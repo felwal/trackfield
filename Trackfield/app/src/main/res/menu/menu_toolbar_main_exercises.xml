@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_24dp"
+        android:iconifiedByDefault="true"
+        app:queryHint="@string/action_search"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
+
+    <item
+        android:id="@+id/action_filter"
+        android:title="@string/action_filter"
+        android:icon="@drawable/ic_filter_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <!--<item
+        android:id="@+id/action_search1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_24dp"
+        app:showAsAction="always"/>-->
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_settings_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_import"
+        android:title="Import from toolbox"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_export"
+        android:title="Export to toolbox"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_recreate"
+        android:title="Recreate db"
+        app:showAsAction="never"/>
+
+</menu>

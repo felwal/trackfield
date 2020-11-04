@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="?android:attr/colorPrimary"/>
+
+    <item android:drawable="@drawable/vector_splash_trademark"
+        android:gravity="bottom|center_horizontal"
+        android:bottom="87dp"/>
+
+    <item android:drawable="@drawable/vector_splash_logo"
+        android:gravity="center"
+        android:bottom="22dp"/>
+
+    <!--
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher_round"/>
+    </item>
+    -->
+
+</layer-list>

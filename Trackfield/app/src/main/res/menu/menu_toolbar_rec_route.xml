@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_filter"
+        android:title="@string/action_filter"
+        android:icon="@drawable/ic_filter_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_setGoal"
+        android:title="@string/action_set_goal"
+        android:icon="@drawable/ic_goal_24dp"
+        android:checkable="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_hideRoute"
+        android:title="@string/action_hide"
+        android:icon="@drawable/ic_hide_24dp"
+        android:checkable="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_renameRoute"
+        android:title="@string/action_rename"
+        android:icon="@drawable/ic_edit_24dp"
+        app:showAsAction="ifRoom"/>
+
+</menu>

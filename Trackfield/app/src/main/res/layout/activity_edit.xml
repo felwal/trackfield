@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EditActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_edit"
+        style="@style/Toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/editText_route"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="Route"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:text="Route"
+                    android:textSize="@dimen/type_heading1"
+                    android:windowSoftInputMode="stateHidden"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editText_routeVar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="variation"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/type_heading2"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText_route"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/editText_route" />
+
+                <EditText
+                    android:id="@+id/editText_date"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:editable="false"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="YYYY/MM/dd"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_interval" />
+
+                <EditText
+                    android:id="@+id/editText_interval"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:editable="true"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="Interval"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_route"
+                    tools:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/editText_note"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="Note"
+                    android:inputType="textMultiLine|textPersonName|textCapSentences"
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/type_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_date" />
+
+                <View
+                    android:id="@+id/divider13"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="?android:attr/listDivider"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_note" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_subDefault"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <TextView
+                    android:id="@+id/textView_s"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="24dp"
+                    android:fontFamily="monospace"
+                    android:text="s"
+                    android:textColor="@color/colorAccBlue"
+                    android:textSize="@dimen/type_heading1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editText_distance"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="km"
+                    android:inputType="numberDecimal"
+                    android:text="0"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView_s"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView_t"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="monospace"
+                    android:text="t"
+                    android:textColor="@color/colorAccTurqoise"
+                    android:textSize="@dimen/type_heading1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/editText_distance"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editText_hours"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="hh"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:text="0"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView_t"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editText_minutes"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="mm"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:text="0"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText_hours"
+                    app:layout_constraintStart_toEndOf="@+id/editText_hours"
+                    app:layout_constraintTop_toTopOf="@+id/editText_hours" />
+
+                <EditText
+                    android:id="@+id/editText_seconds"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="ss"
+                    android:inputType="number|numberDecimal"
+                    android:maxLength="5"
+                    android:text="0"
+                    android:textSize="@dimen/type_heading1"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText_minutes"
+                    app:layout_constraintStart_toEndOf="@+id/editText_minutes"
+                    app:layout_constraintTop_toTopOf="@+id/editText_minutes" />
+
+                <Button
+                    android:id="@+id/button_addSub"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:text="+"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/divider10"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="invisible" />
+
+                <EditText
+                    android:id="@+id/editText_dataSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_24dp"
+                    android:layout_marginTop="24dp"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="Data source"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:text="Garmin Forerunner 645"
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/type_body"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider10" />
+
+                <EditText
+                    android:id="@+id/editText_recordingMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:ems="10"
+                    android:focusedByDefault="false"
+                    android:hint="Recording method"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:text="GPS + Galileo"
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/type_body"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/editText_dataSource"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_dataSource" />
+
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editText_dataSource" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

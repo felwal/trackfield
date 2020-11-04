@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorGreenLight">#5BB974</color>
+    <color name="colorGreen">#0F9D58</color>
+    <color name="colorGreenDark">#0C7E46</color>
+
+    <color name="colorGreenDarker">#395443</color>
+    <color name="colorGreenLighter">#D6EFDC</color>
+
+    <color name="colorBlack">#000000</color>
+    <color name="colorGrey1">#202124</color>
+    <color name="colorGrey2">#27292B</color>
+    <color name="colorGrey3">#2F3033</color>
+    <color name="colorGrey4">#3C4043</color>
+    <color name="colorGrey5">#3E3F43</color>
+    <color name="colorGrey6">#5F6368</color>
+    <color name="colorGrey7">#9DA3A9</color>
+    <color name="colorGrey8">#DCDFE2</color>
+    <color name="colorGrey9">#F5F5F5</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="colorAccBlue">#2196F3</color>
+    <color name="colorAccTurqoise">#009688</color>
+    <color name="colorAccGreen">@color/colorGreenLight</color>
+    <color name="colorAccYellow">#FFEB3B</color>
+    <color name="colorAccOrange">#FF9800</color>
+    <color name="colorAccRed">#F44336</color>
+    <color name="colorAccViolet">#9F69FF</color>
+
+    <color name="colorAccBlueDark">#00323D</color>
+    <color name="colorAccTurqoiseDark">#003D39</color>
+    <color name="colorAccGreenDark">#003D2D</color>
+    <color name="colorAccYellowDark">#383D00</color>
+    <color name="colorAccOrangeDark">#3D2C00</color>
+    <color name="colorAccRedDark">#481B1D</color>
+    <color name="colorAccVioletDark">#FFFFFF</color>
+
+    <color name="colorGold">#EAD688</color>
+    <color name="colorSilver">#DADFDC</color>
+    <color name="colorBronze">#DC9974</color>
+
+    <color name="colorTrans">#00000000</color>
+    <color name="colorHalfTrans">#66000000</color>
+
+    <!-- dark -->
+
+    <color name="colorPrimaryDark">@color/colorGreenDark</color>
+    <color name="colorPrimary">@color/colorGreen</color>
+    <color name="colorPrimaryAccent">@color/colorGreenLight</color>
+
+    <color name="colorBG">@color/colorGrey1</color>
+    <color name="colorBtn">@color/colorGrey3</color>
+    <color name="colorBtn2">@color/colorGrey4</color>
+    <color name="colorBtnAccent">@color/colorGreen</color>
+
+    <color name="colorTextPrimary">@color/colorWhite</color>
+    <color name="colorTextSecondary">@color/colorGrey7</color>
+    <color name="colorTextHighlight">@color/colorGreenLight</color>
+
+    <color name="colorRipple">@color/colorGreenDarker</color>
+    <color name="colorDivider">@color/colorGrey5</color>
+
+
+
+
+    <!-- light -->
+    <!--
+    <color name="colorPrimaryDark">@color/colorGreenDark</color>
+    <color name="colorPrimary">@color/colorGreen</color>
+    <color name="colorPrimaryAccent">@color/colorGreenLight2</color>
+
+    <color name="colorBG">@color/colorWhite</color>
+    <color name="colorBtn">@color/colorWhite</color>
+    <color name="colorBtn2">@color/colorGrey6</color>
+    <color name="colorBtnAccent">@color/colorGreen</color>
+
+    <color name="colorTextPrimary">@color/colorBlack</color>
+    <color name="colorTextSecondary">@color/colorGrey5</color>
+    <color name="colorTextInverted">@color/colorWhite</color>
+    <color name="colorTextTernary">@color/colorGrey5</color>
+    <color name="colorTextBlue">@color/colorBlue</color>
+    <color name="colorTextHighlight">@color/colorGreenDark</color>
+
+    <color name="colorRipple">@color/colorGreenLighter</color>
+    <color name="colorDivider">@color/colorGrey7</color>
+    -->
+
+</resources>

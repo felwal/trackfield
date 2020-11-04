@@ -1,0 +1,698 @@
+<resources>
+
+  <!-- app -->
+
+  <string name="app_name">Trackfield</string>
+  <string name="package_name">com.example.trackfield</string>
+
+  <!-- activities -->
+
+  <string name="activity_edit">Edit</string>
+  <string name="activity_view">Exercise</string>
+  <string name="activity_maps">Map</string>
+  <string name="activity_track">Track</string>
+
+  <!-- fgragments -->
+
+  <string name="fragment_exercises">Exercises</string>
+  <string name="fragment_records">Records</string>
+  <string name="fragment_settings">Settings</string>
+
+  <!-- tabs -->
+
+  <string name="tab_distances">Distances</string>
+  <string name="tab_routes">Routes</string>
+  <string name="tab_intervals">Intervals</string>
+
+  <!-- actions -->
+
+  <string name="action_search">Search</string>
+  <string name="action_filter">Filter</string>
+  <string name="action_settings">Settings</string>
+  <string name="action_edit">Edit</string>
+  <string name="action_rename">Rename</string>
+  <string name="action_save">Save</string>
+  <string name="action_add">Add</string>
+  <string name="action_hide">Hide</string>
+  <string name="action_unhide">Unhide</string>
+  <string name="action_set_goal">Set Goal</string>
+  <string name="action_continue">Continue</string>
+  <string name="action_delete">Delete</string>
+  <string name="action_include_longer">Include longer</string>
+
+  <!-- empty states -->
+
+  <string name="empty_title_exercises">Welcome to Trackfield!</string>
+  <string name="empty_title_search">No results</string>
+  <string name="empty_title_distances">No distances</string>
+  <string name="empty_title_routes">No routes</string>
+  <string name="empty_title_intervals">No intervals</string>
+  <string name="empty_title_distance">No exercises</string>
+  <string name="empty_title_route">No exercises</string>
+
+  <string name="empty_message_exercises">Record your first run, add manually or connect to third party services to get started</string>
+  <string name="empty_message_search">Try a different term, or check spelling and filters</string>
+  <string name="empty_message_distances">Add a distance to see stats</string>
+  <string name="empty_message_routes">Run a route two times or more and it will show up here</string>
+  <string name="empty_message_intervals">Run a interval two times or more and it will show up here</string>
+  <string name="empty_message_distance">Check filters, or set a goal</string>
+  <string name="empty_message_route">Check filters</string>
+
+  <!-- dialogs -->
+
+  <string name="dialog_btn_ok"><b>OK</b></string>
+  <string name="dialog_btn_cancel"><b>Cancel</b></string>
+  <string name="dialog_btn_delete"><b>Delete</b></string>
+  <string name="dialog_btn_rename"><b>Rename</b></string>
+  <string name="dialog_btn_add"><b>Add</b></string>
+  <string name="dialog_btn_set"><b>Set</b></string>
+  <string name="dialog_btn_finish"><b>Finish</b></string>
+  <string name="dialog_btn_filter"><b>Filter</b></string>
+  <string name="dialog_btn_reset"><b>Reset</b></string>
+
+  <string name="dialog_chip_time">Time</string>
+  <string name="dialog_chip_pace">Pace</string>
+
+  <string name="dialog_title_delete_exercise">Delete exercise?</string>
+  <string name="dialog_title_rename_route">Rename route</string>
+  <string name="dialog_title_rename_interval">Rename interval</string>
+  <string name="dialog_title_add_distance">Add distance (km)</string>
+  <string name="dialog_title_delete_distance">Delete distance?</string>
+  <string name="dialog_title_set_goal">Set goal</string>
+  <string name="dialog_title_filter">Filter exercises</string>
+  <string name="dialog_title_finish_recording">Finish recording?</string>
+  <string name="dialog_title_theme">Theme</string>
+  <string name="dialog_title_color">Color</string>
+  <string name="dialog_title_mass">Mass (kg)</string>
+  <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
+
+  <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
+
+  <!-- certificate -->
+
+  <string name="sha1_certificate_fingerprint">***REMOVED***</string>
+  <string name="api_key">***REMOVED***</string>
+
+  <!-- map styles -->
+
+  <string name="mapstyle_night_json">
+  [
+    {
+      \"featureType\": \"all\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#242f3e\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"all\",
+      \"elementType\": \"labels.text.stroke\",
+      \"stylers\": [
+        {
+          \"lightness\": -80
+        }
+      ]
+    },
+    {
+      \"featureType\": \"administrative\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#746855\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"administrative.locality\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#d59563\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#d59563\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi.park\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#263c3f\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi.park\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#6b9a76\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#2b3544\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#9ca5b3\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.arterial\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#38414e\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.arterial\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#212a37\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#746855\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#1f2835\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#f3d19c\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.local\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#38414e\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.local\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#212a37\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#2f3948\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit.station\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#d59563\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"water\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#17263c\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"water\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#515c6d\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"water\",
+      \"elementType\": \"labels.text.stroke\",
+      \"stylers\": [
+        {
+          \"lightness\": -20
+        }
+      ]
+    }
+  ]
+  </string>
+  <string name="mapstyle_retro_json">
+  [
+    {
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#ebe3cd\"
+        }
+      ]
+    },
+    {
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#523735\"
+        }
+      ]
+    },
+    {
+      \"elementType\": \"labels.text.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#f5f1e6\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"administrative\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#c9b2a6\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"administrative.land_parcel\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#dcd2be\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"administrative.land_parcel\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#ae9e90\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"landscape.natural\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#dfd2ae\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#dfd2ae\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#93817c\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi.park\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#a5b076\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"poi.park\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#447530\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#f5f1e6\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.arterial\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#fdfcf8\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#f8c967\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#e9bc62\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway.controlled_access\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#e98d58\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.highway.controlled_access\",
+      \"elementType\": \"geometry.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#db8555\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"road.local\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#806b63\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit.line\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#dfd2ae\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit.line\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#8f7d77\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit.line\",
+      \"elementType\": \"labels.text.stroke\",
+      \"stylers\": [
+        {
+          \"color\": \"#ebe3cd\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"transit.station\",
+      \"elementType\": \"geometry\",
+      \"stylers\": [
+        {
+          \"color\": \"#dfd2ae\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"water\",
+      \"elementType\": \"geometry.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#b9d3c2\"
+        }
+      ]
+    },
+    {
+      \"featureType\": \"water\",
+      \"elementType\": \"labels.text.fill\",
+      \"stylers\": [
+        {
+          \"color\": \"#92998d\"
+        }
+      ]
+    }
+  ]
+  </string>
+  <string name="mapstyle_black_json">
+    [
+  {
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#212121\"
+      }
+    ]
+  },
+  {
+    \"elementType\": \"labels.icon\",
+    \"stylers\": [
+      {
+        \"visibility\": \"off\"
+      }
+    ]
+  },
+  {
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#757575\"
+      }
+    ]
+  },
+  {
+    \"elementType\": \"labels.text.stroke\",
+    \"stylers\": [
+      {
+        \"color\": \"#212121\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"administrative\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#757575\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"administrative.country\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#9e9e9e\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"administrative.land_parcel\",
+    \"stylers\": [
+      {
+        \"visibility\": \"off\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"administrative.locality\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#bdbdbd\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"poi\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#757575\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"poi.park\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#181818\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"poi.park\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#616161\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"poi.park\",
+    \"elementType\": \"labels.text.stroke\",
+    \"stylers\": [
+      {
+        \"color\": \"#1b1b1b\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road\",
+    \"elementType\": \"geometry.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#2c2c2c\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#8a8a8a\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road.arterial\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#373737\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road.highway\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#3c3c3c\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road.highway.controlled_access\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#4e4e4e\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"road.local\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#616161\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"transit\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#757575\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"water\",
+    \"elementType\": \"geometry\",
+    \"stylers\": [
+      {
+        \"color\": \"#000000\"
+      }
+    ]
+  },
+  {
+    \"featureType\": \"water\",
+    \"elementType\": \"labels.text.fill\",
+    \"stylers\": [
+      {
+        \"color\": \"#3d3d3d\"
+      }
+    ]
+  }
+]
+
+  </string>
+
+</resources>
