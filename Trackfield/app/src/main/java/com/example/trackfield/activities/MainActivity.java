@@ -69,7 +69,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
         setToolbar();
         setFabs();
 
-        connectApi();
+        connectAPIs();
     }
 
     private void load() {
@@ -187,9 +187,6 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
         });
 
     }
-    public Helper.Reader getReader() {
-        return reader;
-    }
 
     // tools
     private void selectFragment(MainFragment fragment) {
@@ -262,6 +259,15 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
                 //Helper.Writer writer2 = new Helper.Writer(this);
                 writer.recreate();
                 //writer2.close();
+                return true;
+
+            case R.id.action_strava_last:
+                requestLastActivity();
+                return true;
+
+            case R.id.action_strava_all:
+                requestActivities(1);
+                return true;
 
             default: return super.onOptionsItemSelected(item);
         }

@@ -27,7 +27,13 @@ public final class Contract {
         public static final String COLUMN_RECORDINGMETHOD = "recordingMethod";
         public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_START_LAT = "startLat";
+        public static final String COLUMN_START_LNG = "startLng";
+        public static final String COLUMN_END_LAT = "endLat";
+        public static final String COLUMN_END_LNG = "endLng";
+        public static final String COLUMN_POLYLINE = "polyline";
         public static final String[] EXERLITE_COLUMNS = { _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE, COLUMN_ROUTEVAR, COLUMN_INTERVAL, COLUMN_DISTANCE, COLUMN_TIME };
+        public static final String[] TRAIL_COLUMNS = { COLUMN_POLYLINE, COLUMN_START_LAT, COLUMN_START_LNG, COLUMN_END_LAT, COLUMN_END_LNG };
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -43,7 +49,12 @@ public final class Contract {
                 COLUMN_DATASOURCE + " TEXT," +
                 COLUMN_RECORDINGMETHOD + " TEXT," +
                 COLUMN_DISTANCE + " INTEGER," +
-                COLUMN_TIME + " REAL)";
+                COLUMN_TIME + " REAL," +
+                COLUMN_START_LAT + " REAL," +
+                COLUMN_START_LNG + " REAL," +
+                COLUMN_END_LAT + " REAL," +
+                COLUMN_END_LNG + " REAL," +
+                COLUMN_POLYLINE + " TEXT)";
 
         public static String getColumn(C.SortMode sortMode)  {
 

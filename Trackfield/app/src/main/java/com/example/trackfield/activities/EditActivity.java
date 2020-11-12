@@ -23,7 +23,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Exercise;
+import com.example.trackfield.objects.Map;
 import com.example.trackfield.objects.Sub;
+import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.Toolbox.C;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.example.trackfield.toolbox.Toolbox.L;
@@ -215,12 +217,12 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
             // save
             if (exercise == null) {
-                exercise = new Exercise(-1, D.exercises.size(), type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, null);
+                exercise = new Exercise(-1, D.exercises.size(), type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
                 L.toast(Helper.getWriter(this).addExercise(exercise, this), this);
                 D.exercises.add(exercise);
             }
             else {
-                exercise = new Exercise(exercise.get_id(), exercise.getId(), type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getMap());
+                exercise = new Exercise(exercise.get_id(), exercise.getId(), type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
                 L.toast(Helper.getWriter(this).updateExercise(exercise), this);
                 D.exercises.set(exercise.getId(), exercise);
             }
@@ -229,7 +231,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             finish();
         }
         catch (NumberFormatException e) { L.toast("Can't save empty", this); }
-        catch (Exception e) { L.toast(e, this); }
+        catch (Exception e) { L.handleError(e, this); }
     }
     private ArrayList<Sub> parseSubs() {
 

@@ -3,6 +3,7 @@ package com.example.trackfield.objects;
 import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Exercise {
@@ -10,7 +11,7 @@ public class Exercise {
     private final int _id;
     private int id;
     private int type;
-    private LocalDate date;
+    private LocalDateTime dateTime;
     private int routeId = -1;
     private String route;
     private String routeVar;
@@ -23,6 +24,7 @@ public class Exercise {
     private float time;
     private ArrayList<Sub> subs;
     private Map map;
+    private Trail trail;
 
     public enum SortMode {
         DATE,
@@ -32,22 +34,25 @@ public class Exercise {
         NAME
     }
 
-    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride" };
-    public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides" };
+    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other" };
+    public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Others" };
     public static final int TYPE_RUN = 0;
     public static final int TYPE_INTERVALS = 1;
     public static final int TYPE_WALK = 2;
+    public static final int TYPE_TRACK = 3;
+    public static final int TYPE_RIDE = 4;
+    public static final int TYPE_OTHER = 5;
 
     private static final int DISTANCE_DECIMALS = 2;
     public static final int DISTANCE_DRIVEN = -1;
 
     ////
 
-    public Exercise(int _id, int id, int type, LocalDate date, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Map map) {
+    public Exercise(int _id, int id, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
         this._id = _id;
         this.id = id;
         this.type = type;
-        this.date = date;
+        this.dateTime = dateTime;
         this.routeId = routeId;
         this.route = route;
         this.routeVar = routeVar;
@@ -57,13 +62,13 @@ public class Exercise {
         this.recordingMethod = recordingMethod;
         this.distance = distance;
         this.time = time;
-        this.subs = subs;
-        this.map = map == null ? new Map(_id) : map;
+        this.subs = subs == null ? new ArrayList<Sub>() : subs;
+        this.trail = trail;
     }
-    public Exercise(int _id, int type, LocalDate date, String dataSource, String recordingMethod, Map map) {
+    public Exercise(int _id, int type, LocalDateTime dateTime, String dataSource, String recordingMethod, Map map) {
         this._id = _id;
         this.type = type;
-        this.date = date;
+        this.dateTime = dateTime;
         this.route = "Route";
         this.routeVar = "";
         this.interval = "";
@@ -89,8 +94,8 @@ public class Exercise {
     public void setType(int type) {
         this.type = type;
     }
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
         //Data.calcWeekStats();
     }
     public void setRouteId(int _id) {
@@ -132,7 +137,10 @@ public class Exercise {
         return type;
     }
     public LocalDate getDate() {
-        return date;
+        return dateTime.toLocalDate();
+    }
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
     public int getRouteId() {
         return routeId;
@@ -162,10 +170,10 @@ public class Exercise {
         return time;
     }
     public int getElevationGain() {
-        return map.elevationGain();
+        return map == null ? 0 : map.elevationGain();
     }
     public int getElevationLoss() {
-        return map.elevationLoss();
+        return map == null ? 0 : map.elevationLoss();
     }
 
     public ArrayList<Sub> getSubs() {
@@ -178,15 +186,18 @@ public class Exercise {
     public Map getMap() {
         return map;
     }
+    public Trail getTrail() {
+        return trail;
+    }
 
     // get driven
     public int distance() {
         if (isDistanceDriven()) return D.averageDistance(D.filterByRoute(route, routeVar));
-        if (distance == 0 && time == 0) { return map.distance() == 0 ? getSubsDistance() : map.distance(); }
+        if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
     }
     public float time() {
-        if (time == 0 && distance == 0) { return map.time() == 0 ? getSubsTime() : map.time(); }
+        if (time == 0 && distance == 0) getSubsTime();
         return time;
     }
     public float pace() {
@@ -209,7 +220,7 @@ public class Exercise {
     public int energy(C.UnitEnergy unit) {
         // 0J, 1cal, 2Wh, 3eV
 
-        int calories = (int) (D.mass * distance());
+        int calories = (int) (D.prefs.getMass() * distance());
         if (unit == C.UnitEnergy.CALORIES) { return calories; }
 
         int joules = (int) (calories * 4.184);
@@ -250,18 +261,18 @@ public class Exercise {
     public int subCount() {
         return subs != null ? subs.size() : 0;
     }
-    public boolean hasMap() {
-        return map.getCoordinates().size() > 0;
+    public boolean hasTrail() {
+        return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
     }
     public boolean isType(int type) {
         return this.type == type;
     }
 
     public int getWeek() {
-        return date.get(C.WEEK_OF_YEAR);
+        return dateTime.get(C.WEEK_OF_YEAR);
     }
     public int getYearAndWeek() {
-        return M.mergeYearAndWeek(date.getYear(), getWeek());
+        return M.mergeYearAndWeek(dateTime.getYear(), getWeek());
     }
 
     // print
@@ -274,7 +285,8 @@ public class Exercise {
     public String printDistance(boolean unitlessKm) {
         int distance = distance();
         String print = distance == 0 ? C.NO_VALUE : unitlessKm ? M.round(distance / 1000f, DISTANCE_DECIMALS) + "" : M.prefix(distance, DISTANCE_DECIMALS, "m");
-        return isDistanceDriven() ? M.drive(print) : print + (hasMap() ? "; " + map.distance3D() + " m" : "");
+        if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
+        return isDistanceDriven() ? M.drive(print) : print;
     }
     public String printElevation() {
         int gain = getElevationGain();
@@ -320,7 +332,7 @@ public class Exercise {
         return M.prefix(power, 2, "W");
     }
     public String extractToFile(char div) {
-        return id + "" + div + "" + type + "" + div + date.format(C.FORMATTER_FILE) + div + route + div + routeVar + div +
+        return id + "" + div + "" + type + "" + div + dateTime.format(C.FORMATTER_FILE) + div + route + div + routeVar + div +
                 interval + div + distance + div + time + div + dataSource + div + recordingMethod + div + note;
     }
 
@@ -343,6 +355,76 @@ public class Exercise {
         String timePrint = M.stringTime(time, false);
         if (unit.equals("") || timePrint.equals(C.NO_VALUE_TIME)) { return timePrint; }
         return timePrint + " " + unit;
+    }
+    public static int typeFromStravaType(String stravaType) {
+
+        /*
+        Ride
+        Run
+        Swim
+        Walk
+        Hike
+        Alpine Ski
+        Backcountry Ski
+        Canoe
+        Crossfit
+        E-Bike Ride
+        Elliptical
+        Handcycle
+        Ice Skate
+        Inline Skate
+        Kayak
+        Kitesurf Session
+        Nordic Ski
+        Rock Climb
+        Roller Ski
+        Row
+        Snowboard
+        Snowshoe
+        Stair Stepper
+        Stand Up Paddle
+        Surf
+        Virtual Ride
+        Virtual Run
+        Weight Training
+        Windsurf Session
+        Wheelchair
+        Workout
+        Yoga
+        */
+        switch (stravaType) {
+            case "Run": return TYPE_RUN;
+            case "Walk":
+            case "Hike": return TYPE_WALK;
+            case "Ride": return TYPE_RIDE;
+            case "Swim":
+            case "Apline Ski":
+            case "Backcountry Ski":
+            case "Canoe":
+            case "Crossfit":
+            case "E-Bike Ride":
+            case "Elliptical":
+            case "Handcycle":
+            case "Ice Skate":
+            case "Inline Skate":
+            case "Kayak":
+            case "Kitesurf Session":
+            case "Nordic Ski":
+            case "Row":
+            case "Snowboard":
+            case "Snowshoe":
+            case "Stair Stepper":
+            case "Stand Up Paddle":
+            case "Surf":
+            case "Virtual Ride":
+            case "Virtual Run":
+            case "Weight Training":
+            case "Windsurf Session":
+            case "Wheelchair":
+            case "Workout":
+            case "Yoga":
+            default: return TYPE_OTHER;
+        }
     }
 
 }

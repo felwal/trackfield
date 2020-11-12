@@ -16,14 +16,16 @@ import com.example.trackfield.objects.Map;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.objects.Sub;
+import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.*;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Helper {
 
@@ -104,10 +106,13 @@ public class Helper {
         public void recreate() {
             onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
         }
+
         public void importFromToolbox(Context c) {
             L.toast(deleteAllExercises() && addExercises(D.exercises, c), c);
         }
         public void updateTool(Context c) {
+            db.execSQL(Contract.ExerciseEntry.DELETE_TABLE);
+            db.execSQL(Contract.ExerciseEntry.CREATE_TABLE);
             useUpdateTool = false;
         }
 
@@ -128,9 +133,9 @@ public class Helper {
             e.setSubs_superId((int) _id);
             e.setMap_superId((int) _id);
             final boolean subSuccess = addSubs(e.getSubs());
-            final boolean mapSuccess = addMap(e.getMap());
+            //final boolean mapSuccess = addMap(e.getMap());
 
-            return success(_id) && subSuccess && mapSuccess;
+            return success(_id) && subSuccess; //&& mapSuccess;
         }
 
         private boolean addSubs(ArrayList<Sub> subs) {
@@ -241,9 +246,9 @@ public class Helper {
 
             final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
             final boolean subSuccess = updateSubs(e.getSubs());
-            final boolean mapSuccess = updateMap(e.getMap());
+            //final boolean mapSuccess = updateMap(e.getMap());
 
-            return count > 0 && subSuccess && mapSuccess;
+            return count > 0 && subSuccess;// && mapSuccess;
         }
         public boolean updateRouteName(String oldRoute, String newRoute) {
 
@@ -346,6 +351,7 @@ public class Helper {
             return success(result);
         }
         public boolean deleteMap(Map map) {
+            if (map == null) return true;
 
             final String selection = Contract.MapEntry.COLUMN_SUPERID + " = ?";
             final String[] selectionArgs = { Integer.toString(map.get_superId()) };
@@ -362,7 +368,7 @@ public class Helper {
 
             cv.put(Contract.ExerciseEntry.COLUMN_ID, e.getId());
             cv.put(Contract.ExerciseEntry.COLUMN_TYPE, e.getType());
-            cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getDate().format(Toolbox.C.FORMATTER_SQL));
+            cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getDateTime().format(Toolbox.C.FORMATTER_SQL));
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTE, e.getRoute());
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTEVAR, e.getRouteVar());
@@ -372,6 +378,22 @@ public class Helper {
             cv.put(Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD, e.getRecordingMethod());
             cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistancePrimary());
             cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
+
+            Trail trail = e.getTrail();
+            if (trail != null) {
+                cv.put(Contract.ExerciseEntry.COLUMN_START_LAT, trail.getStartLat());
+                cv.put(Contract.ExerciseEntry.COLUMN_START_LNG, trail.getStartLng());
+                cv.put(Contract.ExerciseEntry.COLUMN_END_LAT,   trail.getEndLat());
+                cv.put(Contract.ExerciseEntry.COLUMN_END_LNG,   trail.getEndLng());
+                cv.put(Contract.ExerciseEntry.COLUMN_POLYLINE,  trail.getPolyline());
+            }
+            else {
+                cv.put(Contract.ExerciseEntry.COLUMN_START_LAT, (Double) null);
+                cv.put(Contract.ExerciseEntry.COLUMN_START_LNG, (Double) null);
+                cv.put(Contract.ExerciseEntry.COLUMN_END_LAT,   (Double) null);
+                cv.put(Contract.ExerciseEntry.COLUMN_END_LNG,   (Double) null);
+                cv.put(Contract.ExerciseEntry.COLUMN_POLYLINE,  (String) null);
+            }
 
             return cv;
         }
@@ -502,6 +524,18 @@ public class Helper {
 
             return exercises;
         }
+        public ArrayList<Exercise> getExercisesForMerge(LocalDateTime dateTime, int type) {
+
+            String selection = "(" + Contract.ExerciseEntry.COLUMN_DATE + " = '" + M.dateTime(dateTime.toLocalDate()).format(C.FORMATTER_SQL) + "' OR " +
+                    Contract.ExerciseEntry.COLUMN_DATE + " = '" + dateTime.format(C.FORMATTER_SQL) + "')"+
+                    " AND " + Contract.ExerciseEntry.COLUMN_TYPE + " = " + type;
+
+            Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, null, selection, null, null, null, null, null);
+            ArrayList<Exercise> exercises = unpackCursor(cursor);
+            cursor.close();
+
+            return exercises;
+        }
         public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst) {
 
             String selection = "";
@@ -616,7 +650,7 @@ public class Helper {
             drivenCursor.close();
 
             exerlites.addAll(drivenExerlites);
-            if (!D.includeLonger) D.removeLonger(exerlites, maxDist);
+            if (!D.prefs.includeLonger()) D.removeLonger(exerlites, maxDist);
             D.sortExerlites(exerlites, sortMode, smallestFirst);
 
             return exerlites;
@@ -707,9 +741,9 @@ public class Helper {
             return _id;
         }
 
-        public ArrayList<Distance> getDistances(C.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<Distance> getDistances(Distance.SortMode sortMode, boolean smallestFirst) {
 
-            String orderBy = null;//orderBy(sortMode, smallestFirst);
+            String orderBy = orderBy(sortMode, smallestFirst);
 
             Cursor cursor = db.query(Contract.DistanceEntry.TABLE_NAME, null, null, null, null, null, orderBy);
             ArrayList<Distance> distances = unpackDistanceCursor(cursor);
@@ -741,6 +775,76 @@ public class Helper {
 
             cursor.close();
             return goalPace;
+        }
+
+        public ArrayList<String> getPolylines(int exceptId) {
+
+            ArrayList<String> polylines = new ArrayList<>();
+
+            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String selection = Contract.ExerciseEntry._ID + " != " + exceptId + " AND " + Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+
+            Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
+            while (cursor.moveToNext()) {
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                polylines.add(polyline);
+            }
+            cursor.close();
+
+            return polylines;
+        }
+        public ArrayList<String> getPolylinesByRoute(int routeId) {
+
+            ArrayList<String> polylines = new ArrayList<>();
+
+            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+
+            Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
+            while (cursor.moveToNext()) {
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                polylines.add(polyline);
+            }
+            cursor.close();
+
+            return polylines;
+        }
+        public ArrayList<String> getPolylinesByRouteExcept(int exceptRouteId) {
+
+            ArrayList<String> polylines = new ArrayList<>();
+
+            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " != " + exceptRouteId + " AND " + Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+
+            Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
+            while (cursor.moveToNext()) {
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                polylines.add(polyline);
+            }
+            cursor.close();
+
+            return polylines;
+        }
+        public Trail getTrail(int _id) {
+
+            Trail trail = null;
+
+            String[] columns = Contract.ExerciseEntry.TRAIL_COLUMNS;
+            String selection = Contract.ExerciseEntry._ID + " = " + _id;
+
+            Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
+            while (cursor.moveToNext()) {
+                double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_START_LAT));
+                double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_START_LNG));
+                double endLat = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_END_LAT));
+                double endLng = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_END_LNG));
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                trail = new Trail(polyline, new LatLng(startLat, startLng), new LatLng(endLat, endLng));
+                break;
+            }
+            cursor.close();
+
+            return trail;
         }
 
         // get items
@@ -888,7 +992,7 @@ public class Helper {
             cursor.close();
             return new RouteItem(getRouteId(route), route, amount, avgDistance, bestPace);
         }
-        public ArrayList<DistanceItem> getDistanceItems(C.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst) {
 
             /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
                     " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
@@ -1083,12 +1187,24 @@ public class Helper {
                 int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
                 float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
 
-                LocalDate date = LocalDate.parse(dateStr, Toolbox.C.FORMATTER_SQL);
+                // convert trail
+                Trail trail = null;
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                if (polyline != null) {
+                    double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_START_LAT));
+                    double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_START_LNG));
+                    double endLat = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_END_LAT));
+                    double endLng = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_END_LNG));
+                    trail = new Trail(polyline, new LatLng(startLat, startLng), new LatLng(endLat, endLng));
+                }
+
+                // convert
+                LocalDateTime dateTime = LocalDateTime.parse(dateStr, Toolbox.C.FORMATTER_SQL);
                 if (interval == null) interval = "";
                 //int routeId = getRouteId(route);
                 String route = getRoute(routeId).getName();
 
-                Exercise exercise = new Exercise(_id, id, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubs(_id), getMap(_id));
+                Exercise exercise = new Exercise(_id, id, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubs(_id), trail);
                 exercises.add(exercise);
             }
 
@@ -1107,7 +1223,8 @@ public class Helper {
                 int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
                 float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
 
-                LocalDate date = LocalDate.parse(dateStr, Toolbox.C.FORMATTER_SQL);
+                // convert
+                LocalDate date = LocalDateTime.parse(dateStr, Toolbox.C.FORMATTER_SQL).toLocalDate();;
                 if (interval == null) interval = "";
                 String route = getRoute(routeId).getName();
 
@@ -1229,6 +1346,9 @@ public class Helper {
         }
         private String orderBy(C.SortMode sortMode, boolean smallestFirst) {
             return Contract.ExerciseEntry.getColumn(sortMode) + sortOrder(smallestFirst);
+        }
+        private String orderBy(Distance.SortMode sortMode, boolean smallestFirst) {
+            return Contract.DistanceEntry.COLUMN_DISTANCE + sortOrder(smallestFirst);
         }
 
     }

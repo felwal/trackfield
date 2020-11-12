@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentManager;
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.toolbox.Toolbox;
-import com.example.trackfield.toolbox.Toolbox.C;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -50,7 +49,7 @@ public class Dialogs {
             return createDialog(buildDialog());
         }
 
-        protected abstract String tag();
+        public abstract String tag();
         protected abstract String title();
         protected abstract String message();
         protected abstract int positiveBtnTxtId();
@@ -558,7 +557,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "deleteExercise";
         }
         @Override protected String title() {
@@ -581,7 +580,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "deleteDistance";
         }
         @Override protected String title() {
@@ -604,7 +603,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "finishTracking";
         }
         @Override protected String title() {
@@ -629,7 +628,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "addExercise";
         }
         @Override protected String title() {
@@ -655,7 +654,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "editMass";
         }
         @Override protected String title() {
@@ -683,7 +682,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "renameRoute";
         }
         @Override protected String title() {
@@ -709,7 +708,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "renameInterval";
         }
         @Override protected String title() {
@@ -737,7 +736,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "setGoalDistance";
         }
         @Override protected String title() {
@@ -769,7 +768,7 @@ public class Dialogs {
             return instance;
         }
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return "setGoalRoute";
         }
         @Override protected String title() {
@@ -802,7 +801,7 @@ public class Dialogs {
             instance.show(fm, instance.tag());
             return instance;
         }
-        @Override protected String tag() {
+        @Override public String tag() {
             return "filterExercises";
         }
 
@@ -815,7 +814,7 @@ public class Dialogs {
             instance.show(fm, instance.tag());
             return instance;
         }
-        @Override protected String tag() {
+        @Override public String tag() {
             return "filterRouteExercises";
         }
 
@@ -828,7 +827,7 @@ public class Dialogs {
             instance.show(fm, instance.tag());
             return instance;
         }
-        @Override protected String tag() {
+        @Override public String tag() {
             return "filterDistanceExercises";
         }
 
@@ -838,7 +837,7 @@ public class Dialogs {
             final Switch longerSw = dialogView.findViewById(R.id.switch_includeLonger);
             final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_types);
 
-            longerSw.setChecked(D.includeLonger);
+            longerSw.setChecked(D.prefs.includeLonger());
             setChips(chipGroup);
 
             if (!message().equals("")) builder.setMessage(message());
@@ -846,7 +845,7 @@ public class Dialogs {
                     .setPositiveButton(positiveBtnTxtId(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                D.includeLonger = longerSw.isChecked();
+                                D.prefs.setIncludeLonger(longerSw.isChecked());
                                 listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag());
                             }
                             catch (NumberFormatException e) {
@@ -872,7 +871,7 @@ public class Dialogs {
 
         public static final String TAG = "weekChartWeeks";
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return null;
         }
         @Override protected String title() {
@@ -915,7 +914,7 @@ public class Dialogs {
 
         public static final String TAG = "theme";
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return null;
         }
         @Override protected String title() {
@@ -935,7 +934,7 @@ public class Dialogs {
             final RadioButton lightRadio = element.findViewById(R.id.radioButton_light);
             final RadioButton batterySaverRadio = element.findViewById(R.id.radioButton_batterySaver);
 
-            if (D.theme) { lightRadio.setChecked(true); }
+            if (D.prefs.isThemeLight()) { lightRadio.setChecked(true); }
             else { darkRadio.setChecked(true); }
 
             builder.setView(element).setTitle("Theme")
@@ -948,8 +947,8 @@ public class Dialogs {
             darkRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (D.theme) {
-                        D.theme = false;
+                    if (D.prefs.isThemeLight()) {
+                        D.prefs.setTheme(false);
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -959,8 +958,8 @@ public class Dialogs {
             lightRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (!D.theme) {
-                        D.theme = true;
+                    if (!D.prefs.isThemeLight()) {
+                        D.prefs.setTheme(true);
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -975,7 +974,7 @@ public class Dialogs {
 
         public static final String TAG = "color";
 
-        @Override protected String tag() {
+        @Override public String tag() {
             return null;
         }
         @Override protected String title() {
@@ -994,7 +993,7 @@ public class Dialogs {
             final RadioButton greenRadio = element.findViewById(R.id.radioButton_green);
             final RadioButton monoRadio = element.findViewById(R.id.radioButton_mono);
 
-            if (D.color == C.COLOR_GREEN) { greenRadio.setChecked(true); }
+            if (D.prefs.isColorGreen()) { greenRadio.setChecked(true); }
             else { monoRadio.setChecked(true); }
 
             builder.setView(element).setTitle("Color")
@@ -1007,8 +1006,8 @@ public class Dialogs {
             greenRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (D.color != C.COLOR_GREEN) {
-                        D.color = C.COLOR_GREEN;
+                    if (!D.prefs.isColorGreen()) {
+                        D.prefs.setColorGreen();
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -1018,8 +1017,8 @@ public class Dialogs {
             monoRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (D.color != C.COLOR_MONO) {
-                        D.color = C.COLOR_MONO;
+                    if (!D.prefs.isColorMono()) {
+                        D.prefs.setColorMono();
                         //a.recreate();
                         listener.doRecreate();
                     }

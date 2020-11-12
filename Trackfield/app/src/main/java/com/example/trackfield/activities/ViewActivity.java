@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.fragments.dialogs.Dialogs;
@@ -27,6 +28,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDialog.DialogListener, OnMapReadyCallback {
 
@@ -48,6 +51,7 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
     public static final int FROM_INTERVAL = 3;
 
     private static final int MAP_MAX_ZOOM = 17;
+    protected static final int MAP_PADDING = 50;
 
     ////
 
@@ -132,7 +136,7 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
 
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
-        dateTv.setText(exercise.getDate().format(C.FORMATTER_VIEW));
+        dateTv.setText(exercise.getDateTime().format(C.FORMATTER_VIEW));
         setTvHideIfEmpty(exercise.getNote(), noteTv);
 
         idTv.setText(exercise.printId());
@@ -160,7 +164,7 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
     private void setMap() {
 
         FrameLayout frame = findViewById(R.id.frameLayout_mapFragment);
-        if (!exercise.hasMap()) { frame.setVisibility(View.GONE); return; }
+        if (!exercise.hasTrail()) { frame.setVisibility(View.GONE); return; }
         findViewById(R.id.divider9).setVisibility(View.INVISIBLE);
         frame.setClipToOutline(true);
 
@@ -199,11 +203,10 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
         if (from != FROM_DISTANCE) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    int distance = exercise.distance();
-                    for (int i = D.distances.size()-1; i >= 0; i--) {
-                        int d = D.distances.get(i);
-                        if (M.insideLimits(distance, d)) {
-                            RecActivity.DistanceActivity.startActivity(ViewActivity.this, d, exercise.get_id());
+                    ArrayList<Distance> distances = Helper.getReader(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
+                    for (Distance d : distances) {
+                        if (M.insideLimits(exercise.distance(), d.getDistance())) {
+                            RecActivity.DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
                             break;
                         }
                     }
@@ -296,11 +299,11 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
 
         //Helper.Writer writer = new Helper.Writer(this);
         try { L.toast(Helper.getWriter(this).deleteExercise(exercise, this), this); }
-        catch (Exception e) { L.toast(e, this); }
+        catch (Exception e) { L.handleError(e, this); }
         //writer.close();
 
         try { D.exercises.remove(exercise.getId()); }
-        catch (Exception e) { L.toast(e, this); }
+        catch (Exception e) { L.handleError(e, this); }
         D.edited();
 
         finish();
@@ -309,13 +312,13 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
 
         if (gMap == null) {
             gMap = googleMap;
-            MapActivity.setReadyMap(gMap, exercise.getMap(), this);
+            MapActivity.ExerciseMap.setReadyMap(gMap, exercise.getTrail(), MAP_PADDING, this);
             gMap.getUiSettings().setAllGesturesEnabled(false);
             gMap.setMaxZoomPreference(MAP_MAX_ZOOM);
 
             gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override public void onMapClick(LatLng latLng) {
-                    MapActivity.startActivity(_id, ViewActivity.this);
+                    MapActivity.ExerciseMap.startActivity(_id, ViewActivity.this);
                 }
             });
         }

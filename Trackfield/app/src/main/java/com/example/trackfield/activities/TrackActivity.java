@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.TreeMap;
 
 public class TrackActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, Dialogs.BinaryDialog.DialogListener {
@@ -188,7 +189,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     private void saveExercise() {
 
         Map map = new Map(-1, coordinates);
-        Exercise exercise = new Exercise(-1, 0, LocalDate.now(), "Trackfield", "GPS", map);
+        Exercise exercise = new Exercise(-1, 0, LocalDateTime.now(), "Trackfield", "GPS", map);
 
         Helper.Writer writer = new Helper.Writer(TrackActivity.this);
         writer.addExercise(exercise, this);
@@ -205,7 +206,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override public void onMapReady(GoogleMap googleMap) {
 
         gMap = googleMap;
-        if (!D.theme) L.toast(gMap.setMapStyle(D.getMapStyle(this)), this);
+        if (!D.prefs.isThemeLight()) L.toast(gMap.setMapStyle(D.getMapStyle(this)), this);
         gMap.getUiSettings().setAllGesturesEnabled(false);
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

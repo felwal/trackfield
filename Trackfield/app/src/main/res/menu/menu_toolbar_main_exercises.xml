@@ -45,4 +45,14 @@
         android:title="Recreate db"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_strava_last"
+        android:title="Request last from Strava"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_strava_all"
+        android:title="Request all from Strava"
+        app:showAsAction="never"/>
+
 </menu>

@@ -43,7 +43,11 @@
             android:name=".activities.TrackActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".activities.MapActivity$ExerciseMap"
+            android:label="@string/activity_maps"
+            android:parentActivityName=".activities.ViewActivity" />
+        <activity
+            android:name=".activities.MapActivity$RouteMap"
             android:label="@string/activity_maps"
             android:parentActivityName=".activities.ViewActivity" />
         <activity

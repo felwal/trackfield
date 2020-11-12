@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
@@ -263,13 +262,13 @@ public class RecyclerFragments {
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
             Chart dailyChart = null;
-            if (D.showDailyChart) {
+            if (D.prefs.showDailyChart()) {
                 dailyChart = new Chart(D.weekDailyDistance());
                 dailyChart.setType(Chart.TYPE_DAILY);
                 itemList.add(dailyChart);
             }
             else itemList.add(sorter);
-            if (D.showWeekChart) {
+            if (D.prefs.showWeekChart()) {
                 //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
                 //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
             }
@@ -308,7 +307,7 @@ public class RecyclerFragments {
                     month = newMonth;
                 }
                 // week
-                if (D.showWeekHeaders && (newWeek = e.getWeek()) != week) {
+                if (D.prefs.showWeekHeaders() && (newWeek = e.getWeek()) != week) {
                     weekHeader.setLastIndex(itemList.size());
                     weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size());
                     itemList.add(weekHeader);
@@ -452,7 +451,7 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sortMode, smallestFirst);
+            ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/, smallestFirst);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
@@ -506,7 +505,7 @@ public class RecyclerFragments {
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
             //ArrayList<String> rList = D.sortRoutes(D.routes, smallestFirst, sortMode, false);
-            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, D.showLesserRoutes); //reader.getRoutes(rList);
+            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, D.prefs.showLesserRoutes()); //reader.getRoutes(rList);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
@@ -559,7 +558,7 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, D.showLesserRoutes);
+            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, D.prefs.showLesserRoutes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);

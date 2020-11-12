@@ -278,11 +278,12 @@ public class RecActivity {
 
                 case R.id.action_hideRoute:
                     route.invertHidden();
-                    //Helper.Writer writer = new Helper.Writer(this);
                     writer.updateRoute(route);
-                    //writer.close();
                     invalidateOptionsMenu();
                     return true;
+
+                case R.id.action_routeMap:
+                    MapActivity.RouteMap.startActivity(route.get_id(), this);
 
                 default: return super.onOptionsItemSelected(item);
             }

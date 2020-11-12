@@ -24,6 +24,9 @@
     <dimen name="layout_originmarker_width">4dp</dimen>
     <dimen name="layout_tabindicator_height">3dp</dimen>
 
+    <dimen name="layout_settings_item_height">50dp</dimen>
+    <dimen name="layout_settings_header_height">30dp</dimen>
+
     <dimen name="layout_item_exercise">62dp</dimen>
 
     <dimen name="layout_header_year">40dp</dimen>

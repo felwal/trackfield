@@ -53,6 +53,8 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -155,9 +157,10 @@ public class Toolbox {
 
         // formatter
         public static final DateTimeFormatter FORMATTER_FILE = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        public static final DateTimeFormatter FORMATTER_SQL = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        public static final DateTimeFormatter FORMATTER_SQL = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        public static final DateTimeFormatter FORMATTER_SQL_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         public static final DateTimeFormatter FORMATTER_EDIT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofPattern("EEE, d MMM yyyy 'at' HH:mm");
         public static final DateTimeFormatter FORMATTER_CAPTION = DateTimeFormatter.ofPattern("d MMM yyyy");
         public static final DateTimeFormatter FORMATTER_CAPTION_NOYEAR = DateTimeFormatter.ofPattern("d MMM");
         public static final DateTimeFormatter FORMATTER_REC = DateTimeFormatter.ofPattern("d MMM ’yy");
@@ -187,30 +190,18 @@ public class Toolbox {
         public static ArrayList<Integer> distances = new ArrayList<>();
         public static ArrayList<String> routes = new ArrayList<>();
 
-        // stats
+        // stats & more
         public static int totalDistance = 0;
         public static float totalTime = 0;
-
-        // preferences
-        public static float mass = 60;
-        public static LocalDate birthday = LocalDate.of(2020,1,1);
-        public static int color = 1;
-        public static boolean theme = false;
-        public static boolean gameOn = false;
-
-        // filters
-        public static boolean showLesserRoutes = true;
-        public static boolean includeLonger = false; //
         private static int distanceLowerLimit = 300; //
         private static int distanceUpperLimit = 999; //
+        public static boolean gameOn = false;
+
+        // preferences
+        public static Prefs prefs = new Prefs();
         public static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
         public static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
         public static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
-
-        public static boolean showWeekHeaders = true;
-        public static boolean weekDistance = true;
-        public static boolean showWeekChart = true;
-        public static boolean showDailyChart = true;
 
         // bort
         public static float[] weekDistances, weekActivities;
@@ -220,7 +211,7 @@ public class Toolbox {
 
         // theme
         public static boolean updateTheme(Activity a) {
-            int newTheme = C.LOOKS[M.boolToInt(theme)][color];
+            int newTheme = C.LOOKS[M.boolToInt(prefs.isThemeLight())][prefs.getColor()];
             try {
                 int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
                 if (currentTheme != newTheme) {
@@ -234,7 +225,7 @@ public class Toolbox {
             return false;
         }
         public static MapStyleOptions getMapStyle(Context c) {
-            return new MapStyleOptions(c.getResources().getString(C.MAP_STYLES[M.boolToInt(D.theme)]));
+            return new MapStyleOptions(c.getResources().getString(C.MAP_STYLES[M.boolToInt(D.prefs.isThemeLight())]));
         }
 
         // sort
@@ -334,7 +325,7 @@ public class Toolbox {
             for (int i = sorted.size()-1; i >= 0; i--) {
                 for (int j = 0; j < i; j++) {
 
-                    if (!alwaysIncludeLesser && !showLesserRoutes && filterByRoute(sorted.get(j)).size() <= 1) {
+                    if (!alwaysIncludeLesser && !prefs.showLesserRoutes() && filterByRoute(sorted.get(j)).size() <= 1) {
                         sorted.remove(j);
                         j--; i--; // räcker inte
                         continue;
@@ -688,6 +679,7 @@ public class Toolbox {
             }
         }
         public static void moveExercise() {
+            if (exercises.size() == 0) return;
 
             for (int i = exercises.size()-1; i > 0; i--) {
                 if (exercises.get(i).getDate().isBefore(exercises.get(i-1).getDate())) {
@@ -881,6 +873,7 @@ public class Toolbox {
 
         // prefs keys
         private static final String SHARED_PREFERENCES = "shared preferences";
+        private static final String PREFS = "prefs";
         private static final String LESSER_ROUTES = "lesserRoutes";
         private static final String SMALLEST_FIRST = "smallestFirst";
         private static final String SORT_MODE = "sortMode";
@@ -891,18 +884,26 @@ public class Toolbox {
         private static final String LOOK_THEME = "theme";
         private static final String MASS = "mass";
         private static final String BIRTHDAY = "birthday";
+        private static final String WEEK_HEADERS = "weekHeaders";
         private static final String TYPES_EXERCISE = "typesExercise";
         private static final String TYPES_ROUTE = "typesRoute";
         private static final String TYPES_DISTANCE = "typesDistance";
 
         // save data
+        private static void savaPref(Object var, String tag, SharedPreferences.Editor editor, Gson gson) {
+            String json = gson.toJson(var);
+            editor.putString(tag, json);
+        }
         public static void savePrefs(Context c) {
 
             SharedPreferences sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             Gson gson = new Gson();
 
-            String lesserJson = gson.toJson(D.showLesserRoutes);
+            String json = gson.toJson(D.prefs);
+            editor.putString(PREFS, json);
+
+            /*String lesserJson = gson.toJson(D.showLesserRoutes);
             String smallestFirstJson = gson.toJson(C.smallestFirstPrefs);
             String sortModeJson = gson.toJson(C.sortModePrefs);
             String weekAmountJson = gson.toJson(D.weekAmount);
@@ -912,6 +913,7 @@ public class Toolbox {
             String themeJson = gson.toJson(D.theme);
             String massJson = gson.toJson(D.mass);
             String birthdayJson = gson.toJson(D.birthday);
+            String weekHeadersJson = gson.toJson(D.showWeekHeaders);
             String typesEJson = gson.toJson(D.exerciseVisibleTypes);
             String typesDJson = gson.toJson(D.distanceVisibleTypes);
             String typesJJson = gson.toJson(D.routeVisibleTypes);
@@ -926,11 +928,18 @@ public class Toolbox {
             editor.putString(LOOK_THEME, themeJson);
             editor.putString(MASS, massJson);
             editor.putString(BIRTHDAY, birthdayJson);
+            editor.putString(WEEK_HEADERS, weekHeadersJson);
             editor.putString(TYPES_EXERCISE, typesEJson);
             editor.putString(TYPES_DISTANCE, typesDJson);
-            editor.putString(TYPES_ROUTE, typesJJson);
+            editor.putString(TYPES_ROUTE, typesJJson);*/
 
             editor.apply();
+        }
+
+        private static <T> T loadPref(TypeToken token, String tag, SharedPreferences sp, Gson gson) {
+            String json = sp.getString(tag, null);
+            Type type = token.getType();
+            return gson.fromJson(json, type);
         }
         public static void loadPrefs(Context c) {
 
@@ -938,7 +947,11 @@ public class Toolbox {
                 SharedPreferences sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
                 Gson gson = new Gson();
 
-                String lesserJson = sp.getString(LESSER_ROUTES, null);
+                String json = sp.getString(PREFS, null);
+                Type type = new TypeToken<Prefs>(){}.getType();
+                D.prefs = gson.fromJson(json, type);
+
+                /*String lesserJson = sp.getString(LESSER_ROUTES, null);
                 String smallestFirstJson = sp.getString(SMALLEST_FIRST, null);
                 String sortModeJson = sp.getString(SORT_MODE, null);
                 String weekAmountJson = sp.getString(WEEK_AMOUNT, null);
@@ -948,6 +961,7 @@ public class Toolbox {
                 String themeLightJson = sp.getString(LOOK_THEME, null);
                 String massJson = sp.getString(MASS, null);
                 String birthdayJson = sp.getString(BIRTHDAY, null);
+                //String weekHeadersJson = sp.getString(WEEK_HEADERS, null);
                 String eTypesJson = sp.getString(TYPES_EXERCISE, null);
                 String dTypesJson = sp.getString(TYPES_DISTANCE, null);
                 String jTypesJson = sp.getString(TYPES_ROUTE, null);
@@ -962,23 +976,25 @@ public class Toolbox {
                 Type themeLightType = new TypeToken<Boolean>(){}.getType();
                 Type massType = new TypeToken<Float>(){}.getType();
                 Type birthdayType = new TypeToken<LocalDate>(){}.getType();
+                //Type weekHeadersType = new TypeToken<Boolean>(){}.getType();
                 Type eTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
                 Type dTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
                 Type jTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
 
-                D.showLesserRoutes = gson.fromJson(lesserJson, lesserType);
+                D.prefs.setShowLesserRoutes((Boolean) gson.fromJson(lesserJson, lesserType));
                 C.smallestFirstPrefs = gson.fromJson(smallestFirstJson, smallestFirstType);
                 C.sortModePrefs = gson.fromJson(sortModeJson, sortModeType);
                 D.weekAmount = gson.fromJson(weekAmountJson, weekAmountType);
-                D.weekDistance = gson.fromJson(weekDistanceJson, weekDistanceType);
-                D.showWeekChart = gson.fromJson(weekChartJson, weekChartType);
-                D.color = gson.fromJson(themeColorJson, themeColorType);
-                D.theme = gson.fromJson(themeLightJson, themeLightType);
-                D.mass = gson.fromJson(massJson, massType);
-                D.birthday = gson.fromJson(birthdayJson, birthdayType);
+                D.prefs.setWeekDistance((Boolean) gson.fromJson(weekDistanceJson, weekDistanceType));
+                D.prefs.setShowWeekChart((Boolean) gson.fromJson(weekChartJson, weekChartType));
+                D.prefs.setColor((Integer) gson.fromJson(themeColorJson, themeColorType));
+                D.prefs.setTheme((Boolean) gson.fromJson(themeLightJson, themeLightType));
+                D.prefs.setMass((Float) gson.fromJson(massJson, massType));
+                D.prefs.setBirthday((LocalDate) gson.fromJson(birthdayJson, birthdayType));
+                //D.showWeekHeaders = gson.fromJson(weekHeadersJson, weekHeadersType);
                 D.exerciseVisibleTypes = gson.fromJson(eTypesJson, eTypeType);
                 D.distanceVisibleTypes = gson.fromJson(dTypesJson, dTypeType);
-                D.routeVisibleTypes = gson.fromJson(jTypesJson, jTypeType);
+                D.routeVisibleTypes = gson.fromJson(jTypesJson, jTypeType);*/
 
             } catch (Exception e) {
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -1158,7 +1174,7 @@ public class Toolbox {
                         Helper.Reader reader = new Helper.Reader(c);
                         int routeId = reader.getRouteId(route);
                         reader.close();
-                        Exercise e = new Exercise(-1, id, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, id), null);
+                        Exercise e = new Exercise(-1, id, type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, id), null);
                         D.exercises.add(e);
                     }
 
@@ -1231,6 +1247,7 @@ public class Toolbox {
 
         public static final double GOLDEN_RATIO = 1.618033988749894;
 
+        // real maths
         public static double sqr(double d) {
             return d * d;
         }
@@ -1359,6 +1376,9 @@ public class Toolbox {
         public static String drive(String s) {
             return "( " + s + " )";
         }
+        public static String truncateString(String s, int maxLength) {
+            return s.length() < maxLength ? s : s.substring(0,maxLength);
+        }
 
         // ratios
         public static int px(int dp) {
@@ -1418,6 +1438,7 @@ public class Toolbox {
             return new float[] {seconds, minutes, hours};
         }
 
+        // dates
         public static int mergeYearAndWeek(int year, int week) {
             String sWeek = Integer.toString(week);
             if (sWeek.length() == 1) {
@@ -1429,6 +1450,9 @@ public class Toolbox {
             int year = Integer.parseInt(Integer.toString(yearAndWeek).substring(0, 4));
             int week = Integer.parseInt(Integer.toString(yearAndWeek).substring(4));
             return new int[] {year, week};
+        }
+        public static LocalDateTime dateTime(LocalDate date) {
+            return LocalDateTime.of(date, LocalTime.of(12,0));
         }
 
         // distance
@@ -1498,15 +1522,18 @@ public class Toolbox {
         }
 
         // toast
+        public static void toast(String s, Context c) {
+            Toast.makeText(c, s, Toast.LENGTH_LONG).show();
+        }
         public static void toast(boolean b, Context c) {
             if (b) return;
             Toast.makeText(c, "success: " + b, Toast.LENGTH_SHORT).show();
         }
-        public static void toast(Exception e, Context c) {
+        public static void handleError(Exception e, Context c) {
             Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        public static void toast(String s, Context c) {
-            Toast.makeText(c, s, Toast.LENGTH_LONG).show();
+        public static void handleError(String desc, Exception e, Context c) {
+            Toast.makeText(c, desc + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         // check

@@ -5,11 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.trackfield.R;
 import com.example.trackfield.fragments.dialogs.Dialogs;
@@ -31,8 +32,14 @@ import java.time.LocalDate;
 public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
 
     private Activity a;
+    private LayoutInflater inflater;
+    private LinearLayout ll;
 
-    private static final String TAG_UPDATE_MASS = "updateMass";
+    private final static String TAG_LESSER_ROUTES = "lesserRoutes";
+    private final static String TAG_WEEK_HEADERS = "weekHeaders";
+    private final static String TAG_DAILY_CHARTS = "dailyChart";
+    private final static String TAG_WEEK_CHART = "weekChart";
+    private final static String TAG_WEEK_CHART_DISTANCE = "weekChartDistance";
 
     ////
 
@@ -47,14 +54,18 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        inflater = getLayoutInflater();
+        ll = findViewById(R.id.linearLayout_settings);
+
         toolbar();
+        inflateViews();
         setTexts();
+        fileListeners();
 
         // settings
-        fileListeners();
-        displayListeners();
-        lookListeners();
-        profileListeners();
+        //displayListeners();
+        //lookListeners();
+        //profileListeners();
     }
 
     private void setTexts() {
@@ -67,8 +78,6 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         totalTimeTv.setText(M.round(D.totalTime, 1) + " h");
         totalActivitiesTv.setText(D.exercises.size() + " activities");
     }
-
-    // listeners
     private void fileListeners() {
 
         // save
@@ -104,142 +113,102 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         });
 
     }
-    private void displayListeners() {
 
-        // lesser routes
-        final Switch lesserSw = findViewById(R.id.switch_showLesserRoutes);
-        lesserSw.setChecked(D.showLesserRoutes);
-        ConstraintLayout lesserCl = findViewById(R.id.constraintLayout_lesserRoutes);
-        lesserCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                lesserSw.setChecked(!lesserSw.isChecked());
-                D.showLesserRoutes = lesserSw.isChecked();
-            }
-        });
+    private void inflateViews() {
 
-        // week headers
-        final Switch wHeadersSw = findViewById(R.id.switch_showWeekHeaders);
-        wHeadersSw.setChecked(D.showWeekHeaders);
-        ConstraintLayout wHeadersCl = findViewById(R.id.constraintLayout_weekHeaders);
-        wHeadersCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                wHeadersSw.setChecked(!wHeadersSw.isChecked());
-                D.showWeekHeaders = wHeadersSw.isChecked();
-            }
-        });
+        inflateHeader("Display Options");
+        inflateSwitchItem("Show lesser routes", D.prefs.showLesserRoutes(), false, TAG_LESSER_ROUTES);
+        inflateSwitchItem("Week headers", D.prefs.showWeekHeaders(), false, TAG_WEEK_HEADERS);
+        inflateSwitchItem("Daily chart", D.prefs.showDailyChart(), false, TAG_DAILY_CHARTS);
+        inflateSwitchItem("Week chart", D.prefs.showWeekChart(), false, TAG_WEEK_CHART);
+        inflateSwitchItem("Week chart distance", D.prefs.showWeekDistance(), true, TAG_WEEK_CHART_DISTANCE);
 
-        // daily chart
-        final Switch dailySw = findViewById(R.id.switch_showDailyChart);
-        dailySw.setChecked(D.showDailyChart);
-        ConstraintLayout dailyCl = findViewById(R.id.constraintLayout_dailyChart);
-        dailyCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                dailySw.setChecked(!dailySw.isChecked());
-                D.showDailyChart = dailySw.isChecked();
-            }
-        });
+        inflateHeader("Look");
+        inflateDialogItem("Theme", D.prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
+        inflateDialogItem("Color", D.prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
 
-        // weekly chart
-        final Switch weeklySw = findViewById(R.id.switch_showWeekChart);
-        weeklySw.setChecked(D.showWeekChart);
-        ConstraintLayout weeklyCl = findViewById(R.id.constraintLayout_weekChart);
-        weeklyCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                weeklySw.setChecked(!weeklySw.isChecked());
-                D.showWeekChart = weeklySw.isChecked();
-            }
-        });
+        inflateHeader("Profile");
+        inflateDialogItem("Mass", D.prefs.getMass() + " kg", false, new Dialogs.EditMass());
 
-        // weekly chart distance
-        final Switch weeklyDistanceSw = findViewById(R.id.switch_weekDistance);
-        weeklyDistanceSw.setChecked(D.weekDistance);
-        ConstraintLayout weeklyDistanceCl = findViewById(R.id.constraintLayout_weekDistance);
-        weeklyDistanceCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                weeklyDistanceSw.setChecked(!weeklyDistanceSw.isChecked());
-                D.weekDistance = weeklyDistanceSw.isChecked();
-            }
-        });
-
-        // weekly chart weeks
-        TextView weeklyWeeksTv = findViewById(R.id.textView_weeksState);
-        weeklyWeeksTv.setText(D.weekAmount + "");
-        ConstraintLayout weeklyWeeksCl = findViewById(R.id.constraintLayout_weeks);
-        weeklyWeeksCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Dialogs.WeekChartWeeks dialog = new Dialogs.WeekChartWeeks();
-                dialog.show(getSupportFragmentManager(), dialog.TAG);
-            }
-        });
-
-    }
-    private void lookListeners() {
-
-        // theme
-        TextView themeTv = findViewById(R.id.textView_lightThemeState);
-        if (D.theme) { themeTv.setText("Light"); }
-        else { themeTv.setText("Dark"); }
-        ConstraintLayout themeCl = findViewById(R.id.constraintLayout_lightTheme);
-        themeCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Dialogs.Theme dialog = new Dialogs.Theme();
-                dialog.show(getSupportFragmentManager(), dialog.TAG);
-            }
-        });
-
-
-        // color
-        TextView colorTv = findViewById(R.id.textView_colorThemeState);
-        if (D.color == 0) { colorTv.setText("Mono"); }
-        else { colorTv.setText("Green"); }
-        ConstraintLayout colorCl = findViewById(R.id.constraintLayout_colorTheme);
-        colorCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Dialogs.Color dialog = new Dialogs.Color();
-                dialog.show(getSupportFragmentManager(), dialog.TAG);
-            }
-        });
-
-    }
-    private void profileListeners() {
-
-        // mass
-        TextView massTv = findViewById(R.id.textView_massState);
-        massTv.setText(D.mass + " kg");
-        ConstraintLayout massCl = findViewById(R.id.constraintLayout_mass);
-        massCl.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Dialogs.EditMass.newInstance(D.mass, getSupportFragmentManager());
-            }
-        });
-
-        // birthday
-        final TextView birthdayTv = findViewById(R.id.textView_birthdayState);
-        if (D.birthday != null) { birthdayTv.setText(D.birthday.format(Toolbox.C.FORMATTER_CAPTION)); }
-        ConstraintLayout birthdatCl = findViewById(R.id.constraintLayout_birthday);
-        birthdatCl.setOnClickListener(new View.OnClickListener() {
+        final LocalDate bd = D.prefs.getBirthday();
+        final View birth = inflateDialogItem("Birthday", bd != null ? bd.format(Toolbox.C.FORMATTER_CAPTION) : "", true);
+        birth.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 int yearSelect, monthSelect, daySelect;
-                if (D.birthday == null) {
+                if (bd == null) {
                     yearSelect = 1970;
                     monthSelect = 0;
                     daySelect = 1;
                 }
                 else {
-                    yearSelect = D.birthday.getYear();
-                    monthSelect = D.birthday.getMonthValue()-1;
-                    daySelect = D.birthday.getDayOfMonth();
+                    yearSelect = bd.getYear();
+                    monthSelect = bd.getMonthValue()-1;
+                    daySelect = bd.getDayOfMonth();
                 }
-                DatePickerDialog dpd = new DatePickerDialog(a, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog picker = new DatePickerDialog(a, new DatePickerDialog.OnDateSetListener() {
                     @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        D.birthday = LocalDate.of(year, month+1, dayOfMonth);
-                        birthdayTv.setText(D.birthday.format(Toolbox.C.FORMATTER_CAPTION));
+                        D.prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
+                        ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(Toolbox.C.FORMATTER_CAPTION));
                     }
                 }, yearSelect, monthSelect, daySelect);
-                dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
-                dpd.show();
+                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
+                picker.show();
             }
         });
+
+
+    }
+
+    // inflate items
+    private void inflateHeader(String title) {
+        View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
+        ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
+        ll.addView(v);
+    }
+    private void inflateDialogItem(String title, String value, boolean hideDivider, final Dialogs.Base dialog) {
+        View v = inflateDialogItem(title, value, hideDivider);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialog.show(getSupportFragmentManager(), dialog.tag());
+            }
+        });
+    }
+    private void inflateSwitchItem(String title, boolean checked, boolean hideDivider, final String tag) {
+        View v = inflateSwitchItem(title, hideDivider);
+        final Switch sw = v.findViewById(R.id.switch_setting);
+        sw.setChecked(checked);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                sw.setChecked(!sw.isChecked());
+                switchSwitched(sw.isChecked(), tag);
+            }
+        });
+    }
+    private View inflateDialogItem(String title, String value, boolean hideDivider) {
+        View v = inflater.inflate(R.layout.layout_settings_dialog, ll, false);
+        ((TextView) v.findViewById(R.id.textView_title)).setText(title);
+        ((TextView) v.findViewById(R.id.textView_value)).setText(value);
+        if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
+        ll.addView(v);
+        return v;
+    }
+    private View inflateSwitchItem(String title, boolean hideDivider) {
+        View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
+        ((TextView) v.findViewById(R.id.switch_setting)).setText(title);
+        if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
+        ll.addView(v);
+        return v;
+    }
+
+    // tools
+    private void switchSwitched(boolean checked, String tag) {
+        switch (tag) {
+            case TAG_LESSER_ROUTES: D.prefs.setShowLesserRoutes(checked); break;
+            case TAG_WEEK_HEADERS: D.prefs.setShowWeekHeaders(checked); break;
+            case TAG_DAILY_CHARTS: D.prefs.setShowDailyChart(checked); break;
+            case TAG_WEEK_CHART: D.prefs.setShowWeekChart(checked); break;
+            case TAG_WEEK_CHART_DISTANCE: D.prefs.setWeekDistance(checked); break;
+        }
     }
 
     // dialog
@@ -248,7 +217,7 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         recreate();
     }
     @Override public void onDecimalDialogPositiveClick(float input, String tag) {
-        D.mass = input;
+        D.prefs.setMass(input);
     }
 
     // toolbar
