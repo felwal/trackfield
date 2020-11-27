@@ -17,10 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
+import com.example.trackfield.database.ApiManager;
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.D;
@@ -29,7 +29,7 @@ import com.example.trackfield.toolbox.Toolbox.M;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
+public class SettingsActivity extends ApiManager implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
@@ -40,6 +40,9 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
     private final static String TAG_DAILY_CHARTS = "dailyChart";
     private final static String TAG_WEEK_CHART = "weekChart";
     private final static String TAG_WEEK_CHART_DISTANCE = "weekChartDistance";
+
+    private final static String TAG_STRAVA = "strava";
+    private final static String TAG_GOOGLE_FIT = "googleFit";
 
     ////
 
@@ -59,8 +62,9 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
 
         toolbar();
         inflateViews();
-        setTexts();
-        fileListeners();
+        fileView();
+
+        connectAPIs();
 
         // settings
         //displayListeners();
@@ -68,17 +72,15 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         //profileListeners();
     }
 
-    private void setTexts() {
+    private void fileView() {
 
+        // stats
         TextView totalDistanceTv = findViewById(R.id.textView_totalDistance);
         TextView totalTimeTv = findViewById(R.id.textView_totalTime);
         TextView totalActivitiesTv = findViewById(R.id.textView_totalActivities);
-
         totalDistanceTv.setText(D.totalDistance / 1000 + " km");
         totalTimeTv.setText(M.round(D.totalTime, 1) + " h");
         totalActivitiesTv.setText(D.exercises.size() + " activities");
-    }
-    private void fileListeners() {
 
         // save
         Button saveBtn = findViewById(R.id.button_save);
@@ -113,7 +115,6 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         });
 
     }
-
     private void inflateViews() {
 
         inflateHeader("Display Options");
@@ -127,11 +128,15 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         inflateDialogItem("Theme", D.prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
         inflateDialogItem("Color", D.prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
 
+        inflateHeader("Other Services");
+        inflateClickItem("Strava", "Connected", false, TAG_STRAVA);
+        inflateClickItem("Google Fit", "Not connected", true, TAG_GOOGLE_FIT);
+
         inflateHeader("Profile");
         inflateDialogItem("Mass", D.prefs.getMass() + " kg", false, new Dialogs.EditMass());
 
         final LocalDate bd = D.prefs.getBirthday();
-        final View birth = inflateDialogItem("Birthday", bd != null ? bd.format(Toolbox.C.FORMATTER_CAPTION) : "", true);
+        final View birth = inflateTextItem("Birthday", bd != null ? bd.format(Toolbox.C.FORMATTER_CAPTION) : "", true);
         birth.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 int yearSelect, monthSelect, daySelect;
@@ -166,7 +171,7 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         ll.addView(v);
     }
     private void inflateDialogItem(String title, String value, boolean hideDivider, final Dialogs.Base dialog) {
-        View v = inflateDialogItem(title, value, hideDivider);
+        View v = inflateTextItem(title, value, hideDivider);
         v.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 dialog.show(getSupportFragmentManager(), dialog.tag());
@@ -180,12 +185,22 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
         v.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 sw.setChecked(!sw.isChecked());
-                switchSwitched(sw.isChecked(), tag);
+                itemSwitched(sw.isChecked(), tag);
             }
         });
     }
-    private View inflateDialogItem(String title, String value, boolean hideDivider) {
-        View v = inflater.inflate(R.layout.layout_settings_dialog, ll, false);
+    private void inflateClickItem(String title, String value, boolean hideDivider, final String tag) {
+        View v = inflateTextItem(title, value, hideDivider);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                itemClicked(tag);
+            }
+        });
+    }
+
+    private View inflateTextItem(String title, String value, boolean hideDivider) {
+        View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
+        Toolbox.L.ripple(v, this);
         ((TextView) v.findViewById(R.id.textView_title)).setText(title);
         ((TextView) v.findViewById(R.id.textView_value)).setText(value);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
@@ -194,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
     }
     private View inflateSwitchItem(String title, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
+        Toolbox.L.ripple(v, this);
         ((TextView) v.findViewById(R.id.switch_setting)).setText(title);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
         ll.addView(v);
@@ -201,13 +217,19 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
     }
 
     // tools
-    private void switchSwitched(boolean checked, String tag) {
+    private void itemSwitched(boolean checked, String tag) {
         switch (tag) {
             case TAG_LESSER_ROUTES: D.prefs.setShowLesserRoutes(checked); break;
             case TAG_WEEK_HEADERS: D.prefs.setShowWeekHeaders(checked); break;
             case TAG_DAILY_CHARTS: D.prefs.setShowDailyChart(checked); break;
             case TAG_WEEK_CHART: D.prefs.setShowWeekChart(checked); break;
             case TAG_WEEK_CHART_DISTANCE: D.prefs.setWeekDistance(checked); break;
+        }
+    }
+    private void itemClicked(String tag) {
+        switch (tag) {
+            case TAG_STRAVA: authenticateStrava(); break;
+            case TAG_GOOGLE_FIT: break;
         }
     }
 
@@ -242,6 +264,11 @@ public class SettingsActivity extends AppCompatActivity implements Dialogs.BaseW
             default: return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override protected void onDestroy() {
+        F.savePrefs(this);
+        super.onDestroy();
     }
 
 }

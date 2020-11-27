@@ -82,7 +82,7 @@ public class SortDialog extends BottomSheetDialogFragment {
         RelativeLayout[] layouts = new RelativeLayout[sortModesTitle.length];
         TextView[] textViews = new TextView[sortModesTitle.length];
 
-        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, M.px(40));
+        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, L.px(40));
         RelativeLayout.LayoutParams tvParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
         // add views
@@ -98,7 +98,7 @@ public class SortDialog extends BottomSheetDialogFragment {
             textViews[rl] = new TextView(getContext());
             textViews[rl].setLayoutParams(tvParams);
             textViews[rl].setGravity(Gravity.CENTER_VERTICAL);
-            textViews[rl].setPadding(M.px(24), 0, 0, 0);
+            textViews[rl].setPadding(L.px(24), 0, 0, 0);
             textViews[rl].setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.type_heading1));
             if (sortMode == sortModes[rl]) {
                 textViews[rl].setTextColor(getResources().getColor(R.color.colorTextHighlight));

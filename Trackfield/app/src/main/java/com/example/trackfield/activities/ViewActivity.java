@@ -43,7 +43,6 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
     // extras
     public static final String EXTRA_FROM = "from";
     public static final String EXTRA_ID = "_id";
-    private static final String TAG_DELETE_EXERCISE = "deleteExercise";
 
     public static final int FROM_NONE = 0;
     public static final int FROM_DISTANCE = 1;
@@ -322,7 +321,6 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
                 }
             });
         }
-
     }
 
     @Override protected void onRestart() {

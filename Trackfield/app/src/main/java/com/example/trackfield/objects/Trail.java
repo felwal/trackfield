@@ -108,5 +108,8 @@ public class Trail {
 
         return distance;
     }
+    public boolean hasStartEnd() {
+        return start != null && end != null;
+    }
 
 }

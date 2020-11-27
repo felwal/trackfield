@@ -1,6 +1,7 @@
 package com.example.trackfield.fragments;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,12 @@ public class RecsFragment extends MainFragment {
 
     ////
 
+    @Override public void onCreate(Bundle savedInstancesState) {
+        super.onCreate(savedInstancesState);
+        TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
+        setEnterTransition(transitionInflater.inflateTransition(R.transition.explode));
+        setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
+    }
     @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recs, container, false);
         setHasOptionsMenu(true);
@@ -54,6 +61,7 @@ public class RecsFragment extends MainFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    // tools
     @Override public void scrollToTop() {
         recsPagerAdapter.scrollToTop();
     }

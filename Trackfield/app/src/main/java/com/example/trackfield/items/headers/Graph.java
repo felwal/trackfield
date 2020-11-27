@@ -1,4 +1,4 @@
-package com.example.trackfield.items.distinct;
+package com.example.trackfield.items.headers;
 
 import android.view.LayoutInflater;
 import android.view.View;

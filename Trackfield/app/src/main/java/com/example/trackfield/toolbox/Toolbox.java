@@ -26,7 +26,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +58,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -190,18 +188,15 @@ public class Toolbox {
         public static ArrayList<Integer> distances = new ArrayList<>();
         public static ArrayList<String> routes = new ArrayList<>();
 
+        // prefs
+        public static Prefs prefs = new Prefs();
+        private static int distanceLowerLimit = 500; //
+        private static int distanceUpperLimit = 999; //
+
         // stats & more
         public static int totalDistance = 0;
         public static float totalTime = 0;
-        private static int distanceLowerLimit = 300; //
-        private static int distanceUpperLimit = 999; //
         public static boolean gameOn = false;
-
-        // preferences
-        public static Prefs prefs = new Prefs();
-        public static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
-        public static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
-        public static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
 
         // bort
         public static float[] weekDistances, weekActivities;
@@ -872,36 +867,18 @@ public class Toolbox {
         private static final char DIV_WRITE = '•';
 
         // prefs keys
-        private static final String SHARED_PREFERENCES = "shared preferences";
-        private static final String PREFS = "prefs";
-        private static final String LESSER_ROUTES = "lesserRoutes";
-        private static final String SMALLEST_FIRST = "smallestFirst";
-        private static final String SORT_MODE = "sortMode";
-        private static final String WEEK_AMOUNT = "weekAmount";
-        private static final String WEEK_DISTANCE = "weekDistance";
-        private static final String WEEK_CHART = "weekChart";
-        private static final String LOOK_COLOR = "color";
-        private static final String LOOK_THEME = "theme";
-        private static final String MASS = "mass";
-        private static final String BIRTHDAY = "birthday";
-        private static final String WEEK_HEADERS = "weekHeaders";
-        private static final String TYPES_EXERCISE = "typesExercise";
-        private static final String TYPES_ROUTE = "typesRoute";
-        private static final String TYPES_DISTANCE = "typesDistance";
+        public static final String SP_SHARED_PREFERENCES = "shared preferences";
+        private static final String SP_PREFS = "prefs";
 
         // save data
-        private static void savaPref(Object var, String tag, SharedPreferences.Editor editor, Gson gson) {
-            String json = gson.toJson(var);
-            editor.putString(tag, json);
-        }
         public static void savePrefs(Context c) {
 
-            SharedPreferences sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+            SharedPreferences sp = c.getSharedPreferences(SP_SHARED_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             Gson gson = new Gson();
 
             String json = gson.toJson(D.prefs);
-            editor.putString(PREFS, json);
+            editor.putString(SP_PREFS, json);
 
             /*String lesserJson = gson.toJson(D.showLesserRoutes);
             String smallestFirstJson = gson.toJson(C.smallestFirstPrefs);
@@ -935,19 +912,13 @@ public class Toolbox {
 
             editor.apply();
         }
-
-        private static <T> T loadPref(TypeToken token, String tag, SharedPreferences sp, Gson gson) {
-            String json = sp.getString(tag, null);
-            Type type = token.getType();
-            return gson.fromJson(json, type);
-        }
         public static void loadPrefs(Context c) {
 
             try {
-                SharedPreferences sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences sp = c.getSharedPreferences(SP_SHARED_PREFERENCES, MODE_PRIVATE);
                 Gson gson = new Gson();
 
-                String json = sp.getString(PREFS, null);
+                String json = sp.getString(SP_PREFS, null);
                 Type type = new TypeToken<Prefs>(){}.getType();
                 D.prefs = gson.fromJson(json, type);
 
@@ -996,11 +967,14 @@ public class Toolbox {
                 D.distanceVisibleTypes = gson.fromJson(dTypesJson, dTypeType);
                 D.routeVisibleTypes = gson.fromJson(jTypesJson, jTypeType);*/
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
             }
+            D.prefs.setUpAutoSave(c);
 
         }
+
         public static void saveExternal(Context c) {
 
             D.moveExercise();
@@ -1329,6 +1303,10 @@ public class Toolbox {
 
             return preComma + "." + postComma + " " + prefix + unit;
         }
+        public static String kiloPrefix(float value, int decimals, String unit) {
+            float rounded = round(value / 1000f, decimals);
+            return decimals == 0 ? (int) rounded + " k" + unit : rounded + " k" + unit;
+        }
         public static String timePrefix(int seconds) {
             return seconds < 60 ? seconds + " s" : seconds < 3600 ? seconds / 60 + " min" : hours(seconds);
         }
@@ -1381,9 +1359,6 @@ public class Toolbox {
         }
 
         // ratios
-        public static int px(int dp) {
-            return (int) (dp * L.scale + 0.5f);
-        }
         public static int goldenRatioA(int of) {
             return (int) (of / (1 + GOLDEN_RATIO));
         }
@@ -1494,13 +1469,17 @@ public class Toolbox {
             a.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             return displayMetrics.heightPixels;
         }
+        public static int px(float dp) {
+            return (int) (dp * scale + 0.5f);
+        }
 
         // resources
-        public static void ripple(RelativeLayout layout, Context c) {
+        public static void ripple(View v, Context c) {
             int[] attrs = new int[] {R.attr.selectableItemBackground};
             TypedArray typedArray = c.obtainStyledAttributes(attrs);
             int backgroundResource = typedArray.getResourceId(0, 0);
-            layout.setBackgroundResource(backgroundResource);
+            v.setBackgroundResource(backgroundResource);
+            typedArray.recycle();
         }
         public static int getBackgroundResourceFromAttr(int attr, Context c) {
             int[] attrs = new int[] { attr };
@@ -1554,12 +1533,13 @@ public class Toolbox {
         // animate
         private static final int ANIM_DURATION = 100;
         private static final int ANIM_DURATION_LONG = 250;
+        private static final int ANIM_DURATION_RECYCLER = 175;
 
         public static void crossfade(View view, float toAlpha) {
             view.animate().alpha(toAlpha).setDuration(ANIM_DURATION).setListener(null);
         }
         public static void crossfadeIn(View view, float toAlpha) {
-            //view.setAlpha(0f);
+            view.setAlpha(0f);
             view.setVisibility(View.VISIBLE);
             view.animate().alpha(toAlpha).setDuration(ANIM_DURATION).setListener(null);
         }
@@ -1569,6 +1549,11 @@ public class Toolbox {
                     view.setVisibility(View.GONE);
                 }
             });
+        }
+
+        public static void crossfadeRecycler(View recycler) {
+            recycler.setAlpha(0f);
+            recycler.animate().alpha(1f).setDuration(ANIM_DURATION_RECYCLER).setListener(null);
         }
 
         public static void animateHeight(final View view, int toHeight) {

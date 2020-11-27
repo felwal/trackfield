@@ -124,7 +124,7 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:elevation">@dimen/elev_navbar</item>
         <item name="android:background">?attr/colorSurface</item>
-        <item name="labelVisibilityMode">labeled</item>
+        <item name="labelVisibilityMode">selected</item>
         <item name="itemTextColor">@drawable/selector_nav_color</item>
         <item name="itemIconTint">@drawable/selector_nav_color</item>
         <item name="menu">@menu/menu_navbar</item>
@@ -232,9 +232,11 @@
         <item name="android:textSize">@dimen/type_dialog_title</item>
         <!--<item name="android:textStyle">bold</item>-->
     </style>
+
     <style name="DialogMessageLone" parent="Text">
         <item name="android:textSize">@dimen/type_dialog_title</item>
     </style>
+
     <style name="DialogMessage" parent="Text">
         <item name="android:textSize">@dimen/type_dialog_message</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
@@ -312,6 +314,15 @@
     <style name="AppTheme.Dark.Green.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.Dark.Green.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

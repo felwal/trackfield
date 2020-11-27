@@ -1,6 +1,6 @@
 package com.example.trackfield.items;
 
-import com.example.trackfield.items.distinct.RecyclerItem;
+import com.example.trackfield.items.headers.RecyclerItem;
 
 public class IntervalItem extends RecyclerItem {
 

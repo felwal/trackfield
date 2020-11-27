@@ -22,18 +22,18 @@ import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.RecyclerAdapters;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.SortDialog;
-import com.example.trackfield.items.distinct.Chart;
+import com.example.trackfield.items.headers.Chart;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.Exerlite;
-import com.example.trackfield.items.distinct.Goal;
-import com.example.trackfield.items.distinct.Graph;
-import com.example.trackfield.items.distinct.Header;
+import com.example.trackfield.items.headers.Goal;
+import com.example.trackfield.items.headers.Graph;
+import com.example.trackfield.items.headers.Header;
 import com.example.trackfield.items.IntervalItem;
-import com.example.trackfield.items.distinct.RecyclerItem;
+import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.items.RouteItem;
-import com.example.trackfield.items.distinct.Sorter;
+import com.example.trackfield.items.headers.Sorter;
 import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
@@ -78,6 +78,7 @@ public class RecyclerFragments {
             manager = new LinearLayoutManager(a);
             recycler.setLayoutManager(manager);
 
+            // empty page
             emptyCl = view.findViewById(R.id.constraintLayout_empty);
             emptyTitle = emptyCl.findViewById(R.id.textView_emptyTitle);
             emptyMessage = emptyCl.findViewById(R.id.textView_emptyMessage);
@@ -89,12 +90,25 @@ public class RecyclerFragments {
 
             setSortModes();
             if (adapter == null) {
-                items.addAll(getRecyclerItems());
-                allItems.addAll(items);
-                getAdapter();
+                new Thread(new Runnable() {
+                    @Override public void run() {
+                        items.addAll(getRecyclerItems());
+                        allItems.addAll(items);
+                        a.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                getAdapter();
+                                adapter.setClickListener(Base.this);
+                                recycler.setAdapter(adapter);
+                                L.crossfadeRecycler(recycler);
+                            }
+                        });
+                    }
+                }).start();
             }
-            adapter.setClickListener(this);
-            recycler.setAdapter(adapter);
+            else {
+                adapter.setClickListener(this);
+                recycler.setAdapter(adapter);
+            }
 
             if (a instanceof MainActivity) {
                 ((MainActivity) a).recyclerScrollListener(recycler, this);
@@ -113,17 +127,14 @@ public class RecyclerFragments {
         protected void setEmptyPage() {}
 
         // calls
-        public void updateRecycler(ArrayList<RecyclerItem> newItems) {
+        public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
 
             class RecyclerItemCallback extends DiffUtil.Callback {
-
                 private ArrayList<RecyclerItem> oldList, newList;
-
                 private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
                     this.oldList = oldList;
                     this.newList = newList;
                 }
-
                 @Override public int getOldListSize() {
                     return oldList.size();
                 }
@@ -141,16 +152,64 @@ public class RecyclerFragments {
                     return oldItem.sameContentAs(newItem);
                 }
             }
-            DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
+            final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
 
             items.clear();
             items.addAll(newItems);
             diff.dispatchUpdatesTo(adapter);
+
+            /*new Thread(new Runnable() {
+                @Override public void run() {
+                    class RecyclerItemCallback extends DiffUtil.Callback {
+                        private ArrayList<RecyclerItem> oldList, newList;
+                        private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
+                            this.oldList = oldList;
+                            this.newList = newList;
+                        }
+                        @Override public int getOldListSize() {
+                            return oldList.size();
+                        }
+                        @Override public int getNewListSize() {
+                            return newList.size();
+                        }
+                        @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                            RecyclerItem oldItem = oldList.get(oldItemPosition);
+                            RecyclerItem newItem = newList.get(newItemPosition);
+                            return oldItem.sameItemAs(newItem);
+                        }
+                        @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                            RecyclerItem oldItem = oldList.get(oldItemPosition);
+                            RecyclerItem newItem = newList.get(newItemPosition);
+                            return oldItem.sameContentAs(newItem);
+                        }
+                    }
+                    final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
+
+                    items.clear();
+                    items.addAll(newItems);
+                    a.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            diff.dispatchUpdatesTo(adapter);
+                        }
+                    });
+                }
+            }).start();*/
         }
         public void updateRecycler() {
-            updateRecycler(getRecyclerItems());
+
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    final ArrayList<RecyclerItem> newItems = getRecyclerItems();
+                    a.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            updateRecycler(newItems);
+                        }
+                    });
+                }
+            }).start();
         }
         public void scrollToTop() {
+            //recycler.scrollToPosition(25);
             recycler.smoothScrollToPosition(0);
         }
 
@@ -256,26 +315,31 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            //ArrayList<Exercise> exerciseList = searchTerm.equals("") ? D.sortExercises(D.exercises, smallestFirst, sortMode) : D.sortExercises(D.filterBySearch(searchTerm), smallestFirst, sortMode);
             ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-            Sorter sorter = newSorter(sortModes, sortModesTitle);
-            Chart dailyChart = null;
-            if (D.prefs.showDailyChart()) {
-                dailyChart = new Chart(D.weekDailyDistance());
-                dailyChart.setType(Chart.TYPE_DAILY);
-                itemList.add(dailyChart);
+            // sorter & charts
+            if (exerliteList.size() != 0) {
+                Sorter sorter = newSorter(sortModes, sortModesTitle);
+                Chart dailyChart = null;
+                if (D.prefs.showDailyChart()) {
+                    dailyChart = new Chart(D.weekDailyDistance());
+                    dailyChart.setType(Chart.TYPE_DAILY);
+                    itemList.add(dailyChart);
+                }
+                else itemList.add(sorter);
+                if (D.prefs.showWeekChart()) {
+                    //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
+                    //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
+                }
+                if (sortMode != C.SortMode.DATE) {
+                    itemList.addAll(exerliteList);
+                    return itemList;
+                }
+
+                else L.crossfadeOut(emptyCl);
             }
-            else itemList.add(sorter);
-            if (D.prefs.showWeekChart()) {
-                //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
-                //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
-            }
-            if (sortMode != C.SortMode.DATE) {
-                itemList.addAll(exerliteList);
-                return itemList;
-            }
+            else L.crossfadeIn(emptyCl, 1);
 
             // headers
             Header yearHeader = new Header("", Header.Type.YEAR, itemList.size());
@@ -284,6 +348,7 @@ public class RecyclerFragments {
             int year = -1; int month = -1; int week = -1;
             int newYear, newMonth, newWeek;
             boolean oldYear = false;
+
             for (Exerlite e : exerliteList) {
                 // year
                 if ((newYear = e.getDate().getYear()) != year) {
@@ -319,13 +384,6 @@ public class RecyclerFragments {
                 weekHeader.addValue((int) e.getTime());
                 itemList.add(e);
             }
-
-            if (exerliteList.size() == 0) {
-                itemList.remove(sorter);
-                itemList.remove(dailyChart);
-                L.crossfadeIn(emptyCl, 1);
-            }
-            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }

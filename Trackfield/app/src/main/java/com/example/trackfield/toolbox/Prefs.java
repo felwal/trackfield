@@ -1,12 +1,25 @@
 package com.example.trackfield.toolbox;
 
-import com.example.trackfield.objects.Exercise;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.example.trackfield.objects.Exercise;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Prefs {
+
+    // file
+    //static SharedPreferences sp;
+    //static SharedPreferences.Editor editor;
+    //static Gson gson = new Gson();
 
     // display options
     private boolean showWeekHeaders = true;
@@ -34,9 +47,15 @@ public class Prefs {
 
     ////
 
+    public void setUpAutoSave(Context c) {
+        //sp = c.getSharedPreferences(Toolbox.F.SP_SHARED_PREFERENCES, MODE_PRIVATE);
+        //editor = sp.edit();
+    }
+
     // set
     public void setShowWeekHeaders(boolean showWeekHeaders) {
         this.showWeekHeaders = showWeekHeaders;
+        //savePref(showWeekHeaders, WEEK_HEADERS);
     }
     public void setWeekDistance(boolean weekDistance) {
         this.weekDistance = weekDistance;
@@ -130,5 +149,32 @@ public class Prefs {
     public boolean isColorMono() {
         return color == COLOR_MONO;
     }
+
+    // save data
+    private void savePref(Object var, String tag) {
+        //String json = gson.toJson(var);
+        //editor.putString(tag, json);
+        //editor.apply();
+    }
+    private <T> T loadPref(TypeToken token, String tag, SharedPreferences sp, Gson gson) {
+        String json = sp.getString(tag, null);
+        Type type = token.getType();
+        return gson.fromJson(json, type);
+    }
+
+    private static final String LESSER_ROUTES = "lesserRoutes";
+    private static final String SMALLEST_FIRST = "smallestFirst";
+    private static final String SORT_MODE = "sortMode";
+    private static final String WEEK_AMOUNT = "weekAmount";
+    private static final String WEEK_DISTANCE = "weekDistance";
+    private static final String WEEK_CHART = "weekChart";
+    private static final String LOOK_COLOR = "color";
+    private static final String LOOK_THEME = "theme";
+    private static final String MASS = "mass";
+    private static final String BIRTHDAY = "birthday";
+    private static final String WEEK_HEADERS = "weekHeaders";
+    private static final String TYPES_EXERCISE = "typesExercise";
+    private static final String TYPES_ROUTE = "typesRoute";
+    private static final String TYPES_DISTANCE = "typesDistance";
 
 }

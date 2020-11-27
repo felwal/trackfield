@@ -11,8 +11,9 @@
   <string name="activity_view">Exercise</string>
   <string name="activity_maps">Map</string>
   <string name="activity_track">Track</string>
+  <string name="activity_boarding">BoardingActivity</string>
 
-  <!-- fgragments -->
+  <!-- fragments -->
 
   <string name="fragment_exercises">Exercises</string>
   <string name="fragment_records">Records</string>
@@ -23,6 +24,14 @@
   <string name="tab_distances">Distances</string>
   <string name="tab_routes">Routes</string>
   <string name="tab_intervals">Intervals</string>
+  <string name="tab_boarding1_title">Exercise</string>
+  <string name="tab_boarding2_title">Analyze</string>
+  <string name="tab_boarding3_title">Organize</string>
+
+  <string name="tab_boarding1_message">You do you.</string>
+  <string name="tab_boarding2_message">Chart, graph, compare.</string>
+  <string name="tab_boarding3_message">Your exercises, exactly where you need them.</string>
+
 
   <!-- actions -->
 
@@ -694,5 +703,6 @@
 ]
 
   </string>
+
 
 </resources>

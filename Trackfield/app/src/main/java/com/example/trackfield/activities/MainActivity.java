@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.database.ApiManager;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.ActivitiesFragment;
+import com.example.trackfield.fragments.ExercisesFragment;
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.fragments.RecsFragment;
 import com.example.trackfield.fragments.RecyclerFragments;
@@ -74,7 +74,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
 
     private void load() {
         if (!D.gameOn) {
-            if (F.shouldAskPermissions(this)) { F.askPermissions(this); }
+            if (F.shouldAskPermissions(this)) F.askPermissions(this);
             F.loadPrefs(this);
             F.loadExternal(this);
             D.gameOn = true;
@@ -170,7 +170,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
                 // fab
                 if (recyclerFragment instanceof RecyclerFragments.ExerciseRF) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && fragment instanceof ActivitiesFragment) fab.show();
+                    else if (fab.isOrWillBeHidden() && dy < 0 && fragment instanceof ExercisesFragment) fab.show();
                 }
             }
 
@@ -197,14 +197,14 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
     // toolbars
     private void setNavbar() {
 
-        selectFragment(new ActivitiesFragment());
+        selectFragment(new ExercisesFragment());
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
                     case R.id.navigation_exercises:
-                        if ((fragment instanceof ActivitiesFragment)) fragment.scrollToTop();
-                        else selectFragment(new ActivitiesFragment());
+                        if ((fragment instanceof ExercisesFragment)) fragment.scrollToTop();
+                        else selectFragment(new ExercisesFragment());
                         if (fab.isOrWillBeHidden()) fab.show();
                         return true;
 
@@ -237,7 +237,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
                 return true;
 
             case R.id.action_filter:
-                Dialogs.FilterExercises.newInstance(D.exerciseVisibleTypes, getSupportFragmentManager());
+                Dialogs.FilterExercises.newInstance(D.prefs.getExerciseVisibleTypes(), getSupportFragmentManager());
                 return true;
 
             case R.id.action_addDistance:
@@ -269,6 +269,10 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
                 requestActivities(1);
                 return true;
 
+            case R.id.action_Boarding:
+                BoardingActivity.startActivity(this);
+                return true;
+
             default: return super.onOptionsItemSelected(item);
         }
     }
@@ -284,7 +288,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
         fragment.updateFragment();
     }
     @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-        D.exerciseVisibleTypes = checkedTypes;
+        D.prefs.setExerciseVisibleTypes(checkedTypes);
         fragment.updateFragment();
     }
 

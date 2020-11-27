@@ -139,7 +139,7 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterDistance.newInstance(D.distanceVisibleTypes, getSupportFragmentManager());
+                    Dialogs.FilterDistance.newInstance(D.prefs.getDistanceVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_deleteDistance:
@@ -212,7 +212,7 @@ public class RecActivity {
             recyclerFragment.updateRecycler();
         }
         @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-            D.distanceVisibleTypes = checkedTypes;
+            D.prefs.setDistanceVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();
         }
 
@@ -255,7 +255,7 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterRoute.newInstance(D.routeVisibleTypes, getSupportFragmentManager());
+                    Dialogs.FilterRoute.newInstance(D.prefs.getRouteVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_renameRoute:
@@ -341,7 +341,7 @@ public class RecActivity {
             recyclerFragment.updateRecycler();
         }
         @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-            D.routeVisibleTypes = checkedTypes;
+            D.prefs.setRouteVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();
         }
 

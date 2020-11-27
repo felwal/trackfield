@@ -14,16 +14,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.items.distinct.Chart;
+import com.example.trackfield.items.headers.Chart;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.Exerlite;
-import com.example.trackfield.items.distinct.Goal;
-import com.example.trackfield.items.distinct.Graph;
-import com.example.trackfield.items.distinct.Header;
+import com.example.trackfield.items.headers.Goal;
+import com.example.trackfield.items.headers.Graph;
+import com.example.trackfield.items.headers.Header;
 import com.example.trackfield.items.IntervalItem;
-import com.example.trackfield.items.distinct.RecyclerItem;
+import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.items.RouteItem;
-import com.example.trackfield.items.distinct.Sorter;
+import com.example.trackfield.items.headers.Sorter;
 import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.C;
 import com.example.trackfield.toolbox.Toolbox.D;
@@ -230,7 +230,7 @@ public class RecyclerAdapters {
                 //float[] y = c.getY();
                 String[] xLabel = chart.getxLabel();
                 float[] yRel = chart.getyRel();
-                int maxHeight = M.px(42);
+                int maxHeight = Toolbox.L.px(42);
 
                 for (int i = 0; i < chart.length(); i++) {
                     RecyclerAdapters.ExerciseRA.ChartVH h = (RecyclerAdapters.ExerciseRA.ChartVH) viewHolder;
@@ -238,7 +238,7 @@ public class RecyclerAdapters {
                     //h.distances[i].setText(Maths.prefix(y[i], 1) + "m");
                     ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = M.px(1); }
+                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
                     h.bars[i].setLayoutParams(params);
 
                 }
@@ -248,7 +248,7 @@ public class RecyclerAdapters {
 
                 final Chart chart = (Chart) getItem(pos);
                 float[] yRel = chart.getyRel();
-                int maxHeight = M.px(22);
+                int maxHeight = Toolbox.L.px(22);
 
                 for (int i = 0; i < chart.length(); i++) {
                     RecyclerAdapters.ExerciseRA.DailyChartVH h = (RecyclerAdapters.ExerciseRA.DailyChartVH) viewHolder;
@@ -256,12 +256,12 @@ public class RecyclerAdapters {
                     // height
                     ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = M.px(1); }
+                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
                     h.bars[i].setLayoutParams(params);
 
                     // color
-                    if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                    else if (i < now.get(C.DAY_OF_WEEK)-1)  { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
+                    //if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
+                    if (i <= now.get(C.DAY_OF_WEEK)-1)  { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
                 }
 
             }
@@ -269,7 +269,7 @@ public class RecyclerAdapters {
 
                 final Chart chart = (Chart) getItem(pos);
                 float[] yRel = chart.getyRel();
-                int maxHeight = M.px(22); //22
+                int maxHeight = Toolbox.L.px(22); //22
                 //char[] labels = chart.getxLabelC();
 
                 RecyclerAdapters.ExerciseRA.YearChartVH h = (RecyclerAdapters.ExerciseRA.YearChartVH) viewHolder;
@@ -285,7 +285,7 @@ public class RecyclerAdapters {
                     // height
                     ViewGroup.LayoutParams params = bar.getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = M.px(1); }
+                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
                     bar.setLayoutParams(params);
 
                     // color

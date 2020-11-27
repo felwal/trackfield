@@ -1,6 +1,7 @@
 package com.example.trackfield.fragments;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +17,9 @@ import androidx.appcompat.widget.SearchView;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.activities.MainActivity.MainFragment;
+import com.example.trackfield.views.GraphSurface;
 
-public class ActivitiesFragment extends MainFragment {
+public class ExercisesFragment extends MainFragment {
 
     private View view;
     private FrameLayout frame;
@@ -25,8 +27,14 @@ public class ActivitiesFragment extends MainFragment {
 
     ////
 
+    @Override public void onCreate(Bundle savedInstancesState) {
+        super.onCreate(savedInstancesState);
+        TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
+        //setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
+        setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
+    }
     @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_activities, container, false);
+        view = inflater.inflate(R.layout.fragment_exercises, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
@@ -35,6 +43,12 @@ public class ActivitiesFragment extends MainFragment {
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;
+    }
+
+    private void drawGraph() {
+
+        //GraphSurface surface = view.findViewById(R.id.graphSurface);
+
     }
 
     // toolbar

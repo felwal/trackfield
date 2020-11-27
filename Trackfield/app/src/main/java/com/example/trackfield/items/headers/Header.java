@@ -1,4 +1,4 @@
-package com.example.trackfield.items.distinct;
+package com.example.trackfield.items.headers;
 
 import com.example.trackfield.toolbox.Toolbox.*;
 
@@ -89,7 +89,7 @@ public class Header extends RecyclerItem {
         switch (type) {
             case WEEK: return M.hours(value);
             case REC: return "";
-            default: return M.prefix(value, 1, "m") + C.TAB + count + " activities";
+            default: return M.kiloPrefix(value, 0, "m") + C.TAB + count + " activities";
         }
     }
 

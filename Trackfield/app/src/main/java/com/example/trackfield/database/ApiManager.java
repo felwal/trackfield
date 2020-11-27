@@ -25,7 +25,6 @@ import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.Session;
 import com.google.android.gms.fitness.request.SessionReadRequest;
@@ -52,7 +51,7 @@ import static java.text.DateFormat.getTimeInstance;
 
 public abstract class ApiManager extends AppCompatActivity {
 
-    Activity a;
+    private Activity a;
 
     // google
     private static FitnessOptions fitnessOptions;
@@ -82,17 +81,18 @@ public abstract class ApiManager extends AppCompatActivity {
     protected void connectAPIs() {
 
         a = this;
+        queue = Volley.newRequestQueue(this);
 
         // Google Fit
-        fitnessOptions = FitnessOptions.builder()
+        /*fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                 //.addDataType(DataType.AGGREGATE_ACTIVITY_SUMMARY, FitnessOptions.ACCESS_READ)
                 .build();
-        //if (hasPermissionsElseRequest()) accessGoogleFit();
+        if (hasPermissionsElseRequest()) accessGoogleFit();*/
 
         // Strava
-        accessStrava();
+        //accessStrava();
 
     }
 
@@ -102,7 +102,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) accessGoogleFit();
-            else if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) accessStrava();
+            else if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authenticateStrava();
         }
     }
 
@@ -209,26 +209,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
     // Strava
 
-    private void accessStrava() {
-
-        queue = Volley.newRequestQueue(this);
-
-        //requestRefreshToken();
-        //requestAccessToken();
-
-        authenticate();
-        //requestAuthCode();
-
-        //requestActivities(1);
-
-        //requestAccessToken(accessTokenURL());
-        //requestActivities(activitiesURL(), 0, 38);
-
-        //volleyRequest(authCodeURL, Request.Method.GET);
-        //volleyRequest(refreshTokenURL, Request.Method.POST);
-
-    }
-    private void authenticate() {
+    protected void authenticateStrava() {
 
         Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
                 .buildUpon()
@@ -245,8 +226,7 @@ public abstract class ApiManager extends AppCompatActivity {
         //authCode = "";
     }
 
-    // requests
-
+    // request tokens
     private void requestAuthCode() {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getAuthCodeURL(), null,
@@ -318,6 +298,7 @@ public abstract class ApiManager extends AppCompatActivity {
         queue.add(request);
     }
 
+    // request activities
     protected void requestActivities(final int page) {
 
         requestAccessToken();
@@ -390,16 +371,21 @@ public abstract class ApiManager extends AppCompatActivity {
 
             JSONObject map = obj.getJSONObject("map");
             String polyline = map.getString("summary_polyline");
-            JSONArray startLatLng = obj.getJSONArray("start_latlng");
-            JSONArray endLatLng = obj.getJSONArray("end_latlng");
-            LatLng start = new LatLng(startLatLng.getDouble(0), startLatLng.getDouble(1));
-            LatLng end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
+            LatLng start = null;
+            LatLng end = null;
+            try {
+                JSONArray startLatLng = obj.getJSONArray("start_latlng");
+                JSONArray endLatLng = obj.getJSONArray("end_latlng");
+                start = new LatLng(startLatLng.getDouble(0), startLatLng.getDouble(1));
+                end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
+            }
+            catch (Exception e) {}
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
             int routeId = Helper.getReader(a).getRouteIdOrCreate(name, a);
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
-            Trail trail = new Trail(polyline, start, end);
+            Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
             return new Exercise(-1, -1, type, dateTime, routeId, name, "", "", "", "Strava", "GPS", distance, time, null, trail);
         }
