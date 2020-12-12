@@ -11,4 +11,9 @@
         android:icon="@drawable/selector_nav_ic_records"
         android:title="@string/fragment_records" />
 
+    <item
+        android:id="@+id/navigation_dev"
+        android:icon="@drawable/selector_nav_ic_dev"
+        android:title="@string/fragment_dev" />
+
 </menu>

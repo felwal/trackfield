@@ -36,7 +36,7 @@ public class Sorter extends RecyclerItem {
         return smallestFirst;
     }
     public String getTitle() {
-        return sortModesTitle[indexOfSortMode()] + " " + ARROWS[M.boolToInt(smallestFirst)];
+        return sortModesTitle[indexOfSortMode()] + " " + ARROWS[M.heaviside(smallestFirst)];
     }
     public C.SortMode[] getSortModes() {
         return sortModes;

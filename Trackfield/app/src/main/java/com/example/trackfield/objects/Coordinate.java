@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.example.trackfield.toolbox.Toolbox.*;
 
-public class Coordinate extends Location {
+@Deprecated public class Coordinate extends Location {
 
     private int _id;
 

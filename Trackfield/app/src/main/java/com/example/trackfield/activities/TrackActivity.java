@@ -8,11 +8,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.example.trackfield.database.Helper;
-import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.objects.Coordinate;
-import com.example.trackfield.objects.Map;
+import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -35,8 +32,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.TreeMap;
 
 public class TrackActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, Dialogs.BinaryDialog.DialogListener {
@@ -81,8 +76,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track);
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        L.transStatusBar(getWindow());
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!F.permissionToLocation(this)) return;
@@ -146,7 +140,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     private void setMap() {
 
         mapFrame = findViewById(R.id.frameLayout_mapFragment);
-        mapFrame.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, M.goldenRatioA(L.getScreenHeight(this))));
+        mapFrame.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, M.goldenRatioSmall(L.getScreenHeight(this))));
         mapFrame.setClipToOutline(true);
 
         polyline = new PolylineOptions();
@@ -162,7 +156,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     // tools
     private void updateMap(Location location) {
 
-        final LatLng latLng = D.toLatLng(location);
+        final LatLng latLng = M.toLatLng(location);
         if (marker == null) marker = gMap.addMarker(new MarkerOptions().position(latLng));
         else marker.setPosition(latLng);
 
@@ -188,12 +182,12 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     }
     private void saveExercise() {
 
-        Map map = new Map(-1, coordinates);
+        /*Map map = new Map(-1, coordinates);
         Exercise exercise = new Exercise(-1, 0, LocalDateTime.now(), "Trackfield", "GPS", map);
 
         Helper.Writer writer = new Helper.Writer(TrackActivity.this);
         writer.addExercise(exercise, this);
-        writer.close();
+        writer.close();*/
     }
 
     @Override public void onBinaryDialogPositiveClick(String tag) {
@@ -206,7 +200,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override public void onMapReady(GoogleMap googleMap) {
 
         gMap = googleMap;
-        if (!D.prefs.isThemeLight()) L.toast(gMap.setMapStyle(D.getMapStyle(this)), this);
+        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(D.getMapStyle(this)), this);
         gMap.getUiSettings().setAllGesturesEnabled(false);
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -214,14 +208,14 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 if (mapExpanded) {
                     L.crossfadeIn(paceTv, 1);
                     L.crossfadeIn(avgPaceTv, 1);
-                    L.animateHeight(mapFrame, M.goldenRatioA(L.getScreenHeight(TrackActivity.this)));
+                    L.animateHeight(mapFrame, M.goldenRatioSmall(L.getScreenHeight(TrackActivity.this)));
                     gMap.getUiSettings().setAllGesturesEnabled(false);
                     mapExpanded = false;
                 }
                 else {
                     L.crossfadeOut(paceTv);
                     L.crossfadeOut(avgPaceTv);
-                    L.animateHeight(mapFrame, M.goldenRatioB(L.getScreenHeight(TrackActivity.this)));
+                    L.animateHeight(mapFrame, M.goldenRatioLarge(L.getScreenHeight(TrackActivity.this)));
                     gMap.getUiSettings().setAllGesturesEnabled(true);
                     mapExpanded = true;
                 }

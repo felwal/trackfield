@@ -6,18 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.trackfield.objects.Coordinate;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.items.IntervalItem;
-import com.example.trackfield.objects.Map;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
-import com.example.trackfield.toolbox.Toolbox;
+import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -37,6 +35,16 @@ public class Helper {
     }
     public static Reader getReader(Context c) {
         return reader == null || !reader.isOpen() ? reader = new Reader(c) : reader;
+    }
+    public static Reader getReader() {
+        return reader;
+    }
+
+    public static void openWriter(Context c) {
+        if (writer == null || !writer.isOpen()) writer = new Writer(c);
+    }
+    public static void openReader(Context c) {
+        if (reader == null || !reader.isOpen()) reader = new Reader(c);
     }
 
     public static void closeWriter() {
@@ -62,20 +70,18 @@ public class Helper {
         }
 
         @Override public void onCreate(SQLiteDatabase db) {
-            db.execSQL(Contract.ExerciseEntry.CREATE_TABLE);
-            db.execSQL(Contract.SubEntry.CREATE_TABLE);
-            db.execSQL(Contract.MapEntry.CREATE_TABLE);
-            db.execSQL(Contract.RouteEntry.CREATE_TABLE);
-            db.execSQL(Contract.DistanceEntry.CREATE_TABLE);
+            Contract.ExerciseEntry.create(db);
+            Contract.SubEntry.create(db);
+            Contract.RouteEntry.create(db);
+            Contract.DistanceEntry.create(db);
         }
         @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // This database is only a cache for online data, so its upgrade policy is
             // to simply to discard the data and start over
-            db.execSQL(Contract.ExerciseEntry.DELETE_TABLE);
-            db.execSQL(Contract.SubEntry.DELETE_TABLE);
-            db.execSQL(Contract.MapEntry.DELETE_TABLE);
-            db.execSQL(Contract.RouteEntry.DELETE_TABLE);
-            db.execSQL(Contract.DistanceEntry.DELETE_TABLE);
+            Contract.ExerciseEntry.delete(db);
+            Contract.SubEntry.delete(db);
+            Contract.RouteEntry.delete(db);
+            Contract.DistanceEntry.delete(db);
             onCreate(db);
         }
         @Override public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -111,8 +117,7 @@ public class Helper {
             L.toast(deleteAllExercises() && addExercises(D.exercises, c), c);
         }
         public void updateTool(Context c) {
-            db.execSQL(Contract.ExerciseEntry.DELETE_TABLE);
-            db.execSQL(Contract.ExerciseEntry.CREATE_TABLE);
+
             useUpdateTool = false;
         }
 
@@ -131,7 +136,6 @@ public class Helper {
 
             final long _id = db.insert(Contract.ExerciseEntry.TABLE_NAME, null, cv);
             e.setSubs_superId((int) _id);
-            e.setMap_superId((int) _id);
             final boolean subSuccess = addSubs(e.getSubs());
             //final boolean mapSuccess = addMap(e.getMap());
 
@@ -149,22 +153,6 @@ public class Helper {
             final ContentValues cvSub = fillSubContentValues(sub);
             final long result = db.insert(Contract.SubEntry.TABLE_NAME, null, cvSub);
             return success(result);
-        }
-        private boolean addMap(Map map) {
-
-            boolean success = true;
-            for (TreeMap.Entry<Float, Coordinate> entry : map.getCoordinates().entrySet()) {
-                final float t = entry.getKey();
-                final Coordinate P = entry.getValue();
-                success &= addCoordinate(map.get_superId(), t, P);
-            }
-            return success;
-        }
-        private boolean addCoordinate(int _superId, float t, Coordinate P) {
-
-            final ContentValues cv = fillCoordinateContentValues(_superId, t, P);
-            final long _id = db.insert(Contract.MapEntry.TABLE_NAME, null, cv);
-            return success(_id);
         }
 
         // new rec
@@ -293,53 +281,30 @@ public class Helper {
 
             return success;
         }
-        private boolean updateMap(Map map) {
-
-            boolean success = deleteMap(map);
-            for (TreeMap.Entry<Float, Coordinate> entry : map.getCoordinates().entrySet()) {
-                float t = entry.getKey();
-                Coordinate P = entry.getValue();
-
-                if (P.get_id() != -1) {
-                    ContentValues newCv = fillCoordinateContentValues(map.get_superId(), t, P);
-                    String selection = Contract.MapEntry._ID + " = ?";
-                    String[] selectionArgs = { Integer.toString(P.get_id()) };
-
-                    int count = db.update(Contract.MapEntry.TABLE_NAME, newCv, selection, selectionArgs);
-                    success &= count > 0;
-                }
-                else { success &= addCoordinate(map.get_superId(), t, P); }
-            }
-
-            return success;
-        }
 
         // delete
         public boolean deleteExercise(Exercise e, Context c) {
 
             final String selection = Contract.ExerciseEntry._ID + " = ?";
             final String subSelection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
-            final String mapSelection = Contract.MapEntry.COLUMN_SUPERID + " = ?";
             final String[] selectionArgs = { Integer.toString(e.get_id()) };
 
             final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, selection, selectionArgs);
             final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, subSelection, selectionArgs);
-            final long mapResult = db.delete(Contract.MapEntry.TABLE_NAME, mapSelection, selectionArgs);
 
             // route
-            Reader reader = new Reader(c);
+            /*Reader reader = new Reader(c);
             if (reader.getExerlitesByRoute(e.getRouteId(), C.SortMode.DATE, false).size() == 0) deleteRoute(e.getRouteId());
-            reader.close();
+            reader.close();*/
 
-            return success(result) && success(subResult) && success(mapResult);
+            return success(result) && success(subResult);
         }
         public boolean deleteAllExercises() {
 
             final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, null, null);
             final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, null, null);
-            final long mapResult = db.delete(Contract.MapEntry.TABLE_NAME, null, null);
 
-            return success(result) && success(subResult) && success(mapResult);
+            return success(result) && success(subResult);
         }
         public boolean deleteSub(Sub sub) {
 
@@ -350,25 +315,15 @@ public class Helper {
 
             return success(result);
         }
-        public boolean deleteMap(Map map) {
-            if (map == null) return true;
-
-            final String selection = Contract.MapEntry.COLUMN_SUPERID + " = ?";
-            final String[] selectionArgs = { Integer.toString(map.get_superId()) };
-
-            final long result = db.delete(Contract.MapEntry.TABLE_NAME, selection, selectionArgs);
-
-            return success(result);
-        }
 
         // ContentValues
         private ContentValues fillExerciseContentValues(Exercise e) {
 
             ContentValues cv = new ContentValues();
 
-            cv.put(Contract.ExerciseEntry.COLUMN_ID, e.getId());
+            cv.put(Contract.ExerciseEntry.COLUMN_ID, e.get_id());
             cv.put(Contract.ExerciseEntry.COLUMN_TYPE, e.getType());
-            cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getDateTime().format(Toolbox.C.FORMATTER_SQL));
+            cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getEpoch());
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTE, e.getRoute());
             cv.put(Contract.ExerciseEntry.COLUMN_ROUTEVAR, e.getRouteVar());
@@ -412,18 +367,6 @@ public class Helper {
             cv.put(Contract.SubEntry.COLUMN_SUPERID, sub.get_superId());
             cv.put(Contract.SubEntry.COLUMN_DISTANCE, sub.getDistance());
             cv.put(Contract.SubEntry.COLUMN_TIME, sub.getTime());
-
-            return cv;
-        }
-        private ContentValues fillCoordinateContentValues(int _superId, float t, Coordinate P) {
-
-            ContentValues cv = new ContentValues();
-
-            cv.put(Contract.MapEntry.COLUMN_SUPERID, _superId);
-            cv.put(Contract.MapEntry.COLUMN_TIME, t);
-            cv.put(Contract.MapEntry.COLUMN_LATITUDE, P.getLatitude());
-            cv.put(Contract.MapEntry.COLUMN_LONGITUDE, P.getLongitude());
-            cv.put(Contract.MapEntry.COLUMN_ALTITUDE, P.getAltitude());
 
             return cv;
         }
@@ -508,18 +451,6 @@ public class Helper {
             cursor.close();
             return subs;
         }
-        public Map getMap(int _superId) {
-
-            String[] columns = Contract.MapEntry.ALL_BUT_SUPERID_COLUMNS;
-            String selection = Contract.MapEntry.COLUMN_SUPERID + " = ?";
-            String[] selectionArgs = { Integer.toString(_superId) };
-
-            Cursor cursor = db.query(Contract.MapEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-            Map map = unpackMapCursor(cursor, _superId);
-
-            cursor.close();
-            return map;
-        }
 
         // get multiple
         public ArrayList<Exercise> getExercises() {
@@ -534,9 +465,9 @@ public class Helper {
         }
         public ArrayList<Exercise> getExercisesForMerge(LocalDateTime dateTime, int type) {
 
-            String selection = "(" + Contract.ExerciseEntry.COLUMN_DATE + " = '" + M.dateTime(dateTime.toLocalDate()).format(C.FORMATTER_SQL) + "' OR " +
-                    Contract.ExerciseEntry.COLUMN_DATE + " = '" + dateTime.format(C.FORMATTER_SQL) + "')"+
-                    " AND (" + Contract.ExerciseEntry.COLUMN_TYPE + " = " + type + " OR " + Contract.ExerciseEntry.COLUMN_TYPE + " = " + Exercise.TYPE_INTERVALS + ")" ;
+            String selection = "(" + Contract.ExerciseEntry.COLUMN_DATE + " = " + M.epoch(dateTime) + " OR " +
+                    Contract.ExerciseEntry.COLUMN_DATE + " = " + M.epoch(M.dateTime(dateTime.toLocalDate())) + ") AND (" +
+                    Contract.ExerciseEntry.COLUMN_TYPE + " = " + type + (type == Exercise.TYPE_RUN ? " OR " + Contract.ExerciseEntry.COLUMN_TYPE + " = " + Exercise.TYPE_INTERVALS : "") + ")" ;
 
             Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, null, selection, null, null, null, null, null);
             ArrayList<Exercise> exercises = unpackCursor(cursor);
@@ -544,13 +475,12 @@ public class Helper {
 
             return exercises;
         }
-        public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
 
             String selection = "";
-            ArrayList<Integer> visibleTypes = D.prefs.getExerciseVisibleTypes();
-            for (int i = 0; i < visibleTypes.size(); i++) {
+            for (int i = 0; i < types.size(); i++) {
                 if (i != 0) selection += " OR ";
-                selection += Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
+                selection += Contract.ExerciseEntry.COLUMN_TYPE + " = " + types.get(i);
             }
 
             String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
@@ -558,12 +488,12 @@ public class Helper {
 
             Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy);
             ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
-
             cursor.close();
+
             return exerlites;
         }
         public ArrayList<Exerlite> getExerlitesBySearch(String search, C.SortMode sortMode, boolean smallestFirst) {
-            if (search.equals("")) return getExerlites(sortMode, smallestFirst);
+            if (search.equals("")) return getExerlites(sortMode, smallestFirst, Prefs.getExerciseVisibleTypes());
 
             String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
             String selection = "(" +
@@ -574,7 +504,7 @@ public class Helper {
                     Contract.ExerciseEntry.COLUMN_DATASOURCE + " LIKE" + "'%" + search + "%' OR " +
                     Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD + " LIKE" + "'%" + search + "%' OR " +
                     Contract.ExerciseEntry.COLUMN_NOTE + " LIKE" + "'%" + search + "%' OR " +
-                    Contract.ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" + selectionFilter(D.prefs.getExerciseVisibleTypes());
+                    Contract.ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" + selectionFilter(Prefs.getExerciseVisibleTypes());
 
             //String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " LIKE ?";
             //String[] selectionArgs = { "%" + filter + "%" };
@@ -600,10 +530,10 @@ public class Helper {
             cursor.close();
             return exerlites;
         }
-        public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
 
             String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
-            String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionFilter(D.prefs.getRouteVisibleTypes());
+            String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionFilter(types);
             //String[] selectionArgs = { Integer.toString(routeId) };
             String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -614,12 +544,12 @@ public class Helper {
             cursor.close();
             return exerlites;
         }
-        public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
 
             int minDist = M.minDistance(distance);
             int maxDist = M.maxDistance(distance);
 
-            String filter = selectionFilter(D.prefs.getDistanceVisibleTypes());
+            String filter = selectionFilter(types);
             String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
             //String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + (D.includeLonger ? " >= " + minDist : " BETWEEN " + minDist + " AND " + maxDist);
             String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + " >= " + minDist + filter;
@@ -635,7 +565,7 @@ public class Helper {
             drivenCursor.close();
 
             exerlites.addAll(drivenExerlites);
-            if (!D.prefs.includeLonger()) D.removeLonger(exerlites, maxDist);
+            if (!Prefs.includeLonger()) D.removeLonger(exerlites, maxDist);
             D.sortExerlites(exerlites, sortMode, smallestFirst);
 
             return exerlites;
@@ -652,6 +582,19 @@ public class Helper {
             D.sortExerlites(exerlites, sortMode, smallestFirst);
 
             cursor.close();
+            return exerlites;
+        }
+        public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
+
+            String filter = selectionFilter(types);
+            String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+            String selection = Contract.ExerciseEntry.COLUMN_DATE + " >= " + M.epoch(M.first(min, max)) + " AND " + Contract.ExerciseEntry.COLUMN_DATE + " <= " + M.epoch(M.last(min, max)) + filter;
+            String orderBy = orderBy(sortMode, smallestFirst);
+
+            Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
+            ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
+            cursor.close();
+
             return exerlites;
         }
 
@@ -688,7 +631,7 @@ public class Helper {
             ArrayList<Route> routes = unpackRouteCursor(cursor);
 
             cursor.close();
-            return routes.size() > 0 ? routes.get(0) : null;
+            return routes.size() > 0 ? routes.get(0) : new Route();
         }
         public int getRouteId(String name) {
 
@@ -1151,16 +1094,93 @@ public class Helper {
             cursor.close();
             return count != 0 ? totalDistance / count : 0;
         }
-        private String selectionFilter(ArrayList<Integer> visibleTypes) {
 
-            String filter = "";
-            for (int i = 0; i < visibleTypes.size(); i++) {
-                if (i == 0) filter += " AND (";
-                filter += Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
-                if (i == visibleTypes.size()-1) filter += ")";
-                else filter += " OR ";
+        public TreeMap<Float, Float> weekDistance(ArrayList<Integer> types, LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+            TreeMap<Integer, Exerlite> map = new TreeMap<>();
+            ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfWeek(includingDate), M.atEndOfWeek(includingDate), C.SortMode.DATE, false, types);
+
+            for (Exerlite e : exerlites) {
+                map.put(e.getDate().getDayOfWeek().getValue(), e);
             }
-            return filter;
+
+            for (int d = 1; d <= 7; d++) {
+                points.put((float) d, map.containsKey(d) ? (float) map.get(d).getDistance() : 0);
+            }
+
+            return points;
+        }
+        public TreeMap<Float, Float> monthDistance(ArrayList<Integer> types, LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+            TreeMap<Integer, Exerlite> map = new TreeMap<>();
+            ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfMonth(includingDate), M.atEndOfMonth(includingDate), C.SortMode.DATE, false, types);
+
+            float totalDistance = 0;
+
+            for (Exerlite e : exerlites) {
+                map.put(e.getDate().getDayOfMonth(), e);
+            }
+            if (map.size() == 0) return points;
+
+            for (int d = 0; d <= includingDate.getMonth().length(includingDate.isLeapYear()); d++) {
+                if (map.containsKey(d)) totalDistance += map.get(d).getDistance();
+                points.put((float) d, totalDistance);
+                if (d == map.lastKey() && includingDate.isEqual(LocalDate.now())) break;
+            }
+
+            return points;
+        }
+        public TreeMap<Float, Float> yearDistance(ArrayList<Integer> types, LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+            TreeMap<Integer, Exerlite> map = new TreeMap<>();
+            ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, true, types);
+
+            float totalDistance = 0;
+
+            /*for (Exerlite e : exerlites) {
+                map.put(e.getDate().getDayOfYear(), e);
+            }
+            if (map.size() == 0) return points;
+
+            for (int d = 0; d <= includingDate.lengthOfYear(); d++) {
+                if (map.containsKey(d)) totalDistance += map.get(d).getDistance();
+                points.put((float) d, totalDistance);
+                if (d == map.lastKey() && includingDate.isEqual(LocalDate.now())) break;
+            }*/
+
+            float lastWeek = 0;
+            for (Exerlite e : exerlites) {
+                float week = e.getWeek();
+                if (week != lastWeek) {
+                    points.put(lastWeek, totalDistance);
+                    lastWeek = week;
+                }
+                totalDistance += e.getDistance();
+            }
+
+            return points;
+        }
+
+        public TreeMap<Float, Float> monthDistanceGoal(LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+
+            points.put(0f, 0f);
+            points.put((float) includingDate.getMonth().length(includingDate.isLeapYear()), 126_000f);
+
+            return points;
+        }
+        public TreeMap<Float, Float> yearDistanceGoal(LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+
+            points.put(0f, 0f);
+            points.put(53f/*(float) includingDate.lengthOfYear()*/, 1_000_000f);
+
+            return points;
         }
 
         // cursors
@@ -1172,7 +1192,7 @@ public class Helper {
                 int _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry._ID));
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ID));
                 int type = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TYPE));
-                String dateStr = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATE));
+                long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATE));
                 int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE_ID));
                 //String route = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE));
                 String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTEVAR));
@@ -1195,13 +1215,13 @@ public class Helper {
                 }
 
                 // convert
-                LocalDateTime dateTime = LocalDateTime.parse(dateStr, Toolbox.C.FORMATTER_SQL);
+                LocalDateTime dateTime = M.ofEpoch(epoch);//LocalDateTime.parse(epoch, Toolbox.C.FORMATTER_SQL);
                 if (interval == null) interval = "";
                 //int routeId = getRouteId(route);
                 Route route = getRoute(routeId);
                 String routeName = route == null ? "error" : getRoute(routeId).getName();
 
-                Exercise exercise = new Exercise(_id, id, type, dateTime, routeId, routeName, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubs(_id), trail);
+                Exercise exercise = new Exercise(_id, type, dateTime, routeId, routeName, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubs(_id), trail);
                 exercises.add(exercise);
             }
 
@@ -1213,7 +1233,7 @@ public class Helper {
 
             while(cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry._ID));
-                String dateStr = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATE));
+                long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATE));
                 int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE_ID));
                 //String route = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE));
                 String interval = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_INTERVAL));
@@ -1221,7 +1241,7 @@ public class Helper {
                 float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
 
                 // convert
-                LocalDate date = LocalDateTime.parse(dateStr, Toolbox.C.FORMATTER_SQL).toLocalDate();;
+                LocalDate date = M.ofEpoch(epoch).toLocalDate();
                 if (interval == null) interval = "";
 
                 Route route = getRoute(routeId);
@@ -1232,13 +1252,6 @@ public class Helper {
                 if (distanceDriven) {
                     String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTEVAR));
                     distance = avgDistance(routeName, routeVar);
-                }
-
-                // map
-                if (distance == 0 && time == 0) {
-                    Map map = getMap(_id);
-                    distance = map.distance();
-                    time = map.time();
                 }
 
                 // subs
@@ -1289,23 +1302,6 @@ public class Helper {
 
             return subs;
         }
-        private Map unpackMapCursor(Cursor cursor, int superId) {
-
-            TreeMap<Float, Coordinate> coordinates = new TreeMap<>();
-
-            while(cursor.moveToNext()) {
-                int _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.MapEntry._ID));
-                float time = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.MapEntry.COLUMN_TIME));
-                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.MapEntry.COLUMN_LATITUDE));
-                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.MapEntry.COLUMN_LONGITUDE));
-                double altitude = cursor.getDouble(cursor.getColumnIndexOrThrow(Contract.MapEntry.COLUMN_ALTITUDE));
-
-                Coordinate P = new Coordinate(_id, latitude, longitude, altitude);
-                coordinates.put(time, P);
-            }
-
-            return new Map(superId, coordinates);
-        }
 
         private ArrayList<Distance> unpackDistanceCursor(Cursor cursor) {
 
@@ -1340,6 +1336,17 @@ public class Helper {
         }
 
         // tools
+        private String selectionFilter(ArrayList<Integer> visibleTypes) {
+
+            String filter = "";
+            for (int i = 0; i < visibleTypes.size(); i++) {
+                if (i == 0) filter += " AND (";
+                filter += Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
+                if (i == visibleTypes.size()-1) filter += ")";
+                else filter += " OR ";
+            }
+            return filter;
+        }
         private String sortOrder(boolean smallestFirst) {
             return smallestFirst ? " ASC" : " DESC";
         }
