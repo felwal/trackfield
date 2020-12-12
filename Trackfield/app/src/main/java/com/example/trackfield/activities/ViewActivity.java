@@ -301,9 +301,9 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
         catch (Exception e) { L.handleError(e, this); }
         //writer.close();
 
-        /*try { D.exercises.remove(exercise.getId()); }
+        try { D.exercises.remove(exercise.getId()); }
         catch (Exception e) { L.handleError(e, this); }
-        D.edited();*/
+        D.edited();
 
         finish();
     }

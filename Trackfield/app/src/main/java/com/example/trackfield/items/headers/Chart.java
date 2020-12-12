@@ -1,12 +1,11 @@
-package com.example.trackfield.items.headers.archive;
+package com.example.trackfield.items.headers;
 
-import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.toolbox.Toolbox;
 
 import java.util.ArrayList;
 
-@Deprecated public class ChartOld extends RecyclerItem {
+public class Chart extends RecyclerItem {
 
     private float[] y;
     private String[] xLabel;
@@ -34,18 +33,18 @@ import java.util.ArrayList;
 
     ////
 
-    public ChartOld(float[] y, String[] xLabel) {
+    public Chart(float[] y, String[] xLabel) {
         this.xLabel = xLabel;
         this.y = y;
         setyRel();
         setyBias();
     }
-    public ChartOld(float[] y) {
+    public Chart(float[] y) {
         this.y = y;
         setyRel();
         setyBias();
     }
-    public ChartOld(ArrayList<Exercise> exercises, Data y, Label xLabel) {
+    public Chart(ArrayList<Exercise> exercises, Data y, Label xLabel) {
 
         this.y = new float[exercises.size()];
         this.xId = new int[exercises.size()];
@@ -159,13 +158,13 @@ import java.util.ArrayList;
     }
 
     @Override public boolean sameItemAs(RecyclerItem item) {
-        if (!(item instanceof ChartOld)) return false;
-        ChartOld c = (ChartOld) item;
+        if (!(item instanceof Chart)) return false;
+        Chart c = (Chart) item;
         return true;
     }
     @Override public boolean sameContentAs(RecyclerItem item) {
-        if (!(item instanceof ChartOld)) return false;
-        ChartOld c = (ChartOld) item;
+        if (!(item instanceof Chart)) return false;
+        Chart c = (Chart) item;
         return y == c.getY();
     }
 

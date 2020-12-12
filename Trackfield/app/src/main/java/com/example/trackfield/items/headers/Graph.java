@@ -1,4 +1,4 @@
-package com.example.trackfield.items.headers.archive;
+package com.example.trackfield.items.headers;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +10,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.trackfield.R;
 import com.example.trackfield.items.Exerlite;
-import com.example.trackfield.items.headers.RecyclerItem;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Deprecated public class GraphOld extends RecyclerItem {
+public class Graph extends RecyclerItem {
 
     private TreeMap<Float, Float> coordinates = new TreeMap<>();
 
@@ -36,7 +35,7 @@ import java.util.TreeMap;
 
     ////
 
-    public GraphOld(ArrayList<Exerlite> exerlites, final DataX xData, final DataY yData) {
+    public Graph(ArrayList<Exerlite> exerlites, final DataX xData, final DataY yData) {
 
         for (int i = 0; i < exerlites.size(); i++) {
             Exerlite e = exerlites.get(i);
@@ -106,13 +105,13 @@ import java.util.TreeMap;
     }
 
     @Override public boolean sameItemAs(RecyclerItem item) {
-        if (!(item instanceof GraphOld)) return false;
-        GraphOld g = (GraphOld) item;
+        if (!(item instanceof Graph)) return false;
+        Graph g = (Graph) item;
         return true;
     }
     @Override public boolean sameContentAs(RecyclerItem item) {
-        if (!(item instanceof GraphOld)) return false;
-        GraphOld g = (GraphOld) item;
+        if (!(item instanceof Graph)) return false;
+        Graph g = (Graph) item;
         return coordinates == g.getCoordinates();
     }
 

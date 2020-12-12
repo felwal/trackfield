@@ -1,20 +1,18 @@
 package com.example.trackfield.objects;
 
-import com.example.trackfield.database.Helper;
-import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class Exercise {
 
     private final int _id;
+    private int id;
     private int type;
     private LocalDateTime dateTime;
-    private int routeId;
+    private int routeId = -1;
     private String route;
     private String routeVar;
     private String interval;
@@ -25,6 +23,7 @@ public class Exercise {
     private int distance;
     private float time;
     private ArrayList<Sub> subs;
+    private Map map;
     private Trail trail;
 
     public enum SortMode {
@@ -49,8 +48,9 @@ public class Exercise {
 
     ////
 
-    public Exercise(int _id, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
+    public Exercise(int _id, int id, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
         this._id = _id;
+        this.id = id;
         this.type = type;
         this.dateTime = dateTime;
         this.routeId = routeId;
@@ -65,12 +65,31 @@ public class Exercise {
         this.subs = subs == null ? new ArrayList<Sub>() : subs;
         this.trail = trail;
     }
+    public Exercise(int _id, int type, LocalDateTime dateTime, String dataSource, String recordingMethod, Map map) {
+        this._id = _id;
+        this.type = type;
+        this.dateTime = dateTime;
+        this.route = "Route";
+        this.routeVar = "";
+        this.interval = "";
+        this.note = "";
+        this.dataSource = dataSource;
+        this.recordingMethod = recordingMethod;
+        this.subs = new ArrayList<>();
+        this.map = map;
+    }
 
     // set
     public void setSubs_superId(int _id) {
         for (Sub sub : subs) {
             sub.set_superId(_id);
         }
+    }
+    public void setMap_superId(int _id) {
+        if (map != null) map.set_superId(_id);
+    }
+    public void setId(int id) {
+        this.id = id;
     }
     public void setType(int type) {
         this.type = type;
@@ -100,10 +119,19 @@ public class Exercise {
     public void setRecordingMethod(String recordingMethod) {
         this.recordingMethod = recordingMethod;
     }
+    public void setMap(Map map) {
+        this.map = map;
+    }
+    public void removeMap() {
+        map = new Map(_id);
+    }
 
     // get
     public int get_id() {
         return _id;
+    }
+    public int getId() {
+        return id;
     }
     public int getType() {
         return type;
@@ -142,10 +170,10 @@ public class Exercise {
         return time;
     }
     public int getElevationGain() {
-        return 0;
+        return map == null ? 0 : map.elevationGain();
     }
     public int getElevationLoss() {
-        return 0;
+        return map == null ? 0 : map.elevationLoss();
     }
 
     public ArrayList<Sub> getSubs() {
@@ -155,13 +183,16 @@ public class Exercise {
         if (index >= subCount()) { return null; }
         return subs.get(index);
     }
+    public Map getMap() {
+        return map;
+    }
     public Trail getTrail() {
         return trail;
     }
 
     // get driven
     public int distance() {
-        if (isDistanceDriven()) return Helper.getReader().avgDistance(route, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
+        if (isDistanceDriven()) return D.averageDistance(D.filterByRoute(route, routeVar));
         if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
     }
@@ -189,7 +220,7 @@ public class Exercise {
     public int energy(C.UnitEnergy unit) {
         // 0J, 1cal, 2Wh, 3eV
 
-        int calories = (int) (Prefs.getMass() * distance());
+        int calories = (int) (D.prefs.getMass() * distance());
         if (unit == C.UnitEnergy.CALORIES) { return calories; }
 
         int joules = (int) (calories * 4.184);
@@ -236,17 +267,17 @@ public class Exercise {
     public boolean isType(int type) {
         return this.type == type;
     }
-    public long getEpoch() {
-        return M.epoch(dateTime);
-    }
 
     public int getWeek() {
         return dateTime.get(C.WEEK_OF_YEAR);
     }
+    public int getYearAndWeek() {
+        return M.mergeYearAndWeek(dateTime.getYear(), getWeek());
+    }
 
     // print
     public String printId() {
-        return "#" + _id;
+        return "#" + id + " _" + _id;
     }
     public String printType() {
         return TYPES[type];
@@ -254,7 +285,7 @@ public class Exercise {
     public String printDistance(boolean unitlessKm) {
         int distance = distance();
         String print = distance == 0 ? C.NO_VALUE : unitlessKm ? M.round(distance / 1000f, DISTANCE_DECIMALS) + "" : M.prefix(distance, DISTANCE_DECIMALS, "m");
-        //if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
+        if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
         return isDistanceDriven() ? M.drive(print) : print;
     }
     public String printElevation() {
@@ -301,10 +332,8 @@ public class Exercise {
         return M.prefix(power, 2, "W");
     }
     public String extractToFile(char div) {
-        return _id + "" + div + "" + type + "" + div + getEpoch() + div + route + div + routeVar + div +
-                interval + div + distance + div + time + div + dataSource + div + recordingMethod + div + note + div +
-                (trail != null ? (trail.getStartLat() + "" + div + "" + trail.getStartLng() + "" + div + "" + trail.getEndLat() + "" + div + "" + trail.getEndLng() + "" + div + trail.getPolyline())
-                        : (div + "" + div + "" + div + "" + div));
+        return id + "" + div + "" + type + "" + div + dateTime.format(C.FORMATTER_FILE) + div + route + div + routeVar + div +
+                interval + div + distance + div + time + div + dataSource + div + recordingMethod + div + note;
     }
 
     // statics

@@ -73,23 +73,10 @@
                     android:editable="false"
                     android:ems="10"
                     android:focusedByDefault="false"
-                    android:hint="yyyy/MM/dd"
+                    android:hint="YYYY/MM/dd"
                     android:textSize="@dimen/type_heading1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText_interval" />
-
-                <EditText
-                    android:id="@+id/editText_time"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:editable="true"
-                    android:ems="10"
-                    android:focusedByDefault="false"
-                    android:hint="HH:mm:ss"
-                    android:text="12:00:00"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintStart_toEndOf="@+id/editText_date"
-                    app:layout_constraintTop_toTopOf="@+id/editText_date" />
 
                 <EditText
                     android:id="@+id/editText_interval"
@@ -138,19 +125,19 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout_subDefault"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="55dp">
 
                 <TextView
                     android:id="@+id/textView_s"
                     android:layout_width="20dp"
                     android:layout_height="25dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-condensed"
+                    android:fontFamily="monospace"
                     android:text="s"
                     android:textColor="@color/colorAccBlue"
                     android:textSize="@dimen/type_heading1"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -164,34 +151,23 @@
                     android:inputType="numberDecimal"
                     android:text="0"
                     android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView_s"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
-
-                <Switch
-                    android:id="@+id/switch_driveDistance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layoutDirection="ltr"
-                    android:text="Drive Distance"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_t"
                     android:layout_width="20dp"
                     android:layout_height="25dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="monospace"
                     android:text="t"
                     android:textColor="@color/colorAccTurqoise"
                     android:textSize="@dimen/type_heading1"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_s" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/editText_distance"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/editText_hours"
@@ -199,14 +175,14 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:focusedByDefault="false"
-                    android:hint="HH"
+                    android:hint="hh"
                     android:inputType="number"
                     android:maxLength="2"
                     android:text="0"
                     android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_t"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView_t"
-                    app:layout_constraintTop_toTopOf="@+id/textView_t" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/editText_minutes"
@@ -248,7 +224,7 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editText_seconds" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -277,7 +253,7 @@
                     android:focusedByDefault="false"
                     android:hint="Data source"
                     android:inputType="textPersonName|textCapSentences"
-                    android:text="Garmin Forerunner 745"
+                    android:text="Garmin Forerunner 645"
                     android:textAlignment="viewStart"
                     android:textSize="@dimen/type_body"
                     app:layout_constraintStart_toStartOf="parent"
@@ -285,9 +261,9 @@
 
                 <EditText
                     android:id="@+id/editText_recordingMethod"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
                     android:ems="10"
                     android:focusedByDefault="false"
                     android:hint="Recording method"
@@ -295,22 +271,17 @@
                     android:text="GPS + Galileo"
                     android:textAlignment="viewStart"
                     android:textSize="@dimen/type_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editText_dataSource"
-                    app:layout_constraintTop_toTopOf="@+id/editText_dataSource" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/editText_dataSource"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_dataSource" />
 
                 <Spinner
                     android:id="@+id/spinner_type"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_dataSource" />
+                    app:layout_constraintTop_toTopOf="@+id/editText_dataSource" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

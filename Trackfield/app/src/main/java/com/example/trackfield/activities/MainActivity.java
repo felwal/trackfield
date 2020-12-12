@@ -9,29 +9,28 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.database.ApiManager;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.DevFragment;
 import com.example.trackfield.fragments.ExercisesFragment;
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.fragments.RecsFragment;
 import com.example.trackfield.fragments.RecyclerFragments;
 import com.example.trackfield.objects.Distance;
-import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
 
+    private Helper.Reader reader;
     private Helper.Writer writer;
     private MainFragment fragment;
     private ActionBar ab;
@@ -50,18 +49,15 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
 
     @Override protected void onCreate(Bundle savedInstanceState) {
 
-        init();
+        load();
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         L.setScale(this);
 
-        //Prefs.setFirstLogin(true);
-        if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
-
         //if (reader == null) reader = new Helper.Reader(this);
         writer = Helper.getWriter(this);
-        Helper.openReader(this);
+        reader = Helper.getReader(this);
 
         if (Helper.Writer.useUpdateTool) {
             //Helper.Writer w = new Helper.Writer(this);
@@ -72,14 +68,15 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
         setNavbar();
         setToolbar();
         setFabs();
+
+        connectAPIs();
     }
 
-    private void init() {
+    private void load() {
         if (!D.gameOn) {
             if (F.shouldAskPermissions(this)) F.askPermissions(this);
-            Prefs.SetUpAndLoad(this);
-            //F.loadPrefs(this);
-            //F.loadExternal(this);
+            F.loadPrefs(this);
+            F.loadExternal(this);
             D.gameOn = true;
         }
     }
@@ -216,12 +213,6 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
                         else selectFragment(new RecsFragment());
                         if (fab.isOrWillBeShown()) fab.hide();
                         return true;
-
-                    case R.id.navigation_dev:
-                        if ((fragment instanceof DevFragment)) fragment.scrollToTop();
-                        else selectFragment(new DevFragment());
-                        if (fab.isOrWillBeShown()) fab.hide();
-                        return true;
                 }
                 return false;
             }
@@ -246,11 +237,40 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
                 return true;
 
             case R.id.action_filter:
-                Dialogs.FilterExercises.newInstance(Prefs.getExerciseVisibleTypes(), getSupportFragmentManager());
+                Dialogs.FilterExercises.newInstance(D.prefs.getExerciseVisibleTypes(), getSupportFragmentManager());
                 return true;
 
             case R.id.action_addDistance:
                 Dialogs.AddDistance.newInstance(Dialogs.Base.NO_TEXT, getSupportFragmentManager());
+                return true;
+
+            case R.id.action_import: // from toolbox
+                //Helper.Writer writer = new Helper.Writer(this);
+                writer.importFromToolbox(this);
+                //writer.close();
+                return true;
+
+            case R.id.action_export: // to toolbox
+                D.exercises.clear();
+                D.exercises.addAll(reader.getExercises());
+                return true;
+
+            case R.id.action_recreate:
+                //Helper.Writer writer2 = new Helper.Writer(this);
+                writer.recreate();
+                //writer2.close();
+                return true;
+
+            case R.id.action_strava_last:
+                requestLastActivity();
+                return true;
+
+            case R.id.action_strava_all:
+                requestActivities(1);
+                return true;
+
+            case R.id.action_Boarding:
+                BoardingActivity.startActivity(this);
                 return true;
 
             default: return super.onOptionsItemSelected(item);
@@ -268,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
         fragment.updateFragment();
     }
     @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-        Prefs.setExerciseVisibleTypes(checkedTypes);
+        D.prefs.setExerciseVisibleTypes(checkedTypes);
         fragment.updateFragment();
     }
 

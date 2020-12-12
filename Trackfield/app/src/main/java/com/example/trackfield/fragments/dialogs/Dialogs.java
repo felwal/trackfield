@@ -19,7 +19,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
-import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.google.android.material.chip.Chip;
@@ -838,7 +837,7 @@ public class Dialogs {
             final Switch longerSw = dialogView.findViewById(R.id.switch_includeLonger);
             final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_types);
 
-            longerSw.setChecked(Prefs.includeLonger());
+            longerSw.setChecked(D.prefs.includeLonger());
             setChips(chipGroup);
 
             if (!message().equals("")) builder.setMessage(message());
@@ -846,7 +845,7 @@ public class Dialogs {
                     .setPositiveButton(positiveBtnTxtId(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                Prefs.includeLonger(longerSw.isChecked());
+                                D.prefs.setIncludeLonger(longerSw.isChecked());
                                 listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag());
                             }
                             catch (NumberFormatException e) {
@@ -897,7 +896,7 @@ public class Dialogs {
                         public void onClick(DialogInterface dialog, int id) {
                             final int weeks = (int) (float) Float.valueOf(et.getText().toString());
                             D.weekAmount = weeks;
-                            //D.calcWeekStats();
+                            D.calcWeekStats();
                             //a.recreate();
                         }
                     })
@@ -935,7 +934,7 @@ public class Dialogs {
             final RadioButton lightRadio = element.findViewById(R.id.radioButton_light);
             final RadioButton batterySaverRadio = element.findViewById(R.id.radioButton_batterySaver);
 
-            if (Prefs.isThemeLight()) { lightRadio.setChecked(true); }
+            if (D.prefs.isThemeLight()) { lightRadio.setChecked(true); }
             else { darkRadio.setChecked(true); }
 
             builder.setView(element).setTitle("Theme")
@@ -948,8 +947,8 @@ public class Dialogs {
             darkRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (Prefs.isThemeLight()) {
-                        Prefs.setTheme(false);
+                    if (D.prefs.isThemeLight()) {
+                        D.prefs.setTheme(false);
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -959,8 +958,8 @@ public class Dialogs {
             lightRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (!Prefs.isThemeLight()) {
-                        Prefs.setTheme(true);
+                    if (!D.prefs.isThemeLight()) {
+                        D.prefs.setTheme(true);
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -994,7 +993,7 @@ public class Dialogs {
             final RadioButton greenRadio = element.findViewById(R.id.radioButton_green);
             final RadioButton monoRadio = element.findViewById(R.id.radioButton_mono);
 
-            if (Prefs.isColorGreen()) { greenRadio.setChecked(true); }
+            if (D.prefs.isColorGreen()) { greenRadio.setChecked(true); }
             else { monoRadio.setChecked(true); }
 
             builder.setView(element).setTitle("Color")
@@ -1007,8 +1006,8 @@ public class Dialogs {
             greenRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (!Prefs.isColorGreen()) {
-                        Prefs.setColorGreen();
+                    if (!D.prefs.isColorGreen()) {
+                        D.prefs.setColorGreen();
                         //a.recreate();
                         listener.doRecreate();
                     }
@@ -1018,8 +1017,8 @@ public class Dialogs {
             monoRadio.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     getDialog().cancel();
-                    if (!Prefs.isColorMono()) {
-                        Prefs.setColorMono();
+                    if (!D.prefs.isColorMono()) {
+                        D.prefs.setColorMono();
                         //a.recreate();
                         listener.doRecreate();
                     }

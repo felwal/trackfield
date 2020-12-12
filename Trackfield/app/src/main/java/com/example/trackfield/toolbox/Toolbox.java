@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -24,8 +25,6 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,32 +35,31 @@ import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.items.Exerlite;
-import com.example.trackfield.objects.Route;
 import com.example.trackfield.objects.Sub;
-import com.example.trackfield.objects.Trail;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.TreeMap;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Toolbox {
 
@@ -152,12 +150,14 @@ public class Toolbox {
         public static final String NO_VALUE_TIME = "– : –";
         public static final String[] M = { "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D" };
 
+        public static SortMode[] sortModePrefs = {SortMode.DATE, SortMode.DISTANCE, SortMode.DATE, SortMode.DATE, SortMode.DATE };
+        public static boolean[] smallestFirstPrefs = { false, true, false, false, false };
+
         // formatter
         public static final DateTimeFormatter FORMATTER_FILE = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         public static final DateTimeFormatter FORMATTER_SQL = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         public static final DateTimeFormatter FORMATTER_SQL_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        public static final DateTimeFormatter FORMATTER_EDIT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        public static final DateTimeFormatter FORMATTER_EDIT_TIME = DateTimeFormatter.ofPattern("HH:mm:ss");
+        public static final DateTimeFormatter FORMATTER_EDIT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofPattern("EEE, d MMM yyyy 'at' HH:mm");
         public static final DateTimeFormatter FORMATTER_CAPTION = DateTimeFormatter.ofPattern("d MMM yyyy");
         public static final DateTimeFormatter FORMATTER_CAPTION_NOYEAR = DateTimeFormatter.ofPattern("d MMM");
@@ -184,23 +184,29 @@ public class Toolbox {
     // Data
     public static class D {
 
-        @Deprecated public static ArrayList<Exercise> exercises = new ArrayList<>();
-        @Deprecated public static ArrayList<Integer> distances = new ArrayList<>();
-        @Deprecated public static ArrayList<String> routes = new ArrayList<>();
+        public static ArrayList<Exercise> exercises = new ArrayList<>();
+        public static ArrayList<Integer> distances = new ArrayList<>();
+        public static ArrayList<String> routes = new ArrayList<>();
+
+        // prefs
+        public static Prefs prefs = new Prefs();
+        private static int distanceLowerLimit = 500; //
+        private static int distanceUpperLimit = 999; //
 
         // stats & more
-        @Deprecated public static int totalDistance = 0;
-        @Deprecated public static float totalTime = 0;
-        @Deprecated public static boolean gameOn = false;
+        public static int totalDistance = 0;
+        public static float totalTime = 0;
+        public static boolean gameOn = false;
 
         // bort
-        @Deprecated public static int[] weeks;
-        @Deprecated public static int weekAmount = 12;
-        @Deprecated public static int distanceTopX = 3;
+        public static float[] weekDistances, weekActivities;
+        public static int[] weeks;
+        public static int weekAmount = 12;
+        public static int distanceTopX = 3;
 
         // theme
         public static boolean updateTheme(Activity a) {
-            int newTheme = C.LOOKS[M.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
+            int newTheme = C.LOOKS[M.boolToInt(prefs.isThemeLight())][prefs.getColor()];
             try {
                 int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
                 if (currentTheme != newTheme) {
@@ -214,7 +220,7 @@ public class Toolbox {
             return false;
         }
         public static MapStyleOptions getMapStyle(Context c) {
-            return new MapStyleOptions(c.getResources().getString(C.MAP_STYLES[M.heaviside(Prefs.isThemeLight())]));
+            return new MapStyleOptions(c.getResources().getString(C.MAP_STYLES[M.boolToInt(D.prefs.isThemeLight())]));
         }
 
         // sort
@@ -229,8 +235,8 @@ public class Toolbox {
                     float compareValue2 = 0;
                     switch (sortBy) {
                         case DATE: // date
-                            compareValue1 = M.heaviside(sorted.get(j).getDate().isAfter(sorted.get(j+1).getDate()));
-                            compareValue2 = M.heaviside(sorted.get(j+1).getDate().isAfter(sorted.get(j).getDate()));
+                            compareValue1 = M.boolToInt(sorted.get(j).getDate().isAfter(sorted.get(j+1).getDate()));
+                            compareValue2 = M.boolToInt(sorted.get(j+1).getDate().isAfter(sorted.get(j).getDate()));
                             break;
                         case DISTANCE:// distance
                             compareValue1 = sorted.get(j).distance();
@@ -275,8 +281,8 @@ public class Toolbox {
                     float compareValue2 = 0;
                     switch (sortBy) {
                         case DATE: // date
-                            compareValue1 = M.heaviside(sorted.get(j).getDate().isAfter(sorted.get(j+1).getDate()));
-                            compareValue2 = M.heaviside(sorted.get(j+1).getDate().isAfter(sorted.get(j).getDate()));
+                            compareValue1 = M.boolToInt(sorted.get(j).getDate().isAfter(sorted.get(j+1).getDate()));
+                            compareValue2 = M.boolToInt(sorted.get(j+1).getDate().isAfter(sorted.get(j).getDate()));
                             break;
                         case DISTANCE: // full distance
                             compareValue1 = sorted.get(j).distance();
@@ -314,7 +320,7 @@ public class Toolbox {
             for (int i = sorted.size()-1; i >= 0; i--) {
                 for (int j = 0; j < i; j++) {
 
-                    if (!alwaysIncludeLesser && !Prefs.areHiddenRoutesShown() && filterByRoute(sorted.get(j)).size() <= 1) {
+                    if (!alwaysIncludeLesser && !prefs.showLesserRoutes() && filterByRoute(sorted.get(j)).size() <= 1) {
                         sorted.remove(j);
                         j--; i--; // räcker inte
                         continue;
@@ -343,8 +349,8 @@ public class Toolbox {
                         case DATE: // recent
                             boolean jBigger = sortExercises(filterByRoute(sorted.get(j)), false, C.SortMode.DATE).get(0).getDate().
                                     isAfter(sortExercises(filterByRoute(sorted.get(j+1)), false, C.SortMode.DATE).get(0).getDate());
-                            compareValue1 = M.heaviside(jBigger);
-                            compareValue2 = M.heaviside(!jBigger);
+                            compareValue1 = M.boolToInt(jBigger);
+                            compareValue2 = M.boolToInt(!jBigger);
                             break;
                         default:
                             break;
@@ -422,8 +428,8 @@ public class Toolbox {
                     float compareValue2 = 0;
                     switch (sortMode) {
                         case DATE: // date
-                            compareValue1 = M.heaviside(listToSort.get(j).getDate().isAfter(listToSort.get(j+1).getDate()));
-                            compareValue2 = M.heaviside(listToSort.get(j+1).getDate().isAfter(listToSort.get(j).getDate()));
+                            compareValue1 = M.boolToInt(listToSort.get(j).getDate().isAfter(listToSort.get(j+1).getDate()));
+                            compareValue2 = M.boolToInt(listToSort.get(j+1).getDate().isAfter(listToSort.get(j).getDate()));
                             break;
                         case DISTANCE:// distance
                             compareValue1 = listToSort.get(j).getDistance();
@@ -458,7 +464,7 @@ public class Toolbox {
         }
 
         // filter
-        @Deprecated public static ArrayList<Exercise> filterByRoute(String route) {
+        public static ArrayList<Exercise> filterByRoute(String route) {
 
             ArrayList<Exercise> filtered = new ArrayList<>();
             for (Exercise e : exercises) {
@@ -468,7 +474,7 @@ public class Toolbox {
             }
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByRoute(String route, String routeVar) {
+        public static ArrayList<Exercise> filterByRoute(String route, String routeVar) {
 
             ArrayList<Exercise> filtered = new ArrayList<>();
             for (Exercise e : exercises) {
@@ -478,7 +484,7 @@ public class Toolbox {
             }
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByInterval(String interval) {
+        public static ArrayList<Exercise> filterByInterval(String interval) {
 
             ArrayList<Exercise> filtered = new ArrayList<>();
             for (Exercise e : exercises) {
@@ -488,7 +494,7 @@ public class Toolbox {
             }
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByDistance(int distance) {
+        public static ArrayList<Exercise> filterByDistance(int distance) {
 
             ArrayList<Exercise> filteredByMin = filterByMinDistance(distance);
             ArrayList<Exercise> top10 = new ArrayList<>(sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0, Math.min(distanceTopX, filteredByMin.size())));
@@ -500,7 +506,7 @@ public class Toolbox {
 
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByDistance(int distance, int type) {
+        public static ArrayList<Exercise> filterByDistance(int distance, int type) {
 
             ArrayList<Exercise> filteredByMin = filterByMinDistance(distance);
             ArrayList<Exercise> top10 = filterByType(new ArrayList<>(sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0, Math.min(distanceTopX, filteredByMin.size()))), type);
@@ -512,7 +518,7 @@ public class Toolbox {
 
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByMinDistance(int distance) {
+        public static ArrayList<Exercise> filterByMinDistance(int distance) {
 
             ArrayList<Exercise> filtered = new ArrayList<>();
             for (Exercise e : exercises) {
@@ -522,7 +528,7 @@ public class Toolbox {
             }
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterByType(ArrayList<Exercise> list, int type) {
+        public static ArrayList<Exercise> filterByType(ArrayList<Exercise> list, int type) {
 
             ArrayList<Exercise> filtered = new ArrayList<>();
             for (Exercise e : list) {
@@ -531,7 +537,7 @@ public class Toolbox {
 
             return filtered;
         }
-        @Deprecated public static ArrayList<Exercise> filterBySearch(String search) {
+        public static ArrayList<Exercise> filterBySearch(String search) {
 
             search = search.toLowerCase();
             ArrayList<Exercise> filtered = new ArrayList<>();
@@ -551,7 +557,7 @@ public class Toolbox {
         }
 
         // compare
-        @Deprecated public static Exercise shortestTime(ArrayList<Exercise> list, int distance) {
+        public static Exercise shortestTime(ArrayList<Exercise> list, int distance) {
 
             Exercise shortest = list.get(0);
             for (Exercise e: list) {
@@ -560,7 +566,7 @@ public class Toolbox {
             return shortest;
 
         }
-        @Deprecated public static Exercise fastestPace(ArrayList<Exercise> list) {
+        public static Exercise fastestPace(ArrayList<Exercise> list) {
 
             Exercise fastest = list.get(0);
             for (int i = 1; i < list.size(); i++) {
@@ -575,7 +581,7 @@ public class Toolbox {
             return fastest;
 
         }
-        @Deprecated public static int averageDistance(ArrayList<Exercise> list) {
+        public static int averageDistance(ArrayList<Exercise> list) {
 
             int totalDistance = 0;
             int count = 0;
@@ -588,7 +594,7 @@ public class Toolbox {
             return totalDistance / count;
 
         }
-        @Deprecated public static int longestDistance(ArrayList<Exercise> list) {
+        public static int longestDistance(ArrayList<Exercise> list) {
 
             int longestDistance = 0;
             for (Exercise e: list) {
@@ -655,13 +661,34 @@ public class Toolbox {
         }
 
         // update data
-        @Deprecated public static void addDistance(int d) {
+        public static void edited() {
+            moveExercise();
+            trimRoutes();
+            calcTotalStats();
+            calcWeekStats();
+        }
+        public static void addDistance(int d) {
             if (!distances.contains(d)) {
                 distances.add(d);
                 sortDistancesData();
             }
         }
-        @Deprecated public static void sortRoutesData() {
+        public static void moveExercise() {
+            if (exercises.size() == 0) return;
+
+            for (int i = exercises.size()-1; i > 0; i--) {
+                if (exercises.get(i).getDate().isBefore(exercises.get(i-1).getDate())) {
+
+                    Exercise temp = exercises.get(i-1);
+                    exercises.set(i-1, exercises.get(i)).setId(i-1);
+                    exercises.set(i, temp).setId(i);
+                }
+                exercises.get(i).setId(i);
+            }
+            exercises.get(0).setId(0);
+
+        }
+        public static void sortRoutesData() {
 
             //trimRoutes();
 
@@ -689,7 +716,7 @@ public class Toolbox {
             }
 
         }
-        @Deprecated public static void sortDistancesData() {
+        public static void sortDistancesData() {
 
             for (int i = distances.size()-1; i >= 0; i--) {
                 for (int j = 0; j < i; j++) {
@@ -705,7 +732,7 @@ public class Toolbox {
             }
 
         }
-        @Deprecated public static void importRoutes() {
+        public static void importRoutes() {
 
             routes.clear();
             for (Exercise e : exercises) {
@@ -715,9 +742,64 @@ public class Toolbox {
             }
 
         }
+        public static void trimRoutes() {
+
+            for (int r = 0; r < routes.size(); r++) {
+                String route = routes.get(r);
+
+                if (filterByRoute(route).size() == 0) {
+                    routes.remove(r);
+                }
+            }
+
+        }
+
+        // stats
+        private static void calcTotalStats() {
+
+            int distance = 0;
+            float time = 0;
+            for (Exercise e : exercises) {
+                distance += e.distance();
+                time += e.time();
+            }
+            totalDistance = distance;
+            totalTime = time / 3600f;
+
+        }
 
         // charts
-        @Deprecated public static float[] weekDailyDistance() {
+        public static void calcWeekStats() {
+
+            weekDistances = new float[weekAmount];
+            weekActivities = new float[weekAmount];
+            weeks = new int[weekAmount];
+            LocalDate now = LocalDate.now();
+
+            // get week numbers
+            for (int w = 0; w < weekAmount; w++) {
+                int week = now.minusDays(7*w).get(C.WEEK_OF_YEAR);
+                weeks[w] = week;
+            }
+
+            // calc
+            for (int i = exercises.size()-1; i >= 0; i--) {
+                Exercise e = exercises.get(i);
+                int week = e.getWeek();
+                boolean calcDone = true;
+                for (int w = 0; w < weekAmount; w++) {
+                    if (week == weeks[w]) {
+                        weekDistances[w] += e.distance();
+                        weekActivities[w]++;
+                        calcDone = false;
+                    }
+                }
+                if (calcDone) { break; }
+
+            }
+
+        }
+        public static float[] weekDailyDistance() {
 
             float[] distances = {0, 0, 0, 0, 0, 0, 0};
             LocalDate now = LocalDate.now();
@@ -729,7 +811,27 @@ public class Toolbox {
             }
             return distances;
         }
-        @Deprecated public static float[] yearMonthlyDistance(int year) {
+        public static float[] yearWeeklyDistance(int year) {
+
+            LocalDate startDate = LocalDate.of(year, 1, 1).minusDays(7);
+            LocalDate endDate = LocalDate.of(year+1, 1, 1).plusDays(7);
+
+            while (startDate.get(C.WEEK_OF_YEAR) > 1) { startDate = startDate.plusDays(1); }
+            while (endDate.get(C.WEEK_OF_YEAR) < 52) { endDate = endDate.minusDays(1); }
+
+            float[] distances = new float[endDate.get(C.WEEK_OF_YEAR)];
+            LocalDate now = LocalDate.now();
+            int week = now.get(C.WEEK_OF_YEAR);
+
+            for (Exercise e : sortExercises(exercises, true, C.SortMode.DATE)) {
+                LocalDate date = e.getDate();
+                if (date.isBefore(startDate)) { continue; }
+                if (date.isAfter(endDate)) { break; }
+                distances[date.get(C.WEEK_OF_YEAR)-1] += e.distance();
+            }
+            return distances;
+        }
+        public static float[] yearMonthlyDistance(int year) {
 
             LocalDate startDate = LocalDate.of(year, 1, 1);
             LocalDate endDate = LocalDate.of(year+1, 1, 1).minusDays(1);
@@ -743,6 +845,10 @@ public class Toolbox {
                 distances[date.getMonthValue()-1] += e.distance();
             }
             return distances;
+        }
+
+        public static LatLng toLatLng(Location location) {
+            return new LatLng(location.getLatitude(), location.getLongitude());
         }
 
     }
@@ -764,10 +870,115 @@ public class Toolbox {
         public static final String SP_SHARED_PREFERENCES = "shared preferences";
         private static final String SP_PREFS = "prefs";
 
-        public static void exportToExternal(Context c) {
+        // save data
+        public static void savePrefs(Context c) {
 
-            //D.moveExercise();
-            //D.trimRoutes();
+            SharedPreferences sp = c.getSharedPreferences(SP_SHARED_PREFERENCES, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            Gson gson = new Gson();
+
+            String json = gson.toJson(D.prefs);
+            editor.putString(SP_PREFS, json);
+
+            /*String lesserJson = gson.toJson(D.showLesserRoutes);
+            String smallestFirstJson = gson.toJson(C.smallestFirstPrefs);
+            String sortModeJson = gson.toJson(C.sortModePrefs);
+            String weekAmountJson = gson.toJson(D.weekAmount);
+            String weekDistanceJson = gson.toJson(D.weekDistance);
+            String weekChartJson = gson.toJson(D.showWeekChart);
+            String colorJson = gson.toJson(D.color);
+            String themeJson = gson.toJson(D.theme);
+            String massJson = gson.toJson(D.mass);
+            String birthdayJson = gson.toJson(D.birthday);
+            String weekHeadersJson = gson.toJson(D.showWeekHeaders);
+            String typesEJson = gson.toJson(D.exerciseVisibleTypes);
+            String typesDJson = gson.toJson(D.distanceVisibleTypes);
+            String typesJJson = gson.toJson(D.routeVisibleTypes);
+
+            editor.putString(LESSER_ROUTES, lesserJson);
+            editor.putString(SMALLEST_FIRST, smallestFirstJson);
+            editor.putString(SORT_MODE, sortModeJson);
+            editor.putString(WEEK_AMOUNT, weekAmountJson);
+            editor.putString(WEEK_DISTANCE, weekDistanceJson);
+            editor.putString(WEEK_CHART, weekChartJson);
+            editor.putString(LOOK_COLOR, colorJson);
+            editor.putString(LOOK_THEME, themeJson);
+            editor.putString(MASS, massJson);
+            editor.putString(BIRTHDAY, birthdayJson);
+            editor.putString(WEEK_HEADERS, weekHeadersJson);
+            editor.putString(TYPES_EXERCISE, typesEJson);
+            editor.putString(TYPES_DISTANCE, typesDJson);
+            editor.putString(TYPES_ROUTE, typesJJson);*/
+
+            editor.apply();
+        }
+        public static void loadPrefs(Context c) {
+
+            try {
+                SharedPreferences sp = c.getSharedPreferences(SP_SHARED_PREFERENCES, MODE_PRIVATE);
+                Gson gson = new Gson();
+
+                String json = sp.getString(SP_PREFS, null);
+                Type type = new TypeToken<Prefs>(){}.getType();
+                D.prefs = gson.fromJson(json, type);
+
+                /*String lesserJson = sp.getString(LESSER_ROUTES, null);
+                String smallestFirstJson = sp.getString(SMALLEST_FIRST, null);
+                String sortModeJson = sp.getString(SORT_MODE, null);
+                String weekAmountJson = sp.getString(WEEK_AMOUNT, null);
+                String weekDistanceJson = sp.getString(WEEK_DISTANCE, null);
+                String weekChartJson = sp.getString(WEEK_CHART, null);
+                String themeColorJson = sp.getString(LOOK_COLOR, null);
+                String themeLightJson = sp.getString(LOOK_THEME, null);
+                String massJson = sp.getString(MASS, null);
+                String birthdayJson = sp.getString(BIRTHDAY, null);
+                //String weekHeadersJson = sp.getString(WEEK_HEADERS, null);
+                String eTypesJson = sp.getString(TYPES_EXERCISE, null);
+                String dTypesJson = sp.getString(TYPES_DISTANCE, null);
+                String jTypesJson = sp.getString(TYPES_ROUTE, null);
+
+                Type lesserType = new TypeToken<Boolean>(){}.getType();
+                Type smallestFirstType = new TypeToken<boolean[]>(){}.getType();
+                Type sortModeType = new TypeToken<C.SortMode[]>(){}.getType();
+                Type weekAmountType = new TypeToken<Integer>(){}.getType();
+                Type weekDistanceType = new TypeToken<Boolean>(){}.getType();
+                Type weekChartType = new TypeToken<Boolean>(){}.getType();
+                Type themeColorType = new TypeToken<Integer>(){}.getType();
+                Type themeLightType = new TypeToken<Boolean>(){}.getType();
+                Type massType = new TypeToken<Float>(){}.getType();
+                Type birthdayType = new TypeToken<LocalDate>(){}.getType();
+                //Type weekHeadersType = new TypeToken<Boolean>(){}.getType();
+                Type eTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
+                Type dTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
+                Type jTypeType = new TypeToken<ArrayList<Integer>>(){}.getType();
+
+                D.prefs.setShowLesserRoutes((Boolean) gson.fromJson(lesserJson, lesserType));
+                C.smallestFirstPrefs = gson.fromJson(smallestFirstJson, smallestFirstType);
+                C.sortModePrefs = gson.fromJson(sortModeJson, sortModeType);
+                D.weekAmount = gson.fromJson(weekAmountJson, weekAmountType);
+                D.prefs.setWeekDistance((Boolean) gson.fromJson(weekDistanceJson, weekDistanceType));
+                D.prefs.setShowWeekChart((Boolean) gson.fromJson(weekChartJson, weekChartType));
+                D.prefs.setColor((Integer) gson.fromJson(themeColorJson, themeColorType));
+                D.prefs.setTheme((Boolean) gson.fromJson(themeLightJson, themeLightType));
+                D.prefs.setMass((Float) gson.fromJson(massJson, massType));
+                D.prefs.setBirthday((LocalDate) gson.fromJson(birthdayJson, birthdayType));
+                //D.showWeekHeaders = gson.fromJson(weekHeadersJson, weekHeadersType);
+                D.exerciseVisibleTypes = gson.fromJson(eTypesJson, eTypeType);
+                D.distanceVisibleTypes = gson.fromJson(dTypesJson, dTypeType);
+                D.routeVisibleTypes = gson.fromJson(jTypesJson, jTypeType);*/
+
+            }
+            catch (Exception e) {
+                Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            D.prefs.setUpAutoSave(c);
+
+        }
+
+        public static void saveExternal(Context c) {
+
+            D.moveExercise();
+            D.trimRoutes();
 
             try {
                 // exercise
@@ -777,10 +988,10 @@ public class Toolbox {
                 FileOutputStream sFos = new FileOutputStream(sFile);
                 OutputStreamWriter eWriter = new OutputStreamWriter(eFos);
                 OutputStreamWriter sWriter = new OutputStreamWriter(sFos);
-                for (Exercise e : Helper.getReader(c).getExercises()) {
+                for (Exercise e : D.exercises) {
                     eWriter.append(e.extractToFile(DIV_WRITE) + "\n");
                     for (int index = 0; index < e.getSubs().size(); index++) {
-                        sWriter.append(e.getSub(index).extractToFile(DIV_WRITE, e.get_id(), index) + "\n");
+                        sWriter.append(e.getSub(index).extractToFile(DIV_WRITE, e.getId(), index) + "\n");
                     }
                 }
                 eWriter.close(); eFos.flush(); eFos.close();
@@ -790,8 +1001,8 @@ public class Toolbox {
                 java.io.File rFile = new java.io.File(PATH + FILENAME_R);
                 FileOutputStream rFos = new FileOutputStream(rFile);
                 OutputStreamWriter rWriter = new OutputStreamWriter(rFos);
-                for (Route r : Helper.getReader(c).getRoutes(C.SortMode.DATE, true, true)) {
-                    rWriter.append(r.getName() + "\n");
+                for (String r : D.routes) {
+                    rWriter.append(r + "\n");
                 }
                 rWriter.close(); rFos.flush(); rFos.close();
 
@@ -799,27 +1010,24 @@ public class Toolbox {
                 java.io.File dFile = new java.io.File(PATH + FILENAME_D);
                 FileOutputStream dFos = new FileOutputStream(dFile);
                 OutputStreamWriter dWriter = new OutputStreamWriter(dFos);
-                for (Distance d : Helper.getReader(c).getDistances(Distance.SortMode.DISTANCE, true)) {
-                    dWriter.append(d.getDistance() + "\n");
+                for (int d : D.distances) {
+                    dWriter.append(d + "\n");
                 }
                 dWriter.close(); dFos.flush(); dFos.close();
 
                 //Toast.makeText(c,"Done writing to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Toast.makeText(c, e.getMessage(),Toast.LENGTH_LONG).show();
             }
 
         }
-        public static void importFromExternal(Context c) {
+        public static void loadExternal(Context c) {
 
             // are you sure?
 
-            //D.exercises.clear();
-            //D.routes.clear();
-            //D.distances.clear();
-            //Helper.getWriter(c).deleteAllExercises();
-            Helper.getWriter(c).recreate();
+            D.exercises.clear();
+            D.routes.clear();
+            D.distances.clear();
 
             try {
                 // sub
@@ -896,9 +1104,9 @@ public class Toolbox {
                 while ((line = eReader.readLine()) != null) {
 
                     // values
-                    int _id = -1;
+                    int id = -1;
                     int type = 0;
-                    LocalDateTime date = LocalDateTime.now();//.parse("0001/01/01", C.FORMATTER_FILE);
+                    LocalDate date = LocalDate.parse("0001/01/01", C.FORMATTER_FILE);
                     String route = "";
                     String routeVar = "";
                     String interval = "";
@@ -907,11 +1115,6 @@ public class Toolbox {
                     String dataSource = "";
                     String recordingMethod = "";
                     String note = "";
-                    String startLat = "";
-                    String startLng = "";
-                    String endLat = "";
-                    String endLng = "";
-                    String polyline = "";
 
                     // get values
                     int section = 0;
@@ -920,24 +1123,19 @@ public class Toolbox {
                         if (line.charAt(ch) != DIV_READ) {
                             temp += line.charAt(ch);
                         }
-                        if (line.charAt(ch) == DIV_READ || ch == line.length() - 1) {
+                        if (line.charAt(ch) == DIV_READ || ch == line.length()-1) {
                             switch (section) {
-                                case 0: _id = Integer.parseInt(temp); break;
-                                case 1: type = Integer.parseInt(temp); break;
-                                case 2: date = M.ofEpoch(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
+                                case 0: id = Integer.valueOf(temp); break;
+                                case 1: type = Integer.valueOf(temp); break;
+                                case 2: date = LocalDate.parse(temp, C.FORMATTER_FILE); break;
                                 case 3: route = temp; break;
                                 case 4: routeVar = temp; break;
                                 case 5: interval = temp; break;
-                                case 6: distance = Integer.parseInt(temp); break;
-                                case 7: time = Float.parseFloat(temp); break;
+                                case 6: distance = Integer.valueOf(temp); break;
+                                case 7: time = Float.valueOf(temp); break;
                                 case 8: dataSource = temp; break;
                                 case 9: recordingMethod = temp; break;
                                 case 10: note = temp; break;
-                                case 11: startLat = temp; break;
-                                case 12: startLng = temp; break;
-                                case 13: endLat = temp; break;
-                                case 14: endLng = temp; break;
-                                case 15: polyline = temp; break;
                                 default: break;
                             }
                             temp = "";
@@ -946,21 +1144,12 @@ public class Toolbox {
                     }
 
                     // add exercise
-                    if (_id != -1) {
-                        int routeId = Helper.getReader(c).getRouteId(route);
-                        Trail trail = null;
-                        if (!polyline.equals("")) {
-                            if (!startLat.equals("") && !startLng.equals("") && !endLat.equals("") && !endLng.equals("")) {
-                                LatLng start = new LatLng(Double.parseDouble(startLat), Double.parseDouble(startLng));
-                                LatLng end = new LatLng(Double.parseDouble(endLat), Double.parseDouble(endLng));
-                                trail = new Trail(polyline, start, end);
-                            }
-                            else trail = new Trail(polyline);
-                        }
-
-                        Exercise e = new Exercise(_id, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
-                        Helper.getWriter(c).addExercise(e, c);
-                        //D.exercises.add(e);
+                    if (id != -1) {
+                        Helper.Reader reader = new Helper.Reader(c);
+                        int routeId = reader.getRouteId(route);
+                        reader.close();
+                        Exercise e = new Exercise(-1, id, type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, id), null);
+                        D.exercises.add(e);
                     }
 
                 }
@@ -971,8 +1160,7 @@ public class Toolbox {
                 FileInputStream rFis = new FileInputStream(rFile);
                 BufferedReader rReader = new BufferedReader(new InputStreamReader(rFis));
                 while ((line = rReader.readLine()) != null) {
-                    //D.routes.add(line);
-                    Helper.getWriter(c).addRoute(new Route(-1, line), c);
+                    D.routes.add(line);
                 }
                 rReader.close(); rFis.close();
 
@@ -981,18 +1169,16 @@ public class Toolbox {
                 FileInputStream dFis = new FileInputStream(dFile);
                 BufferedReader dReader = new BufferedReader(new InputStreamReader(dFis));
                 while ((line = dReader.readLine()) != null) {
-                    //D.distances.add(Integer.valueOf(line));
-                    Helper.getWriter(c).addDistance(new Distance(-1, Integer.parseInt(line)));
+                    D.distances.add(Integer.valueOf(line));
                 }
                 dReader.close(); dFis.close();
 
                 //Toast.makeText(c,"Done reading to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Toast.makeText(c, e.getMessage(),Toast.LENGTH_LONG).show();
             }
 
-            //D.edited();
+            D.edited();
 
         }
 
@@ -1039,22 +1225,12 @@ public class Toolbox {
         public static double sqr(double d) {
             return d * d;
         }
-        public static int heaviside(float x) {
+        public static float heaviside(float x) {
             return x < 0 ? 0 : 1;
-        }
-        public static int heaviside(boolean one) {
-            return one ? 1 : 0;
         }
         public static float nonNegative(float f) {
             return f * heaviside(f);
         }
-        public static int signum(float x) {
-            return x > 0 ? 1 : (x < 0 ? -1 : 0);
-        }
-        public static int signum(boolean positive) {
-            return positive ? 1 : -1;
-        }
-
         public static float round(float f, int decimals) {
             BigDecimal bd = new BigDecimal(Float.toString(f));
             bd = bd.setScale(decimals, BigDecimal.ROUND_HALF_UP);
@@ -1064,14 +1240,6 @@ public class Toolbox {
             BigDecimal bd = new BigDecimal(Double.toString(d));
             bd = bd.setScale(decimals, BigDecimal.ROUND_HALF_UP);
             return bd.doubleValue();
-        }
-
-        // ratios
-        public static int goldenRatioSmall(int of) {
-            return (int) (of / (1 + GOLDEN_RATIO));
-        }
-        public static int goldenRatioLarge(int of) {
-            return (int) (of * GOLDEN_RATIO / (1 + GOLDEN_RATIO));
         }
 
         // strings
@@ -1190,7 +1358,18 @@ public class Toolbox {
             return s.length() < maxLength ? s : s.substring(0,maxLength);
         }
 
+        // ratios
+        public static int goldenRatioA(int of) {
+            return (int) (of / (1 + GOLDEN_RATIO));
+        }
+        public static int goldenRatioB(int of) {
+            return (int) (of * GOLDEN_RATIO / (1 + GOLDEN_RATIO));
+        }
+
         // convert / compute
+        public static int boolToInt(boolean bool) {
+            return bool ? 1 : 0;
+        }
         public static boolean intToBool(int i) {
             return i != 0;
         }
@@ -1234,74 +1413,35 @@ public class Toolbox {
             return new float[] {seconds, minutes, hours};
         }
 
-        // lists
-        public static boolean treeMapsEquals(TreeMap<Float, Float> map1, TreeMap<Float, Float> map2) {
-
-            for (TreeMap.Entry<Float, Float> entry : map1.entrySet()) {
-                float key = entry.getKey();
-                if (!map2.containsKey(key) || map2.get(key).floatValue() != entry.getValue().floatValue()) return false;
+        // dates
+        public static int mergeYearAndWeek(int year, int week) {
+            String sWeek = Integer.toString(week);
+            if (sWeek.length() == 1) {
+                sWeek = 0 + sWeek;
             }
-            return true;
+            return Integer.parseInt(year + "" + sWeek);
         }
-        public static ArrayList<Integer> createList(int valueToAdd) {
-            ArrayList<Integer> list = new ArrayList<>();
-            list.add(valueToAdd);
-            return list;
+        public static int[] splitYearAndWeek(int yearAndWeek) {
+            int year = Integer.parseInt(Integer.toString(yearAndWeek).substring(0, 4));
+            int week = Integer.parseInt(Integer.toString(yearAndWeek).substring(4));
+            return new int[] {year, week};
+        }
+        public static LocalDateTime dateTime(LocalDate date) {
+            return LocalDateTime.of(date, LocalTime.of(12,0));
         }
 
         // distance
         public static int minDistance(int distance) {
-            return (int) nonNegative(distance - Prefs.distanceLowerLimit);
+            return (int) nonNegative(distance - D.distanceLowerLimit);
         }
         public static int maxDistance(int distance) {
-            return distance + Prefs.distanceUpperLimit;
+            return distance + D.distanceUpperLimit;
         }
         public static boolean insideLimits(int distance, int fitsInside) {
             return distance > minDistance(fitsInside) && distance < maxDistance(fitsInside);
         }
         public static boolean insideLimits(int distance, int fitsInside, boolean includeLonger) {
             return distance > M.minDistance(fitsInside) && (includeLonger || distance < M.maxDistance(fitsInside));
-        }
-
-        // dates
-        public static LocalDateTime dateTime(LocalDate date) {
-            return LocalDateTime.of(date, LocalTime.of(12,0));
-        }
-        public static LocalDateTime ofEpoch(long seconds) {
-            return LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.UTC);
-        }
-        public static long epoch(LocalDateTime dateTime) {
-            return dateTime.atZone(ZoneId.of("UTC")).toEpochSecond();
-        }
-        public static LocalDateTime first(LocalDateTime a, LocalDateTime b) {
-            return a.isBefore(b) ? a : b;
-        }
-        public static LocalDateTime last(LocalDateTime a, LocalDateTime b) {
-            return a.isAfter(b) ? a : b;
-        }
-
-        public static LocalDateTime atStartOfWeek(LocalDate date) {
-            return date.minusDays(date.getDayOfWeek().getValue() - 1).atStartOfDay();
-        }
-        public static LocalDateTime atEndOfWeek(LocalDate date) {
-            return date.plusDays(7 - date.getDayOfWeek().getValue()).atTime(23, 59, 59);
-        }
-        public static LocalDateTime atStartOfMonth(LocalDate date) {
-            return date.minusDays(date.getDayOfMonth() - 1).atStartOfDay();
-        }
-        public static LocalDateTime atEndOfMonth(LocalDate date) {
-            return date.plusDays(date.lengthOfMonth() - date.getDayOfMonth()).atTime(23, 59, 59);
-        }
-        public static LocalDateTime atStartOfYear(LocalDate date) {
-            return date.minusDays(date.getDayOfYear() - 1).atStartOfDay();
-        }
-        public static LocalDateTime atEndOfYear(LocalDate date) {
-            return date.plusDays(date.lengthOfYear() - date.getDayOfYear()).atTime(23, 59, 59);
-        }
-
-        // map
-        public static LatLng toLatLng(Location location) {
-            return new LatLng(location.getLatitude(), location.getLongitude());
         }
 
     }
@@ -1331,9 +1471,6 @@ public class Toolbox {
         }
         public static int px(float dp) {
             return (int) (dp * scale + 0.5f);
-        }
-        public static void transStatusBar(Window window) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
         // resources

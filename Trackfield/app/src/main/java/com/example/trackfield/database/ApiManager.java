@@ -1,7 +1,6 @@
 package com.example.trackfield.database;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -11,12 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
-import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -59,13 +59,18 @@ public abstract class ApiManager extends AppCompatActivity {
     private SimpleDateFormat formatterEnd = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
 
     // strava
-    private static RequestQueue queue;
+    private RequestQueue queue;
     private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"); // 2020-11-04T11:16:08Z
 
     private static final String CLIENT_ID = "***REMOVED***";
     private static final String CLIENT_SECRET = "***REMOVED***";
-    private static final String REDIRECT_URI = "https://felwal.github.io/Trackfield/callback";
-    private static final int PER_PAGE = 200;
+    private static final String REDIRECT_URI = "http://localhost/callback";
+    private static int PER_PAGE = 200;
+
+    private static String authCode = "***REMOVED***";
+    private static String refreshToken = "***REMOVED***";
+    private static String accessToken = "***REMOVED***";
+    private static LocalDateTime accessTokenExpiresAt;
 
     // request codes
     private static final int REQUEST_CODE_PERMISSIONS_GOOGLE_FIT = 1;
@@ -97,7 +102,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) accessGoogleFit();
-            else if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authorizeStrava();
+            else if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authenticateStrava();
         }
     }
 
@@ -204,7 +209,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
     // Strava
 
-    protected void authorizeStrava() {
+    protected void authenticateStrava() {
 
         Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
                 .buildUpon()
@@ -217,41 +222,91 @@ public abstract class ApiManager extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    }
-    protected void finishAuthorization(Uri appLinkData) {
-        Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast("Authorization successful", this);
+
+        //authCode = "";
     }
 
-    // request activities
-    private void requestActivity(final int index) {
+    // request tokens
+    private void requestAuthCode() {
 
-        ((TokenRequester) accessToken -> {
-
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null,
-                    response -> {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getAuthCodeURL(), null,
+                new Response.Listener<JSONObject>() {
+                    @Override public void onResponse(JSONObject response) {
                         try {
-                            JSONObject obj = response.getJSONObject(index);
-                            mergeWithExisting(convertToExercise(obj));
-
-                            L.toast("request successful", a);
+                            authCode = response.getString("code");
+                            Log.i("response authCode: ", authCode);
+                            L.toast(response.toString(),  a);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
-                            L.handleError("failed to parse JSONObject", e, a);
+                            L.handleError("failed to get response element from Strava", e, a);
                         }
-                    },
-                    e -> L.handleError("Strava response error", e, a));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError e) {
+                        L.handleError("Strava response error", e, a);
+                    }
+                });
 
-            queue.add(request);
-        }).requestAccessToken(a);
-
+        queue.add(request);
     }
-    private void requestActivities(final int page) {
+    private void requestRefreshToken() {
 
-        ((TokenRequester) accessToken -> {
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
-                    response -> {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getRefreshTokenURL(), null,
+                new Response.Listener<JSONObject>() {
+                    @Override public void onResponse(JSONObject response) {
+                        try {
+                            refreshToken = response.getString("refresh_token");
+                            Log.i("response refreshToken: ", refreshToken);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            L.handleError("failed to get response element from Strava", e, a);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError e) {
+                        L.handleError("Strava response error", e, a);
+                    }
+                });
+
+        queue.add(request);
+    }
+    private void requestAccessToken() {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getAccessTokenURL(), null,
+                new Response.Listener<JSONObject>() {
+                    @Override public void onResponse(JSONObject response) {
+                        try {
+                            accessToken = response.getString("access_token");
+                            Log.i("response accessToken: ", accessToken);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            L.handleError("failed to get response element from Strava", e, a);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError e) {
+                        L.handleError("Strava response error", e, a);
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    // request activities
+    protected void requestActivities(final int page) {
+
+        requestAccessToken();
+        //final ArrayList<Exercise> exercises = new ArrayList<>();
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
+                new Response.Listener<JSONArray>() {
+                    @Override public void onResponse(JSONArray response) {
                         for (int index = 0; index < response.length(); index++) {
                             try {
                                 JSONObject obj = response.getJSONObject(index);
@@ -259,30 +314,47 @@ public abstract class ApiManager extends AppCompatActivity {
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
-                                L.handleError("failed to parse JSONObject", e, a);
+                                L.handleError("failed to get jsonobj from Strava", e, a);
                             }
                         }
                         if (response.length() == PER_PAGE) requestActivities(page + 1);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError e) {
+                        L.handleError("Strava response error", e, a);
+                    }
+                });
 
-                        L.toast("request successful", a);
-                    },
-                    e -> L.handleError("Strava response error", e, a));
-
-            queue.add(request);
-        }).requestAccessToken(a);
-
+        queue.add(request);
     }
+    protected void requestActivity(final int index) {
 
+        requestAccessToken();
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null,
+                new Response.Listener<JSONArray>() {
+                    @Override public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject obj = response.getJSONObject(index);
+                            mergeWithExisting(convertToExercise(obj));
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            L.handleError("failed to get jsonobj from Strava", e, a);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override public void onErrorResponse(VolleyError e) {
+                        L.handleError("Strava response error", e, a);
+                    }
+                });
+
+        queue.add(request);
+    }
     protected void requestLastActivity() {
         requestActivity(0);
-    }
-    protected void requestLastActivities(int count) {
-        for (int i = 0; i < count; i++) {
-            requestActivity(i);
-        }
-    }
-    protected void requestAllActivities() {
-        requestActivities(1);
     }
 
     // convert
@@ -315,7 +387,7 @@ public abstract class ApiManager extends AppCompatActivity {
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
-            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Garmin Forerunner 745", "GPS + Galileo", distance, time, null, trail);
+            return new Exercise(-1, -1, type, dateTime, routeId, name, "", "", "", "Strava", "GPS", distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -330,7 +402,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
         if (matching.size() == 1) {
             Exercise m = matching.get(0);
-            Exercise merged = new Exercise(m.get_id(), m.getType(), fromStrava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
+            Exercise merged = new Exercise(m.get_id(), m.getId(), m.getType(), fromStrava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
                     m.getNote(), m.getDataSource(), m.getRecordingMethod(), fromStrava.getDistancePrimary(), fromStrava.getTimePrimary(), m.getSubs(), fromStrava.getTrail());
 
             Helper.getWriter(a).updateExercise(merged);
@@ -343,72 +415,26 @@ public abstract class ApiManager extends AppCompatActivity {
 
     }
 
-    interface TokenRequester {
-
-        void onTokenReady(String token);
-
-        default void requestAccessToken(Context c) {
-            if (Prefs.isAccessTokenCurrent()) { onTokenReady(Prefs.getAccessToken()); return; }
-
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getAccessTokenURL(), null,
-                    response -> {
-                        try {
-                            Prefs.setAccessToken(response.getString("access_token"));
-                            Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString("expires_at"))));
-
-                            Log.i("response accessToken: ", Prefs.getAccessToken());
-                            onTokenReady(Prefs.getAccessToken());
-                        }
-                        catch (JSONException e) {
-                            //e.printStackTrace();
-                            L.handleError("failed to parse accessToken from Strava", e, c);
-                        }
-                    },
-                    e -> {
-                        L.handleError("failed to request new accessToken, requesting new refreshToken...", e, c);
-
-                        // request refreshToken
-                        ((TokenRequester) refreshToken -> {
-                            ((TokenRequester) accessToken -> {
-                                onTokenReady(accessToken);
-                            }).requestAccessToken(c);
-                        }).requestRefreshToken(true, c);
-                    });
-
-            queue.add(request);
-        }
-        default void requestRefreshToken(boolean requireRequest, Context c) {
-            if(!requireRequest && Prefs.isRefreshTokenCurrent()) onTokenReady(Prefs.getRefreshToken());
-
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getRefreshTokenURL(), null,
-                    response -> {
-                        try {
-                            Prefs.setRefreshToken(response.getString("refresh_token"));
-
-                            Log.i("response refreshToken: ", Prefs.getRefreshToken());
-                            onTokenReady(Prefs.getRefreshToken());
-                        }
-                        catch (JSONException e) {
-                            //e.printStackTrace();
-                            L.handleError("failed to parse refreshToken", e, c);
-                        }
-                    },
-                    e -> L.handleError("failed to request refreshToken, please redo authorizaition", e, c)); // TODO: auto-prompt
-
-            queue.add(request);
-        }
-
-    }
-
     // url:s
-    private static String getRefreshTokenURL() {
-        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + Prefs.getAuthCode() + "&grant_type=authorization_code";
+    private String getAuthCodeURL() {
+        return "https://www.strava.com/oauth/authorize?client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&response_type=code&scope=activity:read_all";
     }
-    private static String getAccessTokenURL() {
-        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&refresh_token=" + Prefs.getRefreshToken() + "&grant_type=refresh_token";
+    private String getRefreshTokenURL() {
+        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + authCode + "&grant_type=authorization_code";
     }
-    private static String getActivitiesURL(int page) {
-        return "https://www.strava.com/api/v3/athlete/activities?per_page=" + PER_PAGE + "&access_token=" + Prefs.getAccessToken() + "&page=" + page;
+    private String getAccessTokenURL() {
+        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&refresh_token=" + refreshToken + "&grant_type=refresh_token";
+    }
+    private String getActivitiesURL(int page) {
+        return "https://www.strava.com/api/v3/athlete/activities?per_page=" + PER_PAGE + "&access_token=" + accessToken + "&page=" + page;
+    }
+
+    // tokens
+    private String getAccessToken() {
+        if (true || LocalDateTime.now().isAfter(accessTokenExpiresAt)) {
+            requestAccessToken();
+        }
+        return accessToken;
     }
 
 }

@@ -103,7 +103,7 @@ public class SortDialog extends BottomSheetDialogFragment {
             if (sortMode == sortModes[rl]) {
                 textViews[rl].setTextColor(getResources().getColor(R.color.colorTextHighlight));
                 textViews[rl].setTypeface(null, Typeface.BOLD);
-                textViews[rl].setText(sortModesTitle[rl] + " " + C.ARROWS[M.heaviside(smallestFirst)]);
+                textViews[rl].setText(sortModesTitle[rl] + " " + C.ARROWS[M.boolToInt(smallestFirst)]);
             } else {
                 //textViews[rl].setTextColor(getResources().getColor(R.attr.colorOnSurface));
                 textViews[rl].setTextAppearance(a, R.style.Heading1);

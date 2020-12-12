@@ -11,7 +11,6 @@ import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.objects.Trails;
-import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,7 +49,6 @@ public class MapActivity {
             D.updateTheme(this);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_map);
-            L.transStatusBar(getWindow());
 
             Intent intent = getIntent();
             if (intent == null) finish();
@@ -135,7 +133,7 @@ public class MapActivity {
 
         public static void setReadyMap(final GoogleMap googleMap, final Trail trail, int padding, Context c) {
 
-            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
+            if (!D.prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
 
             // polyline
             PolylineOptions polyline = new PolylineOptions();
@@ -183,7 +181,7 @@ public class MapActivity {
 
         public static void setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
 
-            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
+            if (!D.prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
             if (trails.trailCount() == 0) return;
 
             // polyline

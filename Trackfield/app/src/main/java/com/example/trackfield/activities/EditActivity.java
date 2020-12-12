@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Exercise;
+import com.example.trackfield.objects.Map;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.Toolbox.C;
@@ -31,8 +32,6 @@ import com.example.trackfield.toolbox.Toolbox.L;
 import com.example.trackfield.toolbox.Toolbox.M;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -43,7 +42,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private boolean edit;
 
     private TextView sTv;
-    private EditText routeEt, routeVarEt, intervalEt, noteEt, distanceEt, hoursEt, minutesEt, secondsEt, dataSourceEt, recordingMethodEt, dateEt, timeEt;
+    private EditText routeEt, routeVarEt, intervalEt, noteEt, distanceEt, hoursEt, minutesEt, secondsEt, dataSourceEt, recordingMethodEt, dateEt;
     private Spinner typeSpinner;
     private ArrayList<View> subViews = new ArrayList<>();
 
@@ -86,7 +85,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         routeVarEt          = findViewById(R.id.editText_routeVar);
         intervalEt          = findViewById(R.id.editText_interval);
         dateEt              = findViewById(R.id.editText_date);
-        timeEt              = findViewById(R.id.editText_time);
         noteEt              = findViewById(R.id.editText_note);
         distanceEt          = findViewById(R.id.editText_distance);
         hoursEt             = findViewById(R.id.editText_hours);
@@ -116,8 +114,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private void setTextsCreate() {
 
         //_id = D.exercises.size();
-        dateEt.setText(LocalDate.now().format(C.FORMATTER_EDIT_DATE));
-        timeEt.setText(LocalDateTime.now().format(C.FORMATTER_EDIT_TIME));
+        dateEt.setText(LocalDate.now().format(C.FORMATTER_EDIT));
     }
     private void setTextsEdit() {
 
@@ -153,8 +150,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         // set texts
         routeEt             .setText(exercise.getRoute());
         routeVarEt          .setText(exercise.getRouteVar());
-        dateEt              .setText(exercise.getDate().format(C.FORMATTER_EDIT_DATE));
-        timeEt              .setText(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME));
+        dateEt              .setText(exercise.getDate().format(C.FORMATTER_EDIT));
         noteEt              .setText(exercise.getNote());
         distanceEt          .setText((float) exercise.getDistancePrimary() / 1000 + "");
         hoursEt             .setText((int) time[2] + "");
@@ -182,11 +178,11 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private void parseAndSave() {
 
         try {
+
             // parse
             String route            = routeEt.getText().toString();
             String routeVar         = routeVarEt.getText().toString();
-            LocalDate date          = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
-            LocalTime localTime     = LocalTime.parse(timeEt.getText(), C.FORMATTER_EDIT_TIME);
+            LocalDate date          = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT);
             String note             = noteEt.getText().toString();
             int distance            = !driveDistance ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) : Exercise.DISTANCE_DRIVEN;
             int hours               = Integer.parseInt(hoursEt.getText().toString());
@@ -199,22 +195,39 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             ArrayList<Sub> subs     = parseSubs();
             String interval         = type == Exercise.TYPE_INTERVALS ? intervalEt.getText().toString() : "";
 
+            // new route
+            boolean newRoute  = true;
+            if (type != Exercise.TYPE_RUN) { /*newRoute = false;*/ }
+            else {
+                for (int id = 0; id < D.routes.size(); id++) {
+                    if (D.routes.get(id).equalsIgnoreCase(route)) {
+                        newRoute = false;
+                    }
+                }
+            }
+            if (newRoute) {
+                D.routes.add(route);
+                D.sortRoutesData();
+            }
+
+            // routeId
+            //Helper.Reader reader = new Helper.Reader(this);
             int routeId = Helper.getReader(this).getRouteIdOrCreate(route, this);
-            LocalDateTime dateTime = LocalDateTime.of(date, localTime);
+            //reader.close();
 
             // save
             if (exercise == null) {
-                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
+                exercise = new Exercise(-1, D.exercises.size(), type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
                 L.toast(Helper.getWriter(this).addExercise(exercise, this), this);
-                //D.exercises.add(exercise);
+                D.exercises.add(exercise);
             }
             else {
-                exercise = new Exercise(exercise.get_id(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
+                exercise = new Exercise(exercise.get_id(), exercise.getId(), type, M.dateTime(date), routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
                 L.toast(Helper.getWriter(this).updateExercise(exercise), this);
-                //D.exercises.set(exercise.getId(), exercise);
+                D.exercises.set(exercise.getId(), exercise);
             }
 
-            //D.edited();
+            D.edited();
             finish();
         }
         catch (NumberFormatException e) { L.toast("Can't save empty", this); }
@@ -298,11 +311,11 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         dateEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) return;
-                LocalDate dateSelect = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
+                LocalDate dateSelect = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT);
 
                 DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEt.setText(LocalDate.of(year, month+1, dayOfMonth).format(C.FORMATTER_EDIT_DATE));
+                        dateEt.setText(LocalDate.of(year, month+1, dayOfMonth).format(C.FORMATTER_EDIT));
                     }
                 }, dateSelect.getYear(), dateSelect.getMonthValue()-1, dateSelect.getDayOfMonth());
 

@@ -22,14 +22,12 @@ import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.RecyclerAdapters;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.SortDialog;
-import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.graphing.Graph;
-import com.example.trackfield.graphing.GraphData;
-import com.example.trackfield.items.headers.archive.ChartOld;
+import com.example.trackfield.items.headers.Chart;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.items.headers.Goal;
+import com.example.trackfield.items.headers.Graph;
 import com.example.trackfield.items.headers.Header;
 import com.example.trackfield.items.IntervalItem;
 import com.example.trackfield.items.headers.RecyclerItem;
@@ -127,20 +125,6 @@ public class RecyclerFragments {
         protected abstract void setPrefs();
 
         protected void setEmptyPage() {}
-        protected void fadeInEmpty() {
-            a.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    L.crossfadeIn(emptyCl, 1);
-                }
-            });
-        }
-        protected void fadeOutEmpty() {
-            a.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    L.crossfadeOut(emptyCl);
-                }
-            });
-        }
 
         // calls
         public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
@@ -337,20 +321,14 @@ public class RecyclerFragments {
             // sorter & charts
             if (exerliteList.size() != 0) {
                 Sorter sorter = newSorter(sortModes, sortModesTitle);
-
-                ChartOld dailyChart;
-                if (Prefs.isDailyChartShown()) {
-                    /*dailyChart = new ChartOld(D.weekDailyDistance());
-                    dailyChart.setType(ChartOld.TYPE_DAILY);
-                    itemList.add(dailyChart);*/
-
-                    GraphData weekData = new GraphData(Helper.getReader(a).weekDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
-                    Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false);
-                    weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
-                    itemList.add(weekGraph);
+                Chart dailyChart = null;
+                if (D.prefs.showDailyChart()) {
+                    dailyChart = new Chart(D.weekDailyDistance());
+                    dailyChart.setType(Chart.TYPE_DAILY);
+                    itemList.add(dailyChart);
                 }
                 else itemList.add(sorter);
-                if (Prefs.isWeekChartShown()) {
+                if (D.prefs.showWeekChart()) {
                     //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
                     //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
                 }
@@ -358,9 +336,10 @@ public class RecyclerFragments {
                     itemList.addAll(exerliteList);
                     return itemList;
                 }
-                else fadeOutEmpty();
+
+                else L.crossfadeOut(emptyCl);
             }
-            else fadeInEmpty();
+            else L.crossfadeIn(emptyCl, 1);
 
             // headers
             Header yearHeader = new Header("", Header.Type.YEAR, itemList.size());
@@ -393,7 +372,7 @@ public class RecyclerFragments {
                     month = newMonth;
                 }
                 // week
-                if (Prefs.isWeekHeadersShown() && (newWeek = e.getWeek()) != week) {
+                if (D.prefs.showWeekHeaders() && (newWeek = e.getWeek()) != week) {
                     weekHeader.setLastIndex(itemList.size());
                     weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size());
                     itemList.add(weekHeader);
@@ -409,19 +388,19 @@ public class RecyclerFragments {
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.ExerciseRA(items, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.EXERCISE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.EXERCISE, smallestFirst);
+            C.sortModePrefs[C.Layout.EXERCISE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.EXERCISE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
 
@@ -500,8 +479,8 @@ public class RecyclerFragments {
                 if (header.isType(Header.Type.YEAR)) {
                     ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
-                    ChartOld chart = new ChartOld(D.yearMonthlyDistance(Integer.valueOf(header.getTitle())), C.M);
-                    chart.setType(ChartOld.TYPE_WEEKS);
+                    Chart chart = new Chart(D.yearMonthlyDistance(Integer.valueOf(header.getTitle())), C.M);
+                    chart.setType(Chart.TYPE_WEEKS);
                     newItems.add(position + 1, chart);
 
                     //Chart chart2 = new Chart(D.yearWeeklyDistance(Integer.valueOf(header.getTitle())));
@@ -538,28 +517,26 @@ public class RecyclerFragments {
             itemList.addAll(distanceItemList);
             if (distanceItemList.size() == 0) {
                 itemList.remove(sorter);
-                fadeInEmpty();
+                L.crossfadeIn(emptyCl, 1);
             }
-            else fadeOutEmpty();
-
-
+            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
+            sortMode = C.sortModePrefs[C.Layout.DISTANCE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.DISTANCE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.DistanceRA(items, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
+            sortMode = C.sortModePrefs[C.Layout.DISTANCE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.DISTANCE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.DISTANCE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.DISTANCE, smallestFirst);
+            C.sortModePrefs[C.Layout.DISTANCE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.DISTANCE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
             emptyTitle.setText(getString(R.string.empty_title_distances));
@@ -586,7 +563,7 @@ public class RecyclerFragments {
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
             //ArrayList<String> rList = D.sortRoutes(D.routes, smallestFirst, sortMode, false);
-            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown()); //reader.getRoutes(rList);
+            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, D.prefs.showLesserRoutes()); //reader.getRoutes(rList);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
@@ -594,26 +571,26 @@ public class RecyclerFragments {
             itemList.addAll(routeItemList);
             if (routeItemList.size() == 0) {
                 itemList.remove(sorter);
-                fadeInEmpty();
+                L.crossfadeIn(emptyCl, 1);
             }
-            else fadeOutEmpty();
+            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.RouteRA(items, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.ROUTE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.ROUTE, smallestFirst);
+            C.sortModePrefs[C.Layout.ROUTE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
             emptyTitle.setText(getString(R.string.empty_title_routes));
@@ -639,7 +616,7 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown());
+            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, D.prefs.showLesserRoutes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
@@ -647,26 +624,26 @@ public class RecyclerFragments {
             itemList.addAll(intervalItemList);
             if (intervalItemList.size() == 0) {
                 itemList.remove(sorter);
-                fadeInEmpty();
+                L.crossfadeIn(emptyCl, 1);
             }
-            else fadeOutEmpty();
+            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.IntervalRA(items, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.ROUTE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.ROUTE, smallestFirst);
+            C.sortModePrefs[C.Layout.ROUTE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.ROUTE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
             emptyTitle.setText(getString(R.string.empty_title_intervals));
@@ -711,58 +688,56 @@ public class RecyclerFragments {
             if (bundle != null) {
                 distance = bundle.getInt(BUNDLE_DISTANCE, -1);
                 originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
-
-                // filtering depending on origin
-                Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Helper.getReader(a).getExercise(originId).getType()));
             }
         }
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sortMode, smallestFirst, Prefs.getDistanceVisibleTypes());
-            ArrayList<Exerlite> chronoList = reader.getExerlitesByDistance(distance, C.SortMode.DATE, true, Prefs.getDistanceVisibleTypes());
+            ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sortMode, smallestFirst);
+            ArrayList<Exerlite> chronoList = reader.getExerlitesByDistance(distance, C.SortMode.DATE, false);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
             D.markTop(exerliteList);
 
-            if (exerliteList.size() != 0) {
-
-                //Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
-                GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER, false, false);
-                Graph graph = new Graph(data, true, false, false, true, true, false, true);
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
-                itemList.add(graph);
-
-                itemList.add(newSorter(sortModes, sortModesTitle));
-
-                float goalPace = reader.getDistanceGoal(distance);
-                Goal goal = null;
-                if (goalPace != Distance.NO_GOAL_PACE) {
-                    goal = new Goal(goalPace, distance);
-                    itemList.add(goal);
-                }
-                addHeadersAndItems(itemList, exerliteList);
-
-                fadeOutEmpty();
+            Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
+            Sorter sorter = newSorter(sortModes, sortModesTitle);
+            itemList.add(graph);
+            itemList.add(sorter);
+            float goalPace = reader.getDistanceGoal(distance);
+            Goal goal = null;
+            if (goalPace != Distance.NO_GOAL_PACE) {
+                goal = new Goal(goalPace, distance);
+                itemList.add(goal);
             }
-            else fadeInEmpty();
 
+            addHeadersAndItems(itemList, exerliteList);
+
+            if (exerliteList.size() == 0) {
+                itemList.remove(sorter);
+                itemList.remove(graph);
+                if (goal != null) {
+                    itemList.remove(goal);
+                    ((TextView) emptyCl.findViewById(R.id.textView_emptyMessage)).setText("Goal:" + C.TAB + goal.printValues());
+                }
+                L.crossfadeIn(emptyCl, 1);
+            }
+            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_DISTANCE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_DISTANCE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.DistanceExerciseRA(items, distance, originId, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_DISTANCE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_DISTANCE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.EXERCISE_DISTANCE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.EXERCISE_DISTANCE, smallestFirst);
+            C.sortModePrefs[C.Layout.EXERCISE_DISTANCE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.EXERCISE_DISTANCE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
             emptyTitle.setText(getString(R.string.empty_title_distance));
@@ -813,55 +788,51 @@ public class RecyclerFragments {
                 //reader = new Helper.Reader(a);
                 route = Helper.getReader(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
                 originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
-
-                // filtering depending on origin
-                Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Helper.getReader(a).getExercise(originId).getType()));
             }
         }
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst, Prefs.getRouteVisibleTypes());
-            ArrayList<Exerlite> chronoList = reader.getExerlitesByRoute(route.get_id(), C.SortMode.DATE, true, Prefs.getRouteVisibleTypes());
+            //ArrayList<Exercise> exerciseList = D.sortExercises(filtered, smallestFirst, sortMode);
+            ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst);
+            ArrayList<Exerlite> chronoList = reader.getExerlitesByRoute(route.get_id(), C.SortMode.DATE, false);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
             D.markTop(exerliteList);
 
-            if (exerliteList.size() != 0) {
-
-                //Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
-                GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER,false, false);
-                Graph graph = new Graph(data, true, false, false, true, true, false, true);
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
-                itemList.add(graph);
-
-                itemList.add(newSorter(sortModes, sortModesTitle));
-
-                if (route.getGoalPace() != Route.NO_GOAL_PACE) {
-                    Goal goal = new Goal(route.getGoalPace());
-                    itemList.add(goal);
-                }
-                addHeadersAndItems(itemList, exerliteList);
-
-                fadeOutEmpty();
+            Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
+            Sorter sorter = newSorter(sortModes, sortModesTitle);
+            itemList.add(graph);
+            itemList.add(sorter);
+            if (route.getGoalPace() != Route.NO_GOAL_PACE) {
+                Goal goal = new Goal(route.getGoalPace());
+                itemList.add(goal);
             }
-            else fadeInEmpty();
+
+            addHeadersAndItems(itemList, exerliteList);
+
+            if (exerliteList.size() == 0) {
+                itemList.remove(sorter);
+                itemList.remove(graph);
+                L.crossfadeIn(emptyCl, 1);
+            }
+            else L.crossfadeOut(emptyCl);
 
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.RouteExerciseRA(items, originId, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.EXERCISE_ROUTE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.EXERCISE_ROUTE, smallestFirst);
+            C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()] = smallestFirst;
         }
         @Override protected void setEmptyPage() {
             emptyTitle.setText(getString(R.string.empty_title_route));
@@ -944,19 +915,19 @@ public class RecyclerFragments {
             return itemList;
         }
         @Override protected void setSortModes() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
         }
         @Override protected void getAdapter() {
             adapter = new RecyclerAdapters.IntervalExerciseRA(items, originId, a);
         }
         @Override protected void getPrefs() {
-            sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-            smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+            sortMode = C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
+            smallestFirst = C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()];
         }
         @Override protected void setPrefs() {
-            Prefs.setSortModePref(C.Layout.EXERCISE_ROUTE, sortMode);
-            Prefs.setSmallestFirstPref(C.Layout.EXERCISE_ROUTE, smallestFirst);
+            C.sortModePrefs[C.Layout.EXERCISE_ROUTE.ordinal()] = sortMode;
+            C.smallestFirstPrefs[C.Layout.EXERCISE_ROUTE.ordinal()] = smallestFirst;
         }
 
         @Override public void onItemClick(View view, int position, int itemType) {
@@ -967,39 +938,6 @@ public class RecyclerFragments {
             super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
         }
 
-    }
-
-    public static class DevRF extends RouteRF {
-
-        @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
-
-            ArrayList<RecyclerItem> itemList = new ArrayList<>();
-
-            GraphData dataGoal = new GraphData(Helper.getReader(a).monthDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-            dataGoal.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNow = new GraphData(Helper.getReader(a).monthDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastMonth = new GraphData(Helper.getReader(a).monthDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
-            dataLastMonth.setPaint("#FF3E3F43", "#FF252528");
-
-            Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false);
-            monthGraph.addData(dataLastMonth);
-            monthGraph.addData(dataGoal);
-            itemList.add(monthGraph);
-
-
-            GraphData dataGoalYear = new GraphData(Helper.getReader(a).yearDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-            dataGoalYear.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNowYear = new GraphData(Helper.getReader(a).yearDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastYear = new GraphData(Helper.getReader(a).yearDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
-            dataLastYear.setPaint("#FF3E3F43", "#FF252528");
-
-            Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false);
-            yearGraph.addData(dataLastYear);
-            yearGraph.addData(dataGoalYear);
-            itemList.add(yearGraph);
-
-            return itemList;
-        }
     }
 
 }

@@ -28,11 +28,6 @@ public class Trail {
         this.end = end;
         setBounds();
     }
-    public Trail(String polyline) {
-        this.polyline = polyline;
-        latLngs = PolyUtil.decode(polyline);
-        setBounds();
-    }
     public Trail(List<LatLng> latLngs, LatLng start, LatLng end) {
         polyline = PolyUtil.encode(latLngs);
         this.latLngs = latLngs;

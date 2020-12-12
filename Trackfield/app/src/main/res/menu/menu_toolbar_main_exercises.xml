@@ -18,10 +18,46 @@
         android:icon="@drawable/ic_filter_24dp"
         app:showAsAction="always"/>
 
+    <!--<item
+        android:id="@+id/action_search1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_24dp"
+        app:showAsAction="always"/>-->
+
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_settings_24dp"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_import"
+        android:title="Import from toolbox"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_export"
+        android:title="Export to toolbox"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_recreate"
+        android:title="Recreate db"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_strava_last"
+        android:title="Request last from Strava"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_strava_all"
+        android:title="Request all from Strava"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_Boarding"
+        android:title="Boarding"
+        app:showAsAction="never"/>
 
 </menu>

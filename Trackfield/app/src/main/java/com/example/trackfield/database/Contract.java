@@ -1,6 +1,5 @@
 package com.example.trackfield.database;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.example.trackfield.objects.Route;
@@ -14,15 +13,7 @@ public final class Contract {
         return smallestFirst ? " ASC" : " DESC";
     }
 
-    public static abstract class BaseEntry implements BaseColumns {
-
-        protected static void exec(SQLiteDatabase db, String sql) {
-            db.execSQL(sql);
-        }
-
-    }
-
-    public static class ExerciseEntry extends BaseEntry {
+    public static class ExerciseEntry implements BaseColumns {
         public static final String TABLE_NAME = "exercises";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_TYPE = "type";
@@ -49,7 +40,7 @@ public final class Contract {
                 _ID + " INTEGER PRIMARY KEY," +
                 COLUMN_ID + " INTEGER," +
                 COLUMN_TYPE + " INTEGER," +
-                COLUMN_DATE + " INTEGER," +
+                COLUMN_DATE + " TEXT," +
                 COLUMN_ROUTE_ID + " INTEGER," +
                 COLUMN_ROUTE + " TEXT," +
                 COLUMN_ROUTEVAR + " TEXT," +
@@ -80,19 +71,8 @@ public final class Contract {
             return getColumn(sortMode) + sortOrder(smallestFirst);
         }
 
-        public static void create(SQLiteDatabase db) {
-            exec(db, CREATE_TABLE);
-        }
-        public static void delete(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-        }
-        public static void recreate(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-            exec(db, CREATE_TABLE);
-        }
-
     }
-    public static class SubEntry extends BaseEntry {
+    public static class SubEntry implements BaseColumns {
         public static final String TABLE_NAME = "subs";
         public static final String COLUMN_SUPERID = "superId";
         public static final String COLUMN_DISTANCE = "distance";
@@ -104,21 +84,27 @@ public final class Contract {
                 COLUMN_SUPERID + " INTEGER," +
                 COLUMN_DISTANCE + " INTEGER," +
                 COLUMN_TIME + " REAL)";
+    }
+    public static class MapEntry implements BaseColumns {
+        public static final String TABLE_NAME = "maps";
+        public static final String COLUMN_SUPERID = "superId";
+        public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_LATITUDE = "latitude";
+        public static final String COLUMN_LONGITUDE = "longitude";
+        public static final String COLUMN_ALTITUDE = "altitude";
+        public static final String[] ALL_BUT_SUPERID_COLUMNS = { _ID, COLUMN_TIME, COLUMN_LATITUDE, COLUMN_LONGITUDE, COLUMN_ALTITUDE};
 
-        public static void create(SQLiteDatabase db) {
-            exec(db, CREATE_TABLE);
-        }
-        public static void delete(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-        }
-        public static void recreate(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-            exec(db, CREATE_TABLE);
-        }
-
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+                _ID + " INTEGER PRIMARY KEY," +
+                COLUMN_SUPERID + " INTEGER," +
+                COLUMN_TIME + " REAL," +
+                COLUMN_LATITUDE + " REAL," +
+                COLUMN_LONGITUDE + " REAL," +
+                COLUMN_ALTITUDE + " REAL)";
     }
 
-    public static class DistanceEntry extends BaseEntry {
+    public static class DistanceEntry implements BaseColumns {
         public static final String TABLE_NAME = "distances";
         public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_BEST_TIME = "bestTime";
@@ -133,19 +119,9 @@ public final class Contract {
                 COLUMN_BEST_PACE + " REAL," +
                 COLUMN_GOAL_PACE + " REAL)";
 
-        public static void create(SQLiteDatabase db) {
-            exec(db, CREATE_TABLE);
-        }
-        public static void delete(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-        }
-        public static void recreate(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-            exec(db, CREATE_TABLE);
-        }
 
     }
-    public static class RouteEntry extends BaseEntry {
+    public static class RouteEntry implements BaseColumns {
         public static final String TABLE_NAME = "routes";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_AMOUNT = "amount";
@@ -163,17 +139,6 @@ public final class Contract {
                 COLUMN_BEST_PACE + " REAL," +
                 COLUMN_GOAL_PACE + " REAL," +
                 COLUMN_HIDDEN + " INTEGER)";
-
-        public static void create(SQLiteDatabase db) {
-            exec(db, CREATE_TABLE);
-        }
-        public static void delete(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-        }
-        public static void recreate(SQLiteDatabase db) {
-            exec(db, DELETE_TABLE);
-            exec(db, CREATE_TABLE);
-        }
 
         public static String getColumn(Route.SortMode sortMode)  {
 
