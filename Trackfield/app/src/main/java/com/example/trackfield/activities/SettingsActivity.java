@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +22,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.ApiManager;
+import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.Dialogs;
+import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.example.trackfield.toolbox.Toolbox.F;
@@ -43,6 +46,14 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
 
     private final static String TAG_STRAVA = "strava";
     private final static String TAG_GOOGLE_FIT = "googleFit";
+    private final static String TAG_EXPORT = "export";
+    private final static String TAG_IMPORT = "import";
+    private final static String TAG_STRAVA_LAST = "stravaLast";
+    private final static String TAG_STRAVA_LAST_5 = "stravaLast5";
+    private final static String TAG_STRAVA_ALL = "stravaAll";
+
+    private final static String TAG_RECREATE_DB = "recreateDb";
+    private final static String TAG_BOARDING = "boarding";
 
     ////
 
@@ -62,80 +73,56 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
 
         toolbar();
         inflateViews();
-        fileView();
 
         connectAPIs();
+        handleIntent();
 
         // settings
         //displayListeners();
         //lookListeners();
         //profileListeners();
     }
-
-    private void fileView() {
-
-        // stats
-        TextView totalDistanceTv = findViewById(R.id.textView_totalDistance);
-        TextView totalTimeTv = findViewById(R.id.textView_totalTime);
-        TextView totalActivitiesTv = findViewById(R.id.textView_totalActivities);
-        totalDistanceTv.setText(D.totalDistance / 1000 + " km");
-        totalTimeTv.setText(M.round(D.totalTime, 1) + " h");
-        totalActivitiesTv.setText(D.exercises.size() + " activities");
-
-        // save
-        Button saveBtn = findViewById(R.id.button_save);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                F.saveExternal(a);
-                F.savePrefs(a);
-                Toast.makeText(a, "Saved", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // load
-        Button loadBtn = findViewById(R.id.button_load);
-        loadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                F.loadExternal(a);
-                F.loadPrefs(a);
-                Toast.makeText(a, "Loaded", Toast.LENGTH_SHORT).show();
-                recreate();
-            }
-        });
-
-        // import routes
-        Button getRoutesBtn = findViewById(R.id.button_importRoutes);
-        getRoutesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                D.importRoutes();
-                Toast.makeText(a, "imported", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent();
     }
+
+    private void handleIntent() {
+        Intent appLinkIntent = getIntent();
+        //String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+        if (appLinkData != null) finishAuthorization(appLinkData);
+    }
+
     private void inflateViews() {
 
         inflateHeader("Display Options");
-        inflateSwitchItem("Show lesser routes", D.prefs.showLesserRoutes(), false, TAG_LESSER_ROUTES);
-        inflateSwitchItem("Week headers", D.prefs.showWeekHeaders(), false, TAG_WEEK_HEADERS);
-        inflateSwitchItem("Daily chart", D.prefs.showDailyChart(), false, TAG_DAILY_CHARTS);
-        inflateSwitchItem("Week chart", D.prefs.showWeekChart(), false, TAG_WEEK_CHART);
-        inflateSwitchItem("Week chart distance", D.prefs.showWeekDistance(), true, TAG_WEEK_CHART_DISTANCE);
+        inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, TAG_LESSER_ROUTES);
+        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, TAG_WEEK_HEADERS);
+        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), false, TAG_DAILY_CHARTS);
+        inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, TAG_WEEK_CHART);
+        inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, TAG_WEEK_CHART_DISTANCE);
 
         inflateHeader("Look");
-        inflateDialogItem("Theme", D.prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
-        inflateDialogItem("Color", D.prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
+        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
+        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
+
+        inflateHeader("File");
+        inflateClickItem("Request last from Strava", "", false, TAG_STRAVA_LAST);
+        inflateClickItem("Request last 5 from Strava", "", false, TAG_STRAVA_LAST_5);
+        inflateClickItem("Request all from Strava", "", false, TAG_STRAVA_ALL);
+        inflateClickItem("Load from external", "", false, TAG_IMPORT);
+        inflateClickItem("Save to external", "", true, TAG_EXPORT);
 
         inflateHeader("Other Services");
-        inflateClickItem("Strava", "Connected", false, TAG_STRAVA);
+        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", false, TAG_STRAVA);
         inflateClickItem("Google Fit", "Not connected", true, TAG_GOOGLE_FIT);
 
         inflateHeader("Profile");
-        inflateDialogItem("Mass", D.prefs.getMass() + " kg", false, new Dialogs.EditMass());
+        inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new Dialogs.EditMass());
 
-        final LocalDate bd = D.prefs.getBirthday();
+        final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextItem("Birthday", bd != null ? bd.format(Toolbox.C.FORMATTER_CAPTION) : "", true);
         birth.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -152,7 +139,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
                 }
                 DatePickerDialog picker = new DatePickerDialog(a, new DatePickerDialog.OnDateSetListener() {
                     @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        D.prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
+                        Prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
                         ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(Toolbox.C.FORMATTER_CAPTION));
                     }
                 }, yearSelect, monthSelect, daySelect);
@@ -161,6 +148,9 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
             }
         });
 
+        inflateHeader("Developer Options");
+        inflateClickItem("Reboard", "", false, TAG_BOARDING);
+        inflateClickItem("Recreate database", "", true, TAG_RECREATE_DB);
 
     }
 
@@ -219,17 +209,24 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     // tools
     private void itemSwitched(boolean checked, String tag) {
         switch (tag) {
-            case TAG_LESSER_ROUTES: D.prefs.setShowLesserRoutes(checked); break;
-            case TAG_WEEK_HEADERS: D.prefs.setShowWeekHeaders(checked); break;
-            case TAG_DAILY_CHARTS: D.prefs.setShowDailyChart(checked); break;
-            case TAG_WEEK_CHART: D.prefs.setShowWeekChart(checked); break;
-            case TAG_WEEK_CHART_DISTANCE: D.prefs.setWeekDistance(checked); break;
+            case TAG_LESSER_ROUTES: Prefs.showHiddenRoutes(checked); break;
+            case TAG_WEEK_HEADERS: Prefs.showWeekHeaders(checked); break;
+            case TAG_DAILY_CHARTS: Prefs.showDailyChart(checked); break;
+            case TAG_WEEK_CHART: Prefs.showWeekChart(checked); break;
+            case TAG_WEEK_CHART_DISTANCE: Prefs.showWeekDistance(checked); break;
         }
     }
     private void itemClicked(String tag) {
         switch (tag) {
-            case TAG_STRAVA: authenticateStrava(); break;
+            case TAG_STRAVA: authorizeStrava(); break;
             case TAG_GOOGLE_FIT: break;
+            case TAG_EXPORT: F.exportToExternal(a); Toolbox.L.toast("Exporterd", this); break;
+            case TAG_IMPORT: F.importFromExternal(a); Toolbox.L.toast("Imported", this); break;
+            case TAG_STRAVA_LAST: requestLastActivity(); break;
+            case TAG_STRAVA_LAST_5: requestLastActivities(5); break;
+            case TAG_STRAVA_ALL: requestAllActivities(); break;
+            case TAG_BOARDING: Prefs.setFirstLogin(true); BoardingActivity.startActivity(this); break;
+            case TAG_RECREATE_DB: Helper.getWriter(this).recreate(); break;
         }
     }
 
@@ -239,7 +236,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         recreate();
     }
     @Override public void onDecimalDialogPositiveClick(float input, String tag) {
-        D.prefs.setMass(input);
+        Prefs.setMass(input);
     }
 
     // toolbar
@@ -267,7 +264,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     }
 
     @Override protected void onDestroy() {
-        F.savePrefs(this);
+        //F.savePrefs(this);
         super.onDestroy();
     }
 

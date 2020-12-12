@@ -29,6 +29,10 @@ public class Route {
         this._id = _id;
         this.name = name;
     }
+    public Route() {
+        _id = -1;
+        name = "[route not found]";
+    }
 
     // set
     public void setName(String name) {

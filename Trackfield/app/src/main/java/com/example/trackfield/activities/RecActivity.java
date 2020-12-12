@@ -18,6 +18,7 @@ import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.fragments.RecyclerFragments;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Route;
+import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.example.trackfield.toolbox.Toolbox.M;
 
@@ -139,7 +140,7 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterDistance.newInstance(D.prefs.getDistanceVisibleTypes(), getSupportFragmentManager());
+                    Dialogs.FilterDistance.newInstance(Prefs.getDistanceVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_deleteDistance:
@@ -212,7 +213,7 @@ public class RecActivity {
             recyclerFragment.updateRecycler();
         }
         @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-            D.prefs.setDistanceVisibleTypes(checkedTypes);
+            Prefs.setDistanceVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();
         }
 
@@ -255,7 +256,7 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterRoute.newInstance(D.prefs.getRouteVisibleTypes(), getSupportFragmentManager());
+                    Dialogs.FilterRoute.newInstance(Prefs.getRouteVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_renameRoute:
@@ -341,7 +342,7 @@ public class RecActivity {
             recyclerFragment.updateRecycler();
         }
         @Override public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-            D.prefs.setRouteVisibleTypes(checkedTypes);
+            Prefs.setRouteVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();
         }
 
@@ -399,12 +400,7 @@ public class RecActivity {
         @Override public void onTextDialogPositiveClick(String input, String tag) {
             if (input.equals("")) return;
 
-            //Helper.Writer writer = new Helper.Writer(this);
-            writer.updateInterval(interval, input);
-            //writer.close();
-
-            ArrayList<Exercise> exercises = D.filterByInterval(interval);
-            for (Exercise e : exercises) { e.setInterval(input); }
+            Helper.getWriter(this).updateInterval(interval, input);
 
             finish();
             startActivity(this, input, originId);

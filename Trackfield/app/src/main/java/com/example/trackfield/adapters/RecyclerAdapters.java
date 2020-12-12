@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,11 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.items.headers.Chart;
+import com.example.trackfield.graphing.Graph;
+import com.example.trackfield.items.headers.archive.ChartOld;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.items.headers.Goal;
-import com.example.trackfield.items.headers.Graph;
+import com.example.trackfield.items.headers.archive.GraphOld;
 import com.example.trackfield.items.headers.Header;
 import com.example.trackfield.items.IntervalItem;
 import com.example.trackfield.items.headers.RecyclerItem;
@@ -28,6 +30,7 @@ import com.example.trackfield.toolbox.Toolbox;
 import com.example.trackfield.toolbox.Toolbox.C;
 import com.example.trackfield.toolbox.Toolbox.D;
 import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.graphing.GraphView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,11 +44,14 @@ public class RecyclerAdapters {
         public static final int ITEM_HEADER_12 = 2;
         public static final int ITEM_HEADER_14 = 3;
         public static final int ITEM_HEADER_18 = 4;
-        static final int ITEM_GRAPH = 5;
-        static final int ITEM_CHART = 6;
+        static final int ITEM_GRAPH_OLD = 5;
+        static final int ITEM_CHART_OLD = 6;
         static final int ITEM_CHART_DAILY = 7;
         static final int ITEM_CHART_YEAR = 8;
         static final int ITEM_GOAL = 9;
+        static final int ITEM_GRAPH_REC = 10;
+        static final int ITEM_GRAPH_MONTH = 11;
+        static final int ITEM_GRAPH_WEEK = 12;
 
         protected Context c;
         protected LayoutInflater inflater;
@@ -85,6 +91,18 @@ public class RecyclerAdapters {
             else if (viewType == ITEM_GOAL) {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_goal, parent, false);
                 return new GoalVH(cl);
+            }
+            else if (viewType == ITEM_GRAPH_REC) {
+                ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_rec, parent, false);
+                return new GraphRecVH(parent, cl);
+            }
+            else if (viewType == ITEM_GRAPH_MONTH) {
+                ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_month, parent, false);
+                return new GraphBaseVH(parent, cl);
+            }
+            else if (viewType == ITEM_GRAPH_WEEK) {
+                ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_week, parent, false);
+                return new GraphBaseVH(parent, cl);
             }
 
             else throw new IllegalArgumentException();
@@ -200,6 +218,7 @@ public class RecyclerAdapters {
 
                 holder.primary.setText(header.getTitle());
             }
+
             else if (viewHolder instanceof SorterVH) {
 
                 final SorterVH holder = ((SorterVH) viewHolder);
@@ -211,7 +230,7 @@ public class RecyclerAdapters {
             else if (viewHolder instanceof GraphVH) {
 
                 final GraphVH holder = ((GraphVH) viewHolder);
-                final Graph graph = (Graph) getItem(pos);
+                final GraphOld graph = (GraphOld) getItem(pos);
 
                 graph.inflateElements(inflater, holder.ll, holder.parent);
             }
@@ -223,10 +242,28 @@ public class RecyclerAdapters {
                 //holder.primary.setText("Goal");
                 holder.secondary.setText(goal.printValues());
             }
+            else if (viewHolder instanceof GraphRecVH) {
+
+                GraphRecVH holder = ((GraphRecVH) viewHolder);
+                Graph graph = (Graph) getItem(pos);
+
+                holder.surface.restoreDefaultFocus();
+                holder.surface.setGraph(graph);
+                holder.low.setText(M.stringTime(graph.getMax(), true));
+                holder.high.setText(M.stringTime(graph.getMin(), true));
+            }
+            else if (viewHolder instanceof GraphBaseVH) {
+
+                GraphBaseVH holder = ((GraphBaseVH) viewHolder);
+                Graph graph = (Graph) getItem(pos);
+
+                holder.surface.restoreDefaultFocus();
+                holder.surface.setGraph(graph);
+            }
 
             else if (viewHolder instanceof RecyclerAdapters.ExerciseRA.ChartVH) {
 
-                final Chart chart = (Chart) getItem(pos);
+                final ChartOld chart = (ChartOld) getItem(pos);
                 //float[] y = c.getY();
                 String[] xLabel = chart.getxLabel();
                 float[] yRel = chart.getyRel();
@@ -246,7 +283,7 @@ public class RecyclerAdapters {
             }
             else if (viewHolder instanceof RecyclerAdapters.ExerciseRA.DailyChartVH) {
 
-                final Chart chart = (Chart) getItem(pos);
+                final ChartOld chart = (ChartOld) getItem(pos);
                 float[] yRel = chart.getyRel();
                 int maxHeight = Toolbox.L.px(22);
 
@@ -267,7 +304,7 @@ public class RecyclerAdapters {
             }
             else if (viewHolder instanceof RecyclerAdapters.ExerciseRA.YearChartVH) {
 
-                final Chart chart = (Chart) getItem(pos);
+                final ChartOld chart = (ChartOld) getItem(pos);
                 float[] yRel = chart.getyRel();
                 int maxHeight = Toolbox.L.px(22); //22
                 //char[] labels = chart.getxLabelC();
@@ -324,27 +361,6 @@ public class RecyclerAdapters {
             }
 
         }
-        public class GraphVH extends BaseVH {
-
-            public ViewGroup parent;
-            public ConstraintLayout cl;
-            public LinearLayout ll;
-            //public TextView[] indices = new TextView[graphLength];
-            //public ConstraintLayout[] points = new ConstraintLayout[graphLength];
-
-            public GraphVH(ViewGroup parent, ConstraintLayout cl) {
-                super(cl);
-                this.parent = parent;
-                this.cl = cl;
-                ll = cl.findViewById(R.id.linearLayout_elementContainer);
-            /*for (int i = graphLength-1; i >= 0; i--) {
-                linearLayout.addView(elements[i]);
-                indices[i] = elements[i].findViewById(R.id.textView_index);
-                points[i] = elements[i].findViewById(R.id.constraintLayout_point);
-            }*/
-            }
-
-        }
         public class HeaderVH extends BaseVH implements View.OnClickListener, View.OnLongClickListener {
 
             public ConstraintLayout constraintLayout;
@@ -392,6 +408,67 @@ public class RecyclerAdapters {
                 constraintLayout = cl;
                 primary = cl.findViewById(R.id.textView_primary);
                 secondary = cl.findViewById(R.id.textView_secondary);
+            }
+
+        }
+
+        public class GraphVH extends BaseVH {
+
+            public ViewGroup parent;
+            public ConstraintLayout cl;
+            public LinearLayout ll;
+            //public TextView[] indices = new TextView[graphLength];
+            //public ConstraintLayout[] points = new ConstraintLayout[graphLength];
+
+            public GraphVH(ViewGroup parent, ConstraintLayout cl) {
+                super(cl);
+                this.parent = parent;
+                this.cl = cl;
+                ll = cl.findViewById(R.id.linearLayout_elementContainer);
+            /*for (int i = graphLength-1; i >= 0; i--) {
+                linearLayout.addView(elements[i]);
+                indices[i] = elements[i].findViewById(R.id.textView_index);
+                points[i] = elements[i].findViewById(R.id.constraintLayout_point);
+            }*/
+            }
+
+        }
+        public class GraphRecVH extends BaseVH {
+
+            public ViewGroup parent;
+            public ConstraintLayout cl;
+            public GraphView surface;
+            public TextView low, high;
+
+            public GraphRecVH(ViewGroup parent, ConstraintLayout cl) {
+                super(cl);
+                this.parent = parent;
+                this.cl = cl;
+                surface = cl.findViewById(R.id.graphSurface_rec);
+                low = cl.findViewById(R.id.textView_low);
+                high = cl.findViewById(R.id.textView_high);
+
+                final HorizontalScrollView sv = cl.findViewById(R.id.scrollView_graphSurface);
+                sv.post(new Runnable() {
+                    @Override public void run() {
+                        sv.fullScroll(View.FOCUS_RIGHT);
+                        sv.scrollTo(sv.getWidth(), 0);
+                    }
+                });
+            }
+
+        }
+        public class GraphBaseVH extends BaseVH {
+
+            public ViewGroup parent;
+            public ConstraintLayout cl;
+            public GraphView surface;
+
+            public GraphBaseVH(ViewGroup parent, ConstraintLayout cl) {
+                super(cl);
+                this.parent = parent;
+                this.cl = cl;
+                surface = cl.findViewById(R.id.graphSurface_base);
             }
 
         }
@@ -551,49 +628,60 @@ public class RecyclerAdapters {
         }
 
         // get
-        @Override public int getItemViewType(int position) {
+        @Override public int getItemViewType(int pos) {
 
-            if (getItem(position) instanceof Exerlite) {
+            RecyclerItem item = getItem(pos);
+
+            if (item instanceof Exerlite) {
                 return ITEM_ITEM;
             }
-            else if (getItem(position) instanceof RouteItem) {
+            else if (item instanceof RouteItem) {
                 return ITEM_ITEM;
             }
-            else if (getItem(position) instanceof DistanceItem) {
+            else if (item instanceof DistanceItem) {
                 return ITEM_ITEM;
             }
-            else if (getItem(position) instanceof IntervalItem) {
+            else if (item instanceof IntervalItem) {
                 return ITEM_ITEM;
             }
 
-            else if (getItem(position) instanceof Header && ((Header) getItem(position)).isType(Header.Type.MONTH)) {
+            else if (item instanceof Header && ((Header) item).isType(Header.Type.MONTH)) {
                 return ITEM_HEADER_14;
             }
-            else if (getItem(position) instanceof Header && ((Header) getItem(position)).isType(Header.Type.YEAR)) {
+            else if (item instanceof Header && ((Header) item).isType(Header.Type.YEAR)) {
                 return ITEM_HEADER_18;
             }
-            else if (getItem(position) instanceof Header && ((Header) getItem(position)).isType(Header.Type.REC, Header.Type.WEEK)) {
+            else if (item instanceof Header && ((Header) item).isType(Header.Type.REC, Header.Type.WEEK)) {
                 return ITEM_HEADER_12;
             }
 
-            else if (getItem(position) instanceof Sorter) {
+            else if (item instanceof Sorter) {
                 return ITEM_SORTER;
             }
-            else if (getItem(position) instanceof Graph) {
-                return ITEM_GRAPH;
+            else if (item instanceof Goal) {
+                return ITEM_GOAL;
+            }
+            else if (item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_REC)) {
+                return ITEM_GRAPH_REC;
+            }
+            else if (item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_WEEK)) {
+                return ITEM_GRAPH_WEEK;
+            }
+            else if (item instanceof Graph) {
+                return ITEM_GRAPH_MONTH;
             }
 
-            else if (getItem(position) instanceof Chart && ((Chart) getItem(position)).isType(Chart.TYPE_DAILY)) {
+            else if (item instanceof GraphOld) {
+                return ITEM_GRAPH_OLD;
+            }
+            else if (item instanceof ChartOld && ((ChartOld) item).isType(ChartOld.TYPE_DAILY)) {
                 return ITEM_CHART_DAILY;
             }
-            else if (getItem(position) instanceof Chart && ((Chart) getItem(position)).isType(Chart.TYPE_YEAR)) {
+            else if (item instanceof ChartOld && ((ChartOld) item).isType(ChartOld.TYPE_YEAR)) {
                 return ITEM_CHART_YEAR;
             }
-            else if (getItem(position) instanceof Chart) {
-                return ITEM_CHART;
-            }
-            else if (getItem(position) instanceof Goal) {
-                return ITEM_GOAL;
+            else if (item instanceof ChartOld) {
+                return ITEM_CHART_OLD;
             }
 
             return -1;
@@ -628,7 +716,7 @@ public class RecyclerAdapters {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise, parent, false);
                 return new ExerciseVH(cl);
             }
-            else if (viewType == ITEM_CHART) {
+            else if (viewType == ITEM_CHART_OLD) {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.chart, parent, false);
                 ConstraintLayout[] elements = new ConstraintLayout[D.weekAmount];
                 for (int i = 0; i < D.weekAmount; i++) {
@@ -716,7 +804,7 @@ public class RecyclerAdapters {
                 RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.layout_item_rec, parent, false);
                 return new DistanceVH(rl);
             }
-            else if (viewType == ITEM_GRAPH) {
+            else if (viewType == ITEM_GRAPH_OLD) {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.chart, parent, false);
                 return new GraphVH(parent, cl);
             }
@@ -770,8 +858,8 @@ public class RecyclerAdapters {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise_distance, parent, false);
                 return new DistanceExerciseVH(cl);
             }
-            else if (viewType == ITEM_GRAPH) {
-                ConstraintLayout cl = Graph.inflateLayout(inflater, parent);
+            else if (viewType == ITEM_GRAPH_OLD) {
+                ConstraintLayout cl = GraphOld.inflateLayout(inflater, parent);
                 return new GraphVH(parent, cl);
             }
             return super.onCreateViewHolder(parent, viewType);
@@ -790,8 +878,8 @@ public class RecyclerAdapters {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise_route, parent, false);
                 return new RouteExerciseVH(cl);
             }
-            else if (viewType == ITEM_GRAPH) {
-                ConstraintLayout cl = Graph.inflateLayout(inflater, parent);
+            else if (viewType == ITEM_GRAPH_OLD) {
+                ConstraintLayout cl = GraphOld.inflateLayout(inflater, parent);
             /*ConstraintLayout[] elements = new ConstraintLayout[graphLength];
             for (int i = 0; i < graphLength; i++) {
                 elements[i] = (ConstraintLayout) inflater.inflate(R.layout.chart_element_point, parent, false);

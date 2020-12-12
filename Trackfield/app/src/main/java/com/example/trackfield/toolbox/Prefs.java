@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,164 +19,315 @@ import static android.content.Context.MODE_PRIVATE;
 public class Prefs {
 
     // file
-    //static SharedPreferences sp;
-    //static SharedPreferences.Editor editor;
-    //static Gson gson = new Gson();
+    private static SharedPreferences sp;
+    private static SharedPreferences.Editor editor;
+    private static Gson gson = new Gson();
+
+    private static boolean firstLogin = true;
 
     // display options
-    private boolean showWeekHeaders = true;
-    private boolean weekDistance = true;
-    private boolean showWeekChart = true;
-    private boolean showDailyChart = true;
+    private static boolean showWeekHeaders = true;
+    private static boolean weekDistance = true;
+    private static boolean showWeekChart = true;
+    private static boolean showDailyChart = true;
 
     // look
-    private int color = 1;
-    private boolean theme = false;
+    private static int color = 1;
+    private static boolean theme = false;
 
     // profile
-    private float mass = 60;
-    private LocalDate birthday = LocalDate.of(2020,1,1);
+    private static float mass = 60;
+    private static LocalDate birthday = LocalDate.of(2020,1,1);
 
     // filtering
-    private boolean showLesserRoutes = true;
-    private boolean includeLonger = false;
-    private ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
-    private ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
-    private ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
+    private static boolean showHiddenRoutes = true;
+    private static boolean includeLonger = false;
+    public static int distanceLowerLimit = 500;
+    public static int distanceUpperLimit = 999;
+    private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
+    private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
+    private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
+
+    // sorting
+    private static Toolbox.C.SortMode[] sortModePrefs = { Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DISTANCE, Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DATE };
+    private static boolean[] smallestFirstPrefs = { false, true, false, false, false };
+
+    // Strava API
+    private static String authCode = "";
+    private static String refreshToken = "";
+    private static String accessToken = "";
+    private static LocalDateTime accessTokenExpiration = LocalDateTime.ofEpochSecond(0,0, ZoneOffset.UTC);
 
     public static final int COLOR_MONO = 0;
     public static final int COLOR_GREEN = 1;
 
+    // tags
+    public static final String SHARED_PREFERENCES = "shared preferences";
+    private static final String FIRST_LOGIN = "firstLogin";
+    private static final String WEEK_HEADERS = "weekHeaders";
+    private static final String WEEK_DISTANCE = "weekDistance";
+    private static final String WEEK_CHART = "weekChart";
+    private static final String DAILY_CHART = "dailyChart";
+    private static final String COLOR = "color";
+    private static final String THEME = "theme";
+    private static final String MASS = "mass";
+    private static final String BIRTHDAY = "birthday";
+    private static final String LESSER_ROUTES = "lesserRoutes";
+    private static final String INCLCUDE_LONGER = "includeLonger";
+    private static final String TYPES_EXERCISE = "typesExercise";
+    private static final String TYPES_ROUTE = "typesRoute";
+    private static final String TYPES_DISTANCE = "typesDistance";
+    private static final String SORT_MODE = "sortModes";
+    private static final String SORT_SMALLEST_FIRST = "smallestFirsts";
+    private static final String STRAVA_AUTH = "stravaAuthCode";
+    private static final String STRAVA_REFRESH = "stravaRefreshToken";
+    private static final String STRAVA_ACCESS = "stravaAccessToken";
+    private static final String STRAVA_ACCESS_EXP = "stravaAccessExpiration";
+
     ////
 
-    public void setUpAutoSave(Context c) {
-        //sp = c.getSharedPreferences(Toolbox.F.SP_SHARED_PREFERENCES, MODE_PRIVATE);
-        //editor = sp.edit();
+    public static void SetUpAndLoad(Context c) {
+        sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        editor = sp.edit();
+        load();
+    }
+    private static void load() {
+
+        TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
+        TypeToken<String> str = new TypeToken<String>(){};
+        TypeToken<ArrayList<Integer>> intArr = new TypeToken<ArrayList<Integer>>(){};
+
+        firstLogin = loadPref(bool, FIRST_LOGIN);
+
+        showWeekHeaders = loadPref(bool, WEEK_HEADERS);
+        weekDistance = loadPref(bool, WEEK_DISTANCE);
+        showWeekChart = loadPref(bool, WEEK_CHART);
+        showDailyChart = loadPref(bool, DAILY_CHART);
+
+        color = loadPref(new TypeToken<Integer>(){}, COLOR);
+        theme = loadPref(bool, THEME);
+
+        mass = loadPref(new TypeToken<Float>(){}, MASS);
+        birthday = loadPref(new TypeToken<LocalDate>(){}, BIRTHDAY);
+
+        showHiddenRoutes = loadPref(bool, LESSER_ROUTES);
+        includeLonger = loadPref(bool, INCLCUDE_LONGER);
+        exerciseVisibleTypes = loadPref(intArr, TYPES_EXERCISE);
+        routeVisibleTypes = loadPref(intArr, TYPES_ROUTE);
+        distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
+
+        sortModePrefs = loadPref(new TypeToken<Toolbox.C.SortMode[]>(){}, SORT_MODE);
+        smallestFirstPrefs = loadPref(new TypeToken<boolean[]>(){}, SORT_SMALLEST_FIRST);
+
+        authCode = loadPref(str, STRAVA_AUTH);
+        refreshToken = loadPref(str, STRAVA_REFRESH);
+        accessToken = loadPref(str, STRAVA_ACCESS);
+        accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
     }
 
-    // set
-    public void setShowWeekHeaders(boolean showWeekHeaders) {
-        this.showWeekHeaders = showWeekHeaders;
-        //savePref(showWeekHeaders, WEEK_HEADERS);
+    // tools
+    private static void savePref(Object var, String tag) {
+        String json = gson.toJson(var);
+        editor.putString(tag, json);
+        editor.apply();
     }
-    public void setWeekDistance(boolean weekDistance) {
-        this.weekDistance = weekDistance;
-    }
-    public void setShowWeekChart(boolean showWeekChart) {
-        this.showWeekChart = showWeekChart;
-    }
-    public void setShowDailyChart(boolean showDailyChart) {
-        this.showDailyChart = showDailyChart;
-    }
-    public void setColor(int color) {
-        this.color = color;
-    }
-    public void setTheme(boolean theme) {
-        this.theme = theme;
-    }
-    public void setMass(float mass) {
-        this.mass = mass;
-    }
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-    public void setShowLesserRoutes(boolean showLesserRoutes) {
-        this.showLesserRoutes = showLesserRoutes;
-    }
-    public void setIncludeLonger(boolean includeLonger) {
-        this.includeLonger = includeLonger;
-    }
-    public void setExerciseVisibleTypes(ArrayList<Integer> exerciseVisibleTypes) {
-        this.exerciseVisibleTypes = exerciseVisibleTypes;
-    }
-    public void setRouteVisibleTypes(ArrayList<Integer> routeVisibleTypes) {
-        this.routeVisibleTypes = routeVisibleTypes;
-    }
-    public void setDistanceVisibleTypes(ArrayList<Integer> distanceVisibleTypes) {
-        this.distanceVisibleTypes = distanceVisibleTypes;
-    }
+    private static <T> T loadPref(TypeToken token, String tag) {
 
-    public void setColorGreen() {
-        color = COLOR_GREEN;
-    }
-    public void setColorMono() {
-        color = COLOR_MONO;
-    }
+        if (!sp.contains(tag)) savePref(ofTag(tag), tag);
 
-    // get
-    public boolean showWeekHeaders() {
-        return showWeekHeaders;
-    }
-    public boolean showWeekDistance() {
-        return weekDistance;
-    }
-    public boolean showWeekChart() {
-        return showWeekChart;
-    }
-    public boolean showDailyChart() {
-        return showDailyChart;
-    }
-    public int getColor() {
-        return color;
-    }
-    public boolean isThemeLight() {
-        return theme;
-    }
-    public float getMass() {
-        return mass;
-    }
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-    public boolean showLesserRoutes() {
-        return showLesserRoutes;
-    }
-    public boolean includeLonger() {
-        return includeLonger;
-    }
-    public ArrayList<Integer> getExerciseVisibleTypes() {
-        return exerciseVisibleTypes;
-    }
-    public ArrayList<Integer> getRouteVisibleTypes() {
-        return routeVisibleTypes;
-    }
-    public ArrayList<Integer> getDistanceVisibleTypes() {
-        return distanceVisibleTypes;
-    }
-
-    // get driven
-    public boolean isColorGreen() {
-        return color == COLOR_GREEN;
-    }
-    public boolean isColorMono() {
-        return color == COLOR_MONO;
-    }
-
-    // save data
-    private void savePref(Object var, String tag) {
-        //String json = gson.toJson(var);
-        //editor.putString(tag, json);
-        //editor.apply();
-    }
-    private <T> T loadPref(TypeToken token, String tag, SharedPreferences sp, Gson gson) {
         String json = sp.getString(tag, null);
         Type type = token.getType();
         return gson.fromJson(json, type);
     }
+    private static Object ofTag(String tag) {
+        switch (tag) {
+            case FIRST_LOGIN: return firstLogin;
+            case WEEK_HEADERS: return showWeekHeaders;
+            case WEEK_DISTANCE: return weekDistance;
+            case WEEK_CHART: return showWeekChart;
+            case DAILY_CHART: return showDailyChart;
+            case COLOR: return color;
+            case THEME: return theme;
+            case MASS: return mass;
+            case BIRTHDAY: return birthday;
+            case LESSER_ROUTES: return showHiddenRoutes;
+            case INCLCUDE_LONGER: return includeLonger;
+            case TYPES_EXERCISE: return exerciseVisibleTypes;
+            case TYPES_ROUTE: return routeVisibleTypes;
+            case TYPES_DISTANCE: return distanceVisibleTypes;
+            case SORT_MODE: return sortModePrefs;
+            case SORT_SMALLEST_FIRST: return smallestFirstPrefs;
+            case STRAVA_AUTH: return authCode;
+            case STRAVA_REFRESH: return refreshToken;
+            case STRAVA_ACCESS: return accessToken;
+            case STRAVA_ACCESS_EXP: return accessTokenExpiration;
+            default: return new Object();
+        }
+    }
 
-    private static final String LESSER_ROUTES = "lesserRoutes";
-    private static final String SMALLEST_FIRST = "smallestFirst";
-    private static final String SORT_MODE = "sortMode";
-    private static final String WEEK_AMOUNT = "weekAmount";
-    private static final String WEEK_DISTANCE = "weekDistance";
-    private static final String WEEK_CHART = "weekChart";
-    private static final String LOOK_COLOR = "color";
-    private static final String LOOK_THEME = "theme";
-    private static final String MASS = "mass";
-    private static final String BIRTHDAY = "birthday";
-    private static final String WEEK_HEADERS = "weekHeaders";
-    private static final String TYPES_EXERCISE = "typesExercise";
-    private static final String TYPES_ROUTE = "typesRoute";
-    private static final String TYPES_DISTANCE = "typesDistance";
+    // set
+    public static void setFirstLogin(boolean firstLogin) {
+        Prefs.firstLogin = firstLogin;
+        savePref(firstLogin, FIRST_LOGIN);
+    }
+    public static void showWeekHeaders(boolean show) {
+        showWeekHeaders = show;
+        savePref(show, WEEK_HEADERS);
+    }
+    public static void showWeekDistance(boolean show) {
+        weekDistance = show;
+        savePref(show, WEEK_DISTANCE);
+    }
+    public static void showWeekChart(boolean show) {
+        showWeekChart = show;
+        savePref(show, WEEK_CHART);
+    }
+    public static void showDailyChart(boolean show) {
+        showDailyChart = show;
+        savePref(show, DAILY_CHART);
+    }
+    public static void setColor(int colorConst) {
+        color = colorConst;
+        savePref(colorConst, COLOR);
+    }
+    public static void setTheme(boolean light) {
+        theme = light;
+        savePref(light, THEME);
+    }
+    public static void setMass(float kilos) {
+        mass = kilos;
+        savePref(kilos, MASS);
+    }
+    public static void setBirthday(LocalDate date) {
+        birthday = date;
+        savePref(date, BIRTHDAY);
+    }
+    public static void showHiddenRoutes(boolean show) {
+        showHiddenRoutes = show;
+        savePref(show, LESSER_ROUTES);
+    }
+    public static void includeLonger(boolean include) {
+        includeLonger = include;
+        savePref(include, INCLCUDE_LONGER);
+    }
+    public static void setExerciseVisibleTypes(ArrayList<Integer> types) {
+        exerciseVisibleTypes = types;
+        savePref(types, TYPES_EXERCISE);
+    }
+    public static void setRouteVisibleTypes(ArrayList<Integer> types) {
+        routeVisibleTypes = types;
+        savePref(types, TYPES_ROUTE);
+    }
+    public static void setDistanceVisibleTypes(ArrayList<Integer> types) {
+        distanceVisibleTypes = types;
+        savePref(types, TYPES_DISTANCE);
+    }
+    public static void setSortModePref(Toolbox.C.Layout layout, Toolbox.C.SortMode sortMode) {
+        sortModePrefs[layout.ordinal()] = sortMode;
+        savePref(sortModePrefs, SORT_MODE);
+    }
+    public static void setSmallestFirstPref(Toolbox.C.Layout layout, boolean smallestFirst) {
+        smallestFirstPrefs[layout.ordinal()] = smallestFirst;
+        savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
+    }
+    public static void setAuthCode(String authCode) {
+        Prefs.authCode = authCode;
+        savePref(authCode, STRAVA_AUTH);
+    }
+    public static void setRefreshToken(String refreshToken) {
+        Prefs.refreshToken = refreshToken;
+        savePref(refreshToken, STRAVA_REFRESH);
+    }
+    public static void setAccessToken(String accessToken) {
+        Prefs.accessToken = accessToken;
+        savePref(accessToken, STRAVA_ACCESS);
+    }
+    public static void setAccessTokenExpiration(LocalDateTime accessTokenExpiration) {
+        Prefs.accessTokenExpiration = accessTokenExpiration;
+        savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
+    }
+
+    public static void setColorGreen() {
+        setColor(COLOR_GREEN);
+    }
+    public static void setColorMono() {
+        setColor(COLOR_MONO);
+    }
+
+    // get
+    public static boolean isFirstLogin() {
+        return firstLogin;
+    }
+    public static boolean isWeekHeadersShown() {
+        return showWeekHeaders;
+    }
+    public static boolean isWeekDistanceShown() {
+        return weekDistance;
+    }
+    public static boolean isWeekChartShown() {
+        return showWeekChart;
+    }
+    public static boolean isDailyChartShown() {
+        return showDailyChart;
+    }
+    public static int getColor() {
+        return color;
+    }
+    public static boolean isThemeLight() {
+        return theme;
+    }
+    public static float getMass() {
+        return mass;
+    }
+    public static LocalDate getBirthday() {
+        return birthday;
+    }
+    public static boolean areHiddenRoutesShown() {
+        return showHiddenRoutes;
+    }
+    public static boolean includeLonger() {
+        return includeLonger;
+    }
+    public static ArrayList<Integer> getExerciseVisibleTypes() {
+        return exerciseVisibleTypes;
+    }
+    public static ArrayList<Integer> getRouteVisibleTypes() {
+        return routeVisibleTypes;
+    }
+    public static ArrayList<Integer> getDistanceVisibleTypes() {
+        return distanceVisibleTypes;
+    }
+    public static Toolbox.C.SortMode getSortModePref(Toolbox.C.Layout layout) {
+        return sortModePrefs[layout.ordinal()];
+    }
+    public static boolean getSmallestFirstPref(Toolbox.C.Layout layout) {
+        return smallestFirstPrefs[layout.ordinal()];
+    }
+    public static String getAuthCode() {
+        return authCode;
+    }
+    public static String getRefreshToken() {
+        return refreshToken;
+    }
+    public static String getAccessToken() {
+        return accessToken;
+    }
+    public static LocalDateTime getAccessTokenExpiration() {
+        return accessTokenExpiration;
+    }
+
+    // get driven
+    public static boolean isColorGreen() {
+        return color == COLOR_GREEN;
+    }
+    public static boolean isColorMono() {
+        return color == COLOR_MONO;
+    }
+    public static boolean isAccessTokenCurrent() {
+        return LocalDateTime.now().isBefore(accessTokenExpiration);
+    }
+    public static boolean isRefreshTokenCurrent() {
+        return refreshToken != null && !refreshToken.equals("");
+    }
 
 }
