@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -38,6 +40,10 @@ public class DevFragment extends MainActivity.MainFragment {
 
         return view;
     }
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar_main_dev, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override protected void setToolbarTitle() {
         ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_dev));
@@ -46,7 +52,7 @@ public class DevFragment extends MainActivity.MainFragment {
 
     }
     @Override protected void updateFragment() {
-
+        if (recyclerFragment != null) recyclerFragment.updateRecycler();
     }
 
 }

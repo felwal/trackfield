@@ -785,7 +785,7 @@ public class Helper {
 
             return routeItems;
         }
-        public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser) {
+        public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, ArrayList<Integer> types) {
 
             /*String[] columns = { Contract.ExerciseEntry.COLUMN_ROUTE };
             String orderBy = orderBy(sortMode, smallestFirst);
@@ -845,8 +845,11 @@ public class Helper {
             final String c_avg_dist = "avgDistance";
             final String c_min_pace = "minPace";
 
-            String havingCount = includeLesser ? "" : " having antal > 1";
-            String whereHidden = includeLesser ? "" : " and r."+r_hidden+" != 1";
+            String havingCount = includeLesser ? "" : " HAVING antal > 1";
+            String whereHidden = includeLesser ? "" : " AND r."+r_hidden+" != 1";
+            String whereTypes = selectionFilter(types);
+            String whereTypesLone = selectionFilterFirst(types, "");
+            String whereTypesAs = selectionFilterAs(types, "e2.");
 
             String orderBy;
             switch (sortMode) {
@@ -861,12 +864,12 @@ public class Helper {
 
             String queryString = "select e."+e_rid+", r."+r_name+", "+c_count+", avg(e."+e_dist+") as "+c_avg_dist+", case when varPaceDrv is null or pace < varPaceDrv then pace else varPaceDrv end "+c_min_pace+" " +
                     "from "+e_t+" as e inner join "+r_t+" as r on e."+e_rid+" = r."+r_id+" inner join " +
-                        "(select "+e_rid+", count(1) as "+c_count+" from "+e_t+" group by "+e_rid + havingCount +") as a on e."+e_rid+" = a."+e_rid+" inner join " +
-                        "(select "+e_rid+", min("+e_time+"/"+e_dist+")*1000 as pace from "+e_t+" where "+e_dist+" > 0 and "+e_time+" != 0 group by "+e_rid+") as v on e."+e_rid+" = v."+e_rid+" left outer join " +
+                        "(select "+e_rid+", count(1) as "+c_count+" from "+e_t + whereTypesLone + " group by "+e_rid + havingCount +") as a on e."+e_rid+" = a."+e_rid+" inner join " +
+                        "(select "+e_rid+", min("+e_time+"/"+e_dist+")*1000 as pace from "+e_t+" where "+e_dist+" > 0 and "+e_time+" != 0"+whereTypes+" group by "+e_rid+") as v on e."+e_rid+" = v."+e_rid+" left outer join " +
                         "(select e2."+e_rid+", min("+e_time+"/varDistAvg)*1000 as varPaceDrv from "+e_t+" as e2 inner join " +
                             "(select "+e_rid+", "+e_rvar+", avg("+e_dist+") as varDistAvg from "+e_t+" where "+e_dist+" > 0 and "+e_time+" != 0 group by "+e_rvar+", "+e_rid+") as vAvg on e2."+e_rid+" = vAvg."+e_rid+" and e2."+e_rvar+" = vAvg."+e_rvar+" " +
-                        "where e2."+e_dist+" = -1 and e2."+e_time+" != 0 group by e2."+e_rvar+", e2."+e_rid+") as vDrv on e."+e_rid+" = vDrv."+e_rid+" " +
-                    "where e."+e_dist+" != -1" + whereHidden + " group by e."+e_rid+" order by " + orderBy;
+                        "where e2."+e_dist+" = -1 and e2."+e_time+" != 0 "+whereTypesAs+" group by e2."+e_rvar+", e2."+e_rid+") as vDrv on e."+e_rid+" = vDrv."+e_rid+" " +
+                    "where e."+e_dist+" != -1" + whereHidden + whereTypes + " group by e."+e_rid+" order by " + orderBy;
 
             Cursor cursor = db.rawQuery(queryString, null);
             ArrayList<RouteItem> routeItems = new ArrayList<>();
@@ -920,7 +923,7 @@ public class Helper {
             cursor.close();
             return new RouteItem(getRouteId(route), route, amount, avgDistance, bestPace);
         }
-        public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst) {
+        public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
 
             /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
                     " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
@@ -942,7 +945,7 @@ public class Helper {
 
             ArrayList<DistanceItem> distanceItems = new ArrayList<>();
             ArrayList<Distance> distances = getDistances(sortMode, smallestFirst);
-            for (Distance distance : distances) distanceItems.add(getDistanceItem(distance.getDistance()));
+            for (Distance distance : distances) distanceItems.add(getDistanceItem(distance.getDistance(), types));
 
             /*ArrayList<Integer> dList = D.sortDistances(D.distances, smallestFirst, sortMode);
             for (int d : dList) {
@@ -951,13 +954,13 @@ public class Helper {
 
             return distanceItems;
         }
-        public DistanceItem getDistanceItem(int distance) {
+        public DistanceItem getDistanceItem(int distance, ArrayList<Integer> types) {
 
             int minDist = M.minDistance(distance);
             int maxDist = M.maxDistance(distance);
 
             String[] columns = { Contract.ExerciseEntry.COLUMN_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTE, Contract.ExerciseEntry.COLUMN_ROUTEVAR };
-            String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + " >= " + minDist + " OR " + Contract.ExerciseEntry.COLUMN_DISTANCE + " = " + Exercise.DISTANCE_DRIVEN;
+            String selection = "(" + Contract.ExerciseEntry.COLUMN_DISTANCE + " >= " + minDist + " OR " + Contract.ExerciseEntry.COLUMN_DISTANCE + " = " + Exercise.DISTANCE_DRIVEN + ")" + selectionFilter(types);
             String orderBy = orderBy(C.SortMode.PACE, true);
 
             float bestPace = -1;
@@ -1342,6 +1345,28 @@ public class Helper {
             for (int i = 0; i < visibleTypes.size(); i++) {
                 if (i == 0) filter += " AND (";
                 filter += Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
+                if (i == visibleTypes.size()-1) filter += ")";
+                else filter += " OR ";
+            }
+            return filter;
+        }
+        private String selectionFilterAs(ArrayList<Integer> visibleTypes, String tableAsName) {
+
+            String filter = "";
+            for (int i = 0; i < visibleTypes.size(); i++) {
+                if (i == 0) filter += " AND (";
+                filter += tableAsName + Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
+                if (i == visibleTypes.size()-1) filter += ")";
+                else filter += " OR ";
+            }
+            return filter;
+        }
+        private String selectionFilterFirst(ArrayList<Integer> visibleTypes, String tableAsName) {
+
+            String filter = "";
+            for (int i = 0; i < visibleTypes.size(); i++) {
+                if (i == 0) filter += " WHERE (";
+                filter += tableAsName + Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
                 if (i == visibleTypes.size()-1) filter += ")";
                 else filter += " OR ";
             }

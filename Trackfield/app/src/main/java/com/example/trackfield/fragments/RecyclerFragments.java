@@ -46,6 +46,7 @@ public class RecyclerFragments {
     public static abstract class Base extends Fragment implements RecyclerAdapters.Base.ItemClickListener, SortDialog.DismissListener {
 
         protected Activity a;
+        protected static Thread bgThread;
         protected Helper.Reader reader;
         protected RecyclerView recycler;
         protected RecyclerView.LayoutManager manager;
@@ -61,6 +62,15 @@ public class RecyclerFragments {
         protected boolean smallestFirst = false;
 
         ////
+
+        interface Threader {
+            void run();
+            default void interruptAndStart() {
+                if (bgThread != null) bgThread.interrupt();
+                bgThread = new Thread(() -> Threader.this.run());
+                bgThread.start();
+            }
+        }
 
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -92,20 +102,31 @@ public class RecyclerFragments {
 
             setSortModes();
             if (adapter == null) {
-                new Thread(new Runnable() {
-                    @Override public void run() {
+
+                ((Threader) () -> {
+                    if (items.size() == 0) {
                         items.addAll(getRecyclerItems());
                         allItems.addAll(items);
-                        a.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                getAdapter();
-                                adapter.setClickListener(Base.this);
-                                recycler.setAdapter(adapter);
-                                L.crossfadeRecycler(recycler);
-                            }
-                        });
                     }
-                }).start();
+                    a.runOnUiThread(() -> {
+                        getAdapter();
+                        adapter.setClickListener(Base.this);
+                        recycler.setAdapter(adapter);
+                        L.crossfadeRecycler(recycler);
+                    });
+                }).interruptAndStart();
+
+                /*bgThread = new Thread(() -> {
+                    items.addAll(getRecyclerItems());
+                    allItems.addAll(items);
+                    a.runOnUiThread(() -> {
+                        getAdapter();
+                        adapter.setClickListener(Base.this);
+                        recycler.setAdapter(adapter);
+                        L.crossfadeRecycler(recycler);
+                    });
+                });
+                bgThread.start();*/
             }
             else {
                 adapter.setClickListener(this);
@@ -113,7 +134,7 @@ public class RecyclerFragments {
             }
 
             if (a instanceof MainActivity) {
-                ((MainActivity) a).recyclerScrollListener(recycler, this);
+                ((MainActivity) a).setRecyclerScrollListener(recycler, this);
             }
 
             return view;
@@ -128,18 +149,10 @@ public class RecyclerFragments {
 
         protected void setEmptyPage() {}
         protected void fadeInEmpty() {
-            a.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    L.crossfadeIn(emptyCl, 1);
-                }
-            });
+            a.runOnUiThread(() -> L.crossfadeIn(emptyCl, 1));
         }
         protected void fadeOutEmpty() {
-            a.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    L.crossfadeOut(emptyCl);
-                }
-            });
+            a.runOnUiThread(() -> L.crossfadeOut(emptyCl));
         }
 
         // calls
@@ -213,16 +226,16 @@ public class RecyclerFragments {
         }
         public void updateRecycler() {
 
-            new Thread(new Runnable() {
-                @Override public void run() {
-                    final ArrayList<RecyclerItem> newItems = getRecyclerItems();
-                    a.runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            updateRecycler(newItems);
-                        }
-                    });
-                }
-            }).start();
+            ((Threader) () -> {
+                final ArrayList<RecyclerItem> newItems = getRecyclerItems();
+                a.runOnUiThread(() -> updateRecycler(newItems));
+            }).interruptAndStart();
+
+            /*bgThread = new Thread(() -> {
+                final ArrayList<RecyclerItem> newItems = getRecyclerItems();
+                a.runOnUiThread(() -> updateRecycler(newItems));
+            });
+            bgThread.start();*/
         }
         public void scrollToTop() {
             //recycler.scrollToPosition(25);
@@ -530,7 +543,7 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/, smallestFirst);
+            ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/, smallestFirst, Prefs.getExerciseVisibleTypes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);
@@ -585,8 +598,7 @@ public class RecyclerFragments {
 
         @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-            //ArrayList<String> rList = D.sortRoutes(D.routes, smallestFirst, sortMode, false);
-            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown()); //reader.getRoutes(rList);
+            ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = newSorter(sortModes, sortModesTitle);

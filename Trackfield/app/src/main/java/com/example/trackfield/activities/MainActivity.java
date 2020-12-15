@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
             //w.close();
         }
 
-        setNavbar();
+        setBottomNavbar();
         setToolbar();
         setFabs();
     }
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
             D.gameOn = true;
         }
     }
-
 
     // fab
     private void setFabs() {
@@ -163,7 +162,42 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
         L.animateFab(fab, fromColor, toColor, toIcon);
     }
 
-    public void recyclerScrollListener(final RecyclerView rv, final RecyclerFragments.Base recyclerFragment) {
+    private void setToolbar() {
+        final Toolbar tb = findViewById(R.id.toolbar_main);
+        setSupportActionBar(tb);
+        ab = getSupportActionBar();
+    }
+    private void setBottomNavbar() {
+
+        selectFragment(new ExercisesFragment());
+        final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
+
+            switch (item.getItemId()) {
+                case R.id.navigation_exercises:
+                    if ((fragment instanceof ExercisesFragment)) fragment.scrollToTop();
+                    else selectFragment(new ExercisesFragment());
+                    if (fab.isOrWillBeHidden()) fab.show();
+                    return true;
+
+                case R.id.navigation_recs:
+                    if ((fragment instanceof RecsFragment)) fragment.scrollToTop();
+                    else selectFragment(new RecsFragment());
+                    if (fab.isOrWillBeShown()) fab.hide();
+                    return true;
+
+                case R.id.navigation_dev:
+                    if ((fragment instanceof DevFragment)) fragment.scrollToTop();
+                    else selectFragment(new DevFragment());
+                    if (fab.isOrWillBeShown()) fab.hide();
+                    return true;
+            }
+            return false;
+        };
+
+        final BottomNavigationView navView = findViewById(R.id.navbar);
+        navView.setOnNavigationItemSelectedListener(navItemListener);
+    }
+    public void setRecyclerScrollListener(final RecyclerView rv, final RecyclerFragments.Base recyclerFragment) {
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -196,48 +230,10 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
         this.fragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_fragmentContainer, this.fragment).commit();
     }
-
-    // toolbars
-    private void setNavbar() {
-
-        selectFragment(new ExercisesFragment());
-        final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.navigation_exercises:
-                        if ((fragment instanceof ExercisesFragment)) fragment.scrollToTop();
-                        else selectFragment(new ExercisesFragment());
-                        if (fab.isOrWillBeHidden()) fab.show();
-                        return true;
-
-                    case R.id.navigation_recs:
-                        if ((fragment instanceof RecsFragment)) fragment.scrollToTop();
-                        else selectFragment(new RecsFragment());
-                        if (fab.isOrWillBeShown()) fab.hide();
-                        return true;
-
-                    case R.id.navigation_dev:
-                        if ((fragment instanceof DevFragment)) fragment.scrollToTop();
-                        else selectFragment(new DevFragment());
-                        if (fab.isOrWillBeShown()) fab.hide();
-                        return true;
-                }
-                return false;
-            }
-        };
-
-        final BottomNavigationView navView = findViewById(R.id.navbar);
-        navView.setOnNavigationItemSelectedListener(navItemListener);
-    }
-    private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_main);
-        setSupportActionBar(tb);
-        ab = getSupportActionBar();
-    }
     public void setToolbarTitle(String title) {
         ab.setTitle(title);
     }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -256,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
             default: return super.onOptionsItemSelected(item);
         }
     }
-
     @Override public void onDecimalDialogPositiveClick(float input, String tag) {
 
         int distance = (int) (input * 1000);

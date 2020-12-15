@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_addDistance"
-        android:title="@string/action_add"
-        android:icon="@drawable/ic_add_24dp"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_filter"
         android:title="@string/action_filter"
         android:icon="@drawable/ic_filter_24dp"
@@ -18,6 +12,6 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_settings_24dp"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

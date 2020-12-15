@@ -126,11 +126,7 @@ public class Graph extends RecyclerItem {
 
     // compare
     private boolean sameArgsAs(Graph graph) {
-        boolean grids = Arrays.equals(this.grids, graph.grids);
-        boolean borders = Arrays.equals(this.borders, graph.borders);
-        boolean widthFixed = this.widthFixed == graph.widthFixed;
-        boolean invertY = this.yInverted == graph.yInverted;
-        return grids && borders && widthFixed && invertY;
+        return Arrays.equals(grids, graph.grids) && Arrays.equals(borders, graph.borders) && widthFixed == graph.widthFixed && yInverted == graph.yInverted;
     }
     private boolean sameDataAs(Graph graph) {
         if (data.size() != graph.data.size()) return false;
@@ -143,14 +139,10 @@ public class Graph extends RecyclerItem {
     // recycler
     @Override public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof Graph)) return false;
-        boolean sameArgs = sameArgsAs((Graph) item);
-        boolean sameTag = item.hasTag(tag);
-        return sameTag && sameArgs;
+        return sameArgsAs((Graph) item) && item.hasTag(tag);
     }
     @Override public boolean sameContentAs(RecyclerItem item) {
-        boolean sameItem = sameItemAs(item);
-        boolean sameData = sameDataAs((Graph) item);
-        return sameItem && sameData;
+        return sameItemAs(item) && sameDataAs((Graph) item);
     }
 
 }
