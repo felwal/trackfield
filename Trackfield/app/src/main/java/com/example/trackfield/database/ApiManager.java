@@ -64,7 +64,7 @@ public abstract class ApiManager extends AppCompatActivity {
 
     private static final String CLIENT_ID = "***REMOVED***";
     private static final String CLIENT_SECRET = "***REMOVED***";
-    private static final String REDIRECT_URI = "https://felwal.github.io/Trackfield/callback";
+    private static final String REDIRECT_URI = "https://felwal.github.io/Trackfield_web/callback";
     private static final int PER_PAGE = 200;
 
     // request codes
@@ -220,7 +220,7 @@ public abstract class ApiManager extends AppCompatActivity {
     }
     protected void finishAuthorization(Uri appLinkData) {
         Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast("Authorization successful", this);
+        L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), this);
     }
 
     // request activities
@@ -315,7 +315,7 @@ public abstract class ApiManager extends AppCompatActivity {
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
-            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Garmin Forerunner 745", "GPS + Galileo", distance, time, null, trail);
+            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Runkeeper", "GPS", distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -356,6 +356,7 @@ public abstract class ApiManager extends AppCompatActivity {
                             Prefs.setAccessToken(response.getString("access_token"));
                             Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString("expires_at"))));
 
+                            L.toast("accessToken: " + Prefs.getAccessToken(), c);
                             Log.i("response accessToken: ", Prefs.getAccessToken());
                             onTokenReady(Prefs.getAccessToken());
                         }
@@ -385,6 +386,7 @@ public abstract class ApiManager extends AppCompatActivity {
                         try {
                             Prefs.setRefreshToken(response.getString("refresh_token"));
 
+                            L.toast("refreshToken: " + Prefs.getRefreshToken(), c);
                             Log.i("response refreshToken: ", Prefs.getRefreshToken());
                             onTokenReady(Prefs.getRefreshToken());
                         }

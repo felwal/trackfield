@@ -24,7 +24,7 @@
         <!-- elements -->
         <item name="android:colorBackground">@color/colorGrey1</item>
         <item name="colorSurface">@color/colorGrey3</item>
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
 
         <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
         <item name="android:colorButtonNormal">@color/colorGrey3</item>
@@ -60,7 +60,6 @@
         <item name="android:colorButtonNormal">@color/colorWhite</item>
         <item name="android:colorActivatedHighlight">@color/colorGreen</item>
         <item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeLight</item>
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
 
         <item name="colorSurface">@color/colorWhite</item>
         <item name="colorOnSurface">@color/colorGrey6</item>

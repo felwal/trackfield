@@ -72,7 +72,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="64dp"
         android:text="Get started"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -86,7 +86,6 @@
                     android:ems="10"
                     android:focusedByDefault="false"
                     android:hint="HH:mm:ss"
-                    android:text="12:00:00"
                     android:textSize="@dimen/type_heading1"
                     app:layout_constraintStart_toEndOf="@+id/editText_date"
                     app:layout_constraintTop_toTopOf="@+id/editText_date" />
@@ -177,7 +176,8 @@
                     android:text="Drive Distance"
                     app:layout_constraintBottom_toBottomOf="@+id/textView_s"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
+                    app:layout_constraintTop_toTopOf="@+id/textView_s"
+                    tools:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textView_t"
@@ -277,7 +277,6 @@
                     android:focusedByDefault="false"
                     android:hint="Data source"
                     android:inputType="textPersonName|textCapSentences"
-                    android:text="Garmin Forerunner 745"
                     android:textAlignment="viewStart"
                     android:textSize="@dimen/type_body"
                     app:layout_constraintStart_toStartOf="parent"
@@ -292,7 +291,6 @@
                     android:focusedByDefault="false"
                     android:hint="Recording method"
                     android:inputType="textPersonName|textCapSentences"
-                    android:text="GPS + Galileo"
                     android:textAlignment="viewStart"
                     android:textSize="@dimen/type_body"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -1402,9 +1402,16 @@ public class Toolbox {
             view.animate().alpha(toAlpha).setDuration(ANIM_DURATION).setListener(null);
         }
         public static void crossfadeIn(View view, float toAlpha) {
+            if (view == null) return;
             view.setAlpha(0f);
             view.setVisibility(View.VISIBLE);
             view.animate().alpha(toAlpha).setDuration(ANIM_DURATION).setListener(null);
+        }
+        public static void crossfadeInLong(View view, float toAlpha) {
+            if (view == null) return;
+            view.setAlpha(0f);
+            view.setVisibility(View.VISIBLE);
+            view.animate().alpha(toAlpha).setDuration(ANIM_DURATION_LONG).setListener(null);
         }
         public static void crossfadeOut(final View view) {
             view.animate().alpha(0f).setDuration(ANIM_DURATION).setListener(new AnimatorListenerAdapter() {

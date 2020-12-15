@@ -37,7 +37,7 @@ public class Prefs {
 
     // profile
     private static float mass = 60;
-    private static LocalDate birthday = LocalDate.of(2020,1,1);
+    private static LocalDate birthday = LocalDate.of(2001,1,29);
 
     // filtering
     private static boolean showHiddenRoutes = true;
@@ -56,7 +56,7 @@ public class Prefs {
     private static String authCode = "";
     private static String refreshToken = "";
     private static String accessToken = "";
-    private static LocalDateTime accessTokenExpiration = LocalDateTime.ofEpochSecond(0,0, ZoneOffset.UTC);
+    private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;// = LocalDateTime.ofEpochSecond(0,0, ZoneOffset.UTC);
 
     public static final int COLOR_MONO = 0;
     public static final int COLOR_GREEN = 1;
@@ -122,7 +122,7 @@ public class Prefs {
         authCode = loadPref(str, STRAVA_AUTH);
         refreshToken = loadPref(str, STRAVA_REFRESH);
         accessToken = loadPref(str, STRAVA_ACCESS);
-        accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
+        //accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
     }
 
     // tools
@@ -324,7 +324,9 @@ public class Prefs {
         return color == COLOR_MONO;
     }
     public static boolean isAccessTokenCurrent() {
-        return LocalDateTime.now().isBefore(accessTokenExpiration);
+        boolean b = accessTokenExpiration != null;
+        LocalDateTime now = LocalDateTime.now();
+        return b && now.isBefore(accessTokenExpiration);
     }
     public static boolean isRefreshTokenCurrent() {
         return refreshToken != null && !refreshToken.equals("");

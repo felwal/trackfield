@@ -30,6 +30,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDialog.DialogListener, OnMapReadyCallback {
 
@@ -315,12 +316,10 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
             gMap.getUiSettings().setAllGesturesEnabled(false);
             gMap.setMaxZoomPreference(MAP_MAX_ZOOM);
 
-            gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override public void onMapClick(LatLng latLng) {
-                    MapActivity.ExerciseMap.startActivity(_id, ViewActivity.this);
-                }
-            });
+            gMap.setOnMapClickListener(latLng -> MapActivity.ExerciseMap.startActivity(_id, ViewActivity.this));
         }
+
+        L.crossfadeInLong(mapFragment.getView(), 1);
     }
 
     @Override protected void onRestart() {
