@@ -1251,10 +1251,10 @@ public class Toolbox {
 
         // distance
         public static int minDistance(int distance) {
-            return (int) nonNegative(distance - Prefs.distanceLowerLimit);
+            return (int) nonNegative(distance - Prefs.getDistanceLowerLimit());
         }
         public static int maxDistance(int distance) {
-            return distance + Prefs.distanceUpperLimit;
+            return distance + Prefs.getDistanceUpperLimit();
         }
         public static boolean insideLimits(int distance, int fitsInside) {
             return distance > minDistance(fitsInside) && distance < maxDistance(fitsInside);

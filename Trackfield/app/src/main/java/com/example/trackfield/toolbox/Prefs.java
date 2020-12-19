@@ -42,8 +42,9 @@ public class Prefs {
     // filtering
     private static boolean showHiddenRoutes = true;
     private static boolean includeLonger = false;
-    public static int distanceLowerLimit = 500;
-    public static int distanceUpperLimit = 999;
+    private static boolean includePaceless = true;
+    private static int distanceLowerLimit = 630;
+    private static int distanceUpperLimit = 999;
     private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
     private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
     private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
@@ -62,7 +63,7 @@ public class Prefs {
     public static final int COLOR_GREEN = 1;
 
     // tags
-    public static final String SHARED_PREFERENCES = "shared preferences";
+    private static final String SHARED_PREFERENCES = "shared preferences";
     private static final String FIRST_LOGIN = "firstLogin";
     private static final String WEEK_HEADERS = "weekHeaders";
     private static final String WEEK_DISTANCE = "weekDistance";
@@ -74,6 +75,9 @@ public class Prefs {
     private static final String BIRTHDAY = "birthday";
     private static final String LESSER_ROUTES = "lesserRoutes";
     private static final String INCLCUDE_LONGER = "includeLonger";
+    private static final String INCLCUDE_PACELESS = "includePaceless";
+    private static final String LIMIT_LOWER = "lowerLimit";
+    private static final String LIMIT_UPPER = "upperLimit";
     private static final String TYPES_EXERCISE = "typesExercise";
     private static final String TYPES_ROUTE = "typesRoute";
     private static final String TYPES_DISTANCE = "typesDistance";
@@ -95,6 +99,7 @@ public class Prefs {
 
         TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
         TypeToken<String> str = new TypeToken<String>(){};
+        TypeToken<Integer> in = new TypeToken<Integer>(){};
         TypeToken<ArrayList<Integer>> intArr = new TypeToken<ArrayList<Integer>>(){};
 
         firstLogin = loadPref(bool, FIRST_LOGIN);
@@ -112,6 +117,8 @@ public class Prefs {
 
         showHiddenRoutes = loadPref(bool, LESSER_ROUTES);
         includeLonger = loadPref(bool, INCLCUDE_LONGER);
+        distanceLowerLimit = loadPref(in, LIMIT_LOWER);
+        distanceUpperLimit = loadPref(in, LIMIT_UPPER);
         exerciseVisibleTypes = loadPref(intArr, TYPES_EXERCISE);
         routeVisibleTypes = loadPref(intArr, TYPES_ROUTE);
         distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
@@ -122,7 +129,7 @@ public class Prefs {
         authCode = loadPref(str, STRAVA_AUTH);
         refreshToken = loadPref(str, STRAVA_REFRESH);
         accessToken = loadPref(str, STRAVA_ACCESS);
-        //accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
+        accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
     }
 
     // tools
@@ -152,6 +159,8 @@ public class Prefs {
             case BIRTHDAY: return birthday;
             case LESSER_ROUTES: return showHiddenRoutes;
             case INCLCUDE_LONGER: return includeLonger;
+            case LIMIT_LOWER: return distanceLowerLimit;
+            case LIMIT_UPPER: return distanceUpperLimit;
             case TYPES_EXERCISE: return exerciseVisibleTypes;
             case TYPES_ROUTE: return routeVisibleTypes;
             case TYPES_DISTANCE: return distanceVisibleTypes;
@@ -209,6 +218,14 @@ public class Prefs {
     public static void includeLonger(boolean include) {
         includeLonger = include;
         savePref(include, INCLCUDE_LONGER);
+    }
+    public static void setDistanceLowerLimit(int distanceLowerLimit) {
+        Prefs.distanceLowerLimit = distanceLowerLimit;
+        savePref(distanceLowerLimit, LIMIT_LOWER);
+    }
+    public static void setDistanceUpperLimit(int distanceUpperLimit) {
+        Prefs.distanceUpperLimit = distanceUpperLimit;
+        savePref(distanceUpperLimit, LIMIT_UPPER);
     }
     public static void setExerciseVisibleTypes(ArrayList<Integer> types) {
         exerciseVisibleTypes = types;
@@ -288,6 +305,13 @@ public class Prefs {
     public static boolean includeLonger() {
         return includeLonger;
     }
+    public static int getDistanceLowerLimit() {
+        return distanceLowerLimit;
+    }
+    public static int getDistanceUpperLimit() {
+        return distanceUpperLimit;
+    }
+
     public static ArrayList<Integer> getExerciseVisibleTypes() {
         return exerciseVisibleTypes;
     }

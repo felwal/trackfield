@@ -483,7 +483,7 @@ public class Dialogs {
         }
         @Override protected AlertDialog buildDialog() {
 
-            View dialogView = inflater.inflate(R.layout.dialog_filter, null);
+            View dialogView = inflater.inflate(R.layout.dialog_filter_main, null);
             final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_types);
 
             setChips(chipGroup);

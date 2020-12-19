@@ -47,8 +47,6 @@ public class GraphView extends View implements View.OnTouchListener {
     private float barRadius = L.px(6);
     private float unitWidth = L.px(30);
 
-    public static final float PADDING_Y = L.px(16);
-
     ////
 
     public GraphView(Context context, AttributeSet attrs) {
@@ -67,8 +65,8 @@ public class GraphView extends View implements View.OnTouchListener {
         start = 0;
         end = getWidth();
         width = end - start;
-        top = PADDING_Y;
-        bottom = getHeight() - PADDING_Y;
+        top = getPaddingTop();
+        bottom = getHeight() - getPaddingBottom();
         height = bottom - top;
     }
     private void calcPoints() {
@@ -93,7 +91,7 @@ public class GraphView extends View implements View.OnTouchListener {
             for (TreeMap.Entry<Float, Float> entry : datum.getDataPoints().entrySet()) {
                 //float y = height - (entry.getValue() / data.getMax() * height) + MARGIN_Y;
                 //float bias = (data.isInvertY() ? 1 : 0) + (entry.getValue() - data.getMin()) / (data.getMax() - data.getMin()) * (data.isInvertY() ? -1 : 1);
-                float y = height + PADDING_Y - graph.bias(entry.getValue()) * height;
+                float y = height + getPaddingTop() - graph.bias(entry.getValue()) * height;
                 float x = /*(data.isGraphType(GraphData.GRAPH_BAR) ? barRadius : 0) +*/ (entry.getKey() - graph.getStart()) * unitWidth + (hasBars ? barRadius : 0);
                 surPoints.add(new PointF(x, y));
             }
@@ -191,7 +189,7 @@ public class GraphView extends View implements View.OnTouchListener {
         if (points.isEmpty()) return;
 
         for (PointF p : points) {
-            canvas.drawRoundRect(p.x - barRadius, p.y == bottom ? bottom + zeroHeight : p.y, p.x + barRadius, bottom, cornerRadius, cornerRadius, data.getPaint());
+            canvas.drawRoundRect(p.x - barRadius, p.y == bottom ? bottom - zeroHeight : p.y, p.x + barRadius, bottom, cornerRadius, cornerRadius, data.getPaint());
             drawPointIfEnabled(canvas, p, data);
         }
 
@@ -225,8 +223,8 @@ public class GraphView extends View implements View.OnTouchListener {
         ArrayList<PointF> points = data.getSurPoints();
         if (!data.isShowArea()) return;
 
-        path.lineTo(points.get(points.size()-1).x, getHeight() - PADDING_Y);
-        path.lineTo(points.get(0).x, getHeight() - PADDING_Y);
+        path.lineTo(points.get(points.size()-1).x, getHeight() - getPaddingBottom());
+        path.lineTo(points.get(0).x, getHeight() - getPaddingBottom());
         path.lineTo(points.get(0).x, points.get(0).y);
         canvas.drawPath(path, data.getAreaPaint());
     }

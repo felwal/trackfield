@@ -1098,47 +1098,80 @@ public class Helper {
             return count != 0 ? totalDistance / count : 0;
         }
 
-        public TreeMap<Float, Float> weekDistance(ArrayList<Integer> types, LocalDate includingDate) {
+        // graph data
+        public TreeMap<Float, Float> weekDailyDistance(ArrayList<Integer> types, LocalDate includingDate) {
 
             TreeMap<Float, Float> points = new TreeMap<>();
-            TreeMap<Integer, Exerlite> map = new TreeMap<>();
+            TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
             ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfWeek(includingDate), M.atEndOfWeek(includingDate), C.SortMode.DATE, false, types);
 
             for (Exerlite e : exerlites) {
-                map.put(e.getDate().getDayOfWeek().getValue(), e);
+                int key = e.getDate().getDayOfWeek().getValue();
+                int value = dayAndDistance.containsKey(key) ? dayAndDistance.get(key) + e.getDistance() : e.getDistance();
+                dayAndDistance.put(key, value);
             }
 
             for (int d = 1; d <= 7; d++) {
-                points.put((float) d, map.containsKey(d) ? (float) map.get(d).getDistance() : 0);
+                points.put((float) d, dayAndDistance.containsKey(d) ? (float) dayAndDistance.get(d).intValue() : 0);
             }
 
             return points;
         }
-        public TreeMap<Float, Float> monthDistance(ArrayList<Integer> types, LocalDate includingDate) {
+        public TreeMap<Float, Float> yearMonthlyDistance(ArrayList<Integer> types, LocalDate includingDate) {
 
             TreeMap<Float, Float> points = new TreeMap<>();
-            TreeMap<Integer, Exerlite> map = new TreeMap<>();
+            TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
+            ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, false, types);
+
+            for (Exerlite e : exerlites) {
+                int key = e.getDate().getMonthValue();
+                int value = monthAndDistance.containsKey(key) ? monthAndDistance.get(key) + e.getDistance() : e.getDistance();
+                monthAndDistance.put(key, value);
+            }
+
+            for (int m = 1; m <= 12; m++) {
+                points.put((float) m, monthAndDistance.containsKey(m) ? (float) monthAndDistance.get(m).intValue() : 0);
+            }
+
+            return points;
+        }
+        public TreeMap<Float, Float> yearMonthlyDistanceGoal() {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+
+            for (int m = 1; m <= 12; m++) {
+                points.put((float) m, 83_000f);
+            }
+
+            return points;
+        }
+
+        public TreeMap<Float, Float> monthDailyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
+
+            TreeMap<Float, Float> points = new TreeMap<>();
+            TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
             ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfMonth(includingDate), M.atEndOfMonth(includingDate), C.SortMode.DATE, false, types);
 
             float totalDistance = 0;
 
             for (Exerlite e : exerlites) {
-                map.put(e.getDate().getDayOfMonth(), e);
+                int key = e.getDate().getDayOfMonth();
+                int value = dayAndDistance.containsKey(key) ? dayAndDistance.get(key) + e.getDistance() : e.getDistance();
+                dayAndDistance.put(key, value);
             }
-            if (map.size() == 0) return points;
+            if (dayAndDistance.size() == 0) return points;
 
-            for (int d = 0; d <= includingDate.getMonth().length(includingDate.isLeapYear()); d++) {
-                if (map.containsKey(d)) totalDistance += map.get(d).getDistance();
+            for (int d = 0; d <= includingDate.lengthOfMonth(); d++) {
+                if (dayAndDistance.containsKey(d)) totalDistance += dayAndDistance.get(d);
                 points.put((float) d, totalDistance);
-                if (d == map.lastKey() && includingDate.isEqual(LocalDate.now())) break;
+                if (includingDate.isEqual(LocalDate.now()) && LocalDate.now().getDayOfMonth() == d) break;
             }
 
             return points;
         }
-        public TreeMap<Float, Float> yearDistance(ArrayList<Integer> types, LocalDate includingDate) {
+        public TreeMap<Float, Float> yearWeeklyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
 
             TreeMap<Float, Float> points = new TreeMap<>();
-            TreeMap<Integer, Exerlite> map = new TreeMap<>();
             ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, true, types);
 
             float totalDistance = 0;
@@ -1166,8 +1199,7 @@ public class Helper {
 
             return points;
         }
-
-        public TreeMap<Float, Float> monthDistanceGoal(LocalDate includingDate) {
+        public TreeMap<Float, Float> monthIntegralDistanceGoal(LocalDate includingDate) {
 
             TreeMap<Float, Float> points = new TreeMap<>();
 
@@ -1176,7 +1208,7 @@ public class Helper {
 
             return points;
         }
-        public TreeMap<Float, Float> yearDistanceGoal(LocalDate includingDate) {
+        public TreeMap<Float, Float> yearIntegralDistanceGoal(LocalDate includingDate) {
 
             TreeMap<Float, Float> points = new TreeMap<>();
 

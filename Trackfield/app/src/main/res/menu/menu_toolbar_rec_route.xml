@@ -19,7 +19,6 @@
         android:id="@+id/action_hideRoute"
         android:title="@string/action_hide"
         android:icon="@drawable/ic_hide_24dp"
-        android:checkable="true"
         app:showAsAction="ifRoom"/>
 
     <item

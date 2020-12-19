@@ -70,11 +70,7 @@ public class MapActivity {
         private void mapOptionsFab() {
 
             FloatingActionButton fab = findViewById(R.id.fab_mapOptions);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    togglePolylines();
-                }
-            });
+            fab.setOnClickListener(view -> togglePolylines());
 
         }
         private void togglePolylines() {
@@ -84,6 +80,7 @@ public class MapActivity {
                     for (String path : getRestOfPolylines()) {
                         PolylineOptions options = new PolylineOptions();
                         options.color(getResources().getColor(R.color.colorGreenLightTrans));
+                        options.width(L.px(3));
                         options.addAll(PolyUtil.decode(path));
                         tempOptions.add(options);
                         tempPolylines.add(googleMap.addPolyline(options));
@@ -147,11 +144,7 @@ public class MapActivity {
             final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(trail.getBounds(), padding);
             try { googleMap.moveCamera(cu); }
             catch (Exception e) {
-                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                    @Override public void onMapLoaded() {
-                        googleMap.moveCamera(cu);
-                    }
-                });
+                googleMap.setOnMapLoadedCallback(() -> googleMap.moveCamera(cu));
             }
 
         }
@@ -198,11 +191,7 @@ public class MapActivity {
             final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(trails.getBounds(), padding);
             try { googleMap.moveCamera(cu); }
             catch (Exception e) {
-                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                    @Override public void onMapLoaded() {
-                        googleMap.moveCamera(cu);
-                    }
-                });
+                googleMap.setOnMapLoadedCallback(() -> googleMap.moveCamera(cu));
             }
 
         }

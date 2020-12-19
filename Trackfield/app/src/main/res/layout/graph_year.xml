@@ -9,8 +9,9 @@
 
     <com.example.trackfield.graphing.GraphView
         android:id="@+id/graphSurface_base"
-        android:layout_width="125dp"
+        android:layout_width="0dp"
         android:layout_height="64dp"
+        android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="24dp"
@@ -19,6 +20,7 @@
         android:requiresFadingEdge="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

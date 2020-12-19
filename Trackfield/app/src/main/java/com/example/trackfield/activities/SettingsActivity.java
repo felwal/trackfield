@@ -10,12 +10,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -25,10 +23,7 @@ import com.example.trackfield.database.ApiManager;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox;
-import com.example.trackfield.toolbox.Toolbox.D;
-import com.example.trackfield.toolbox.Toolbox.F;
-import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
 
@@ -37,23 +32,6 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     private Activity a;
     private LayoutInflater inflater;
     private LinearLayout ll;
-
-    private final static String TAG_LESSER_ROUTES = "lesserRoutes";
-    private final static String TAG_WEEK_HEADERS = "weekHeaders";
-    private final static String TAG_DAILY_CHARTS = "dailyChart";
-    private final static String TAG_WEEK_CHART = "weekChart";
-    private final static String TAG_WEEK_CHART_DISTANCE = "weekChartDistance";
-
-    private final static String TAG_STRAVA = "strava";
-    private final static String TAG_GOOGLE_FIT = "googleFit";
-    private final static String TAG_EXPORT = "export";
-    private final static String TAG_IMPORT = "import";
-    private final static String TAG_STRAVA_LAST = "stravaLast";
-    private final static String TAG_STRAVA_LAST_5 = "stravaLast5";
-    private final static String TAG_STRAVA_ALL = "stravaAll";
-
-    private final static String TAG_RECREATE_DB = "recreateDb";
-    private final static String TAG_BOARDING = "boarding";
 
     ////
 
@@ -98,59 +76,73 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     private void inflateViews() {
 
         inflateHeader("Display Options");
-        inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, TAG_LESSER_ROUTES);
-        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, TAG_WEEK_HEADERS);
-        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), false, TAG_DAILY_CHARTS);
-        inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, TAG_WEEK_CHART);
-        inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, TAG_WEEK_CHART_DISTANCE);
+        inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
+        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
+        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), false, Prefs::showDailyChart);
+        inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
+        inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
         inflateHeader("Look");
         inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
         inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
 
         inflateHeader("File");
-        inflateClickItem("Request last from Strava", "", false, TAG_STRAVA_LAST);
-        inflateClickItem("Request last 5 from Strava", "", false, TAG_STRAVA_LAST_5);
-        inflateClickItem("Request all from Strava", "", false, TAG_STRAVA_ALL);
-        inflateClickItem("Load from external", "", false, TAG_IMPORT);
-        inflateClickItem("Save to external", "", true, TAG_EXPORT);
+        inflateClickItem("Load from external", "", false, v -> {
+            F.importFromExternal(a);
+            L.toast("Imported", this);
+        });
+        inflateClickItem("Save to external", "", true, v -> {
+            F.exportToExternal(a);
+            L.toast("Exporterd", this);
+        });
 
         inflateHeader("Other Services");
-        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", false, TAG_STRAVA);
-        inflateClickItem("Google Fit", "Not connected", true, TAG_GOOGLE_FIT);
+        inflateClickItem("Request last from Strava", "", false, v -> {
+            requestLastActivity();
+        });
+        inflateClickItem("Request last 5 from Strava", "", false, v -> {
+            requestLastActivities(5);
+        });
+        inflateClickItem("Request all from Strava", "", false, v -> {
+            requestAllActivities();
+        });
+        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", false, v -> {
+            authorizeStrava();
+        });
+        inflateClickItem("Google Fit", "Not connected", true, v -> {});
 
         inflateHeader("Profile");
         inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new Dialogs.EditMass());
 
         final LocalDate bd = Prefs.getBirthday();
-        final View birth = inflateTextItem("Birthday", bd != null ? bd.format(Toolbox.C.FORMATTER_CAPTION) : "", true);
-        birth.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                int yearSelect, monthSelect, daySelect;
-                if (bd == null) {
-                    yearSelect = 1970;
-                    monthSelect = 0;
-                    daySelect = 1;
-                }
-                else {
-                    yearSelect = bd.getYear();
-                    monthSelect = bd.getMonthValue()-1;
-                    daySelect = bd.getDayOfMonth();
-                }
-                DatePickerDialog picker = new DatePickerDialog(a, new DatePickerDialog.OnDateSetListener() {
-                    @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
-                        ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(Toolbox.C.FORMATTER_CAPTION));
-                    }
-                }, yearSelect, monthSelect, daySelect);
-                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
-                picker.show();
+        final View birth = inflateTextView("Birthday", bd != null ? bd.format(C.FORMATTER_CAPTION) : "", true);
+        birth.setOnClickListener(v -> {
+            int yearSelect, monthSelect, daySelect;
+            if (bd == null) {
+                yearSelect = 1970;
+                monthSelect = 0;
+                daySelect = 1;
             }
+            else {
+                yearSelect = bd.getYear();
+                monthSelect = bd.getMonthValue()-1;
+                daySelect = bd.getDayOfMonth();
+            }
+            DatePickerDialog picker = new DatePickerDialog(a, (view, year, month, dayOfMonth) -> {
+                Prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
+                ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(C.FORMATTER_CAPTION));
+            }, yearSelect, monthSelect, daySelect);
+            picker.getDatePicker().setMaxDate(System.currentTimeMillis());
+            picker.show();
         });
 
         inflateHeader("Developer Options");
-        inflateClickItem("Reboard", "", false, TAG_BOARDING);
-        inflateClickItem("Recreate database", "", true, TAG_RECREATE_DB);
+        inflateClickItem("Reboard", "", false, v -> {
+            Prefs.setFirstLogin(true); BoardingActivity.startActivity(this);
+        });
+        inflateClickItem("Recreate database", "", true, v -> {
+            Helper.getWriter(this).recreate();
+        });
 
     }
 
@@ -161,45 +153,35 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         ll.addView(v);
     }
     private void inflateDialogItem(String title, String value, boolean hideDivider, final Dialogs.Base dialog) {
-        View v = inflateTextItem(title, value, hideDivider);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                dialog.show(getSupportFragmentManager(), dialog.tag());
-            }
-        });
+        View v = inflateTextView(title, value, hideDivider);
+        v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager(), dialog.tag()));
     }
-    private void inflateSwitchItem(String title, boolean checked, boolean hideDivider, final String tag) {
-        View v = inflateSwitchItem(title, hideDivider);
+    private void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
+        View v = inflateSwitchView(title, hideDivider);
         final Switch sw = v.findViewById(R.id.switch_setting);
         sw.setChecked(checked);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                sw.setChecked(!sw.isChecked());
-                itemSwitched(sw.isChecked(), tag);
-            }
+        v.setOnClickListener(view -> {
+            sw.setChecked(!sw.isChecked());
+            listener.onSwitch(sw.isChecked());
         });
     }
-    private void inflateClickItem(String title, String value, boolean hideDivider, final String tag) {
-        View v = inflateTextItem(title, value, hideDivider);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                itemClicked(tag);
-            }
-        });
+    private void inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
+        View v = inflateTextView(title, value, hideDivider);
+        v.setOnClickListener(listener);
     }
 
-    private View inflateTextItem(String title, String value, boolean hideDivider) {
+    private View inflateTextView(String title, String value, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
-        Toolbox.L.ripple(v, this);
+        L.ripple(v, this);
         ((TextView) v.findViewById(R.id.textView_title)).setText(title);
         ((TextView) v.findViewById(R.id.textView_value)).setText(value);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
         ll.addView(v);
         return v;
     }
-    private View inflateSwitchItem(String title, boolean hideDivider) {
+    private View inflateSwitchView(String title, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
-        Toolbox.L.ripple(v, this);
+        L.ripple(v, this);
         ((TextView) v.findViewById(R.id.switch_setting)).setText(title);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
         ll.addView(v);
@@ -207,27 +189,8 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     }
 
     // tools
-    private void itemSwitched(boolean checked, String tag) {
-        switch (tag) {
-            case TAG_LESSER_ROUTES: Prefs.showHiddenRoutes(checked); break;
-            case TAG_WEEK_HEADERS: Prefs.showWeekHeaders(checked); break;
-            case TAG_DAILY_CHARTS: Prefs.showDailyChart(checked); break;
-            case TAG_WEEK_CHART: Prefs.showWeekChart(checked); break;
-            case TAG_WEEK_CHART_DISTANCE: Prefs.showWeekDistance(checked); break;
-        }
-    }
-    private void itemClicked(String tag) {
-        switch (tag) {
-            case TAG_STRAVA: authorizeStrava(); break;
-            case TAG_GOOGLE_FIT: break;
-            case TAG_EXPORT: F.exportToExternal(a); Toolbox.L.toast("Exporterd", this); break;
-            case TAG_IMPORT: F.importFromExternal(a); Toolbox.L.toast("Imported", this); break;
-            case TAG_STRAVA_LAST: requestLastActivity(); break;
-            case TAG_STRAVA_LAST_5: requestLastActivities(5); break;
-            case TAG_STRAVA_ALL: requestAllActivities(); break;
-            case TAG_BOARDING: Prefs.setFirstLogin(true); BoardingActivity.startActivity(this); break;
-            case TAG_RECREATE_DB: Helper.getWriter(this).recreate(); break;
-        }
+    interface OnSwitchListener {
+        void onSwitch(boolean checked);
     }
 
     // dialog

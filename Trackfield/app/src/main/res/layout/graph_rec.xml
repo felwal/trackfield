@@ -29,6 +29,8 @@
                 android:layout_height="175dp"
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="24dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:requiresFadingEdge="horizontal" />
         </LinearLayout>
     </HorizontalScrollView>

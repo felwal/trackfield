@@ -149,6 +149,10 @@ public class GraphData {
     public float getDomainSize() {
         return dataPoints.lastKey() - dataPoints.firstKey();
     }
+    public float getPointCount() {
+        if (dataPoints == null) return 0;
+        return dataPoints.size();
+    }
 
     public boolean isEmpty() {
         return dataPoints == null || dataPoints.size() == 0;
@@ -166,7 +170,8 @@ public class GraphData {
         TreeMap<Float, Float> map = new TreeMap<>();
         for (int i = 0; i < exerlites.size(); i++) {
             float pace = exerlites.get(i).getPace();
-            if (pace != 0) map.put((float) i, pace);
+            float key = map.size() == 0 ? 0 : map.lastKey() + 1;
+            if (pace != 0) map.put(key, pace);
         }
 
         return map;

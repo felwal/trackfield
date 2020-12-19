@@ -155,6 +155,15 @@ public class RecyclerFragments {
             a.runOnUiThread(() -> L.crossfadeOut(emptyCl));
         }
 
+        protected ArrayList<RecyclerItem> getVisibleItems() {
+
+            ArrayList<RecyclerItem> visibleItems = new ArrayList<>();
+            for (RecyclerItem item : allItems) {
+                if (item.isVisible()) visibleItems.add(item);
+            }
+            return visibleItems;
+        }
+
         // calls
         public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
 
@@ -185,49 +194,16 @@ public class RecyclerFragments {
 
             items.clear();
             items.addAll(newItems);
+            //allItems.clear();
+            //allItems.addAll(items);
             diff.dispatchUpdatesTo(adapter);
 
-            /*new Thread(new Runnable() {
-                @Override public void run() {
-                    class RecyclerItemCallback extends DiffUtil.Callback {
-                        private ArrayList<RecyclerItem> oldList, newList;
-                        private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
-                            this.oldList = oldList;
-                            this.newList = newList;
-                        }
-                        @Override public int getOldListSize() {
-                            return oldList.size();
-                        }
-                        @Override public int getNewListSize() {
-                            return newList.size();
-                        }
-                        @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                            RecyclerItem oldItem = oldList.get(oldItemPosition);
-                            RecyclerItem newItem = newList.get(newItemPosition);
-                            return oldItem.sameItemAs(newItem);
-                        }
-                        @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                            RecyclerItem oldItem = oldList.get(oldItemPosition);
-                            RecyclerItem newItem = newList.get(newItemPosition);
-                            return oldItem.sameContentAs(newItem);
-                        }
-                    }
-                    final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
-
-                    items.clear();
-                    items.addAll(newItems);
-                    a.runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            diff.dispatchUpdatesTo(adapter);
-                        }
-                    });
-                }
-            }).start();*/
         }
         public void updateRecycler() {
 
             ((Threader) () -> {
-                final ArrayList<RecyclerItem> newItems = getRecyclerItems();
+                allItems = getRecyclerItems();
+                final ArrayList<RecyclerItem> newItems = getVisibleItems();//getRecyclerItems();
                 a.runOnUiThread(() -> updateRecycler(newItems));
             }).interruptAndStart();
 
@@ -330,6 +306,7 @@ public class RecyclerFragments {
             setPrefs();
             updateRecycler();
         }
+
     }
 
     public static class ExerciseRF extends Base {
@@ -351,14 +328,13 @@ public class RecyclerFragments {
             if (exerliteList.size() != 0) {
                 Sorter sorter = newSorter(sortModes, sortModesTitle);
 
-                ChartOld dailyChart;
                 if (Prefs.isDailyChartShown()) {
                     /*dailyChart = new ChartOld(D.weekDailyDistance());
                     dailyChart.setType(ChartOld.TYPE_DAILY);
                     itemList.add(dailyChart);*/
 
-                    GraphData weekData = new GraphData(Helper.getReader(a).weekDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
-                    Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false);
+                    GraphData weekData = new GraphData(Helper.getReader(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                    Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false, true);
                     weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
                     itemList.add(weekGraph);
                 }
@@ -456,14 +432,6 @@ public class RecyclerFragments {
             if (isAdded()) setEmptyPage();
             updateRecycler();
         }
-        private ArrayList<RecyclerItem> getVisibleItems() {
-
-            ArrayList<RecyclerItem> visibleItems = new ArrayList<>();
-            for (RecyclerItem item : allItems) {
-                if (item.isVisible()) visibleItems.add(item);
-            }
-            return visibleItems;
-        }
         private RecyclerItem getItemOfAll(int pos) {
             return allItems.get(pos);
         }
@@ -493,10 +461,8 @@ public class RecyclerFragments {
                 //adapter.notifyDataSetChanged();
 
                 // animate header
-                int collapsedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month_collapsed) :
-                        (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
-                int expandedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) :
-                        (int) getResources().getDimension(R.dimen.layout_header_year);
+                int collapsedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month_collapsed) : (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
+                int expandedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) : (int) getResources().getDimension(R.dimen.layout_header_year);
                 View itemView = manager.findViewByPosition(position);
                 L.animateHeight(itemView, collapsedHeight, expandedHeight, !header.isChildrenExpanded());
                 //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
@@ -510,16 +476,13 @@ public class RecyclerFragments {
             if (item instanceof Header) {
                 Header header = (Header) item;
 
-                if (header.isType(Header.Type.YEAR)) {
+                if (false && header.isType(Header.Type.YEAR)) {
                     ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
-                    ChartOld chart = new ChartOld(D.yearMonthlyDistance(Integer.valueOf(header.getTitle())), C.M);
-                    chart.setType(ChartOld.TYPE_WEEKS);
-                    newItems.add(position + 1, chart);
-
-                    //Chart chart2 = new Chart(D.yearWeeklyDistance(Integer.valueOf(header.getTitle())));
-                    //chart2.setType(Chart.TYPE_YEAR);
-                    //newItems.add(position + 1, chart2);
+                    GraphData yearData = new GraphData(Helper.getReader(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                    Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
+                    yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
+                    newItems.add(position + 1, yearGraph);
 
                     updateRecycler(newItems);
                 }
@@ -738,18 +701,17 @@ public class RecyclerFragments {
 
             if (exerliteList.size() != 0) {
 
-                //Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
                 GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER, false, false);
-                Graph graph = new Graph(data, true, false, false, true, true, false, true);
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
-                itemList.add(graph);
+                Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
+                if (graph.hasMoreThanOnePoint()) {
+                    graph.setTag(RecyclerItem.TAG_GRAPH_REC);
+                    itemList.add(graph);
+                }
 
                 itemList.add(newSorter(sortModes, sortModesTitle));
-
                 float goalPace = reader.getDistanceGoal(distance);
-                Goal goal = null;
                 if (goalPace != Distance.NO_GOAL_PACE) {
-                    goal = new Goal(goalPace, distance);
+                    Goal goal = new Goal(goalPace, distance);
                     itemList.add(goal);
                 }
                 addHeadersAndItems(itemList, exerliteList);
@@ -757,7 +719,6 @@ public class RecyclerFragments {
                 fadeOutEmpty();
             }
             else fadeInEmpty();
-
 
             return itemList;
         }
@@ -840,14 +801,15 @@ public class RecyclerFragments {
 
             if (exerliteList.size() != 0) {
 
-                //Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
                 GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER,false, false);
-                Graph graph = new Graph(data, true, false, false, true, true, false, true);
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
-                itemList.add(graph);
+                Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
+                if (graph.hasMoreThanOnePoint()) {
+                    graph.setTag(RecyclerItem.TAG_GRAPH_REC);
+                    itemList.add(graph);
+                }
 
                 itemList.add(newSorter(sortModes, sortModesTitle));
-
+                route = Helper.getReader().getRoute(route.get_id());
                 if (route.getGoalPace() != Route.NO_GOAL_PACE) {
                     Goal goal = new Goal(route.getGoalPace());
                     itemList.add(goal);
@@ -987,28 +949,37 @@ public class RecyclerFragments {
 
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-            GraphData dataGoal = new GraphData(Helper.getReader(a).monthDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
+            GraphData dataGoal = new GraphData(Helper.getReader(a).monthIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
             dataGoal.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNow = new GraphData(Helper.getReader(a).monthDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastMonth = new GraphData(Helper.getReader(a).monthDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
+            GraphData dataNow = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
+            GraphData dataLastMonth = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
             dataLastMonth.setPaint("#FF3E3F43", "#FF252528");
 
-            Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false);
+            Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false, true);
             monthGraph.addData(dataLastMonth);
             monthGraph.addData(dataGoal);
             itemList.add(monthGraph);
 
 
-            GraphData dataGoalYear = new GraphData(Helper.getReader(a).yearDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
+            GraphData dataGoalYear = new GraphData(Helper.getReader(a).yearIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
             dataGoalYear.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNowYear = new GraphData(Helper.getReader(a).yearDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastYear = new GraphData(Helper.getReader(a).yearDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
+            GraphData dataNowYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
+            GraphData dataLastYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
             dataLastYear.setPaint("#FF3E3F43", "#FF252528");
 
-            Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false);
+            Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false, true);
             yearGraph.addData(dataLastYear);
             yearGraph.addData(dataGoalYear);
             itemList.add(yearGraph);
+
+
+            GraphData dataNowYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+            GraphData dataGoalYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false, false);
+            dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
+
+            Graph yearGraph2 = new Graph(dataNowYear2, false, true, true, true, true, true, false, true);
+            yearGraph2.addData(dataGoalYear2);
+            itemList.add(yearGraph2);
 
             return itemList;
         }

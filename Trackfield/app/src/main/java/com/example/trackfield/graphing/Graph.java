@@ -1,9 +1,7 @@
 package com.example.trackfield.graphing;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 
 import androidx.annotation.NonNull;
 
@@ -20,8 +18,9 @@ public class Graph extends RecyclerItem {
 
     private boolean[] grids = new boolean[2];
     private boolean[] borders = new boolean[4];
-    private boolean widthFixed = true;
-    private boolean yInverted = false;
+    private boolean widthFixed;
+    private boolean yInverted;
+    private boolean zeroAsMin;
 
     private boolean xGrid = true;
     private boolean yBorders = true;
@@ -42,9 +41,10 @@ public class Graph extends RecyclerItem {
     ////
 
 
-    public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder, boolean bBorder, boolean widthFixed, boolean yInverted) {
+    public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder, boolean bBorder, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
         this.widthFixed = widthFixed;
         this.yInverted = yInverted;
+        this.zeroAsMin = zeroAsMin;
 
         grids[0] = xGrid;
         borders[0] = lBorder;
@@ -66,13 +66,13 @@ public class Graph extends RecyclerItem {
     private void setDomainAndRange(GraphData data) {
         start = data.getStart();
         end = data.getEnd();
-        min = data.getMin();
+        min = zeroAsMin ? 0 : data.getMin();
         max = data.getMax();
     }
     private void updateDomainAndRange(GraphData newData) {
         start = Math.min(start, newData.getStart());
         end = Math.max(end, newData.getEnd());
-        min = Math.min(min, newData.getMin());
+        min = zeroAsMin ? 0 : Math.min(min, newData.getMin());
         max = Math.max(max, newData.getMax());
     }
 
@@ -82,6 +82,12 @@ public class Graph extends RecyclerItem {
     }
     public boolean hasData() {
         return data != null && data.size() > 0;
+    }
+    public boolean hasMoreThanOnePoint() {
+        for (GraphData datum : data) {
+            if (datum.getPointCount() > 1) return true;
+        }
+        return false;
     }
 
     public float getStart() {

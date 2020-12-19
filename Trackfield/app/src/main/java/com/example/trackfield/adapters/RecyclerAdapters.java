@@ -52,6 +52,7 @@ public class RecyclerAdapters {
         static final int ITEM_GRAPH_REC = 10;
         static final int ITEM_GRAPH_MONTH = 11;
         static final int ITEM_GRAPH_WEEK = 12;
+        static final int ITEM_GRAPH_YEAR = 13;
 
         protected Context c;
         protected LayoutInflater inflater;
@@ -102,6 +103,10 @@ public class RecyclerAdapters {
             }
             else if (viewType == ITEM_GRAPH_WEEK) {
                 ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_week, parent, false);
+                return new GraphBaseVH(parent, cl);
+            }
+            else if (viewType == ITEM_GRAPH_YEAR) {
+                ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_year, parent, false);
                 return new GraphBaseVH(parent, cl);
             }
 
@@ -666,6 +671,9 @@ public class RecyclerAdapters {
             }
             else if (item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_WEEK)) {
                 return ITEM_GRAPH_WEEK;
+            }
+            else if (item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_YEAR)) {
+                return ITEM_GRAPH_YEAR;
             }
             else if (item instanceof Graph) {
                 return ITEM_GRAPH_MONTH;

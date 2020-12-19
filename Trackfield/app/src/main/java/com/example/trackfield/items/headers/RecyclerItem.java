@@ -12,6 +12,7 @@ public abstract class RecyclerItem {
     public final static String TAG_HEADER_REC = "recHeader";
     public final static String TAG_GRAPH_REC = "recGraph";
     public final static String TAG_GRAPH_WEEK = "weekGraph";
+    public final static String TAG_GRAPH_YEAR = "yearGraph";
 
     ////
 

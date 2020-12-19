@@ -315,7 +315,7 @@ public abstract class ApiManager extends AppCompatActivity {
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
-            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Runkeeper", "GPS", distance, time, null, trail);
+            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Garmin Forerunner 745", "GPS + Galileo", distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();

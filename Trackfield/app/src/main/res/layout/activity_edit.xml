@@ -167,18 +167,6 @@
                     app:layout_constraintStart_toEndOf="@+id/textView_s"
                     app:layout_constraintTop_toTopOf="@+id/textView_s" />
 
-                <Switch
-                    android:id="@+id/switch_driveDistance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layoutDirection="ltr"
-                    android:text="Drive Distance"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s"
-                    tools:visibility="gone" />
-
                 <TextView
                     android:id="@+id/textView_t"
                     android:layout_width="20dp"

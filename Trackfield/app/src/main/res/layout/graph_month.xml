@@ -15,6 +15,8 @@
         android:layout_marginEnd="24dp"
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:requiresFadingEdge="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
