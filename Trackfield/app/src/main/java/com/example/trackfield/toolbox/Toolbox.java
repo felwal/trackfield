@@ -172,12 +172,9 @@ public class Toolbox {
         public static final TemporalField DAY_OF_WEEK = WeekFields.ISO.dayOfWeek();
 
         // theme
-        public static final int COLOR_MONO = 0;
-        public static final int COLOR_GREEN = 1;
         public static final int[][] LOOKS = {
                 { R.style.AppTheme_Dark_Mono, R.style.AppTheme_Dark_Green, R.style.AppTheme_Splash},
                 { R.style.AppTheme_Light_Mono, R.style.AppTheme_Light_Green} };
-        public static final int[] MAP_STYLES = { R.string.mapstyle_night_json, R.string.mapstyle_retro_json };
 
     }
 
@@ -212,9 +209,6 @@ public class Toolbox {
                 e.printStackTrace();
             }
             return false;
-        }
-        public static MapStyleOptions getMapStyle(Context c) {
-            return new MapStyleOptions(c.getResources().getString(C.MAP_STYLES[M.heaviside(Prefs.isThemeLight())]));
         }
 
         // sort

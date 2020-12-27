@@ -5,10 +5,10 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.objects.Trails;
 import com.example.trackfield.toolbox.Prefs;
@@ -104,6 +104,7 @@ public class MapActivity {
     public static class ExerciseMap extends Base {
 
         private Trail trail;
+        private Trails routeTrails;
 
         ////
 
@@ -116,10 +117,12 @@ public class MapActivity {
         @Override protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             trail = Helper.getReader(this).getTrail(_id); //getExercise(_id).getTrail();
+            Exercise e = Helper.getReader().getExercise(_id);
+            //routeTrails = new Trails(Helper.getReader().getPolylinesByRoute(e.getRouteId(), e.getRouteVar()));
         }
         @Override public void onMapReady(GoogleMap googleMap) {
             super.onMapReady(googleMap);
-            setReadyMap(googleMap, trail, MAP_PADDING, this);
+            setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
 
             // markers
             MarkerOptions startMarker = new MarkerOptions();
@@ -130,15 +133,23 @@ public class MapActivity {
             googleMap.addMarker(endMarker);
         }
 
-        public static void setReadyMap(final GoogleMap googleMap, final Trail trail, int padding, Context c) {
+        public static void setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Context c) {
 
-            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
+            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
 
             // polyline
             PolylineOptions polyline = new PolylineOptions();
             polyline.color(c.getResources().getColor(R.color.colorGreenLight));
             polyline.addAll(trail.getLatLngs());
             googleMap.addPolyline(polyline);
+
+            // avg poly
+            /*if (trails != null) {
+                PolylineOptions routePoly = new PolylineOptions();
+                routePoly.color(c.getResources().getColor(R.color.colorWhite));
+                routePoly.addAll(trails.toAvgTrail().getLatLngs());
+                googleMap.addPolyline(routePoly);
+            }*/
 
             // focus
             final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(trail.getBounds(), padding);
@@ -176,7 +187,7 @@ public class MapActivity {
 
         public static void setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
 
-            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(D.getMapStyle(c)), c);
+            if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
             if (trails.trailCount() == 0) return;
 
             // polyline
@@ -186,6 +197,12 @@ public class MapActivity {
                 polyline.addAll(latLngs);
                 googleMap.addPolyline(polyline);
             }
+
+            // avg poly
+            //PolylineOptions polyline = new PolylineOptions();
+            //polyline.color(c.getResources().getColor(R.color.colorWhite));
+            //polyline.addAll(trails.toAvgTrail().getLatLngs());
+            //googleMap.addPolyline(polyline);
 
             // focus
             final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(trails.getBounds(), padding);

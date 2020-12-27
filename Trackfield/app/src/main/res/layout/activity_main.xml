@@ -78,17 +78,17 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_track"
                 style="@style/FabMini"
-                android:theme="@style/FabMini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
+                android:theme="@style/FabMini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_fab_track_24dp"
+                app:srcCompat="@drawable/ic_fab_strava_24dp"
                 tools:visibility="visible" />
 
             <TextView
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="Track exercise"
+                android:text="Request last"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/fab_track"
                 app:layout_constraintEnd_toStartOf="@+id/fab_track"
@@ -114,13 +114,13 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add"
                 style="@style/FabMini"
-                android:theme="@style/FabMini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
+                android:theme="@style/FabMini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

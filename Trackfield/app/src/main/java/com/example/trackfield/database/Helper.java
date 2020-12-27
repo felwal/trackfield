@@ -737,6 +737,23 @@ public class Helper {
 
             return polylines;
         }
+        public ArrayList<String> getPolylinesByRoute(int routeId, String routeVar) {
+
+            ArrayList<String> polylines = new ArrayList<>();
+
+            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + Contract.ExerciseEntry.COLUMN_ROUTEVAR + " = '" + routeVar + "' AND " +
+                    Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+
+            Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
+            while (cursor.moveToNext()) {
+                String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
+                polylines.add(polyline);
+            }
+            cursor.close();
+
+            return polylines;
+        }
         public ArrayList<String> getPolylinesByRouteExcept(int exceptRouteId) {
 
             ArrayList<String> polylines = new ArrayList<>();

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Trails {
 
+    private List<Trail> trails = new ArrayList<>();
     private List<String> polylines;
     private List<List<LatLng>> latLngs;
     private LatLngBounds bounds;
@@ -16,20 +17,22 @@ public class Trails {
     ////
 
     public Trails(ArrayList<String> polylines) {
-        this.polylines = polylines;
-        latLngs = new ArrayList<>();
+        //this.polylines = polylines;
+        //latLngs = new ArrayList<>();
         for (String s : polylines) {
-            latLngs.add(PolyUtil.decode(s));
+            //latLngs.add(PolyUtil.decode(s));
+            trails.add(new Trail(s));
         }
-        setBounds();
+        //setBounds();
     }
     public Trails(List<List<LatLng>> latLngs) {
-        polylines = new ArrayList<>();
+        //polylines = new ArrayList<>();
         for (List<LatLng> ll : latLngs) {
-            polylines.add(PolyUtil.encode(ll));
+            //polylines.add(PolyUtil.encode(ll));
+            trails.add(new Trail(ll));
         }
-        this.latLngs = latLngs;
-        setBounds();
+        //this.latLngs = latLngs;
+        //setBounds();
     }
 
     // set
@@ -65,15 +68,59 @@ public class Trails {
         return polylines;
     }
     public List<List<LatLng>> getLatLngs() {
+
+        List<List<LatLng>> latLngs = new ArrayList<>();
+        for (Trail trail : trails) latLngs.add(trail.getLatLngs());
+
         return latLngs;
     }
     public LatLngBounds getBounds() {
+
+        double north = trails.get(0).getBounds().northeast.latitude;
+        double south = trails.get(0).getBounds().southwest.latitude;
+        double east = trails.get(0).getBounds().northeast.longitude;
+        double west = trails.get(0).getBounds().southwest.longitude;
+
+        for (int i = 1; i < trails.size(); i++) {
+            double n = trails.get(i).getBounds().northeast.latitude;
+            double s = trails.get(i).getBounds().southwest.latitude;
+            double e = trails.get(i).getBounds().northeast.longitude;
+            double w = trails.get(i).getBounds().southwest.longitude;
+
+            north = Math.max(north, n);
+            south = Math.min(south, s);
+            east = Math.max(east, e);
+            west = Math.min(west, w);
+        }
+
+        LatLng northEast = new LatLng(north, east);
+        LatLng southWest = new LatLng(south, west);
+        LatLngBounds bounds = new LatLngBounds(southWest, northEast);
+
         return bounds;
+    }
+
+    public Trail toAvgTrail() {
+
+        List<LatLng> latLngs = new ArrayList<>();
+
+        float pointCount = trails.get(0).getDistance() / 15;
+        float step = 1 / pointCount;
+
+        for (float percent = 0; percent < 1 + step; percent += step) {
+            List<LatLng> coordsForAvg = new ArrayList<>();
+            for (Trail trail : trails) {
+                coordsForAvg.add(trail.at(percent));
+            }
+            latLngs.add(Trail.avg(coordsForAvg));
+        }
+
+        return new Trail(latLngs);
     }
 
     // get driven
     public int trailCount() {
-        return latLngs == null ? 0 : latLngs.size();
+        return trails == null ? 0 : trails.size();
     }
 
 }

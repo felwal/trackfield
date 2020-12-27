@@ -356,7 +356,7 @@ public abstract class ApiManager extends AppCompatActivity {
                             Prefs.setAccessToken(response.getString("access_token"));
                             Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString("expires_at"))));
 
-                            L.toast("accessToken: " + Prefs.getAccessToken(), c);
+                            //L.toast("accessToken: " + Prefs.getAccessToken(), c);
                             Log.i("response accessToken: ", Prefs.getAccessToken());
                             onTokenReady(Prefs.getAccessToken());
                         }
@@ -386,7 +386,7 @@ public abstract class ApiManager extends AppCompatActivity {
                         try {
                             Prefs.setRefreshToken(response.getString("refresh_token"));
 
-                            L.toast("refreshToken: " + Prefs.getRefreshToken(), c);
+                            //L.toast("refreshToken: " + Prefs.getRefreshToken(), c);
                             Log.i("response refreshToken: ", Prefs.getRefreshToken());
                             onTokenReady(Prefs.getRefreshToken());
                         }

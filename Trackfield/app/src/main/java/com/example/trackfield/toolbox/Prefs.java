@@ -3,14 +3,17 @@ package com.example.trackfield.toolbox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
+import com.example.trackfield.toolbox.Toolbox.*;
+
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -354,6 +357,13 @@ public class Prefs {
     }
     public static boolean isRefreshTokenCurrent() {
         return refreshToken != null && !refreshToken.equals("");
+    }
+
+    public static String getMapId(Context c) {
+        return c.getResources().getString(theme ? R.string.map_id_light : R.string.map_id_dark);
+    }
+    public static MapStyleOptions getMapStyle(Context c) {
+        return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_retro_json : R.string.mapstyle_mono_json));// C.MAP_STYLES[M.heaviside(theme)]));
     }
 
 }

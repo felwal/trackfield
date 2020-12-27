@@ -79,21 +79,21 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
         inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), false, Prefs::showDailyChart);
-        inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
-        inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
+        //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
+        //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
         inflateHeader("Look");
         inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
         inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
 
         inflateHeader("File");
-        inflateClickItem("Load from external", "", false, v -> {
-            F.importFromExternal(a);
-            L.toast("Imported", this);
-        });
-        inflateClickItem("Save to external", "", true, v -> {
+        inflateClickItem("Save to external", "", false, v -> {
             F.exportToExternal(a);
             L.toast("Exporterd", this);
+        });
+        inflateClickItem("Load from external", "", true, v -> {
+            F.importFromExternal(a);
+            L.toast("Imported", this);
         });
 
         inflateHeader("Other Services");
@@ -109,7 +109,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", false, v -> {
             authorizeStrava();
         });
-        inflateClickItem("Google Fit", "Not connected", true, v -> {});
+        //inflateClickItem("Google Fit", "Not connected", true, v -> {});
 
         inflateHeader("Profile");
         inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new Dialogs.EditMass());

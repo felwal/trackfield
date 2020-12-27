@@ -312,7 +312,7 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
 
         if (gMap == null) {
             gMap = googleMap;
-            MapActivity.ExerciseMap.setReadyMap(gMap, exercise.getTrail(), MAP_PADDING, this);
+            MapActivity.ExerciseMap.setReadyMap(gMap, exercise.getTrail(), null, MAP_PADDING, this);
             gMap.getUiSettings().setAllGesturesEnabled(false);
             gMap.setMaxZoomPreference(MAP_MAX_ZOOM);
 

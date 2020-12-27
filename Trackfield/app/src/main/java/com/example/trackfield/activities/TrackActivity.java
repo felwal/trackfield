@@ -200,7 +200,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override public void onMapReady(GoogleMap googleMap) {
 
         gMap = googleMap;
-        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(D.getMapStyle(this)), this);
+        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
         gMap.getUiSettings().setAllGesturesEnabled(false);
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

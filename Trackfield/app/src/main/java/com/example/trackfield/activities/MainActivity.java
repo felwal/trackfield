@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.database.ApiManager;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.DevFragment;
 import com.example.trackfield.fragments.ExercisesFragment;
@@ -30,7 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
 
     private Helper.Writer writer;
     private MainFragment fragment;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
             //w.close();
         }
 
+        connectAPIs();
         setBottomNavbar();
         setToolbar();
         setFabs();
@@ -95,33 +97,23 @@ public class MainActivity extends AppCompatActivity implements Dialogs.DecimalDi
         trackCl = findViewById(R.id.constraintLayout_trackFab);
         overlayView = findViewById(R.id.view_overlay);
 
+        // hide
+        trackCl.setVisibility(View.GONE);
+        addCl.setVisibility(View.GONE);
         closeFabMenu();
 
         // click
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (isFabMenuOpen) closeFabMenu();
-                else openFabMenu();
-            }
+        fab.setOnClickListener(v -> {
+            if (isFabMenuOpen) closeFabMenu();
+            else openFabMenu();
         });
 
-        addFab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                EditActivity.startActivity(MainActivity.this);
-            }
-        });
+        addFab.setOnClickListener(view -> EditActivity.startActivity(MainActivity.this));
 
-        trackFab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                TrackActivity.startActivity(MainActivity.this);
-            }
-        });
+        //trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
+        trackFab.setOnClickListener(view -> requestLastActivity());
 
-        overlayView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                closeFabMenu();
-            }
-        });
+        overlayView.setOnClickListener(view -> closeFabMenu());
 
     }
     private void openFabMenu() {
