@@ -1,13 +1,20 @@
 package com.example.trackfield.activities;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.fragments.dialogs.PeekSheet;
+import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.objects.Trails;
@@ -18,7 +25,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -26,11 +35,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MapActivity {
 
-    public static abstract class Base extends FragmentActivity implements OnMapReadyCallback {
+    public static abstract class Base extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener{
 
         protected int _id;
 
@@ -51,6 +61,7 @@ public class MapActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_map);
             L.transStatusBar(getWindow());
+            setToolbar();
 
             Intent intent = getIntent();
             if (intent == null) finish();
@@ -63,31 +74,34 @@ public class MapActivity {
         @Override public void onMapReady(GoogleMap googleMap) {
             this.googleMap = googleMap;
             googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
-            mapOptionsFab();
         }
 
         // tools
-        private void mapOptionsFab() {
-
-            FloatingActionButton fab = findViewById(R.id.fab_mapOptions);
-            fab.setOnClickListener(view -> togglePolylines());
-
-        }
         private void togglePolylines() {
 
             if (!tempShown) {
-                if (tempOptions.size() == 0) {
-                    for (String path : getRestOfPolylines()) {
-                        PolylineOptions options = new PolylineOptions();
-                        options.color(getResources().getColor(R.color.colorGreenLightTrans));
-                        options.width(L.px(3));
-                        options.addAll(PolyUtil.decode(path));
-                        tempOptions.add(options);
+                if (tempOptions.size() != 0) {
+                    tempOptions.clear(); // temp
+                    for (PolylineOptions options : tempOptions) {
                         tempPolylines.add(googleMap.addPolyline(options));
                     }
                 }
-                else for (PolylineOptions options : tempOptions) {
-                    tempPolylines.add(googleMap.addPolyline(options));
+                if (tempOptions.size() == 0) {
+                    for (HashMap.Entry<Integer, String> entry : getRestOfPolylines().entrySet()) {
+
+                        // options
+                        PolylineOptions options = new PolylineOptions();
+                        options.color(getResources().getColor(R.color.colorGreenLightTrans));
+                        options.width(L.px(3));
+                        options.addAll(PolyUtil.decode(entry.getValue()));
+                        tempOptions.add(options);
+
+                        // poly
+                        Polyline polyline = googleMap.addPolyline(options);
+                        polyline.setTag(entry.getKey());
+                        polyline.setClickable(true);
+                        tempPolylines.add(polyline);
+                    }
                 }
             }
             else {
@@ -97,7 +111,45 @@ public class MapActivity {
 
             tempShown = !tempShown;
         }
-        protected abstract ArrayList<String> getRestOfPolylines();
+        protected abstract HashMap<Integer, String> getRestOfPolylines();
+
+        private void setToolbar() {
+            final Toolbar tb = findViewById(R.id.toolbar_map);
+            setSupportActionBar(tb);
+            ActionBar ab = getSupportActionBar();
+            ab.setTitle("");//getResources().getString(R.string.activity_maps));
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+        @Override public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_toolbar_map, menu);
+            return true;
+        }
+        @Override public boolean onOptionsItemSelected(MenuItem item) {
+
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    finish();
+                    return true;
+
+                case R.id.action_maptype:
+                    googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID : GoogleMap.MAP_TYPE_NORMAL);
+                    return true;
+
+                case R.id.action_heatmap:
+                    togglePolylines();
+                    return true;
+
+                case R.id.action_filter:
+                    return true;
+
+                default: return super.onOptionsItemSelected(item);
+            }
+        }
+
+        @Override public void onPolylineClick(Polyline polyline) {
+            int id = (int) polyline.getTag();
+            PeekSheet.newInstance(id, getSupportFragmentManager());
+        }
 
     }
 
@@ -122,26 +174,29 @@ public class MapActivity {
         }
         @Override public void onMapReady(GoogleMap googleMap) {
             super.onMapReady(googleMap);
-            setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
+            Polyline polyline = setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
+            googleMap.setOnPolylineClickListener(this);
 
             // markers
             MarkerOptions startMarker = new MarkerOptions();
-            MarkerOptions endMarker = new MarkerOptions();
+            MarkerOptions endMarker = new MarkerOptions();//.icon(BitmapDescriptorFactory.fromResource((R.drawable.ic_map_marker_24dp)));
             startMarker.position(trail.getStart());
             endMarker.position(trail.getEnd());
-            googleMap.addMarker(startMarker);
-            googleMap.addMarker(endMarker);
+            //googleMap.addMarker(startMarker);
+            //googleMap.addMarker(endMarker);
+
+            //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
 
-        public static void setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Context c) {
+        public static Polyline setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Context c) {
 
             if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
 
             // polyline
-            PolylineOptions polyline = new PolylineOptions();
-            polyline.color(c.getResources().getColor(R.color.colorGreenLight));
-            polyline.addAll(trail.getLatLngs());
-            googleMap.addPolyline(polyline);
+            PolylineOptions options = new PolylineOptions();
+            options.color(c.getResources().getColor(R.color.colorGreenLight));
+            options.addAll(trail.getLatLngs());
+            Polyline polyline = googleMap.addPolyline(options);
 
             // avg poly
             /*if (trails != null) {
@@ -158,8 +213,9 @@ public class MapActivity {
                 googleMap.setOnMapLoadedCallback(() -> googleMap.moveCamera(cu));
             }
 
+            return polyline;
         }
-        @Override protected ArrayList<String> getRestOfPolylines() {
+        @Override protected HashMap<Integer, String> getRestOfPolylines() {
             return Helper.getReader(this).getPolylines(_id);
         }
 
@@ -183,6 +239,7 @@ public class MapActivity {
         @Override public void onMapReady(GoogleMap googleMap) {
             super.onMapReady(googleMap);
             setReadyMap(googleMap, trails, MAP_PADDING, this);
+            googleMap.setOnPolylineClickListener(this);
         }
 
         public static void setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
@@ -212,7 +269,7 @@ public class MapActivity {
             }
 
         }
-        @Override protected ArrayList<String> getRestOfPolylines() {
+        @Override protected HashMap<Integer, String> getRestOfPolylines() {
             return Helper.getReader(this).getPolylinesByRouteExcept(_id);
         }
 

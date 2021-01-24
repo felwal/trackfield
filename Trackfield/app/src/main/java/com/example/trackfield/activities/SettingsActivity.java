@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -173,7 +172,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
     private View inflateTextView(String title, String value, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
         L.ripple(v, this);
-        ((TextView) v.findViewById(R.id.textView_title)).setText(title);
+        ((TextView) v.findViewById(R.id.textView_route)).setText(title);
         ((TextView) v.findViewById(R.id.textView_value)).setText(value);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
         ll.addView(v);

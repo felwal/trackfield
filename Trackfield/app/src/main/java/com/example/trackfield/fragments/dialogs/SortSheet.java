@@ -19,7 +19,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class SortDialog extends BottomSheetDialogFragment {
+public class SortSheet extends BottomSheetDialogFragment {
 
     private Activity a;
     private View view;
@@ -40,8 +40,8 @@ public class SortDialog extends BottomSheetDialogFragment {
 
     ////
 
-    public static SortDialog newInstance(C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
-        SortDialog instance = new SortDialog();
+    public static SortSheet newInstance(C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+        SortSheet instance = new SortSheet();
         Bundle bundle = new Bundle();
         bundle.putIntArray(BUNDLE_SORTMODES, C.SortMode.toInts(sortModes));
         bundle.putInt(BUNDLE_SORTMODE, C.SortMode.toInt(sortMode));
@@ -68,7 +68,7 @@ public class SortDialog extends BottomSheetDialogFragment {
 
     }
     @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialog_bottomsheet, container, false);
+        view = inflater.inflate(R.layout.dialogsheet_sort, container, false);
 
         sortClick();
 

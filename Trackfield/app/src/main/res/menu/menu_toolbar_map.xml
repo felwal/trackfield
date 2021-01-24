@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_filter"
+        android:title="@string/action_filter"
+        android:icon="@drawable/ic_filter_24dp"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_heatmap"
+        android:title="Heatmap"
+        android:icon="@drawable/ic_heatmap_24dp"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_maptype"
+        android:title="Map Type"
+        android:icon="@drawable/ic_map_type_24dp"
+        app:showAsAction="always"/>
+
+</menu>

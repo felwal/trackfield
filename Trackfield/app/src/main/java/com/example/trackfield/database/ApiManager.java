@@ -324,7 +324,7 @@ public abstract class ApiManager extends AppCompatActivity {
         }
     }
     private void mergeWithExisting(Exercise fromStrava) {
-        if (fromStrava == null || !fromStrava.hasTrail()) return;
+        if (fromStrava == null) return;
 
         ArrayList<Exercise> matching = Helper.getReader(a).getExercisesForMerge(fromStrava.getDateTime(), fromStrava.getType());
 

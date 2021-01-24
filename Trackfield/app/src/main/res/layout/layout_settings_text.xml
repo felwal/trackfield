@@ -6,7 +6,7 @@
     android:layout_height="@dimen/layout_settings_item_height">
 
     <TextView
-        android:id="@+id/textView_title"
+        android:id="@+id/textView_route"
         style="@style/HeadingSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

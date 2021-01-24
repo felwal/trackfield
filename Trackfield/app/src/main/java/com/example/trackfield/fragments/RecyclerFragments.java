@@ -21,11 +21,10 @@ import com.example.trackfield.activities.RecActivity;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.RecyclerAdapters;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.dialogs.SortDialog;
+import com.example.trackfield.fragments.dialogs.SortSheet;
 import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
-import com.example.trackfield.items.headers.archive.ChartOld;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.Exerlite;
@@ -43,7 +42,7 @@ import java.util.ArrayList;
 
 public class RecyclerFragments {
 
-    public static abstract class Base extends Fragment implements RecyclerAdapters.Base.ItemClickListener, SortDialog.DismissListener {
+    public static abstract class Base extends Fragment implements RecyclerAdapters.Base.ItemClickListener, SortSheet.DismissListener {
 
         protected Activity a;
         protected static Thread bgThread;
@@ -269,7 +268,7 @@ public class RecyclerFragments {
 
             getPrefs();
             //final BottomSheetDialog sheet = new BottomSheetDialog(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst, this);
-            final SortDialog sheet = SortDialog.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+            final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
             sheet.setDismissListener(this);
 
             sheet.show(getChildFragmentManager(), sheet.getTag());

@@ -705,21 +705,24 @@ public class Helper {
             return goalPace;
         }
 
-        public ArrayList<String> getPolylines(int exceptId) {
+        public HashMap<Integer, String> getPolylines(int exceptId) {
 
+            HashMap<Integer, String> polys = new HashMap<>();
             ArrayList<String> polylines = new ArrayList<>();
 
-            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String[] columns = { Contract.ExerciseEntry._ID, Contract.ExerciseEntry.COLUMN_POLYLINE };
             String selection = Contract.ExerciseEntry._ID + " != " + exceptId + " AND " + Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
             Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
             while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry._ID));
                 String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
                 polylines.add(polyline);
+                polys.put(_id, polyline);
             }
             cursor.close();
 
-            return polylines;
+            return polys;
         }
         public ArrayList<String> getPolylinesByRoute(int routeId) {
 
@@ -754,17 +757,18 @@ public class Helper {
 
             return polylines;
         }
-        public ArrayList<String> getPolylinesByRouteExcept(int exceptRouteId) {
+        public HashMap<Integer, String> getPolylinesByRouteExcept(int exceptRouteId) {
 
-            ArrayList<String> polylines = new ArrayList<>();
+            HashMap<Integer, String> polylines = new HashMap<>();
 
-            String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
+            String[] columns = { Contract.ExerciseEntry._ID, Contract.ExerciseEntry.COLUMN_POLYLINE };
             String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " != " + exceptRouteId + " AND " + Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
             Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
             while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry._ID));
                 String polyline = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_POLYLINE));
-                polylines.add(polyline);
+                polylines.put(_id, polyline);
             }
             cursor.close();
 
@@ -1157,7 +1161,7 @@ public class Helper {
             TreeMap<Float, Float> points = new TreeMap<>();
 
             for (int m = 1; m <= 12; m++) {
-                points.put((float) m, 83_000f);
+                points.put((float) m, 100_000f);
             }
 
             return points;
@@ -1221,7 +1225,7 @@ public class Helper {
             TreeMap<Float, Float> points = new TreeMap<>();
 
             points.put(0f, 0f);
-            points.put((float) includingDate.getMonth().length(includingDate.isLeapYear()), 126_000f);
+            points.put((float) includingDate.getMonth().length(includingDate.isLeapYear()), 100_000f);
 
             return points;
         }
@@ -1230,7 +1234,7 @@ public class Helper {
             TreeMap<Float, Float> points = new TreeMap<>();
 
             points.put(0f, 0f);
-            points.put(53f/*(float) includingDate.lengthOfYear()*/, 1_000_000f);
+            points.put(53f/*(float) includingDate.lengthOfYear()*/, 1_200_000f);
 
             return points;
         }

@@ -73,8 +73,8 @@ public final class Contract {
                 case TIME: return COLUMN_TIME;
                 case PACE: return COLUMN_TIME;
                 case NAME: return COLUMN_ROUTE;
+                default: return COLUMN_DATE;
             }
-            return "";
         }
         public static String orderBy(C.SortMode sortMode, boolean smallestFirst) {
             return getColumn(sortMode) + sortOrder(smallestFirst);

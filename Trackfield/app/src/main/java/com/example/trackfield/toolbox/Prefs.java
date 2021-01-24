@@ -351,9 +351,9 @@ public class Prefs {
         return color == COLOR_MONO;
     }
     public static boolean isAccessTokenCurrent() {
-        boolean b = accessTokenExpiration != null;
+        boolean notNull = accessTokenExpiration != null && accessTokenExpiration.toLocalDate() != null && accessTokenExpiration.toLocalTime() != null;
         LocalDateTime now = LocalDateTime.now();
-        return b && now.isBefore(accessTokenExpiration);
+        return notNull && now.isBefore(accessTokenExpiration);
     }
     public static boolean isRefreshTokenCurrent() {
         return refreshToken != null && !refreshToken.equals("");
