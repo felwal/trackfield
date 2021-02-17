@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SortSheet extends BottomSheetDialogFragment {
@@ -119,7 +121,7 @@ public class SortSheet extends BottomSheetDialogFragment {
                 @Override public void onClick(View v) {
                     if (sortMode == sortModes[RL]) { smallestFirst = !smallestFirst; }
                     else { sortMode = sortModes[RL]; smallestFirst = smallestFirsts[RL]; }
-                    listener.onDismiss(sortMode, smallestFirst);
+                    listener.onSortSheetDismiss(sortMode, smallestFirst);
                     dismiss();
                 }
             });
@@ -133,7 +135,7 @@ public class SortSheet extends BottomSheetDialogFragment {
         listener = dismissListener;
     }
     public interface DismissListener {
-        void onDismiss(C.SortMode sortMode, boolean smallestFirst);
+        void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst);
     }
 
 }

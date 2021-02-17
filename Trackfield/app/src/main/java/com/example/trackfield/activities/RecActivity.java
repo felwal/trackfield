@@ -19,8 +19,8 @@ import com.example.trackfield.fragments.RecyclerFragments;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.D;
-import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.M;
 
 import java.util.ArrayList;
 

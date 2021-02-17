@@ -26,10 +26,10 @@ import com.example.trackfield.items.IntervalItem;
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.items.headers.Sorter;
-import com.example.trackfield.toolbox.Toolbox;
-import com.example.trackfield.toolbox.Toolbox.C;
-import com.example.trackfield.toolbox.Toolbox.D;
-import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.graphing.GraphView;
 
 import java.time.LocalDate;
@@ -272,7 +272,7 @@ public class RecyclerAdapters {
                 //float[] y = c.getY();
                 String[] xLabel = chart.getxLabel();
                 float[] yRel = chart.getyRel();
-                int maxHeight = Toolbox.L.px(42);
+                int maxHeight = L.px(42);
 
                 for (int i = 0; i < chart.length(); i++) {
                     RecyclerAdapters.ExerciseRA.ChartVH h = (RecyclerAdapters.ExerciseRA.ChartVH) viewHolder;
@@ -280,7 +280,7 @@ public class RecyclerAdapters {
                     //h.distances[i].setText(Maths.prefix(y[i], 1) + "m");
                     ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
+                    if (params.height == 0) { params.height = L.px(1); }
                     h.bars[i].setLayoutParams(params);
 
                 }
@@ -290,7 +290,7 @@ public class RecyclerAdapters {
 
                 final ChartOld chart = (ChartOld) getItem(pos);
                 float[] yRel = chart.getyRel();
-                int maxHeight = Toolbox.L.px(22);
+                int maxHeight = L.px(22);
 
                 for (int i = 0; i < chart.length(); i++) {
                     RecyclerAdapters.ExerciseRA.DailyChartVH h = (RecyclerAdapters.ExerciseRA.DailyChartVH) viewHolder;
@@ -298,12 +298,12 @@ public class RecyclerAdapters {
                     // height
                     ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
+                    if (params.height == 0) { params.height = L.px(1); }
                     h.bars[i].setLayoutParams(params);
 
                     // color
                     //if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                    if (i <= now.get(C.DAY_OF_WEEK)-1)  { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
+                    if (i <= now.get(C.DAY_OF_WEEK)-1)  { h.bars[i].setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
                 }
 
             }
@@ -311,7 +311,7 @@ public class RecyclerAdapters {
 
                 final ChartOld chart = (ChartOld) getItem(pos);
                 float[] yRel = chart.getyRel();
-                int maxHeight = Toolbox.L.px(22); //22
+                int maxHeight = L.px(22); //22
                 //char[] labels = chart.getxLabelC();
 
                 RecyclerAdapters.ExerciseRA.YearChartVH h = (RecyclerAdapters.ExerciseRA.YearChartVH) viewHolder;
@@ -327,12 +327,12 @@ public class RecyclerAdapters {
                     // height
                     ViewGroup.LayoutParams params = bar.getLayoutParams();
                     params.height = (int) (maxHeight * yRel[i]);
-                    if (params.height == 0) { params.height = Toolbox.L.px(1); }
+                    if (params.height == 0) { params.height = L.px(1); }
                     bar.setLayoutParams(params);
 
                     // color
-                    if (i == now.get(C.WEEK_OF_YEAR)-1)      { bar.setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                    else if (i < now.get(C.WEEK_OF_YEAR)-1)  { bar.setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
+                    if (i == now.get(C.WEEK_OF_YEAR)-1)      { bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
+                    else if (i < now.get(C.WEEK_OF_YEAR)-1)  { bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
                 }
 
             }
@@ -712,6 +712,8 @@ public class RecyclerAdapters {
 
     }
 
+    //
+
     public static class ExerciseRA extends Base {
 
         public ExerciseRA(ArrayList<RecyclerItem> itemList, Context c) {
@@ -800,6 +802,8 @@ public class RecyclerAdapters {
 
     }
 
+    //
+
     public static class DistanceRA extends Base {
 
         public DistanceRA(ArrayList<RecyclerItem> itemList, Context c) {
@@ -820,6 +824,8 @@ public class RecyclerAdapters {
         }
 
     }
+
+
     public static class RouteRA extends Base {
 
         public RouteRA(ArrayList<RecyclerItem> itemList, Context c) {
@@ -835,6 +841,8 @@ public class RecyclerAdapters {
         }
 
     }
+
+
     public static class IntervalRA extends Base {
 
         public IntervalRA(ArrayList<RecyclerItem> itemList, Context c) {
@@ -850,6 +858,8 @@ public class RecyclerAdapters {
         }
 
     }
+
+    //
 
     public static class DistanceExerciseRA extends Base {
 
@@ -874,6 +884,8 @@ public class RecyclerAdapters {
         }
 
     }
+
+
     public static class RouteExerciseRA extends Base {
 
         public RouteExerciseRA(ArrayList<RecyclerItem> itemList, int originId, Context c) {
@@ -898,6 +910,8 @@ public class RecyclerAdapters {
         }
 
     }
+
+
     public static class IntervalExerciseRA extends Base {
 
         public IntervalExerciseRA(ArrayList<RecyclerItem> itemList, int originId, Context c) {

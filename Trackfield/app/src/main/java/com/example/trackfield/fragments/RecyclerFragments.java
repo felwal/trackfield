@@ -22,6 +22,10 @@ import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.RecyclerAdapters;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.SortSheet;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
@@ -35,7 +39,6 @@ import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.items.headers.Sorter;
-import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -299,7 +302,7 @@ public class RecyclerFragments {
         }
 
         @Override public void onItemLongClick(View view, int position, int itemType) {}
-        @Override public void onDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        @Override public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
             this.sortMode = sortMode;
             this.smallestFirst = smallestFirst;
             setPrefs();
@@ -307,6 +310,8 @@ public class RecyclerFragments {
         }
 
     }
+
+    //
 
     public static class ExerciseRF extends Base {
 
@@ -495,6 +500,8 @@ public class RecyclerFragments {
 
     }
 
+    //
+
     public static class DistanceRF extends Base {
 
         private final String[] sortModesTitle = { "Distance", "Amount", "Best time", "Best pace" };
@@ -550,6 +557,8 @@ public class RecyclerFragments {
         }
 
     }
+
+
     public static class RouteRF extends Base {
 
         private final String[] sortModesTitle = { "Recent", "Name", "Amount", "Avg distance", "Best pace" };
@@ -603,6 +612,8 @@ public class RecyclerFragments {
         }
 
     }
+
+
     public static class IntervalRF extends Base {
 
         private final String[] sortModesTitle = { "Recent", "Amount" };
@@ -656,6 +667,51 @@ public class RecyclerFragments {
         }
 
     }
+
+
+    public static class StatsRF extends RouteRF {
+
+        @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+
+            ArrayList<RecyclerItem> itemList = new ArrayList<>();
+
+            GraphData dataGoal = new GraphData(Helper.getReader(a).monthIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
+            dataGoal.setPaint("#003E3F43", "#FF252528");
+            GraphData dataNow = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
+            GraphData dataLastMonth = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
+            dataLastMonth.setPaint("#FF3E3F43", "#FF252528");
+
+            Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false, true);
+            monthGraph.addData(dataLastMonth);
+            monthGraph.addData(dataGoal);
+            itemList.add(monthGraph);
+
+
+            GraphData dataGoalYear = new GraphData(Helper.getReader(a).yearIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
+            dataGoalYear.setPaint("#003E3F43", "#FF252528");
+            GraphData dataNowYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
+            GraphData dataLastYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
+            dataLastYear.setPaint("#FF3E3F43", "#FF252528");
+
+            Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false, true);
+            yearGraph.addData(dataLastYear);
+            yearGraph.addData(dataGoalYear);
+            itemList.add(yearGraph);
+
+
+            GraphData dataNowYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+            GraphData dataGoalYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false, false);
+            dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
+
+            Graph yearGraph2 = new Graph(dataNowYear2, false, true, true, true, true, true, false, true);
+            yearGraph2.addData(dataGoalYear2);
+            itemList.add(yearGraph2);
+
+            return itemList;
+        }
+    }
+
+    //
 
     public static class DistanceExerciseRF extends Base {
 
@@ -751,6 +807,8 @@ public class RecyclerFragments {
         }
 
     }
+
+
     public static class RouteExerciseRF extends Base {
 
         private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
@@ -851,6 +909,8 @@ public class RecyclerFragments {
         }
 
     }
+
+
     public static class IntervalExerciseRF extends Base {
 
         private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
@@ -940,48 +1000,6 @@ public class RecyclerFragments {
             super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
         }
 
-    }
-
-    public static class DevRF extends RouteRF {
-
-        @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
-
-            ArrayList<RecyclerItem> itemList = new ArrayList<>();
-
-            GraphData dataGoal = new GraphData(Helper.getReader(a).monthIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-            dataGoal.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNow = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastMonth = new GraphData(Helper.getReader(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
-            dataLastMonth.setPaint("#FF3E3F43", "#FF252528");
-
-            Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false, true);
-            monthGraph.addData(dataLastMonth);
-            monthGraph.addData(dataGoal);
-            itemList.add(monthGraph);
-
-
-            GraphData dataGoalYear = new GraphData(Helper.getReader(a).yearIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-            dataGoalYear.setPaint("#003E3F43", "#FF252528");
-            GraphData dataNowYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-            GraphData dataLastYear = new GraphData(Helper.getReader(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
-            dataLastYear.setPaint("#FF3E3F43", "#FF252528");
-
-            Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false, true);
-            yearGraph.addData(dataLastYear);
-            yearGraph.addData(dataGoalYear);
-            itemList.add(yearGraph);
-
-
-            GraphData dataNowYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
-            GraphData dataGoalYear2 = new GraphData(Helper.getReader(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false, false);
-            dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
-
-            Graph yearGraph2 = new Graph(dataNowYear2, false, true, true, true, true, true, false, true);
-            yearGraph2.addData(dataGoalYear2);
-            itemList.add(yearGraph2);
-
-            return itemList;
-        }
     }
 
 }

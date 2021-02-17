@@ -15,8 +15,11 @@ import com.example.trackfield.objects.Route;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
@@ -130,7 +133,7 @@ public class Helper {
         }
         public boolean addExercise(Exercise e, Context c) {
 
-            e.setRouteId((int) addRoute(new Route(e.getRouteId(), e.getRoute()), c));
+            e.setRouteId((int) addRouteIfNotAdded(new Route(e.getRouteId(), e.getRoute()), c));
 
             final ContentValues cv = fillExerciseContentValues(e);
 
@@ -156,6 +159,12 @@ public class Helper {
         }
 
         // new rec
+        public boolean addDistances(ArrayList<Distance> distances) {
+
+            boolean success = true;
+            for (Distance d : distances) { success &= addDistance(d); }
+            return success;
+        }
         public boolean addDistance(Distance distance) {
 
             final ContentValues cv = fillDistanceContentValues(distance);
@@ -183,7 +192,10 @@ public class Helper {
             return success(result);
         }
 
-        public long addRoute(Route route, Context c) {
+        public void addRoutes(ArrayList<Route> routes, Context c) {
+            for (Route r : routes) addRouteIfNotAdded(r, c);
+        }
+        public long addRouteIfNotAdded(Route route, Context c) {
 
             Reader reader = new Reader(c);
             Route existingRoute = reader.getRoute(route.getName());
@@ -633,6 +645,21 @@ public class Helper {
             cursor.close();
             return routes.size() > 0 ? routes.get(0) : new Route();
         }
+        public String getRouteName(int _id) {
+
+            String[] columns = { Contract.RouteEntry.COLUMN_NAME };
+            String selection = Contract.RouteEntry._ID + " = ?";
+            String[] selectionArgs = { Integer.toString(_id) };
+
+            Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+            String name = "";
+            while (cursor.moveToNext()) {
+                name = cursor.getString(cursor.getColumnIndexOrThrow(Contract.RouteEntry.COLUMN_NAME));
+            }
+
+            cursor.close();
+            return name;
+        }
         public int getRouteId(String name) {
 
             String[] columns = { Contract.RouteEntry._ID };
@@ -641,7 +668,7 @@ public class Helper {
 
             Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
             int _id = -1;
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.RouteEntry._ID));
             }
 
@@ -650,22 +677,23 @@ public class Helper {
         }
         public int getRouteIdOrCreate(String name, Context c) {
 
-            String[] columns = { Contract.RouteEntry._ID };
+            /*String[] columns = { Contract.RouteEntry._ID };
             String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
             String[] selectionArgs = { name };
 
             Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
             int _id = -1;
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.RouteEntry._ID));
-            }
+            }*/
+            int _id = getRouteId(name);
             if (_id == -1) {
                 Writer writer = new Writer(c);
-                _id = (int) writer.addRoute(new Route(-1, name), c);
+                _id = (int) writer.addRouteIfNotAdded(new Route(-1, name), c);
                 writer.close();
             }
 
-            cursor.close();
+            //cursor.close();
             return _id;
         }
 
@@ -1210,7 +1238,7 @@ public class Helper {
 
             float lastWeek = 0;
             for (Exerlite e : exerlites) {
-                float week = e.getWeek();
+                float week = (float) Math.ceil(e.getDate().getDayOfYear() / 7f);//e.getWeek();
                 if (week != lastWeek) {
                     points.put(lastWeek, totalDistance);
                     lastWeek = week;

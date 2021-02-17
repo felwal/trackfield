@@ -2,7 +2,7 @@ package com.example.trackfield.objects;
 
 import android.location.Location;
 
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.example.trackfield.toolbox.M;
 
 @Deprecated public class Coordinate extends Location {
 

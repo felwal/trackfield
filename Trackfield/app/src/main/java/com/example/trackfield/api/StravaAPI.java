@@ -1,4 +1,4 @@
-package com.example.trackfield.database;
+package com.example.trackfield.api;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -14,49 +13,28 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.Bucket;
-import com.google.android.gms.fitness.data.DataPoint;
-import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Session;
-import com.google.android.gms.fitness.request.SessionReadRequest;
-import com.google.android.gms.fitness.result.SessionReadResponse;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import static java.text.DateFormat.getTimeInstance;
 
-public abstract class ApiManager extends AppCompatActivity {
+public abstract class StravaAPI extends AppCompatActivity {
 
     private Activity a;
-
-    // google
-    private static FitnessOptions fitnessOptions;
-    private SimpleDateFormat formatterStart = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.ENGLISH);
-    private SimpleDateFormat formatterEnd = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
 
     // strava
     private static RequestQueue queue;
@@ -68,25 +46,15 @@ public abstract class ApiManager extends AppCompatActivity {
     private static final int PER_PAGE = 200;
 
     // request codes
-    private static final int REQUEST_CODE_PERMISSIONS_GOOGLE_FIT = 1;
     private static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
 
     ////
 
-    protected void connectAPIs() {
+    protected void connectAPI() {
 
         a = this;
         queue = Volley.newRequestQueue(this);
 
-        // Google Fit
-        /*fitnessOptions = FitnessOptions.builder()
-                .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
-                .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                //.addDataType(DataType.AGGREGATE_ACTIVITY_SUMMARY, FitnessOptions.ACCESS_READ)
-                .build();
-        if (hasPermissionsElseRequest()) accessGoogleFit();*/
-
-        // Strava
         //accessStrava();
 
     }
@@ -96,113 +64,9 @@ public abstract class ApiManager extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) accessGoogleFit();
-            else if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authorizeStrava();
+            if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authorizeStrava();
         }
     }
-
-    //
-
-    // Google Fit
-
-    private void accessGoogleFit() {
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.WEEK_OF_YEAR, -4);
-
-        long startTime = cal.getTimeInMillis();
-
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
-        SessionReadRequest readRequest = new SessionReadRequest.Builder()
-                .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
-                .readSessionsFromAllApps()
-                //.read(DataType.TYPE_LOCATION_SAMPLE)
-                //.aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-                //.aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
-                //.bucketBySession(60, TimeUnit.SECONDS)
-                .build();
-
-        Fitness.getSessionsClient(this, account).readSession(readRequest)
-                .addOnSuccessListener(new OnSuccessListener<SessionReadResponse>() {
-                    @Override public void onSuccess(SessionReadResponse response) {
-                        for (Session session : response.getSessions()) dumpSession(session);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override public void onFailure(@NonNull Exception e) {
-                        //L.toast("There was an error reading data from Google Fit:", a);
-                        L.handleError(e, a);
-                    }
-                });
-
-    }
-
-    private void dumpSession(Session s) {
-
-        Calendar start = Calendar.getInstance();
-        Calendar end = Calendar.getInstance();
-        start.setTimeInMillis(s.getStartTime(TimeUnit.MILLISECONDS));
-        end.setTimeInMillis(s.getEndTime(TimeUnit.MILLISECONDS));
-
-
-
-        L.toast(s.getName() + " (" + s.getActivity() + ")\n" + s.getAppPackageName() + "\n" +
-                formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()),
-                a);
-    }
-    private void dumpBucket(Bucket b) {
-
-        Calendar start = Calendar.getInstance();
-        Calendar end = Calendar.getInstance();
-        start.setTimeInMillis(b.getStartTime(TimeUnit.MILLISECONDS));
-        end.setTimeInMillis(b.getEndTime(TimeUnit.MILLISECONDS));
-
-        String fieldStr = "";
-
-        for (DataSet ds : b.getDataSets()) {
-            for (DataPoint dp : ds.getDataPoints()) {
-                for (Field field : dp.getDataType().getFields()) {
-
-                    DateFormat dateFormat = getTimeInstance();
-
-                    // fields
-                    if (field.getName().equals("duration")) {
-                        int minutes = dp.getValue(field).asInt() / 1000 / 60;
-                        fieldStr += field.getName() + ": " + minutes + "min ";
-                    }
-                    else if (field.getName().equals("activity")) {
-                        fieldStr += dp.getValue(field).asActivity() + " ";
-                    }
-                    else if (field.getName().equals("num_segments")) {
-                        fieldStr += field.getName() + ": " + dp.getValue(field).asInt() + " ";
-                    }
-                    else {
-                        fieldStr += field.getName() + ": " + dp.getValue(field) + " ";
-                    }
-                    L.toast(formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()) + " " + fieldStr, a);
-
-                }
-            }
-        }
-
-        L.toast(formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()) + " " + fieldStr, a);
-    }
-
-    private boolean hasPermissionsElseRequest() {
-        // Check if the user has previously granted the necessary data access, and if not, initiate the authorization flow:
-
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
-
-        if (GoogleSignIn.hasPermissions(account, fitnessOptions)) return true;
-        GoogleSignIn.requestPermissions(this, REQUEST_CODE_PERMISSIONS_GOOGLE_FIT, account, fitnessOptions);
-        return false;
-    }
-
-    //
-
-    // Strava
 
     protected void authorizeStrava() {
 
@@ -234,6 +98,8 @@ public abstract class ApiManager extends AppCompatActivity {
                             JSONObject obj = response.getJSONObject(index);
                             mergeWithExisting(convertToExercise(obj));
 
+                            Log.i("Strava API","response: " + obj.toString());
+                            //L.toast("response: " + obj.toString(), a);
                             L.toast("request successful", a);
                         }
                         catch (JSONException e) {

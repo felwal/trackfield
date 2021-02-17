@@ -10,8 +10,12 @@ import android.os.Bundle;
 
 import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.objects.Coordinate;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.F;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -91,7 +95,6 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
         setFabs();
         setMap();
-
     }
 
     private void setFabs() {

@@ -18,15 +18,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.ApiManager;
+import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.dialogs.Dialogs;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.F;
+import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends ApiManager implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
+public class SettingsActivity extends StravaAPI implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
@@ -51,7 +54,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         toolbar();
         inflateViews();
 
-        connectAPIs();
+        connectAPI();
         handleIntent();
 
         // settings
@@ -86,13 +89,11 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
 
         inflateHeader("File");
-        inflateClickItem("Save to external", "", false, v -> {
-            F.exportToExternal(a);
-            L.toast("Exporterd", this);
+        inflateClickItem("Export Json", "", false, v -> {
+            F.exportJson(a);
         });
-        inflateClickItem("Load from external", "", true, v -> {
-            F.importFromExternal(a);
-            L.toast("Imported", this);
+        inflateClickItem("Import Json", "", true, v -> {
+            F.importJson(a);
         });
 
         inflateHeader("Other Services");
@@ -105,7 +106,7 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
         inflateClickItem("Request all from Strava", "", false, v -> {
             requestAllActivities();
         });
-        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", false, v -> {
+        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> {
             authorizeStrava();
         });
         //inflateClickItem("Google Fit", "Not connected", true, v -> {});
@@ -135,13 +136,21 @@ public class SettingsActivity extends ApiManager implements Dialogs.BaseWithList
             picker.show();
         });
 
-        inflateHeader("Developer Options");
-        inflateClickItem("Reboard", "", false, v -> {
-            Prefs.setFirstLogin(true); BoardingActivity.startActivity(this);
-        });
-        inflateClickItem("Recreate database", "", true, v -> {
-            Helper.getWriter(this).recreate();
-        });
+        if (Prefs.isDeveloper()) {
+            inflateHeader("Developer Options");
+            inflateClickItem("Reboard", "", false, v -> {
+                Prefs.setFirstLogin(true); BoardingActivity.startActivity(this);
+            });
+            inflateClickItem("Recreate database", "", false, v -> {
+                Helper.getWriter(this).recreate();
+            });
+            inflateClickItem("Export .txt", "", false, v -> {
+                F.exportTxt(a);
+            });
+            inflateClickItem("Import .txt", "", true, v -> {
+                F.importTxt(a);
+            });
+        }
 
     }
 

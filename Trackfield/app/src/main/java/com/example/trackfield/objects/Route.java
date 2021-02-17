@@ -1,6 +1,14 @@
 package com.example.trackfield.objects;
 
-public class Route {
+import android.content.Context;
+
+import com.example.trackfield.objects.interfaces.JSONObjectable;
+import com.example.trackfield.toolbox.L;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Route implements JSONObjectable {
 
     private final int _id;
     private String name;
@@ -17,6 +25,12 @@ public class Route {
 
     public static final int NO_GOAL_PACE = -1;
 
+    // json
+    private static final String JSON_ID = "id";
+    private static final String JSON_NAME = "name";
+    private static final String JSON_GOAL_PACE = "goal_pace";
+    private static final String JSON_HIDDEN = "hidden";
+
     ////
 
     public Route(int _id, String name, float goalPace, boolean hidden) {
@@ -28,6 +42,12 @@ public class Route {
     public Route(int _id, String name) {
         this._id = _id;
         this.name = name;
+    }
+    public Route(JSONObject obj) throws JSONException {
+        _id = obj.getInt(JSON_ID);
+        name = obj.getString(JSON_NAME);
+        goalPace = (float) obj.getDouble(JSON_GOAL_PACE);
+        hidden = obj.getBoolean(JSON_HIDDEN);
     }
     public Route() {
         _id = -1;
@@ -66,6 +86,23 @@ public class Route {
     }
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override public JSONObject toJSONObject(Context c) {
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put(JSON_ID, _id);
+            obj.put(JSON_NAME, name);
+            obj.put(JSON_GOAL_PACE, goalPace);
+            obj.put(JSON_HIDDEN, hidden);
+        }
+        catch (JSONException e) {
+            L.handleError(e, c);
+        }
+
+        return obj;
     }
 
 }

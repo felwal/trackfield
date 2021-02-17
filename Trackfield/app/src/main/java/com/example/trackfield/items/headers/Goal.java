@@ -1,6 +1,7 @@
 package com.example.trackfield.items.headers;
 
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.M;
 
 public class Goal extends RecyclerItem {
 

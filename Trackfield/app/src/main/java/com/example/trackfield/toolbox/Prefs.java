@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
-import com.example.trackfield.toolbox.Toolbox.*;
 
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
@@ -26,6 +25,7 @@ public class Prefs {
     private static SharedPreferences.Editor editor;
     private static Gson gson = new Gson();
 
+    private static boolean developer = true;
     private static boolean firstLogin = true;
 
     // display options
@@ -53,7 +53,7 @@ public class Prefs {
     private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
 
     // sorting
-    private static Toolbox.C.SortMode[] sortModePrefs = { Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DISTANCE, Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DATE, Toolbox.C.SortMode.DATE };
+    private static C.SortMode[] sortModePrefs = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE };
     private static boolean[] smallestFirstPrefs = { false, true, false, false, false };
 
     // Strava API
@@ -67,6 +67,7 @@ public class Prefs {
 
     // tags
     private static final String SHARED_PREFERENCES = "shared preferences";
+    private static final String DEVELOPER = "developer";
     private static final String FIRST_LOGIN = "firstLogin";
     private static final String WEEK_HEADERS = "weekHeaders";
     private static final String WEEK_DISTANCE = "weekDistance";
@@ -126,7 +127,7 @@ public class Prefs {
         routeVisibleTypes = loadPref(intArr, TYPES_ROUTE);
         distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
 
-        sortModePrefs = loadPref(new TypeToken<Toolbox.C.SortMode[]>(){}, SORT_MODE);
+        sortModePrefs = loadPref(new TypeToken<C.SortMode[]>(){}, SORT_MODE);
         smallestFirstPrefs = loadPref(new TypeToken<boolean[]>(){}, SORT_SMALLEST_FIRST);
 
         authCode = loadPref(str, STRAVA_AUTH);
@@ -151,6 +152,7 @@ public class Prefs {
     }
     private static Object ofTag(String tag) {
         switch (tag) {
+            case DEVELOPER: return developer;
             case FIRST_LOGIN: return firstLogin;
             case WEEK_HEADERS: return showWeekHeaders;
             case WEEK_DISTANCE: return weekDistance;
@@ -178,6 +180,10 @@ public class Prefs {
     }
 
     // set
+    public static void setDeveloper(boolean developer) {
+        Prefs.developer = developer;
+        savePref(developer, DEVELOPER);
+    }
     public static void setFirstLogin(boolean firstLogin) {
         Prefs.firstLogin = firstLogin;
         savePref(firstLogin, FIRST_LOGIN);
@@ -242,11 +248,11 @@ public class Prefs {
         distanceVisibleTypes = types;
         savePref(types, TYPES_DISTANCE);
     }
-    public static void setSortModePref(Toolbox.C.Layout layout, Toolbox.C.SortMode sortMode) {
+    public static void setSortModePref(C.Layout layout, C.SortMode sortMode) {
         sortModePrefs[layout.ordinal()] = sortMode;
         savePref(sortModePrefs, SORT_MODE);
     }
-    public static void setSmallestFirstPref(Toolbox.C.Layout layout, boolean smallestFirst) {
+    public static void setSmallestFirstPref(C.Layout layout, boolean smallestFirst) {
         smallestFirstPrefs[layout.ordinal()] = smallestFirst;
         savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
     }
@@ -275,6 +281,9 @@ public class Prefs {
     }
 
     // get
+    public static boolean isDeveloper() {
+        return developer;
+    }
     public static boolean isFirstLogin() {
         return firstLogin;
     }
@@ -324,10 +333,10 @@ public class Prefs {
     public static ArrayList<Integer> getDistanceVisibleTypes() {
         return distanceVisibleTypes;
     }
-    public static Toolbox.C.SortMode getSortModePref(Toolbox.C.Layout layout) {
+    public static C.SortMode getSortModePref(C.Layout layout) {
         return sortModePrefs[layout.ordinal()];
     }
-    public static boolean getSmallestFirstPref(Toolbox.C.Layout layout) {
+    public static boolean getSmallestFirstPref(C.Layout layout) {
         return smallestFirstPrefs[layout.ordinal()];
     }
     public static String getAuthCode() {

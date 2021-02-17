@@ -9,14 +9,13 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.ApiManager;
+import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.fragments.DevFragment;
 import com.example.trackfield.fragments.ExercisesFragment;
@@ -24,14 +23,16 @@ import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.fragments.RecsFragment;
 import com.example.trackfield.fragments.RecyclerFragments;
 import com.example.trackfield.objects.Distance;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.F;
+import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
 
     private Helper.Writer writer;
     private MainFragment fragment;
@@ -70,7 +71,7 @@ public class MainActivity extends ApiManager implements Dialogs.DecimalDialog.Di
             //w.close();
         }
 
-        connectAPIs();
+        connectAPI();
         setBottomNavbar();
         setToolbar();
         setFabs();

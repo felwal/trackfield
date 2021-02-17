@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.example.trackfield.objects.Route;
-import com.example.trackfield.toolbox.Toolbox.C;
+import com.example.trackfield.toolbox.C;
 
 public final class Contract {
 

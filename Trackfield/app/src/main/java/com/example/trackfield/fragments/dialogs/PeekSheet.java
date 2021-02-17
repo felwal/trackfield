@@ -1,6 +1,7 @@
 package com.example.trackfield.fragments.dialogs;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,28 +16,29 @@ import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Exercise;
-import com.example.trackfield.toolbox.Toolbox;
+import com.example.trackfield.toolbox.C;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class PeekSheet extends BottomSheetDialogFragment {
 
     private Activity a;
     private View view;
+    private DismissListener listener;
 
-    private Exercise exersice;
+    private Exercise exercise;
 
     // bundle
     public static final String BUNDLE_ID = "id";
 
     ////
 
-    public static PeekSheet newInstance(int id, FragmentManager fm) {
+    public static PeekSheet newInstance(int id, FragmentManager fm, DismissListener dismissListener) {
         PeekSheet instance = new PeekSheet();
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_ID, id);
         instance.setArguments(bundle);
         instance.show(fm, instance.getTag());
-        //fm.executePendingTransactions();
+        instance.listener = dismissListener;
         return instance;
     }
 
@@ -48,7 +50,7 @@ public class PeekSheet extends BottomSheetDialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             int id = bundle.getInt(BUNDLE_ID, 0);
-            exersice = Helper.getReader(a).getExercise(id);
+            exercise = Helper.getReader(a).getExercise(id);
         }
 
     }
@@ -71,18 +73,27 @@ public class PeekSheet extends BottomSheetDialogFragment {
         TextView paceTv = view.findViewById(R.id.textView_velocity);
 
         // set
-        routeTv.setText(exersice.getRoute());
-        routeVarTv.setText(exersice.getRouteVar());
-        dateTv.setText(exersice.getDateTime().format(Toolbox.C.FORMATTER_CAPTION));
-        distanceTv.setText(exersice.printDistance(true));
-        timeTv.setText(exersice.printTime(false));
-        paceTv.setText(exersice.printPace(false));
+        routeTv.setText(exercise.getRoute());
+        routeVarTv.setText(exercise.getRouteVar());
+        dateTv.setText(exercise.getDateTime().format(C.FORMATTER_CAPTION));
+        distanceTv.setText(exercise.printDistance(true));
+        timeTv.setText(exercise.printTime(false));
+        paceTv.setText(exercise.printPace(false));
 
         // open full view
         view.setOnClickListener(view -> {
-            ViewActivity.startActivity(a, exersice.get_id());
+            ViewActivity.startActivity(a, exercise.get_id());
         });
 
+    }
+
+    @Override public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
+        listener.onPeekSheetDismiss(exercise.get_id());
+    }
+
+    public interface DismissListener {
+        void onPeekSheetDismiss(int id);
     }
 
 }

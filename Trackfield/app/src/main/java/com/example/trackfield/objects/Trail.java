@@ -179,6 +179,30 @@ public class Trail {
 
         return new LatLng(latTot / latLngs.size(), lngTot / latLngs.size());
     }
+    public static LatLngBounds bounds(List<LatLng> latLngs) {
+
+        if (latLngs.size() == 0) return null;
+        LatLng ll0 = latLngs.get(0);
+
+        double north = ll0.latitude;
+        double south = ll0.latitude;
+        double east = ll0.longitude;
+        double west = ll0.longitude;
+
+        for (int i = 1; i < latLngs.size(); i++) {
+            LatLng lli = latLngs.get(i);
+
+            if (lli.latitude > north) north = lli.latitude;
+            else if (lli.latitude < south) south = lli.latitude;
+
+            if (lli.longitude > east) east = lli.longitude;
+            else if (lli.longitude < west) west = lli.longitude;
+        }
+
+        LatLng northEast = new LatLng(north, east);
+        LatLng southWest = new LatLng(south, west);
+        return new LatLngBounds(southWest, northEast);
+    }
 
 }
 

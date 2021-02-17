@@ -20,17 +20,15 @@ import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.fragments.dialogs.Dialogs;
-import com.example.trackfield.toolbox.Toolbox.C;
-import com.example.trackfield.toolbox.Toolbox.D;
-import com.example.trackfield.toolbox.Toolbox.L;
-import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDialog.DialogListener, OnMapReadyCallback {
 

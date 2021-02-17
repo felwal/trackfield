@@ -2,8 +2,6 @@ package com.example.trackfield.fragments;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +17,7 @@ public class DevFragment extends MainActivity.MainFragment {
 
     private View view;
     private FrameLayout frame;
-    private RecyclerFragments.DevRF recyclerFragment;
+    private RecyclerFragments.StatsRF recyclerFragment;
 
     ////
 
@@ -35,7 +33,7 @@ public class DevFragment extends MainActivity.MainFragment {
         setToolbarTitle();
 
         frame = view.findViewById(R.id.frameLayout_scrollerFrameDev);
-        recyclerFragment = new RecyclerFragments.DevRF();
+        recyclerFragment = new RecyclerFragments.StatsRF();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;
@@ -46,7 +44,7 @@ public class DevFragment extends MainActivity.MainFragment {
     }
 
     @Override protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_dev));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_stats));
     }
     @Override protected void scrollToTop() {
 

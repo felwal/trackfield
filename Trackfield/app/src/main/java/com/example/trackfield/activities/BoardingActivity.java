@@ -12,8 +12,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trackfield.activities.ui.main.BoardingPagerAdapter;
+import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
 
 public class BoardingActivity extends AppCompatActivity {
 

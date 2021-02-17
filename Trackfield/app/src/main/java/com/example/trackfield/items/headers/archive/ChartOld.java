@@ -2,7 +2,7 @@ package com.example.trackfield.items.headers.archive;
 
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.objects.Exercise;
-import com.example.trackfield.toolbox.Toolbox;
+import com.example.trackfield.toolbox.C;
 
 import java.util.ArrayList;
 
@@ -59,7 +59,7 @@ import java.util.ArrayList;
                 case DISTANCE:  this.y[i] = ((float) e.distance()); break;
                 case TIME:      this.y[i] = (e.time()); break;
                 case PACE:      this.y[i] = (e.pace()); break;
-                case ENERGY:    this.y[i] = ((float) e.energy(Toolbox.C.UnitEnergy.JOULES)); break;
+                case ENERGY:    this.y[i] = ((float) e.energy(C.UnitEnergy.JOULES)); break;
                 case POWER:     this.y[i] = ((float) e.power()); break;
             }
             switch (xLabel) {

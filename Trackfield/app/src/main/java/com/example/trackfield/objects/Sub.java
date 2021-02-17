@@ -1,6 +1,7 @@
 package com.example.trackfield.objects;
 
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.M;
 
 public class Sub {
 

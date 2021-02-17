@@ -6,7 +6,8 @@ import android.graphics.Paint;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.items.headers.RecyclerItem;
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 
 import java.util.ArrayList;
 import java.util.Arrays;

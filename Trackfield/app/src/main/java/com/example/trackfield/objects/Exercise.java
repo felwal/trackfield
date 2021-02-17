@@ -1,15 +1,24 @@
 package com.example.trackfield.objects;
 
+import android.content.Context;
+
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.objects.interfaces.JSONObjectable;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox.*;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
-public class Exercise {
+public class Exercise implements JSONObjectable {
 
     private final int _id;
     private int type;
@@ -47,6 +56,24 @@ public class Exercise {
     private static final int DISTANCE_DECIMALS = 2;
     public static final int DISTANCE_DRIVEN = -1;
 
+    // json
+    private static final String JSON_ID = "id";
+    private static final String JSON_TYPE = "type";
+    private static final String JSON_EPOCH = "epoch";
+    private static final String JSON_ROUTE_ID = "route_id";
+    private static final String JSON_ROUTE = "route";
+    private static final String JSON_ROUTEVAR = "route_var";
+    private static final String JSON_INTERVAL = "interval";
+    private static final String JSON_DISTANCE = "distance";
+    private static final String JSON_TIME = "time";
+    private static final String JSON_DATA_SOURCE = "data_source";
+    private static final String JSON_RECORDING_METHOD = "recording_method";
+    private static final String JSON_NOTE = "note";
+    private static final String JSON_START_LATLNG = "start_latlng";
+    private static final String JSON_END_LATLNG = "end_latlng";
+    private static final String JSON_POLYLINE = "polyline";
+
+
     ////
 
     public Exercise(int _id, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
@@ -62,8 +89,42 @@ public class Exercise {
         this.recordingMethod = recordingMethod;
         this.distance = distance;
         this.time = time;
-        this.subs = subs == null ? new ArrayList<Sub>() : subs;
+        this.subs = subs == null ? new ArrayList<>() : subs;
         this.trail = trail;
+    }
+    public Exercise(JSONObject obj) throws JSONException {
+        _id = obj.getInt(JSON_ID);
+        type = obj.getInt(JSON_TYPE);
+        dateTime = M.ofEpoch(obj.getInt(JSON_EPOCH));
+        routeId = obj.getInt(JSON_ROUTE_ID);
+        //route = obj.getString(JSON_ROUTE);
+        route = Helper.getReader().getRouteName(routeId);//.getName();
+        routeVar = obj.getString(JSON_ROUTEVAR);
+        interval = obj.getString(JSON_INTERVAL);
+        distance = obj.getInt(JSON_DISTANCE);
+        time = (float) obj.getDouble(JSON_TIME);
+        dataSource = obj.getString(JSON_DATA_SOURCE);
+        recordingMethod = obj.getString(JSON_RECORDING_METHOD);
+        note = obj.getString(JSON_NOTE);
+        subs = new ArrayList<>(); //
+
+        // trail
+        trail = null;
+        if (obj.has(JSON_POLYLINE)) {
+                String polyline = obj.getString(JSON_POLYLINE);
+
+                // start & end
+                if (obj.has(JSON_START_LATLNG) && obj.has(JSON_END_LATLNG)) {
+                    JSONArray start_latlng = obj.getJSONArray(JSON_START_LATLNG);
+                    JSONArray end_latlng = obj.getJSONArray(JSON_END_LATLNG);
+
+                    LatLng start = new LatLng(start_latlng.getDouble(0), start_latlng.getDouble(1));
+                    LatLng end = new LatLng(end_latlng.getDouble(0), end_latlng.getDouble(1));
+
+                    trail = new Trail(polyline, start, end);
+                }
+                else trail = new Trail(polyline);
+            }
     }
 
     // set
@@ -305,6 +366,45 @@ public class Exercise {
                 interval + div + distance + div + time + div + dataSource + div + recordingMethod + div + note + div +
                 (trail != null ? (trail.getStartLat() + "" + div + "" + trail.getStartLng() + "" + div + "" + trail.getEndLat() + "" + div + "" + trail.getEndLng() + "" + div + trail.getPolyline())
                         : (div + "" + div + "" + div + "" + div));
+    }
+
+    @Override public JSONObject toJSONObject(Context c) {
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put(JSON_ID, _id);
+            obj.put(JSON_TYPE, type);
+            obj.put(JSON_EPOCH, getEpoch());
+            obj.put(JSON_ROUTE_ID, routeId);
+            //obj.put(JSON_ROUTE, route);
+            obj.put(JSON_ROUTEVAR, routeVar);
+            obj.put(JSON_INTERVAL, interval);
+            obj.put(JSON_DISTANCE, distance);
+            obj.put(JSON_TIME, time);
+            obj.put(JSON_DATA_SOURCE, dataSource);
+            obj.put(JSON_RECORDING_METHOD, recordingMethod);
+            obj.put(JSON_NOTE, note);
+
+            if (hasTrail()) {
+                JSONArray start_latlng = new JSONArray();
+                JSONArray end_latlng = new JSONArray();
+
+                start_latlng.put(trail.getStartLat());
+                start_latlng.put(trail.getStartLng());
+                end_latlng.put(trail.getEndLat());
+                end_latlng.put(trail.getEndLng());
+
+                obj.put(JSON_START_LATLNG, start_latlng);
+                obj.put(JSON_END_LATLNG, end_latlng);
+                obj.put(JSON_POLYLINE, trail.getPolyline());
+            }
+        }
+        catch (JSONException e) {
+            L.handleError(e, c);
+        }
+
+        return obj;
     }
 
     // statics

@@ -25,10 +25,10 @@ import com.example.trackfield.database.Helper;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
-import com.example.trackfield.toolbox.Toolbox.C;
-import com.example.trackfield.toolbox.Toolbox.D;
-import com.example.trackfield.toolbox.Toolbox.L;
-import com.example.trackfield.toolbox.Toolbox.M;
+import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -17,7 +17,7 @@
 
   <string name="fragment_exercises">Exercises</string>
   <string name="fragment_records">Records</string>
-  <string name="fragment_dev">Dev</string>
+  <string name="fragment_stats">Stats</string>
   <string name="fragment_settings">Settings</string>
 
   <!-- tabs -->

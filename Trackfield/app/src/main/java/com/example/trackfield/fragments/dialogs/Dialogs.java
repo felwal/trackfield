@@ -19,9 +19,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
+import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
-import com.example.trackfield.toolbox.Toolbox;
-import com.example.trackfield.toolbox.Toolbox.D;
+import com.example.trackfield.toolbox.D;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -337,7 +337,7 @@ public class Dialogs {
                                 listener.onDecimalDialogPositiveClick(input, tag());
                             }
                             catch (NumberFormatException e) {
-                                Toolbox.L.toast("No input", a);
+                                L.toast("No input", a);
                             }
                         }
                     })
@@ -506,7 +506,7 @@ public class Dialogs {
                                 listener.onTimeDialogPositiveClick(input1, input2, tag());
                             }
                             catch (NumberFormatException e) {
-                                Toolbox.L.toast("No input", a);
+                                L.toast("No input", a);
                             }
                         }
                     })
@@ -590,7 +590,7 @@ public class Dialogs {
                                 listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag());
                             }
                             catch (NumberFormatException e) {
-                                Toolbox.L.toast("No input", a);
+                                L.toast("No input", a);
                             }
                         }
                     })
@@ -944,7 +944,7 @@ public class Dialogs {
                                 listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag());
                             }
                             catch (NumberFormatException e) {
-                                Toolbox.L.toast("No input", a);
+                                L.toast("No input", a);
                             }
                         }
                     })
