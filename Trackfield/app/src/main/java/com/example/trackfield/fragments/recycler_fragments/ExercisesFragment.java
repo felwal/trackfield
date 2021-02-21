@@ -1,4 +1,4 @@
-package com.example.trackfield.fragments;
+package com.example.trackfield.fragments.recycler_fragments;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -22,7 +22,7 @@ public class ExercisesFragment extends MainFragment {
 
     private View view;
     private FrameLayout frame;
-    private RecyclerFragments.ExerciseRF recyclerFragment;
+    private ExRecyclerFragment recyclerFragment;
 
     ////
 
@@ -38,7 +38,7 @@ public class ExercisesFragment extends MainFragment {
         setToolbarTitle();
 
         frame = view.findViewById(R.id.frameLayout_scrollerFrameMain);
-        recyclerFragment = new RecyclerFragments.ExerciseRF();
+        recyclerFragment = new ExRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;

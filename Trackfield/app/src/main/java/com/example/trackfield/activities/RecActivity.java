@@ -13,9 +13,23 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.fragments.recycler_fragments.DiExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.InExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RoExRecyclerFragment;
+import com.example.trackfield.dialogs.BaseDialog;
+import com.example.trackfield.dialogs.BinaryDialog;
+import com.example.trackfield.dialogs.instances.DeleteDistance;
+import com.example.trackfield.dialogs.FilterDialog;
+import com.example.trackfield.dialogs.instances.FilterDistance;
+import com.example.trackfield.dialogs.instances.FilterRoute;
+import com.example.trackfield.dialogs.instances.GoalDistance;
+import com.example.trackfield.dialogs.instances.GoalRoute;
+import com.example.trackfield.dialogs.instances.RenameInterval;
+import com.example.trackfield.dialogs.instances.RenameRoute;
+import com.example.trackfield.dialogs.TextDialog;
+import com.example.trackfield.dialogs.TimeDialog;
 import com.example.trackfield.objects.Exercise;
-import com.example.trackfield.fragments.dialogs.Dialogs;
-import com.example.trackfield.fragments.RecyclerFragments;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.toolbox.Prefs;
@@ -32,7 +46,7 @@ public class RecActivity {
         protected Helper.Writer writer;
         private ActionBar ab;
         protected FrameLayout frame;
-        protected RecyclerFragments.Base recyclerFragment;
+        protected RecyclerFragment recyclerFragment;
 
         protected int originId = -1;
 
@@ -56,7 +70,7 @@ public class RecActivity {
         protected abstract void getExtras(Intent intent);
         protected abstract int getToolbarMenuRes();
 
-        protected void selectFragment(RecyclerFragments.Base recyclerFragment) {
+        protected void selectFragment(RecyclerFragment recyclerFragment) {
             this.recyclerFragment = recyclerFragment;
             getSupportFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
         }
@@ -102,7 +116,7 @@ public class RecActivity {
 
     }
 
-    public static class DistanceActivity extends Base implements Dialogs.BinaryDialog.DialogListener, Dialogs.TimeDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+    public static class DistanceActivity extends Base implements BinaryDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
 
         private Distance distance;
         private int length;
@@ -130,7 +144,7 @@ public class RecActivity {
 
             distance = reader.getDistance(length);
             setToolbar(M.prefix(length, 2, "m"));
-            selectFragment(RecyclerFragments.DistanceExerciseRF.newInstance(length, originId));
+            selectFragment(DiExRecyclerFragment.newInstance(length, originId));
         }
         @Override protected int getToolbarMenuRes() {
             return R.menu.menu_toolbar_rec_distance;
@@ -140,11 +154,11 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterDistance.newInstance(Prefs.getDistanceVisibleTypes(), getSupportFragmentManager());
+                    FilterDistance.newInstance(Prefs.getDistanceVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_deleteDistance:
-                    Dialogs.DeleteDistance.newInstance(getSupportFragmentManager());
+                    DeleteDistance.newInstance(getSupportFragmentManager());
                     return true;
 
                 case R.id.action_setGoal:
@@ -154,8 +168,8 @@ public class RecActivity {
 
                     int minutes, seconds;
                     if (goalPace == Distance.NO_GOAL_PACE) {
-                        minutes = Dialogs.Base.NO_TEXT;
-                        seconds = Dialogs.Base.NO_TEXT;
+                        minutes = BaseDialog.NO_TEXT;
+                        seconds = BaseDialog.NO_TEXT;
                     }
                     else {
                         float[] timeParts = M.getTimeParts(goalPace);
@@ -163,7 +177,7 @@ public class RecActivity {
                         seconds = (int) timeParts[0];
                     }
 
-                    Dialogs.GoalDistance.newInstance(minutes, seconds, getSupportFragmentManager());
+                    GoalDistance.newInstance(minutes, seconds, getSupportFragmentManager());
                     return true;
 
                 default: return super.onOptionsItemSelected(item);
@@ -218,7 +232,7 @@ public class RecActivity {
         }
 
     }
-    public static class RouteActivity extends Base implements Dialogs.TextDialog.DialogListener, Dialogs.TimeDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+    public static class RouteActivity extends Base implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
 
         //private int routeId;
         private Route route;
@@ -246,7 +260,7 @@ public class RecActivity {
 
             setToolbar(route.getName());
 
-            selectFragment(RecyclerFragments.RouteExerciseRF.newInstance(route.get_id(), originId));
+            selectFragment(RoExRecyclerFragment.newInstance(route.get_id(), originId));
         }
         @Override protected int getToolbarMenuRes() {
             return R.menu.menu_toolbar_rec_route;
@@ -256,25 +270,25 @@ public class RecActivity {
 
             switch (item.getItemId()) {
                 case R.id.action_filter:
-                    Dialogs.FilterRoute.newInstance(Prefs.getRouteVisibleTypes(), getSupportFragmentManager());
+                    FilterRoute.newInstance(Prefs.getRouteVisibleTypes(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_renameRoute:
-                    if (route != null) Dialogs.RenameRoute.newInstance(route.getName(), getSupportFragmentManager());
+                    if (route != null) RenameRoute.newInstance(route.getName(), getSupportFragmentManager());
                     return true;
 
                 case R.id.action_setGoal:
                     int minutes, seconds;
                     if (route.getGoalPace() == Route.NO_GOAL_PACE) {
-                        minutes = Dialogs.Base.NO_TEXT;
-                        seconds = Dialogs.Base.NO_TEXT;
+                        minutes = BaseDialog.NO_TEXT;
+                        seconds = BaseDialog.NO_TEXT;
                     }
                     else {
                         float[] timeParts = M.getTimeParts(route.getGoalPace());
                         minutes = (int) timeParts[1];
                         seconds = (int) timeParts[0];
                     }
-                    Dialogs.GoalRoute.newInstance(minutes, seconds, getSupportFragmentManager());
+                    GoalRoute.newInstance(minutes, seconds, getSupportFragmentManager());
                     return true;
 
                 case R.id.action_hideRoute:
@@ -347,7 +361,7 @@ public class RecActivity {
         }
 
     }
-    public static class IntervalActivity extends Base implements Dialogs.TextDialog.DialogListener {
+    public static class IntervalActivity extends Base implements TextDialog.DialogListener {
 
         private String interval;
 
@@ -374,7 +388,7 @@ public class RecActivity {
             interval = intent.getStringExtra(EXTRA_INTERVAL);
             setToolbar(interval);
             originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
-            selectFragment(RecyclerFragments.IntervalExerciseRF.newInstance(interval, originId));
+            selectFragment(InExRecyclerFragment.newInstance(interval, originId));
         }
         @Override protected int getToolbarMenuRes() {
             return R.menu.menu_toolbar_rec_interval;
@@ -390,7 +404,7 @@ public class RecActivity {
                 case R.id.action_renameInterval:
                     if (interval != null) {
                         //Dialogs.TextDialog.bundle(getString(R.string.dialog_title_rename_interval), "", "", interval, R.string.dialog_btn_rename, getSupportFragmentManager(), TAG_RENAME_INTERVAL);
-                        Dialogs.RenameInterval.newInstance(interval, getSupportFragmentManager());
+                        RenameInterval.newInstance(interval, getSupportFragmentManager());
                     }
                     return true;
 

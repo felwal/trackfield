@@ -17,11 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.DevFragment;
-import com.example.trackfield.fragments.ExercisesFragment;
-import com.example.trackfield.fragments.dialogs.Dialogs;
+import com.example.trackfield.fragments.recycler_fragments.ExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
+import com.example.trackfield.fragments.StatsFragment;
+import com.example.trackfield.fragments.recycler_fragments.ExercisesFragment;
+import com.example.trackfield.dialogs.instances.AddDistance;
+import com.example.trackfield.dialogs.BaseDialog;
+import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.fragments.RecsFragment;
-import com.example.trackfield.fragments.RecyclerFragments;
+import com.example.trackfield.dialogs.FilterDialog;
+import com.example.trackfield.dialogs.instances.FilterExercises;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
@@ -32,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.DialogListener, Dialogs.FilterDialog.DialogListener {
+public class MainActivity extends StravaAPI implements DecimalDialog.DialogListener, FilterDialog.DialogListener {
 
     private Helper.Writer writer;
     private MainFragment fragment;
@@ -179,8 +184,8 @@ public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.Dia
                     return true;
 
                 case R.id.navigation_dev:
-                    if ((fragment instanceof DevFragment)) fragment.scrollToTop();
-                    else selectFragment(new DevFragment());
+                    if ((fragment instanceof StatsFragment)) fragment.scrollToTop();
+                    else selectFragment(new StatsFragment());
                     if (fab.isOrWillBeShown()) fab.hide();
                     return true;
             }
@@ -190,7 +195,7 @@ public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.Dia
         final BottomNavigationView navView = findViewById(R.id.navbar);
         navView.setOnNavigationItemSelectedListener(navItemListener);
     }
-    public void setRecyclerScrollListener(final RecyclerView rv, final RecyclerFragments.Base recyclerFragment) {
+    public void setRecyclerScrollListener(final RecyclerView rv, final RecyclerFragment recyclerFragment) {
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -198,7 +203,7 @@ public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.Dia
                 super.onScrolled(recyclerView, dx, dy);
 
                 // fab
-                if (recyclerFragment instanceof RecyclerFragments.ExerciseRF) {
+                if (recyclerFragment instanceof ExRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
                     else if (fab.isOrWillBeHidden() && dy < 0 && fragment instanceof ExercisesFragment) fab.show();
                 }
@@ -235,11 +240,11 @@ public class MainActivity extends StravaAPI implements Dialogs.DecimalDialog.Dia
                 return true;
 
             case R.id.action_filter:
-                Dialogs.FilterExercises.newInstance(Prefs.getExerciseVisibleTypes(), getSupportFragmentManager());
+                FilterExercises.newInstance(Prefs.getExerciseVisibleTypes(), getSupportFragmentManager());
                 return true;
 
             case R.id.action_addDistance:
-                Dialogs.AddDistance.newInstance(Dialogs.Base.NO_TEXT, getSupportFragmentManager());
+                AddDistance.newInstance(BaseDialog.NO_TEXT, getSupportFragmentManager());
                 return true;
 
             default: return super.onOptionsItemSelected(item);

@@ -12,12 +12,13 @@ import android.widget.FrameLayout;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
+import com.example.trackfield.fragments.recycler_fragments.StatsRecyclerFragment;
 
-public class DevFragment extends MainActivity.MainFragment {
+public class StatsFragment extends MainActivity.MainFragment {
 
     private View view;
     private FrameLayout frame;
-    private RecyclerFragments.StatsRF recyclerFragment;
+    private StatsRecyclerFragment recyclerFragment;
 
     ////
 
@@ -33,7 +34,7 @@ public class DevFragment extends MainActivity.MainFragment {
         setToolbarTitle();
 
         frame = view.findViewById(R.id.frameLayout_scrollerFrameDev);
-        recyclerFragment = new RecyclerFragments.StatsRF();
+        recyclerFragment = new StatsRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;

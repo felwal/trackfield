@@ -16,10 +16,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.dialogs.BinaryDialog;
+import com.example.trackfield.dialogs.instances.DeleteExercise;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
-import com.example.trackfield.fragments.dialogs.Dialogs;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
@@ -30,7 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
-public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDialog.DialogListener, OnMapReadyCallback {
+public class ViewActivity extends AppCompatActivity implements BinaryDialog.DialogListener, OnMapReadyCallback {
 
     private Exercise exercise;
     private int _id;
@@ -286,7 +287,7 @@ public class ViewActivity extends AppCompatActivity implements Dialogs.BinaryDia
                 return true;
 
             case R.id.action_delete:
-                Dialogs.DeleteExercise.newInstance(getSupportFragmentManager());
+                DeleteExercise.newInstance(getSupportFragmentManager());
                 return true;
 
             default: return super.onOptionsItemSelected(item);

@@ -20,7 +20,12 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.dialogs.Dialogs;
+import com.example.trackfield.dialogs.BaseDialog;
+import com.example.trackfield.dialogs.BaseDialogWithListener;
+import com.example.trackfield.dialogs.instances.Color;
+import com.example.trackfield.dialogs.DecimalDialog;
+import com.example.trackfield.dialogs.instances.EditMass;
+import com.example.trackfield.dialogs.instances.Theme;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
@@ -29,7 +34,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends StravaAPI implements Dialogs.BaseWithListener.DialogListener, Dialogs.DecimalDialog.DialogListener {
+public class SettingsActivity extends StravaAPI implements BaseDialogWithListener.DialogListener, DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
@@ -85,8 +90,8 @@ public class SettingsActivity extends StravaAPI implements Dialogs.BaseWithListe
         //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
         inflateHeader("Look");
-        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Dialogs.Theme());
-        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Dialogs.Color());
+        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Theme());
+        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Color());
 
         inflateHeader("File");
         inflateClickItem("Export Json", "", false, v -> {
@@ -112,7 +117,7 @@ public class SettingsActivity extends StravaAPI implements Dialogs.BaseWithListe
         //inflateClickItem("Google Fit", "Not connected", true, v -> {});
 
         inflateHeader("Profile");
-        inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new Dialogs.EditMass());
+        inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new EditMass());
 
         final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextView("Birthday", bd != null ? bd.format(C.FORMATTER_CAPTION) : "", true);
@@ -160,7 +165,7 @@ public class SettingsActivity extends StravaAPI implements Dialogs.BaseWithListe
         ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
         ll.addView(v);
     }
-    private void inflateDialogItem(String title, String value, boolean hideDivider, final Dialogs.Base dialog) {
+    private void inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager(), dialog.tag()));
     }

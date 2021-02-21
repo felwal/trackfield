@@ -9,16 +9,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.trackfield.R;
-import com.example.trackfield.fragments.RecyclerFragments;
+import com.example.trackfield.fragments.recycler_fragments.DiRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.InRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RoRecyclerFragment;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context c;
 
-    private RecyclerFragments.Base selectedRF;
-    private RecyclerFragments.DistanceRF distanceRF;
-    private RecyclerFragments.RouteRF routeRF;
-    private RecyclerFragments.IntervalRF intervalRF;
+    private RecyclerFragment selectedRF;
+    private DiRecyclerFragment distanceRF;
+    private RoRecyclerFragment routeRF;
+    private InRecyclerFragment intervalRF;
 
     @StringRes private static final int[] TAB_TITLES = new int[] { R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
 
@@ -31,9 +34,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
     @Override public Fragment getItem(int position) {
         switch (position) {
-            case 0: return selectedRF = distanceRF != null ? distanceRF : (distanceRF = new RecyclerFragments.DistanceRF());
-            case 1: return selectedRF = routeRF != null ? routeRF : (routeRF = new RecyclerFragments.RouteRF());
-            default: return selectedRF = intervalRF != null ? intervalRF : (intervalRF = new RecyclerFragments.IntervalRF());
+            case 0: return selectedRF = distanceRF != null ? distanceRF : (distanceRF = new DiRecyclerFragment());
+            case 1: return selectedRF = routeRF != null ? routeRF : (routeRF = new RoRecyclerFragment());
+            default: return selectedRF = intervalRF != null ? intervalRF : (intervalRF = new InRecyclerFragment());
         }
     }
     @Nullable @Override public CharSequence getPageTitle(int position) {

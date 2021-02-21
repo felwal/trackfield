@@ -8,7 +8,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.example.trackfield.fragments.dialogs.Dialogs;
+import com.example.trackfield.dialogs.BinaryDialog;
+import com.example.trackfield.dialogs.instances.FinishTracking;
 import com.example.trackfield.objects.Coordinate;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
@@ -38,7 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.TreeMap;
 
-public class TrackActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, Dialogs.BinaryDialog.DialogListener {
+public class TrackActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, BinaryDialog.DialogListener {
 
     private LocationManager manager;
     private LocationListener listener;
@@ -181,7 +182,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
     private void finishDialog() {
-        Dialogs.FinishTracking.newInstance(getSupportFragmentManager());
+        FinishTracking.newInstance(getSupportFragmentManager());
     }
     private void saveExercise() {
 

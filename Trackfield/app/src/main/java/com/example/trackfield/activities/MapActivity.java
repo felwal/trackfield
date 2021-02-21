@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.fragments.dialogs.PeekSheet;
+import com.example.trackfield.dialogs.sheets.PeekSheet;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.objects.Trails;

@@ -1,0 +1,38 @@
+package com.example.trackfield.adapters.recycler_adapters;
+
+import android.content.Context;
+import android.view.ViewGroup;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.trackfield.R;
+import com.example.trackfield.items.headers.RecyclerItem;
+import com.example.trackfield.items.headers.archive.GraphOld;
+
+import java.util.ArrayList;
+
+public class RoExRecyclerAdapter extends RecyclerAdapter {
+
+    public RoExRecyclerAdapter(ArrayList<RecyclerItem> itemList, int originId, Context c) {
+        super(itemList, c);
+        this.originId = originId;
+    }
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if (viewType == ITEM_ITEM) {
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise_route, parent, false);
+            return new RouteExerciseVH(cl);
+        }
+        else if (viewType == ITEM_GRAPH_OLD) {
+            ConstraintLayout cl = GraphOld.inflateLayout(inflater, parent);
+        /*ConstraintLayout[] elements = new ConstraintLayout[graphLength];
+        for (int i = 0; i < graphLength; i++) {
+            elements[i] = (ConstraintLayout) inflater.inflate(R.layout.chart_element_point, parent, false);
+        }*/
+            return new GraphVH(parent, cl);
+        }
+        return super.onCreateViewHolder(parent, viewType);
+    }
+
+}
