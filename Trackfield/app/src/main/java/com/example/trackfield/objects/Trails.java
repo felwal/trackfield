@@ -2,7 +2,6 @@ package com.example.trackfield.objects;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ public class Trails {
         }
         //setBounds();
     }
+
     public Trails(List<List<LatLng>> latLngs) {
         //polylines = new ArrayList<>();
         for (List<LatLng> ll : latLngs) {
@@ -36,6 +36,7 @@ public class Trails {
     }
 
     // set
+
     private void setBounds() {
 
         if (latLngs.size() == 0 || latLngs.get(0).size() == 0) return;
@@ -64,9 +65,11 @@ public class Trails {
     }
 
     // get
+
     public List<String> getPolylines() {
         return polylines;
     }
+
     public List<List<LatLng>> getLatLngs() {
 
         List<List<LatLng>> latLngs = new ArrayList<>();
@@ -74,6 +77,7 @@ public class Trails {
 
         return latLngs;
     }
+
     public LatLngBounds getBounds() {
 
         double north = trails.get(0).getBounds().northeast.latitude;
@@ -100,6 +104,8 @@ public class Trails {
         return bounds;
     }
 
+    // get driven
+
     public Trail toAvgTrail() {
 
         List<LatLng> latLngs = new ArrayList<>();
@@ -119,6 +125,7 @@ public class Trails {
     }
 
     // get driven
+
     public int trailCount() {
         return trails == null ? 0 : trails.size();
     }

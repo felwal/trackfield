@@ -35,10 +35,12 @@ public class Distance implements JSONObjectable {
         this.distance = distance;
         this.goalPace = goalPace;
     }
+
     public Distance(int _id, int distance) {
         this._id = _id;
         this.distance = distance;
     }
+
     public Distance(JSONObject obj) throws JSONException {
         _id = obj.getInt(JSON_ID);
         distance = obj.getInt(JSON_DISTANCE);
@@ -46,26 +48,34 @@ public class Distance implements JSONObjectable {
     }
 
     // set
+
     public void setGoalPace(float goalPace) {
         this.goalPace = goalPace;
     }
+
     public void removeGoalPace() {
         this.goalPace = NO_GOAL_PACE;
     }
 
     // get
+
     public int get_id() {
         return _id;
     }
+
     public int getDistance() {
         return distance;
     }
+
     public float getGoalPace() {
         return goalPace;
     }
+
     public boolean hasGoalPace() {
         return goalPace != NO_GOAL_PACE;
     }
+
+    // extends
 
     @Override public JSONObject toJSONObject(Context c) {
 

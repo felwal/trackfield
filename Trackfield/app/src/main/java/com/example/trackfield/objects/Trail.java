@@ -6,10 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.PolyUtil;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 public class Trail {
 
@@ -28,11 +25,13 @@ public class Trail {
         this.end = end;
         setBounds();
     }
+
     public Trail(String polyline) {
         this.polyline = polyline;
         latLngs = PolyUtil.decode(polyline);
         setBounds();
     }
+
     public Trail(List<LatLng> latLngs, LatLng start, LatLng end) {
         polyline = PolyUtil.encode(latLngs);
         this.latLngs = latLngs;
@@ -40,6 +39,7 @@ public class Trail {
         this.end = end;
         setBounds();
     }
+
     public Trail(List<LatLng> latLngs) {
         polyline = PolyUtil.encode(latLngs);
         this.latLngs = latLngs;
@@ -47,6 +47,7 @@ public class Trail {
     }
 
     // set
+
     private void setBounds() {
 
         if (latLngs.size() == 0) return;
@@ -73,38 +74,49 @@ public class Trail {
     }
 
     // get
+
     public String getPolyline() {
         return polyline;
     }
+
     public List<LatLng> getLatLngs() {
         return latLngs;
     }
+
     public LatLng getStart() {
         return start;
     }
+
     public LatLng getEnd() {
         return end;
     }
+
     public LatLngBounds getBounds() {
         return bounds;
     }
 
     // get driven
+
     public double getStartLat() {
         return start.latitude;
     }
+
     public double getStartLng() {
         return start.longitude;
     }
+
     public double getEndLat() {
         return end.latitude;
     }
+
     public double getEndLng() {
         return end.longitude;
     }
+
     public boolean hasStartEnd() {
         return start != null && end != null;
     }
+
     public int getDistance() {
 
         int distance = 0;
@@ -121,6 +133,7 @@ public class Trail {
 
         return distance;
     }
+
     public int getLatLngCount() {
         return latLngs == null ? 0 : latLngs.size();
     }
@@ -157,6 +170,7 @@ public class Trail {
     }
 
     // static tools
+
     public static LatLng between(LatLng P, LatLng Q, float percent) {
         if (P == null || Q == null) return null;
 
@@ -165,6 +179,7 @@ public class Trail {
 
         return new LatLng(lat, lng);
     }
+
     public static LatLng avg(List<LatLng> latLngs) {
         if (latLngs == null || latLngs.size() == 0) return null;
 
@@ -179,6 +194,7 @@ public class Trail {
 
         return new LatLng(latTot / latLngs.size(), lngTot / latLngs.size());
     }
+
     public static LatLngBounds bounds(List<LatLng> latLngs) {
 
         if (latLngs.size() == 0) return null;

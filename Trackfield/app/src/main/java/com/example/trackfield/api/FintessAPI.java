@@ -44,7 +44,7 @@ public abstract class FintessAPI extends AppCompatActivity {
 
     ////
 
-    protected void connectAPI() {
+    protected void connectFitness() {
 
         a = this;
 

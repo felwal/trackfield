@@ -21,11 +21,8 @@ import com.example.trackfield.R;
 import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.BaseDialog;
-import com.example.trackfield.dialogs.BaseDialogWithListener;
-import com.example.trackfield.dialogs.instances.Color;
+import com.example.trackfield.dialogs.RadioDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
-import com.example.trackfield.dialogs.instances.EditMass;
-import com.example.trackfield.dialogs.instances.Theme;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
@@ -34,11 +31,14 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends StravaAPI implements BaseDialogWithListener.DialogListener, DecimalDialog.DialogListener {
+public class SettingsActivity extends StravaAPI implements RadioDialog.DialogListener, DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
     private LinearLayout ll;
+
+    private static final String TAG_THEME = "theme";
+    private static final String TAG_COLOR = "color";
 
     ////
 
@@ -46,7 +46,10 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
         c.startActivity(new Intent(c, SettingsActivity.class));
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    // on
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
         a = this;
         D.updateTheme(this);
@@ -56,24 +59,53 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
         inflater = getLayoutInflater();
         ll = findViewById(R.id.linearLayout_settings);
 
-        toolbar();
+        setToolbar();
         inflateViews();
 
-        connectAPI();
-        handleIntent();
+        connectStrava();
+        handleIntentForStrava();
 
         // settings
         //displayListeners();
         //lookListeners();
         //profileListeners();
     }
-    @Override protected void onNewIntent(Intent intent) {
+
+    @Override
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        handleIntent();
+        handleIntentForStrava();
     }
 
-    private void handleIntent() {
+    @Override
+    protected void onDestroy() {
+        //F.savePrefs(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    //
+
+    private void handleIntentForStrava() {
         Intent appLinkIntent = getIntent();
         //String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
@@ -82,42 +114,38 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
 
     private void inflateViews() {
 
+        // display options
         inflateHeader("Display Options");
         inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
-        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), false, Prefs::showDailyChart);
+        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
         //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
         //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
+        // look
         inflateHeader("Look");
-        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false, new Theme());
-        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true, new Color());
+        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false,
+                RadioDialog.newInstance(getString(R.string.dialog_title_theme), "", C.themeNames, Prefs.getThemeInt(), TAG_THEME));
+        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true,
+                RadioDialog.newInstance(getString(R.string.dialog_title_color), "", C.colorNames, Prefs.getColor(), TAG_COLOR));
 
+        // file
         inflateHeader("File");
-        inflateClickItem("Export Json", "", false, v -> {
-            F.exportJson(a);
-        });
-        inflateClickItem("Import Json", "", true, v -> {
-            F.importJson(a);
-        });
+        inflateClickItem("Export Json", "", false, v -> F.exportJson(a));
+        inflateClickItem("Import Json", "", true, v -> F.importJson(a));
 
+        // other services
         inflateHeader("Other Services");
-        inflateClickItem("Request last from Strava", "", false, v -> {
-            requestLastActivity();
-        });
-        inflateClickItem("Request last 5 from Strava", "", false, v -> {
-            requestLastActivities(5);
-        });
-        inflateClickItem("Request all from Strava", "", false, v -> {
-            requestAllActivities();
-        });
-        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> {
-            authorizeStrava();
-        });
+        inflateClickItem("Request last from Strava", "", false, v -> requestLastActivity());
+        inflateClickItem("Request last 5 from Strava", "", false, v -> requestLastActivities(5));
+        inflateClickItem("Request all from Strava", "", false, v -> requestAllActivities());
+        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> authorizeStrava());
         //inflateClickItem("Google Fit", "Not connected", true, v -> {});
 
+        // profile
         inflateHeader("Profile");
-        inflateDialogItem("Mass", Prefs.getMass() + " kg", false, new EditMass());
+        inflateDialogItem("Mass", Prefs.getMass() + " kg", false,
+                DecimalDialog.newInstance(getString(R.string.dialog_title_mass), "", Prefs.getMass(), "Kg", R.string.dialog_btn_set, "mass"));
 
         final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextView("Birthday", bd != null ? bd.format(C.FORMATTER_CAPTION) : "", true);
@@ -141,6 +169,7 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
             picker.show();
         });
 
+        // developer options
         if (Prefs.isDeveloper()) {
             inflateHeader("Developer Options");
             inflateClickItem("Reboard", "", false, v -> {
@@ -160,15 +189,18 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
     }
 
     // inflate items
+
     private void inflateHeader(String title) {
         View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
         ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
         ll.addView(v);
     }
+
     private void inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
         View v = inflateTextView(title, value, hideDivider);
-        v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager(), dialog.tag()));
+        v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager()));
     }
+
     private void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
         final Switch sw = v.findViewById(R.id.switch_setting);
@@ -178,10 +210,13 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
             listener.onSwitch(sw.isChecked());
         });
     }
+
     private void inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(listener);
     }
+
+    // inflate views
 
     private View inflateTextView(String title, String value, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
@@ -192,6 +227,7 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
         ll.addView(v);
         return v;
     }
+
     private View inflateSwitchView(String title, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
         L.ripple(v, this);
@@ -201,47 +237,56 @@ public class SettingsActivity extends StravaAPI implements BaseDialogWithListene
         return v;
     }
 
-    // tools
-    interface OnSwitchListener {
-        void onSwitch(boolean checked);
-    }
+    // implement
 
-    // dialog
-    @Override public void doRecreate() {
+    @Override
+    public void onRadioDialogClick(int index, String tag) {
+
+        if (tag.equals(TAG_THEME)) {
+            switch (index) {
+                case 0:
+                    if (Prefs.isThemeLight()) Prefs.setTheme(false);
+                    break;
+                case 1:
+                    if (!Prefs.isThemeLight()) Prefs.setTheme(true);
+                    break;
+                case 2: break;
+            }
+        }
+        else if (tag.equals(TAG_COLOR)) {
+            switch (index) {
+                case 0:
+                    if (!Prefs.isColorMono()) Prefs.setColorMono();
+                    break;
+                case 1:
+                    if (!Prefs.isColorGreen()) Prefs.setColorGreen();
+                    break;
+            }
+        }
+
         MainActivity.recreate = true;
         recreate();
     }
-    @Override public void onDecimalDialogPositiveClick(float input, String tag) {
+
+    @Override
+    public void onDecimalDialogPositiveClick(float input, String tag) {
         Prefs.setMass(input);
     }
 
     // toolbar
-    private void toolbar() {
+
+    private void setToolbar() {
         final Toolbar tb = findViewById(R.id.toolbar_settings);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setTitle(getResources().getString(R.string.fragment_settings));
         ab.setDisplayHomeAsUpEnabled(true);
     }
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_settings, menu);
-        return true;
-    }
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+    // interface
 
-            default: return super.onOptionsItemSelected(item);
-        }
-
-    }
-
-    @Override protected void onDestroy() {
-        //F.savePrefs(this);
-        super.onDestroy();
+    interface OnSwitchListener {
+        void onSwitch(boolean checked);
     }
 
 }

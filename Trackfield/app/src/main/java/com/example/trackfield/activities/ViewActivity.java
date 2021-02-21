@@ -15,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
+import com.example.trackfield.activities.map_activity.ExerciseMapActivity;
+import com.example.trackfield.activities.rec_activity.DistanceRecActivity;
+import com.example.trackfield.activities.rec_activity.IntervalRecActivity;
+import com.example.trackfield.activities.rec_activity.RouteRecActivity;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.BinaryDialog;
-import com.example.trackfield.dialogs.instances.DeleteExercise;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
@@ -59,6 +62,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         intent.putExtra(EXTRA_ID, _id);
         c.startActivity(intent);
     }
+
     public static void startActivity(Context c, int _id, int from) {
         Intent intent = new Intent(c, ViewActivity.class);
         intent.putExtra(EXTRA_ID, _id);
@@ -66,7 +70,10 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         c.startActivity(intent);
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    // on
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
@@ -86,6 +93,54 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         setMap();
         setTexts();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //Helper.closeReader();
+        //Helper.closeWriter();
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home: finish(); return true;
+
+            case R.id.action_edit:
+                EditActivity.startActivity(this, _id);
+                return true;
+
+            case R.id.action_delete:
+                BinaryDialog.newInstance(getString(R.string.dialog_title_delete_exercise), "", R.string.dialog_btn_delete, "deleteExercise")
+                        .show(getSupportFragmentManager());
+                return true;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // set
+
+    private void setToolbar() {
+        final Toolbar tb = findViewById(R.id.toolbar_view);
+        setSupportActionBar(tb);
+        final ActionBar ab = getSupportActionBar();
+        ab.setTitle(getResources().getString(R.string.activity_view));
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void setTexts() {
@@ -160,6 +215,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         paceTvListener(paceTv);
         energyTvListener(energyTv);
     }
+
     private void setMap() {
 
         FrameLayout frame = findViewById(R.id.frameLayout_mapFragment);
@@ -176,27 +232,30 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     }
 
-    // listeners
+    // set listeners
+
     private void routeTvListener(final TextView tv) {
 
         if (from != FROM_ROUTE) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    RecActivity.RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id());
+                    RouteRecActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id());
                 }
             });
         }
     }
+
     private void intervalTvListener(final TextView tv) {
 
         if (from != FROM_INTERVAL) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    RecActivity.IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id());
+                    IntervalRecActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id());
                 }
             });
         }
     }
+
     private void distanceTvListener(final TextView tv) {
 
         if (from != FROM_DISTANCE) {
@@ -205,7 +264,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                     ArrayList<Distance> distances = Helper.getReader(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
                     for (Distance d : distances) {
                         if (M.insideLimits(exercise.distance(), d.getDistance())) {
-                            RecActivity.DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
+                            DistanceRecActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
                             break;
                         }
                     }
@@ -214,6 +273,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
 
     }
+
     private void paceTvListener(final TextView tv) {
 
         tv.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +297,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             }
         });
     }
+
     private void energyTvListener(final TextView tv) {
 
         tv.setOnClickListener(new View.OnClickListener() {
@@ -265,36 +326,27 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         });
     }
 
-    // toolbar
-    private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_view);
-        setSupportActionBar(tb);
-        final ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_view));
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
-        return true;
-    }
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    // tools
 
-        switch (item.getItemId()) {
-            case android.R.id.home: finish(); return true;
-
-            case R.id.action_edit:
-                EditActivity.startActivity(this, _id);
-                return true;
-
-            case R.id.action_delete:
-                DeleteExercise.newInstance(getSupportFragmentManager());
-                return true;
-
-            default: return super.onOptionsItemSelected(item);
+    private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
+        if (value.equals(C.NO_VALUE) || value.equals(C.NO_VALUE_TIME) || value.equals("")) {
+            tv.setVisibility(View.GONE);
+            alsoHide.setVisibility(View.GONE);
         }
+        else tv.setText(value);
     }
 
-    @Override public void onBinaryDialogPositiveClick(String tag) {
+    private void setTvHideIfEmpty(String value, TextView tv) {
+        if (value.equals(C.NO_VALUE) || value.equals(C.NO_VALUE_TIME) || value.equals("")) {
+            tv.setVisibility(View.GONE);
+        }
+        else tv.setText(value);
+    }
+
+    // implements
+
+    @Override
+    public void onBinaryDialogPositiveClick(String tag) {
 
         //Helper.Writer writer = new Helper.Writer(this);
         try { L.toast(Helper.getWriter(this).deleteExercise(exercise, this), this); }
@@ -307,43 +359,20 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         finish();
     }
-    @Override public void onMapReady(GoogleMap googleMap) {
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
         if (gMap == null) {
             gMap = googleMap;
-            MapActivity.ExerciseMap.setReadyMap(gMap, exercise.getTrail(), null, MAP_PADDING, this);
+            ExerciseMapActivity.setReadyMap(gMap, exercise.getTrail(), null, MAP_PADDING, this);
             gMap.getUiSettings().setAllGesturesEnabled(false);
             gMap.setMaxZoomPreference(MAP_MAX_ZOOM);
 
-            gMap.setOnMapClickListener(latLng -> MapActivity.ExerciseMap.startActivity(_id, ViewActivity.this));
+            gMap.setOnMapClickListener(latLng -> ExerciseMapActivity.startActivity(_id, ViewActivity.this));
         }
 
         L.crossfadeInLong(mapFragment.getView(), 1);
-    }
-
-    @Override protected void onRestart() {
-        super.onRestart();
-        recreate();
-    }
-    @Override protected void onDestroy() {
-        //Helper.closeReader();
-        //Helper.closeWriter();
-        super.onDestroy();
-    }
-
-    // tools
-    private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
-        if (value.equals(C.NO_VALUE) || value.equals(C.NO_VALUE_TIME) || value.equals("")) {
-            tv.setVisibility(View.GONE);
-            alsoHide.setVisibility(View.GONE);
-        }
-        else tv.setText(value);
-    }
-    private void setTvHideIfEmpty(String value, TextView tv) {
-        if (value.equals(C.NO_VALUE) || value.equals(C.NO_VALUE_TIME) || value.equals("")) {
-            tv.setVisibility(View.GONE);
-        }
-        else tv.setText(value);
     }
 
 }

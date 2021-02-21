@@ -50,7 +50,7 @@ public abstract class StravaAPI extends AppCompatActivity {
 
     ////
 
-    protected void connectAPI() {
+    protected void connectStrava() {
 
         a = this;
         queue = Volley.newRequestQueue(this);

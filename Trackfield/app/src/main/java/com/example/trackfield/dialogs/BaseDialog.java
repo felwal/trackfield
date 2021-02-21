@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 
@@ -18,30 +21,60 @@ public abstract class BaseDialog extends DialogFragment {
     protected AlertDialog.Builder builder;
     protected LayoutInflater inflater;
 
+    protected String title, message, tag;
+    @StringRes protected int posBtnTxtId;
+    @StringRes protected int negBtnTxtId = R.string.dialog_btn_cancel;
+
     public final static int NO_TEXT = -1;
+
+    // bundle
+    protected static final String BUNDLE_TITLE = "title";
+    protected static final String BUNDLE_MESSAGE = "message";
+    protected static final String BUNDLE_POSITIVE_BUTTON = "positiveButtonTextId";
+    protected final static String BUNDLE_TAG = "tag";
 
     ////
 
-    @NonNull
-    @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @NonNull @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        unpackBundle();
         a = getActivity();
         builder = new AlertDialog.Builder(a);
         inflater = requireActivity().getLayoutInflater();
 
-        return createDialog(buildDialog());
+        return customizeDialog(buildDialog());
     }
 
-    public abstract String tag();
-    protected abstract String title();
-    protected abstract String message();
-    protected abstract int positiveBtnTxtId();
-    protected int negativeBtnTxtId() {
-        return R.string.dialog_btn_cancel;
+    // tools
+
+    protected static Bundle putBundleBase(String title, String message, @StringRes int posBtnTxtId, String tag) {
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString(BUNDLE_TITLE, title);
+        bundle.putString(BUNDLE_MESSAGE, message);
+        bundle.putInt(BUNDLE_POSITIVE_BUTTON, posBtnTxtId);
+        bundle.putString(BUNDLE_TAG, tag);
+
+        return bundle;
     }
 
-    protected abstract AlertDialog buildDialog();
-    protected AlertDialog createDialog(AlertDialog dialog) {
+    protected Bundle unpackBundleBase(String defaultTag) {
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            title = bundle.getString(BUNDLE_TITLE, "");
+            message = bundle.getString(BUNDLE_MESSAGE, "");
+            posBtnTxtId = bundle.getInt(BUNDLE_POSITIVE_BUTTON, R.string.dialog_btn_ok);
+            tag = bundle.getString(BUNDLE_TAG, defaultTag);
+        }
+
+        return bundle;
+    }
+
+    protected AlertDialog customizeDialog(AlertDialog dialog) {
 
         // title
         int titleId = getResources().getIdentifier( "alertTitle", "id", "android" );
@@ -52,7 +85,7 @@ public abstract class BaseDialog extends DialogFragment {
 
         // message
         TextView messageTv = dialog.findViewById(android.R.id.message);
-        messageTv.setTextAppearance(title().equals("") ? R.style.DialogMessageLone : R.style.DialogMessage);
+        messageTv.setTextAppearance(title.equals("") ? R.style.DialogMessageLone : R.style.DialogMessage);
 
         // bg
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog_bg);
@@ -61,5 +94,15 @@ public abstract class BaseDialog extends DialogFragment {
 
         return dialog;
     }
+
+    public void show(FragmentManager fm) {
+        super.show(fm, tag);
+    }
+
+    // abstract
+
+    protected abstract void unpackBundle();
+
+    protected abstract AlertDialog buildDialog();
 
 }

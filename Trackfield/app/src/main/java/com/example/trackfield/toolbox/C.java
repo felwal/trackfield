@@ -5,6 +5,8 @@ import com.example.trackfield.R;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 // Consts
 public class C {
@@ -113,6 +115,8 @@ public class C {
     public static final TemporalField DAY_OF_WEEK = WeekFields.ISO.dayOfWeek();
 
     // theme
+    public static final ArrayList<String> themeNames = new ArrayList<>(Arrays.asList("Dark", "Light", "Set by Battery Saver"));
+    public static final ArrayList<String> colorNames = new ArrayList<>(Arrays.asList("Mono", "Green"));
     public static final int[][] LOOKS = {
             { R.style.AppTheme_Dark_Mono, R.style.AppTheme_Dark_Green, R.style.AppTheme_Splash},
             { R.style.AppTheme_Light_Mono, R.style.AppTheme_Light_Green} };

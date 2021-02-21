@@ -8,17 +8,12 @@ import android.widget.Button;
 
 import com.example.trackfield.R;
 
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trackfield.activities.ui.main.BoardingPagerAdapter;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
 
 public class BoardingActivity extends AppCompatActivity {
-
-    private BoardingPagerAdapter adapter;
-    private ViewPager pager;
 
     ////
 
@@ -26,6 +21,8 @@ public class BoardingActivity extends AppCompatActivity {
         Intent startIntent = new Intent(c.getApplicationContext(), BoardingActivity.class);
         c.startActivity(startIntent);
     }
+
+    // on
 
     @Override protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,6 +36,8 @@ public class BoardingActivity extends AppCompatActivity {
 
         setBtn();
     }
+
+    // set
 
     private void setBtn() {
         final Button nextBtn = findViewById(R.id.button_next);

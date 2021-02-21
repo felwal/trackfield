@@ -3,7 +3,7 @@ package com.example.trackfield.fragments.recycler_fragments;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.RecActivity;
+import com.example.trackfield.activities.rec_activity.RouteRecActivity;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RoRecyclerAdapter;
 import com.example.trackfield.items.RouteItem;
@@ -61,7 +61,7 @@ public class RoRecyclerFragment extends RecyclerFragment {
 
     @Override public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
-            RecActivity.RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
+            RouteRecActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }

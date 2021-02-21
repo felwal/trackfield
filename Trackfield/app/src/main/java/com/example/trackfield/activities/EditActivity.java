@@ -56,13 +56,17 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent startIntent = new Intent(c.getApplicationContext(), EditActivity.class);
         c.startActivity(startIntent);
     }
+
     public static void startActivity(Context c, int _id) {
         Intent startIntent = new Intent(c.getApplicationContext(), EditActivity.class);
         startIntent.putExtra(EXTRA_ID, _id);
         c.startActivity(startIntent);
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    // on
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
@@ -79,6 +83,38 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         setTexts();
         addSubViewBtnListener();
     }
+
+    @Override
+    protected void onDestroy() {
+        //writer.close();
+        //Helper.closeReader();
+        //Helper.closeWriter();
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            case R.id.action_save:
+                parseAndSave();
+                return true;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // set
 
     private void findEditTexts() {
 
@@ -104,7 +140,15 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    // set texts
+    private void setToolbar() {
+        final Toolbar tb = findViewById(R.id.toolbar_edit);
+        setSupportActionBar(tb);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(getResources().getString(R.string.activity_edit));
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setHomeAsUpIndicator(R.drawable.ic_cancel_24dp);
+    }
+
     private void setTexts() {
 
         if (edit) setTextsEdit();
@@ -113,12 +157,14 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         driveDistanceTvListener();
         dateEtListener();
     }
+
     private void setTextsCreate() {
 
         //_id = D.exercises.size();
         dateEt.setText(LocalDate.now().format(C.FORMATTER_EDIT_DATE));
         timeEt.setText(LocalDateTime.now().format(C.FORMATTER_EDIT_TIME));
     }
+
     private void setTextsEdit() {
 
         //exercise = D.exercises.get(id);
@@ -179,6 +225,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     // parse
+
     private void parseAndSave() {
 
         try {
@@ -220,6 +267,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         catch (NumberFormatException e) { L.toast("Can't save empty", this); }
         catch (Exception e) { L.handleError(e, this); }
     }
+
     private ArrayList<Sub> parseSubs() {
 
         ArrayList<Sub> subs = new ArrayList<>();
@@ -251,7 +299,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         return subs;
     }
 
-    // listeners
+    // set listeners
+
     private void addSubViewBtnListener() {
 
         final Button addSubBtn = findViewById(R.id.button_addSub);
@@ -266,6 +315,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
     private void removeSubViewBtnListener(final LinearLayout ll, final View subView) {
 
         final Button removeBtn = subView.findViewById(R.id.button_removeSub);
@@ -276,6 +326,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
     private void driveDistanceTvListener() {
 
         sTv.setOnClickListener(new View.OnClickListener() {
@@ -293,6 +344,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
     private void dateEtListener() {
 
         dateEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -313,46 +365,15 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
-    // toolbar
-    private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_edit);
-        setSupportActionBar(tb);
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_edit));
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setHomeAsUpIndicator(R.drawable.ic_cancel_24dp);
-    }
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_edit, menu);
-        return true;
-    }
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    // implements
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-
-            case R.id.action_save:
-                parseAndSave();
-                return true;
-
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override protected void onDestroy() {
-        //writer.close();
-        //Helper.closeReader();
-        //Helper.closeWriter();
-        super.onDestroy();
-    }
-
-    // spinner
-    @Override public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
         L.setVisibleOrGone(intervalEt, pos == Exercise.TYPE_INTERVALS);
     }
-    @Override public void onNothingSelected(AdapterView<?> adapterView) {
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
         L.setVisibleOrGone(intervalEt, false);
     }
 

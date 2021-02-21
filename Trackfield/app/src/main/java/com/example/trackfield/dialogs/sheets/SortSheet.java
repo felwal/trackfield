@@ -54,7 +54,10 @@ public class SortSheet extends BottomSheetDialogFragment {
         return instance;
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    // on
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         a = getActivity();
 
@@ -69,16 +72,19 @@ public class SortSheet extends BottomSheetDialogFragment {
         }
 
     }
-    @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialogsheet_sort, container, false);
 
-        sortClick();
+        setClick();
 
         return view;
     }
 
-    // buttons
-    private void sortClick() {
+    // set
+
+    private void setClick() {
 
         LinearLayout scroller = view.findViewById(R.id.linearLayout_sortSheet_base);
         RelativeLayout[] layouts = new RelativeLayout[sortModesTitle.length];
@@ -117,23 +123,23 @@ public class SortSheet extends BottomSheetDialogFragment {
 
             // click
             final int RL = rl;
-            layouts[rl].setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if (sortMode == sortModes[RL]) { smallestFirst = !smallestFirst; }
-                    else { sortMode = sortModes[RL]; smallestFirst = smallestFirsts[RL]; }
-                    listener.onSortSheetDismiss(sortMode, smallestFirst);
-                    dismiss();
-                }
+            layouts[rl].setOnClickListener(v -> {
+                if (sortMode == sortModes[RL]) { smallestFirst = !smallestFirst; }
+                else { sortMode = sortModes[RL]; smallestFirst = smallestFirsts[RL]; }
+                listener.onSortSheetDismiss(sortMode, smallestFirst);
+                dismiss();
             });
 
         }
 
     }
 
-    // dismiss
+    // interface
+
     public void setDismissListener(DismissListener dismissListener) {
         listener = dismissListener;
     }
+
     public interface DismissListener {
         void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst);
     }

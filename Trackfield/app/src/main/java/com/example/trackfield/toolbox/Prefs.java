@@ -99,6 +99,7 @@ public class Prefs {
         editor = sp.edit();
         load();
     }
+
     private static void load() {
 
         TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
@@ -137,11 +138,13 @@ public class Prefs {
     }
 
     // tools
+
     private static void savePref(Object var, String tag) {
         String json = gson.toJson(var);
         editor.putString(tag, json);
         editor.apply();
     }
+
     private static <T> T loadPref(TypeToken token, String tag) {
 
         if (!sp.contains(tag)) savePref(ofTag(tag), tag);
@@ -150,6 +153,7 @@ public class Prefs {
         Type type = token.getType();
         return gson.fromJson(json, type);
     }
+
     private static Object ofTag(String tag) {
         switch (tag) {
             case DEVELOPER: return developer;
@@ -180,94 +184,117 @@ public class Prefs {
     }
 
     // set
+
     public static void setDeveloper(boolean developer) {
         Prefs.developer = developer;
         savePref(developer, DEVELOPER);
     }
+
     public static void setFirstLogin(boolean firstLogin) {
         Prefs.firstLogin = firstLogin;
         savePref(firstLogin, FIRST_LOGIN);
     }
+
     public static void showWeekHeaders(boolean show) {
         showWeekHeaders = show;
         savePref(show, WEEK_HEADERS);
     }
+
     public static void showWeekDistance(boolean show) {
         weekDistance = show;
         savePref(show, WEEK_DISTANCE);
     }
+
     public static void showWeekChart(boolean show) {
         showWeekChart = show;
         savePref(show, WEEK_CHART);
     }
+
     public static void showDailyChart(boolean show) {
         showDailyChart = show;
         savePref(show, DAILY_CHART);
     }
+
     public static void setColor(int colorConst) {
         color = colorConst;
         savePref(colorConst, COLOR);
     }
+
     public static void setTheme(boolean light) {
         theme = light;
         savePref(light, THEME);
     }
+
     public static void setMass(float kilos) {
         mass = kilos;
         savePref(kilos, MASS);
     }
+
     public static void setBirthday(LocalDate date) {
         birthday = date;
         savePref(date, BIRTHDAY);
     }
+
     public static void showHiddenRoutes(boolean show) {
         showHiddenRoutes = show;
         savePref(show, LESSER_ROUTES);
     }
+
     public static void includeLonger(boolean include) {
         includeLonger = include;
         savePref(include, INCLCUDE_LONGER);
     }
+
     public static void setDistanceLowerLimit(int distanceLowerLimit) {
         Prefs.distanceLowerLimit = distanceLowerLimit;
         savePref(distanceLowerLimit, LIMIT_LOWER);
     }
+
     public static void setDistanceUpperLimit(int distanceUpperLimit) {
         Prefs.distanceUpperLimit = distanceUpperLimit;
         savePref(distanceUpperLimit, LIMIT_UPPER);
     }
+
     public static void setExerciseVisibleTypes(ArrayList<Integer> types) {
         exerciseVisibleTypes = types;
         savePref(types, TYPES_EXERCISE);
     }
+
     public static void setRouteVisibleTypes(ArrayList<Integer> types) {
         routeVisibleTypes = types;
         savePref(types, TYPES_ROUTE);
     }
+
     public static void setDistanceVisibleTypes(ArrayList<Integer> types) {
         distanceVisibleTypes = types;
         savePref(types, TYPES_DISTANCE);
     }
+
     public static void setSortModePref(C.Layout layout, C.SortMode sortMode) {
         sortModePrefs[layout.ordinal()] = sortMode;
         savePref(sortModePrefs, SORT_MODE);
     }
+
     public static void setSmallestFirstPref(C.Layout layout, boolean smallestFirst) {
         smallestFirstPrefs[layout.ordinal()] = smallestFirst;
         savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
     }
+
     public static void setAuthCode(String authCode) {
         Prefs.authCode = authCode;
         savePref(authCode, STRAVA_AUTH);
     }
+
     public static void setRefreshToken(String refreshToken) {
         Prefs.refreshToken = refreshToken;
         savePref(refreshToken, STRAVA_REFRESH);
     }
+
     public static void setAccessToken(String accessToken) {
         Prefs.accessToken = accessToken;
         savePref(accessToken, STRAVA_ACCESS);
     }
+
     public static void setAccessTokenExpiration(LocalDateTime accessTokenExpiration) {
         Prefs.accessTokenExpiration = accessTokenExpiration;
         savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
@@ -276,50 +303,65 @@ public class Prefs {
     public static void setColorGreen() {
         setColor(COLOR_GREEN);
     }
+
     public static void setColorMono() {
         setColor(COLOR_MONO);
     }
 
     // get
+
     public static boolean isDeveloper() {
         return developer;
     }
+
     public static boolean isFirstLogin() {
         return firstLogin;
     }
+
     public static boolean isWeekHeadersShown() {
         return showWeekHeaders;
     }
+
     public static boolean isWeekDistanceShown() {
         return weekDistance;
     }
+
     public static boolean isWeekChartShown() {
         return showWeekChart;
     }
+
     public static boolean isDailyChartShown() {
         return showDailyChart;
     }
+
     public static int getColor() {
         return color;
     }
+
     public static boolean isThemeLight() {
         return theme;
     }
+
     public static float getMass() {
         return mass;
     }
+
     public static LocalDate getBirthday() {
         return birthday;
     }
+
     public static boolean areHiddenRoutesShown() {
         return showHiddenRoutes;
     }
+
     public static boolean includeLonger() {
         return includeLonger;
     }
+
     public static int getDistanceLowerLimit() {
         return distanceLowerLimit;
     }
+
     public static int getDistanceUpperLimit() {
         return distanceUpperLimit;
     }
@@ -327,43 +369,59 @@ public class Prefs {
     public static ArrayList<Integer> getExerciseVisibleTypes() {
         return exerciseVisibleTypes;
     }
+
     public static ArrayList<Integer> getRouteVisibleTypes() {
         return routeVisibleTypes;
     }
+
     public static ArrayList<Integer> getDistanceVisibleTypes() {
         return distanceVisibleTypes;
     }
+
     public static C.SortMode getSortModePref(C.Layout layout) {
         return sortModePrefs[layout.ordinal()];
     }
+
     public static boolean getSmallestFirstPref(C.Layout layout) {
         return smallestFirstPrefs[layout.ordinal()];
     }
+
     public static String getAuthCode() {
         return authCode;
     }
+
     public static String getRefreshToken() {
         return refreshToken;
     }
+
     public static String getAccessToken() {
         return accessToken;
     }
+
     public static LocalDateTime getAccessTokenExpiration() {
         return accessTokenExpiration;
     }
 
     // get driven
+
     public static boolean isColorGreen() {
         return color == COLOR_GREEN;
     }
+
     public static boolean isColorMono() {
         return color == COLOR_MONO;
     }
+
+    public static int getThemeInt() {
+        return theme ? 1 : 0;
+    }
+
     public static boolean isAccessTokenCurrent() {
         boolean notNull = accessTokenExpiration != null && accessTokenExpiration.toLocalDate() != null && accessTokenExpiration.toLocalTime() != null;
         LocalDateTime now = LocalDateTime.now();
         return notNull && now.isBefore(accessTokenExpiration);
     }
+
     public static boolean isRefreshTokenCurrent() {
         return refreshToken != null && !refreshToken.equals("");
     }
@@ -371,6 +429,7 @@ public class Prefs {
     public static String getMapId(Context c) {
         return c.getResources().getString(theme ? R.string.map_id_light : R.string.map_id_dark);
     }
+
     public static MapStyleOptions getMapStyle(Context c) {
         return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_retro_json : R.string.mapstyle_mono_json));// C.MAP_STYLES[M.heaviside(theme)]));
     }

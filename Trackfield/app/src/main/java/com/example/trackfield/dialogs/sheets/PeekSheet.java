@@ -42,7 +42,10 @@ public class PeekSheet extends BottomSheetDialogFragment {
         return instance;
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    // on
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         a = getActivity();
 
@@ -54,13 +57,22 @@ public class PeekSheet extends BottomSheetDialogFragment {
         }
 
     }
-    @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialogsheet_peek, container, false);
 
         setViews();
 
         return view;
     }
+
+    @Override public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
+        listener.onPeekSheetDismiss(exercise.get_id());
+    }
+
+    // set
 
     private void setViews() {
 
@@ -87,10 +99,7 @@ public class PeekSheet extends BottomSheetDialogFragment {
 
     }
 
-    @Override public void onCancel(@NonNull DialogInterface dialog) {
-        super.onCancel(dialog);
-        listener.onPeekSheetDismiss(exercise.get_id());
-    }
+    // interface
 
     public interface DismissListener {
         void onPeekSheetDismiss(int id);

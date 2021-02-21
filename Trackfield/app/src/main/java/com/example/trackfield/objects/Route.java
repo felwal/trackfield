@@ -39,54 +39,69 @@ public class Route implements JSONObjectable {
         this.goalPace = goalPace;
         this.hidden = hidden;
     }
+
     public Route(int _id, String name) {
         this._id = _id;
         this.name = name;
     }
+
     public Route(JSONObject obj) throws JSONException {
         _id = obj.getInt(JSON_ID);
         name = obj.getString(JSON_NAME);
         goalPace = (float) obj.getDouble(JSON_GOAL_PACE);
         hidden = obj.getBoolean(JSON_HIDDEN);
     }
+
     public Route() {
         _id = -1;
         name = "[route not found]";
     }
 
     // set
+
     public void setName(String name) {
         this.name = name;
     }
+
     public void setGoalPace(float goalPace) {
         this.goalPace = goalPace;
     }
+
     public void removeGoalPace() {
         this.goalPace = NO_GOAL_PACE;
     }
+
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
+
     public void invertHidden() {
         hidden = !hidden;
     }
 
     // get
+
     public int get_id() {
         return _id;
     }
+
     public String getName() {
         return name;
     }
+
     public float getGoalPace() {
         return goalPace;
     }
+
     public boolean hasGoalPace() {
         return goalPace != NO_GOAL_PACE;
     }
+
     public boolean isHidden() {
         return hidden;
     }
+
+    // extends
 
     @Override public JSONObject toJSONObject(Context c) {
 

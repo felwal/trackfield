@@ -9,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.example.trackfield.dialogs.BinaryDialog;
-import com.example.trackfield.dialogs.instances.FinishTracking;
 import com.example.trackfield.objects.Coordinate;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
@@ -22,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -75,8 +75,10 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         c.startActivity(intent);
     }
 
-    @SuppressLint("MissingPermission")
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    // on
+
+    @SuppressLint("MissingPermission") @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
@@ -97,6 +99,45 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         setFabs();
         setMap();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (coordinates.size() == 0) {
+            super.onBackPressed();
+            return;
+        }
+        finishDialog();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        gMap = googleMap;
+        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
+        gMap.getUiSettings().setAllGesturesEnabled(false);
+
+        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override public void onMapClick(LatLng latLng) {
+                if (mapExpanded) {
+                    L.crossfadeIn(paceTv, 1);
+                    L.crossfadeIn(avgPaceTv, 1);
+                    L.animateHeight(mapFrame, M.goldenRatioSmall(L.getScreenHeight(TrackActivity.this)));
+                    gMap.getUiSettings().setAllGesturesEnabled(false);
+                    mapExpanded = false;
+                }
+                else {
+                    L.crossfadeOut(paceTv);
+                    L.crossfadeOut(avgPaceTv);
+                    L.animateHeight(mapFrame, M.goldenRatioLarge(L.getScreenHeight(TrackActivity.this)));
+                    gMap.getUiSettings().setAllGesturesEnabled(true);
+                    mapExpanded = true;
+                }
+            }
+        });
+
+    }
+
+    // set
 
     private void setFabs() {
 
@@ -158,6 +199,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     // tools
+
     private void updateMap(Location location) {
 
         final LatLng latLng = M.toLatLng(location);
@@ -181,9 +223,12 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         gMap.addPolyline(polyline);
 
     }
+
     private void finishDialog() {
-        FinishTracking.newInstance(getSupportFragmentManager());
+        BinaryDialog.newInstance(getString(R.string.dialog_title_finish_recording), "", R.string.dialog_btn_finish, "finishTracking")
+                .show(getSupportFragmentManager());
     }
+
     private void saveExercise() {
 
         /*Map map = new Map(-1, coordinates);
@@ -194,41 +239,19 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         writer.close();*/
     }
 
-    @Override public void onBinaryDialogPositiveClick(String tag) {
+    // implements
+
+    @Override
+    public void onBinaryDialogPositiveClick(String tag) {
         if (coordinates.lastKey() < 30) { finish(); return; }
         saveExercise();
         finish();
     }
 
-    // map & location listener
-    @Override public void onMapReady(GoogleMap googleMap) {
+    // LocationListener implements
 
-        gMap = googleMap;
-        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
-        gMap.getUiSettings().setAllGesturesEnabled(false);
-
-        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override public void onMapClick(LatLng latLng) {
-                if (mapExpanded) {
-                    L.crossfadeIn(paceTv, 1);
-                    L.crossfadeIn(avgPaceTv, 1);
-                    L.animateHeight(mapFrame, M.goldenRatioSmall(L.getScreenHeight(TrackActivity.this)));
-                    gMap.getUiSettings().setAllGesturesEnabled(false);
-                    mapExpanded = false;
-                }
-                else {
-                    L.crossfadeOut(paceTv);
-                    L.crossfadeOut(avgPaceTv);
-                    L.animateHeight(mapFrame, M.goldenRatioLarge(L.getScreenHeight(TrackActivity.this)));
-                    gMap.getUiSettings().setAllGesturesEnabled(true);
-                    mapExpanded = true;
-                }
-            }
-        });
-
-    }
-    @SuppressLint("SetTextI18n")
-    @Override public void onLocationChanged(Location location) {
+    @SuppressLint("SetTextI18n") @Override
+    public void onLocationChanged(@NonNull Location location) {
 
         if (gMap != null) updateMap(location);
         if (!loaded) { playPauseFab.setVisibility(View.VISIBLE); loaded = true; }
@@ -264,20 +287,17 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    @Override public void onProviderEnabled(String provider) {
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
         L.crossfade(mapFrame, 1);
     }
-    @Override public void onProviderDisabled(String provider) {
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
         L.crossfade(mapFrame, 0.5f);
     }
-    @Override public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-    @Override public void onBackPressed() {
-        if (coordinates.size() == 0) {
-            super.onBackPressed();
-            return;
-        }
-        finishDialog();
-    }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
 }

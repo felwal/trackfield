@@ -55,7 +55,10 @@ public class F {
     public static final String SP_SHARED_PREFERENCES = "shared preferences";
     private static final String SP_PREFS = "prefs";
 
+    ////
+
     // general tools
+
     private static void writeFile(String pathname, String content, Context c) {
 
         // export
@@ -79,6 +82,7 @@ public class F {
         }
 
     }
+
     private static List<String> readFile(String pathname, Context c) {
 
         List<String> lines = new ArrayList<>();
@@ -106,6 +110,7 @@ public class F {
 
         return lines;
     }
+
     private static void writeJSONObjectList(String pathname, ArrayList<? extends JSONObjectable> objs, Context c) {
 
         JSONArray array = new JSONArray();
@@ -127,6 +132,7 @@ public class F {
         }
 
     }
+
     private static List<JSONObject> readJSONObjectList(String pathname, Context c) {
 
         List<JSONObject> objs = new ArrayList<>();
@@ -171,11 +177,13 @@ public class F {
     }
 
     // json
+
     public static void exportJson(Context c) {
         writeJSONObjectList(PATH + FILENAME_EJ, Helper.getReader(c).getExercises(), c);
         writeJSONObjectList(PATH + FILENAME_RJ, Helper.getReader(c).getRoutes(C.SortMode.DATE, true, true), c);
         writeJSONObjectList(PATH + FILENAME_DJ, Helper.getReader(c).getDistances(Distance.SortMode.DISTANCE, true), c);
     }
+
     public static void importJson(Context c) {
         Helper.getWriter(c).recreate();
         importRoutesJson(c);
@@ -244,6 +252,7 @@ public class F {
 
         */
     }
+
     private static void importRoutesJson(Context c) {
 
         ArrayList<Route> routes = new ArrayList<>();
@@ -261,6 +270,7 @@ public class F {
         L.toast("Imported", c);
         L.toast("Imported", c);
     }
+
     private static void importDistancesJson(Context c) {
 
         ArrayList<Distance> distances = new ArrayList<>();
@@ -279,6 +289,7 @@ public class F {
     }
 
     // txt
+
     @Deprecated public static void exportTxt(Context c) {
 
         //D.moveExercise();
@@ -327,6 +338,7 @@ public class F {
         }
 
     }
+
     @Deprecated public static void importTxt(Context c) {
 
         // are you sure?
@@ -513,19 +525,12 @@ public class F {
 
     }
 
-    private static ArrayList<Sub> getSubsBySuperId(ArrayList<ArrayList<Sub>> subSets, int superId) {
-
-        for (ArrayList<Sub> subSet : subSets) {
-            if (subSet.get(0).get_superId() == superId) { return subSet; }
-        }
-
-        return new ArrayList<>();
-    }
-
     // permissions
+
     public static boolean shouldAskPermissions(Context c) {
         return !permissionToStorage(c) || !permissionToLocation(c);
     }
+
     @TargetApi(23) public static void askPermissions(Activity a) {
         String[] permissions = {
                 "android.permission.READ_EXTERNAL_STORAGE",
@@ -535,14 +540,27 @@ public class F {
         int requestCode = 200;
         ActivityCompat.requestPermissions(a, permissions, requestCode);
     }
+
     public static boolean permissionToStorage(Context c) {
         return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
     }
+
     public static boolean permissionToLocation(Context c) {
         return ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //
+
+    private static ArrayList<Sub> getSubsBySuperId(ArrayList<ArrayList<Sub>> subSets, int superId) {
+
+        for (ArrayList<Sub> subSet : subSets) {
+            if (subSet.get(0).get_superId() == superId) { return subSet; }
+        }
+
+        return new ArrayList<>();
     }
 
 }

@@ -3,7 +3,7 @@ package com.example.trackfield.fragments.recycler_fragments;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.RecActivity;
+import com.example.trackfield.activities.rec_activity.IntervalRecActivity;
 import com.example.trackfield.adapters.recycler_adapters.InRecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.items.IntervalItem;
@@ -61,7 +61,7 @@ public class InRecyclerFragment extends RecyclerFragment {
 
     @Override public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
-            RecActivity.IntervalActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval() );
+            IntervalRecActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval() );
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }
