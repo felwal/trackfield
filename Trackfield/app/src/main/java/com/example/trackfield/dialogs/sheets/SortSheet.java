@@ -1,6 +1,7 @@
 package com.example.trackfield.dialogs.sheets;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -14,24 +15,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
+import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class SortSheet extends BottomSheetDialogFragment {
+public class SortSheet extends BaseSheet {
 
-    private Activity a;
-    private View view;
     private DismissListener listener;
 
+    // arguments
     private C.SortMode[] sortModes;
     private C.SortMode sortMode;
     private String[] sortModesTitle;
     private boolean[] smallestFirsts;
     private boolean smallestFirst;
+
+    private static final String TAG = "peekSheet";
 
     // bundle
     public static final String BUNDLE_SORTMODES = "sortModes";
@@ -43,35 +47,22 @@ public class SortSheet extends BottomSheetDialogFragment {
     ////
 
     public static SortSheet newInstance(C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+
         SortSheet instance = new SortSheet();
         Bundle bundle = new Bundle();
+
         bundle.putIntArray(BUNDLE_SORTMODES, C.SortMode.toInts(sortModes));
         bundle.putInt(BUNDLE_SORTMODE, C.SortMode.toInt(sortMode));
         bundle.putStringArray(BUNDLE_SORTMODES_TITLE, sortModesTitle);
         bundle.putBooleanArray(BUNDLE_SMALLESTFIRSTS, smallestFirsts);
         bundle.putBoolean(BUNDLE_SMALLESTFIRST, smallestFirst);
+
         instance.setArguments(bundle);
+
         return instance;
     }
 
-    // on
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        a = getActivity();
-
-        // arguments
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            sortModes = C.SortMode.fromInts(bundle.getIntArray(BUNDLE_SORTMODES));
-            sortMode = C.SortMode.fromInt(bundle.getInt(BUNDLE_SORTMODE, 0));
-            sortModesTitle = bundle.getStringArray(BUNDLE_SORTMODES_TITLE);
-            smallestFirsts = bundle.getBooleanArray(BUNDLE_SMALLESTFIRSTS);
-            smallestFirst = bundle.getBoolean(BUNDLE_SMALLESTFIRST, false);
-        }
-
-    }
+    // extends DialogFragment
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,6 +71,37 @@ public class SortSheet extends BottomSheetDialogFragment {
         setClick();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (DismissListener) context;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement DialogListener");
+        }
+    }
+
+    // extends BaseSheet
+
+    @Override
+    protected void unpackBundle() {
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            sortModes = C.SortMode.fromInts(bundle.getIntArray(BUNDLE_SORTMODES));
+            sortMode = C.SortMode.fromInt(bundle.getInt(BUNDLE_SORTMODE, 0));
+            sortModesTitle = bundle.getStringArray(BUNDLE_SORTMODES_TITLE);
+            smallestFirsts = bundle.getBooleanArray(BUNDLE_SMALLESTFIRSTS);
+            smallestFirst = bundle.getBoolean(BUNDLE_SMALLESTFIRST, false);
+        }
+
+        tag = TAG;
+
     }
 
     // set
@@ -135,10 +157,6 @@ public class SortSheet extends BottomSheetDialogFragment {
     }
 
     // interface
-
-    public void setDismissListener(DismissListener dismissListener) {
-        listener = dismissListener;
-    }
 
     public interface DismissListener {
         void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst);

@@ -17,6 +17,7 @@ public class DecimalDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    // arguments
     private float text;
     private String hint;
 
@@ -27,8 +28,6 @@ public class DecimalDialog extends BaseDialog {
     private final static String TAG_DEFAULT = "decimalDialog";
 
     ////
-
-    private DecimalDialog() {}
 
     public static DecimalDialog newInstance(String title, String message, float text, String hint, @StringRes int posBtnTxtId, String tag) {
 
@@ -49,7 +48,9 @@ public class DecimalDialog extends BaseDialog {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        try { listener = (DialogListener) context; }
+        try {
+            listener = (DialogListener) context;
+        }
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }

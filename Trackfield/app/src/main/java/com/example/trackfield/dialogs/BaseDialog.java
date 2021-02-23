@@ -21,19 +21,24 @@ public abstract class BaseDialog extends DialogFragment {
     protected AlertDialog.Builder builder;
     protected LayoutInflater inflater;
 
+    // arguments
     protected String title, message, tag;
-    @StringRes protected int posBtnTxtId;
+    @StringRes protected int posBtnTxtId = R.string.dialog_btn_ok;
     @StringRes protected int negBtnTxtId = R.string.dialog_btn_cancel;
 
     public final static int NO_TEXT = -1;
+    public final static int NO_RES = -1;
 
     // bundle
     protected static final String BUNDLE_TITLE = "title";
     protected static final String BUNDLE_MESSAGE = "message";
     protected static final String BUNDLE_POSITIVE_BUTTON = "positiveButtonTextId";
+    protected static final String BUNDLE_NEGATIVE_BUTTON = "negativeButtonTextId";
     protected final static String BUNDLE_TAG = "tag";
 
     ////
+
+    // extends DialogFragment
 
     @NonNull @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -67,7 +72,8 @@ public abstract class BaseDialog extends DialogFragment {
         if (bundle != null) {
             title = bundle.getString(BUNDLE_TITLE, "");
             message = bundle.getString(BUNDLE_MESSAGE, "");
-            posBtnTxtId = bundle.getInt(BUNDLE_POSITIVE_BUTTON, R.string.dialog_btn_ok);
+            posBtnTxtId = bundle.getInt(BUNDLE_POSITIVE_BUTTON, posBtnTxtId);
+            negBtnTxtId = bundle.getInt(BUNDLE_NEGATIVE_BUTTON, negBtnTxtId);
             tag = bundle.getString(BUNDLE_TAG, defaultTag);
         }
 

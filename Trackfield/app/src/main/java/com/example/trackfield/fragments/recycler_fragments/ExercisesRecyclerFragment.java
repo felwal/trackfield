@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
-import com.example.trackfield.adapters.recycler_adapters.ExRecyclerAdapter;
+import com.example.trackfield.adapters.recycler_adapters.ExercisesRecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.graphing.Graph;
@@ -20,7 +20,7 @@ import com.example.trackfield.toolbox.Prefs;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ExRecyclerFragment extends RecyclerFragment {
+public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
@@ -37,7 +37,7 @@ public class ExRecyclerFragment extends RecyclerFragment {
 
         // sorter & charts
         if (exerliteList.size() != 0) {
-            Sorter sorter = newSorter(sortModes, sortModesTitle);
+            Sorter sorter = getNewSorter(sortModes, sortModesTitle);
 
             if (Prefs.isDailyChartShown()) {
                 /*dailyChart = new ChartOld(D.weekDailyDistance());
@@ -113,7 +113,7 @@ public class ExRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
     }
     @Override protected void getAdapter() {
-        adapter = new ExRecyclerAdapter(items, a);
+        adapter = new ExercisesRecyclerAdapter(items, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);

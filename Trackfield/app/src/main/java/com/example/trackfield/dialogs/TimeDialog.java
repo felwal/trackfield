@@ -19,6 +19,7 @@ public class TimeDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    // arguments
     private int text1, text2;
     private String hint1, hint2;
     @StringRes private int neuBtnTxtId;
@@ -33,8 +34,6 @@ public class TimeDialog extends BaseDialog {
     private final static String TAG_DEFAULT = "timeDialog";
 
     ////
-
-    private TimeDialog() {}
 
     public static TimeDialog newInstance(String title, String message, int text1, int text2, String hint1, String hint2, @StringRes int posBtnTxtId, String tag) {
 
@@ -55,7 +54,6 @@ public class TimeDialog extends BaseDialog {
 
     @Override
     public void onAttach(@NonNull Context context) {
-
         super.onAttach(context);
 
         try {
@@ -64,7 +62,6 @@ public class TimeDialog extends BaseDialog {
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }
-
     }
 
     // extends

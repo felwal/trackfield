@@ -16,6 +16,7 @@ public class TextDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    // arguments
     private String text, hint;
 
     // bundle
@@ -25,8 +26,6 @@ public class TextDialog extends BaseDialog {
     private final static String TAG_DEFAULT = "textDialog";
 
     ////
-
-    private TextDialog() {}
 
     public static TextDialog newInstance(String title, String message, String text, String hint, @StringRes int posBtnTxtId, String tag) {
 
@@ -45,7 +44,6 @@ public class TextDialog extends BaseDialog {
 
     @Override
     public void onAttach(@NonNull Context context) {
-
         super.onAttach(context);
 
         try {
@@ -54,7 +52,6 @@ public class TextDialog extends BaseDialog {
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }
-
     }
 
     // extends

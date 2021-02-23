@@ -3,8 +3,8 @@ package com.example.trackfield.fragments.recycler_fragments;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.rec_activity.IntervalRecActivity;
-import com.example.trackfield.adapters.recycler_adapters.InRecyclerAdapter;
+import com.example.trackfield.activities.rec_activity.IntervalActivity;
+import com.example.trackfield.adapters.recycler_adapters.IntervalsRecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.items.IntervalItem;
 import com.example.trackfield.items.headers.RecyclerItem;
@@ -14,7 +14,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class InRecyclerFragment extends RecyclerFragment {
+public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Amount" };
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.AMOUNT};
@@ -27,7 +27,7 @@ public class InRecyclerFragment extends RecyclerFragment {
         ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-        Sorter sorter = newSorter(sortModes, sortModesTitle);
+        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
         itemList.add(sorter);
         itemList.addAll(intervalItemList);
         if (intervalItemList.size() == 0) {
@@ -43,7 +43,7 @@ public class InRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
     @Override protected void getAdapter() {
-        adapter = new InRecyclerAdapter(items, a);
+        adapter = new IntervalsRecyclerAdapter(items, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
@@ -61,7 +61,7 @@ public class InRecyclerFragment extends RecyclerFragment {
 
     @Override public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
-            IntervalRecActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval() );
+            IntervalActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval() );
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }

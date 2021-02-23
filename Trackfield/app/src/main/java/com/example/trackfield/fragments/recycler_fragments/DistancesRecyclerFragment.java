@@ -3,8 +3,8 @@ package com.example.trackfield.fragments.recycler_fragments;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.rec_activity.DistanceRecActivity;
-import com.example.trackfield.adapters.recycler_adapters.DiRecyclerAdapter;
+import com.example.trackfield.activities.rec_activity.DistanceActivity;
+import com.example.trackfield.adapters.recycler_adapters.DistancesRecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.items.DistanceItem;
 import com.example.trackfield.items.headers.RecyclerItem;
@@ -15,7 +15,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class DiRecyclerFragment extends RecyclerFragment {
+public class DistancesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Distance", "Amount", "Best time", "Best pace" };
     private final C.SortMode[] sortModes = { C.SortMode.DISTANCE, C.SortMode.AMOUNT, C.SortMode.TIME, C.SortMode.PACE };
@@ -28,7 +28,7 @@ public class DiRecyclerFragment extends RecyclerFragment {
         ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/, smallestFirst, Prefs.getExerciseVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-        Sorter sorter = newSorter(sortModes, sortModesTitle);
+        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
         itemList.add(sorter);
         itemList.addAll(distanceItemList);
         if (distanceItemList.size() == 0) {
@@ -46,7 +46,7 @@ public class DiRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
     }
     @Override protected void getAdapter() {
-        adapter = new DiRecyclerAdapter(items, a);
+        adapter = new DistancesRecyclerAdapter(items, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
@@ -64,7 +64,7 @@ public class DiRecyclerFragment extends RecyclerFragment {
 
     @Override public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
-            DistanceRecActivity.startActivity(a, ((DistanceItem) items.get(position)).getDistance());
+            DistanceActivity.startActivity(a, ((DistanceItem) items.get(position)).getDistance());
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }

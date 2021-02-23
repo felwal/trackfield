@@ -16,9 +16,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.map_activity.ExerciseMapActivity;
-import com.example.trackfield.activities.rec_activity.DistanceRecActivity;
-import com.example.trackfield.activities.rec_activity.IntervalRecActivity;
-import com.example.trackfield.activities.rec_activity.RouteRecActivity;
+import com.example.trackfield.activities.rec_activity.DistanceActivity;
+import com.example.trackfield.activities.rec_activity.IntervalActivity;
+import com.example.trackfield.activities.rec_activity.RouteActivity;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Distance;
@@ -239,7 +239,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         if (from != FROM_ROUTE) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    RouteRecActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id());
+                    RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id());
                 }
             });
         }
@@ -250,7 +250,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         if (from != FROM_INTERVAL) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    IntervalRecActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id());
+                    IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id());
                 }
             });
         }
@@ -264,7 +264,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                     ArrayList<Distance> distances = Helper.getReader(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
                     for (Distance d : distances) {
                         if (M.insideLimits(exercise.distance(), d.getDistance())) {
-                            DistanceRecActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
+                            DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
                             break;
                         }
                     }

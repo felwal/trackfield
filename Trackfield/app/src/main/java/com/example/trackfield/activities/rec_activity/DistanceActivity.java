@@ -10,7 +10,7 @@ import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TimeDialog;
-import com.example.trackfield.fragments.recycler_fragments.DiExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.DistanceRecyclerFragment;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.M;
@@ -18,7 +18,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class DistanceRecActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
+public class DistanceActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
 
     private Distance distance;
     private int length;
@@ -27,19 +27,19 @@ public class DistanceRecActivity extends RecActivity implements BinaryDialog.Dia
     ////
 
     public static void startActivity(Context c, int distance) {
-        Intent intent = new Intent(c, DistanceRecActivity.class);
+        Intent intent = new Intent(c, DistanceActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
         c.startActivity(intent);
     }
 
     public static void startActivity(Context c, int distance, int originId) {
-        Intent intent = new Intent(c, DistanceRecActivity.class);
+        Intent intent = new Intent(c, DistanceActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
         if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
-    // on
+    // extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -90,7 +90,7 @@ public class DistanceRecActivity extends RecActivity implements BinaryDialog.Dia
         }
     }
 
-    // extend
+    // extends RecActivity
 
     @Override
     protected void getExtras(Intent intent) {
@@ -101,7 +101,7 @@ public class DistanceRecActivity extends RecActivity implements BinaryDialog.Dia
 
         distance = reader.getDistance(length);
         setToolbar(M.prefix(length, 2, "m"));
-        selectFragment(DiExRecyclerFragment.newInstance(length, originId));
+        selectFragment(DistanceRecyclerFragment.newInstance(length, originId));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class DistanceRecActivity extends RecActivity implements BinaryDialog.Dia
         return R.menu.menu_toolbar_rec_distance;
     }
 
-    // implement
+    // implements dialogs
 
     @Override
     public void onBinaryDialogPositiveClick(String tag) {

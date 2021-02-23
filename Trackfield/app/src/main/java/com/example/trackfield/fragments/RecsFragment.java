@@ -16,6 +16,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.activities.MainActivity.MainFragment;
 import com.example.trackfield.adapters.RecsPagerAdapter;
+import com.example.trackfield.toolbox.C;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsFragment extends MainFragment {
@@ -25,13 +26,18 @@ public class RecsFragment extends MainFragment {
 
     ////
 
-    @Override public void onCreate(Bundle savedInstancesState) {
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         setEnterTransition(transitionInflater.inflateTransition(R.transition.explode));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
     }
-    @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recs, container, false);
         setHasOptionsMenu(true);
 
@@ -40,6 +46,14 @@ public class RecsFragment extends MainFragment {
 
         return view;
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar_main_recs, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // set
 
     private void setPagerAdapter() {
         // set pagerAdapter to viewPager
@@ -52,21 +66,26 @@ public class RecsFragment extends MainFragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    // toolbar
-    @Override protected void setToolbarTitle() {
+    // extends MainFragment
+
+    @Override
+    protected void setToolbarTitle() {
         ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_records));
     }
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_toolbar_main_recs, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
-    // tools
-    @Override public void scrollToTop() {
+    @Override
+    public void scrollToTop() {
         recsPagerAdapter.scrollToTop();
     }
-    @Override public void updateFragment() {
+
+    @Override
+    public void updateFragment() {
         recsPagerAdapter.updateAdapter();
+    }
+
+    @Override
+    protected void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        recsPagerAdapter.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
 }

@@ -11,7 +11,7 @@ import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.dialogs.TimeDialog;
-import com.example.trackfield.fragments.recycler_fragments.RoExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.RouteRecyclerFragment;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.toolbox.D;
@@ -20,7 +20,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class RouteRecActivity extends RecActivity implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
+public class RouteActivity extends RecActivity implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
 
     //private int routeId;
     private Route route;
@@ -29,18 +29,18 @@ public class RouteRecActivity extends RecActivity implements TextDialog.DialogLi
     ////
 
     public static void startActivity(Context c, int routeId) {
-        Intent intent = new Intent(c, RouteRecActivity.class);
+        Intent intent = new Intent(c, RouteActivity.class);
         intent.putExtra(EXTRA_ROUTE_ID, routeId);
         c.startActivity(intent);
     }
     public static void startActivity(Context c, int routeId, int originId) {
-        Intent intent = new Intent(c, RouteRecActivity.class);
+        Intent intent = new Intent(c, RouteActivity.class);
         intent.putExtra(EXTRA_ROUTE_ID, routeId);
         if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
-    // on
+    // extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -104,7 +104,7 @@ public class RouteRecActivity extends RecActivity implements TextDialog.DialogLi
         }
     }
 
-    // extend
+    // extends RecActivity
 
     @Override
     protected void getExtras(Intent intent) {
@@ -115,7 +115,7 @@ public class RouteRecActivity extends RecActivity implements TextDialog.DialogLi
 
         setToolbar(route.getName());
 
-        selectFragment(RoExRecyclerFragment.newInstance(route.get_id(), originId));
+        selectFragment(RouteRecyclerFragment.newInstance(route.get_id(), originId));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class RouteRecActivity extends RecActivity implements TextDialog.DialogLi
         return R.menu.menu_toolbar_rec_route;
     }
 
-    // implement
+    // implements dialogs
 
     @Override
     public void onTextDialogPositiveClick(String input, String tag) {

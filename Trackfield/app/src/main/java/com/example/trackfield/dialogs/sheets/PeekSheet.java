@@ -1,6 +1,7 @@
 package com.example.trackfield.dialogs.sheets;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,44 +20,33 @@ import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.toolbox.C;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class PeekSheet extends BottomSheetDialogFragment {
+public class PeekSheet extends BaseSheet {
 
-    private Activity a;
-    private View view;
     private DismissListener listener;
 
+    // arguments
     private Exercise exercise;
+
+    private static final String TAG = "peekSheet";
 
     // bundle
     public static final String BUNDLE_ID = "id";
 
     ////
 
-    public static PeekSheet newInstance(int id, FragmentManager fm, DismissListener dismissListener) {
+    public static PeekSheet newInstance(int id) {
+
         PeekSheet instance = new PeekSheet();
         Bundle bundle = new Bundle();
+
         bundle.putInt(BUNDLE_ID, id);
+
         instance.setArguments(bundle);
-        instance.show(fm, instance.getTag());
-        instance.listener = dismissListener;
+
         return instance;
     }
 
-    // on
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        a = getActivity();
-
-        // arguments
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            int id = bundle.getInt(BUNDLE_ID, 0);
-            exercise = Helper.getReader(a).getExercise(id);
-        }
-
-    }
+    // extends DialogFragment
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,9 +57,38 @@ public class PeekSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    @Override public void onCancel(@NonNull DialogInterface dialog) {
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (DismissListener) context;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement DialogListener");
+        }
+    }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         listener.onPeekSheetDismiss(exercise.get_id());
+    }
+
+    // extends BaseSheet
+
+    @Override
+    protected void unpackBundle() {
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            int id = bundle.getInt(BUNDLE_ID, 0);
+            exercise = Helper.getReader(a).getExercise(id);
+        }
+
+        tag = TAG;
+
     }
 
     // set

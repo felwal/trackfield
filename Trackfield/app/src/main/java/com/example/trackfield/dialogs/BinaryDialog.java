@@ -16,8 +16,6 @@ public class BinaryDialog extends BaseDialog {
 
     ////
 
-    private BinaryDialog() {}
-
     public static BinaryDialog newInstance(String title, String message, @StringRes int posBtnTxtId, String tag) {
 
         BinaryDialog instance = new BinaryDialog();
@@ -28,7 +26,7 @@ public class BinaryDialog extends BaseDialog {
         return instance;
     }
 
-    // on
+    // extends DialogFragment
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -40,16 +38,13 @@ public class BinaryDialog extends BaseDialog {
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }
-
     }
 
-    // extends
+    // extends BaseDialog
 
     @Override
     protected void unpackBundle() {
-
         unpackBundleBase(TAG_DEFAULT);
-
     }
 
     @Override

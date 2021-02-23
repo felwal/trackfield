@@ -16,9 +16,9 @@ import com.example.trackfield.toolbox.D;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ExRecyclerAdapter extends RecyclerAdapter {
+public class ExercisesRecyclerAdapter extends RecyclerAdapter {
 
-    public ExRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
+    public ExercisesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);
         now = LocalDate.now();
     }

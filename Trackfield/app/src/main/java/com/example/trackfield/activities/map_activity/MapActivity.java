@@ -193,7 +193,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
         // sheet
         int id = (int) polyline.getTag();
-        PeekSheet.newInstance(id, getSupportFragmentManager(), this);
+        PeekSheet.newInstance(id).show(getSupportFragmentManager());
 
         // camera
         LatLngBounds bounds = Trail.bounds(polyline.getPoints());

@@ -1,4 +1,4 @@
-package com.example.trackfield.fragments.recycler_fragments;
+package com.example.trackfield.fragments;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -17,44 +17,42 @@ import androidx.appcompat.widget.SearchView;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.activities.MainActivity.MainFragment;
+import com.example.trackfield.fragments.recycler_fragments.ExercisesRecyclerFragment;
+import com.example.trackfield.toolbox.C;
 
 public class ExercisesFragment extends MainFragment {
 
     private View view;
     private FrameLayout frame;
-    private ExRecyclerFragment recyclerFragment;
+    private ExercisesRecyclerFragment recyclerFragment;
 
     ////
 
-    @Override public void onCreate(Bundle savedInstancesState) {
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         //setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
     }
-    @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_exercises, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
         frame = view.findViewById(R.id.frameLayout_scrollerFrameMain);
-        recyclerFragment = new ExRecyclerFragment();
+        recyclerFragment = new ExercisesRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;
     }
 
-    private void drawGraph() {
-
-        //GraphSurface surface = view.findViewById(R.id.graphSurface);
-
-    }
-
-    // toolbar
-    @Override protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_exercises));
-    }
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_toolbar_main_exercises, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
@@ -73,12 +71,26 @@ public class ExercisesFragment extends MainFragment {
 
     }
 
-    // tools
-    @Override public void scrollToTop() {
+    // extends MainFragment
+
+    @Override
+    protected void setToolbarTitle() {
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_exercises));
+    }
+
+    @Override
+    public void scrollToTop() {
         recyclerFragment.scrollToTop();
     }
-    @Override public void updateFragment() {
+
+    @Override
+    public void updateFragment() {
         if (recyclerFragment != null) recyclerFragment.updateRecycler();
+    }
+
+    @Override
+    protected void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
 }

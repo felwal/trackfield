@@ -23,6 +23,7 @@ public class FilterDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    // arguments
     protected ArrayList<Integer> checkedTypes;
 
     // bundle
@@ -31,8 +32,6 @@ public class FilterDialog extends BaseDialog {
     private final static String TAG_DEFAULT = "filterDialog";
 
     ////
-
-    private FilterDialog() {}
 
     public static FilterDialog newInstance(String title, ArrayList<Integer> checkedTypes, @StringRes int posBtnTxtId, String tag) {
 
@@ -49,7 +48,6 @@ public class FilterDialog extends BaseDialog {
     // on
 
     @Override public void onAttach(@NonNull Context context) {
-
         super.onAttach(context);
 
         try {
@@ -58,7 +56,6 @@ public class FilterDialog extends BaseDialog {
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }
-
     }
 
     // extends

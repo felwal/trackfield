@@ -9,7 +9,7 @@ import com.example.trackfield.toolbox.Prefs;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class StatsRecyclerFragment extends RoRecyclerFragment {
+public class StatsRecyclerFragment extends RoutesRecyclerFragment {
 
     @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
 

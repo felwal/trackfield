@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.fragments.recycler_fragments.StatsRecyclerFragment;
+import com.example.trackfield.toolbox.C;
 
 public class StatsFragment extends MainActivity.MainFragment {
 
@@ -22,13 +25,18 @@ public class StatsFragment extends MainActivity.MainFragment {
 
     ////
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         //setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
     }
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_dev, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
@@ -39,19 +47,33 @@ public class StatsFragment extends MainActivity.MainFragment {
 
         return view;
     }
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_toolbar_main_dev, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override protected void setToolbarTitle() {
+    // extends MainFragment
+
+    @Override
+    protected void setToolbarTitle() {
         ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_stats));
     }
-    @Override protected void scrollToTop() {
+
+    @Override
+    protected void scrollToTop() {
 
     }
-    @Override protected void updateFragment() {
+
+    @Override
+    protected void updateFragment() {
         if (recyclerFragment != null) recyclerFragment.updateRecycler();
+    }
+
+    @Override
+    protected void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
 }

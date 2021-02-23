@@ -6,7 +6,7 @@ import android.view.View;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
-import com.example.trackfield.adapters.recycler_adapters.RoExRecyclerAdapter;
+import com.example.trackfield.adapters.recycler_adapters.RouteRecyclerAdapter;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
@@ -21,7 +21,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class RoExRecyclerFragment extends RecyclerFragment {
+public class RouteRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
@@ -35,8 +35,8 @@ public class RoExRecyclerFragment extends RecyclerFragment {
 
     ////
 
-    public static RoExRecyclerFragment newInstance(int routeId, int originId) {
-        RoExRecyclerFragment instance = new RoExRecyclerFragment();
+    public static RouteRecyclerFragment newInstance(int routeId, int originId) {
+        RouteRecyclerFragment instance = new RouteRecyclerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_ROUTE_ID, routeId);
         bundle.putInt(BUNDLE_ORIGIN_ID, originId);
@@ -77,7 +77,7 @@ public class RoExRecyclerFragment extends RecyclerFragment {
                 itemList.add(graph);
             }
 
-            itemList.add(newSorter(sortModes, sortModesTitle));
+            itemList.add(getNewSorter(sortModes, sortModesTitle));
             route = Helper.getReader().getRoute(route.get_id());
             if (route.getGoalPace() != Route.NO_GOAL_PACE) {
                 Goal goal = new Goal(route.getGoalPace());
@@ -96,7 +96,7 @@ public class RoExRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
     }
     @Override protected void getAdapter() {
-        adapter = new RoExRecyclerAdapter(items, originId, a);
+        adapter = new RouteRecyclerAdapter(items, originId, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);

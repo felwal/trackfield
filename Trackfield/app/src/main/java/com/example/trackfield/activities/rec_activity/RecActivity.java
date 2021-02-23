@@ -12,10 +12,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
+import com.example.trackfield.dialogs.sheets.SortSheet;
 import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
+import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 
-public abstract class RecActivity extends AppCompatActivity {
+public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
 
     protected Helper.Reader reader;
     protected Helper.Writer writer;
@@ -28,6 +30,8 @@ public abstract class RecActivity extends AppCompatActivity {
     public static final String EXTRA_ORIGIN_ID = "orignId";
 
     ////
+
+    // extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,5 +107,11 @@ public abstract class RecActivity extends AppCompatActivity {
     protected abstract void getExtras(Intent intent);
 
     protected abstract int getToolbarMenuRes();
+
+    // implements SortSheet
+
+    @Override public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
+    }
 
 }

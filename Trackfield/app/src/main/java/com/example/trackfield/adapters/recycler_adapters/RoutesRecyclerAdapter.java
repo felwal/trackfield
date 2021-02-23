@@ -11,16 +11,16 @@ import com.example.trackfield.items.headers.RecyclerItem;
 
 import java.util.ArrayList;
 
-public class InRecyclerAdapter extends RecyclerAdapter {
+public class RoutesRecyclerAdapter extends RecyclerAdapter {
 
-    public InRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
+    public RoutesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);
     }
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
             RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.layout_item_rec, parent, false);
-            return new IntervalVH(rl);
+            return new RouteVH(rl);
         }
         return super.onCreateViewHolder(parent, viewType);
     }

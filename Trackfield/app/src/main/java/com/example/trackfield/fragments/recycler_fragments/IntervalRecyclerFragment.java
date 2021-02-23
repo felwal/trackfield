@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.trackfield.activities.ViewActivity;
-import com.example.trackfield.adapters.recycler_adapters.InExRecyclerAdapter;
+import com.example.trackfield.adapters.recycler_adapters.IntervalRecyclerAdapter;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
 import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.items.headers.RecyclerItem;
@@ -14,7 +14,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class InExRecyclerFragment extends RecyclerFragment {
+public class IntervalRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
@@ -28,8 +28,8 @@ public class InExRecyclerFragment extends RecyclerFragment {
 
     ////
 
-    public static InExRecyclerFragment newInstance(String interval, int originId) {
-        InExRecyclerFragment instance = new InExRecyclerFragment();
+    public static IntervalRecyclerFragment newInstance(String interval, int originId) {
+        IntervalRecyclerFragment instance = new IntervalRecyclerFragment();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_INTERVAL, interval);
         bundle.putInt(BUNDLE_ORIGINID, originId);
@@ -53,7 +53,7 @@ public class InExRecyclerFragment extends RecyclerFragment {
 
         /*Graph graph = new Graph(chronoList, Graph.DataX.INDEX, Graph.DataY.PACE);
         itemList.add(graph);*/
-        Sorter sorter = newSorter(sortModes, sortModesTitle);
+        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
         itemList.add(sorter);
 
         addHeadersAndItems(itemList, exerliteList);
@@ -84,7 +84,7 @@ public class InExRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
     }
     @Override protected void getAdapter() {
-        adapter = new InExRecyclerAdapter(items, originId, a);
+        adapter = new IntervalRecyclerAdapter(items, originId, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);

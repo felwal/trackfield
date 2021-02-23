@@ -3,9 +3,9 @@ package com.example.trackfield.fragments.recycler_fragments;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.rec_activity.RouteRecActivity;
+import com.example.trackfield.activities.rec_activity.RouteActivity;
 import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
-import com.example.trackfield.adapters.recycler_adapters.RoRecyclerAdapter;
+import com.example.trackfield.adapters.recycler_adapters.RoutesRecyclerAdapter;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.items.headers.Sorter;
@@ -14,7 +14,7 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class RoRecyclerFragment extends RecyclerFragment {
+public class RoutesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Name", "Amount", "Avg distance", "Best pace" };
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.NAME, C.SortMode.AMOUNT, C.SortMode.DISTANCE, C.SortMode.PACE };
@@ -27,7 +27,7 @@ public class RoRecyclerFragment extends RecyclerFragment {
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-        Sorter sorter = newSorter(sortModes, sortModesTitle);
+        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
         itemList.add(sorter);
         itemList.addAll(routeItemList);
         if (routeItemList.size() == 0) {
@@ -43,7 +43,7 @@ public class RoRecyclerFragment extends RecyclerFragment {
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
     @Override protected void getAdapter() {
-        adapter = new RoRecyclerAdapter(items, a);
+        adapter = new RoutesRecyclerAdapter(items, a);
     }
     @Override protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
@@ -61,7 +61,7 @@ public class RoRecyclerFragment extends RecyclerFragment {
 
     @Override public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
-            RouteRecActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
+            RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }

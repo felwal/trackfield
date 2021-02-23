@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.TextDialog;
-import com.example.trackfield.fragments.recycler_fragments.InExRecyclerFragment;
+import com.example.trackfield.fragments.recycler_fragments.IntervalRecyclerFragment;
 
-public class IntervalRecActivity extends RecActivity implements TextDialog.DialogListener {
+public class IntervalActivity extends RecActivity implements TextDialog.DialogListener {
 
     private String interval;
 
@@ -19,19 +19,19 @@ public class IntervalRecActivity extends RecActivity implements TextDialog.Dialo
     ////
 
     public static void startActivity(Context c, String interval) {
-        Intent intent = new Intent(c, IntervalRecActivity.class);
+        Intent intent = new Intent(c, IntervalActivity.class);
         intent.putExtra(EXTRA_INTERVAL, interval);
         c.startActivity(intent);
     }
 
     public static void startActivity(Context c, String interval, int originId) {
-        Intent intent = new Intent(c, IntervalRecActivity.class);
+        Intent intent = new Intent(c, IntervalActivity.class);
         intent.putExtra(EXTRA_INTERVAL, interval);
         if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
-    // on
+    // extends AppCompatActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -53,7 +53,7 @@ public class IntervalRecActivity extends RecActivity implements TextDialog.Dialo
         return interval;
     }
 
-    // extend
+    // extends RecActivity
 
     @Override
     protected void getExtras(Intent intent) {
@@ -62,7 +62,7 @@ public class IntervalRecActivity extends RecActivity implements TextDialog.Dialo
         interval = intent.getStringExtra(EXTRA_INTERVAL);
         setToolbar(interval);
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
-        selectFragment(InExRecyclerFragment.newInstance(interval, originId));
+        selectFragment(IntervalRecyclerFragment.newInstance(interval, originId));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class IntervalRecActivity extends RecActivity implements TextDialog.Dialo
         return R.menu.menu_toolbar_rec_interval;
     }
 
-    // implement
+    // implements TextDialog
 
     @Override public void onTextDialogPositiveClick(String input, String tag) {
         if (input.equals("")) return;

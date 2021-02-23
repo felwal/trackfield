@@ -29,7 +29,7 @@ import com.example.trackfield.toolbox.L;
 
 import java.util.ArrayList;
 
-public abstract class RecyclerFragment extends Fragment implements RecyclerAdapter.ItemClickListener, SortSheet.DismissListener {
+public abstract class RecyclerFragment extends Fragment implements RecyclerAdapter.ItemClickListener {
 
     protected Activity a;
     protected static Thread bgThread;
@@ -49,18 +49,12 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     ////
 
-    interface Threader {
-        void run();
-        default void interruptAndStart() {
-            if (bgThread != null) bgThread.interrupt();
-            bgThread = new Thread(() -> Threader.this.run());
-            bgThread.start();
-        }
-    }
+    // extends Fragment
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
@@ -126,20 +120,19 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return view;
     }
 
-    // abstracts
+    // abstract
+
     protected abstract void setSortModes();
+
     protected abstract ArrayList<RecyclerItem> getRecyclerItems();
+
     protected abstract void getAdapter();
+
     protected abstract void getPrefs();
+
     protected abstract void setPrefs();
 
-    protected void setEmptyPage() {}
-    protected void fadeInEmpty() {
-        a.runOnUiThread(() -> L.crossfadeIn(emptyCl, 1));
-    }
-    protected void fadeOutEmpty() {
-        a.runOnUiThread(() -> L.crossfadeOut(emptyCl));
-    }
+    // get
 
     protected ArrayList<RecyclerItem> getVisibleItems() {
 
@@ -150,65 +143,11 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return visibleItems;
     }
 
-    // calls
-    public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
-
-        class RecyclerItemCallback extends DiffUtil.Callback {
-            private ArrayList<RecyclerItem> oldList, newList;
-            private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
-                this.oldList = oldList;
-                this.newList = newList;
-            }
-            @Override public int getOldListSize() {
-                return oldList.size();
-            }
-            @Override public int getNewListSize() {
-                return newList.size();
-            }
-            @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                RecyclerItem oldItem = oldList.get(oldItemPosition);
-                RecyclerItem newItem = newList.get(newItemPosition);
-                return oldItem.sameItemAs(newItem);
-            }
-            @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                RecyclerItem oldItem = oldList.get(oldItemPosition);
-                RecyclerItem newItem = newList.get(newItemPosition);
-                return oldItem.sameContentAs(newItem);
-            }
-        }
-        final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
-
-        items.clear();
-        items.addAll(newItems);
-        //allItems.clear();
-        //allItems.addAll(items);
-        diff.dispatchUpdatesTo(adapter);
-
-    }
-    public void updateRecycler() {
-
-        ((Threader) () -> {
-            allItems = getRecyclerItems();
-            final ArrayList<RecyclerItem> newItems = getVisibleItems();//getRecyclerItems();
-            a.runOnUiThread(() -> updateRecycler(newItems));
-        }).interruptAndStart();
-
-        /*bgThread = new Thread(() -> {
-            final ArrayList<RecyclerItem> newItems = getRecyclerItems();
-            a.runOnUiThread(() -> updateRecycler(newItems));
-        });
-        bgThread.start();*/
-    }
-    public void scrollToTop() {
-        //recycler.scrollToPosition(25);
-        recycler.smoothScrollToPosition(0);
-    }
-
-    // tools
-    protected Sorter newSorter(C.SortMode[] sortModes, String[] sortModesTitle) {
+    protected Sorter getNewSorter(C.SortMode[] sortModes, String[] sortModesTitle) {
         return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
-    protected String title(C.Layout layout, C.SortMode sortMode){
+
+    protected String getSortModeTitle(C.Layout layout, C.SortMode sortMode){
 
         switch (layout) {
             case EXERCISE: switch (sortMode) {
@@ -246,21 +185,91 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return "???";
     }
 
+    // calls
+
+    public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
+
+        class RecyclerItemCallback extends DiffUtil.Callback {
+            private ArrayList<RecyclerItem> oldList, newList;
+            private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
+                this.oldList = oldList;
+                this.newList = newList;
+            }
+            @Override public int getOldListSize() {
+                return oldList.size();
+            }
+            @Override public int getNewListSize() {
+                return newList.size();
+            }
+            @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                RecyclerItem oldItem = oldList.get(oldItemPosition);
+                RecyclerItem newItem = newList.get(newItemPosition);
+                return oldItem.sameItemAs(newItem);
+            }
+            @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                RecyclerItem oldItem = oldList.get(oldItemPosition);
+                RecyclerItem newItem = newList.get(newItemPosition);
+                return oldItem.sameContentAs(newItem);
+            }
+        }
+        final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
+
+        items.clear();
+        items.addAll(newItems);
+        //allItems.clear();
+        //allItems.addAll(items);
+        diff.dispatchUpdatesTo(adapter);
+
+    }
+
+    public void updateRecycler() {
+
+        ((Threader) () -> {
+            allItems = getRecyclerItems();
+            final ArrayList<RecyclerItem> newItems = getVisibleItems();//getRecyclerItems();
+            a.runOnUiThread(() -> updateRecycler(newItems));
+        }).interruptAndStart();
+
+        /*bgThread = new Thread(() -> {
+            final ArrayList<RecyclerItem> newItems = getRecyclerItems();
+            a.runOnUiThread(() -> updateRecycler(newItems));
+        });
+        bgThread.start();*/
+    }
+
+    public void scrollToTop() {
+        //recycler.scrollToPosition(25);
+        recycler.smoothScrollToPosition(0);
+    }
+
+    public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+        this.sortMode = sortMode;
+        this.smallestFirst = smallestFirst;
+        setPrefs();
+        updateRecycler();
+    }
+
+    // item clicks
+
     protected void onItemClick(int itemType, C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
         if (itemType == RecyclerAdapter.ITEM_SORTER) {
             onSorterClick(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
         }
     }
+
     protected void onSorterClick(C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         getPrefs();
         //final BottomSheetDialog sheet = new BottomSheetDialog(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst, this);
         final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
-        sheet.setDismissListener(this);
+        //sheet.setDismissListener(this);
 
-        sheet.show(getChildFragmentManager(), sheet.getTag());
+        sheet.show(getChildFragmentManager());
         getChildFragmentManager().executePendingTransactions();
     }
+
+    // add items
+
     protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList) {
 
         if (sortMode == C.SortMode.DATE) {
@@ -285,12 +294,31 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         //else itemList.addAll(exerliteList);
     }
 
+    // empty page
+
+    protected void setEmptyPage() {}
+
+    protected void fadeInEmpty() {
+        a.runOnUiThread(() -> L.crossfadeIn(emptyCl, 1));
+    }
+
+    protected void fadeOutEmpty() {
+        a.runOnUiThread(() -> L.crossfadeOut(emptyCl));
+    }
+
+    // implements RecyclerAdapter
+
     @Override public void onItemLongClick(View view, int position, int itemType) {}
-    @Override public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
-        this.sortMode = sortMode;
-        this.smallestFirst = smallestFirst;
-        setPrefs();
-        updateRecycler();
+
+    // interface
+
+    interface Threader {
+        void run();
+        default void interruptAndStart() {
+            if (bgThread != null) bgThread.interrupt();
+            bgThread = new Thread(() -> Threader.this.run());
+            bgThread.start();
+        }
     }
 
 }

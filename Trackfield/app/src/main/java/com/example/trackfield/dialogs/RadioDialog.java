@@ -18,6 +18,7 @@ public class RadioDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    // arguments
     private ArrayList<String> radioTexts;
     private int selectedIndex;
 
@@ -45,7 +46,6 @@ public class RadioDialog extends BaseDialog {
     // on
 
     @Override public void onAttach(@NonNull Context context) {
-
         super.onAttach(context);
 
         try {
@@ -54,7 +54,6 @@ public class RadioDialog extends BaseDialog {
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
         }
-
     }
 
     // extends

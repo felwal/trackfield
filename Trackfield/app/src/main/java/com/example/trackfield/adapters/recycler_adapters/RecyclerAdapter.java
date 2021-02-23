@@ -137,7 +137,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             DistanceExerciseVH holder = (DistanceExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
-            String values = this instanceof DiExRecyclerAdapter ? e.printDistance() + C.TAB + e.printTimeByDistance(((DiExRecyclerAdapter) this).distance) + C.TAB + e.printPace() : "";
+            String values = this instanceof DistanceRecyclerAdapter ? e.printDistance() + C.TAB + e.printTimeByDistance(((DistanceRecyclerAdapter) this).distance) + C.TAB + e.printPace() : "";
             String date = e.getDate().format(sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR : C.FORMATTER_REC);
 
             holder.primary.setText(date);
@@ -263,7 +263,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             holder.surface.setGraph(graph);
         }
 
-        else if (viewHolder instanceof ExRecyclerAdapter.ChartVH) {
+        else if (viewHolder instanceof ExercisesRecyclerAdapter.ChartVH) {
 
             final ChartOld chart = (ChartOld) getItem(pos);
             //float[] y = c.getY();
@@ -272,7 +272,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             int maxHeight = L.px(42);
 
             for (int i = 0; i < chart.length(); i++) {
-                ExRecyclerAdapter.ChartVH h = (ExRecyclerAdapter.ChartVH) viewHolder;
+                ExercisesRecyclerAdapter.ChartVH h = (ExercisesRecyclerAdapter.ChartVH) viewHolder;
                 h.weeks[i].setText(xLabel[i]);
                 //h.distances[i].setText(Maths.prefix(y[i], 1) + "m");
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
@@ -283,14 +283,14 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
 
         }
-        else if (viewHolder instanceof ExRecyclerAdapter.DailyChartVH) {
+        else if (viewHolder instanceof ExercisesRecyclerAdapter.DailyChartVH) {
 
             final ChartOld chart = (ChartOld) getItem(pos);
             float[] yRel = chart.getyRel();
             int maxHeight = L.px(22);
 
             for (int i = 0; i < chart.length(); i++) {
-                ExRecyclerAdapter.DailyChartVH h = (ExRecyclerAdapter.DailyChartVH) viewHolder;
+                ExercisesRecyclerAdapter.DailyChartVH h = (ExercisesRecyclerAdapter.DailyChartVH) viewHolder;
 
                 // height
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
@@ -304,14 +304,14 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
 
         }
-        else if (viewHolder instanceof ExRecyclerAdapter.YearChartVH) {
+        else if (viewHolder instanceof ExercisesRecyclerAdapter.YearChartVH) {
 
             final ChartOld chart = (ChartOld) getItem(pos);
             float[] yRel = chart.getyRel();
             int maxHeight = L.px(22); //22
             //char[] labels = chart.getxLabelC();
 
-            ExRecyclerAdapter.YearChartVH h = (ExRecyclerAdapter.YearChartVH) viewHolder;
+            ExercisesRecyclerAdapter.YearChartVH h = (ExercisesRecyclerAdapter.YearChartVH) viewHolder;
             h.linearLayout.removeAllViews();
 
             for (int i = chart.length()-1; i >= 0; i--) {
