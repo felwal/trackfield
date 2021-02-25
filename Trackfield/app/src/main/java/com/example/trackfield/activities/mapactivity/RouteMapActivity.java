@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.map_activity;
+package com.example.trackfield.activities.mapactivity;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.map_activity;
+package com.example.trackfield.activities.mapactivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,7 +46,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
@@ -76,7 +75,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -93,7 +91,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             case R.id.action_filter:
                 return true;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -114,7 +113,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     // tools
 
     private void togglePolylines() {
-
         if (!tempShown) {
             if (tempOptions.size() != 0) {
                 tempOptions.clear(); // temp
@@ -149,7 +147,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     }
 
     protected static void moveCamera(GoogleMap googleMap, LatLngBounds bounds, int padding, boolean animate) {
-
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         try {
             if (animate) googleMap.animateCamera(cu);
@@ -161,7 +158,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
                 else googleMap.moveCamera(cu);
             });
         }
-
     }
 
     protected ArrayList<Polyline> getPolylineComplement(Polyline to) {
@@ -189,8 +185,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     // implements
 
-    @Override public void onPolylineClick(Polyline polyline) {
-
+    @Override
+    public void onPolylineClick(Polyline polyline) {
         // sheet
         int id = (int) polyline.getTag();
         PeekSheet.newInstance(id).show(getSupportFragmentManager());
@@ -202,11 +198,10 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         // appearence
         polyline.setColor(polyColorSelected(this));
         for (Polyline line : getPolylineComplement(polyline)) line.setColor(polyColorHidden(this));
-
     }
 
-    @Override public void onPeekSheetDismiss(int id) {
-
+    @Override
+    public void onPeekSheetDismiss(int id) {
         // get poly
         Polyline polyline = null;
         for (Polyline line : tempPolylines) {
@@ -219,8 +214,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
         // appearence
         polyline.setColor(polyColorDeselected(this));
-        for (Polyline line : getPolylineComplement(polyline)) line.setColor(polyColorDeselected(this));
-
+        for (Polyline line : getPolylineComplement(polyline))
+            line.setColor(polyColorDeselected(this));
     }
 
 }

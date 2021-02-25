@@ -1,11 +1,11 @@
-package com.example.trackfield.fragments.recycler_fragments;
+package com.example.trackfield.fragments.recyclerfragments;
 
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.rec_activity.RouteActivity;
-import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
-import com.example.trackfield.adapters.recycler_adapters.RoutesRecyclerAdapter;
+import com.example.trackfield.activities.recactivity.RouteActivity;
+import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
+import com.example.trackfield.adapters.recycleradapters.RoutesRecyclerAdapter;
 import com.example.trackfield.items.RouteItem;
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.items.headers.Sorter;

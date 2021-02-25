@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.rec_activity;
+package com.example.trackfield.activities.recactivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TimeDialog;
-import com.example.trackfield.fragments.recycler_fragments.DistanceRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.DistanceRecyclerFragment;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.M;
@@ -82,7 +82,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
                     seconds = (int) timeParts[0];
                 }
 
-                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, "distanceGoal")
+                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "distanceGoal")
                         .show(getSupportFragmentManager());
                 return true;
 

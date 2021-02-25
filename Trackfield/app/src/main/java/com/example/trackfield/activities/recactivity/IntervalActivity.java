@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.rec_activity;
+package com.example.trackfield.activities.recactivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.TextDialog;
-import com.example.trackfield.fragments.recycler_fragments.IntervalRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.IntervalRecyclerFragment;
 
 public class IntervalActivity extends RecActivity implements TextDialog.DialogListener {
 

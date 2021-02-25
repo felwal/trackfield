@@ -76,16 +76,8 @@ public class C {
         }
     }
 
-    public enum UnitVelocity {
-        METERS_PER_SECOND,
-        KILOMETERS_PER_HOUR
-    }
-    public enum UnitEnergy {
-        JOULES,
-        CALORIES,
-        WATTHOURS,
-        ELECTRONVOLTS
-    }
+    public enum UnitVelocity { METERS_PER_SECOND, KILOMETERS_PER_HOUR }
+    public enum UnitEnergy { JOULES, CALORIES, WATTHOURS, ELECTRONVOLTS }
 
     // text
 

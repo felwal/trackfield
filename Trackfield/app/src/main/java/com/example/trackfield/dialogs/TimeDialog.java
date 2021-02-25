@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.toolbox.L;
@@ -35,7 +34,7 @@ public class TimeDialog extends BaseDialog {
 
     ////
 
-    public static TimeDialog newInstance(String title, String message, int text1, int text2, String hint1, String hint2, @StringRes int posBtnTxtId, String tag) {
+    public static TimeDialog newInstance(String title, String message, int text1, int text2, String hint1, String hint2, @StringRes int posBtnTxtId, @StringRes int neuBtnTxtId, String tag) {
 
         TimeDialog instance = new TimeDialog();
         Bundle bundle = putBundleBase(title, message, posBtnTxtId, tag);
@@ -44,6 +43,7 @@ public class TimeDialog extends BaseDialog {
         bundle.putInt(BUNDLE_TEXT2, text2);
         bundle.putString(BUNDLE_HINT1, hint1);
         bundle.putString(BUNDLE_HINT2, hint2);
+        bundle.putInt(BUNDLE_NEUTRAL_BUTTON, neuBtnTxtId);
 
         instance.setArguments(bundle);
 
@@ -68,14 +68,13 @@ public class TimeDialog extends BaseDialog {
 
     @Override
     protected void unpackBundle() {
-
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         text1 = bundle.getInt(BUNDLE_TEXT1, 0);
         text2 = bundle.getInt(BUNDLE_TEXT2, 0);
         hint1 = bundle.getString(BUNDLE_HINT1, "");
         hint2 = bundle.getString(BUNDLE_HINT2, "");
-
+        neuBtnTxtId = bundle.getInt(BUNDLE_NEUTRAL_BUTTON, R.string.action_delete);
     }
 
     @Override
@@ -125,13 +124,14 @@ public class TimeDialog extends BaseDialog {
             }
             checkedChip.setClickable(false);
         }
-
     }
 
     // interface
 
     public interface DialogListener {
+
         void onTimeDialogPositiveClick(int input1, int input2, String tag);
+
         void onTimeDialogNegativeClick(String tag);
         //void onTimeDialogNeutralClick(String tag);
     }

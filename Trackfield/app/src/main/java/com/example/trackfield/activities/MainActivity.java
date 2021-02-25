@@ -9,23 +9,23 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.api.StravaAPI;
 import com.example.trackfield.database.Helper;
-import com.example.trackfield.dialogs.sheets.SortSheet;
-import com.example.trackfield.fragments.recycler_fragments.ExercisesRecyclerFragment;
-import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
-import com.example.trackfield.fragments.StatsFragment;
-import com.example.trackfield.fragments.ExercisesFragment;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
-import com.example.trackfield.fragments.RecsFragment;
 import com.example.trackfield.dialogs.FilterDialog;
+import com.example.trackfield.dialogs.sheets.SortSheet;
+import com.example.trackfield.fragments.ExercisesFragment;
+import com.example.trackfield.fragments.RecsFragment;
+import com.example.trackfield.fragments.StatsFragment;
+import com.example.trackfield.fragments.recyclerfragments.ExercisesRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.RecyclerFragment;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
@@ -37,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends StravaAPI implements DecimalDialog.DialogListener, FilterDialog.DialogListener, SortSheet.DismissListener {
+public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener, FilterDialog.DialogListener, SortSheet.DismissListener {
 
     private Helper.Writer writer;
     private MainFragment mainFragment;
@@ -53,13 +53,10 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
 
     private static final float OVERLAY_ΑLPHA = 0.96f;
 
-    ////
-
     // extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         initApp();
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
@@ -79,7 +76,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
             //w.close();
         }
 
-        connectStrava();
         setBottomNavbar();
         setToolbar();
         setFabs();
@@ -114,7 +110,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_settings:
                 SettingsActivity.startActivity(this);
@@ -122,7 +117,8 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
 
             case R.id.action_filter:
                 FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getExerciseVisibleTypes(), R.string.dialog_btn_filter, "filterExercises")
-                        .show(getSupportFragmentManager());;
+                        .show(getSupportFragmentManager());
+                ;
                 return true;
 
             case R.id.action_addDistance:
@@ -130,7 +126,8 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
                         .show(getSupportFragmentManager());
                 return true;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -157,7 +154,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     }
 
     private void setBottomNavbar() {
-
         selectFragment(new ExercisesFragment());
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
 
@@ -188,7 +184,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     }
 
     private void setFabs() {
-
         fab = findViewById(R.id.fab_menu);
         addFab = findViewById(R.id.fab_add);
         trackFab = findViewById(R.id.fab_track);
@@ -210,24 +205,23 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
 
         addFab.setOnClickListener(view -> EditActivity.startActivity(MainActivity.this));
 
-        //trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
-        trackFab.setOnClickListener(view -> requestLastActivity());
+        trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 
         overlayView.setOnClickListener(view -> closeFabMenu());
-
     }
 
     public void setRecyclerScrollListener(final RecyclerView rv, final RecyclerFragment recyclerFragment) {
-
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            @Override public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 // fab
                 if (recyclerFragment instanceof ExercisesRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment) fab.show();
+                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment)
+                        fab.show();
                 }
             }
 
@@ -240,9 +234,7 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
                     ab.setElevation(0);
                 }
             }*/
-
         });
-
     }
 
     private void selectFragment(MainFragment fragment) {
@@ -253,7 +245,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     // tools
 
     private void openFabMenu() {
-
         animateFab();
         addFab.show();
         trackFab.show();
@@ -266,7 +257,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     }
 
     private void closeFabMenu() {
-
         animateFab();
         trackFab.hide();
         addFab.hide();
@@ -279,7 +269,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     }
 
     private void animateFab() {
-
         Context fabContext = fab.getContext();
 
         @ColorInt int primaryVariant = L.getColorInt(R.attr.colorPrimaryVariant, fabContext);
@@ -296,7 +285,6 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
 
     @Override
     public void onDecimalDialogPositiveClick(float input, String tag) {
-
         int distance = (int) (input * 1000);
         D.addDistance(distance);
 
@@ -322,10 +310,15 @@ public class MainActivity extends StravaAPI implements DecimalDialog.DialogListe
     // class
 
     public static abstract class MainFragment extends Fragment {
+
         protected abstract void setToolbarTitle();
+
         protected abstract void scrollToTop();
+
         protected abstract void updateFragment();
+
         protected abstract void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst);
+
     }
 
 }

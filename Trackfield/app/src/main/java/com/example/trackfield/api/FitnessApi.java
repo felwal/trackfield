@@ -1,10 +1,6 @@
 package com.example.trackfield.api;
 
 import android.app.Activity;
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trackfield.toolbox.L;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -18,9 +14,6 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.Session;
 import com.google.android.gms.fitness.request.SessionReadRequest;
-import com.google.android.gms.fitness.result.SessionReadResponse;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,34 +24,36 @@ import java.util.concurrent.TimeUnit;
 
 import static java.text.DateFormat.getTimeInstance;
 
-public abstract class FintessAPI extends AppCompatActivity {
+public class FitnessApi {
 
     private Activity a;
 
     private static FitnessOptions fitnessOptions;
-    private SimpleDateFormat formatterStart = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.ENGLISH);
-    private SimpleDateFormat formatterEnd = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+    private final SimpleDateFormat formatterStart = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.ENGLISH);
+    private final SimpleDateFormat formatterEnd = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
 
     // request codes
-    private static final int REQUEST_CODE_PERMISSIONS_GOOGLE_FIT = 1;
+    public static final int REQUEST_CODE_PERMISSIONS_GOOGLE_FIT = 1;
 
     ////
 
-    protected void connectFitness() {
+    public FitnessApi(Activity a) {
+        this.a = a;
+    }
 
-        a = this;
+    // connect
 
-        // Google Fit
+    public void connectFitness() {
         fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                 //.addDataType(DataType.AGGREGATE_ACTIVITY_SUMMARY, FitnessOptions.ACCESS_READ)
                 .build();
-        if (hasPermissionsElseRequest()) accessGoogleFit();
-
+        //if (hasPermissionsElseRequest()) requestActivities();
     }
 
-    private void accessGoogleFit() {
+    public void requestActivities() {
+        if (!hasPermissionsElseRequest()) return;
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -67,7 +62,7 @@ public abstract class FintessAPI extends AppCompatActivity {
 
         long startTime = cal.getTimeInMillis();
 
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
+        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(a, fitnessOptions);
         SessionReadRequest readRequest = new SessionReadRequest.Builder()
                 .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
                 .readSessionsFromAllApps()
@@ -77,22 +72,34 @@ public abstract class FintessAPI extends AppCompatActivity {
                 //.bucketBySession(60, TimeUnit.SECONDS)
                 .build();
 
-        Fitness.getSessionsClient(this, account).readSession(readRequest)
-                .addOnSuccessListener(new OnSuccessListener<SessionReadResponse>() {
-                    @Override public void onSuccess(SessionReadResponse response) {
-                        for (Session session : response.getSessions()) dumpSession(session);
-                    }
+        Fitness.getSessionsClient(a, account).readSession(readRequest)
+                .addOnSuccessListener(response -> {
+                    for (Session session : response.getSessions()) dumpSession(session);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override public void onFailure(@NonNull Exception e) {
-                        //L.toast("There was an error reading data from Google Fit:", a);
-                        L.handleError(e, a);
-                    }
+                .addOnFailureListener(e -> {
+                    //L.toast("There was an error reading data from Google Fit:", a);
+                    L.handleError(e, a);
                 });
+    }
 
+    // permissions / authorization
+
+    public boolean hasPermissionsElseRequest() {
+        // Check if the user has previously granted the necessary data access, and if not, initiate the authorization flow:
+
+        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(a, fitnessOptions);
+
+        if (GoogleSignIn.hasPermissions(account, fitnessOptions)) return true;
+        GoogleSignIn.requestPermissions(a, REQUEST_CODE_PERMISSIONS_GOOGLE_FIT, account, fitnessOptions);
+        return false;
+    }
+
+    public void permissionsGained() {
+        //requestActivities();
     }
 
     // dump
+
     private void dumpSession(Session s) {
 
         Calendar start = Calendar.getInstance();
@@ -100,12 +107,11 @@ public abstract class FintessAPI extends AppCompatActivity {
         start.setTimeInMillis(s.getStartTime(TimeUnit.MILLISECONDS));
         end.setTimeInMillis(s.getEndTime(TimeUnit.MILLISECONDS));
 
-
-
         L.toast(s.getName() + " (" + s.getActivity() + ")\n" + s.getAppPackageName() + "\n" +
                         formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()),
                 a);
     }
+
     private void dumpBucket(Bucket b) {
 
         Calendar start = Calendar.getInstance();
@@ -136,30 +142,11 @@ public abstract class FintessAPI extends AppCompatActivity {
                         fieldStr += field.getName() + ": " + dp.getValue(field) + " ";
                     }
                     L.toast(formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()) + " " + fieldStr, a);
-
                 }
             }
         }
 
         L.toast(formatterStart.format(start.getTime()) + "-" + formatterEnd.format(end.getTime()) + " " + fieldStr, a);
-    }
-
-    // authorization flow result
-    private boolean hasPermissionsElseRequest() {
-        // Check if the user has previously granted the necessary data access, and if not, initiate the authorization flow:
-
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
-
-        if (GoogleSignIn.hasPermissions(account, fitnessOptions)) return true;
-        GoogleSignIn.requestPermissions(this, REQUEST_CODE_PERMISSIONS_GOOGLE_FIT, account, fitnessOptions);
-        return false;
-    }
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) accessGoogleFit();
-        }
     }
 
 }

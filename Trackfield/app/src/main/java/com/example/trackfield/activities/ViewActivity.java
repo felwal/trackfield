@@ -15,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.map_activity.ExerciseMapActivity;
-import com.example.trackfield.activities.rec_activity.DistanceActivity;
-import com.example.trackfield.activities.rec_activity.IntervalActivity;
-import com.example.trackfield.activities.rec_activity.RouteActivity;
+import com.example.trackfield.activities.mapactivity.ExerciseMapActivity;
+import com.example.trackfield.activities.recactivity.DistanceActivity;
+import com.example.trackfield.activities.recactivity.IntervalActivity;
+import com.example.trackfield.activities.recactivity.RouteActivity;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Distance;

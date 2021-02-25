@@ -1,11 +1,11 @@
-package com.example.trackfield.fragments.recycler_fragments;
+package com.example.trackfield.fragments.recyclerfragments;
 
 import android.view.View;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
-import com.example.trackfield.adapters.recycler_adapters.ExercisesRecyclerAdapter;
-import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
+import com.example.trackfield.adapters.recycleradapters.ExercisesRecyclerAdapter;
+import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
@@ -22,16 +22,16 @@ import java.util.ArrayList;
 
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
-    private final boolean[] smallestFirsts = { false, false, false, true };
+    private final String[] sortModesTitle = {"Date", "Distance", "Time", "Pace"};
+    private final C.SortMode[] sortModes = {C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE};
+    private final boolean[] smallestFirsts = {false, false, false, true};
 
     private String search = "";
 
     ////
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
-
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
@@ -66,7 +66,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         Header yearHeader = new Header("", Header.Type.YEAR, itemList.size());
         Header monthHeader = new Header("", Header.Type.MONTH, itemList.size());
         Header weekHeader = new Header("", Header.Type.WEEK, itemList.size());
-        int year = -1; int month = -1; int week = -1;
+        int year = -1;
+        int month = -1;
+        int week = -1;
         int newYear, newMonth, newWeek;
         boolean oldYear = false;
 
@@ -100,32 +102,48 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 week = newWeek;
             }
 
+            // add values
             yearHeader.addValue(e.getDistance());
             monthHeader.addValue(e.getDistance());
             weekHeader.addValue((int) e.getTime());
             itemList.add(e);
         }
 
+        // set last index for last headers
+        monthHeader.setLastIndex(itemList.size());
+        yearHeader.setLastIndex(itemList.size());
+        weekHeader.setLastIndex(itemList.size());
+
         return itemList;
     }
-    @Override protected void setSortModes() {
+
+    @Override
+    protected void setSortModes() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
     }
-    @Override protected void getAdapter() {
+
+    @Override
+    protected void getAdapter() {
         adapter = new ExercisesRecyclerAdapter(items, a);
     }
-    @Override protected void getPrefs() {
+
+    @Override
+    protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
     }
-    @Override protected void setPrefs() {
+
+    @Override
+    protected void setPrefs() {
         Prefs.setSortModePref(C.Layout.EXERCISE, sortMode);
         Prefs.setSmallestFirstPref(C.Layout.EXERCISE, smallestFirst);
     }
-    @Override protected void setEmptyPage() {
 
-        if (search.equals("")){
+    @Override
+    protected void setEmptyPage() {
+
+        if (search.equals("")) {
             emptyTitle.setText(R.string.empty_title_exercises);
             emptyMessage.setText(R.string.empty_message_exercises);
             emptyImage.setImageResource(R.drawable.ic_empty_exercise_24dp);
@@ -135,19 +153,24 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             emptyMessage.setText(R.string.empty_message_search);
             emptyImage.setImageResource(R.drawable.ic_empty_search_24dp);
         }
-
     }
+
+    //
 
     public void updateSearch(String search) {
         this.search = search;
         if (isAdded()) setEmptyPage();
         updateRecycler();
     }
+
     private RecyclerItem getItemOfAll(int pos) {
         return allItems.get(pos);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    //
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         RecyclerItem item;
 
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
@@ -181,7 +204,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
     }
-    @Override public void onItemLongClick(View view, int position, int itemType) {
+
+    @Override
+    public void onItemLongClick(View view, int position, int itemType) {
         RecyclerItem item = adapter.getItem(position);
 
         if (item instanceof Header) {
@@ -200,8 +225,6 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             else if (header.isType(Header.Type.MONTH)) {
 
             }
-
-
         }
     }
 

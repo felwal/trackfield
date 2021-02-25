@@ -30,13 +30,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static java.text.DateFormat.getTimeInstance;
-
-public abstract class StravaAPI extends AppCompatActivity {
+public class StravaApi {
 
     private Activity a;
 
-    // strava
     private static RequestQueue queue;
     private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"); // 2020-11-04T11:16:08Z
 
@@ -46,30 +43,21 @@ public abstract class StravaAPI extends AppCompatActivity {
     private static final int PER_PAGE = 200;
 
     // request codes
-    private static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
+    public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
 
     ////
 
-    protected void connectStrava() {
-
-        a = this;
-        queue = Volley.newRequestQueue(this);
-
-        //accessStrava();
-
+    public StravaApi(Activity a) {
+        this.a = a;
     }
 
-    // authorization flow result
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_PERMISSIONS_STRAVA) authorizeStrava();
-        }
+    public void connectStrava() {
+        queue = Volley.newRequestQueue(a);
     }
 
-    protected void authorizeStrava() {
+    // authorize
 
+    public void authorizeStrava() {
         Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
                 .buildUpon()
                 .appendQueryParameter("client_id", CLIENT_ID)
@@ -80,16 +68,23 @@ public abstract class StravaAPI extends AppCompatActivity {
                 .build();
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        a.startActivity(intent);
     }
-    protected void finishAuthorization(Uri appLinkData) {
+
+    private void finishAuthorization(Uri appLinkData) {
         Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), this);
+        L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), a);
+    }
+
+    public void handleIntent(Intent appLinkIntent) {
+        //String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+        if (appLinkData != null) finishAuthorization(appLinkData);
     }
 
     // request activities
-    private void requestActivity(final int index) {
 
+    private void requestActivity(final int index) {
         ((TokenRequester) accessToken -> {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null,
@@ -98,7 +93,7 @@ public abstract class StravaAPI extends AppCompatActivity {
                             JSONObject obj = response.getJSONObject(index);
                             mergeWithExisting(convertToExercise(obj));
 
-                            Log.i("Strava API","response: " + obj.toString());
+                            Log.i("Strava API", "response: " + obj.toString());
                             //L.toast("response: " + obj.toString(), a);
                             L.toast("request successful", a);
                         }
@@ -111,10 +106,9 @@ public abstract class StravaAPI extends AppCompatActivity {
 
             queue.add(request);
         }).requestAccessToken(a);
-
     }
-    private void requestActivities(final int page) {
 
+    private void requestActivities(final int page) {
         ((TokenRequester) accessToken -> {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                     response -> {
@@ -136,22 +130,24 @@ public abstract class StravaAPI extends AppCompatActivity {
 
             queue.add(request);
         }).requestAccessToken(a);
-
     }
 
-    protected void requestLastActivity() {
+    public void requestLastActivity() {
         requestActivity(0);
     }
-    protected void requestLastActivities(int count) {
+
+    public void requestLastActivities(int count) {
         for (int i = 0; i < count; i++) {
             requestActivity(i);
         }
     }
-    protected void requestAllActivities() {
+
+    public void requestAllActivities() {
         requestActivities(1);
     }
 
     // convert
+
     private Exercise convertToExercise(JSONObject obj) {
         if (obj == null) return null;
 
@@ -173,7 +169,8 @@ public abstract class StravaAPI extends AppCompatActivity {
                 start = new LatLng(startLatLng.getDouble(0), startLatLng.getDouble(1));
                 end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+            }
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
@@ -189,6 +186,7 @@ public abstract class StravaAPI extends AppCompatActivity {
             return null;
         }
     }
+
     private void mergeWithExisting(Exercise fromStrava) {
         if (fromStrava == null) return;
 
@@ -205,16 +203,35 @@ public abstract class StravaAPI extends AppCompatActivity {
             Helper.getWriter(a).addExercise(fromStrava, a);
             //L.toast("import on " + dateTime.toLocalDate().format(C.FORMATTER_SQL_DATE), a);
         }
-        else L.toast("multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
-
+        else
+            L.toast("multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
     }
+
+    // get url:s
+
+    private static String getRefreshTokenURL() {
+        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + Prefs.getAuthCode() + "&grant_type=authorization_code";
+    }
+
+    private static String getAccessTokenURL() {
+        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&refresh_token=" + Prefs.getRefreshToken() + "&grant_type=refresh_token";
+    }
+
+    private static String getActivitiesURL(int page) {
+        return "https://www.strava.com/api/v3/athlete/activities?per_page=" + PER_PAGE + "&access_token=" + Prefs.getAccessToken() + "&page=" + page;
+    }
+
+    // interface
 
     interface TokenRequester {
 
         void onTokenReady(String token);
 
         default void requestAccessToken(Context c) {
-            if (Prefs.isAccessTokenCurrent()) { onTokenReady(Prefs.getAccessToken()); return; }
+            if (Prefs.isAccessTokenCurrent()) {
+                onTokenReady(Prefs.getAccessToken());
+                return;
+            }
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getAccessTokenURL(), null,
                     response -> {
@@ -235,17 +252,15 @@ public abstract class StravaAPI extends AppCompatActivity {
                         L.handleError("failed to request new accessToken, requesting new refreshToken...", e, c);
 
                         // request refreshToken
-                        ((TokenRequester) refreshToken -> {
-                            ((TokenRequester) accessToken -> {
-                                onTokenReady(accessToken);
-                            }).requestAccessToken(c);
-                        }).requestRefreshToken(true, c);
+                        ((TokenRequester) refreshToken -> ((TokenRequester) this).requestAccessToken(c)).requestRefreshToken(true, c);
                     });
 
             queue.add(request);
         }
+
         default void requestRefreshToken(boolean requireRequest, Context c) {
-            if(!requireRequest && Prefs.isRefreshTokenCurrent()) onTokenReady(Prefs.getRefreshToken());
+            if (!requireRequest && Prefs.isRefreshTokenCurrent())
+                onTokenReady(Prefs.getRefreshToken());
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getRefreshTokenURL(), null,
                     response -> {
@@ -266,17 +281,6 @@ public abstract class StravaAPI extends AppCompatActivity {
             queue.add(request);
         }
 
-    }
-
-    // url:s
-    private static String getRefreshTokenURL() {
-        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + Prefs.getAuthCode() + "&grant_type=authorization_code";
-    }
-    private static String getAccessTokenURL() {
-        return "https://www.strava.com/oauth/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&refresh_token=" + Prefs.getRefreshToken() + "&grant_type=refresh_token";
-    }
-    private static String getActivitiesURL(int page) {
-        return "https://www.strava.com/api/v3/athlete/activities?per_page=" + PER_PAGE + "&access_token=" + Prefs.getAccessToken() + "&page=" + page;
     }
 
 }

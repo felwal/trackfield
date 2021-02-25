@@ -46,21 +46,21 @@
             android:name=".activities.TrackActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.map_activity.ExerciseMapActivity"
+            android:name=".activities.mapactivity.ExerciseMapActivity"
             android:label="@string/activity_maps"
             android:parentActivityName=".activities.ViewActivity" />
         <activity
-            android:name=".activities.map_activity.RouteMapActivity"
+            android:name=".activities.mapactivity.RouteMapActivity"
             android:label="@string/activity_maps"
             android:parentActivityName=".activities.ViewActivity" />
         <activity
-            android:name=".activities.rec_activity.DistanceActivity"
+            android:name=".activities.recactivity.DistanceActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.rec_activity.RouteActivity"
+            android:name=".activities.recactivity.RouteActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.rec_activity.IntervalActivity"
+            android:name=".activities.recactivity.IntervalActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SettingsActivity"

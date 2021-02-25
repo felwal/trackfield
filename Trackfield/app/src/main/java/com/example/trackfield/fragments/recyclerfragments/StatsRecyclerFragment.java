@@ -1,4 +1,4 @@
-package com.example.trackfield.fragments.recycler_fragments;
+package com.example.trackfield.fragments.recyclerfragments;
 
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.graphing.Graph;

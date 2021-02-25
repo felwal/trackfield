@@ -14,15 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.api.StravaAPI;
+import com.example.trackfield.api.FitnessApi;
+import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.BaseDialog;
-import com.example.trackfield.dialogs.RadioDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
+import com.example.trackfield.dialogs.RadioDialog;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
@@ -31,26 +34,28 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends StravaAPI implements RadioDialog.DialogListener, DecimalDialog.DialogListener {
+public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener, DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
     private LinearLayout ll;
+
+    FitnessApi fit = new FitnessApi(this);
+    StravaApi strava = new StravaApi(this);
 
     private static final String TAG_THEME = "theme";
     private static final String TAG_COLOR = "color";
 
     ////
 
-    public static void startActivity(Context c) {
+    public static void startActivity(@NonNull Context c) {
         c.startActivity(new Intent(c, SettingsActivity.class));
     }
 
-    // on
+    // extends AppcompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         a = this;
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
@@ -62,26 +67,37 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
         setToolbar();
         inflateViews();
 
-        connectStrava();
-        handleIntentForStrava();
-
-        // settings
-        //displayListeners();
-        //lookListeners();
-        //profileListeners();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        handleIntentForStrava();
+        // api
+        fit.connectFitness();
+        strava.connectStrava();
+        strava.handleIntent(getIntent());
     }
 
     @Override
     protected void onDestroy() {
         //F.savePrefs(this);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // strava
+
+        super.onNewIntent(intent);
+        setIntent(intent);
+        strava.handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // api authorization flow result
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == FitnessApi.REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) fit.permissionsGained();
+            if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
+        }
     }
 
     @Override
@@ -98,18 +114,19 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
                 finish();
                 return true;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
     }
 
-    //
+    // set
 
-    private void handleIntentForStrava() {
-        Intent appLinkIntent = getIntent();
-        //String appLinkAction = appLinkIntent.getAction();
-        Uri appLinkData = appLinkIntent.getData();
-        if (appLinkData != null) finishAuthorization(appLinkData);
+    private void setToolbar() {
+        final Toolbar tb = findViewById(R.id.toolbar_settings);
+        setSupportActionBar(tb);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(getResources().getString(R.string.fragment_settings));
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void inflateViews() {
@@ -134,13 +151,17 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
         inflateClickItem("Export Json", "", false, v -> F.exportJson(a));
         inflateClickItem("Import Json", "", true, v -> F.importJson(a));
 
-        // other services
-        inflateHeader("Other Services");
-        inflateClickItem("Request last from Strava", "", false, v -> requestLastActivity());
-        inflateClickItem("Request last 5 from Strava", "", false, v -> requestLastActivities(5));
-        inflateClickItem("Request all from Strava", "", false, v -> requestAllActivities());
-        inflateClickItem("Strava", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> authorizeStrava());
-        //inflateClickItem("Google Fit", "Not connected", true, v -> {});
+        // Strava
+        inflateHeader("Strava");
+        inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
+        inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
+        inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
+        inflateClickItem("Status", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> strava.authorizeStrava());
+
+        // Google Fit
+        //inflateHeader("Google Fit");
+        //inflateClickItem("Request all", "", false, v -> fit.requestActivities());
+        //inflateClickItem("Status", "Unknown", true, v -> fit.hasPermissionsElseRequest());
 
         // profile
         inflateHeader("Profile");
@@ -158,11 +179,11 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
             }
             else {
                 yearSelect = bd.getYear();
-                monthSelect = bd.getMonthValue()-1;
+                monthSelect = bd.getMonthValue() - 1;
                 daySelect = bd.getDayOfMonth();
             }
             DatePickerDialog picker = new DatePickerDialog(a, (view, year, month, dayOfMonth) -> {
-                Prefs.setBirthday(LocalDate.of(year, month+1, dayOfMonth));
+                Prefs.setBirthday(LocalDate.of(year, month + 1, dayOfMonth));
                 ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(C.FORMATTER_CAPTION));
             }, yearSelect, monthSelect, daySelect);
             picker.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -173,7 +194,8 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
         if (Prefs.isDeveloper()) {
             inflateHeader("Developer Options");
             inflateClickItem("Reboard", "", false, v -> {
-                Prefs.setFirstLogin(true); BoardingActivity.startActivity(this);
+                Prefs.setFirstLogin(true);
+                BoardingActivity.startActivity(this);
             });
             inflateClickItem("Recreate database", "", false, v -> {
                 Helper.getWriter(this).recreate();
@@ -185,7 +207,6 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
                 F.importTxt(a);
             });
         }
-
     }
 
     // inflate items
@@ -237,7 +258,7 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
         return v;
     }
 
-    // implement
+    // implements dialogs
 
     @Override
     public void onRadioDialogClick(int index, String tag) {
@@ -250,7 +271,8 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
                 case 1:
                     if (!Prefs.isThemeLight()) Prefs.setTheme(true);
                     break;
-                case 2: break;
+                case 2:
+                    break;
             }
         }
         else if (tag.equals(TAG_COLOR)) {
@@ -273,20 +295,12 @@ public class SettingsActivity extends StravaAPI implements RadioDialog.DialogLis
         Prefs.setMass(input);
     }
 
-    // toolbar
-
-    private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_settings);
-        setSupportActionBar(tb);
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.fragment_settings));
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
-
     // interface
 
     interface OnSwitchListener {
+
         void onSwitch(boolean checked);
+
     }
 
 }

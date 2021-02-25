@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.DialogFragment;
@@ -36,13 +35,11 @@ public abstract class BaseDialog extends DialogFragment {
     protected static final String BUNDLE_NEGATIVE_BUTTON = "negativeButtonTextId";
     protected final static String BUNDLE_TAG = "tag";
 
-    ////
 
     // extends DialogFragment
 
     @NonNull @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         unpackBundle();
         a = getActivity();
         builder = new AlertDialog.Builder(a);
@@ -54,7 +51,6 @@ public abstract class BaseDialog extends DialogFragment {
     // tools
 
     protected static Bundle putBundleBase(String title, String message, @StringRes int posBtnTxtId, String tag) {
-
         Bundle bundle = new Bundle();
 
         bundle.putString(BUNDLE_TITLE, title);
@@ -66,7 +62,6 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     protected Bundle unpackBundleBase(String defaultTag) {
-
         Bundle bundle = getArguments();
 
         if (bundle != null) {
@@ -81,7 +76,6 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     protected AlertDialog customizeDialog(AlertDialog dialog) {
-
         // title
         int titleId = getResources().getIdentifier( "alertTitle", "id", "android" );
         if (titleId > 0) {

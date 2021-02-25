@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.rec_activity;
+package com.example.trackfield.activities.recactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.sheets.SortSheet;
-import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.RecyclerFragment;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 

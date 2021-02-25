@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".activities.map_activity.MapActivity" />
+        tools:context=".activities.mapactivity.MapActivity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

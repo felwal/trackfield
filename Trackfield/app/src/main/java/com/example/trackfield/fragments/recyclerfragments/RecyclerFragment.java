@@ -1,4 +1,4 @@
-package com.example.trackfield.fragments.recycler_fragments;
+package com.example.trackfield.fragments.recyclerfragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
-import com.example.trackfield.adapters.recycler_adapters.RecyclerAdapter;
+import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
 import com.example.trackfield.database.Helper;
 import com.example.trackfield.dialogs.sheets.SortSheet;
 import com.example.trackfield.items.Exerlite;

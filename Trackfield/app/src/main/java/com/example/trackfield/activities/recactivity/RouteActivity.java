@@ -1,4 +1,4 @@
-package com.example.trackfield.activities.rec_activity;
+package com.example.trackfield.activities.recactivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,12 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.trackfield.R;
-import com.example.trackfield.activities.map_activity.RouteMapActivity;
+import com.example.trackfield.activities.mapactivity.RouteMapActivity;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.dialogs.TimeDialog;
-import com.example.trackfield.fragments.recycler_fragments.RouteRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.RouteRecyclerFragment;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.toolbox.D;
@@ -87,7 +87,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
                     seconds = (int) timeParts[0];
                 }
 
-                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, "routeGoal")
+                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "routeGoal")
                         .show(getSupportFragmentManager());
                 return true;
 

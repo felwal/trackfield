@@ -1,4 +1,4 @@
-package com.example.trackfield.adapters.recycler_adapters;
+package com.example.trackfield.adapters.recycleradapters;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -8,20 +8,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.items.headers.RecyclerItem;
+import com.example.trackfield.items.headers.archive.GraphOld;
 
 import java.util.ArrayList;
 
-public class IntervalRecyclerAdapter extends RecyclerAdapter {
+public class DistanceRecyclerAdapter extends RecyclerAdapter {
 
-    public IntervalRecyclerAdapter(ArrayList<RecyclerItem> itemList, int originId, Context c) {
+    int distance;
+
+    public DistanceRecyclerAdapter(ArrayList<RecyclerItem> itemList, int distance, int originId, Context c) {
         super(itemList, c);
+        this.distance = distance;
         this.originId = originId;
     }
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise_distance, parent, false);
-            return new IntervalExerciseVH(cl);
+            return new DistanceExerciseVH(cl);
+        }
+        else if (viewType == ITEM_GRAPH_OLD) {
+            ConstraintLayout cl = GraphOld.inflateLayout(inflater, parent);
+            return new GraphVH(parent, cl);
         }
         return super.onCreateViewHolder(parent, viewType);
     }

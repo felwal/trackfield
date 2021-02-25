@@ -2,17 +2,23 @@
 
     <dimen name="corner_radius">8dp</dimen>
 
-    <!-- margins -->
+    <!-- margin -->
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
+
+    <!-- spacing -->
     <dimen name="spacing_small">5dp</dimen>
     <dimen name="spacing_medium">10dp</dimen>
+
+    <!-- padding -->
     <dimen name="padding_dialog_top">8dp</dimen>
     <dimen name="padding_dialog_side">24dp</dimen>
     <dimen name="padding_dialog_side_20dp">20dp</dimen>
+    <dimen name="padding_recycler">8dp</dimen>
 
-    <!-- layouts -->
+
+    <!-- layout -->
     <dimen name="layout_big_62dp">62dp</dimen>
     <dimen name="layout_meduim_50dp">50dp</dimen>
     <dimen name="layout_meduim_40dp">40dp</dimen>

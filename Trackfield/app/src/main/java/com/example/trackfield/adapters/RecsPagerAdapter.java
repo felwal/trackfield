@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.trackfield.R;
-import com.example.trackfield.fragments.recycler_fragments.DistancesRecyclerFragment;
-import com.example.trackfield.fragments.recycler_fragments.IntervalsRecyclerFragment;
-import com.example.trackfield.fragments.recycler_fragments.RecyclerFragment;
-import com.example.trackfield.fragments.recycler_fragments.RoutesRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.DistancesRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.IntervalsRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.RecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.RoutesRecyclerFragment;
 import com.example.trackfield.toolbox.C;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {

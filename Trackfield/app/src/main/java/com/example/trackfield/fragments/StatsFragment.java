@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
-import com.example.trackfield.fragments.recycler_fragments.StatsRecyclerFragment;
+import com.example.trackfield.fragments.recyclerfragments.StatsRecyclerFragment;
 import com.example.trackfield.toolbox.C;
 
 public class StatsFragment extends MainActivity.MainFragment {
