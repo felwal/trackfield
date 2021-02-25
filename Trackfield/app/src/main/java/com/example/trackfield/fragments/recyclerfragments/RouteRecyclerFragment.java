@@ -7,7 +7,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
 import com.example.trackfield.adapters.recycleradapters.RouteRecyclerAdapter;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
 import com.example.trackfield.items.Exerlite;
@@ -53,11 +53,11 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         if (bundle != null) {
             //reader.close();
             //reader = new Helper.Reader(a);
-            route = Helper.getReader(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
+            route = Reader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Helper.getReader(a).getExercise(originId).getType()));
+            Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Reader.get(a).getExercise(originId).getType()));
         }
     }
 
@@ -78,7 +78,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
             }
 
             itemList.add(getNewSorter(sortModes, sortModesTitle));
-            route = Helper.getReader().getRoute(route.get_id());
+            route = Reader.get(a).getRoute(route.get_id());
             if (route.getGoalPace() != Route.NO_GOAL_PACE) {
                 Goal goal = new Goal(route.getGoalPace());
                 itemList.add(goal);

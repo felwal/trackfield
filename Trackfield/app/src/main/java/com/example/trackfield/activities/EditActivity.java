@@ -21,7 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
@@ -67,7 +68,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
@@ -110,7 +110,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
                 parseAndSave();
                 return true;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -118,26 +119,28 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void findEditTexts() {
 
-        routeEt             = findViewById(R.id.editText_route);
-        routeVarEt          = findViewById(R.id.editText_routeVar);
-        intervalEt          = findViewById(R.id.editText_interval);
-        dateEt              = findViewById(R.id.editText_date);
-        timeEt              = findViewById(R.id.editText_time);
-        noteEt              = findViewById(R.id.editText_note);
-        distanceEt          = findViewById(R.id.editText_distance);
-        hoursEt             = findViewById(R.id.editText_hours);
-        minutesEt           = findViewById(R.id.editText_minutes);
-        secondsEt           = findViewById(R.id.editText_seconds);
-        dataSourceEt        = findViewById(R.id.editText_dataSource);
-        recordingMethodEt   = findViewById(R.id.editText_recordingMethod);
-        typeSpinner         = findViewById(R.id.spinner_type);
-        sTv                 = findViewById(R.id.textView_s);
+        // edittexts
+        routeEt = findViewById(R.id.editText_route);
+        routeVarEt = findViewById(R.id.editText_routeVar);
+        intervalEt = findViewById(R.id.editText_interval);
+        dateEt = findViewById(R.id.editText_date);
+        timeEt = findViewById(R.id.editText_time);
+        noteEt = findViewById(R.id.editText_note);
+        distanceEt = findViewById(R.id.editText_distance);
+        hoursEt = findViewById(R.id.editText_hours);
+        minutesEt = findViewById(R.id.editText_minutes);
+        secondsEt = findViewById(R.id.editText_seconds);
+        //polylineEt = findViewById(R.id.editText_polyline);
+        dataSourceEt = findViewById(R.id.editText_dataSource);
+        recordingMethodEt = findViewById(R.id.editText_recordingMethod);
+        typeSpinner = findViewById(R.id.spinner_type);
+        sTv = findViewById(R.id.textView_s);
 
+        // spinner
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Exercise.TYPES);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(spinnerAdapter);
         typeSpinner.setOnItemSelectedListener(this);
-
     }
 
     private void setToolbar() {
@@ -150,7 +153,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void setTexts() {
-
         if (edit) setTextsEdit();
         else setTextsCreate();
 
@@ -166,9 +168,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void setTextsEdit() {
-
         //exercise = D.exercises.get(id);
-        exercise = Helper.getReader(this).getExercise(_id);
+        exercise = Reader.get(this).getExercise(_id);
 
         // subs
         for (int i = 0; i < exercise.subCount(); i++) {
@@ -177,38 +178,44 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             // add views
             final View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, null);
             final LinearLayout ll = findViewById(R.id.linearLayout_edit);
-            ll.addView(subView, ll.getChildCount()-1);
+            ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
             removeSubViewBtnListener(ll, subView);
 
-            final EditText sDistanceEt  = subViews.get(i).findViewById(R.id.editText_distance_sub);
-            final EditText sHoursEt     = subViews.get(i).findViewById(R.id.editText_hours_sub);
-            final EditText sMinutesEt   = subViews.get(i).findViewById(R.id.editText_minutes_sub);
-            final EditText sSecondsEt   = subViews.get(i).findViewById(R.id.editText_seconds_sub);
+            final EditText sDistanceEt = subViews.get(i).findViewById(R.id.editText_distance_sub);
+            final EditText sHoursEt = subViews.get(i).findViewById(R.id.editText_hours_sub);
+            final EditText sMinutesEt = subViews.get(i).findViewById(R.id.editText_minutes_sub);
+            final EditText sSecondsEt = subViews.get(i).findViewById(R.id.editText_seconds_sub);
 
             float[] time = M.getTimeParts(sub.getTime());
 
-            sDistanceEt .setText((float) sub.getDistance() / 1000 + "");
-            sHoursEt    .setText((int) time[2] + "");
-            sMinutesEt  .setText((int) time[1] + "");
-            sSecondsEt  .setText(time[0] + "");
+            sDistanceEt.setText((float) sub.getDistance() / 1000 + "");
+            sHoursEt.setText((int) time[2] + "");
+            sMinutesEt.setText((int) time[1] + "");
+            sSecondsEt.setText(time[0] + "");
         }
 
         float[] time = M.getTimeParts(exercise.getTimePrimary());
 
         // set texts
-        routeEt             .setText(exercise.getRoute());
-        routeVarEt          .setText(exercise.getRouteVar());
-        dateEt              .setText(exercise.getDate().format(C.FORMATTER_EDIT_DATE));
-        timeEt              .setText(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME));
-        noteEt              .setText(exercise.getNote());
-        distanceEt          .setText((float) exercise.getDistancePrimary() / 1000 + "");
-        hoursEt             .setText((int) time[2] + "");
-        minutesEt           .setText((int) time[1] + "");
-        secondsEt           .setText(time[0] + "");
-        dataSourceEt        .setText(exercise.getDataSource());
-        recordingMethodEt   .setText(exercise.getRecordingMethod());
-        typeSpinner         .setSelection(exercise.getType());
+        routeEt.setText(exercise.getRoute());
+        routeVarEt.setText(exercise.getRouteVar());
+        dateEt.setText(exercise.getDate().format(C.FORMATTER_EDIT_DATE));
+        timeEt.setText(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME));
+        noteEt.setText(exercise.getNote());
+        distanceEt.setText((float) exercise.getDistancePrimary() / 1000 + "");
+        hoursEt.setText((int) time[2] + "");
+        minutesEt.setText((int) time[1] + "");
+        secondsEt.setText(time[0] + "");
+        dataSourceEt.setText(exercise.getDataSource());
+        recordingMethodEt.setText(exercise.getRecordingMethod());
+        typeSpinner.setSelection(exercise.getType());
+
+        // polyline
+        /*if (exercise.hasTrail()) {
+            polylineEt.setText(exercise.getTrail().getPolyline());
+            polylineEt.setFocusable(false);
+        }*/
 
         // show or hide interval
         if (exercise.isType(Exercise.TYPE_INTERVALS)) {
@@ -227,45 +234,58 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     // parse
 
     private void parseAndSave() {
-
         try {
             // parse
-            String route            = routeEt.getText().toString();
-            String routeVar         = routeVarEt.getText().toString();
-            LocalDate date          = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
-            LocalTime localTime     = LocalTime.parse(timeEt.getText(), C.FORMATTER_EDIT_TIME);
-            String note             = noteEt.getText().toString();
-            int distance            = !driveDistance ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) : Exercise.DISTANCE_DRIVEN;
-            int hours               = Integer.parseInt(hoursEt.getText().toString());
-            int minutes             = Integer.parseInt(minutesEt.getText().toString());
-            float seconds           = Float.parseFloat(secondsEt.getText().toString());
-            float time              = hours*3600 + minutes*60 + seconds;
-            String dataSource       = dataSourceEt.getText().toString();
-            String recordingMethod  = recordingMethodEt.getText().toString();
-            int type                = typeSpinner.getSelectedItemPosition();
-            ArrayList<Sub> subs     = parseSubs();
-            String interval         = type == Exercise.TYPE_INTERVALS ? intervalEt.getText().toString() : "";
+            String route = routeEt.getText().toString();
+            String routeVar = routeVarEt.getText().toString();
+            LocalDate date = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
+            LocalTime localTime = LocalTime.parse(timeEt.getText(), C.FORMATTER_EDIT_TIME);
+            String note = noteEt.getText().toString();
+            int distance = !driveDistance ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) : Exercise.DISTANCE_DRIVEN;
+            int hours = Integer.parseInt(hoursEt.getText().toString());
+            int minutes = Integer.parseInt(minutesEt.getText().toString());
+            float seconds = Float.parseFloat(secondsEt.getText().toString());
+            float time = hours * 3600 + minutes * 60 + seconds;
+            String dataSource = dataSourceEt.getText().toString();
+            String recordingMethod = recordingMethodEt.getText().toString();
+            int type = typeSpinner.getSelectedItemPosition();
+            ArrayList<Sub> subs = parseSubs();
+            String interval = type == Exercise.TYPE_INTERVALS ? intervalEt.getText().toString() : "";
 
-            int routeId = Helper.getReader(this).getRouteIdOrCreate(route, this);
+            int routeId = Reader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
 
-            // save
+            // save create
             if (exercise == null) {
-                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
-                L.toast(Helper.getWriter(this).addExercise(exercise, this), this);
+                // trail
+                /*Trail trail = null;
+                String polyline = polylineEt.getText().toString();
+                if (!polyline.equals("")) {
+                    trail = new Trail(PolyUtil.decode(polyline));
+                }*/
+
+                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval,note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
+                L.toast(Writer.get(this).addExercise(exercise, this), this);
                 //D.exercises.add(exercise);
             }
+            // save edit
             else {
                 exercise = new Exercise(exercise.get_id(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
-                L.toast(Helper.getWriter(this).updateExercise(exercise), this);
+                L.toast(Writer.get(this).updateExercise(exercise), this);
                 //D.exercises.set(exercise.getId(), exercise);
             }
 
-            //D.edited();
             finish();
         }
-        catch (NumberFormatException e) { L.toast("Can't save empty", this); }
-        catch (Exception e) { L.handleError(e, this); }
+        catch (NumberFormatException e) {
+            L.toast("Can't save empty", this);
+        }
+        catch (StringIndexOutOfBoundsException e) {
+            L.toast("Problem decoding polyline", this);
+        }
+        catch (Exception e) {
+            L.handleError(e, this);
+        }
     }
 
     private ArrayList<Sub> parseSubs() {
@@ -276,24 +296,26 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         for (int i = 0; i < subViews.size(); i++) {
             View v = subViews.get(i);
 
-            EditText sDistanceEt    = v.findViewById(R.id.editText_distance_sub);
-            EditText sHoursEt       = v.findViewById(R.id.editText_hours_sub);
-            EditText sMinutesEt     = v.findViewById(R.id.editText_minutes_sub);
-            EditText sSecondsEt     = v.findViewById(R.id.editText_seconds_sub);
+            EditText sDistanceEt = v.findViewById(R.id.editText_distance_sub);
+            EditText sHoursEt = v.findViewById(R.id.editText_hours_sub);
+            EditText sMinutesEt = v.findViewById(R.id.editText_minutes_sub);
+            EditText sSecondsEt = v.findViewById(R.id.editText_seconds_sub);
 
-            int distance    = (int) (Float.parseFloat(sDistanceEt.getText().toString()) * 1000);
-            int hours       = Integer.parseInt(sHoursEt.getText().toString());
-            int minutes     = Integer.parseInt(sMinutesEt.getText().toString());
-            float seconds   = Float.parseFloat(sSecondsEt.getText().toString());
-            float time      = hours*3600 + minutes*60 + seconds;
-            int _subId      = (exercise != null && i < exercise.subCount()) ? exercise.getSub(i).get_id() : -1;
+            int distance = (int) (Float.parseFloat(sDistanceEt.getText().toString()) * 1000);
+            int hours = Integer.parseInt(sHoursEt.getText().toString());
+            int minutes = Integer.parseInt(sMinutesEt.getText().toString());
+            float seconds = Float.parseFloat(sSecondsEt.getText().toString());
+            float time = hours * 3600 + minutes * 60 + seconds;
+            int _subId = (exercise != null && i < exercise.subCount()) ? exercise.getSub(i).get_id() : -1;
 
             subs.add(new Sub(_subId, _id, distance, time));
         }
 
         // delete
         for (int i = 0; exercise != null && i < exercise.subCount(); i++) {
-            if (i >= subs.size()) { Helper.getWriter(this).deleteSub(exercise.getSub(i)); }
+            if (i >= subs.size()) {
+                Writer.get(this).deleteSub(exercise.getSub(i));
+            }
         }
 
         return subs;
@@ -302,25 +324,24 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     // set listeners
 
     private void addSubViewBtnListener() {
-
         final Button addSubBtn = findViewById(R.id.button_addSub);
-        addSubBtn.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                final View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, null);
-                final LinearLayout ll = findViewById(R.id.linearLayout_edit);
-                ll.addView(subView, ll.getChildCount()-1);
-                subViews.add(subView);
+        addSubBtn.setVisibility(View.GONE);
+        /*addSubBtn.setOnClickListener(v -> {
+            final View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, null);
+            final LinearLayout ll = findViewById(R.id.linearLayout_edit);
+            ll.addView(subView, ll.getChildCount() - 1);
+            subViews.add(subView);
 
-                removeSubViewBtnListener(ll, subView);
-            }
-        });
+            removeSubViewBtnListener(ll, subView);
+        });*/
     }
 
     private void removeSubViewBtnListener(final LinearLayout ll, final View subView) {
 
         final Button removeBtn = subView.findViewById(R.id.button_removeSub);
         removeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 ll.removeView(subView);
                 subViews.remove(subView);
             }
@@ -330,7 +351,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private void driveDistanceTvListener() {
 
         sTv.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (!driveDistance) {
                     distanceEt.setEnabled(false);
                     sTv.setText("s.");
@@ -348,15 +370,17 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private void dateEtListener() {
 
         dateEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View v, boolean hasFocus) {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) return;
                 LocalDate dateSelect = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
 
                 DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEt.setText(LocalDate.of(year, month+1, dayOfMonth).format(C.FORMATTER_EDIT_DATE));
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(C.FORMATTER_EDIT_DATE));
                     }
-                }, dateSelect.getYear(), dateSelect.getMonthValue()-1, dateSelect.getDayOfMonth());
+                }, dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
 
                 dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 dialog.show();

@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.dialogs.FilterDialog;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener, FilterDialog.DialogListener, SortSheet.DismissListener {
 
-    private Helper.Writer writer;
+    private Writer writer;
     private MainFragment mainFragment;
     private ActionBar ab;
 
@@ -67,10 +67,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
 
         //if (reader == null) reader = new Helper.Reader(this);
-        writer = Helper.getWriter(this);
-        Helper.openReader(this);
+        writer = Writer.get(this);
 
-        if (Helper.Writer.useUpdateTool) {
+        if (Writer.useUpdateTool) {
             //Helper.Writer w = new Helper.Writer(this);
             writer.updateTool(this);
             //w.close();
@@ -92,14 +91,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             mainFragment.updateFragment();
             if (isFabMenuOpen) closeFabMenu();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        //reader.close();
-        Helper.closeReader();
-        Helper.closeWriter();
-        super.onDestroy();
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.api.FitnessApi;
 import com.example.trackfield.api.StravaApi;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.dialogs.RadioDialog;
@@ -198,7 +197,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 BoardingActivity.startActivity(this);
             });
             inflateClickItem("Recreate database", "", false, v -> {
-                Helper.getWriter(this).recreate();
+                Writer.get(this).recreate();
             });
             inflateClickItem("Export .txt", "", false, v -> {
                 F.exportTxt(a);

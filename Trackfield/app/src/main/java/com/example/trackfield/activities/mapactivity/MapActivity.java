@@ -44,6 +44,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     ////
 
+    // extends AppCompatActivity
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         D.updateTheme(this);
@@ -52,6 +54,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         L.transStatusBar(getWindow());
         setToolbar();
 
+        // intent
         Intent intent = getIntent();
         if (intent == null) finish();
         _id = intent.getIntExtra(EXTRA_ID, -1);
@@ -106,7 +109,13 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    // abstract
+    // get
+
+    protected ArrayList<Polyline> getPolylineComplement(Polyline to) {
+        ArrayList<Polyline> complement = new ArrayList<>(tempPolylines);
+        complement.remove(to);
+        return complement;
+    }
 
     protected abstract HashMap<Integer, String> getRestOfPolylines(int exceptId);
 
@@ -125,7 +134,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
                     // options
                     PolylineOptions options = new PolylineOptions();
-                    options.color(polyColorDeselected(this));
+                    options.color(getColorDeselected(this));
                     options.width(L.px(3));
                     options.addAll(PolyUtil.decode(entry.getValue()));
                     tempOptions.add(options);
@@ -160,44 +169,23 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    protected ArrayList<Polyline> getPolylineComplement(Polyline to) {
-        ArrayList<Polyline> complement = new ArrayList<>(tempPolylines);
-        complement.remove(to);
-        return complement;
-    }
-
-    // resources
-
-    @ColorInt
-    protected static int polyColorSelected(Context c) {
-        return c.getResources().getColor(R.color.colorGreenLight);
-    }
-
-    @ColorInt
-    protected static int polyColorDeselected(Context c) {
-        return c.getResources().getColor(R.color.colorGreenLightTrans);
-    }
-
-    @ColorInt
-    protected static int polyColorHidden(Context c) {
-        return c.getResources().getColor(R.color.colorTrans);
-    }
-
-    // implements
+    // implements GoogleMap, PeekSheet
 
     @Override
     public void onPolylineClick(Polyline polyline) {
+        if (polyline.getTag() == null) return;
+
         // sheet
         int id = (int) polyline.getTag();
         PeekSheet.newInstance(id).show(getSupportFragmentManager());
 
-        // camera
-        LatLngBounds bounds = Trail.bounds(polyline.getPoints());
-        moveCamera(googleMap, bounds, MAP_PADDING, true);
+        // focus camera
+        //LatLngBounds bounds = Trail.bounds(polyline.getPoints());
+        //moveCamera(googleMap, bounds, MAP_PADDING, true);
 
         // appearence
-        polyline.setColor(polyColorSelected(this));
-        for (Polyline line : getPolylineComplement(polyline)) line.setColor(polyColorHidden(this));
+        polyline.setColor(getColorSelected(this));
+        for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorHidden(this));
     }
 
     @Override
@@ -213,9 +201,27 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         if (polyline == null) return;
 
         // appearence
-        polyline.setColor(polyColorDeselected(this));
-        for (Polyline line : getPolylineComplement(polyline))
-            line.setColor(polyColorDeselected(this));
+        polyline.setColor(getColorDeselected(this));
+        for (Polyline line : getPolylineComplement(polyline)) {
+            line.setColor(getColorDeselected(this));
+        }
+    }
+
+    // get static
+
+    @ColorInt
+    protected static int getColorSelected(Context c) {
+        return c.getResources().getColor(R.color.colorGreenLight);
+    }
+
+    @ColorInt
+    protected static int getColorDeselected(Context c) {
+        return c.getResources().getColor(R.color.colorGreenLightTrans);
+    }
+
+    @ColorInt
+    protected static int getColorHidden(Context c) {
+        return c.getResources().getColor(R.color.colorTrans);
     }
 
 }

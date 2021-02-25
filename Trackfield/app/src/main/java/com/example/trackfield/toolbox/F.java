@@ -11,7 +11,8 @@ import android.os.Environment;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
@@ -179,13 +180,13 @@ public class F {
     // json
 
     public static void exportJson(Context c) {
-        writeJSONObjectList(PATH + FILENAME_EJ, Helper.getReader(c).getExercises(), c);
-        writeJSONObjectList(PATH + FILENAME_RJ, Helper.getReader(c).getRoutes(C.SortMode.DATE, true, true), c);
-        writeJSONObjectList(PATH + FILENAME_DJ, Helper.getReader(c).getDistances(Distance.SortMode.DISTANCE, true), c);
+        writeJSONObjectList(PATH + FILENAME_EJ, Reader.get(c).getExercises(), c);
+        writeJSONObjectList(PATH + FILENAME_RJ, Reader.get(c).getRoutes(C.SortMode.DATE, true, true), c);
+        writeJSONObjectList(PATH + FILENAME_DJ, Reader.get(c).getDistances(Distance.SortMode.DISTANCE, true), c);
     }
 
     public static void importJson(Context c) {
-        Helper.getWriter(c).recreate();
+        Writer.get(c).recreate();
         importRoutesJson(c);
         importDistancesJson(c);
         importExercisesJson(c);
@@ -204,7 +205,7 @@ public class F {
             }
         }
 
-        Helper.getWriter(c).addExercises(exercises, c);
+        Writer.get(c).addExercises(exercises, c);
         L.toast("Imported", c);
 
         /*
@@ -266,7 +267,7 @@ public class F {
             }
         }
 
-        Helper.getWriter(c).addRoutes(routes, c);
+        Writer.get(c).addRoutes(routes, c);
         L.toast("Imported", c);
         L.toast("Imported", c);
     }
@@ -284,7 +285,7 @@ public class F {
             }
         }
 
-        Helper.getWriter(c).addDistances(distances);
+        Writer.get(c).addDistances(distances);
         L.toast("Imported", c);
     }
 
@@ -303,7 +304,7 @@ public class F {
             FileOutputStream sFos = new FileOutputStream(sFile);
             OutputStreamWriter eWriter = new OutputStreamWriter(eFos);
             OutputStreamWriter sWriter = new OutputStreamWriter(sFos);
-            for (Exercise e : Helper.getReader(c).getExercises()) {
+            for (Exercise e : Reader.get(c).getExercises()) {
                 eWriter.append(e.extractToFile(DIV_WRITE) + "\n");
                 for (int index = 0; index < e.getSubs().size(); index++) {
                     sWriter.append(e.getSub(index).extractToFile(DIV_WRITE, e.get_id(), index) + "\n");
@@ -316,7 +317,7 @@ public class F {
             java.io.File rFile = new java.io.File(PATH + FILENAME_R);
             FileOutputStream rFos = new FileOutputStream(rFile);
             OutputStreamWriter rWriter = new OutputStreamWriter(rFos);
-            for (Route r : Helper.getReader(c).getRoutes(C.SortMode.DATE, true, true)) {
+            for (Route r : Reader.get(c).getRoutes(C.SortMode.DATE, true, true)) {
                 rWriter.append(r.getName() + "\n");
             }
             rWriter.close(); rFos.flush(); rFos.close();
@@ -325,7 +326,7 @@ public class F {
             java.io.File dFile = new java.io.File(PATH + FILENAME_D);
             FileOutputStream dFos = new FileOutputStream(dFile);
             OutputStreamWriter dWriter = new OutputStreamWriter(dFos);
-            for (Distance d : Helper.getReader(c).getDistances(Distance.SortMode.DISTANCE, true)) {
+            for (Distance d : Reader.get(c).getDistances(Distance.SortMode.DISTANCE, true)) {
                 dWriter.append(d.getDistance() + "\n");
             }
             dWriter.close(); dFos.flush(); dFos.close();
@@ -347,7 +348,7 @@ public class F {
         //D.routes.clear();
         //D.distances.clear();
         //Helper.getWriter(c).deleteAllExercises();
-        Helper.getWriter(c).recreate();
+        Writer.get(c).recreate();
 
         try {
             // sub
@@ -475,7 +476,7 @@ public class F {
 
                 // add exercise
                 if (_id != -1) {
-                    int routeId = Helper.getReader(c).getRouteId(route);
+                    int routeId = Reader.get(c).getRouteId(route);
                     Trail trail = null;
                     if (!polyline.equals("")) {
                         if (!startLat.equals("") && !startLng.equals("") && !endLat.equals("") && !endLng.equals("")) {
@@ -487,7 +488,7 @@ public class F {
                     }
 
                     Exercise e = new Exercise(_id, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
-                    Helper.getWriter(c).addExercise(e, c);
+                    Writer.get(c).addExercise(e, c);
                     //D.exercises.add(e);
                 }
 
@@ -500,7 +501,7 @@ public class F {
             BufferedReader rReader = new BufferedReader(new InputStreamReader(rFis));
             while ((line = rReader.readLine()) != null) {
                 //D.routes.add(line);
-                Helper.getWriter(c).addRouteIfNotAdded(new Route(-1, line), c);
+                Writer.get(c).addRouteIfNotAdded(new Route(-1, line), c);
             }
             rReader.close(); rFis.close();
 
@@ -510,7 +511,7 @@ public class F {
             BufferedReader dReader = new BufferedReader(new InputStreamReader(dFis));
             while ((line = dReader.readLine()) != null) {
                 //D.distances.add(Integer.valueOf(line));
-                Helper.getWriter(c).addDistance(new Distance(-1, Integer.parseInt(line)));
+                Writer.get(c).addDistance(new Distance(-1, Integer.parseInt(line)));
             }
             dReader.close(); dFis.close();
 

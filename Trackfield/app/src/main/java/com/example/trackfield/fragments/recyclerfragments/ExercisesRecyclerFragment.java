@@ -6,7 +6,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.recycleradapters.ExercisesRecyclerAdapter;
 import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
 import com.example.trackfield.items.Exerlite;
@@ -44,7 +44,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 dailyChart.setType(ChartOld.TYPE_DAILY);
                 itemList.add(dailyChart);*/
 
-                GraphData weekData = new GraphData(Helper.getReader(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                GraphData weekData = new GraphData(Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
                 Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false, true);
                 weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
                 itemList.add(weekGraph);
@@ -215,7 +215,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             if (false && header.isType(Header.Type.YEAR)) {
                 ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
-                GraphData yearData = new GraphData(Helper.getReader(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                GraphData yearData = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
                 Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
                 yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
                 newItems.add(position + 1, yearGraph);

@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
@@ -28,7 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // Layout
@@ -116,9 +115,6 @@ public class L {
     }
 
     // check
-    public static void checkReader(Helper.Reader reader, Context c) {
-        if (reader == null) { reader = new Helper.Reader(c); }
-    }
     public static void setVisibleOrGone(View v, boolean visible) {
         v.setVisibility(visible ? View.VISIBLE : View.GONE);
     }

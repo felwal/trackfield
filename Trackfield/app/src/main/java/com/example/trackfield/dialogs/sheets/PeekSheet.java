@@ -1,6 +1,5 @@
 package com.example.trackfield.dialogs.sheets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,14 +10,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.toolbox.C;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class PeekSheet extends BaseSheet {
 
@@ -84,7 +81,7 @@ public class PeekSheet extends BaseSheet {
 
         if (bundle != null) {
             int id = bundle.getInt(BUNDLE_ID, 0);
-            exercise = Helper.getReader(a).getExercise(id);
+            exercise = Reader.get(a).getExercise(id);
         }
 
         tag = TAG;

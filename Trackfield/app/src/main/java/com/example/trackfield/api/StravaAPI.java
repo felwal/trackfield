@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.C;
@@ -174,7 +173,7 @@ public class StravaApi {
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
-            int routeId = Helper.getReader(a).getRouteIdOrCreate(name, a);
+            int routeId = Reader.get(a).getRouteIdOrCreate(name, a);
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
@@ -190,17 +189,17 @@ public class StravaApi {
     private void mergeWithExisting(Exercise fromStrava) {
         if (fromStrava == null) return;
 
-        ArrayList<Exercise> matching = Helper.getReader(a).getExercisesForMerge(fromStrava.getDateTime(), fromStrava.getType());
+        ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(fromStrava.getDateTime(), fromStrava.getType());
 
         if (matching.size() == 1) {
             Exercise m = matching.get(0);
             Exercise merged = new Exercise(m.get_id(), m.getType(), fromStrava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
                     m.getNote(), m.getDataSource(), m.getRecordingMethod(), fromStrava.getDistancePrimary(), fromStrava.getTimePrimary(), m.getSubs(), fromStrava.getTrail());
 
-            Helper.getWriter(a).updateExercise(merged);
+            Writer.get(a).updateExercise(merged);
         }
         else if (matching.size() == 0) {
-            Helper.getWriter(a).addExercise(fromStrava, a);
+            Writer.get(a).addExercise(fromStrava, a);
             //L.toast("import on " + dateTime.toLocalDate().format(C.FORMATTER_SQL_DATE), a);
         }
         else

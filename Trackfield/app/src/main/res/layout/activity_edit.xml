@@ -236,7 +236,8 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editText_seconds" />
+                    app:layout_constraintTop_toTopOf="@+id/editText_seconds"
+                    tools:visibility="gone" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

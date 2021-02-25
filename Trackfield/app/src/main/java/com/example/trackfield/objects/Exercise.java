@@ -2,7 +2,7 @@ package com.example.trackfield.objects;
 
 import android.content.Context;
 
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.interfaces.JSONObjectable;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.L;
@@ -36,13 +36,7 @@ public class Exercise implements JSONObjectable {
     private ArrayList<Sub> subs;
     private Trail trail;
 
-    public enum SortMode {
-        DATE,
-        DISTANCE,
-        TIME,
-        PACE,
-        NAME
-    }
+    public enum SortMode { DATE, DISTANCE, TIME, PACE, NAME }
     
     public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other" };
     public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Others" };
@@ -99,7 +93,7 @@ public class Exercise implements JSONObjectable {
         dateTime = M.ofEpoch(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
         //route = obj.getString(JSON_ROUTE);
-        route = Helper.getReader().getRouteName(routeId);//.getName();
+        route = Reader.get().getRouteName(routeId);//.getName();
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
@@ -227,15 +221,15 @@ public class Exercise implements JSONObjectable {
         return time;
     }
 
+    // TODO
     public int getElevationGain() {
         return 0;
     }
 
+    // TODO
     public int getElevationLoss() {
         return 0;
     }
-
-    // get subs
 
     public ArrayList<Sub> getSubs() {
         return subs;
@@ -253,7 +247,7 @@ public class Exercise implements JSONObjectable {
     // get driven
 
     public int distance() {
-        if (isDistanceDriven()) return Helper.getReader().avgDistance(route, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
+        if (isDistanceDriven()) return Reader.get().avgDistance(route, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
         if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
     }

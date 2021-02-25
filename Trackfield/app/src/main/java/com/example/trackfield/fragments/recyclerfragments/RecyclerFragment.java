@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.dialogs.sheets.SortSheet;
 import com.example.trackfield.items.Exerlite;
 import com.example.trackfield.items.headers.Header;
@@ -33,7 +33,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     protected Activity a;
     protected static Thread bgThread;
-    protected Helper.Reader reader;
+    protected Reader reader;
     protected RecyclerView recycler;
     protected RecyclerView.LayoutManager manager;
     protected RecyclerAdapter adapter;
@@ -62,7 +62,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         //if (a instanceof MainActivity)          reader = ((MainActivity) a)     .getReader() != null ? ((MainActivity) a).getReader() : new Helper.Reader(a);
         //else if (a instanceof RecActivity.Base) reader = ((RecActivity.Base) a) .getReader() != null ? ((MainActivity) a).getReader() : new Helper.Reader(a);
         //else reader = new Helper.Reader(a);
-        reader = Helper.getReader(a);
+        reader = Reader.get(a);
 
 
         recycler = view.findViewById(R.id.recyclerView);

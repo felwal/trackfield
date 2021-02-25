@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import com.example.trackfield.R;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.fragments.recyclerfragments.IntervalRecyclerFragment;
 
@@ -75,7 +75,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     @Override public void onTextDialogPositiveClick(String input, String tag) {
         if (input.equals("")) return;
 
-        Helper.getWriter(this).updateInterval(interval, input);
+        Writer.get(this).updateInterval(interval, input);
 
         finish();
         startActivity(this, input, originId);

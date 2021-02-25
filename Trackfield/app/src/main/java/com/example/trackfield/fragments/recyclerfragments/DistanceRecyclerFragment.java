@@ -7,7 +7,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.adapters.recycleradapters.DistanceRecyclerAdapter;
 import com.example.trackfield.adapters.recycleradapters.RecyclerAdapter;
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
 import com.example.trackfield.items.Exerlite;
@@ -51,7 +51,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Helper.getReader(a).getExercise(originId).getType()));
+            Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Reader.get(a).getExercise(originId).getType()));
         }
     }
 

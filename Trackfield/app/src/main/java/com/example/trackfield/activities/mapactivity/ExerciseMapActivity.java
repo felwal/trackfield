@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.trackfield.database.Helper;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.objects.Trails;
@@ -35,9 +35,9 @@ public class ExerciseMapActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        trail = Helper.getReader(this).getTrail(_id); //getExercise(_id).getTrail();
-        Exercise e = Helper.getReader().getExercise(_id);
-        //routeTrails = new Trails(Helper.getReader().getPolylinesByRoute(e.getRouteId(), e.getRouteVar()));
+        trail = Reader.get(this).getTrail(_id); //getExercise(_id).getTrail();
+        Exercise e = Reader.get(this).getExercise(_id);
+        //routeTrails = new Trails(Reader.get().getPolylinesByRoute(e.getRouteId(), e.getRouteVar()));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ExerciseMapActivity extends MapActivity {
 
         // polyline
         PolylineOptions options = new PolylineOptions();
-        options.color(polyColorSelected(c));
+        options.color(getColorSelected(c));
         options.addAll(trail.getLatLngs());
         Polyline polyline = googleMap.addPolyline(options);
 
@@ -86,7 +86,7 @@ public class ExerciseMapActivity extends MapActivity {
 
     @Override
     protected HashMap<Integer, String> getRestOfPolylines(int exceptId) {
-        return Helper.getReader(this).getPolylines(exceptId);
+        return Reader.get(this).getPolylines(exceptId);
     }
 
 }
