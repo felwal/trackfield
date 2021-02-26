@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class Writer extends Helper {
 
     private static Writer instance;
-    public static boolean useUpdateTool = false;
+    private static boolean useUpdateTool = false;
 
     ////
 
@@ -39,7 +39,8 @@ public class Writer extends Helper {
         onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
     }
 
-    public void updateTool(Context c) {
+    public void useUpdateToolIfEnabled(Context c) {
+        if (!useUpdateTool) return;
 
         useUpdateTool = false;
     }

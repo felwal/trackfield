@@ -23,7 +23,10 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
 
     ////
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    // extends RecyclerFragment
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/, smallestFirst, Prefs.getExerciseVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
@@ -37,32 +40,43 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
         }
         else fadeOutEmpty();
 
-
-
         return itemList;
     }
-    @Override protected void setSortModes() {
+
+    @Override
+    protected void setSortModes() {
         sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
     }
-    @Override protected void getAdapter() {
+
+    @Override
+    protected void getAdapter() {
         adapter = new DistancesRecyclerAdapter(items, a);
     }
-    @Override protected void getPrefs() {
+
+    @Override
+    protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
     }
-    @Override protected void setPrefs() {
+
+    @Override
+    protected void setPrefs() {
         Prefs.setSortModePref(C.Layout.DISTANCE, sortMode);
         Prefs.setSmallestFirstPref(C.Layout.DISTANCE, smallestFirst);
     }
-    @Override protected void setEmptyPage() {
+
+    @Override
+    protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.empty_title_distances));
         emptyMessage.setText(getString(R.string.empty_message_distances));
         emptyImage.setImageResource(R.drawable.ic_empty_distances_24dp);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    // implements RecyclerAdapter
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
             DistanceActivity.startActivity(a, ((DistanceItem) items.get(position)).getDistance());
         }

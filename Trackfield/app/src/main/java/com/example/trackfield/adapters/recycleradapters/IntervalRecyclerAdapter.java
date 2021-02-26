@@ -3,6 +3,7 @@ package com.example.trackfield.adapters.recycleradapters;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +18,10 @@ public class IntervalRecyclerAdapter extends RecyclerAdapter {
         super(itemList, c);
         this.originId = originId;
     }
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise_distance, parent, false);

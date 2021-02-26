@@ -12,7 +12,6 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_map"
         style="@style/Toolbar"
-        android:layout_marginTop="24dp"
         android:background="@color/colorTrans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

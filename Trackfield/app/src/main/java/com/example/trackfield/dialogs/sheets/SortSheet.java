@@ -1,6 +1,5 @@
 package com.example.trackfield.dialogs.sheets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,14 +14,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
-import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SortSheet extends BaseSheet {
 
@@ -122,7 +118,7 @@ public class SortSheet extends BaseSheet {
             layouts[rl] = new RelativeLayout(getContext());
             layouts[rl].setLayoutParams(rlParams);
             layouts[rl].setBackgroundColor(getResources().getColor(R.color.colorBG));
-            L.ripple(layouts[rl], a);
+            L.setRipple(layouts[rl], a);
 
             // textView
             textViews[rl] = new TextView(getContext());

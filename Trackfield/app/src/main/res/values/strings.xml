@@ -25,13 +25,34 @@
   <string name="tab_distances">Distances</string>
   <string name="tab_routes">Routes</string>
   <string name="tab_intervals">Intervals</string>
+
   <string name="tab_boarding1_title">Exercise</string>
   <string name="tab_boarding2_title">Analyze</string>
   <string name="tab_boarding3_title">Organize</string>
-
   <string name="tab_boarding1_message">You do you.</string>
   <string name="tab_boarding2_message">Chart, graph, compare.</string>
   <string name="tab_boarding3_message">Your exercises, exactly where you need them.</string>
+
+  <!-- edit texts -->
+  <string name="et_text_edit_route">Route</string>
+  <string name="et_hint_edit_route">Route</string>
+  <string name="et_hint_edit_routevar">variation</string>
+  <string name="et_hint_edit_date">yyyy/MM/dd</string>
+  <string name="et_hint_edit_time">HH:mm:ss</string>
+  <string name="et_hint_edit_interval">Interval</string>
+  <string name="et_hint_edit_note">Note</string>
+  <string name="et_hint_edit_distance">km</string>
+  <string name="et_hint_edit_hours">HH</string>
+  <string name="et_hint_edit_minutes">mm</string>
+  <string name="et_hint_edit_seconds">ss</string>
+  <string name="et_hint_edit_datasource">Data source</string>
+  <string name="et_hint_edit_recordingmethod">Recording method</string>
+
+  <!-- text views -->
+  <string name="tv_text_boarding_subtitle">Welcome to</string>
+  <string name="tv_text_boarding_title">Trackfield!</string>
+  <string name="tv_text_boarding_caption">Hej mamma</string>
+  <string name="btn_text_boarding_start">Get started</string>
 
 
   <!-- actions -->
@@ -79,6 +100,7 @@
   <string name="dialog_btn_finish"><b>Finish</b></string>
   <string name="dialog_btn_filter"><b>Filter</b></string>
   <string name="dialog_btn_reset"><b>Reset</b></string>
+  <string name="dialog_btn_discard"><b>Discard</b></string>
 
   <string name="dialog_chip_time">Time</string>
   <string name="dialog_chip_pace">Pace</string>
@@ -91,6 +113,7 @@
   <string name="dialog_title_set_goal">Set goal</string>
   <string name="dialog_title_filter">Filter exercises</string>
   <string name="dialog_title_finish_recording">Finish recording?</string>
+  <string name="dialog_title_discard">Discard edits?</string>
   <string name="dialog_title_theme">Theme</string>
   <string name="dialog_title_color">Color</string>
   <string name="dialog_title_mass">Mass (kg)</string>

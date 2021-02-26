@@ -120,18 +120,6 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return view;
     }
 
-    // abstract
-
-    protected abstract void setSortModes();
-
-    protected abstract ArrayList<RecyclerItem> getRecyclerItems();
-
-    protected abstract void getAdapter();
-
-    protected abstract void getPrefs();
-
-    protected abstract void setPrefs();
-
     // get
 
     protected ArrayList<RecyclerItem> getVisibleItems() {
@@ -309,6 +297,18 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     // implements RecyclerAdapter
 
     @Override public void onItemLongClick(View view, int position, int itemType) {}
+
+    // abstract
+
+    protected abstract void setSortModes();
+
+    protected abstract ArrayList<RecyclerItem> getRecyclerItems();
+
+    protected abstract void getAdapter();
+
+    protected abstract void getPrefs();
+
+    protected abstract void setPrefs();
 
     // interface
 

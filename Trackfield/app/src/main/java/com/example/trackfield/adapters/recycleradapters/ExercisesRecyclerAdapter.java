@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,12 +23,16 @@ public class ExercisesRecyclerAdapter extends RecyclerAdapter {
         super(itemList, c);
         now = LocalDate.now();
     }
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == ITEM_ITEM) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_exercise, parent, false);
             return new ExerciseVH(cl);
         }
+
+        // deprecated
         else if (viewType == ITEM_CHART_OLD) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.chart, parent, false);
             ConstraintLayout[] elements = new ConstraintLayout[D.weekAmount];
@@ -48,7 +53,8 @@ public class ExercisesRecyclerAdapter extends RecyclerAdapter {
     }
 
     // holders
-    public class ChartVH extends RecyclerView.ViewHolder {
+
+    @Deprecated public class ChartVH extends RecyclerView.ViewHolder {
 
         public ConstraintLayout constraintLayout;
         public LinearLayout linearLayout;
@@ -69,7 +75,8 @@ public class ExercisesRecyclerAdapter extends RecyclerAdapter {
         }
 
     }
-    public class DailyChartVH extends RecyclerView.ViewHolder {
+
+    @Deprecated public class DailyChartVH extends RecyclerView.ViewHolder {
 
         public ConstraintLayout constraintLayout;
         public View[] bars = new View[7];
@@ -85,8 +92,10 @@ public class ExercisesRecyclerAdapter extends RecyclerAdapter {
             bars[5] = cl.findViewById(R.id.view_barSat);
             bars[6] = cl.findViewById(R.id.view_barSun);
         }
+
     }
-    public class YearChartVH extends RecyclerView.ViewHolder {
+
+    @Deprecated public class YearChartVH extends RecyclerView.ViewHolder {
 
         public ConstraintLayout constraintLayout;
         public LinearLayout linearLayout;

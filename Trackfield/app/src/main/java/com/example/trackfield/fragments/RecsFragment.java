@@ -57,8 +57,8 @@ public class RecsFragment extends MainFragment {
 
     private void setPagerAdapter() {
         // set pagerAdapter to viewPager
-        recsPagerAdapter = new RecsPagerAdapter(getActivity().getApplicationContext(), getChildFragmentManager());
         final ViewPager viewPager = view.findViewById(R.id.view_pager);
+        recsPagerAdapter = new RecsPagerAdapter(viewPager, getActivity().getApplicationContext(), getChildFragmentManager());
         viewPager.setAdapter(recsPagerAdapter);
 
         // set viewPager to tabs

@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
+import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
@@ -36,17 +37,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, BinaryDialog.DialogListener {
 
     private Exercise exercise;
     private int _id;
     private boolean driveDistance = false;
     private boolean edit;
 
+    private String createDate, createTime;
+
     private TextView sTv;
     private EditText routeEt, routeVarEt, intervalEt, noteEt, distanceEt, hoursEt, minutesEt, secondsEt, dataSourceEt, recordingMethodEt, dateEt, timeEt;
     private Spinner typeSpinner;
     private ArrayList<View> subViews = new ArrayList<>();
+
+    private static final String DIALOG_DISCARD = "discardDialog";
 
     // extras
     public static final String EXTRA_ID = "_id";
@@ -100,10 +105,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (haveEditsBeenMade()) showDiscardDialog();
+                else finish();
                 return true;
 
             case R.id.action_save:
@@ -115,7 +120,22 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (haveEditsBeenMade()) showDiscardDialog();
+        else super.onBackPressed();
+    }
+
     // set
+
+    private void setToolbar() {
+        final Toolbar tb = findViewById(R.id.toolbar_edit);
+        setSupportActionBar(tb);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(getResources().getString(R.string.activity_edit));
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setHomeAsUpIndicator(R.drawable.ic_cancel_24dp);
+    }
 
     private void findEditTexts() {
 
@@ -143,15 +163,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         typeSpinner.setOnItemSelectedListener(this);
     }
 
-    private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_edit);
-        setSupportActionBar(tb);
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_edit));
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setHomeAsUpIndicator(R.drawable.ic_cancel_24dp);
-    }
-
     private void setTexts() {
         if (edit) setTextsEdit();
         else setTextsCreate();
@@ -162,13 +173,11 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void setTextsCreate() {
 
-        //_id = D.exercises.size();
-        dateEt.setText(LocalDate.now().format(C.FORMATTER_EDIT_DATE));
-        timeEt.setText(LocalDateTime.now().format(C.FORMATTER_EDIT_TIME));
+        dateEt.setText(createDate = LocalDate.now().format(C.FORMATTER_EDIT_DATE));
+        timeEt.setText(createTime = LocalDateTime.now().format(C.FORMATTER_EDIT_TIME));
     }
 
     private void setTextsEdit() {
-        //exercise = D.exercises.get(id);
         exercise = Reader.get(this).getExercise(_id);
 
         // subs
@@ -231,6 +240,51 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    // get
+
+    private boolean haveEditsBeenMade() {
+        if (edit) {
+            float[] time = M.getTimeParts(exercise.getTimePrimary());
+
+            if (!routeEt.getText().toString().equals(exercise.getRoute())) return true;
+            if (!routeVarEt.getText().toString().equals(exercise.getRouteVar())) return true;
+            if (!dateEt.getText().toString().equals(exercise.getDate().format(C.FORMATTER_EDIT_DATE))) return true;
+            if (!timeEt.getText().toString().equals(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME))) return true;
+            if (!noteEt.getText().toString().equals(exercise.getNote())) return true;
+            if (!distanceEt.getText().toString().equals((float) exercise.getDistancePrimary() / 1000 + "")) return true;
+            if (!hoursEt.getText().toString().equals((int) time[2] + "")) return true;
+            if (!minutesEt.getText().toString().equals((int) time[1] + "")) return true;
+            if (!secondsEt.getText().toString().equals(time[0] + "")) return true;
+            if (!dataSourceEt.getText().toString().equals(exercise.getDataSource())) return true;
+            if (!recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())) return true;
+            if (typeSpinner.getSelectedItemPosition() != exercise.getType()) return true;
+            if (driveDistance != exercise.isDistanceDriven()) return true;
+        }
+        else {
+            if (!routeEt.getText().toString().equals("Route")) return true;
+            if (!routeVarEt.getText().toString().equals("")) return true;
+            if (!dateEt.getText().toString().equals(createDate)) return true;
+            if (!timeEt.getText().toString().equals(createTime)) return true;
+            if (!noteEt.getText().toString().equals("")) return true;
+
+            if (!distanceEt.getText().toString().equals("0")) return true;
+            if (!hoursEt.getText().toString().equals("0")) return true;
+            if (!minutesEt.getText().toString().equals("0")) return true;
+            if (!secondsEt.getText().toString().equals("0")) return true;
+            if (!dataSourceEt.getText().toString().equals("")) return true;
+            if (!recordingMethodEt.getText().toString().equals("")) return true;
+            if (typeSpinner.getSelectedItemPosition() != 0) return true;
+            if (driveDistance) return true;
+        }
+
+        return false;
+    }
+
+    private void showDiscardDialog() {
+        BinaryDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard, DIALOG_DISCARD)
+                .show(getSupportFragmentManager());
+    }
+
     // parse
 
     private void parseAndSave() {
@@ -264,7 +318,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval,note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
+                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
                 L.toast(Writer.get(this).addExercise(exercise, this), this);
                 //D.exercises.add(exercise);
             }
@@ -389,7 +443,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
-    // implements
+    // implements AdapterView
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -399,6 +453,13 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         L.setVisibleOrGone(intervalEt, false);
+    }
+
+    // implements BinaryDialog
+
+    @Override
+    public void onBinaryDialogPositiveClick(String tag) {
+        if (tag.equals(DIALOG_DISCARD)) finish();
     }
 
 }

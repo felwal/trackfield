@@ -43,16 +43,14 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         instance.setArguments(bundle);
         return instance;
     }
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getBundle();
-    }
 
-    private void getBundle() {
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            //reader.close();
-            //reader = new Helper.Reader(a);
             route = Reader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
@@ -61,7 +59,10 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         }
     }
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    // extends RecyclerFragment
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst, Prefs.getRouteVisibleTypes());
         ArrayList<Exerlite> chronoList = reader.getExerlitesByRoute(route.get_id(), C.SortMode.DATE, true, Prefs.getRouteVisibleTypes());
@@ -70,7 +71,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
         if (exerliteList.size() != 0) {
 
-            GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER,false, false);
+            GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER, false, false);
             Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
             if (graph.hasMoreThanOnePoint()) {
                 graph.setTag(RecyclerItem.TAG_GRAPH_REC);
@@ -91,28 +92,41 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
         return itemList;
     }
-    @Override protected void setSortModes() {
+
+    @Override
+    protected void setSortModes() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
     }
-    @Override protected void getAdapter() {
+
+    @Override
+    protected void getAdapter() {
         adapter = new RouteRecyclerAdapter(items, originId, a);
     }
-    @Override protected void getPrefs() {
+
+    @Override
+    protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
     }
-    @Override protected void setPrefs() {
+
+    @Override
+    protected void setPrefs() {
         Prefs.setSortModePref(C.Layout.EXERCISE_ROUTE, sortMode);
         Prefs.setSmallestFirstPref(C.Layout.EXERCISE_ROUTE, smallestFirst);
     }
-    @Override protected void setEmptyPage() {
+
+    @Override
+    protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.empty_title_route));
         emptyMessage.setText(getString(R.string.empty_message_route));
         emptyImage.setImageResource(R.drawable.ic_empty_route_24dp);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    // implements RecyclerAdapter
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
             int _id = ((Exerlite) items.get(position)).get_id();
             if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_ROUTE);

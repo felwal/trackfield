@@ -3,7 +3,6 @@ package com.example.trackfield.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.trackfield.R;
@@ -22,13 +21,13 @@ public class BoardingActivity extends AppCompatActivity {
         c.startActivity(startIntent);
     }
 
-    // on
+    // extends AppCompatActivity
 
     @Override protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boarding);
-        L.transStatusBar(getWindow());
+        L.makeStatusBarTransparent(getWindow(), true, findViewById(R.id.textView_boardingSubtitle));
 
         //adapter = new BoardingPagerAdapter(this, getSupportFragmentManager());
         //pager = findViewById(R.id.view_pager);
@@ -40,17 +39,10 @@ public class BoardingActivity extends AppCompatActivity {
     // set
 
     private void setBtn() {
-        final Button nextBtn = findViewById(R.id.button_next);
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                /*int pos = pager.getCurrentItem();
-                if (pos < adapter.getCount() - 1) pager.setCurrentItem(pos + 1);
-                else finish();
-                nextBtn.setText(pos == adapter.getCount() - 2 ? "Finish" : "Next");*/
-
-                Prefs.setFirstLogin(false);
-                finish();
-            }
+        final Button nextBtn = findViewById(R.id.button_start);
+        nextBtn.setOnClickListener(view -> {
+            Prefs.setFirstLogin(false);
+            finish();
         });
     }
 

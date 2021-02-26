@@ -83,7 +83,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track);
-        L.transStatusBar(getWindow());
+        L.makeStatusBarTransparent(getWindow(), false, null);
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!F.permissionToLocation(this)) return;

@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.dialogs.sheets.PeekSheet;
-import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,8 +50,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        L.transStatusBar(getWindow());
         setToolbar();
+        L.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.toolbar_map));
 
         // intent
         Intent intent = getIntent();

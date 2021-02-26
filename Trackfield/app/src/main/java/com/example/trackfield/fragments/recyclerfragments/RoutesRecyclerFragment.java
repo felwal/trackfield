@@ -22,7 +22,10 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
     ////
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    // extends RecyclerFragment
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
@@ -38,28 +41,41 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
         return itemList;
     }
-    @Override protected void setSortModes() {
+
+    @Override
+    protected void setSortModes() {
         sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
-    @Override protected void getAdapter() {
+
+    @Override
+    protected void getAdapter() {
         adapter = new RoutesRecyclerAdapter(items, a);
     }
-    @Override protected void getPrefs() {
+
+    @Override
+    protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
-    @Override protected void setPrefs() {
+
+    @Override
+    protected void setPrefs() {
         Prefs.setSortModePref(C.Layout.ROUTE, sortMode);
         Prefs.setSmallestFirstPref(C.Layout.ROUTE, smallestFirst);
     }
-    @Override protected void setEmptyPage() {
+
+    @Override
+    protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.empty_title_routes));
         emptyMessage.setText(getString(R.string.empty_message_routes));
         emptyImage.setImageResource(R.drawable.ic_empty_routes_24dp);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    // implements RecyclerAdapter
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
             RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
         }

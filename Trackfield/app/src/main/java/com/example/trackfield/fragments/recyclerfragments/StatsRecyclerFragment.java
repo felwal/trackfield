@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class StatsRecyclerFragment extends RoutesRecyclerFragment {
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
@@ -26,7 +27,6 @@ public class StatsRecyclerFragment extends RoutesRecyclerFragment {
         monthGraph.addData(dataGoal);
         itemList.add(monthGraph);
 
-
         GraphData dataGoalYear = new GraphData(Reader.get(a).yearIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
         dataGoalYear.setPaint("#003E3F43", "#FF252528");
         GraphData dataNowYear = new GraphData(Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
@@ -38,7 +38,6 @@ public class StatsRecyclerFragment extends RoutesRecyclerFragment {
         yearGraph.addData(dataGoalYear);
         itemList.add(yearGraph);
 
-
         GraphData dataNowYear2 = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
         GraphData dataGoalYear2 = new GraphData(Reader.get(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false, false);
         dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
@@ -49,4 +48,5 @@ public class StatsRecyclerFragment extends RoutesRecyclerFragment {
 
         return itemList;
     }
+
 }

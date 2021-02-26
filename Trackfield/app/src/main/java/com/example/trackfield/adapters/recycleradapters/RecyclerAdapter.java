@@ -68,7 +68,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         inflater = LayoutInflater.from(c);
     }
 
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    // extends RecyclerView
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_SORTER) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_sorter, parent, false);
@@ -109,7 +113,9 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         else throw new IllegalArgumentException();
     }
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int pos) {
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
 
         RecyclerItem item = getItem(pos);
         boolean visible = item.isVisible();
@@ -277,11 +283,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 //h.distances[i].setText(Maths.prefix(y[i], 1) + "m");
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
-                if (params.height == 0) { params.height = L.px(1); }
+                if (params.height == 0) {
+                    params.height = L.px(1);
+                }
                 h.bars[i].setLayoutParams(params);
-
             }
-
         }
         else if (viewHolder instanceof ExercisesRecyclerAdapter.DailyChartVH) {
 
@@ -295,14 +301,17 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 // height
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
-                if (params.height == 0) { params.height = L.px(1); }
+                if (params.height == 0) {
+                    params.height = L.px(1);
+                }
                 h.bars[i].setLayoutParams(params);
 
                 // color
                 //if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                if (i <= now.get(C.DAY_OF_WEEK)-1)  { h.bars[i].setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
+                if (i <= now.get(C.DAY_OF_WEEK) - 1) {
+                    h.bars[i].setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c)));
+                }
             }
-
         }
         else if (viewHolder instanceof ExercisesRecyclerAdapter.YearChartVH) {
 
@@ -314,7 +323,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             ExercisesRecyclerAdapter.YearChartVH h = (ExercisesRecyclerAdapter.YearChartVH) viewHolder;
             h.linearLayout.removeAllViews();
 
-            for (int i = chart.length()-1; i >= 0; i--) {
+            for (int i = chart.length() - 1; i >= 0; i--) {
 
                 ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.chart_element_bar_small, h.parent, false);
                 h.linearLayout.addView(element);
@@ -324,19 +333,24 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 // height
                 ViewGroup.LayoutParams params = bar.getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
-                if (params.height == 0) { params.height = L.px(1); }
+                if (params.height == 0) {
+                    params.height = L.px(1);
+                }
                 bar.setLayoutParams(params);
 
                 // color
-                if (i == now.get(C.WEEK_OF_YEAR)-1)      { bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                else if (i < now.get(C.WEEK_OF_YEAR)-1)  { bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c))); }
+                if (i == now.get(C.WEEK_OF_YEAR) - 1) {
+                    bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c)));
+                }
+                else if (i < now.get(C.WEEK_OF_YEAR) - 1) {
+                    bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c)));
+                }
             }
-
         }
-
     }
 
     // holders
+
     public class BaseVH extends RecyclerView.ViewHolder {
 
         public BaseVH(@NonNull View itemView) {
@@ -344,6 +358,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
     }
+
     public class SorterVH extends BaseVH implements View.OnClickListener {
 
         public ConstraintLayout constraintLayout;
@@ -358,58 +373,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_SORTER); }
-        }
-
-    }
-    public class HeaderVH extends BaseVH implements View.OnClickListener, View.OnLongClickListener {
-
-        public ConstraintLayout constraintLayout;
-        public TextView primary;
-        public TextView secondary;
-
-        public HeaderVH(ConstraintLayout cl) {
-            super(cl);
-            constraintLayout = cl;
-            primary = cl.findViewById(R.id.textView_primary);
-            secondary = cl.findViewById(R.id.textView_secondary);
-            cl.setOnClickListener(this);
-            cl.setOnLongClickListener(this);
-        }
-
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_HEADER_18); }
-        }
-        @Override public boolean onLongClick(View view) {
-            if (listener != null) { listener.onItemLongClick(view, getAdapterPosition(), ITEM_HEADER_18); }
-            return true;
-        }
-
-    }
-    public class RecHeaderVH extends BaseVH {
-
-        public ConstraintLayout constraintLayout;
-        public TextView primary;
-
-        public RecHeaderVH(ConstraintLayout cl) {
-            super(cl);
-            constraintLayout = cl;
-            primary = cl.findViewById(R.id.textView_primary);
-        }
-
-    }
-    public class GoalVH extends BaseVH {
-
-        public ConstraintLayout constraintLayout;
-        public TextView primary;
-        public TextView secondary;
-
-        public GoalVH(ConstraintLayout cl) {
-            super(cl);
-            constraintLayout = cl;
-            primary = cl.findViewById(R.id.textView_primary);
-            secondary = cl.findViewById(R.id.textView_secondary);
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_SORTER);
+            }
         }
 
     }
@@ -435,6 +403,86 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
     }
+
+    // TODO: i exercise
+
+    public class HeaderVH extends BaseVH implements View.OnClickListener, View.OnLongClickListener {
+
+        public ConstraintLayout constraintLayout;
+        public TextView primary;
+        public TextView secondary;
+
+        public HeaderVH(ConstraintLayout cl) {
+            super(cl);
+            constraintLayout = cl;
+            primary = cl.findViewById(R.id.textView_primary);
+            secondary = cl.findViewById(R.id.textView_secondary);
+            cl.setOnClickListener(this);
+            cl.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_HEADER_18);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (listener != null) {
+                listener.onItemLongClick(view, getAdapterPosition(), ITEM_HEADER_18);
+            }
+            return true;
+        }
+
+    }
+
+    public class GraphBaseVH extends BaseVH {
+
+        public ViewGroup parent;
+        public ConstraintLayout cl;
+        public GraphView surface;
+
+        public GraphBaseVH(ViewGroup parent, ConstraintLayout cl) {
+            super(cl);
+            this.parent = parent;
+            this.cl = cl;
+            surface = cl.findViewById(R.id.graphSurface_base);
+        }
+
+    }
+
+    // TODO: i abstract rec
+
+    public class GoalVH extends BaseVH {
+
+        public ConstraintLayout constraintLayout;
+        public TextView primary;
+        public TextView secondary;
+
+        public GoalVH(ConstraintLayout cl) {
+            super(cl);
+            constraintLayout = cl;
+            primary = cl.findViewById(R.id.textView_primary);
+            secondary = cl.findViewById(R.id.textView_secondary);
+        }
+
+    }
+
+    public class RecHeaderVH extends BaseVH {
+
+        public ConstraintLayout constraintLayout;
+        public TextView primary;
+
+        public RecHeaderVH(ConstraintLayout cl) {
+            super(cl);
+            constraintLayout = cl;
+            primary = cl.findViewById(R.id.textView_primary);
+        }
+
+    }
+
     public class GraphRecVH extends BaseVH {
 
         public ViewGroup parent;
@@ -452,7 +500,8 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             final HorizontalScrollView sv = cl.findViewById(R.id.scrollView_graphSurface);
             sv.post(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     sv.fullScroll(View.FOCUS_RIGHT);
                     sv.scrollTo(sv.getWidth(), 0);
                 }
@@ -460,20 +509,8 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
     }
-    public class GraphBaseVH extends BaseVH {
 
-        public ViewGroup parent;
-        public ConstraintLayout cl;
-        public GraphView surface;
-
-        public GraphBaseVH(ViewGroup parent, ConstraintLayout cl) {
-            super(cl);
-            this.parent = parent;
-            this.cl = cl;
-            surface = cl.findViewById(R.id.graphSurface_base);
-        }
-
-    }
+    // TODO: i varsinn
 
     public class ExerciseVH extends BaseVH implements View.OnClickListener {
 
@@ -491,8 +528,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
@@ -517,11 +557,15 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
+
     public class RouteExerciseVH extends BaseVH implements View.OnClickListener {
 
         public ConstraintLayout constraintLayout;
@@ -540,11 +584,15 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
+
     public class IntervalExerciseVH extends BaseVH implements View.OnClickListener {
 
         public ConstraintLayout constraintLayout;
@@ -565,8 +613,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
@@ -585,11 +636,15 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             rl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
+
     public class RouteVH extends BaseVH implements View.OnClickListener {
 
         public RelativeLayout relativeLayout;
@@ -604,11 +659,15 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             rl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
+
     public class IntervalVH extends BaseVH implements View.OnClickListener {
 
         public RelativeLayout relativeLayout;
@@ -623,14 +682,19 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             rl.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            if (listener != null) { listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM); }
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onItemClick(view, getAdapterPosition(), ITEM_ITEM);
+            }
         }
 
     }
 
     // get
-    @Override public int getItemViewType(int pos) {
+
+    @Override
+    public int getItemViewType(int pos) {
 
         RecyclerItem item = getItem(pos);
 
@@ -691,20 +755,29 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         return -1;
     }
-    @Override public int getItemCount() {
+
+    @Override
+    public int getItemCount() {
         return itemList.size();
     }
+
     public RecyclerItem getItem(int pos) {
+        if (pos < 0 || pos >= itemList.size()) return null;
         return itemList.get(pos);
     }
 
     // click
+
     public void setClickListener(ItemClickListener itemClickListener) {
         listener = itemClickListener;
     }
+
     public interface ItemClickListener {
+
         void onItemClick(View view, int position, int itemType);
+
         void onItemLongClick(View view, int position, int itemType);
+
     }
 
 }

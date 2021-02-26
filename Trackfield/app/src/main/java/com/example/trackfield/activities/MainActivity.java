@@ -39,7 +39,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener, FilterDialog.DialogListener, SortSheet.DismissListener {
 
-    private Writer writer;
     private MainFragment mainFragment;
     private ActionBar ab;
 
@@ -66,14 +65,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         //Prefs.setFirstLogin(true);
         if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
 
-        //if (reader == null) reader = new Helper.Reader(this);
-        writer = Writer.get(this);
-
-        if (Writer.useUpdateTool) {
-            //Helper.Writer w = new Helper.Writer(this);
-            writer.updateTool(this);
-            //w.close();
-        }
+        Writer.get(this).useUpdateToolIfEnabled(this);
 
         setBottomNavbar();
         setToolbar();
@@ -109,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             case R.id.action_filter:
                 FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getExerciseVisibleTypes(), R.string.dialog_btn_filter, "filterExercises")
                         .show(getSupportFragmentManager());
-                ;
                 return true;
 
             case R.id.action_addDistance:
@@ -279,9 +270,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         int distance = (int) (input * 1000);
         D.addDistance(distance);
 
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.addDistance(new Distance(-1, distance));
-        //writer.close();
+        Writer.get(this).addDistance(new Distance(-1, distance));
         mainFragment.updateFragment();
     }
 

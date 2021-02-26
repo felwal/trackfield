@@ -40,7 +40,7 @@
         <!-- other items -->
         <item name="textAllCaps">false</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowSoftInputMode">stateHidden</item>
+        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
         <!--<item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeDark</item>-->
     </style>
 
@@ -68,7 +68,7 @@
         <item name="strokeColor">@color/colorGrey8</item>
         <item name="panelBackground">@color/colorGrey9</item>
 
-        <item name="android:windowSoftInputMode">stateHidden</item>
+        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
     </style>
 
     <style name="AppTheme.Dark.Green" parent="AppTheme.Dark">
@@ -104,6 +104,7 @@
     <style name="AppTheme.Splash" parent="AppTheme.Dark.Green">
         <item name="colorPrimaryDark">?android:attr/colorPrimary</item>
         <item name="android:windowBackground">@drawable/layer_splash</item>
+        <item name="android:navigationBarColor">@color/colorGreen</item>
     </style>
 
 

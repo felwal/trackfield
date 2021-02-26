@@ -43,9 +43,13 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         instance.setArguments(bundle);
         return instance;
     }
-    @Override public void onCreate(Bundle savedInstanceState) {
+
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Bundle bundle = getArguments();
+        Bundle bundle = getArguments();
         if (bundle != null) {
             distance = bundle.getInt(BUNDLE_DISTANCE, -1);
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
@@ -55,7 +59,10 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         }
     }
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    // extends RecyclerFragment
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sortMode, smallestFirst, Prefs.getDistanceVisibleTypes());
         ArrayList<Exerlite> chronoList = reader.getExerlitesByDistance(distance, C.SortMode.DATE, true, Prefs.getDistanceVisibleTypes());
@@ -85,28 +92,41 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
         return itemList;
     }
-    @Override protected void setSortModes() {
+
+    @Override
+    protected void setSortModes() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
     }
-    @Override protected void getAdapter() {
+
+    @Override
+    protected void getAdapter() {
         adapter = new DistanceRecyclerAdapter(items, distance, originId, a);
     }
-    @Override protected void getPrefs() {
+
+    @Override
+    protected void getPrefs() {
         sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
         smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
     }
-    @Override protected void setPrefs() {
+
+    @Override
+    protected void setPrefs() {
         Prefs.setSortModePref(C.Layout.EXERCISE_DISTANCE, sortMode);
         Prefs.setSmallestFirstPref(C.Layout.EXERCISE_DISTANCE, smallestFirst);
     }
-    @Override protected void setEmptyPage() {
+
+    @Override
+    protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.empty_title_distance));
         emptyMessage.setText(getString(R.string.empty_message_distance));
         emptyImage.setImageResource(R.drawable.ic_empty_distance_24dp);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    // implements RecyclerAdapter
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
             int _id = ((Exerlite) items.get(position)).get_id();
             if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_DISTANCE);

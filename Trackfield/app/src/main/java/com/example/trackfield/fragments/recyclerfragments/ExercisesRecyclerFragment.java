@@ -30,6 +30,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     ////
 
+    // extends RecyclerFragment
+
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
@@ -70,7 +72,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         int month = -1;
         int week = -1;
         int newYear, newMonth, newWeek;
-        boolean oldYear = false;
+        int yearOfLast = -1;
+        boolean notCurrentYear = false;
 
         for (Exerlite e : exerliteList) {
             // year
@@ -80,13 +83,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size());
                 itemList.add(yearHeader);
                 //itemList.add(new Chart(D.yearWeeklyDistance(newYear), Chart.TYPE_YEAR));
+                yearOfLast = year;
                 year = newYear;
-                oldYear = year != LocalDate.now().getYear();
+                notCurrentYear = year != LocalDate.now().getYear();
             }
             // month
-            if ((newMonth = e.getMonthValue()) != month) {
+            if ((newMonth = e.getMonthValue()) != month || e.getDate().getYear() != yearOfLast) {
                 String title = e.getMonth();
-                if (oldYear) {
+                if (notCurrentYear) {
                     title += " " + year;
                 }
                 monthHeader.setLastIndex(itemList.size());
@@ -95,12 +99,13 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 month = newMonth;
             }
             // week
-            if (Prefs.isWeekHeadersShown() && (newWeek = e.getWeek()) != week) {
+            if ((((newWeek = e.getWeek()) != week) || e.getDate().getYear() != yearOfLast) && Prefs.isWeekHeadersShown()) {
                 weekHeader.setLastIndex(itemList.size());
                 weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size());
                 itemList.add(weekHeader);
                 week = newWeek;
             }
+            yearOfLast = year;
 
             // add values
             yearHeader.addValue(e.getDistance());
@@ -155,6 +160,29 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         }
     }
 
+    @Override
+    public void onItemLongClick(View view, int position, int itemType) {
+        RecyclerItem item = adapter.getItem(position);
+
+        if (item instanceof Header) {
+            Header header = (Header) item;
+
+            if (false && header.isType(Header.Type.YEAR)) {
+                ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
+
+                GraphData yearData = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
+                yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
+                newItems.add(position + 1, yearGraph);
+
+                updateRecycler(newItems);
+            }
+            else if (header.isType(Header.Type.MONTH)) {
+
+            }
+        }
+    }
+
     //
 
     public void updateSearch(String search) {
@@ -167,7 +195,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         return allItems.get(pos);
     }
 
-    //
+    // implements RecyclerAdapter
 
     @Override
     public void onItemClick(View view, int position, int itemType) {
@@ -203,29 +231,6 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
         }
         super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
-    }
-
-    @Override
-    public void onItemLongClick(View view, int position, int itemType) {
-        RecyclerItem item = adapter.getItem(position);
-
-        if (item instanceof Header) {
-            Header header = (Header) item;
-
-            if (false && header.isType(Header.Type.YEAR)) {
-                ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
-
-                GraphData yearData = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
-                Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
-                yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
-                newItems.add(position + 1, yearGraph);
-
-                updateRecycler(newItems);
-            }
-            else if (header.isType(Header.Type.MONTH)) {
-
-            }
-        }
     }
 
 }

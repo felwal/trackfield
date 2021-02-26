@@ -20,12 +20,12 @@
     </androidx.viewpager.widget.ViewPager>-->
 
     <TextView
-        android:id="@+id/textView_boardTitle2"
+        android:id="@+id/textView_boardingSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="Welcome to"
+        android:text="@string/tv_text_boarding_subtitle"
         android:textAppearance="@style/Headline"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -35,11 +35,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_boardTitle3"
+        android:id="@+id/textView_boardingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:text="Trackfield!"
+        android:text="@string/tv_text_boarding_title"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="@style/Headline"
@@ -49,31 +49,31 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_boardTitle2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_boardingSubtitle" />
 
     <TextView
-        android:id="@+id/textView_boardMessage2"
+        android:id="@+id/textView_boardingCaption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="Hej mamma"
+        android:text="@string/tv_text_boarding_caption"
         android:textAlignment="center"
         android:textAppearance="@style/Body"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_boardTitle3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_boardingTitle" />
 
     <Button
-        android:id="@+id/button_next"
+        android:id="@+id/button_start"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
-        android:text="Get started"
+        android:text="@string/btn_text_boarding_start"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

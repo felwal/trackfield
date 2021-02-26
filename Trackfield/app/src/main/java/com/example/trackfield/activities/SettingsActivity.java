@@ -240,7 +240,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     private View inflateTextView(String title, String value, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
-        L.ripple(v, this);
+        L.setRipple(v, this);
         ((TextView) v.findViewById(R.id.textView_route)).setText(title);
         ((TextView) v.findViewById(R.id.textView_value)).setText(value);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
@@ -250,7 +250,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     private View inflateSwitchView(String title, boolean hideDivider) {
         View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
-        L.ripple(v, this);
+        L.setRipple(v, this);
         ((TextView) v.findViewById(R.id.switch_setting)).setText(title);
         if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
         ll.addView(v);

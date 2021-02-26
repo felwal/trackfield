@@ -8,6 +8,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.fragments.recyclerfragments.DistancesRecyclerFragment;
@@ -20,32 +21,41 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context c;
 
-    private RecyclerFragment selectedRF;
-    private DistancesRecyclerFragment distanceRF;
-    private RoutesRecyclerFragment routeRF;
-    private IntervalsRecyclerFragment intervalRF;
+    private final ViewPager viewPager;
 
-    @StringRes private static final int[] TAB_TITLES = new int[] { R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
+    @StringRes
+    private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
+    private static final int POS_DISTANCES = 0;
+    private static final int POS_ROUTES = 1;
+    private static final int POS_INTERVALS = 2;
 
     ////
 
-    public RecsPagerAdapter(Context context, FragmentManager fm) {
+    public RecsPagerAdapter(ViewPager viewPager, Context context, FragmentManager fm) {
         super(fm);
         c = context;
+        this.viewPager = viewPager;
     }
 
     // extends FragmentPagerAdapter
 
-    @NonNull @Override
+    @NonNull
+    @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return selectedRF = distanceRF != null ? distanceRF : (distanceRF = new DistancesRecyclerFragment());
-            case 1: return selectedRF = routeRF != null ? routeRF : (routeRF = new RoutesRecyclerFragment());
-            default: return selectedRF = intervalRF != null ? intervalRF : (intervalRF = new IntervalsRecyclerFragment());
+            case POS_DISTANCES:
+                return new DistancesRecyclerFragment();
+            case POS_ROUTES:
+                return new RoutesRecyclerFragment();
+            case POS_INTERVALS:
+                return new IntervalsRecyclerFragment();
+            default:
+                return new DistancesRecyclerFragment();
         }
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public CharSequence getPageTitle(int position) {
         return c.getResources().getString(TAB_TITLES[position]);
     }
@@ -55,22 +65,24 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
         return TAB_TITLES.length;
     }
 
-    // delegate from RecsFragment to RecyclerFragments TODO: bara till den aktiva!
+    // get
+
+    private RecyclerFragment getCurrentFragment() {
+        return (RecyclerFragment) instantiateItem(viewPager, viewPager.getCurrentItem());
+    }
+
+    // delegate from RecsFragment to RecyclerFragment
 
     public void scrollToTop() {
-        selectedRF.scrollToTop();
+        getCurrentFragment().scrollToTop();
     }
 
     public void updateAdapter() {
-        if (distanceRF != null) distanceRF.updateRecycler();
-        if (routeRF != null) routeRF.updateRecycler();
-        if (intervalRF != null) intervalRF.updateRecycler();
+        getCurrentFragment().updateRecycler();
     }
 
     public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
-        if (distanceRF != null) distanceRF.onSortSheetDismiss(sortMode, smallestFirst);
-        if (routeRF != null) routeRF.onSortSheetDismiss(sortMode, smallestFirst);
-        if (intervalRF != null) intervalRF.onSortSheetDismiss(sortMode, smallestFirst);
+        getCurrentFragment().onSortSheetDismiss(sortMode, smallestFirst);
     }
 
 }

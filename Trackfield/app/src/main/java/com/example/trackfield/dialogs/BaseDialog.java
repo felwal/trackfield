@@ -22,8 +22,10 @@ public abstract class BaseDialog extends DialogFragment {
 
     // arguments
     protected String title, message, tag;
-    @StringRes protected int posBtnTxtId = R.string.dialog_btn_ok;
-    @StringRes protected int negBtnTxtId = R.string.dialog_btn_cancel;
+    @StringRes
+    protected int posBtnTxtId = R.string.dialog_btn_ok;
+    @StringRes
+    protected int negBtnTxtId = R.string.dialog_btn_cancel;
 
     public final static int NO_TEXT = -1;
     public final static int NO_RES = -1;
@@ -35,10 +37,10 @@ public abstract class BaseDialog extends DialogFragment {
     protected static final String BUNDLE_NEGATIVE_BUTTON = "negativeButtonTextId";
     protected final static String BUNDLE_TAG = "tag";
 
-
     // extends DialogFragment
 
-    @NonNull @Override
+    @NonNull
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         unpackBundle();
         a = getActivity();
@@ -77,7 +79,7 @@ public abstract class BaseDialog extends DialogFragment {
 
     protected AlertDialog customizeDialog(AlertDialog dialog) {
         // title
-        int titleId = getResources().getIdentifier( "alertTitle", "id", "android" );
+        int titleId = getResources().getIdentifier("alertTitle", "id", "android");
         if (titleId > 0) {
             TextView titleTv = dialog.findViewById(titleId);
             titleTv.setTextAppearance(R.style.DialogTitle);
