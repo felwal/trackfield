@@ -11,6 +11,7 @@ import android.os.Environment;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Distance;
@@ -126,7 +127,7 @@ public class F {
             String jsonStr = array.toString(2);
             writeFile(pathname, jsonStr, c);
 
-            L.toast("Exported", c);
+            L.toast(c.getString(R.string.toast_file_exported), c);
         }
         catch (JSONException e) {
             L.handleError(e, c);
@@ -197,16 +198,17 @@ public class F {
         ArrayList<Exercise> exercises = new ArrayList<>();
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_EJ, c)) {
             try {
-                Exercise e = new Exercise(obj);
+                Reader.get(c);
+                Exercise e = new Exercise(obj, c);
                 exercises.add(e);
             }
             catch (JSONException e) {
-                L.handleError(e, c);
+                L.handleError(c.getString(R.string.toast_err_parse_jsonobj), e, c);
             }
         }
 
         Writer.get(c).addExercises(exercises, c);
-        L.toast("Imported", c);
+        L.toast(c.getString(R.string.toast_file_imported), c);
 
         /*
         try {
@@ -268,8 +270,7 @@ public class F {
         }
 
         Writer.get(c).addRoutes(routes, c);
-        L.toast("Imported", c);
-        L.toast("Imported", c);
+        L.toast(c.getString(R.string.toast_file_imported), c);
     }
 
     private static void importDistancesJson(Context c) {
@@ -286,7 +287,7 @@ public class F {
         }
 
         Writer.get(c).addDistances(distances);
-        L.toast("Imported", c);
+        L.toast(c.getString(R.string.toast_file_imported), c);
     }
 
     // txt
@@ -332,7 +333,7 @@ public class F {
             dWriter.close(); dFos.flush(); dFos.close();
 
             //Toast.makeText(c,"Done writing to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            L.toast("Exporterd", c);
+            L.toast(c.getString(R.string.toast_file_exported), c);
         }
         catch (Exception e) {
             L.handleError(e, c);
@@ -487,7 +488,7 @@ public class F {
                         else trail = new Trail(polyline);
                     }
 
-                    Exercise e = new Exercise(_id, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
+                    Exercise e = new Exercise(_id, -1, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
                     Writer.get(c).addExercise(e, c);
                     //D.exercises.add(e);
                 }
@@ -516,7 +517,7 @@ public class F {
             dReader.close(); dFis.close();
 
             //Toast.makeText(c,"Done reading to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            L.toast("Imported", c);
+            L.toast(c.getString(R.string.toast_file_imported), c);
         }
         catch (Exception e) {
             L.handleError(e, c);

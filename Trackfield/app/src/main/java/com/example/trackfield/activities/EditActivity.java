@@ -318,13 +318,13 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(-1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
+                exercise = new Exercise(-1, -1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
                 L.toast(Writer.get(this).addExercise(exercise, this), this);
                 //D.exercises.add(exercise);
             }
             // save edit
             else {
-                exercise = new Exercise(exercise.get_id(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
+                exercise = new Exercise(exercise.get_id(), exercise.getExternalId(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
                 L.toast(Writer.get(this).updateExercise(exercise), this);
                 //D.exercises.set(exercise.getId(), exercise);
             }
@@ -332,10 +332,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             finish();
         }
         catch (NumberFormatException e) {
-            L.toast("Can't save empty", this);
+            L.toast(getString(R.string.toast_err_save_empty), this);
         }
         catch (StringIndexOutOfBoundsException e) {
-            L.toast("Problem decoding polyline", this);
+            L.toast(getString(R.string.toast_err_decode_polyline), this);
         }
         catch (Exception e) {
             L.handleError(e, this);

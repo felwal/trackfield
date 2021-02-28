@@ -34,6 +34,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
+        Reader.get(a);
         ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 

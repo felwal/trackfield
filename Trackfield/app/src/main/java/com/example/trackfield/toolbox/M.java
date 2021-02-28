@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -320,6 +323,10 @@ public class M {
 
     public static LocalDateTime dateTime(LocalDate date) {
         return LocalDateTime.of(date, LocalTime.of(12, 0));
+    }
+
+    public static LocalDateTime truncateSecs(LocalDateTime dateTime) {
+        return dateTime.truncatedTo(ChronoUnit.MINUTES);
     }
 
     public static LocalDateTime ofEpoch(long seconds) {

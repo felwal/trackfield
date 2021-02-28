@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class Exercise implements JSONObjectable {
 
     private final int _id;
+    private long externalId;
     private int type;
     private LocalDateTime dateTime;
     private int routeId;
@@ -32,6 +33,7 @@ public class Exercise implements JSONObjectable {
     private String recordingMethod;
 
     private int distance;
+    private int effectiveDistance;
     private float time;
     private ArrayList<Sub> subs;
     private Trail trail;
@@ -52,6 +54,7 @@ public class Exercise implements JSONObjectable {
 
     // json
     private static final String JSON_ID = "id";
+    private static final String JSON_EXTERNAL_ID = "external_id";
     private static final String JSON_TYPE = "type";
     private static final String JSON_EPOCH = "epoch";
     private static final String JSON_ROUTE_ID = "route_id";
@@ -59,6 +62,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_ROUTEVAR = "route_var";
     private static final String JSON_INTERVAL = "interval";
     private static final String JSON_DISTANCE = "distance";
+    private static final String JSON_EFFECTIVE_DISTANCE = "effective_distance";
     private static final String JSON_TIME = "time";
     private static final String JSON_DATA_SOURCE = "data_source";
     private static final String JSON_RECORDING_METHOD = "recording_method";
@@ -70,8 +74,10 @@ public class Exercise implements JSONObjectable {
 
     ////
 
-    public Exercise(int _id, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
+    public Exercise(int _id, long externalId, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note,
+                    String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {
         this._id = _id;
+        this.externalId = externalId;
         this.type = type;
         this.dateTime = dateTime;
         this.routeId = routeId;
@@ -85,23 +91,26 @@ public class Exercise implements JSONObjectable {
         this.time = time;
         this.subs = subs == null ? new ArrayList<>() : subs;
         this.trail = trail;
+
+        effectiveDistance = distance();
     }
 
-    public Exercise(JSONObject obj) throws JSONException {
+    public Exercise(JSONObject obj, Context c) throws JSONException {
         _id = obj.getInt(JSON_ID);
+        externalId = obj.getLong(JSON_EXTERNAL_ID);
         type = obj.getInt(JSON_TYPE);
         dateTime = M.ofEpoch(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
         //route = obj.getString(JSON_ROUTE);
-        route = Reader.get().getRouteName(routeId);//.getName();
+        route = Reader.get(c).getRouteName(routeId);//.getName();
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
+        effectiveDistance = obj.getInt(JSON_EFFECTIVE_DISTANCE);
         time = (float) obj.getDouble(JSON_TIME);
         dataSource = obj.getString(JSON_DATA_SOURCE);
         recordingMethod = obj.getString(JSON_RECORDING_METHOD);
         note = obj.getString(JSON_NOTE);
-        subs = new ArrayList<>(); //
 
         // trail
         trail = null;
@@ -120,14 +129,15 @@ public class Exercise implements JSONObjectable {
                 }
                 else trail = new Trail(polyline);
             }
+
+        // TODO
+        subs = new ArrayList<>(); //
     }
 
     // set
 
-    public void setSubs_superId(int _id) {
-        for (Sub sub : subs) {
-            sub.set_superId(_id);
-        }
+    public void setExternalId(long externalId) {
+        this.externalId = externalId;
     }
 
     public void setType(int type) {
@@ -167,10 +177,20 @@ public class Exercise implements JSONObjectable {
         this.recordingMethod = recordingMethod;
     }
 
+    public void setSubs_superId(int _id) {
+        for (Sub sub : subs) {
+            sub.set_superId(_id);
+        }
+    }
+
     // get
 
     public int get_id() {
         return _id;
+    }
+
+    public long getExternalId() {
+        return externalId;
     }
 
     public int getType() {
@@ -215,6 +235,10 @@ public class Exercise implements JSONObjectable {
 
     public int getDistancePrimary() {
         return distance;
+    }
+
+    public int getEffectiveDistance() {
+        return effectiveDistance;
     }
 
     public float getTimePrimary() {
@@ -349,6 +373,10 @@ public class Exercise implements JSONObjectable {
         return "#" + _id;
     }
 
+    public String printExternalId() {
+        return externalId == -1 ? "" : "@" + externalId;
+    }
+
     public String printType() {
         return TYPES[type];
     }
@@ -426,6 +454,7 @@ public class Exercise implements JSONObjectable {
 
         try {
             obj.put(JSON_ID, _id);
+            obj.put(JSON_EXTERNAL_ID, externalId);
             obj.put(JSON_TYPE, type);
             obj.put(JSON_EPOCH, getEpoch());
             obj.put(JSON_ROUTE_ID, routeId);
@@ -433,6 +462,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_ROUTEVAR, routeVar);
             obj.put(JSON_INTERVAL, interval);
             obj.put(JSON_DISTANCE, distance);
+            obj.put(JSON_EFFECTIVE_DISTANCE, distance());
             obj.put(JSON_TIME, time);
             obj.put(JSON_DATA_SOURCE, dataSource);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);

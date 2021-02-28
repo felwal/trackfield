@@ -121,6 +121,21 @@
 
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
 
+  <!-- toasts -->
+
+  <string name="toast_err_no_input">No input</string>
+  <string name="toast_err_save_empty">Can\'t save empty</string>
+  <string name="toast_err_decode_polyline">Problem decoding polyline</string>
+  <string name="toast_err_display_density">Couldn\'t fetch display density</string>
+  <string name="toast_err_strava_response">Strava response error</string>
+  <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
+  <string name="toast_file_exported">Exported</string>
+  <string name="toast_file_imported">Imported</string>
+  <string name="toast_api_auth_successful">Authorization successful</string>
+  <string name="toast_api_request_successful">Request successful</string>
+
+
+
   <!-- certificate -->
 
   <string name="sha1_certificate_fingerprint">***REMOVED***</string>

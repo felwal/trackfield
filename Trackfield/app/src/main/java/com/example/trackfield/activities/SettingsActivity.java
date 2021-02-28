@@ -196,15 +196,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 Prefs.setFirstLogin(true);
                 BoardingActivity.startActivity(this);
             });
-            inflateClickItem("Recreate database", "", false, v -> {
-                Writer.get(this).recreate();
-            });
-            inflateClickItem("Export .txt", "", false, v -> {
-                F.exportTxt(a);
-            });
-            inflateClickItem("Import .txt", "", true, v -> {
-                F.importTxt(a);
-            });
+            inflateClickItem("Recreate database", "", false, v -> Writer.get(this).recreate());
+            inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
+            inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
         }
     }
 

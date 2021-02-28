@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.example.trackfield.activities.mapactivity.ExerciseMapActivity;
 import com.example.trackfield.activities.recactivity.DistanceActivity;
 import com.example.trackfield.activities.recactivity.IntervalActivity;
 import com.example.trackfield.activities.recactivity.RouteActivity;
+import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BinaryDialog;
@@ -178,7 +180,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
 
         // get
-        final TextView idTv = findViewById(R.id.textView_id);
         final TextView routeTv = findViewById(R.id.textView_primary);
         final TextView routeVarTv = findViewById(R.id.textView_routeVar);
         final TextView intervalTv = findViewById(R.id.textView_interval);
@@ -190,9 +191,12 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         final TextView powerTv = findViewById(R.id.textView_power);
         final TextView elevationTv = findViewById(R.id.textView_elevation);
         final TextView noteTv = findViewById(R.id.textView_note);
+        final TextView idTv = findViewById(R.id.textView_id);
+        final TextView typeTv = findViewById(R.id.textView_type);
         final TextView dataSourceTv = findViewById(R.id.textView_dataSource);
         final TextView recordingMethodTv = findViewById(R.id.textView_recordingMethod);
-        final TextView typeTv = findViewById(R.id.textView_type);
+        final TextView extIdTv = findViewById(R.id.textView_external);
+        final ImageView stravaIv = findViewById(R.id.imageView_strava);
 
         // set
 
@@ -203,8 +207,9 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         idTv.setText(exercise.printId());
         typeTv.setText(exercise.printType());
-        recordingMethodTv.setText(exercise.getRecordingMethod());
         setTvHideIfEmpty(exercise.getDataSource(), dataSourceTv);
+        setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
+        setTvHideIfEmpty(exercise.printExternalId(), extIdTv);
 
         TextView sTv = findViewById(R.id.textView_s);
         if (exercise.isDistanceDriven()) {
@@ -219,11 +224,68 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.printPower(), powerTv, findViewById(R.id.textView_P));
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.textView_h));
 
-        routeTvListener(routeTv);
-        intervalTvListener(intervalTv);
-        distanceTvListener(distanceTv);
-        paceTvListener(paceTv);
-        energyTvListener(energyTv);
+        // set listeners
+        if (from != FROM_ROUTE) {
+            routeTv.setOnClickListener(v -> RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id()));
+        }
+        if (from != FROM_INTERVAL) {
+            intervalTv.setOnClickListener(v -> IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id()));
+        }
+        if (from != FROM_DISTANCE) {
+            distanceTv.setOnClickListener(v -> {
+                ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
+                for (Distance d : distances) {
+                    if (M.insideLimits(exercise.distance(), d.getDistance())) {
+                        DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
+                        break;
+                    }
+                }
+            });
+        }
+        paceTv.setOnClickListener(v -> {
+
+            String text = paceTv.getText().toString();
+            String perKm = exercise.printPace(true);
+            String mPerS = exercise.printVelocity(C.UnitVelocity.METERS_PER_SECOND, true); //M.round(exercise.getVelocity(C.UNIT_METERS_PER_SECOND), 1) + " m/s";
+            String kmPerH = exercise.printVelocity(C.UnitVelocity.KILOMETERS_PER_HOUR, true); //M.round(exercise.getVelocity(C.UNIT_KILOMETERS_PER_HOUR), 1) + " km/h";
+
+            if (text.equals(perKm)) {
+                paceTv.setText(mPerS);
+            }
+            else if (text.equals(mPerS)) {
+                paceTv.setText(kmPerH);
+            }
+            else {
+                paceTv.setText(perKm);
+            }
+        });
+        energyTv.setOnClickListener(v -> {
+
+            String text = energyTv.getText().toString();
+            String joules = M.prefix(exercise.energy(C.UnitEnergy.JOULES), 2, "J");
+            String calories = M.prefix(exercise.energy(C.UnitEnergy.CALORIES), 2, "cal");
+            String watthours = M.prefix(exercise.energy(C.UnitEnergy.WATTHOURS), 2, "Wh");
+            String electronvolts = M.bigPrefix(exercise.energy(C.UnitEnergy.ELECTRONVOLTS), 19, "eV");
+
+            if (text.equals(joules)) {
+                energyTv.setText(calories);
+            }
+            else if (text.equals(calories)) {
+                energyTv.setText(watthours);
+            }
+            else if (text.equals(watthours)) {
+                energyTv.setText(electronvolts);
+            }
+            else {
+                energyTv.setText(joules);
+            }
+        });
+        if (exercise.getExternalId() == -1) {
+            stravaIv.setVisibility(View.GONE);
+        }
+        else {
+            stravaIv.setOnClickListener(v -> StravaApi.launchActivity(exercise.getExternalId(), this));
+        }
     }
 
     private void setMap() {
@@ -243,6 +305,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
     }
 
+
     private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
         if (value.equals(C.NO_VALUE) || value.equals(C.NO_VALUE_TIME) || value.equals("")) {
             tv.setVisibility(View.GONE);
@@ -256,102 +319,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             tv.setVisibility(View.GONE);
         }
         else tv.setText(value);
-    }
-
-    // set listeners
-
-    private void routeTvListener(final TextView tv) {
-
-        if (from != FROM_ROUTE) {
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id());
-                }
-            });
-        }
-    }
-
-    private void intervalTvListener(final TextView tv) {
-
-        if (from != FROM_INTERVAL) {
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id());
-                }
-            });
-        }
-    }
-
-    private void distanceTvListener(final TextView tv) {
-
-        if (from != FROM_DISTANCE) {
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
-                    for (Distance d : distances) {
-                        if (M.insideLimits(exercise.distance(), d.getDistance())) {
-                            DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
-                            break;
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void paceTvListener(final TextView tv) {
-
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String text = tv.getText().toString();
-                String perKm = exercise.printPace(true);
-                String mPerS = exercise.printVelocity(C.UnitVelocity.METERS_PER_SECOND, true); //M.round(exercise.getVelocity(C.UNIT_METERS_PER_SECOND), 1) + " m/s";
-                String kmPerH = exercise.printVelocity(C.UnitVelocity.KILOMETERS_PER_HOUR, true); //M.round(exercise.getVelocity(C.UNIT_KILOMETERS_PER_HOUR), 1) + " km/h";
-
-                if (text.equals(perKm)) {
-                    tv.setText(mPerS);
-                }
-                else if (text.equals(mPerS)) {
-                    tv.setText(kmPerH);
-                }
-                else {
-                    tv.setText(perKm);
-                }
-            }
-        });
-    }
-
-    private void energyTvListener(final TextView tv) {
-
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String text = tv.getText().toString();
-                String joules = M.prefix(exercise.energy(C.UnitEnergy.JOULES), 2, "J");
-                String calories = M.prefix(exercise.energy(C.UnitEnergy.CALORIES), 2, "cal");
-                String watthours = M.prefix(exercise.energy(C.UnitEnergy.WATTHOURS), 2, "Wh");
-                String electronvolts = M.bigPrefix(exercise.energy(C.UnitEnergy.ELECTRONVOLTS), 19, "eV");
-
-                if (text.equals(joules)) {
-                    tv.setText(calories);
-                }
-                else if (text.equals(calories)) {
-                    tv.setText(watthours);
-                }
-                else if (text.equals(watthours)) {
-                    tv.setText(electronvolts);
-                }
-                else {
-                    tv.setText(joules);
-                }
-            }
-        });
     }
 
     // implements BinaryDialog, OnMapReadyCallback

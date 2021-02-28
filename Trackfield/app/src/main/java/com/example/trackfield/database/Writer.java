@@ -42,6 +42,8 @@ public class Writer extends Helper {
     public void useUpdateToolIfEnabled(Context c) {
         if (!useUpdateTool) return;
 
+        recreate();
+
         useUpdateTool = false;
     }
 
@@ -287,7 +289,7 @@ public class Writer extends Helper {
 
         ContentValues cv = new ContentValues();
 
-        cv.put(Contract.ExerciseEntry.COLUMN_ID, e.get_id());
+        cv.put(Contract.ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
         cv.put(Contract.ExerciseEntry.COLUMN_TYPE, e.getType());
         cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getEpoch());
         cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
@@ -298,6 +300,7 @@ public class Writer extends Helper {
         cv.put(Contract.ExerciseEntry.COLUMN_DATASOURCE, e.getDataSource());
         cv.put(Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD, e.getRecordingMethod());
         cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistancePrimary());
+        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
         cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
 
         Trail trail = e.getTrail();

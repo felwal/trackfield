@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Exercise;
@@ -44,6 +45,18 @@ public class StravaApi {
     // request codes
     public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
 
+    // json
+    private static final String JSON_ID = "id";
+    private static final String JSON_NAME = "name";
+    private static final String JSON_DISTANCE = "distance";
+    private static final String JSON_TIME = "elapsed_time";
+    private static final String JSON_TYPE = "type";
+    private static final String JSON_DATE = "start_date_local";
+    private static final String JSON_MAP = "map";
+    private static final String JSON_POLYLINE = "summary_polyline";
+    private static final String JSON_START = "start_latlng";
+    private static final String JSON_END = "end_latlng";
+
     ////
 
     public StravaApi(Activity a) {
@@ -72,7 +85,8 @@ public class StravaApi {
 
     private void finishAuthorization(Uri appLinkData) {
         Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), a);
+        L.toast(a.getString(R.string.toast_api_auth_successful), a);
+        //L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), a);
     }
 
     public void handleIntent(Intent appLinkIntent) {
@@ -94,14 +108,14 @@ public class StravaApi {
 
                             Log.i("Strava API", "response: " + obj.toString());
                             //L.toast("response: " + obj.toString(), a);
-                            L.toast("request successful", a);
+                            L.toast(a.getString(R.string.toast_api_request_successful), a);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
-                            L.handleError("failed to parse JSONObject", e, a);
+                            L.handleError(a.getString(R.string.toast_err_parse_jsonobj), e, a);
                         }
                     },
-                    e -> L.handleError("Strava response error", e, a));
+                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -118,14 +132,14 @@ public class StravaApi {
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
-                                L.handleError("failed to parse JSONObject", e, a);
+                                L.handleError(a.getString(R.string.toast_err_parse_jsonobj), e, a);
                             }
                         }
                         if (response.length() == PER_PAGE) requestActivities(page + 1);
 
-                        L.toast("request successful", a);
+                        L.toast(a.getString(R.string.toast_api_request_successful), a);
                     },
-                    e -> L.handleError("Strava response error", e, a));
+                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -152,24 +166,29 @@ public class StravaApi {
 
         try {
             Log.i("response", obj.toString());
-            String name = obj.getString("name");
-            int distance = (int) obj.getDouble("distance");
-            int time = obj.getInt("elapsed_time");
-            String stravaType = obj.getString("type");
-            String date = obj.getString("start_date_local");
+            long stravaId = obj.getLong(JSON_ID);
+            String name = obj.getString(JSON_NAME);
+            int distance = (int) obj.getDouble(JSON_DISTANCE);
+            int time = obj.getInt(JSON_TIME);
+            String stravaType = obj.getString(JSON_TYPE);
+            String date = obj.getString(JSON_DATE);
 
-            JSONObject map = obj.getJSONObject("map");
-            String polyline = map.getString("summary_polyline");
+            JSONObject map = obj.getJSONObject(JSON_MAP);
+            String polyline = map.getString(JSON_POLYLINE);
             LatLng start = null;
             LatLng end = null;
             try {
-                JSONArray startLatLng = obj.getJSONArray("start_latlng");
-                JSONArray endLatLng = obj.getJSONArray("end_latlng");
+                JSONArray startLatLng = obj.getJSONArray(JSON_START);
+                JSONArray endLatLng = obj.getJSONArray(JSON_END);
                 start = new LatLng(startLatLng.getDouble(0), startLatLng.getDouble(1));
                 end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
             }
             catch (Exception e) {
             }
+
+            // TODO: import
+            String device = "Garmin Forerunner 745";
+            String method = "GPS + Galileo";
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
@@ -177,11 +196,12 @@ public class StravaApi {
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null : new Trail(polyline, start, end);
 
-            return new Exercise(-1, type, dateTime, routeId, name, "", "", "", "Garmin Forerunner 745", "GPS + Galileo", distance, time, null, trail);
+            return new Exercise(-1, stravaId, type, dateTime, routeId, name, "", "", "",
+                    device, method, distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();
-            L.handleError("failed to convert jsonobj to exercise, returning null", e, a);
+            L.handleError("Failed to convert jsonobj to exercise, returning null", e, a);
             return null;
         }
     }
@@ -192,18 +212,33 @@ public class StravaApi {
         ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(fromStrava.getDateTime(), fromStrava.getType());
 
         if (matching.size() == 1) {
-            Exercise m = matching.get(0);
-            Exercise merged = new Exercise(m.get_id(), m.getType(), fromStrava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
-                    m.getNote(), m.getDataSource(), m.getRecordingMethod(), fromStrava.getDistancePrimary(), fromStrava.getTimePrimary(), m.getSubs(), fromStrava.getTrail());
+            Exercise x = matching.get(0);
+            Exercise merged = new Exercise(x.get_id(), fromStrava.getExternalId(), x.getType(), fromStrava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(),
+                    x.getNote(), x.getDataSource(), x.getRecordingMethod(), fromStrava.getDistancePrimary(), fromStrava.getTimePrimary(), x.getSubs(), fromStrava.getTrail());
+            //x.setExternalId(fromStrava.getExternalId());
+            //x.setDateTime(fromStrava.getDateTime());
 
             Writer.get(a).updateExercise(merged);
         }
         else if (matching.size() == 0) {
             Writer.get(a).addExercise(fromStrava, a);
-            //L.toast("import on " + dateTime.toLocalDate().format(C.FORMATTER_SQL_DATE), a);
+            Log.i("Strava", "Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE));
+            //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
-        else
-            L.toast("multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
+        else {
+            Log.i("Strava", "Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE));
+            //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
+        }
+    }
+
+    // launch 18/03/02
+
+    public static void launchActivity(long stravaId, Activity a) {
+        Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId)
+                .buildUpon().build();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        a.startActivity(intent);
     }
 
     // get url:s

@@ -51,7 +51,7 @@ public class L {
             scale = c.getResources().getDisplayMetrics().density;
         }
         catch (Exception e) {
-            toast("Couldn't fetch display density: " + e.getMessage(), c);
+            handleError(c.getString(R.string.toast_err_display_density), e, c);
         }
     }
 

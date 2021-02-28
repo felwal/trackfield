@@ -103,7 +103,7 @@ public class TimeDialog extends BaseDialog {
                         listener.onTimeDialogPositiveClick(input1, input2, tag);
                     }
                     catch (NumberFormatException e) {
-                        L.toast("No input", a);
+                        L.toast(a.getString(R.string.toast_err_no_input), a);
                     }
                 })
                 .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel())
