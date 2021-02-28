@@ -11,13 +11,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.adapters.adapterdelegates.delegates.ExerciseAdapterDelegate;
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.toolbox.D;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ExercisesRecyclerAdapter extends RecyclerAdapter {
+@Deprecated public class ExercisesRecyclerAdapter extends RecyclerAdapter {
 
     public ExercisesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);

@@ -13,7 +13,7 @@ import com.example.trackfield.items.headers.RecyclerItem;
 
 import java.util.ArrayList;
 
-public class DistancesRecyclerAdapter extends RecyclerAdapter {
+@Deprecated public class DistancesRecyclerAdapter extends RecyclerAdapter {
 
     public DistancesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);

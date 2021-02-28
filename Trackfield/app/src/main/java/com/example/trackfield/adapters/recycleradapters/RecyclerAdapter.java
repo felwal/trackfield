@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.adapters.adapterdelegates.delegates.ExerciseAdapterDelegate;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphView;
 import com.example.trackfield.items.DistanceItem;
@@ -34,7 +35,7 @@ import com.example.trackfield.toolbox.M;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+@Deprecated public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int ITEM_SORTER = 0;
     public static final int ITEM_ITEM = 1;
@@ -132,10 +133,9 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             final ExerciseVH holder = (ExerciseVH) viewHolder;
             final Exerlite e = (Exerlite) getItem(pos);
-            final String values = e.printDistance() + C.TAB + e.printTime() + C.TAB + e.printPace();
 
             holder.primary.setText(e.printPrimary());
-            holder.secondary.setText(values);
+            holder.secondary.setText(e.printDistanceTimePace());
             holder.caption.setText(e.printCaption());
         }
 
@@ -351,7 +351,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     // holders
 
-    public class BaseVH extends RecyclerView.ViewHolder {
+    public static class BaseVH extends RecyclerView.ViewHolder {
 
         public BaseVH(@NonNull View itemView) {
             super(itemView);
@@ -514,18 +514,18 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class ExerciseVH extends BaseVH implements View.OnClickListener {
 
-        public ConstraintLayout constraintLayout;
+        public View view;
         public TextView primary;
         public TextView secondary;
         public TextView caption;
 
-        public ExerciseVH(ConstraintLayout cl) {
-            super(cl);
-            constraintLayout = cl;
-            primary = cl.findViewById(R.id.textView_primary);
-            secondary = cl.findViewById(R.id.textView_secondary);
-            caption = cl.findViewById(R.id.textView_caption);
-            cl.setOnClickListener(this);
+        public ExerciseVH(View v) {
+            super(v);
+            view = v;
+            primary = v.findViewById(R.id.textView_primary);
+            secondary = v.findViewById(R.id.textView_secondary);
+            caption = v.findViewById(R.id.textView_caption);
+            v.setOnClickListener(this);
         }
 
         @Override

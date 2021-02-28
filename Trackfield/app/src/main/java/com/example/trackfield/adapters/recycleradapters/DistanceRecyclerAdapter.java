@@ -13,7 +13,7 @@ import com.example.trackfield.items.headers.archive.GraphOld;
 
 import java.util.ArrayList;
 
-public class DistanceRecyclerAdapter extends RecyclerAdapter {
+@Deprecated public class DistanceRecyclerAdapter extends RecyclerAdapter {
 
     int distance;
 
