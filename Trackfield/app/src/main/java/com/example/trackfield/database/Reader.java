@@ -2,6 +2,7 @@ package com.example.trackfield.database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +35,7 @@ public class Reader extends Helper {
 
     ////
 
-    public Reader(Context context) {
+    private Reader(Context context) {
         super(context);
         db = getReadableDatabase();
     }
@@ -53,7 +54,6 @@ public class Reader extends Helper {
     // get exercises
 
     public Exercise getExercise(int _id) {
-
         String selection = Contract.ExerciseEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(_id) };
 
@@ -65,7 +65,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exercise> getExercises() {
-
         String queryString = "SELECT * FROM " + Contract.ExerciseEntry.TABLE_NAME;
 
         Cursor cursor = db.rawQuery(queryString, null);
@@ -76,7 +75,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exercise> getExercisesForMerge(LocalDateTime dateTime, int type) {
-
         String selection = "(" + Contract.ExerciseEntry.COLUMN_DATE + " = " + M.epoch(dateTime) + " OR " +
                 Contract.ExerciseEntry.COLUMN_DATE + " = " + M.epoch(dateTime.truncatedTo(ChronoUnit.MINUTES)) + " OR " +
                 Contract.ExerciseEntry.COLUMN_DATE + " = " + M.epoch(M.dateTime(dateTime.toLocalDate())) + ")" +
@@ -89,6 +87,22 @@ public class Reader extends Helper {
         return exercises;
     }
 
+    @Nullable
+    public Exercise getExercise(long externalId) {
+        String selection = Contract.ExerciseEntry.COLUMN_EXTERNAL_ID + " = ?";
+        String[] selectionArgs = { Long.toString(externalId) };
+
+        Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null, null);
+        ArrayList<Exercise> exercises = unpackCursor(cursor);
+        cursor.close();
+
+        if (exercises.size() > 1) {
+            Log.w("reader", "more than one exercise with externalId " + externalId);
+        }
+
+        return exercises.size() > 0 ? exercises.get(0) : null;
+    }
+
     // get exerlites
 
     public Exerlite getExerlite(int _id) {
@@ -99,13 +113,12 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
-
         cursor.close();
+
         return exerlites.size() > 0 ? exerlites.get(0) : null;
     }
 
     public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-
         String selection = "";
         for (int i = 0; i < types.size(); i++) {
             if (i != 0) selection += " OR ";
@@ -149,7 +162,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByRoute(String route, C.SortMode sortMode, boolean smallestFirst) {
-
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
         String[] selectionArgs = { route };
@@ -164,7 +176,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionFilter(types);
         //String[] selectionArgs = { Integer.toString(routeId) };
@@ -179,7 +190,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
@@ -206,7 +216,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByInterval(String interval, C.SortMode sortMode, boolean smallestFirst) {
-
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " = ?";
         String[] selectionArgs = { interval };
@@ -221,7 +230,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-
         String filter = selectionFilter(types);
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry.COLUMN_DATE + " >= " + M.epoch(M.first(min, max)) + " AND " + Contract.ExerciseEntry.COLUMN_DATE + " <= " + M.epoch(M.last(min, max)) + filter;
@@ -237,7 +245,6 @@ public class Reader extends Helper {
     // get subs
 
     private ArrayList<Sub> getSubs(int _superId) {
-
         String selection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
         String[] selectionArgs = { Integer.toString(_superId) };
 
@@ -251,7 +258,6 @@ public class Reader extends Helper {
     // get routes
 
     public ArrayList<Route> getRoutes(C.SortMode sortMode, boolean smallestFirst, boolean includeHidden) {
-
         String selection = includeHidden ? null : Contract.RouteEntry.COLUMN_HIDDEN + " = ?"; //+ 0 + " AND " + Contract.RouteEntry.COLUMN_AMOUNT + " >= " + 2;
         String[] selectionArgs = includeHidden ? null : new String[]{ Integer.toString(0) };
         String orderBy = null;//orderBy(sortMode, smallestFirst);
@@ -264,7 +270,6 @@ public class Reader extends Helper {
     }
 
     public Route getRoute(String name) {
-
         String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
         String[] selectionArgs = { name };
 
@@ -276,7 +281,6 @@ public class Reader extends Helper {
     }
 
     public Route getRoute(int _id) {
-
         String selection = Contract.RouteEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(_id) };
 
@@ -288,7 +292,6 @@ public class Reader extends Helper {
     }
 
     public String getRouteName(int _id) {
-
         String[] columns = { Contract.RouteEntry.COLUMN_NAME };
         String selection = Contract.RouteEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(_id) };
@@ -304,7 +307,6 @@ public class Reader extends Helper {
     }
 
     public int getRouteId(String name) {
-
         String[] columns = { Contract.RouteEntry._ID };
         String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
         String[] selectionArgs = { name };
@@ -320,7 +322,6 @@ public class Reader extends Helper {
     }
 
     public int getRouteIdOrCreate(String name, Context c) {
-
         /*String[] columns = { Contract.RouteEntry._ID };
         String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
         String[] selectionArgs = { name };
@@ -332,9 +333,7 @@ public class Reader extends Helper {
         }*/
         int _id = getRouteId(name);
         if (_id == -1) {
-            Writer writer = new Writer(c);
-            _id = (int) writer.addRouteIfNotAdded(new Route(-1, name), c);
-            writer.close();
+            _id = (int) Writer.get(c).addRouteIfNotAdded(new Route(-1, name), c);
         }
 
         //cursor.close();
@@ -344,7 +343,6 @@ public class Reader extends Helper {
     // get distances
 
     public ArrayList<Distance> getDistances(Distance.SortMode sortMode, boolean smallestFirst) {
-
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(Contract.DistanceEntry.TABLE_NAME, null, null, null, null, null, orderBy);
@@ -355,7 +353,6 @@ public class Reader extends Helper {
     }
 
     public Distance getDistance(int length) {
-
         String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
         String[] selectionArgs = { Integer.toString(length) };
 
@@ -367,7 +364,6 @@ public class Reader extends Helper {
     }
 
     public float getDistanceGoal(int distance) {
-
         String[] columns = { Contract.DistanceEntry.COLUMN_GOAL_PACE };
         String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = " + distance;
 
@@ -384,7 +380,6 @@ public class Reader extends Helper {
     // get trail
 
     public HashMap<Integer, String> getPolylines(int exceptId) {
-
         HashMap<Integer, String> polys = new HashMap<>();
         ArrayList<String> polylines = new ArrayList<>();
 
@@ -404,7 +399,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<String> getPolylinesByRoute(int routeId) {
-
         ArrayList<String> polylines = new ArrayList<>();
 
         String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
@@ -421,7 +415,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<String> getPolylinesByRoute(int routeId, String routeVar) {
-
         ArrayList<String> polylines = new ArrayList<>();
 
         String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
@@ -439,7 +432,6 @@ public class Reader extends Helper {
     }
 
     public HashMap<Integer, String> getPolylinesByRouteExcept(int exceptRouteId) {
-
         HashMap<Integer, String> polylines = new HashMap<>();
 
         String[] columns = { Contract.ExerciseEntry._ID, Contract.ExerciseEntry.COLUMN_POLYLINE };
@@ -457,7 +449,6 @@ public class Reader extends Helper {
     }
 
     public Trail getTrail(int _id) {
-
         Trail trail = null;
 
         String[] columns = Contract.ExerciseEntry.TRAIL_COLUMNS;
@@ -478,10 +469,9 @@ public class Reader extends Helper {
         return trail;
     }
 
-    // get items
+    // get route items
 
     public ArrayList<RouteItem> getRouteItems(ArrayList<String> rList) {
-
         ArrayList<RouteItem> routeItems = new ArrayList<>();
         for (String r : rList) {
             routeItems.add(getRouteItem(r));
@@ -491,7 +481,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, ArrayList<Integer> types) {
-
         /*String[] columns = { Contract.ExerciseEntry.COLUMN_ROUTE };
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -605,7 +594,6 @@ public class Reader extends Helper {
     }
 
     public RouteItem getRouteItem(String route) {
-
         String[] columns = { Contract.ExerciseEntry.COLUMN_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTEVAR };
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
         String[] selectionArgs = { route };
@@ -644,8 +632,9 @@ public class Reader extends Helper {
         return new RouteItem(getRouteId(route), route, amount, avgDistance, bestPace);
     }
 
-    public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
+    // get distance items
 
+    public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
         /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
                 " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
                 " (SELECT routeId, MIN(time/distance)*1000 as pace FROM exercises WHERE distance > 0 AND time != 0 GROUP BY routeId) AS v" +
@@ -677,7 +666,6 @@ public class Reader extends Helper {
     }
 
     public DistanceItem getDistanceItem(int distance, ArrayList<Integer> types) {
-
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
@@ -709,8 +697,9 @@ public class Reader extends Helper {
         return new DistanceItem(distance, bestTimePerDistance, bestPace);
     }
 
-    public IntervalItem getIntervalItem(String interval) {
+    // get interval items
 
+    public IntervalItem getIntervalItem(String interval) {
         String[] columns = {};
         String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " = ?";
         String[] selectionArgs = { interval };
@@ -728,7 +717,6 @@ public class Reader extends Helper {
     }
 
     public ArrayList<IntervalItem> getIntervalItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser) {
-
         String[] columns = { Contract.ExerciseEntry.COLUMN_INTERVAL };
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -815,7 +803,6 @@ public class Reader extends Helper {
     }
 
     public int avgDistance(String route, String routeVar) {
-
         String[] colums = { Contract.ExerciseEntry.COLUMN_DISTANCE };
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?" + " AND " + Contract.ExerciseEntry.COLUMN_ROUTEVAR + " = ?";
         String[] selectionArgs = { route, routeVar };
@@ -838,7 +825,6 @@ public class Reader extends Helper {
     // graph data
 
     public TreeMap<Float, Float> weekDailyDistance(ArrayList<Integer> types, LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfWeek(includingDate), M.atEndOfWeek(includingDate), C.SortMode.DATE, false, types);
@@ -857,7 +843,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> yearMonthlyDistance(ArrayList<Integer> types, LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, false, types);
@@ -876,7 +861,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> yearMonthlyDistanceGoal() {
-
         TreeMap<Float, Float> points = new TreeMap<>();
 
         for (int m = 1; m <= 12; m++) {
@@ -887,7 +871,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> monthDailyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfMonth(includingDate), M.atEndOfMonth(includingDate), C.SortMode.DATE, false, types);
@@ -912,7 +895,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> yearWeeklyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, true, types);
 
@@ -943,7 +925,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> monthIntegralDistanceGoal(LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
 
         points.put(0f, 0f);
@@ -953,7 +934,6 @@ public class Reader extends Helper {
     }
 
     public TreeMap<Float, Float> yearIntegralDistanceGoal(LocalDate includingDate) {
-
         TreeMap<Float, Float> points = new TreeMap<>();
 
         points.put(0f, 0f);
@@ -965,7 +945,6 @@ public class Reader extends Helper {
     // unpack cursors
 
     private ArrayList<Exercise> unpackCursor(Cursor cursor) {
-
         ArrayList<Exercise> exercises = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -1009,7 +988,6 @@ public class Reader extends Helper {
     }
 
     private ArrayList<Exerlite> unpackLiteCursor(Cursor cursor) {
-
         ArrayList<Exerlite> exerlites = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -1060,7 +1038,6 @@ public class Reader extends Helper {
     }
 
     private ArrayList<Exerlite> unpackLiteDrivenCursor(Cursor cursor, int distance) {
-
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         ArrayList<Exerlite> filtered = new ArrayList<>();
         for (Exerlite e : exerlites) {
@@ -1071,7 +1048,6 @@ public class Reader extends Helper {
     }
 
     private ArrayList<Sub> unpackSubCursor(Cursor cursor) {
-
         ArrayList<Sub> subs = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -1088,7 +1064,6 @@ public class Reader extends Helper {
     }
 
     private ArrayList<Distance> unpackDistanceCursor(Cursor cursor) {
-
         ArrayList<Distance> distances = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -1104,7 +1079,6 @@ public class Reader extends Helper {
     }
 
     private ArrayList<Route> unpackRouteCursor(Cursor cursor) {
-
         ArrayList<Route> routes = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -1120,7 +1094,7 @@ public class Reader extends Helper {
         return routes;
     }
 
-    // sql tools
+    // query tools
 
     private String selectionFilter(ArrayList<Integer> visibleTypes) {
         String filter = "";

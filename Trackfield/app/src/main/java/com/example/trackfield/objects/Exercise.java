@@ -183,6 +183,19 @@ public class Exercise implements JSONObjectable {
         }
     }
 
+    public void updateWithStravaActivity(Exercise strava) {
+        if (externalId != strava.externalId) {
+            return;
+        }
+
+        // update policy
+        type = strava.type;
+        dateTime = strava.dateTime;
+        distance = strava.distance;
+        time = strava.time;
+        trail = strava.trail;
+    }
+
     // get
 
     public int get_id() {
@@ -269,6 +282,10 @@ public class Exercise implements JSONObjectable {
     }
 
     // get driven
+
+    public boolean hasExternalId() {
+        return externalId != -1;
+    }
 
     public int distance() {
         if (isDistanceDriven()) return Reader.get().avgDistance(route, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));

@@ -62,11 +62,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         setContentView(R.layout.activity_main);
         L.setScale(this);
 
+        // prefs
+        Prefs.setDeveloper(true);
         //Prefs.setFirstLogin(true);
         if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
 
+        // TODO: dev tool
         Writer.get(this).useUpdateToolIfEnabled(this);
 
+        // layout
         setBottomNavbar();
         setToolbar();
         setFabs();

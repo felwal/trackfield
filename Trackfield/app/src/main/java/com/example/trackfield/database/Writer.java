@@ -22,11 +22,15 @@ public class Writer extends Helper {
 
     ////
 
-    public Writer(Context context) {
+    private Writer(Context context) {
         super(context);
         db = getWritableDatabase();
     }
 
+    /**
+     * Gets the current writer instance, or creates if null or closed
+     * @return Writer Instance
+     */
     @NonNull
     public static Writer get(Context c) {
         if (instance == null || !instance.db.isOpen()) instance = new Writer(c);
@@ -55,7 +59,6 @@ public class Writer extends Helper {
     // exercises
 
     public boolean addExercises(ArrayList<Exercise> exercises, Context c) {
-
         boolean success = true;
         for (Exercise e : exercises) {
             success &= addExercise(e, c);
@@ -64,7 +67,6 @@ public class Writer extends Helper {
     }
 
     public boolean addExercise(Exercise e, Context c) {
-
         e.setRouteId((int) addRouteIfNotAdded(new Route(e.getRouteId(), e.getRoute()), c));
 
         final ContentValues cv = fillExerciseContentValues(e);
@@ -78,11 +80,10 @@ public class Writer extends Helper {
     }
 
     public boolean updateExercise(Exercise e) {
-
         ContentValues newCv = fillExerciseContentValues(e);
 
         String selection = Contract.ExerciseEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(e.get_id())};
+        String[] selectionArgs = { Integer.toString(e.get_id()) };
 
         final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
         final boolean subSuccess = updateSubs(e.getSubs());
@@ -92,10 +93,9 @@ public class Writer extends Helper {
     }
 
     public boolean deleteExercise(Exercise e, Context c) {
-
         final String selection = Contract.ExerciseEntry._ID + " = ?";
         final String subSelection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
-        final String[] selectionArgs = {Integer.toString(e.get_id())};
+        final String[] selectionArgs = { Integer.toString(e.get_id()) };
 
         final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, selection, selectionArgs);
         final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, subSelection, selectionArgs);
@@ -109,7 +109,6 @@ public class Writer extends Helper {
     }
 
     public boolean deleteAllExercises() {
-
         final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, null, null);
         final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, null, null);
 
@@ -119,7 +118,6 @@ public class Writer extends Helper {
     // subs
 
     private boolean addSubs(ArrayList<Sub> subs) {
-
         boolean success = true;
         for (Sub sub : subs) {
             success &= addSub(sub);
@@ -128,21 +126,19 @@ public class Writer extends Helper {
     }
 
     private boolean addSub(Sub sub) {
-
         final ContentValues cvSub = fillSubContentValues(sub);
         final long result = db.insert(Contract.SubEntry.TABLE_NAME, null, cvSub);
         return success(result);
     }
 
     private boolean updateSubs(ArrayList<Sub> subs) {
-
         boolean success = true;
         for (Sub sub : subs) {
 
             if (sub.get_id() != -1) {
                 ContentValues newCv = fillSubContentValues(sub);
                 String selection = Contract.SubEntry._ID + " = ?";
-                String[] selectionArgs = {Integer.toString(sub.get_id())};
+                String[] selectionArgs = { Integer.toString(sub.get_id()) };
 
                 int count = db.update(Contract.SubEntry.TABLE_NAME, newCv, selection, selectionArgs);
                 success &= count > 0;
@@ -156,9 +152,8 @@ public class Writer extends Helper {
     }
 
     public boolean deleteSub(Sub sub) {
-
         final String selection = Contract.SubEntry._ID + " = ?";
-        final String[] selectionArgs = {Integer.toString(sub.get_id())};
+        final String[] selectionArgs = { Integer.toString(sub.get_id()) };
 
         final long result = db.delete(Contract.SubEntry.TABLE_NAME, selection, selectionArgs);
 
@@ -168,7 +163,6 @@ public class Writer extends Helper {
     // distances
 
     public boolean addDistances(ArrayList<Distance> distances) {
-
         boolean success = true;
         for (Distance d : distances) {
             success &= addDistance(d);
@@ -177,18 +171,16 @@ public class Writer extends Helper {
     }
 
     public boolean addDistance(Distance distance) {
-
         final ContentValues cv = fillDistanceContentValues(distance);
         final long result = db.insert(Contract.DistanceEntry.TABLE_NAME, null, cv);
         return success(result);
     }
 
     public boolean updateDistance(Distance distance) {
-
         ContentValues newCv = fillDistanceContentValues(distance);
 
         String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
-        String[] selectionArgs = {Integer.toString((distance.getDistance()))};
+        String[] selectionArgs = { Integer.toString((distance.getDistance())) };
 
         final int count = db.update(Contract.DistanceEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
@@ -196,9 +188,8 @@ public class Writer extends Helper {
     }
 
     public boolean deleteDistance(Distance distance) {
-
         final String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
-        final String[] selectionArgs = {Integer.toString(distance.getDistance())};
+        final String[] selectionArgs = { Integer.toString(distance.getDistance()) };
 
         final long result = db.delete(Contract.DistanceEntry.TABLE_NAME, selection, selectionArgs);
 
@@ -212,11 +203,8 @@ public class Writer extends Helper {
     }
 
     public long addRouteIfNotAdded(Route route, Context c) {
-
-        Reader reader = Reader.get(c);
-        Route existingRoute = reader.getRoute(route.getName());
+        Route existingRoute = Reader.get(c).getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
-        reader.close();
 
         final ContentValues cv = fillRouteContentValues(route);
         final long _id = db.insert(Contract.RouteEntry.TABLE_NAME, null, cv);
@@ -224,11 +212,10 @@ public class Writer extends Helper {
     }
 
     public boolean updateRoute(Route route) {
-
         ContentValues newCv = fillRouteContentValues(route);
 
         String selection = Contract.RouteEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(route.get_id())};
+        String[] selectionArgs = { Integer.toString(route.get_id()) };
 
         final int count = db.update(Contract.RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
@@ -236,9 +223,8 @@ public class Writer extends Helper {
     }
 
     public boolean deleteRoute(int routeId) {
-
         final String selection = Contract.RouteEntry._ID + " = ?";
-        final String[] selectionArgs = {Integer.toString(routeId)};
+        final String[] selectionArgs = { Integer.toString(routeId) };
 
         final long result = db.delete(Contract.RouteEntry.TABLE_NAME, selection, selectionArgs);
 
@@ -246,9 +232,8 @@ public class Writer extends Helper {
     }
 
     public boolean deleteRoute(String name) {
-
         final String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
-        final String[] selectionArgs = {name};
+        final String[] selectionArgs = { name };
 
         final long result = db.delete(Contract.RouteEntry.TABLE_NAME, selection, selectionArgs);
 
@@ -256,12 +241,11 @@ public class Writer extends Helper {
     }
 
     public boolean updateRouteName(String oldRoute, String newRoute) {
-
         ContentValues newCv = new ContentValues();
         newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newRoute);
 
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
-        String[] selectionArgs = {oldRoute};
+        String[] selectionArgs = { oldRoute };
 
         int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
@@ -271,12 +255,11 @@ public class Writer extends Helper {
     // intervals
 
     public boolean updateInterval(String oldInterval, String newInterval) {
-
         ContentValues newCv = new ContentValues();
         newCv.put(Contract.ExerciseEntry.COLUMN_INTERVAL, newInterval);
 
         String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " = ?";
-        String[] selectionArgs = {oldInterval};
+        String[] selectionArgs = { oldInterval };
 
         int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
@@ -286,7 +269,6 @@ public class Writer extends Helper {
     // fill ContentValues
 
     private ContentValues fillExerciseContentValues(Exercise e) {
-
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
@@ -300,7 +282,7 @@ public class Writer extends Helper {
         cv.put(Contract.ExerciseEntry.COLUMN_DATASOURCE, e.getDataSource());
         cv.put(Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD, e.getRecordingMethod());
         cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistancePrimary());
-        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
+        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.distance()); // TODO: eller effectiveDistance??
         cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
 
         Trail trail = e.getTrail();
@@ -331,7 +313,6 @@ public class Writer extends Helper {
     }
 
     private ContentValues fillSubContentValues(Sub sub) {
-
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.SubEntry.COLUMN_SUPERID, sub.get_superId());
@@ -342,7 +323,6 @@ public class Writer extends Helper {
     }
 
     private ContentValues fillDistanceContentValues(Distance distance) {
-
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.DistanceEntry.COLUMN_DISTANCE, distance.getDistance());
@@ -352,7 +332,6 @@ public class Writer extends Helper {
     }
 
     private ContentValues fillRouteContentValues(Route route) {
-
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.RouteEntry.COLUMN_NAME, route.getName());

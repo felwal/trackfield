@@ -23,7 +23,7 @@ import java.util.ArrayList;
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
-            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.layout_item_rec, parent, false);
+            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.item_rec, parent, false);
             return new IntervalVH(rl);
         }
         return super.onCreateViewHolder(parent, viewType);

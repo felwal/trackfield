@@ -10,12 +10,6 @@ public final class Contract {
     private Contract() {
     }
 
-    // tools
-
-    public static String sortOrder(boolean smallestFirst) {
-        return smallestFirst ? " ASC" : " DESC";
-    }
-
     // entries
 
     public static class ExerciseEntry implements BaseColumns {
@@ -71,7 +65,7 @@ public final class Contract {
                 COLUMN_END_LNG + " REAL," +
                 COLUMN_POLYLINE + " TEXT)";
 
-        private static final String ALTER_TABLE_1 = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN (" +
+        public static final String ALTER_TO_VER_2 = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN (" +
                 COLUMN_EXTERNAL_ID + " INTEGER," +
                 COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
@@ -174,6 +168,12 @@ public final class Contract {
             return getColumn(sortMode) + sortOrder(smallestFirst);
         }
 
+    }
+
+    // tools
+
+    public static String sortOrder(boolean smallestFirst) {
+        return smallestFirst ? " ASC" : " DESC";
     }
 
 }

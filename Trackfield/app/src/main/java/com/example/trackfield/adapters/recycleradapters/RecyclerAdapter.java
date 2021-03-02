@@ -15,7 +15,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.adapters.adapterdelegates.delegates.ExerciseAdapterDelegate;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphView;
 import com.example.trackfield.items.DistanceItem;
@@ -76,39 +75,39 @@ import java.util.ArrayList;
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_SORTER) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_sorter, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_sorter, parent, false);
             return new SorterVH(cl);
         }
         else if (viewType == ITEM_HEADER_12) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_header_12, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_header_12, parent, false);
             return new HeaderVH(cl);
         }
         else if (viewType == ITEM_HEADER_14) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_header_14, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_header_14, parent, false);
             return new HeaderVH(cl);
         }
         else if (viewType == ITEM_HEADER_18) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_header_18, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_header_18, parent, false);
             return new HeaderVH(cl);
         }
         else if (viewType == ITEM_GOAL) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.layout_item_goal, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_goal, parent, false);
             return new GoalVH(cl);
         }
         else if (viewType == ITEM_GRAPH_REC) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_rec, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_graph_rec, parent, false);
             return new GraphRecVH(parent, cl);
         }
         else if (viewType == ITEM_GRAPH_MONTH) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_month, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_graph_month, parent, false);
             return new GraphBaseVH(parent, cl);
         }
         else if (viewType == ITEM_GRAPH_WEEK) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_week, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_graph_week, parent, false);
             return new GraphBaseVH(parent, cl);
         }
         else if (viewType == ITEM_GRAPH_YEAR) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.graph_year, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_graph_year, parent, false);
             return new GraphBaseVH(parent, cl);
         }
 
@@ -325,7 +324,7 @@ import java.util.ArrayList;
 
             for (int i = chart.length() - 1; i >= 0; i--) {
 
-                ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.chart_element_bar_small, h.parent, false);
+                ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.dep_chart_element_bar_small, h.parent, false);
                 h.linearLayout.addView(element);
                 View bar = element.findViewById(R.id.view_barSmall);
                 //((TextView) element.findViewById(R.id.textView_week)).setText(labels[i] + "");

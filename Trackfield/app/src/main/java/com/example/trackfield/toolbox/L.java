@@ -87,13 +87,17 @@ public class L {
 
         // set optional margins
         window.getDecorView().setOnApplyWindowInsetsListener((v, insets) -> {
-            if (top != null) setMargin(top, insets.getSystemWindowInsetTop(), Direction.TOP);
+            if (top != null) {
+                // TODO: params margin finns inte?
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) top.getLayoutParams();
+                int margin = params.topMargin + insets.getSystemWindowInsetTop();
+                setMargin(top, margin, Direction.TOP);
+            }
             return insets;
         });
         //getWindow().getDecorView().requestApplyInsets();
 
-
-
+        
         // försök 2
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 

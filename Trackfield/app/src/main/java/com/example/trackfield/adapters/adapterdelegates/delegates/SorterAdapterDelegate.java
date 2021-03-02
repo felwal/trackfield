@@ -39,7 +39,7 @@ public class SorterAdapterDelegate implements AdapterDelegate<ArrayList<Recycler
     @Override
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new SorterVH(inflater.inflate(R.layout.layout_item_exercise, parent, false));
+        return new SorterVH(inflater.inflate(R.layout.item_exercise, parent, false));
     }
 
     @Override

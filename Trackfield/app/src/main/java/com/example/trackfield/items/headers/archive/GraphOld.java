@@ -67,14 +67,14 @@ import java.util.TreeMap;
     }
 
     public static ConstraintLayout inflateLayout(LayoutInflater inflater, ViewGroup parent) {
-        return (ConstraintLayout) inflater.inflate(R.layout.chart, parent, false);
+        return (ConstraintLayout) inflater.inflate(R.layout.dep_chart, parent, false);
     }
     public void inflateElements(LayoutInflater inflater, LinearLayout ll, ViewGroup parent) {
 
         for (Map.Entry<Float, Float> coord : coordinates.entrySet()) {
 
             // element
-            ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.chart_element_point, parent, false);
+            ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.dep_chart_element_point, parent, false);
             ll.addView(element);
 
             // label

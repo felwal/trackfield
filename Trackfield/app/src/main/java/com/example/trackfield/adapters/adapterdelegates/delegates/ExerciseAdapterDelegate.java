@@ -38,7 +38,7 @@ public class ExerciseAdapterDelegate implements AdapterDelegate<ArrayList<Recycl
     @Override
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new ExerciseVH(inflater.inflate(R.layout.layout_item_exercise, parent, false));
+        return new ExerciseVH(inflater.inflate(R.layout.item_exercise, parent, false));
     }
 
     @Override

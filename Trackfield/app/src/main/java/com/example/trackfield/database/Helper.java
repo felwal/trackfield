@@ -29,6 +29,13 @@ public abstract class Helper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        /*if (oldVersion < 1) {
+
+        }
+        if (oldVersion < 2) {
+            db.execSQL(Contract.ExerciseEntry.ALTER_TO_VER_2);
+        }*/
+
         db.execSQL(Contract.ExerciseEntry.DELETE_TABLE);
         db.execSQL(Contract.SubEntry.DELETE_TABLE);
         db.execSQL(Contract.RouteEntry.DELETE_TABLE);

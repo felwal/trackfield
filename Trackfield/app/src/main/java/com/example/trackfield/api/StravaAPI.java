@@ -40,7 +40,7 @@ public class StravaApi {
     private static final String CLIENT_ID = "***REMOVED***";
     private static final String CLIENT_SECRET = "***REMOVED***";
     private static final String REDIRECT_URI = "https://felwal.github.io/Trackfield_web/callback";
-    private static final int PER_PAGE = 200;
+    private static final int PER_PAGE = 200; // max = 200
 
     // request codes
     public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
@@ -96,6 +96,21 @@ public class StravaApi {
     }
 
     // request activities
+
+    public void requestActivity(final long id) {
+        ((TokenRequester) accessToken -> {
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(id), null,
+                    response -> {
+                        updateExistingManually(convertToExercise(response));
+
+                        Log.i("Strava", "response: " + response.toString());
+                    },
+                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
+
+            queue.add(request);
+        }).requestAccessToken(a);
+    }
 
     private void requestActivity(final int index) {
         ((TokenRequester) accessToken -> {
@@ -206,39 +221,45 @@ public class StravaApi {
         }
     }
 
-    private void mergeWithExisting(Exercise fromStrava) {
-        if (fromStrava == null) return;
+    private void updateExistingManually(Exercise strava) {
+        if (strava == null) return;
 
-        ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(fromStrava.getDateTime(), fromStrava.getType());
+        Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
+        if (existing == null) {
+            Writer.get(a).addExercise(strava, a);
+            L.toast("Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE), a);
+            Log.i("Strava", "Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
+        }
+        else {
+            existing.updateWithStravaActivity(strava);
+            Writer.get(a).updateExercise(existing);
+            L.toast("Exercise updated manually", a);
+        }
+    }
+
+    private void mergeWithExisting(Exercise strava) {
+        if (strava == null) return;
+
+        ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(strava.getDateTime(), strava.getType());
 
         if (matching.size() == 1) {
             Exercise x = matching.get(0);
-            Exercise merged = new Exercise(x.get_id(), fromStrava.getExternalId(), x.getType(), fromStrava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(),
-                    x.getNote(), x.getDataSource(), x.getRecordingMethod(), fromStrava.getDistancePrimary(), fromStrava.getTimePrimary(), x.getSubs(), fromStrava.getTrail());
+            Exercise merged = new Exercise(x.get_id(), strava.getExternalId(), x.getType(), strava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(),
+                    x.getNote(), x.getDataSource(), x.getRecordingMethod(), strava.getDistancePrimary(), strava.getTimePrimary(), x.getSubs(), strava.getTrail());
             //x.setExternalId(fromStrava.getExternalId());
             //x.setDateTime(fromStrava.getDateTime());
 
             Writer.get(a).updateExercise(merged);
         }
         else if (matching.size() == 0) {
-            Writer.get(a).addExercise(fromStrava, a);
-            Log.i("Strava", "Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE));
+            Writer.get(a).addExercise(strava, a);
+            Log.i("Strava", "Import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
         else {
-            Log.i("Strava", "Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE));
+            Log.i("Strava", "Multiple choice on " + strava.getDateTime().format(C.FORMATTER_SQL_DATE));
             //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
         }
-    }
-
-    // launch 18/03/02
-
-    public static void launchActivity(long stravaId, Activity a) {
-        Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId)
-                .buildUpon().build();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        a.startActivity(intent);
     }
 
     // get url:s
@@ -253,6 +274,20 @@ public class StravaApi {
 
     private static String getActivitiesURL(int page) {
         return "https://www.strava.com/api/v3/athlete/activities?per_page=" + PER_PAGE + "&access_token=" + Prefs.getAccessToken() + "&page=" + page;
+    }
+
+    private static String getActivityURL(long id) {
+        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=false" + "&access_token=" + Prefs.getAccessToken();
+    }
+
+    // launch
+
+    public static void launchActivity(long stravaId, Activity a) {
+        Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId)
+                .buildUpon().build();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        a.startActivity(intent);
     }
 
     // interface
@@ -293,8 +328,9 @@ public class StravaApi {
         }
 
         default void requestRefreshToken(boolean requireRequest, Context c) {
-            if (!requireRequest && Prefs.isRefreshTokenCurrent())
+            if (!requireRequest && Prefs.isRefreshTokenCurrent()) {
                 onTokenReady(Prefs.getRefreshToken());
+            }
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getRefreshTokenURL(), null,
                     response -> {

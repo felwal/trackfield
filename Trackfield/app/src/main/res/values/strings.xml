@@ -34,6 +34,7 @@
   <string name="tab_boarding3_message">Your exercises, exactly where you need them.</string>
 
   <!-- edit texts -->
+
   <string name="et_text_edit_route">Route</string>
   <string name="et_hint_edit_route">Route</string>
   <string name="et_hint_edit_routevar">variation</string>
@@ -49,11 +50,11 @@
   <string name="et_hint_edit_recordingmethod">Recording method</string>
 
   <!-- text views -->
+
   <string name="tv_text_boarding_subtitle">Welcome to</string>
   <string name="tv_text_boarding_title">Trackfield!</string>
   <string name="tv_text_boarding_caption">Hej mamma</string>
   <string name="btn_text_boarding_start">Get started</string>
-
 
   <!-- actions -->
 
@@ -70,6 +71,7 @@
   <string name="action_continue">Continue</string>
   <string name="action_delete">Delete</string>
   <string name="action_include_longer">Include longer</string>
+  <string name="action_update_from_strava">Update with Strava activity</string>
 
   <!-- empty states -->
 
@@ -101,6 +103,7 @@
   <string name="dialog_btn_filter"><b>Filter</b></string>
   <string name="dialog_btn_reset"><b>Reset</b></string>
   <string name="dialog_btn_discard"><b>Discard</b></string>
+  <string name="dialog_btn_merge"><b>Merge</b></string>
 
   <string name="dialog_chip_time">Time</string>
   <string name="dialog_chip_pace">Pace</string>
@@ -118,8 +121,10 @@
   <string name="dialog_title_color">Color</string>
   <string name="dialog_title_mass">Mass (kg)</string>
   <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
+  <string name="dialog_title_merge_routes">Merge routes?</string>
 
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
+  <string name="dialog_message_merge_routes">A route with the selected name already exists. Merge or discard rename?</string>
 
   <!-- toasts -->
 
@@ -134,9 +139,7 @@
   <string name="toast_api_auth_successful">Authorization successful</string>
   <string name="toast_api_request_successful">Request successful</string>
 
-
-
-  <!-- certificate -->
+  <!-- api certificate -->
 
   <string name="sha1_certificate_fingerprint">***REMOVED***</string>
   <string name="api_key">***REMOVED***</string>

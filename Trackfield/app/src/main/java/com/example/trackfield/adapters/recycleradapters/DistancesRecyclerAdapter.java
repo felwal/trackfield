@@ -24,11 +24,11 @@ import java.util.ArrayList;
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
-            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.layout_item_rec, parent, false);
+            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.item_rec, parent, false);
             return new DistanceVH(rl);
         }
         else if (viewType == ITEM_GRAPH_OLD) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.chart, parent, false);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.dep_chart, parent, false);
             return new GraphVH(parent, cl);
         }
         return super.onCreateViewHolder(parent, viewType);

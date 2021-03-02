@@ -121,7 +121,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -135,6 +134,15 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 BinaryDialog.newInstance(getString(R.string.dialog_title_delete_exercise), "", R.string.dialog_btn_delete, "deleteExercise")
                         .show(getSupportFragmentManager());
                 return true;
+            case R.id.action_update:
+                if (exercise.hasExternalId()) {
+                    StravaApi api = new StravaApi(this);
+                    api.connectStrava();
+                    api.requestActivity(exercise.getExternalId());
+                }
+                else {
+                    L.toast("No Strava id present", this);
+                }
 
             default:
                 return super.onOptionsItemSelected(item);
