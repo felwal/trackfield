@@ -51,11 +51,13 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     // extends Fragment
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         a = getActivity();
@@ -63,7 +65,6 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         //else if (a instanceof RecActivity.Base) reader = ((RecActivity.Base) a) .getReader() != null ? ((MainActivity) a).getReader() : new Helper.Reader(a);
         //else reader = new Helper.Reader(a);
         reader = Reader.get(a);
-
 
         recycler = view.findViewById(R.id.recyclerView);
         recycler.setHasFixedSize(true);
@@ -135,39 +136,64 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
 
-    protected String getSortModeTitle(C.Layout layout, C.SortMode sortMode){
+    protected String getSortModeTitle(C.Layout layout, C.SortMode sortMode) {
 
         switch (layout) {
-            case EXERCISE: switch (sortMode) {
-                case DATE: return "Date";
-                case DISTANCE: return "Distance";
-                case TIME: return "Time";
-                case PACE: return "Pace";
-            }
-            case DISTANCE: switch (sortMode) {
-                case DISTANCE: return "Distance";
-                case AMOUNT: return "Amount";
-                case TIME: return "Best time";
-                case PACE: return "Best pace";
-            }
-            case ROUTE: switch (sortMode) {
-                case NAME: return "Name";
-                case AMOUNT: return "Amount";
-                case PACE: return "Best pace";
-                case DISTANCE: return "Avg distance";
-                case DATE: return "Recent";
-            }
-            case EXERCISE_DISTANCE: switch (sortMode) {
-                case DATE: return "Date";
-                case PACE: return "Pace & avg time";
-                case DISTANCE: return "Full distance";
-            }
-            case EXERCISE_ROUTE: switch (sortMode) {
-                case DATE: return "Date";
-                case DISTANCE: return "Distance";
-                case TIME: return "Time";
-                case PACE: return "Pace";
-            }
+            case EXERCISE:
+                switch (sortMode) {
+                    case DATE:
+                        return "Date";
+                    case DISTANCE:
+                        return "Distance";
+                    case TIME:
+                        return "Time";
+                    case PACE:
+                        return "Pace";
+                }
+            case DISTANCE:
+                switch (sortMode) {
+                    case DISTANCE:
+                        return "Distance";
+                    case AMOUNT:
+                        return "Amount";
+                    case TIME:
+                        return "Best time";
+                    case PACE:
+                        return "Best pace";
+                }
+            case ROUTE:
+                switch (sortMode) {
+                    case NAME:
+                        return "Name";
+                    case AMOUNT:
+                        return "Amount";
+                    case PACE:
+                        return "Best pace";
+                    case DISTANCE:
+                        return "Avg distance";
+                    case DATE:
+                        return "Recent";
+                }
+            case EXERCISE_DISTANCE:
+                switch (sortMode) {
+                    case DATE:
+                        return "Date";
+                    case PACE:
+                        return "Pace & avg time";
+                    case DISTANCE:
+                        return "Full distance";
+                }
+            case EXERCISE_ROUTE:
+                switch (sortMode) {
+                    case DATE:
+                        return "Date";
+                    case DISTANCE:
+                        return "Distance";
+                    case TIME:
+                        return "Time";
+                    case PACE:
+                        return "Pace";
+                }
         }
 
         return "???";
@@ -178,27 +204,38 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
 
         class RecyclerItemCallback extends DiffUtil.Callback {
+
             private ArrayList<RecyclerItem> oldList, newList;
+
             private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
                 this.oldList = oldList;
                 this.newList = newList;
             }
-            @Override public int getOldListSize() {
+
+            @Override
+            public int getOldListSize() {
                 return oldList.size();
             }
-            @Override public int getNewListSize() {
+
+            @Override
+            public int getNewListSize() {
                 return newList.size();
             }
-            @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
                 RecyclerItem oldItem = oldList.get(oldItemPosition);
                 RecyclerItem newItem = newList.get(newItemPosition);
                 return oldItem.sameItemAs(newItem);
             }
-            @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                 RecyclerItem oldItem = oldList.get(oldItemPosition);
                 RecyclerItem newItem = newList.get(newItemPosition);
                 return oldItem.sameContentAs(newItem);
             }
+
         }
         final DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new RecyclerItemCallback(items, newItems));
 
@@ -207,7 +244,6 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         //allItems.clear();
         //allItems.addAll(items);
         diff.dispatchUpdatesTo(adapter);
-
     }
 
     public void updateRecycler() {
@@ -261,7 +297,8 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList) {
 
         if (sortMode == C.SortMode.DATE) {
-            int year = -1; int newYear;
+            int year = -1;
+            int newYear;
             for (Exerlite e : exerliteList) {
                 if ((newYear = e.getDate().getYear()) != year) {
                     itemList.add(new Header(newYear + "", Header.Type.REC));
@@ -275,7 +312,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
             for (int i = 0; i < exerliteList.size(); i++) {
                 if (i == 0) itemList.add(new Header("Top " + 3, Header.Type.REC));
                 else if (i == 3) itemList.add(new Header("Top " + 10, Header.Type.REC));
-                else if (i % 10 == 0) itemList.add(new Header("Top " + (i+10), Header.Type.REC));
+                else if (i % 10 == 0) itemList.add(new Header("Top " + (i + 10), Header.Type.REC));
                 itemList.add(exerliteList.get(i));
             }
         }
@@ -284,7 +321,8 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     // empty page
 
-    protected void setEmptyPage() {}
+    protected void setEmptyPage() {
+    }
 
     protected void fadeInEmpty() {
         a.runOnUiThread(() -> L.crossfadeIn(emptyCl, 1));
@@ -296,7 +334,9 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     // implements RecyclerAdapter
 
-    @Override public void onItemLongClick(View view, int position, int itemType) {}
+    @Override
+    public void onItemLongClick(View view, int position, int itemType) {
+    }
 
     // abstract
 
@@ -313,12 +353,15 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     // interface
 
     interface Threader {
+
         void run();
+
         default void interruptAndStart() {
             if (bgThread != null) bgThread.interrupt();
             bgThread = new Thread(() -> Threader.this.run());
             bgThread.start();
         }
+
     }
 
 }

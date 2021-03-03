@@ -46,6 +46,7 @@ public class Reader extends Helper {
         return instance;
     }
 
+    @Deprecated
     @Nullable
     public static Reader get() {
         return instance;
@@ -106,7 +107,6 @@ public class Reader extends Helper {
     // get exerlites
 
     public Exerlite getExerlite(int _id) {
-
         String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(_id) };
@@ -136,17 +136,18 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesBySearch(String search, C.SortMode sortMode, boolean smallestFirst) {
-        if (search.equals(""))
+        if (search.equals("")) {
             return getExerlites(sortMode, smallestFirst, Prefs.getExerciseVisibleTypes());
+        }
 
         String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = "(" +
                 Contract.ExerciseEntry._ID + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_DATE + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_ROUTE + " LIKE" + "'%" + search + "%' OR " +
-                Contract.ExerciseEntry.COLUMN_ROUTEVAR + " LIKE" + "'%" + search + "%' OR " +
-                Contract.ExerciseEntry.COLUMN_DATASOURCE + " LIKE" + "'%" + search + "%' OR " +
-                Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_DATA_SOURCE + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_NOTE + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" + selectionFilter(Prefs.getExerciseVisibleTypes());
 
@@ -154,13 +155,14 @@ public class Reader extends Helper {
         //String[] selectionArgs = { "%" + filter + "%" };
         String orderBy = orderBy(sortMode, smallestFirst);
 
-        Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy, null);
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
-
         cursor.close();
+
         return exerlites;
     }
 
+    @Deprecated
     public ArrayList<Exerlite> getExerlitesByRoute(String route, C.SortMode sortMode, boolean smallestFirst) {
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
@@ -189,6 +191,7 @@ public class Reader extends Helper {
         return exerlites;
     }
 
+    // TODO: raw
     public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
@@ -200,17 +203,13 @@ public class Reader extends Helper {
         //String drivenSelection = Contract.ExerciseEntry.COLUMN_DISTANCE + " = " + Exercise.DISTANCE_DRIVEN + filter;
         String orderBy = orderBy(sortMode, smallestFirst);
 
-        Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         cursor.close();
 
-        //Cursor drivenCursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, drivenSelection, null, null, null, orderBy, null);
-        //ArrayList<Exerlite> drivenExerlites = unpackLiteDrivenCursor(drivenCursor, distance);
-        //drivenCursor.close();
-
-        //exerlites.addAll(drivenExerlites);
+        // temp, behöver sortera igen
         if (!Prefs.includeLonger()) D.removeLonger(exerlites, maxDist);
-        //D.sortExerlites(exerlites, sortMode, smallestFirst);
+        D.sortExerlites(exerlites, sortMode, smallestFirst);
 
         return exerlites;
     }
@@ -223,9 +222,10 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs, null, null, orderBy);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
+        cursor.close();
+
         D.sortExerlites(exerlites, sortMode, smallestFirst);
 
-        cursor.close();
         return exerlites;
     }
 
@@ -250,8 +250,8 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.SubEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Sub> subs = unpackSubCursor(cursor);
-
         cursor.close();
+
         return subs;
     }
 
@@ -275,8 +275,8 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Route> routes = unpackRouteCursor(cursor);
-
         cursor.close();
+
         return routes.size() > 0 ? routes.get(0) : null;
     }
 
@@ -286,8 +286,8 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Route> routes = unpackRouteCursor(cursor);
-
         cursor.close();
+
         return routes.size() > 0 ? routes.get(0) : new Route();
     }
 
@@ -301,8 +301,8 @@ public class Reader extends Helper {
         while (cursor.moveToNext()) {
             name = cursor.getString(cursor.getColumnIndexOrThrow(Contract.RouteEntry.COLUMN_NAME));
         }
-
         cursor.close();
+
         return name;
     }
 
@@ -316,8 +316,8 @@ public class Reader extends Helper {
         while (cursor.moveToNext()) {
             _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.RouteEntry._ID));
         }
-
         cursor.close();
+
         return _id;
     }
 
@@ -336,7 +336,6 @@ public class Reader extends Helper {
             _id = (int) Writer.get(c).addRouteIfNotAdded(new Route(-1, name), c);
         }
 
-        //cursor.close();
         return _id;
     }
 
@@ -358,8 +357,8 @@ public class Reader extends Helper {
 
         Cursor cursor = db.query(Contract.DistanceEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Distance> distances = unpackDistanceCursor(cursor);
-
         cursor.close();
+
         return distances.size() > 0 ? distances.get(0) : null;
     }
 
@@ -372,8 +371,8 @@ public class Reader extends Helper {
         while (cursor.moveToNext()) {
             goalPace = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.DistanceEntry.COLUMN_GOAL_PACE));
         }
-
         cursor.close();
+
         return goalPace;
     }
 
@@ -418,7 +417,7 @@ public class Reader extends Helper {
         ArrayList<String> polylines = new ArrayList<>();
 
         String[] columns = { Contract.ExerciseEntry.COLUMN_POLYLINE };
-        String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + Contract.ExerciseEntry.COLUMN_ROUTEVAR + " = '" + routeVar + "' AND " +
+        String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "' AND " +
                 Contract.ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
@@ -471,6 +470,7 @@ public class Reader extends Helper {
 
     // get route items
 
+    @Deprecated
     public ArrayList<RouteItem> getRouteItems(ArrayList<String> rList) {
         ArrayList<RouteItem> routeItems = new ArrayList<>();
         for (String r : rList) {
@@ -480,57 +480,56 @@ public class Reader extends Helper {
         return routeItems;
     }
 
-    public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, ArrayList<Integer> types) {
-        /*String[] columns = { Contract.ExerciseEntry.COLUMN_ROUTE };
-        String orderBy = orderBy(sortMode, smallestFirst);
+    @Deprecated
+    public RouteItem getRouteItem(String route) {
+        String[] columns = { Contract.ExerciseEntry.COLUMN_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTE_VAR };
+        String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
+        String[] selectionArgs = { route };
+        String orderBy = orderBy(C.SortMode.PACE, true);
 
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, null, null, null, null, orderBy);
+        int amount = 0;
+        int totalDistanceCount = 0;
+        int totalDistance = 0;
+        float bestPace = -1;
 
-        HashMap<String, Integer> names = new HashMap<>();
-        ArrayList<RouteItem> routeItems = new ArrayList<>();
-
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, orderBy);
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE));
-            if (names.containsKey(name)) {
-                int count = names.get(name);
-                if (!includeLesser && count == 1) routeItems.add(getRouteItem(name));
-                names.put(name, count + 1);
+            int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
+            float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
+
+            // driven distance
+            if (distance == Exercise.DISTANCE_DRIVEN) {
+                String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE_VAR));
+                distance = avgDistance(route, routeVar);
             }
+            // bidra bara till avg om inte driven
             else {
-                if (includeLesser) routeItems.add(getRouteItem(name));
-                names.put(name, 1);
+                totalDistanceCount++;
+                totalDistance += distance;
             }
-        }*/
 
-        ////
+            amount++;
+            float pace = time / distance * 1000f;
+            if (distance != 0 && time != 0 && (pace < bestPace || bestPace == -1)) {
+                bestPace = pace;
+            }
+        }
+        cursor.close();
 
-        /*ArrayList<Route> routes = getRoutes(sortMode, smallestFirst, includeLesser);
-        ArrayList<RouteItem> routeItems = new ArrayList<>();
+        int avgDistance = totalDistanceCount != 0 ? totalDistance / totalDistanceCount : 0;
 
-        for (Route route : routes) {
-            RouteItem item = getRouteItem(route.getName());
-            if (includeLesser || item.getCount() > 1) routeItems.add(item);
-        }*/
+        return new RouteItem(getRouteId(route), route, amount, avgDistance, bestPace);
+    }
 
-        ////
-
-        /*String[] columns = null;
-        String selection = null;
-        String [] selectionArgs = null;
-        String groupBy = Contract.ExerciseEntry.COLUMN_ROUTE_ID;
-        String orderBy = null;
-
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, groupBy, null, orderBy);
-        ArrayList<RouteItem> routeItems = new ArrayList<>();
-        cursor.close();*/
-
+    // TODO: förenkla, effectiveDistance
+    public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, ArrayList<Integer> types) {
         final String e_t = Contract.ExerciseEntry.TABLE_NAME;
         final String r_t = Contract.RouteEntry.TABLE_NAME;
         final String e_dist = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
         final String e_time = Contract.ExerciseEntry.COLUMN_TIME;
         final String r_name = Contract.RouteEntry.COLUMN_NAME;
         final String e_rid = Contract.ExerciseEntry.COLUMN_ROUTE_ID;
-        final String e_rvar = Contract.ExerciseEntry.COLUMN_ROUTEVAR;
+        final String e_rvar = Contract.ExerciseEntry.COLUMN_ROUTE_VAR;
         final String e_date = Contract.ExerciseEntry.COLUMN_DATE;
         final String r_hidden = Contract.RouteEntry.COLUMN_HIDDEN;
         final String r_id = Contract.RouteEntry._ID;
@@ -593,47 +592,9 @@ public class Reader extends Helper {
         return routeItems;
     }
 
-    public RouteItem getRouteItem(String route) {
-        String[] columns = { Contract.ExerciseEntry.COLUMN_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTEVAR };
-        String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
-        String[] selectionArgs = { route };
-        String orderBy = orderBy(C.SortMode.PACE, true);
-
-        int amount = 0;
-        int totalDistanceCount = 0;
-        int totalDistance = 0;
-        float bestPace = -1;
-
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, orderBy);
-        while (cursor.moveToNext()) {
-            int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
-            float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
-
-            // driven distance
-            if (distance == Exercise.DISTANCE_DRIVEN) {
-                String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTEVAR));
-                distance = avgDistance(route, routeVar);
-            }
-            // bidra bara till avg om inte driven
-            else {
-                totalDistanceCount++;
-                totalDistance += distance;
-            }
-
-            amount++;
-            float pace = time / distance * 1000f;
-            if (distance != 0 && time != 0 && (pace < bestPace || bestPace == -1)) {
-                bestPace = pace;
-            }
-        }
-        int avgDistance = totalDistanceCount != 0 ? totalDistance / totalDistanceCount : 0;
-
-        cursor.close();
-        return new RouteItem(getRouteId(route), route, amount, avgDistance, bestPace);
-    }
-
     // get distance items
 
+    // TODO: raw
     public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
         /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
                 " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
@@ -654,8 +615,9 @@ public class Reader extends Helper {
 
         ArrayList<DistanceItem> distanceItems = new ArrayList<>();
         ArrayList<Distance> distances = getDistances(sortMode, smallestFirst);
-        for (Distance distance : distances)
+        for (Distance distance : distances) {
             distanceItems.add(getDistanceItem(distance.getDistance(), types));
+        }
 
         /*ArrayList<Integer> dList = D.sortDistances(D.distances, smallestFirst, sortMode);
         for (int d : dList) {
@@ -669,7 +631,7 @@ public class Reader extends Helper {
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
-        String[] columns = { Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTE, Contract.ExerciseEntry.COLUMN_ROUTEVAR };
+        String[] columns = { Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTE, Contract.ExerciseEntry.COLUMN_ROUTE_VAR };
         String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + selectionFilter(types);
         String orderBy = orderBy(C.SortMode.PACE, true);
 
@@ -691,9 +653,10 @@ public class Reader extends Helper {
                 bestPace = pace;
             }
         }
+        cursor.close();
+
         float bestTimePerDistance = bestPace * distance / 1000;
 
-        cursor.close();
         return new DistanceItem(distance, bestTimePerDistance, bestPace);
     }
 
@@ -720,11 +683,10 @@ public class Reader extends Helper {
         String[] columns = { Contract.ExerciseEntry.COLUMN_INTERVAL };
         String orderBy = orderBy(sortMode, smallestFirst);
 
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, null, null, null, null, orderBy);
-
         HashMap<String, Integer> names = new HashMap<>();
         ArrayList<IntervalItem> intervalItems = new ArrayList<>();
 
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, null, null, null, null, orderBy);
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_INTERVAL));
             if (!name.equals("")) {
@@ -739,13 +701,53 @@ public class Reader extends Helper {
                 }
             }
         }
-
         cursor.close();
+
         return intervalItems;
     }
 
     // projections
 
+    public int avgDistance(int routeId, String routeVar) {
+        String queryString = "select avg(" + Contract.ExerciseEntry.COLUMN_DISTANCE + ")" +
+                " from " + Contract.ExerciseEntry.TABLE_NAME +
+                " where " + Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
+                " and " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" +
+                " and " + Contract.ExerciseEntry.COLUMN_DISTANCE + " != " + Exercise.DISTANCE_DRIVEN +
+                " and " + Contract.ExerciseEntry.COLUMN_DISTANCE + " != " + 0;
+
+        Cursor cursor = db.rawQuery(queryString, null);
+        int avgDistance = 0;
+        while (cursor.moveToNext()) {
+            avgDistance = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return avgDistance;
+    }
+
+    @Deprecated
+    public int avgDistance(String route, String routeVar) {
+        String[] colums = { Contract.ExerciseEntry.COLUMN_DISTANCE };
+        String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ? AND " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " = ?";
+        String[] selectionArgs = { route, routeVar };
+
+        Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs, null, null, null, null);
+        int totalDistance = 0;
+        int count = 0;
+        while (cursor.moveToNext()) {
+            int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
+            if (distance != Exercise.DISTANCE_DRIVEN && distance != 0) {
+                totalDistance += distance;
+                count++;
+            }
+        }
+        cursor.close();
+
+        return count != 0 ? totalDistance / count : 0;
+    }
+
+    @Deprecated
     private String routeValues(String route) {
         // amount, avg distance, fastest pace
 
@@ -771,12 +773,14 @@ public class Reader extends Helper {
                 bestPace = pace;
             }
         }
+        cursor.close();
+
         int avgDistance = amount != 0 ? totalDistance / amount : 0;
 
-        cursor.close();
         return amount + C.TAB + M.prefix(avgDistance, 1, "m") + C.TAB + M.stringTime(bestPace, true);
     }
 
+    @Deprecated
     private String distanceValues(int distance) {
         // best time per distance, pace
 
@@ -796,30 +800,11 @@ public class Reader extends Helper {
                 bestPace = pace;
             }
         }
+        cursor.close();
+
         float bestTimePerDistance = bestPace * distance / 1000;
 
-        cursor.close();
         return M.stringTime(bestTimePerDistance, true) + C.TAB + M.stringTime(bestPace, true);
-    }
-
-    public int avgDistance(String route, String routeVar) {
-        String[] colums = { Contract.ExerciseEntry.COLUMN_DISTANCE };
-        String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?" + " AND " + Contract.ExerciseEntry.COLUMN_ROUTEVAR + " = ?";
-        String[] selectionArgs = { route, routeVar };
-
-        Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs, null, null, null, null);
-        int totalDistance = 0;
-        int count = 0;
-        while (cursor.moveToNext()) {
-            int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
-            if (distance != -1) {
-                totalDistance += distance;
-                count++;
-            }
-        }
-
-        cursor.close();
-        return count != 0 ? totalDistance / count : 0;
     }
 
     // graph data
@@ -954,11 +939,11 @@ public class Reader extends Helper {
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE_ID));
             //String route = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE));
-            String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTEVAR));
+            String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_ROUTE_VAR));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_INTERVAL));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_NOTE));
-            String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATASOURCE));
-            String recordingMethod = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD));
+            String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DATA_SOURCE));
+            String recordingMethod = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(Contract.ExerciseEntry.COLUMN_TIME));
 
@@ -978,7 +963,7 @@ public class Reader extends Helper {
             if (interval == null) interval = "";
             //int routeId = getRouteId(route);
             Route route = getRoute(routeId);
-            String routeName = route == null ? "error" : getRoute(routeId).getName();
+            String routeName = route == null ? Route.NO_NAME : getRoute(routeId).getName();
 
             Exercise exercise = new Exercise(_id, externalId, type, dateTime, routeId, routeName, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubs(_id), trail);
             exercises.add(exercise);
@@ -1014,8 +999,8 @@ public class Reader extends Helper {
                 distance = avgDistance(routeName, routeVar);
             }*/
 
-            // subs
-            if (effectiveDistance == 0 && time == 0) {
+            // TODO: subs
+            /*if (effectiveDistance == 0 && time == 0) {
                 String selection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
                 String[] selectionArgs = { Integer.toString(_id) };
                 String[] columns = { Contract.SubEntry.COLUMN_DISTANCE, Contract.SubEntry.COLUMN_TIME };
@@ -1028,7 +1013,7 @@ public class Reader extends Helper {
                     time += subTime;
                 }
                 subCursor.close();
-            }
+            }*/
 
             Exerlite exerlite = new Exerlite(_id, date, routeName, interval, effectiveDistance, time, distanceDriven);
             exerlites.add(exerlite);
@@ -1037,6 +1022,7 @@ public class Reader extends Helper {
         return exerlites;
     }
 
+    @Deprecated
     private ArrayList<Exerlite> unpackLiteDrivenCursor(Cursor cursor, int distance) {
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         ArrayList<Exerlite> filtered = new ArrayList<>();

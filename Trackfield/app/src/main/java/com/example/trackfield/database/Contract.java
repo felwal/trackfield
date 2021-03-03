@@ -20,11 +20,11 @@ public final class Contract {
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_ROUTE_ID = "route_id";
         public static final String COLUMN_ROUTE = "route";
-        public static final String COLUMN_ROUTEVAR = "routeVar";
+        public static final String COLUMN_ROUTE_VAR = "route_var";
         public static final String COLUMN_INTERVAL = "interval";
         public static final String COLUMN_NOTE = "note";
-        public static final String COLUMN_DATASOURCE = "data_source";
-        public static final String COLUMN_RECORDINGMETHOD = "recording_method";
+        public static final String COLUMN_DATA_SOURCE = "data_source";
+        public static final String COLUMN_RECORDING_METHOD = "recording_method";
         public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_EFFECTIVE_DISTANCE = "effective_distance";
         public static final String COLUMN_TIME = "time";
@@ -35,7 +35,7 @@ public final class Contract {
         public static final String COLUMN_POLYLINE = "polyline";
 
         public static final String[] EXERLITE_COLUMNS = {
-                _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE, COLUMN_ROUTEVAR,
+                _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE, COLUMN_ROUTE_VAR,
                 COLUMN_INTERVAL, COLUMN_DISTANCE, COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
         };
         public static final String[] TRAIL_COLUMNS = {
@@ -51,11 +51,11 @@ public final class Contract {
                 COLUMN_DATE + " INTEGER," +
                 COLUMN_ROUTE_ID + " INTEGER," +
                 COLUMN_ROUTE + " TEXT," +
-                COLUMN_ROUTEVAR + " TEXT," +
+                COLUMN_ROUTE_VAR + " TEXT," +
                 COLUMN_INTERVAL + " TEXT," +
                 COLUMN_NOTE + " TEXT," +
-                COLUMN_DATASOURCE + " TEXT," +
-                COLUMN_RECORDINGMETHOD + " TEXT," +
+                COLUMN_DATA_SOURCE + " TEXT," +
+                COLUMN_RECORDING_METHOD + " TEXT," +
                 COLUMN_DISTANCE + " INTEGER," +
                 COLUMN_EFFECTIVE_DISTANCE + " INTEGER," +
                 COLUMN_TIME + " REAL," +
@@ -70,16 +70,15 @@ public final class Contract {
                 COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
         public static String getColumn(C.SortMode sortMode) {
-
             switch (sortMode) {
                 case DATE:
                     return COLUMN_DATE;
                 case DISTANCE:
-                    return COLUMN_DISTANCE;
+                    return COLUMN_EFFECTIVE_DISTANCE;
                 case TIME:
                     return COLUMN_TIME;
                 case PACE:
-                    return COLUMN_TIME;
+                    return COLUMN_TIME; // TODO
                 case NAME:
                     return COLUMN_ROUTE;
                 default:

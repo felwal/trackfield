@@ -520,6 +520,13 @@ public class D {
         if (top[0] != -1) list.get(top[0]).setTop(1);
     }
 
+    /**
+     * Removes all exercises longer than maxDist, except those classifying in top three
+     *
+     * @param list List to filter
+     * @param maxDist Inclusive limit
+     */
+    @Deprecated
     public static void removeLonger(ArrayList<Exerlite> list, int maxDist) {
 
         // separate

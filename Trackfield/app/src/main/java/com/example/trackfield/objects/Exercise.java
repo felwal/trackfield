@@ -287,14 +287,15 @@ public class Exercise implements JSONObjectable {
         return externalId != -1;
     }
 
+    // TODO: bara effectiveDistance, assigna i helper?
     public int distance() {
-        if (isDistanceDriven()) return Reader.get().avgDistance(route, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
+        if (isDistanceDriven()) return Reader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
         if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
     }
 
     public float time() {
-        if (time == 0 && distance == 0) getSubsTime();
+        if (time == 0 && distance == 0) return getSubsTime();
         return time;
     }
 

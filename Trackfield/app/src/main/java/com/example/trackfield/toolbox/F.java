@@ -209,51 +209,6 @@ public class F {
 
         Writer.get(c).addExercises(exercises, c);
         L.toast(c.getString(R.string.toast_file_imported), c);
-
-        /*
-        try {
-            // open
-            java.io.File file = new java.io.File(pathname);
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder builder = new StringBuilder();
-
-            // lines
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                builder.append(line).append("\n");
-                line = bufferedReader.readLine();
-            }
-            bufferedReader.close();
-
-            // to array
-            String response = builder.toString();
-            JSONArray array = new JSONArray(response);
-
-            // to exercises
-            ArrayList<Exercise> exercises = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                // to object
-                try {
-                    JSONObject obj = array.getJSONObject(i);
-                    Exercise e = new Exercise(obj);
-                    exercises.add(e);
-                }
-                catch (JSONException e) {
-                    L.handleError(e, c);
-                }
-            }
-
-            // to database
-            Helper.getWriter(c).addExercises(exercises, c);
-
-            L.toast("Imported", c);
-        }
-        catch (IOException | JSONException e) {
-            L.handleError(e, c);
-        }
-
-        */
     }
 
     private static void importRoutesJson(Context c) {

@@ -232,7 +232,7 @@ public class StravaApi {
         }
         else {
             existing.updateWithStravaActivity(strava);
-            Writer.get(a).updateExercise(existing);
+            Writer.get(a).updateExercise(existing, a);
             L.toast("Exercise updated manually", a);
         }
     }
@@ -249,7 +249,7 @@ public class StravaApi {
             //x.setExternalId(fromStrava.getExternalId());
             //x.setDateTime(fromStrava.getDateTime());
 
-            Writer.get(a).updateExercise(merged);
+            Writer.get(a).updateExercise(merged, a);
         }
         else if (matching.size() == 0) {
             Writer.get(a).addExercise(strava, a);

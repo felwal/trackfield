@@ -15,14 +15,9 @@ public class Route implements JSONObjectable {
     private float goalPace = NO_GOAL_PACE;
     private boolean hidden = false;
 
-    public enum SortMode {
-        RECENT,
-        NAME,
-        AMOUNT,
-        AVG_DISTANCE,
-        BEST_PACE
-    }
+    public enum SortMode { RECENT, NAME, AMOUNT, AVG_DISTANCE, BEST_PACE }
 
+    public static final String NO_NAME = "Name not found";
     public static final int NO_GOAL_PACE = -1;
 
     // json

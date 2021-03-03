@@ -325,7 +325,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             // save edit
             else {
                 exercise = new Exercise(exercise.get_id(), exercise.getExternalId(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
-                L.toast(Writer.get(this).updateExercise(exercise), this);
+                L.toast(Writer.get(this).updateExercise(exercise, this), this);
                 //D.exercises.set(exercise.getId(), exercise);
             }
 

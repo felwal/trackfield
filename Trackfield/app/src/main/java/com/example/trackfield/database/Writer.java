@@ -58,7 +58,7 @@ public class Writer extends Helper {
 
     // exercises
 
-    public boolean addExercises(ArrayList<Exercise> exercises, Context c) {
+    public boolean addExercises(@NonNull ArrayList<Exercise> exercises, Context c) {
         boolean success = true;
         for (Exercise e : exercises) {
             success &= addExercise(e, c);
@@ -66,7 +66,15 @@ public class Writer extends Helper {
         return success;
     }
 
-    public boolean addExercise(Exercise e, Context c) {
+    /**
+     * Adds an exercise
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}
+     *
+     * @param e The exercise to add
+     * @param c Context
+     * @return True if the exercise was added successfully
+     */
+    public boolean addExercise(@NonNull Exercise e, Context c) {
         e.setRouteId((int) addRouteIfNotAdded(new Route(e.getRouteId(), e.getRoute()), c));
 
         final ContentValues cv = fillExerciseContentValues(e);
@@ -74,25 +82,52 @@ public class Writer extends Helper {
         final long _id = db.insert(Contract.ExerciseEntry.TABLE_NAME, null, cv);
         e.setSubs_superId((int) _id);
         final boolean subSuccess = addSubs(e.getSubs());
-        //final boolean mapSuccess = addMap(e.getMap());
 
-        return success(_id) && subSuccess; //&& mapSuccess;
+        // must be called to keep effective distance current
+        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+
+        return success(_id) && subSuccess;
     }
 
-    public boolean updateExercise(Exercise e) {
+    /**
+     * Updates an exercise
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or distance
+     *
+     * @param e The exercise to update
+     * @param c Context
+     * @return True if the exercise was added successfully
+     */
+    public boolean updateExercise(@NonNull Exercise e, Context c) {
+        Exercise old = Reader.get(c).getExercise(e.get_id());
         ContentValues newCv = fillExerciseContentValues(e);
 
-        String selection = Contract.ExerciseEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(e.get_id()) };
+        String where = Contract.ExerciseEntry._ID + " = ?";
+        String[] whereArgs = { Integer.toString(e.get_id()) };
 
-        final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
+        final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
         final boolean subSuccess = updateSubs(e.getSubs());
-        //final boolean mapSuccess = updateMap(e.getMap());
 
-        return count > 0 && subSuccess;// && mapSuccess;
+        // update effective distance if routeId, routeVar or distance updated
+        if (old.getRouteId() != e.getRouteId() || !old.getRouteVar().equals(e.getRouteVar())) {
+            updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
+            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+        }
+        else if (old.getDistancePrimary() != e.getDistancePrimary()) {
+            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+        }
+
+        return count > 0 && subSuccess;
     }
 
-    public boolean deleteExercise(Exercise e, Context c) {
+    /**
+     * Deletes an exercise
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}
+     *
+     * @param e The exercise to delete
+     * @param c Context
+     * @return True if the exercise was added successfully
+     */
+    public boolean deleteExercise(@NonNull Exercise e, Context c) {
         final String selection = Contract.ExerciseEntry._ID + " = ?";
         final String subSelection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
         final String[] selectionArgs = { Integer.toString(e.get_id()) };
@@ -105,6 +140,9 @@ public class Writer extends Helper {
         if (reader.getExerlitesByRoute(e.getRouteId(), C.SortMode.DATE, false).size() == 0) deleteRoute(e.getRouteId());
         reader.close();*/
 
+        // must be called to keep effective distance current
+        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+
         return success(result) && success(subResult);
     }
 
@@ -115,9 +153,36 @@ public class Writer extends Helper {
         return success(result) && success(subResult);
     }
 
+    // single columns
+
+    /**
+     * Updates effective distance for all exercises having routeId and routeVar
+     * <p>Is called in:
+     * <p>1) {@link #addExercise(Exercise, Context)} when an exercise is created
+     * <p>2) {@link #deleteExercise(Exercise, Context)} when an exercise is deleted
+     * <p>3) {@link #updateExercise(Exercise, Context)} when distance of an exercise is edited and (twice) when rotue or routeVar of is edited
+     *
+     * @param routeId The routeId to edit effective distance of
+     * @param routeVar The routeVar to edit effective distance of
+     * @param c Context
+     */
+    private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
+        int effectiveDistance = Reader.get(c).avgDistance(routeId, routeVar);
+
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
+
+        String where = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " = ? AND " + Contract.ExerciseEntry.COLUMN_DISTANCE + " = ?";
+        String[] whereArgs = { Integer.toString(routeId), routeVar, Integer.toString(Exercise.DISTANCE_DRIVEN) };
+
+        int count = db.update(Contract.ExerciseEntry.TABLE_NAME, cv, where, whereArgs);
+
+        return success(count);
+    }
+
     // subs
 
-    private boolean addSubs(ArrayList<Sub> subs) {
+    private boolean addSubs(@NonNull ArrayList<Sub> subs) {
         boolean success = true;
         for (Sub sub : subs) {
             success &= addSub(sub);
@@ -131,7 +196,7 @@ public class Writer extends Helper {
         return success(result);
     }
 
-    private boolean updateSubs(ArrayList<Sub> subs) {
+    private boolean updateSubs(@NonNull ArrayList<Sub> subs) {
         boolean success = true;
         for (Sub sub : subs) {
 
@@ -151,7 +216,7 @@ public class Writer extends Helper {
         return success;
     }
 
-    public boolean deleteSub(Sub sub) {
+    public boolean deleteSub(@NonNull Sub sub) {
         final String selection = Contract.SubEntry._ID + " = ?";
         final String[] selectionArgs = { Integer.toString(sub.get_id()) };
 
@@ -162,7 +227,7 @@ public class Writer extends Helper {
 
     // distances
 
-    public boolean addDistances(ArrayList<Distance> distances) {
+    public boolean addDistances(@NonNull ArrayList<Distance> distances) {
         boolean success = true;
         for (Distance d : distances) {
             success &= addDistance(d);
@@ -187,7 +252,7 @@ public class Writer extends Helper {
         return count > 0;
     }
 
-    public boolean deleteDistance(Distance distance) {
+    public boolean deleteDistance(@NonNull Distance distance) {
         final String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
         final String[] selectionArgs = { Integer.toString(distance.getDistance()) };
 
@@ -198,11 +263,11 @@ public class Writer extends Helper {
 
     // routes
 
-    public void addRoutes(ArrayList<Route> routes, Context c) {
+    public void addRoutes(@NonNull ArrayList<Route> routes, Context c) {
         for (Route r : routes) addRouteIfNotAdded(r, c);
     }
 
-    public long addRouteIfNotAdded(Route route, Context c) {
+    public long addRouteIfNotAdded(@NonNull Route route, Context c) {
         Route existingRoute = Reader.get(c).getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
 
@@ -231,6 +296,7 @@ public class Writer extends Helper {
         return success(result);
     }
 
+    @Deprecated
     public boolean deleteRoute(String name) {
         final String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
         final String[] selectionArgs = { name };
@@ -268,7 +334,8 @@ public class Writer extends Helper {
 
     // fill ContentValues
 
-    private ContentValues fillExerciseContentValues(Exercise e) {
+    @NonNull
+    private ContentValues fillExerciseContentValues(@NonNull Exercise e) {
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
@@ -276,13 +343,13 @@ public class Writer extends Helper {
         cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getEpoch());
         cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
         cv.put(Contract.ExerciseEntry.COLUMN_ROUTE, e.getRoute());
-        cv.put(Contract.ExerciseEntry.COLUMN_ROUTEVAR, e.getRouteVar());
+        cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_VAR, e.getRouteVar());
         cv.put(Contract.ExerciseEntry.COLUMN_INTERVAL, e.getInterval());
         cv.put(Contract.ExerciseEntry.COLUMN_NOTE, e.getNote());
-        cv.put(Contract.ExerciseEntry.COLUMN_DATASOURCE, e.getDataSource());
-        cv.put(Contract.ExerciseEntry.COLUMN_RECORDINGMETHOD, e.getRecordingMethod());
+        cv.put(Contract.ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
+        cv.put(Contract.ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
         cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistancePrimary());
-        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.distance()); // TODO: eller effectiveDistance??
+        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.distance()); // TODO: eller effectiveDistance?
         cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
 
         Trail trail = e.getTrail();
@@ -312,7 +379,8 @@ public class Writer extends Helper {
         return cv;
     }
 
-    private ContentValues fillSubContentValues(Sub sub) {
+    @NonNull
+    private ContentValues fillSubContentValues(@NonNull Sub sub) {
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.SubEntry.COLUMN_SUPERID, sub.get_superId());
@@ -322,7 +390,8 @@ public class Writer extends Helper {
         return cv;
     }
 
-    private ContentValues fillDistanceContentValues(Distance distance) {
+    @NonNull
+    private ContentValues fillDistanceContentValues(@NonNull Distance distance) {
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.DistanceEntry.COLUMN_DISTANCE, distance.getDistance());
@@ -331,7 +400,8 @@ public class Writer extends Helper {
         return cv;
     }
 
-    private ContentValues fillRouteContentValues(Route route) {
+    @NonNull
+    private ContentValues fillRouteContentValues(@NonNull Route route) {
         ContentValues cv = new ContentValues();
 
         cv.put(Contract.RouteEntry.COLUMN_NAME, route.getName());
@@ -341,7 +411,7 @@ public class Writer extends Helper {
         return cv;
     }
 
-    // tools
+    // query tools
 
     private boolean success(long dbResult) {
         return dbResult != -1;
