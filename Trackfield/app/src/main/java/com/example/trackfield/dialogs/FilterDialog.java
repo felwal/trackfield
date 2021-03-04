@@ -112,6 +112,7 @@ public class FilterDialog extends BaseDialog {
 
     }
 
+    @NonNull
     protected ArrayList<Integer> getCheckedTypes(ChipGroup chipGroup) {
 
         ArrayList<Integer> checkedTypes = new ArrayList<>();
@@ -126,7 +127,7 @@ public class FilterDialog extends BaseDialog {
     // interface
 
     public interface DialogListener {
-        void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag);
+        void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag);
     }
 
 }

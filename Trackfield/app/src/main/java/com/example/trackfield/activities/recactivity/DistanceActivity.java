@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+
 import com.example.trackfield.R;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
@@ -151,7 +153,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     }
 
     @Override
-    public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
         Prefs.setDistanceVisibleTypes(checkedTypes);
         recyclerFragment.updateRecycler();
     }

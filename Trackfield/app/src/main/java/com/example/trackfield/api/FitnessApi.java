@@ -39,11 +39,12 @@ public class FitnessApi {
 
     public FitnessApi(Activity a) {
         this.a = a;
+        connectFitness();
     }
 
     // connect
 
-    public void connectFitness() {
+    private void connectFitness() {
         fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)

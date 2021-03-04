@@ -92,8 +92,9 @@ public class TimeDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         // require selection
-        setChipGroup(chipGroup);
-        chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
+        chipGroup.setVisibility(View.GONE);
+        //setChipGroup(chipGroup);
+        //chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
 
         builder.setView(dialogView).setTitle(title)
                 .setPositiveButton(posBtnTxtId, (dialog, id) -> {
@@ -114,8 +115,8 @@ public class TimeDialog extends BaseDialog {
 
     // tools
 
+    // TODO time / pace
     private void setChipGroup(ChipGroup chipGroup) {
-
         Chip checkedChip = (Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId());
 
         if (checkedChip != null) {

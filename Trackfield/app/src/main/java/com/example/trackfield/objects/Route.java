@@ -17,8 +17,9 @@ public class Route implements JSONObjectable {
 
     public enum SortMode { RECENT, NAME, AMOUNT, AVG_DISTANCE, BEST_PACE }
 
-    public static final String NO_NAME = "Name not found";
+    public static final String NO_NAME = "[Name not found]";
     public static final int NO_GOAL_PACE = -1;
+    public static final int ID_NON_EXISTANT = -1;
 
     // json
     private static final String JSON_ID = "id";

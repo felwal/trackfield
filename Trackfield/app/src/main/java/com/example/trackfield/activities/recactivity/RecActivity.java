@@ -20,8 +20,10 @@ import com.example.trackfield.toolbox.D;
 
 public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
 
+    // TODO: bort
     protected Reader reader;
     protected Writer writer;
+
     private ActionBar ab;
     protected FrameLayout frame;
     protected RecyclerFragment recyclerFragment;

@@ -10,6 +10,8 @@ import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
+import com.example.trackfield.annotations.ZeroAccessors;
+import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 
@@ -53,7 +55,8 @@ public class Writer extends Helper {
 
     @Deprecated
     public void importFromToolbox(Context c) {
-        L.toast(deleteAllExercises() && addExercises(D.exercises, c), c);
+        recreate();
+        L.toast(addExercises(D.exercises, c), c);
     }
 
     // exercises
@@ -107,6 +110,11 @@ public class Writer extends Helper {
         final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
         final boolean subSuccess = updateSubs(e.getSubs());
 
+        // delete route if changed and empty
+        if (old.getRouteId() != e.getRouteId()) {
+            deleteRouteIfEmpty(old.getRouteId(), c);
+        }
+
         // update effective distance if routeId, routeVar or distance updated
         if (old.getRouteId() != e.getRouteId() || !old.getRouteVar().equals(e.getRouteVar())) {
             updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
@@ -136,19 +144,10 @@ public class Writer extends Helper {
         final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, subSelection, selectionArgs);
 
         // route
-        /*Reader reader = new Reader(c);
-        if (reader.getExerlitesByRoute(e.getRouteId(), C.SortMode.DATE, false).size() == 0) deleteRoute(e.getRouteId());
-        reader.close();*/
+        deleteRouteIfEmpty(e.getRouteId(), c);
 
-        // must be called to keep effective distance current
+        // effective distance
         updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
-
-        return success(result) && success(subResult);
-    }
-
-    public boolean deleteAllExercises() {
-        final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, null, null);
-        final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, null, null);
 
         return success(result) && success(subResult);
     }
@@ -157,7 +156,7 @@ public class Writer extends Helper {
 
     /**
      * Updates effective distance for all exercises having routeId and routeVar
-     * <p>Is called in:
+     * <p>Must be called in:
      * <p>1) {@link #addExercise(Exercise, Context)} when an exercise is created
      * <p>2) {@link #deleteExercise(Exercise, Context)} when an exercise is deleted
      * <p>3) {@link #updateExercise(Exercise, Context)} when distance of an exercise is edited and (twice) when rotue or routeVar of is edited
@@ -178,6 +177,31 @@ public class Writer extends Helper {
         int count = db.update(Contract.ExerciseEntry.TABLE_NAME, cv, where, whereArgs);
 
         return success(count);
+    }
+
+    /**
+     * Checks whether a route has no exercíses, deletes the route if true
+     * <p>Must be called when:
+     * <p>1) the route of an exercise is edited in {@link #updateExercise(Exercise, Context)}
+     * <p>2) an exercise is deleted in {@link #deleteExercise(Exercise, Context)}
+     *
+     * @param routeId RouteId of the route to check
+     * @param c Context
+     * @return True if the route was empty and successfully deleted
+     */
+    private boolean deleteRouteIfEmpty(int routeId, Context c) {
+        int remainingOfRoute = Reader.get(c).getExerlitesByRoute(routeId, C.SortMode.DATE, false, new ArrayList<>()).size();
+        if (remainingOfRoute == 0) return deleteRoute(routeId);
+        return false;
+    }
+
+    @ZeroAccessors
+    public boolean deleteEmptyRoutes(Context c) {
+        boolean success = true;
+        for (Route route : Reader.get(c).getRoutes(C.SortMode.DATE, true, true)) {
+            success &= deleteRouteIfEmpty(route.get_id(), c);
+        }
+        return success;
     }
 
     // subs
@@ -276,15 +300,39 @@ public class Writer extends Helper {
         return _id;
     }
 
-    public boolean updateRoute(Route route) {
-        ContentValues newCv = fillRouteContentValues(route);
+    public int updateRoute(Route route) {
+        int existingIdForNewName = Reader.get().getRouteId(route.getName());
 
-        String selection = Contract.RouteEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(route.get_id()) };
+        // update route
+        if (existingIdForNewName == Route.ID_NON_EXISTANT) {
+            ContentValues newCv = fillRouteContentValues(route);
 
-        final int count = db.update(Contract.RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
+            String selection = Contract.RouteEntry._ID + " = ?";
+            String[] selectionArgs = { Integer.toString(route.get_id()) };
 
-        return count > 0;
+            final int count = db.update(Contract.RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
+
+            return route.get_id();
+            //return count > 0;
+        }
+
+        // merge routes, update routeId and delete merger
+        else {
+            // update routeId to mergeree routeId
+            ContentValues newCv = new ContentValues();
+            newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, existingIdForNewName);
+
+            String where = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = ?";
+            String[] whereArgs = { Integer.toString(route.get_id()) };
+
+            final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
+
+            // delete merger route
+            boolean deleteSuccess = deleteRoute(route.get_id());
+
+            return existingIdForNewName;
+            //return count > 0 && deleteSuccess;
+        }
     }
 
     public boolean deleteRoute(int routeId) {
@@ -307,6 +355,8 @@ public class Writer extends Helper {
     }
 
     public boolean updateRouteName(String oldRoute, String newRoute) {
+        // update name in exercises
+
         ContentValues newCv = new ContentValues();
         newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newRoute);
 

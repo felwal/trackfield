@@ -2,6 +2,8 @@ package com.example.trackfield.toolbox;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.math.BigDecimal;
@@ -295,6 +297,7 @@ public class M {
         return true;
     }
 
+    @NonNull
     public static ArrayList<Integer> createList(int valueToAdd) {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(valueToAdd);

@@ -45,6 +45,8 @@ public class StravaApi {
     // request codes
     public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
 
+    private static final String LOG_TAG = "Strava API";
+
     // json
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
@@ -61,9 +63,6 @@ public class StravaApi {
 
     public StravaApi(Activity a) {
         this.a = a;
-    }
-
-    public void connectStrava() {
         queue = Volley.newRequestQueue(a);
     }
 
@@ -104,7 +103,8 @@ public class StravaApi {
                     response -> {
                         updateExistingManually(convertToExercise(response));
 
-                        Log.i("Strava", "response: " + response.toString());
+                        Log.i(LOG_TAG, "response: " + response.toString());
+                        L.toast(a.getString(R.string.toast_api_request_successful), a);
                     },
                     e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
 
@@ -121,7 +121,7 @@ public class StravaApi {
                             JSONObject obj = response.getJSONObject(index);
                             mergeWithExisting(convertToExercise(obj));
 
-                            Log.i("Strava API", "response: " + obj.toString());
+                            Log.i(LOG_TAG, "response: " + obj.toString());
                             //L.toast("response: " + obj.toString(), a);
                             L.toast(a.getString(R.string.toast_api_request_successful), a);
                         }
@@ -180,7 +180,7 @@ public class StravaApi {
         if (obj == null) return null;
 
         try {
-            Log.i("response", obj.toString());
+            Log.i(LOG_TAG, "response: " + obj.toString());
             long stravaId = obj.getLong(JSON_ID);
             String name = obj.getString(JSON_NAME);
             int distance = (int) obj.getDouble(JSON_DISTANCE);
@@ -228,7 +228,7 @@ public class StravaApi {
         if (existing == null) {
             Writer.get(a).addExercise(strava, a);
             L.toast("Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE), a);
-            Log.i("Strava", "Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
+            Log.i(LOG_TAG, "Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
         }
         else {
             existing.updateWithStravaActivity(strava);
@@ -253,11 +253,11 @@ public class StravaApi {
         }
         else if (matching.size() == 0) {
             Writer.get(a).addExercise(strava, a);
-            Log.i("Strava", "Import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
+            Log.i(LOG_TAG, "Import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
         else {
-            Log.i("Strava", "Multiple choice on " + strava.getDateTime().format(C.FORMATTER_SQL_DATE));
+            Log.i(LOG_TAG, "Multiple choice on " + strava.getDateTime().format(C.FORMATTER_SQL_DATE));
             //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
         }
     }
@@ -309,7 +309,7 @@ public class StravaApi {
                             Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString("expires_at"))));
 
                             //L.toast("accessToken: " + Prefs.getAccessToken(), c);
-                            Log.i("response accessToken: ", Prefs.getAccessToken());
+                            Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());
                             onTokenReady(Prefs.getAccessToken());
                         }
                         catch (JSONException e) {
@@ -338,7 +338,7 @@ public class StravaApi {
                             Prefs.setRefreshToken(response.getString("refresh_token"));
 
                             //L.toast("refreshToken: " + Prefs.getRefreshToken(), c);
-                            Log.i("response refreshToken: ", Prefs.getRefreshToken());
+                            Log.i(LOG_TAG, "response refreshToken: " + Prefs.getRefreshToken());
                             onTokenReady(Prefs.getRefreshToken());
                         }
                         catch (JSONException e) {

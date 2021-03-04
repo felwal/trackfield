@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.api.StravaApi;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
         Prefs.setExerciseVisibleTypes(checkedTypes);
         mainFragment.updateFragment();
     }

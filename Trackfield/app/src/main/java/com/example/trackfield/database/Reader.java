@@ -118,14 +118,21 @@ public class Reader extends Helper {
         return exerlites.size() > 0 ? exerlites.get(0) : null;
     }
 
-    public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-        String selection = "";
-        for (int i = 0; i < types.size(); i++) {
-            if (i != 0) selection += " OR ";
-            selection += Contract.ExerciseEntry.COLUMN_TYPE + " = " + types.get(i);
-        }
-
+    public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types, int amount) {
         String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String selection = selectionTypeFilter("", types);
+        String orderBy = orderBy(sortMode, smallestFirst);
+
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy);
+        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
+        cursor.close();
+
+        return exerlites;
+    }
+
+    public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
+        String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String selection = selectionTypeFilter("", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy);
@@ -149,7 +156,8 @@ public class Reader extends Helper {
                 Contract.ExerciseEntry.COLUMN_DATA_SOURCE + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_NOTE + " LIKE" + "'%" + search + "%' OR " +
-                Contract.ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" + selectionFilter(Prefs.getExerciseVisibleTypes());
+                Contract.ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" +
+                selectionTypeFilter(" AND", Prefs.getExerciseVisibleTypes());
 
         //String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " LIKE ?";
         //String[] selectionArgs = { "%" + filter + "%" };
@@ -177,29 +185,28 @@ public class Reader extends Helper {
         return exerlites;
     }
 
-    public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
+    public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
-        String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionFilter(types);
+        String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionTypeFilter(" AND", types);
         //String[] selectionArgs = { Integer.toString(routeId) };
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
-        D.sortExerlites(exerlites, sortMode, smallestFirst);
+        //D.sortExerlites(exerlites, sortMode, smallestFirst);
 
         cursor.close();
         return exerlites;
     }
 
     // TODO: raw
-    public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
+    public ArrayList<Exerlite> getExerlitesByDistance(int distance, C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
-        String filter = selectionFilter(types);
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
         //String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + (Prefs.includeLonger() ? " >= " + minDist : " BETWEEN " + minDist + " AND " + maxDist) + filter;
-        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + filter;
+        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + selectionTypeFilter(" AND", types);
         //String drivenSelection = Contract.ExerciseEntry.COLUMN_DISTANCE + " = " + Exercise.DISTANCE_DRIVEN + filter;
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -229,10 +236,11 @@ public class Reader extends Helper {
         return exerlites;
     }
 
-    public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, C.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
-        String filter = selectionFilter(types);
+    public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
         String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
-        String selection = Contract.ExerciseEntry.COLUMN_DATE + " >= " + M.epoch(M.first(min, max)) + " AND " + Contract.ExerciseEntry.COLUMN_DATE + " <= " + M.epoch(M.last(min, max)) + filter;
+        String selection = Contract.ExerciseEntry.COLUMN_DATE + " >= " + M.epoch(M.first(min, max)) +
+                " AND " + Contract.ExerciseEntry.COLUMN_DATE + " <= " + M.epoch(M.last(min, max)) +
+                selectionTypeFilter(" AND", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(true, Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
@@ -312,7 +320,7 @@ public class Reader extends Helper {
         String[] selectionArgs = { name };
 
         Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-        int _id = -1;
+        int _id = Route.ID_NON_EXISTANT;
         while (cursor.moveToNext()) {
             _id = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.RouteEntry._ID));
         }
@@ -522,7 +530,7 @@ public class Reader extends Helper {
     }
 
     // TODO: förenkla, effectiveDistance
-    public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, ArrayList<Integer> types) {
+    public ArrayList<RouteItem> getRouteItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser, @NonNull ArrayList<Integer> types) {
         final String e_t = Contract.ExerciseEntry.TABLE_NAME;
         final String r_t = Contract.RouteEntry.TABLE_NAME;
         final String e_dist = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
@@ -540,9 +548,9 @@ public class Reader extends Helper {
 
         String havingCount = includeLesser ? "" : " HAVING antal > 1";
         String whereHidden = includeLesser ? "" : " AND r." + r_hidden + " != 1";
-        String whereTypes = selectionFilter(types);
-        String whereTypesLone = selectionFilterFirst(types, "");
-        String whereTypesAs = selectionFilterAs(types, "e2.");
+        String whereTypes = selectionTypeFilter(" AND", types);
+        String whereTypesLone = selectionTypeFilter(" WHERE", types);
+        String whereTypesAs = rawSelectionTypeFilter(" AND", types, "e2.");
 
         String orderBy;
         switch (sortMode) {
@@ -595,7 +603,7 @@ public class Reader extends Helper {
     // get distance items
 
     // TODO: raw
-    public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, ArrayList<Integer> types) {
+    public ArrayList<DistanceItem> getDistanceItems(Distance.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
         /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
                 " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
                 " (SELECT routeId, MIN(time/distance)*1000 as pace FROM exercises WHERE distance > 0 AND time != 0 GROUP BY routeId) AS v" +
@@ -627,12 +635,12 @@ public class Reader extends Helper {
         return distanceItems;
     }
 
-    public DistanceItem getDistanceItem(int distance, ArrayList<Integer> types) {
+    public DistanceItem getDistanceItem(int distance, @NonNull ArrayList<Integer> types) {
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
         String[] columns = { Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, Contract.ExerciseEntry.COLUMN_TIME, Contract.ExerciseEntry.COLUMN_ROUTE, Contract.ExerciseEntry.COLUMN_ROUTE_VAR };
-        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + selectionFilter(types);
+        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + selectionTypeFilter(" AND", types);
         String orderBy = orderBy(C.SortMode.PACE, true);
 
         float bestPace = -1;
@@ -809,7 +817,7 @@ public class Reader extends Helper {
 
     // graph data
 
-    public TreeMap<Float, Float> weekDailyDistance(ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> weekDailyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfWeek(includingDate), M.atEndOfWeek(includingDate), C.SortMode.DATE, false, types);
@@ -827,7 +835,7 @@ public class Reader extends Helper {
         return points;
     }
 
-    public TreeMap<Float, Float> yearMonthlyDistance(ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> yearMonthlyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, false, types);
@@ -855,7 +863,7 @@ public class Reader extends Helper {
         return points;
     }
 
-    public TreeMap<Float, Float> monthDailyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> monthDailyIntegralDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfMonth(includingDate), M.atEndOfMonth(includingDate), C.SortMode.DATE, false, types);
@@ -879,7 +887,7 @@ public class Reader extends Helper {
         return points;
     }
 
-    public TreeMap<Float, Float> yearWeeklyIntegralDistance(ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> yearWeeklyIntegralDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(M.atStartOfYear(includingDate), M.atEndOfYear(includingDate), C.SortMode.DATE, true, types);
 
@@ -990,7 +998,7 @@ public class Reader extends Helper {
             if (interval == null) interval = "";
 
             Route route = getRoute(routeId);
-            String routeName = route == null ? "error" : getRoute(routeId).getName();
+            String routeName = route == null ? Route.NO_NAME : getRoute(routeId).getName();
 
             // distance driven
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
@@ -1082,10 +1090,18 @@ public class Reader extends Helper {
 
     // query tools
 
-    private String selectionFilter(ArrayList<Integer> visibleTypes) {
+    /**
+     * Add to any SQL selection string to also filter by type
+     * Includes spacing after keyword, but not before it; use the form " AND".
+     *
+     * @param precedingKeyword To precede the statement with
+     * @param visibleTypes Types to filter in
+     * @return The SQL query selection string
+     */
+    private String selectionTypeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<Integer> visibleTypes) {
         String filter = "";
         for (int i = 0; i < visibleTypes.size(); i++) {
-            if (i == 0) filter += " AND (";
+            if (i == 0) filter += precedingKeyword + " (";
             filter += Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
             if (i == visibleTypes.size() - 1) filter += ")";
             else filter += " OR ";
@@ -1093,21 +1109,10 @@ public class Reader extends Helper {
         return filter;
     }
 
-    private String selectionFilterAs(ArrayList<Integer> visibleTypes, String tableAsName) {
+    private String rawSelectionTypeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<Integer> visibleTypes, String tableAsName) {
         String filter = "";
         for (int i = 0; i < visibleTypes.size(); i++) {
-            if (i == 0) filter += " AND (";
-            filter += tableAsName + Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
-            if (i == visibleTypes.size() - 1) filter += ")";
-            else filter += " OR ";
-        }
-        return filter;
-    }
-
-    private String selectionFilterFirst(ArrayList<Integer> visibleTypes, String tableAsName) {
-        String filter = "";
-        for (int i = 0; i < visibleTypes.size(); i++) {
-            if (i == 0) filter += " WHERE (";
+            if (i == 0) filter += precedingKeyword + " (";
             filter += tableAsName + Contract.ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
             if (i == visibleTypes.size() - 1) filter += ")";
             else filter += " OR ";

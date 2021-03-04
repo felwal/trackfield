@@ -39,9 +39,11 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private LayoutInflater inflater;
     private LinearLayout ll;
 
-    FitnessApi fit = new FitnessApi(this);
-    StravaApi strava = new StravaApi(this);
+    // api
+    FitnessApi fit;
+    StravaApi strava;
 
+    // tags
     private static final String TAG_THEME = "theme";
     private static final String TAG_COLOR = "color";
 
@@ -67,8 +69,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateViews();
 
         // api
-        fit.connectFitness();
-        strava.connectStrava();
+        fit = new FitnessApi(this);
+        strava = new StravaApi(this);
         strava.handleIntent(getIntent());
     }
 

@@ -3,6 +3,8 @@ package com.example.trackfield.toolbox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
 
@@ -50,9 +52,9 @@ public class Prefs {
     private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
-    private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
-    private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
-    private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
+    @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
+    @NonNull private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
+    @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
 
     // sorting
     private static C.SortMode[] sortModePrefs = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE };
@@ -265,17 +267,17 @@ public class Prefs {
         savePref(distanceUpperLimit, LIMIT_UPPER);
     }
 
-    public static void setExerciseVisibleTypes(ArrayList<Integer> types) {
+    public static void setExerciseVisibleTypes(@NonNull ArrayList<Integer> types) {
         exerciseVisibleTypes = types;
         savePref(types, TYPES_EXERCISE);
     }
 
-    public static void setRouteVisibleTypes(ArrayList<Integer> types) {
+    public static void setRouteVisibleTypes(@NonNull ArrayList<Integer> types) {
         routeVisibleTypes = types;
         savePref(types, TYPES_ROUTE);
     }
 
-    public static void setDistanceVisibleTypes(ArrayList<Integer> types) {
+    public static void setDistanceVisibleTypes(@NonNull ArrayList<Integer> types) {
         distanceVisibleTypes = types;
         savePref(types, TYPES_DISTANCE);
     }
@@ -380,14 +382,17 @@ public class Prefs {
         return distanceUpperLimit;
     }
 
+    @NonNull
     public static ArrayList<Integer> getExerciseVisibleTypes() {
         return exerciseVisibleTypes;
     }
 
+    @NonNull
     public static ArrayList<Integer> getRouteVisibleTypes() {
         return routeVisibleTypes;
     }
 
+    @NonNull
     public static ArrayList<Integer> getDistanceVisibleTypes() {
         return distanceVisibleTypes;
     }

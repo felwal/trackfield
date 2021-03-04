@@ -5,26 +5,37 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+
 import com.example.trackfield.R;
 import com.example.trackfield.activities.mapactivity.RouteMapActivity;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.dialogs.BaseDialog;
+import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.dialogs.TimeDialog;
 import com.example.trackfield.fragments.recyclerfragments.RouteRecyclerFragment;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
+import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class RouteActivity extends RecActivity implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
+public class RouteActivity extends RecActivity implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
 
     //private int routeId;
     private Route route;
     public static final String EXTRA_ROUTE_ID = "routeId";
+
+    private static final String DIALOG_RENAME = "renameDialog";
+    private static final String DIALOG_MERGE = "mergeDialog";
+    private static final String DIALOG_GOAL = "goalDialog";
+    private static final String DIALOG_FILTER = "filterDialog";
+
 
     ////
 
@@ -64,13 +75,13 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
 
         switch (item.getItemId()) {
             case R.id.action_filter:
-                FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getRouteVisibleTypes(), R.string.dialog_btn_filter, "filterRoute")
+                FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getRouteVisibleTypes(), R.string.dialog_btn_filter, DIALOG_FILTER)
                         .show(getSupportFragmentManager());
                 return true;
 
             case R.id.action_renameRoute:
                 if (route != null) {
-                    TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(), "", R.string.dialog_btn_rename, "renameRoute")
+                    TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME)
                             .show(getSupportFragmentManager());
                 }
                 return true;
@@ -87,7 +98,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
                     seconds = (int) timeParts[0];
                 }
 
-                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "routeGoal")
+                TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "", minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL)
                         .show(getSupportFragmentManager());
                 return true;
 
@@ -127,50 +138,73 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
 
     @Override
     public void onTextDialogPositiveClick(String input, String tag) {
-        if (input.equals("") || input.equals(route.getName())) return;
+        if (tag.equals(DIALOG_RENAME)) {
+            if (input.equals("") || input.equals(route.getName())) return;
 
-        ArrayList<Exercise> exercises = D.filterByRoute(route.getName());
-        for (Exercise e : exercises) { e.setRoute(input); }
-        D.importRoutes();
+            //ArrayList<Exercise> exercises = D.filterByRoute(route.getName());
+            //for (Exercise e : exercises) { e.setRoute(input); }
+            //D.importRoutes();
 
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.updateRouteName(route.getName(), input);
-        route.setName(input);
-        writer.updateRoute(route);
-        //writer.close();
+            int existingIdForNewName = Reader.get(this).getRouteId(input);
 
+            // update route
+            if (existingIdForNewName != Route.ID_NON_EXISTANT) {
+                // temp use tag for passing inpu TODO: parameter for passing value
+                BinaryDialog.newInstance(getString(R.string.dialog_title_merge_routes), getString(R.string.dialog_message_merge_routes),
+                        R.string.dialog_btn_merge, input).show(getSupportFragmentManager());
+            }
+            else {
+                writer.updateRouteName(route.getName(), input);
+                route.setName(input);
+                writer.updateRoute(route);
+                finish();
+                startActivity(this, route.get_id(), originId);
+            }
+        }
+    }
+
+    @Override
+    public void onBinaryDialogPositiveClick(String tag) {
+        // mergeDialog TODO: check tag
+        writer.updateRouteName(route.getName(), tag);
+        route.setName(tag);
+        int newId = writer.updateRoute(route);
         finish();
-        startActivity(this, route.get_id(), originId);
+        startActivity(this, newId, originId);
     }
 
     @Override
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
+        if (tag.equals(DIALOG_GOAL)) {
+            route.setGoalPace(M.seconds(0, input1, input2));
+            //Helper.Writer writer = new Helper.Writer(this);
+            writer.updateRoute(route);
+            //writer.close();
 
-        route.setGoalPace(M.seconds(0, input1, input2));
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.updateRoute(route);
-        //writer.close();
-
-        invalidateOptionsMenu();
-        recyclerFragment.updateRecycler();
+            invalidateOptionsMenu();
+            recyclerFragment.updateRecycler();
+        }
     }
 
     @Override
     public void onTimeDialogNegativeClick(String tag) {
+        if (tag.equals(DIALOG_GOAL)) {
+            route.removeGoalPace();
+            //Helper.Writer writer = new Helper.Writer(this);
+            writer.updateRoute(route);
+            //writer.close();
 
-        route.removeGoalPace();
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.updateRoute(route);
-        //writer.close();
-
-        invalidateOptionsMenu();
-        recyclerFragment.updateRecycler();
+            invalidateOptionsMenu();
+            recyclerFragment.updateRecycler();
+        }
     }
 
     @Override
-    public void onFilterDialogPositiveClick(ArrayList<Integer> checkedTypes, String tag) {
-        Prefs.setRouteVisibleTypes(checkedTypes);
-        recyclerFragment.updateRecycler();
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
+        if (tag.equals(DIALOG_FILTER)) {
+            Prefs.setRouteVisibleTypes(checkedTypes);
+            recyclerFragment.updateRecycler();
+        }
     }
 
 }

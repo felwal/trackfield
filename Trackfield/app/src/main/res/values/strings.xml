@@ -113,7 +113,7 @@
   <string name="dialog_title_rename_interval">Rename interval</string>
   <string name="dialog_title_add_distance">Add distance (km)</string>
   <string name="dialog_title_delete_distance">Delete distance?</string>
-  <string name="dialog_title_set_goal">Set goal</string>
+  <string name="dialog_title_set_goal">Set pace goal</string>
   <string name="dialog_title_filter">Filter exercises</string>
   <string name="dialog_title_finish_recording">Finish recording?</string>
   <string name="dialog_title_discard">Discard edits?</string>
@@ -124,7 +124,7 @@
   <string name="dialog_title_merge_routes">Merge routes?</string>
 
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
-  <string name="dialog_message_merge_routes">A route with the selected name already exists. Merge or discard rename?</string>
+  <string name="dialog_message_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
 
   <!-- toasts -->
 
