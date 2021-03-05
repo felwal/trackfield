@@ -1,6 +1,13 @@
 package com.example.trackfield.fragments.recyclerfragments;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.recactivity.DistanceActivity;
@@ -21,7 +28,19 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
     private final C.SortMode[] sortModes = { C.SortMode.DISTANCE, C.SortMode.AMOUNT, C.SortMode.TIME, C.SortMode.PACE };
     private final boolean[] smallestFirsts = { true, false, false, true };
 
-    ////
+    // extends Fragment
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar_main_recs_distances, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     // extends RecyclerFragment
 

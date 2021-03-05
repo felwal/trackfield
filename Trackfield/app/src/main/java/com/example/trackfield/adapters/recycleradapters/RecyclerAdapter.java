@@ -308,7 +308,7 @@ import java.util.ArrayList;
                 // color
                 //if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
                 if (i <= now.get(C.DAY_OF_WEEK) - 1) {
-                    h.bars[i].setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c)));
+                    h.bars[i].setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorAccent, c)));
                 }
             }
         }
@@ -339,10 +339,10 @@ import java.util.ArrayList;
 
                 // color
                 if (i == now.get(C.WEEK_OF_YEAR) - 1) {
-                    bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c)));
+                    bar.setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorPrimary, c)));
                 }
                 else if (i < now.get(C.WEEK_OF_YEAR) - 1) {
-                    bar.setBackgroundColor(c.getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.colorAccent, c)));
+                    bar.setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorAccent, c)));
                 }
             }
         }

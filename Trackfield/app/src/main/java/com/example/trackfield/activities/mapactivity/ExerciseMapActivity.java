@@ -1,9 +1,12 @@
 package com.example.trackfield.activities.mapactivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
+import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Trail;
@@ -57,15 +60,20 @@ public class ExerciseMapActivity extends MapActivity {
         //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
+    @Override
+    protected void recentre() {
+        moveCamera(googleMap, trail.getBounds(), MAP_PADDING, true);
+    }
+
     // set
 
-    public static Polyline setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Context c) {
+    public static Polyline setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
 
-        if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
+        if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
 
         // polyline
         PolylineOptions options = new PolylineOptions();
-        options.color(getColorSelected(c));
+        options.color(getColorSelected(a));
         options.addAll(trail.getLatLngs());
         Polyline polyline = googleMap.addPolyline(options);
 

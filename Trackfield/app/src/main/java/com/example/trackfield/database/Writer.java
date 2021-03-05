@@ -300,11 +300,22 @@ public class Writer extends Helper {
         return _id;
     }
 
+    /**
+     * Updates a route. Merges with existing route if new name already exists.
+     *
+     * @param route Route to update
+     * @return The routeId for the updated route
+     */
     public int updateRoute(Route route) {
+        Route oldRoute = Reader.get().getRoute(route.get_id());
+        boolean nameNotChanged = route.getName().equals(oldRoute.getName());
         int existingIdForNewName = Reader.get().getRouteId(route.getName());
+        boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;
+
+        boolean dontMerge = nameNotChanged || newNameFree;
 
         // update route
-        if (existingIdForNewName == Route.ID_NON_EXISTANT) {
+        if (dontMerge) {
             ContentValues newCv = fillRouteContentValues(route);
 
             String selection = Contract.RouteEntry._ID + " = ?";

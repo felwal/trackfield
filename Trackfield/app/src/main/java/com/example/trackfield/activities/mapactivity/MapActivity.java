@@ -67,6 +67,11 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
+        googleMap.getUiSettings().setCompassEnabled(false);
+
+        // set padding (for compass)
+        //int mapPaddingTop = /*L.statusBarHeight +*/ L.getAttr(R.attr.actionBarSize, this);
+        //googleMap.setPadding(0, mapPaddingTop, 0, 0); // left top right bottom
     }
 
     @Override
@@ -93,10 +98,16 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             case R.id.action_filter:
                 return true;
 
+            case R.id.action_recentre:
+                recentre();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    protected abstract void recentre();
 
     // set
 

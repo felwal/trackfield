@@ -179,7 +179,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.textView_v));
 
                 if (i % 2 == 0) {
-                    subView.setBackgroundColor(getResources().getColor(L.getBackgroundResourceFromAttr(R.attr.panelBackground, this)));
+                    subView.setBackgroundColor(getResources().getColor(L.getAttr(R.attr.panelBackground, this)));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);

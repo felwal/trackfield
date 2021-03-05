@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     public static boolean recreate = false;
 
+    // dialog tags
+    private static final String DIALOG_FILTER_EXERCISES = "filterExercisesDialog";
+    private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
+
     private static final float OVERLAY_ΑLPHA = 0.96f;
 
     // extends AppCompatActivity
@@ -105,13 +109,19 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 return true;
 
             case R.id.action_filter:
-                FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getExerciseVisibleTypes(), R.string.dialog_btn_filter, "filterExercises")
+                FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getExerciseVisibleTypes(), R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
                         .show(getSupportFragmentManager());
                 return true;
 
             case R.id.action_addDistance:
-                DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", BaseDialog.NO_TEXT, "", R.string.dialog_btn_add, "addDistance")
+                DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", BaseDialog.NO_TEXT, "", R.string.dialog_btn_add, DIALOG_ADD_DISTANCE)
                         .show(getSupportFragmentManager());
+                return true;
+
+            case R.id.action_showHidden:
+                Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
+                mainFragment.updateFragment();
+                invalidateOptionsMenu();
                 return true;
 
             default:
@@ -273,17 +283,21 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     @Override
     public void onDecimalDialogPositiveClick(float input, String tag) {
-        int distance = (int) (input * 1000);
-        D.addDistance(distance);
+        if (tag.equals(DIALOG_ADD_DISTANCE)) {
+            int distance = (int) (input * 1000);
+            D.addDistance(distance);
 
-        Writer.get(this).addDistance(new Distance(-1, distance));
-        mainFragment.updateFragment();
+            Writer.get(this).addDistance(new Distance(-1, distance));
+            mainFragment.updateFragment();
+        }
     }
 
     @Override
     public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
-        Prefs.setExerciseVisibleTypes(checkedTypes);
-        mainFragment.updateFragment();
+        if (tag.equals(DIALOG_FILTER_EXERCISES)) {
+            Prefs.setExerciseVisibleTypes(checkedTypes);
+            mainFragment.updateFragment();
+        }
     }
 
     // implements SortSheet

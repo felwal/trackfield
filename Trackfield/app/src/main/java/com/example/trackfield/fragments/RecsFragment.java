@@ -39,7 +39,7 @@ public class RecsFragment extends MainFragment {
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recs, container, false);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
         setToolbarTitle();
         setPagerAdapter();
@@ -47,11 +47,11 @@ public class RecsFragment extends MainFragment {
         return view;
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_toolbar_main_recs, menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }
+    }*/
 
     // set
 
@@ -82,6 +82,8 @@ public class RecsFragment extends MainFragment {
     public void updateFragment() {
         recsPagerAdapter.updateAdapter();
     }
+
+    // implements dialog
 
     @Override
     protected void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {

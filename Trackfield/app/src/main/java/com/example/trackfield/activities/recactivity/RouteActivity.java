@@ -55,7 +55,6 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hideRoute);
         hideItem.setChecked(route.isHidden());
@@ -72,7 +71,6 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_filter:
                 FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getRouteVisibleTypes(), R.string.dialog_btn_filter, DIALOG_FILTER)

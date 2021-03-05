@@ -35,6 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class L {
 
     public static float scale;
+    public static int statusBarHeight;
 
     public enum Direction { LEFT, TOP, RIGHT, BOTTOM }
 
@@ -46,25 +47,32 @@ public class L {
 
     // set
 
-    public static void setScale(Context c) {
+    public static void setScale(Activity a) {
         try {
-            scale = c.getResources().getDisplayMetrics().density;
+            scale = a.getResources().getDisplayMetrics().density;
         }
         catch (Exception e) {
-            handleError(c.getString(R.string.toast_err_display_density), e, c);
+            handleError(a.getString(R.string.toast_err_display_density), e, a);
         }
+
+        // funkar inte / gör status svart
+        // set statusBar size
+        /*a.getWindow().getDecorView().setOnApplyWindowInsetsListener((v, insets) -> {
+            statusBarHeight = insets.getSystemWindowInsetTop();
+            return insets;
+        });*/
     }
 
     public static void setRipple(View v, Context c) {
-        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        int[] attrs = new int[] { R.attr.selectableItemBackground };
         TypedArray typedArray = c.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
         v.setBackgroundResource(backgroundResource);
         typedArray.recycle();
     }
 
-    public static int getBackgroundResourceFromAttr(int attr, Context c) {
-        int[] attrs = new int[]{attr};
+    public static int getAttr(int attrResId, Context c) {
+        int[] attrs = new int[] { attrResId };
         TypedArray typedArray = c.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
         return backgroundResource;
@@ -97,7 +105,6 @@ public class L {
         });
         //getWindow().getDecorView().requestApplyInsets();
 
-        
         // försök 2
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 

@@ -49,8 +49,8 @@ public class StatsFragment extends MainActivity.MainFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_toolbar_main_dev, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater)  {
+        inflater.inflate(R.menu.menu_toolbar_main_stats, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

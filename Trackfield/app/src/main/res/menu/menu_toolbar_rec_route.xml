@@ -19,7 +19,7 @@
         android:id="@+id/action_hideRoute"
         android:title="@string/action_hide"
         android:icon="@drawable/ic_hide_24dp"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_renameRoute"

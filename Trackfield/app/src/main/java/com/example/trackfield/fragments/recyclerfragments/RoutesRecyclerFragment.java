@@ -1,6 +1,14 @@
 package com.example.trackfield.fragments.recyclerfragments;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.activities.recactivity.RouteActivity;
@@ -20,7 +28,28 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
     private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.NAME, C.SortMode.AMOUNT, C.SortMode.DISTANCE, C.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, true, false, false, true };
 
-    ////
+    // extends Fragment
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        // show hidden
+        MenuItem hiddenItem = menu.findItem(R.id.action_showHidden);
+        hiddenItem.setChecked(Prefs.areHiddenRoutesShown());
+        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden_24dp).setTitle(R.string.action_hide_hidden);
+        else hiddenItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_show_hidden);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar_main_recs_routes, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     // extends RecyclerFragment
 

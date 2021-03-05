@@ -22,6 +22,8 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     private final Context c;
 
     private final ViewPager viewPager;
+    private RecyclerFragment intervalFragment;
+    private RecyclerFragment routeFragment;
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
@@ -46,9 +48,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
             case POS_DISTANCES:
                 return new DistancesRecyclerFragment();
             case POS_ROUTES:
-                return new RoutesRecyclerFragment();
+                return (routeFragment = new RoutesRecyclerFragment());
             case POS_INTERVALS:
-                return new IntervalsRecyclerFragment();
+                return (intervalFragment = new IntervalsRecyclerFragment());
             default:
                 return new DistancesRecyclerFragment();
         }
@@ -78,7 +80,16 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void updateAdapter() {
-        getCurrentFragment().updateRecycler();
+        RecyclerFragment currentFragment = getCurrentFragment();
+        currentFragment.updateRecycler();
+
+        // sync showHidden TODO: bättre sätt
+        if (currentFragment instanceof RoutesRecyclerFragment) {
+            intervalFragment.updateRecycler();
+        }
+        else if (currentFragment instanceof IntervalsRecyclerFragment) {
+            routeFragment.updateRecycler();
+        }
     }
 
     public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {

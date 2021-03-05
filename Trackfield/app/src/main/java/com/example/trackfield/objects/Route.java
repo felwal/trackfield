@@ -17,7 +17,7 @@ public class Route implements JSONObjectable {
 
     public enum SortMode { RECENT, NAME, AMOUNT, AVG_DISTANCE, BEST_PACE }
 
-    public static final String NO_NAME = "[Name not found]";
+    public static final String NO_NAME = "[Route not found]";
     public static final int NO_GOAL_PACE = -1;
     public static final int ID_NON_EXISTANT = -1;
 
@@ -50,7 +50,7 @@ public class Route implements JSONObjectable {
 
     public Route() {
         _id = -1;
-        name = "[route not found]";
+        name = NO_NAME;
     }
 
     // set

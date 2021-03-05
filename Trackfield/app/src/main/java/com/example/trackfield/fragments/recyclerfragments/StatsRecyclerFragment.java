@@ -1,5 +1,13 @@
 package com.example.trackfield.fragments.recyclerfragments;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+
+import com.example.trackfield.R;
+import com.example.trackfield.adapters.recycleradapters.RoutesRecyclerAdapter;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.graphing.Graph;
 import com.example.trackfield.graphing.GraphData;
@@ -9,7 +17,21 @@ import com.example.trackfield.toolbox.Prefs;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class StatsRecyclerFragment extends RoutesRecyclerFragment {
+public class StatsRecyclerFragment extends RecyclerFragment {
+
+    // extends Fragment
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar_main_stats, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // extends RecyclerFragment
+
+    @Override
+    protected void setSortModes() {
+    }
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
@@ -47,6 +69,25 @@ public class StatsRecyclerFragment extends RoutesRecyclerFragment {
         itemList.add(yearGraph2);
 
         return itemList;
+    }
+
+    @Override
+    protected void getAdapter() {
+        adapter = new RoutesRecyclerAdapter(items, a);
+    }
+
+    @Override
+    protected void getPrefs() {
+    }
+
+    @Override
+    protected void setPrefs() {
+    }
+
+    // implements RecyclerAdapter
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
     }
 
 }

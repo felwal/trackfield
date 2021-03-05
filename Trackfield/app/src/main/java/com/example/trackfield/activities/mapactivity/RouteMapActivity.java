@@ -43,6 +43,11 @@ public class RouteMapActivity extends MapActivity {
         googleMap.setOnPolylineClickListener(this);
     }
 
+    @Override
+    protected void recentre() {
+        moveCamera(googleMap, trails.getBounds(), MAP_PADDING, true);
+    }
+
     // set
 
     public static void setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
