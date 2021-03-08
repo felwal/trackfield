@@ -2,6 +2,7 @@ package com.example.trackfield.database;
 
 import android.provider.BaseColumns;
 
+import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Route;
 import com.example.trackfield.toolbox.C;
 
@@ -34,11 +35,11 @@ public final class Contract {
         public static final String COLUMN_END_LNG = "end_lng";
         public static final String COLUMN_POLYLINE = "polyline";
 
-        public static final String[] EXERLITE_COLUMNS = {
+        public static final String[] COLUMNS_EXERLITE = {
                 _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE, COLUMN_ROUTE_VAR,
                 COLUMN_INTERVAL, COLUMN_DISTANCE, COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
         };
-        public static final String[] TRAIL_COLUMNS = {
+        public static final String[] COLUMNS_TRAIL = {
                 COLUMN_POLYLINE, COLUMN_START_LAT, COLUMN_START_LNG,
                 COLUMN_END_LAT, COLUMN_END_LNG
         };
@@ -69,6 +70,21 @@ public final class Contract {
                 COLUMN_EXTERNAL_ID + " INTEGER," +
                 COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
+        public static String toString(String[] strings) {
+            /*if (strings == null) return "";
+            String string = strings.toString();
+            string.replace("[", "");
+            string.replace("]", "");
+            return string;*/
+
+            String string = "";
+            for (int i = 0; i < strings.length; i++) {
+                string += strings[i];
+                if (i != strings.length - 1) string += ", ";
+            }
+            return string;
+        }
+
         public static String getColumn(C.SortMode sortMode) {
             switch (sortMode) {
                 case DATE:
@@ -78,7 +94,7 @@ public final class Contract {
                 case TIME:
                     return COLUMN_TIME;
                 case PACE:
-                    return COLUMN_TIME; // TODO
+                    return "(" + COLUMN_TIME + " / " + COLUMN_EFFECTIVE_DISTANCE + ")"; // TODO
                 case NAME:
                     return COLUMN_ROUTE;
                 default:

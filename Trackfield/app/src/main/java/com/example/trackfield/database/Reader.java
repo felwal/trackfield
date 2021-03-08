@@ -107,7 +107,7 @@ public class Reader extends Helper {
     // get exerlites
 
     public Exerlite getExerlite(int _id) {
-        String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] columns = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = Contract.ExerciseEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(_id) };
 
@@ -118,12 +118,12 @@ public class Reader extends Helper {
         return exerlites.size() > 0 ? exerlites.get(0) : null;
     }
 
-    public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types, int amount) {
-        String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+    public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types, int startIndex, int endIndex) {
+        String[] columns = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = selectionTypeFilter("", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy);
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy, Integer.toString(endIndex));
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         cursor.close();
 
@@ -131,7 +131,7 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlites(C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
-        String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] columns = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = selectionTypeFilter("", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -147,7 +147,7 @@ public class Reader extends Helper {
             return getExerlites(sortMode, smallestFirst, Prefs.getExerciseVisibleTypes());
         }
 
-        String[] columns = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] columns = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = "(" +
                 Contract.ExerciseEntry._ID + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_DATE + " LIKE" + "'%" + search + "%' OR " +
@@ -172,7 +172,7 @@ public class Reader extends Helper {
 
     @Deprecated
     public ArrayList<Exerlite> getExerlitesByRoute(String route, C.SortMode sortMode, boolean smallestFirst) {
-        String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
         String[] selectionArgs = { route };
         String orderBy = orderBy(sortMode, smallestFirst);
@@ -186,7 +186,7 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
-        String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + selectionTypeFilter(" AND", types);
         //String[] selectionArgs = { Integer.toString(routeId) };
         String orderBy = orderBy(sortMode, smallestFirst);
@@ -204,25 +204,66 @@ public class Reader extends Helper {
         int minDist = M.minDistance(distance);
         int maxDist = M.maxDistance(distance);
 
-        String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
-        //String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + (Prefs.includeLonger() ? " >= " + minDist : " BETWEEN " + minDist + " AND " + maxDist) + filter;
-        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + selectionTypeFilter(" AND", types);
-        //String drivenSelection = Contract.ExerciseEntry.COLUMN_DISTANCE + " = " + Exercise.DISTANCE_DRIVEN + filter;
-        String orderBy = orderBy(sortMode, smallestFirst);
+        /*String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
+        String typeFilter = selectionTypeFilter(" AND", types);
 
+        // within bounds
+        String selection = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + " AND " +
+                Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " <= " + maxDist + typeFilter;
+        String orderBy = orderBy(sortMode, smallestFirst);
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         cursor.close();
 
-        // temp, behöver sortera igen
-        if (!Prefs.includeLonger()) D.removeLonger(exerlites, maxDist);
-        D.sortExerlites(exerlites, sortMode, smallestFirst);
+        // top 3
+        String selectionTop3 = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE + " >= " + minDist + typeFilter;
+        String orderTop3 = orderBy(C.SortMode.PACE, true);
+        Cursor cursorTop3 = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selectionTop3, null, null, null, orderTop3, "3");
+        ArrayList<Exerlite> top3 = unpackLiteCursor(cursorTop3);
+        cursorTop3.close();
+
+        // mark
+        for (int i = 0; i < top3.size(); i++) top3.get(i).setTop(i + 1);
+
+        // merge
+        exerlites.replaceAll((oldValue -> {
+            for (Exerlite top : top3) {
+                if (oldValue.sameItemAs(top)) {
+                    top3.remove(top);
+                    return top;
+                }
+            }
+            return oldValue;
+        }));
+        exerlites.addAll(top3);*/
+
+        String exerliteColumns = Contract.ExerciseEntry.toString(Contract.ExerciseEntry.COLUMNS_EXERLITE);
+        String orderByPace = orderBy(C.SortMode.TIME, true);
+        String table = Contract.ExerciseEntry.TABLE_NAME;
+        String id = Contract.ExerciseEntry._ID;
+        String dist = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
+
+        // TODO: gammal version
+        String queryString3p25 = "SELECT row_number over (ORDER BY " + orderByPace + ") AS rownum, " + exerliteColumns +
+                " FROM " + table +
+                " WHERE " + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist + " AND " + dist + " <= " + maxDist + ")" +
+                " OR " + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist + " ORDER BY " + orderByPace + " LIMIT 3)" +
+                " ORDER BY " + orderByPace;//orderBy(sortMode, smallestFirst);
+
+        Cursor cursor = db.rawQuery(queryString3p25, null);
+        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
+        cursor.close();
 
         return exerlites;
+
+        /*String selection = Contract.ExerciseEntry.COLUMN_DISTANCE + (Prefs.includeLonger() ? " >= " + minDist : " BETWEEN " + minDist + " AND " + maxDist) + filter;
+        // temp, behöver sortera igen
+        if (!Prefs.includeLonger()) D.removeLonger(top3, maxDist);
+        D.sortExerlites(top3, sortMode, smallestFirst);*/
     }
 
     public ArrayList<Exerlite> getExerlitesByInterval(String interval, C.SortMode sortMode, boolean smallestFirst) {
-        String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " = ?";
         String[] selectionArgs = { interval };
         String orderBy = orderBy(sortMode, smallestFirst);
@@ -237,7 +278,7 @@ public class Reader extends Helper {
     }
 
     public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, C.SortMode sortMode, boolean smallestFirst, @NonNull ArrayList<Integer> types) {
-        String[] colums = Contract.ExerciseEntry.EXERLITE_COLUMNS;
+        String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection = Contract.ExerciseEntry.COLUMN_DATE + " >= " + M.epoch(M.first(min, max)) +
                 " AND " + Contract.ExerciseEntry.COLUMN_DATE + " <= " + M.epoch(M.last(min, max)) +
                 selectionTypeFilter(" AND", types);
@@ -267,7 +308,7 @@ public class Reader extends Helper {
 
     public ArrayList<Route> getRoutes(C.SortMode sortMode, boolean smallestFirst, boolean includeHidden) {
         String selection = includeHidden ? null : Contract.RouteEntry.COLUMN_HIDDEN + " = ?"; //+ 0 + " AND " + Contract.RouteEntry.COLUMN_AMOUNT + " >= " + 2;
-        String[] selectionArgs = includeHidden ? null : new String[]{ Integer.toString(0) };
+        String[] selectionArgs = includeHidden ? null : new String[] { Integer.toString(0) };
         String orderBy = null;//orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(Contract.RouteEntry.TABLE_NAME, null, selection, selectionArgs, null, null, orderBy);
@@ -458,7 +499,7 @@ public class Reader extends Helper {
     public Trail getTrail(int _id) {
         Trail trail = null;
 
-        String[] columns = Contract.ExerciseEntry.TRAIL_COLUMNS;
+        String[] columns = Contract.ExerciseEntry.COLUMNS_TRAIL;
         String selection = Contract.ExerciseEntry._ID + " = " + _id;
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
