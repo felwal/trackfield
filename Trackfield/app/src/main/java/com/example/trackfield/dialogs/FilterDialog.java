@@ -1,15 +1,12 @@
 package com.example.trackfield.dialogs;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.objects.Exercise;
@@ -33,10 +30,10 @@ public class FilterDialog extends BaseDialog {
 
     ////
 
-    public static FilterDialog newInstance(String title, ArrayList<Integer> checkedTypes, @StringRes int posBtnTxtId, String tag) {
+    public static FilterDialog newInstance(@StringRes int titleRes, ArrayList<Integer> checkedTypes, @StringRes int posBtnTxtRes, String tag) {
 
         FilterDialog instance = new FilterDialog();
-        Bundle bundle = putBundleBase(title, "", posBtnTxtId, tag);
+        Bundle bundle = putBundleBase(titleRes, NO_RES, posBtnTxtRes, tag);
 
         bundle.putIntegerArrayList(BUNDLE_CHECKED_TYPES, checkedTypes);
 
@@ -80,7 +77,7 @@ public class FilterDialog extends BaseDialog {
         setChips(chipGroup);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtId, (dialog, id) -> {
+                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
                     try {
                         listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag);
                     }
@@ -88,7 +85,7 @@ public class FilterDialog extends BaseDialog {
                         L.toast(a.getString(R.string.toast_err_no_input), a);
                     }
                 })
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel());
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }

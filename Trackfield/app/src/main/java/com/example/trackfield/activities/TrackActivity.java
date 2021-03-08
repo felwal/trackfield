@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Coordinate;
 import com.example.trackfield.toolbox.C;
@@ -65,8 +66,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     // consts
     private static final int MAP_ZOOM = 16; // 15
     private static final int DISTANCE_DECIMALS = 2;
-
-    private static final String TAG_FINISH_RECORDING = "finishRecording";
+    private static final String DIALOG_FINISH_TRACKING = "finishTrackingDialog";
 
     ////
 
@@ -225,7 +225,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void finishDialog() {
-        BinaryDialog.newInstance(getString(R.string.dialog_title_finish_recording), "", R.string.dialog_btn_finish, "finishTracking")
+        BinaryDialog.newInstance(R.string.dialog_title_finish_recording, BaseDialog.NO_RES, R.string.dialog_btn_finish, DIALOG_FINISH_TRACKING)
                 .show(getSupportFragmentManager());
     }
 
@@ -242,10 +242,12 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     // implements
 
     @Override
-    public void onBinaryDialogPositiveClick(String tag) {
-        if (coordinates.lastKey() < 30) { finish(); return; }
-        saveExercise();
-        finish();
+    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+        if (tag.equals(DIALOG_FINISH_TRACKING)) {
+            if (coordinates.lastKey() < 30) { finish(); return; }
+            saveExercise();
+            finish();
+        }
     }
 
     // LocationListener implements

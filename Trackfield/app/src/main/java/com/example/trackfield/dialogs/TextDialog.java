@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 
@@ -27,10 +26,10 @@ public class TextDialog extends BaseDialog {
 
     ////
 
-    public static TextDialog newInstance(String title, String message, String text, String hint, @StringRes int posBtnTxtId, String tag) {
+    public static TextDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, String text, String hint, @StringRes int posBtnTxtRes, String tag) {
 
         TextDialog instance = new TextDialog();
-        Bundle bundle = putBundleBase(title, message, posBtnTxtId, tag);
+        Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
         bundle.putString(BUNDLE_TEXT, text);
         bundle.putString(BUNDLE_HINT, hint);
@@ -79,11 +78,11 @@ public class TextDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtId, (dialog, id) -> {
+                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
                     final String input = et.getText().toString();
                     listener.onTextDialogPositiveClick(input, tag);
                 })
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel());
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }

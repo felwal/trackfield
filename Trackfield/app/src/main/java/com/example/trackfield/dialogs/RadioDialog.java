@@ -8,9 +8,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
-import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
@@ -30,10 +30,10 @@ public class RadioDialog extends BaseDialog {
 
     ////
 
-    public static RadioDialog newInstance(String title, String message, ArrayList<String> radioButtonTexts, int selectedIndex, String tag) {
+    public static RadioDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, ArrayList<String> radioButtonTexts, int selectedIndex, String tag) {
 
         RadioDialog instance = new RadioDialog();
-        Bundle bundle = putBundleBase(title, message, -1, tag);
+        Bundle bundle = putBundleBase(titleRes, messageRes, NO_RES, tag);
 
         bundle.putStringArrayList(BUNDLE_RADIO_TEXTS, radioButtonTexts);
         bundle.putInt(BUNDLE_SELECTED_INDEX, selectedIndex);
@@ -81,7 +81,7 @@ public class RadioDialog extends BaseDialog {
         final RadioGroup group = view.findViewById(R.id.radioGroup_dialog);
 
         builder.setView(view).setTitle(title)
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel());
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         // inflate radio buttons
         for (int i = 0; i < radioTexts.size(); i++) {

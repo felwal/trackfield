@@ -16,8 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.api.StravaApi;
-import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
@@ -109,13 +107,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 return true;
 
             case R.id.action_filter:
-                FilterDialog.newInstance(getString(R.string.dialog_title_filter), Prefs.getExerciseVisibleTypes(), R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
+                FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getExerciseVisibleTypes(),
+                        R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
                         .show(getSupportFragmentManager());
                 return true;
 
             case R.id.action_addDistance:
-                DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", BaseDialog.NO_TEXT, "", R.string.dialog_btn_add, DIALOG_ADD_DISTANCE)
-                        .show(getSupportFragmentManager());
+                DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT, "",
+                        R.string.dialog_btn_add, DIALOG_ADD_DISTANCE).show(getSupportFragmentManager());
                 return true;
 
             case R.id.action_showHidden:
@@ -135,8 +134,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (!D.gameOn) {
             if (F.shouldAskPermissions(this)) F.askPermissions(this);
             Prefs.SetUpAndLoad(this);
-            //F.loadPrefs(this);
-            //F.loadExternal(this);
             D.gameOn = true;
         }
     }

@@ -21,20 +21,22 @@ public abstract class BaseDialog extends DialogFragment {
     protected LayoutInflater inflater;
 
     // arguments
-    protected String title, message, tag;
+    protected String title;
+    protected String message;
+    protected String tag;
     @StringRes
-    protected int posBtnTxtId = R.string.dialog_btn_ok;
+    protected int posBtnTxtRes = R.string.dialog_btn_ok;
     @StringRes
-    protected int negBtnTxtId = R.string.dialog_btn_cancel;
+    protected int negBtnTxtRes = R.string.dialog_btn_cancel;
 
-    public final static int NO_TEXT = -1;
     public final static int NO_RES = -1;
+    public final static int NO_FLOAT_TEXT = -1;
 
     // bundle
-    protected static final String BUNDLE_TITLE = "title";
-    protected static final String BUNDLE_MESSAGE = "message";
-    protected static final String BUNDLE_POSITIVE_BUTTON = "positiveButtonTextId";
-    protected static final String BUNDLE_NEGATIVE_BUTTON = "negativeButtonTextId";
+    protected static final String BUNDLE_TITLE_RES = "title";
+    protected static final String BUNDLE_MESSAGE_RES = "message";
+    protected static final String BUNDLE_POSITIVE_BUTTON_RES = "positiveButtonText";
+    protected static final String BUNDLE_NEGATIVE_BUTTON_RES = "negativeButtonText";
     protected final static String BUNDLE_TAG = "tag";
 
     // extends DialogFragment
@@ -52,12 +54,12 @@ public abstract class BaseDialog extends DialogFragment {
 
     // tools
 
-    protected static Bundle putBundleBase(String title, String message, @StringRes int posBtnTxtId, String tag) {
+    protected static Bundle putBundleBase(@StringRes int titleRes, @StringRes int messageRes, @StringRes int posBtnTxtRes, String tag) {
         Bundle bundle = new Bundle();
 
-        bundle.putString(BUNDLE_TITLE, title);
-        bundle.putString(BUNDLE_MESSAGE, message);
-        bundle.putInt(BUNDLE_POSITIVE_BUTTON, posBtnTxtId);
+        bundle.putInt(BUNDLE_TITLE_RES, titleRes);
+        bundle.putInt(BUNDLE_MESSAGE_RES, messageRes);
+        bundle.putInt(BUNDLE_POSITIVE_BUTTON_RES, posBtnTxtRes);
         bundle.putString(BUNDLE_TAG, tag);
 
         return bundle;
@@ -67,11 +69,15 @@ public abstract class BaseDialog extends DialogFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            title = bundle.getString(BUNDLE_TITLE, "");
-            message = bundle.getString(BUNDLE_MESSAGE, "");
-            posBtnTxtId = bundle.getInt(BUNDLE_POSITIVE_BUTTON, posBtnTxtId);
-            negBtnTxtId = bundle.getInt(BUNDLE_NEGATIVE_BUTTON, negBtnTxtId);
+            int titleRes = bundle.getInt(BUNDLE_TITLE_RES, NO_RES);
+            int messageRes = bundle.getInt(BUNDLE_MESSAGE_RES, NO_RES);
+            posBtnTxtRes = bundle.getInt(BUNDLE_POSITIVE_BUTTON_RES, posBtnTxtRes);
+            negBtnTxtRes = bundle.getInt(BUNDLE_NEGATIVE_BUTTON_RES, negBtnTxtRes);
             tag = bundle.getString(BUNDLE_TAG, defaultTag);
+
+            // convert from res
+            title = titleRes == NO_RES ? "" : getString(titleRes);
+            message = messageRes == NO_RES ? "" : getString(messageRes);
         }
 
         return bundle;

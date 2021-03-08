@@ -43,9 +43,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     FitnessApi fit;
     StravaApi strava;
 
-    // tags
-    private static final String TAG_THEME = "theme";
-    private static final String TAG_COLOR = "color";
+    // dialog tags
+    private static final String DIALOG_THEME = "themeDialog";
+    private static final String DIALOG_COLOR = "colorDialog";
+    private static final String DIALOG_MASS = "massDialog";
 
     ////
 
@@ -134,7 +135,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // display options
         inflateHeader("Display Options");
-        //inflateSwitchItem("Show hidden routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
+        //inflateSwitchItem("Hide singleton routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
         inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
         //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
@@ -143,14 +144,16 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // look
         inflateHeader("Look");
         inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false,
-                RadioDialog.newInstance(getString(R.string.dialog_title_theme), "", C.themeNames, Prefs.getThemeInt(), TAG_THEME));
+                RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
+                        C.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
         inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true,
-                RadioDialog.newInstance(getString(R.string.dialog_title_color), "", C.colorNames, Prefs.getColor(), TAG_COLOR));
+                RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
+                        C.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
         // file
         inflateHeader("File");
-        inflateClickItem("Export Json", "", false, v -> F.exportJson(a));
-        inflateClickItem("Import Json", "", true, v -> F.importJson(a));
+        inflateClickItem("Export json", "", false, v -> F.exportJson(a));
+        inflateClickItem("Import json", "", true, v -> F.importJson(a));
 
         // Strava
         inflateHeader("Strava");
@@ -167,10 +170,11 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // profile
         inflateHeader("Profile");
         inflateDialogItem("Mass", Prefs.getMass() + " kg", false,
-                DecimalDialog.newInstance(getString(R.string.dialog_title_mass), "", Prefs.getMass(), "Kg", R.string.dialog_btn_set, "mass"));
+                DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
+                        Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
 
         final LocalDate bd = Prefs.getBirthday();
-        final View birth = inflateTextView("Birthday", bd != null ? bd.format(C.FORMATTER_CAPTION) : "", true);
+        final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(C.FORMATTER_CAPTION), true);
         birth.setOnClickListener(v -> {
             int yearSelect, monthSelect, daySelect;
             if (bd == null) {
@@ -257,8 +261,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     @Override
     public void onRadioDialogClick(int index, String tag) {
-
-        if (tag.equals(TAG_THEME)) {
+        if (tag.equals(DIALOG_THEME)) {
             switch (index) {
                 case 0:
                     if (Prefs.isThemeLight()) Prefs.setTheme(false);
@@ -270,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                     break;
             }
         }
-        else if (tag.equals(TAG_COLOR)) {
+        else if (tag.equals(DIALOG_COLOR)) {
             switch (index) {
                 case 0:
                     if (!Prefs.isColorMono()) Prefs.setColorMono();
@@ -287,7 +290,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     @Override
     public void onDecimalDialogPositiveClick(float input, String tag) {
-        Prefs.setMass(input);
+        if (tag.equals(DIALOG_MASS)) {
+            Prefs.setMass(input);
+        }
     }
 
     // interface

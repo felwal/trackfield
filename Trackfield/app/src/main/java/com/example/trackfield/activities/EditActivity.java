@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
+import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
@@ -281,7 +282,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void showDiscardDialog() {
-        BinaryDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard, DIALOG_DISCARD)
+        BinaryDialog.newInstance(R.string.dialog_title_discard, BaseDialog.NO_RES, R.string.dialog_btn_discard, DIALOG_DISCARD)
                 .show(getSupportFragmentManager());
     }
 
@@ -458,7 +459,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     // implements BinaryDialog
 
     @Override
-    public void onBinaryDialogPositiveClick(String tag) {
+    public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DISCARD)) finish();
     }
 

@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.toolbox.L;
@@ -29,10 +28,10 @@ public class DecimalDialog extends BaseDialog {
 
     ////
 
-    public static DecimalDialog newInstance(String title, String message, float text, String hint, @StringRes int posBtnTxtId, String tag) {
+    public static DecimalDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, float text, String hint, @StringRes int posBtnTxtRes, String tag) {
 
         DecimalDialog instance = new DecimalDialog();
-        Bundle bundle = putBundleBase(title, message, posBtnTxtId, tag);
+        Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
         bundle.putFloat(BUNDLE_TEXT, text);
         bundle.putString(BUNDLE_HINT, hint);
@@ -77,11 +76,11 @@ public class DecimalDialog extends BaseDialog {
         final EditText et = dialogView.findViewById(R.id.editText_numberDecimalField);
 
         et.setHint(hint);
-        if (text != NO_TEXT) et.setText(Float.toString(text));
+        if (text != NO_FLOAT_TEXT) et.setText(Float.toString(text));
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtId, (dialog, id) -> {
+                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
                     try {
                         final float input = Float.parseFloat(et.getText().toString());
                         listener.onDecimalDialogPositiveClick(input, tag);
@@ -90,7 +89,7 @@ public class DecimalDialog extends BaseDialog {
                         L.toast(a.getString(R.string.toast_err_no_input), a);
                     }
                 })
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel());
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }

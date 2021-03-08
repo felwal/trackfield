@@ -5,21 +5,39 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentManager;
 
 public class BinaryDialog extends BaseDialog {
 
     protected DialogListener listener;
 
+    @Nullable
+    private String passValue = null;
+
+    private final static String BUNDLE_PASS_VALUE = "passValue";
+
     private final static String TAG_DEFAULT = "binaryDialog";
 
     ////
 
-    public static BinaryDialog newInstance(String title, String message, @StringRes int posBtnTxtId, String tag) {
+    public static BinaryDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, @StringRes int posBtnTxtRes, String tag) {
 
         BinaryDialog instance = new BinaryDialog();
-        Bundle bundle = putBundleBase(title, message, posBtnTxtId, tag);
+        Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
+
+        instance.setArguments(bundle);
+
+        return instance;
+    }
+
+    public static BinaryDialog newInstance(@StringRes int titleRes, @StringRes int messageRes,
+                                           @StringRes int posBtnTxtRes, @Nullable String passValue, String tag) {
+
+        BinaryDialog instance = new BinaryDialog();
+        Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
+
+        bundle.putString(BUNDLE_PASS_VALUE, passValue);
 
         instance.setArguments(bundle);
 
@@ -44,7 +62,8 @@ public class BinaryDialog extends BaseDialog {
 
     @Override
     protected void unpackBundle() {
-        unpackBundleBase(TAG_DEFAULT);
+        Bundle bundle = unpackBundleBase(TAG_DEFAULT);
+        passValue = bundle.getString(BUNDLE_PASS_VALUE, null);
     }
 
     @Override
@@ -53,8 +72,8 @@ public class BinaryDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setTitle(title)
-                .setPositiveButton(posBtnTxtId, (dialog, id) -> listener.onBinaryDialogPositiveClick(tag))
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel());
+                .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onBinaryDialogPositiveClick(passValue, tag))
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }
@@ -62,7 +81,9 @@ public class BinaryDialog extends BaseDialog {
     // interface
 
     public interface DialogListener {
-        void onBinaryDialogPositiveClick(String tag);
+
+        default void onBinaryDialogPositiveClick(String passValue, String tag) {}
+
     }
 
 }

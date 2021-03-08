@@ -47,7 +47,7 @@ public class StravaApi {
 
     private static final String LOG_TAG = "Strava API";
 
-    // json
+    // strava response json keys
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
     private static final String JSON_DISTANCE = "distance";
@@ -58,6 +58,10 @@ public class StravaApi {
     private static final String JSON_POLYLINE = "summary_polyline";
     private static final String JSON_START = "start_latlng";
     private static final String JSON_END = "end_latlng";
+
+    private static final String JSON_ACCESS_TOKEN = "access_token";
+    private static final String JSON_REFRESH_TOKEN = "refresh_token";
+    private static final String JSON_EXPIRES_AT = "expires_at";
 
     ////
 
@@ -84,8 +88,7 @@ public class StravaApi {
 
     private void finishAuthorization(Uri appLinkData) {
         Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast(a.getString(R.string.toast_api_auth_successful), a);
-        //L.toast("Authorization successful; authCode: " + Prefs.getAuthCode(), a);
+        L.toast(a.getString(R.string.toast_strava_auth_successful), a);
     }
 
     public void handleIntent(Intent appLinkIntent) {
@@ -104,9 +107,9 @@ public class StravaApi {
                         updateExistingManually(convertToExercise(response));
 
                         Log.i(LOG_TAG, "response: " + response.toString());
-                        L.toast(a.getString(R.string.toast_api_request_successful), a);
+                        L.toast(a.getString(R.string.toast_strava_req_activity_successful), a);
                     },
-                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
+                    e -> L.handleError(a.getString(R.string.toast_strava_req_activity_err), e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -123,14 +126,14 @@ public class StravaApi {
 
                             Log.i(LOG_TAG, "response: " + obj.toString());
                             //L.toast("response: " + obj.toString(), a);
-                            L.toast(a.getString(R.string.toast_api_request_successful), a);
+                            L.toast(a.getString(R.string.toast_strava_req_activity_successful), a);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
                             L.handleError(a.getString(R.string.toast_err_parse_jsonobj), e, a);
                         }
                     },
-                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
+                    e -> L.handleError(a.getString(R.string.toast_strava_req_activity_err), e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -152,9 +155,9 @@ public class StravaApi {
                         }
                         if (response.length() == PER_PAGE) requestActivities(page + 1);
 
-                        L.toast(a.getString(R.string.toast_api_request_successful), a);
+                        L.toast(a.getString(R.string.toast_strava_req_activity_successful), a);
                     },
-                    e -> L.handleError(a.getString(R.string.toast_err_strava_response), e, a));
+                    e -> L.handleError(a.getString(R.string.toast_strava_req_activity_err), e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -199,6 +202,7 @@ public class StravaApi {
                 end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
             }
             catch (Exception e) {
+                // no start or end, leave as null; do nothing
             }
 
             // TODO: import
@@ -216,7 +220,7 @@ public class StravaApi {
         }
         catch (JSONException e) {
             e.printStackTrace();
-            L.handleError("Failed to convert jsonobj to exercise, returning null", e, a);
+            L.handleError("Failed parse JSONObject, returning null", e, a);
             return null;
         }
     }
@@ -305,8 +309,8 @@ public class StravaApi {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getAccessTokenURL(), null,
                     response -> {
                         try {
-                            Prefs.setAccessToken(response.getString("access_token"));
-                            Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString("expires_at"))));
+                            Prefs.setAccessToken(response.getString(JSON_ACCESS_TOKEN));
+                            Prefs.setAccessTokenExpiration(M.ofEpoch(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
 
                             //L.toast("accessToken: " + Prefs.getAccessToken(), c);
                             Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());
@@ -314,11 +318,11 @@ public class StravaApi {
                         }
                         catch (JSONException e) {
                             //e.printStackTrace();
-                            L.handleError("failed to parse accessToken from Strava", e, c);
+                            L.handleError("Failed to parse accessToken from Strava", e, c);
                         }
                     },
                     e -> {
-                        L.handleError("failed to request new accessToken, requesting new refreshToken...", e, c);
+                        L.handleError(c.getString(R.string.toast_strava_req_access_err), e, c);
 
                         // request refreshToken
                         ((TokenRequester) refreshToken -> ((TokenRequester) this).requestAccessToken(c)).requestRefreshToken(true, c);
@@ -335,18 +339,18 @@ public class StravaApi {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getRefreshTokenURL(), null,
                     response -> {
                         try {
-                            Prefs.setRefreshToken(response.getString("refresh_token"));
+                            Prefs.setRefreshToken(response.getString(JSON_REFRESH_TOKEN));
 
-                            //L.toast("refreshToken: " + Prefs.getRefreshToken(), c);
+                            L.toast(c.getString(R.string.toast_strava_req_refresh_successful), c);
                             Log.i(LOG_TAG, "response refreshToken: " + Prefs.getRefreshToken());
                             onTokenReady(Prefs.getRefreshToken());
                         }
                         catch (JSONException e) {
                             //e.printStackTrace();
-                            L.handleError("failed to parse refreshToken", e, c);
+                            L.handleError("Failed to parse refreshToken", e, c);
                         }
                     },
-                    e -> L.handleError("failed to request refreshToken, please redo authorizaition", e, c)); // TODO: auto-prompt
+                    e -> L.handleError(c.getString(R.string.toast_strava_req_refresh_err), e, c)); // TODO: auto-prompt
 
             queue.add(request);
         }

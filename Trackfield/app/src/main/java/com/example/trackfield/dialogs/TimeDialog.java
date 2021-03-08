@@ -28,22 +28,23 @@ public class TimeDialog extends BaseDialog {
     private final static String BUNDLE_TEXT2 = "text2";
     private final static String BUNDLE_HINT1 = "hint1";
     private final static String BUNDLE_HINT2 = "hint2";
-    private final static String BUNDLE_NEUTRAL_BUTTON = "neutralButtonTextId";
+    private final static String BUNDLE_NEUTRAL_BUTTON_RES = "neutralButtonTextId";
 
     private final static String TAG_DEFAULT = "timeDialog";
 
     ////
 
-    public static TimeDialog newInstance(String title, String message, int text1, int text2, String hint1, String hint2, @StringRes int posBtnTxtId, @StringRes int neuBtnTxtId, String tag) {
+    public static TimeDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, int text1, int text2, String hint1, String hint2,
+                                         @StringRes int posBtnTxtRes, @StringRes int neuBtnTxtRes, String tag) {
 
         TimeDialog instance = new TimeDialog();
-        Bundle bundle = putBundleBase(title, message, posBtnTxtId, tag);
+        Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
         bundle.putInt(BUNDLE_TEXT1, text1);
         bundle.putInt(BUNDLE_TEXT2, text2);
         bundle.putString(BUNDLE_HINT1, hint1);
         bundle.putString(BUNDLE_HINT2, hint2);
-        bundle.putInt(BUNDLE_NEUTRAL_BUTTON, neuBtnTxtId);
+        bundle.putInt(BUNDLE_NEUTRAL_BUTTON_RES, neuBtnTxtRes);
 
         instance.setArguments(bundle);
 
@@ -74,7 +75,7 @@ public class TimeDialog extends BaseDialog {
         text2 = bundle.getInt(BUNDLE_TEXT2, 0);
         hint1 = bundle.getString(BUNDLE_HINT1, "");
         hint2 = bundle.getString(BUNDLE_HINT2, "");
-        neuBtnTxtId = bundle.getInt(BUNDLE_NEUTRAL_BUTTON, R.string.action_delete);
+        neuBtnTxtId = bundle.getInt(BUNDLE_NEUTRAL_BUTTON_RES, R.string.action_delete);
     }
 
     @Override
@@ -87,8 +88,8 @@ public class TimeDialog extends BaseDialog {
 
         et1.setHint(hint1);
         et2.setHint(hint2);
-        if (text1 != NO_TEXT) et1.setText(Integer.toString(text1));
-        if (text2 != NO_TEXT) et2.setText(Integer.toString(text2));
+        if (text1 != NO_FLOAT_TEXT) et1.setText(Integer.toString(text1));
+        if (text2 != NO_FLOAT_TEXT) et2.setText(Integer.toString(text2));
         if (!message.equals("")) builder.setMessage(message);
 
         // require selection
@@ -97,7 +98,7 @@ public class TimeDialog extends BaseDialog {
         //chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtId, (dialog, id) -> {
+                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
                     try {
                         final int input1 = Integer.parseInt(et1.getText().toString());
                         final int input2 = Integer.parseInt(et2.getText().toString());
@@ -107,7 +108,7 @@ public class TimeDialog extends BaseDialog {
                         L.toast(a.getString(R.string.toast_err_no_input), a);
                     }
                 })
-                .setNegativeButton(negBtnTxtId, (dialog, id) -> getDialog().cancel())
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel())
                 .setNeutralButton(neuBtnTxtId, (dialog, id) -> listener.onTimeDialogNegativeClick(tag));
 
         return builder.show();

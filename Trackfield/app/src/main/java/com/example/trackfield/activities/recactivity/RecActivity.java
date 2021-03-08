@@ -38,7 +38,6 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         D.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec);

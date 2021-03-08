@@ -23,6 +23,7 @@ import com.example.trackfield.activities.recactivity.RouteActivity;
 import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
+import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
@@ -57,6 +58,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     private static final int MAP_MAX_ZOOM = 17;
     protected static final int MAP_PADDING = 50;
+
+    private final static String DIALOG_DELETE_EXERCISE = "deleteExerciseDialog";
 
     ////
 
@@ -131,7 +134,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 return true;
 
             case R.id.action_delete:
-                BinaryDialog.newInstance(getString(R.string.dialog_title_delete_exercise), "", R.string.dialog_btn_delete, "deleteExercise")
+                BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, BaseDialog.NO_RES, R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
                         .show(getSupportFragmentManager());
                 return true;
             case R.id.action_update:
@@ -331,22 +334,21 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     // implements BinaryDialog, OnMapReadyCallback
 
     @Override
-    public void onBinaryDialogPositiveClick(String tag) {
+    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+        if (tag.equals(DIALOG_DELETE_EXERCISE)) {
+            try {
+                L.toast(Writer.get(this).deleteExercise(exercise, this), this);
+            }
+            catch (Exception e) {
+                L.handleError(e, this);
+            }
 
-        //Helper.Writer writer = new Helper.Writer(this);
-        try {
-            L.toast(Writer.get(this).deleteExercise(exercise, this), this);
+            /*try { D.exercises.remove(exercise.getId()); }
+            catch (Exception e) { L.handleError(e, this); }
+            D.edited();*/
+
+            finish();
         }
-        catch (Exception e) {
-            L.handleError(e, this);
-        }
-        //writer.close();
-
-        /*try { D.exercises.remove(exercise.getId()); }
-        catch (Exception e) { L.handleError(e, this); }
-        D.edited();*/
-
-        finish();
     }
 
     @Override

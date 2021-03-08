@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Writer;
+import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.fragments.recyclerfragments.IntervalRecyclerFragment;
 
@@ -14,7 +15,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     private String interval;
 
     public static final String EXTRA_INTERVAL = "interval";
-    private static final String TAG_RENAME_INTERVAL = "renameInterval";
+    private static final String DIALOG_RENAME_INTERVAL = "renameIntervalDialog";
 
     ////
 
@@ -38,7 +39,8 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
         switch (item.getItemId()) {
             case R.id.action_renameInterval:
                 if (interval != null) {
-                    TextDialog.newInstance(getString(R.string.dialog_title_rename_interval), "", interval, "", R.string.dialog_btn_rename, "renameInterval")
+                    TextDialog.newInstance(R.string.dialog_title_rename_interval, BaseDialog.NO_RES,
+                            interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
                             .show(getSupportFragmentManager());;
                 }
                 return true;
@@ -73,12 +75,14 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     // implements TextDialog
 
     @Override public void onTextDialogPositiveClick(String input, String tag) {
-        if (input.equals("")) return;
+        if (tag.equals(DIALOG_RENAME_INTERVAL)) {
+            if (input.equals("")) return;
 
-        Writer.get(this).updateInterval(interval, input);
+            Writer.get(this).updateInterval(interval, input);
 
-        finish();
-        startActivity(this, input, originId);
+            finish();
+            startActivity(this, input, originId);
+        }
     }
 
 }
