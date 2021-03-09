@@ -294,7 +294,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             stravaIv.setVisibility(View.GONE);
         }
         else {
-            stravaIv.setOnClickListener(v -> StravaApi.launchActivity(exercise.getExternalId(), this));
+            stravaIv.setOnClickListener(v -> StravaApi.launchStravaActivity(exercise.getExternalId(), this));
         }
     }
 

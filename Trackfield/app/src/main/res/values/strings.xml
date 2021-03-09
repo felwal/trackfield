@@ -54,6 +54,9 @@
   <string name="tv_text_boarding_subtitle">Welcome to</string>
   <string name="tv_text_boarding_title">Trackfield!</string>
   <string name="tv_text_boarding_caption">Hej mamma</string>
+
+  <!-- buttons -->
+
   <string name="btn_text_boarding_start">Get started</string>
 
   <!-- actions -->
@@ -147,7 +150,9 @@
 
   <!-- api certificate -->
 
+  <!-- debug, gotten from debug keystore -->
   <string name="sha1_certificate_fingerprint">***REMOVED***</string>
+  <!-- restricted to: Maps SDK for Android, Fitness API -->
   <string name="google_api_key">***REMOVED***</string>
 
   <!-- map styles -->

@@ -141,6 +141,7 @@ public class StravaApi {
 
     private void requestActivities(final int page) {
         ((TokenRequester) accessToken -> {
+
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                     response -> {
                         for (int index = 0; index < response.length(); index++) {
@@ -286,7 +287,7 @@ public class StravaApi {
 
     // launch
 
-    public static void launchActivity(long stravaId, Activity a) {
+    public static void launchStravaActivity(long stravaId, Activity a) {
         Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId)
                 .buildUpon().build();
 

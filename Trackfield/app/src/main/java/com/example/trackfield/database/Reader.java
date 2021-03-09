@@ -250,6 +250,8 @@ public class Reader extends Helper {
                 " OR " + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist + " ORDER BY " + orderByPace + " LIMIT 3)" +
                 " ORDER BY " + orderByPace;//orderBy(sortMode, smallestFirst);
 
+        String queryString;
+
         Cursor cursor = db.rawQuery(queryString3p25, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor);
         cursor.close();
