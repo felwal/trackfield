@@ -71,8 +71,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_END_LATLNG = "end_latlng";
     private static final String JSON_POLYLINE = "polyline";
 
-
-    ////
+    //
 
     public Exercise(int _id, long externalId, int type, LocalDateTime dateTime, int routeId, String route, String routeVar, String interval, String note,
                     String dataSource, String recordingMethod, int distance, float time, ArrayList<Sub> subs, Trail trail) {

@@ -25,7 +25,6 @@ import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
-import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.toolbox.C;
@@ -36,13 +35,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
-import java.util.ArrayList;
-
 public class ViewActivity extends AppCompatActivity implements BinaryDialog.DialogListener, OnMapReadyCallback {
 
     private Exercise exercise;
     private int _id;
-    private int from = 0;
+    private int fromRecycler = FROM_NONE;
 
     private GoogleMap gMap;
     private SupportMapFragment mapFragment;
@@ -76,7 +73,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         c.startActivity(intent);
     }
 
-    // on
+    // extends AppCompatActivitys
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +85,11 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         // intent
         Intent intent = getIntent();
         _id = intent.getIntExtra(EXTRA_ID, -1);
-        from = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
+        fromRecycler = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
         // db
         //Helper.Reader reader = new Helper.Reader(this);
         exercise = Reader.get(this).getExercise(_id);
-        //reader.close();
         if (exercise == null) {
             finish();
             return;
@@ -124,31 +120,32 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-
-            case R.id.action_edit:
-                EditActivity.startActivity(this, _id);
-                return true;
-
-            case R.id.action_delete:
-                BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, BaseDialog.NO_RES, R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
-                        .show(getSupportFragmentManager());
-                return true;
-            case R.id.action_update:
-                if (exercise.hasExternalId()) {
-                    StravaApi api = new StravaApi(this);
-                    api.requestActivity(exercise.getExternalId());
-                }
-                else {
-                    L.toast("No Strava id present", this);
-                }
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
         }
+        else if (itemId == R.id.action_edit) {
+            EditActivity.startActivity(this, _id);
+            return true;
+        }
+        else if (itemId == R.id.action_delete) {
+            BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, BaseDialog.NO_RES,
+                    R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
+                    .show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_update) {
+            if (exercise.hasExternalId()) {
+                StravaApi api = new StravaApi(this);
+                api.requestActivity(exercise.getExternalId());
+            }
+            else {
+                L.toast("No Strava id present", this);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // set
@@ -235,21 +232,24 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.textView_h));
 
         // set listeners
-        if (from != FROM_ROUTE) {
+        if (fromRecycler != FROM_ROUTE) {
             routeTv.setOnClickListener(v -> RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id()));
         }
-        if (from != FROM_INTERVAL) {
+        if (fromRecycler != FROM_INTERVAL) {
             intervalTv.setOnClickListener(v -> IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id()));
         }
-        if (from != FROM_DISTANCE) {
+        if (fromRecycler != FROM_DISTANCE) {
             distanceTv.setOnClickListener(v -> {
-                ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
+                int longestDistance = Reader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.distance());
+                DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.get_id());
+
+                /*ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
                 for (Distance d : distances) {
                     if (M.insideLimits(exercise.distance(), d.getDistance())) {
                         DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
                         break;
                     }
-                }
+                }*/
             });
         }
         paceTv.setOnClickListener(v -> {

@@ -27,7 +27,7 @@ public class Route implements JSONObjectable {
     private static final String JSON_GOAL_PACE = "goal_pace";
     private static final String JSON_HIDDEN = "hidden";
 
-    ////
+    //
 
     public Route(int _id, String name, float goalPace, boolean hidden) {
         this._id = _id;
@@ -41,16 +41,21 @@ public class Route implements JSONObjectable {
         this.name = name;
     }
 
+    public Route(String name) {
+        _id = ID_NON_EXISTANT;
+        this.name = name;
+    }
+
+    public Route() {
+        _id = ID_NON_EXISTANT;
+        name = NO_NAME;
+    }
+
     public Route(JSONObject obj) throws JSONException {
         _id = obj.getInt(JSON_ID);
         name = obj.getString(JSON_NAME);
         goalPace = (float) obj.getDouble(JSON_GOAL_PACE);
         hidden = obj.getBoolean(JSON_HIDDEN);
-    }
-
-    public Route() {
-        _id = -1;
-        name = NO_NAME;
     }
 
     // set
@@ -100,7 +105,6 @@ public class Route implements JSONObjectable {
     // extends
 
     @Override public JSONObject toJSONObject(Context c) {
-
         JSONObject obj = new JSONObject();
 
         try {

@@ -106,19 +106,17 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (haveEditsBeenMade()) showDiscardDialog();
-                else finish();
-                return true;
-
-            case R.id.action_save:
-                parseAndSave();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (haveEditsBeenMade()) showDiscardDialog();
+            else finish();
+            return true;
         }
+        else if (itemId == R.id.action_save) {
+            parseAndSave();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     public static final String EXTRA_INTERVAL = "interval";
     private static final String DIALOG_RENAME_INTERVAL = "renameIntervalDialog";
 
-    ////
+    //
 
     public static void startActivity(Context c, String interval) {
         Intent intent = new Intent(c, IntervalActivity.class);
@@ -35,18 +35,15 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     // extends AppCompatActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_renameInterval:
-                if (interval != null) {
-                    TextDialog.newInstance(R.string.dialog_title_rename_interval, BaseDialog.NO_RES,
-                            interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
-                            .show(getSupportFragmentManager());;
-                }
-                return true;
-
-            default: return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_renameInterval) {
+            if (interval != null) {
+                TextDialog.newInstance(R.string.dialog_title_rename_interval, BaseDialog.NO_RES,
+                        interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
+                        .show(getSupportFragmentManager());
+            }
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     // get

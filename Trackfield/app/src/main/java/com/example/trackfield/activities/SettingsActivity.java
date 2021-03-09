@@ -110,15 +110,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     // set

@@ -39,8 +39,7 @@ public class Graph extends RecyclerItem {
         setStyle(Paint.Style.STROKE);
     }};
 
-    ////
-
+    //
 
     public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder, boolean bBorder, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
         this.widthFixed = widthFixed;

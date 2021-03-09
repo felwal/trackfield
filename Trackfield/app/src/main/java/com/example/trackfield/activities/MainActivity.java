@@ -101,31 +101,29 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                SettingsActivity.startActivity(this);
-                return true;
-
-            case R.id.action_filter:
-                FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getExerciseVisibleTypes(),
-                        R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
-                        .show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_addDistance:
-                DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT, "",
-                        R.string.dialog_btn_add, DIALOG_ADD_DISTANCE).show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_showHidden:
-                Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
-                mainFragment.updateFragment();
-                invalidateOptionsMenu();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_settings) {
+            SettingsActivity.startActivity(this);
+            return true;
         }
+        else if (itemId == R.id.action_filter) {
+            FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getExerciseVisibleTypes(),
+                    R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
+                    .show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_addDistance) {
+            DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT, "",
+                    R.string.dialog_btn_add, DIALOG_ADD_DISTANCE).show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_showHidden) {
+            Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
+            mainFragment.updateFragment();
+            invalidateOptionsMenu();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // set
@@ -152,24 +150,24 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         selectFragment(new ExercisesFragment());
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
 
-            switch (item.getItemId()) {
-                case R.id.navigation_exercises:
-                    if ((mainFragment instanceof ExercisesFragment)) mainFragment.scrollToTop();
-                    else selectFragment(new ExercisesFragment());
-                    if (fab.isOrWillBeHidden()) fab.show();
-                    return true;
-
-                case R.id.navigation_recs:
-                    if ((mainFragment instanceof RecsFragment)) mainFragment.scrollToTop();
-                    else selectFragment(new RecsFragment());
-                    if (fab.isOrWillBeShown()) fab.hide();
-                    return true;
-
-                case R.id.navigation_dev:
-                    if ((mainFragment instanceof StatsFragment)) mainFragment.scrollToTop();
-                    else selectFragment(new StatsFragment());
-                    if (fab.isOrWillBeShown()) fab.hide();
-                    return true;
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_exercises) {
+                if ((mainFragment instanceof ExercisesFragment)) mainFragment.scrollToTop();
+                else selectFragment(new ExercisesFragment());
+                if (fab.isOrWillBeHidden()) fab.show();
+                return true;
+            }
+            else if (itemId == R.id.navigation_recs) {
+                if ((mainFragment instanceof RecsFragment)) mainFragment.scrollToTop();
+                else selectFragment(new RecsFragment());
+                if (fab.isOrWillBeShown()) fab.hide();
+                return true;
+            }
+            else if (itemId == R.id.navigation_dev) {
+                if ((mainFragment instanceof StatsFragment)) mainFragment.scrollToTop();
+                else selectFragment(new StatsFragment());
+                if (fab.isOrWillBeShown()) fab.hide();
+                return true;
             }
             return false;
         };

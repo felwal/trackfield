@@ -22,8 +22,8 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class RouteActivity extends RecActivity
-        implements TextDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
+public class RouteActivity extends RecActivity implements TextDialog.DialogListener,
+        TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
 
     //private int routeId;
     private Route route;
@@ -34,14 +34,14 @@ public class RouteActivity extends RecActivity
     private static final String DIALOG_GOAL_ROUTE = "goalRouteDialog";
     private static final String DIALOG_FILTER_ROUTE = "filterRouteDialog";
 
-
-    ////
+    //
 
     public static void startActivity(Context c, int routeId) {
         Intent intent = new Intent(c, RouteActivity.class);
         intent.putExtra(EXTRA_ROUTE_ID, routeId);
         c.startActivity(intent);
     }
+
     public static void startActivity(Context c, int routeId, int originId) {
         Intent intent = new Intent(c, RouteActivity.class);
         intent.putExtra(EXTRA_ROUTE_ID, routeId);
@@ -69,48 +69,50 @@ public class RouteActivity extends RecActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getRouteVisibleTypes(),
-                        R.string.dialog_btn_filter, DIALOG_FILTER_ROUTE)
-                        .show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_renameRoute:
-                if (route != null) {
-                    TextDialog.newInstance(R.string.dialog_title_rename_route, BaseDialog.NO_RES,
-                            route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME_ROUTE)
-                            .show(getSupportFragmentManager());
-                }
-                return true;
-
-            case R.id.action_setGoal:
-                int minutes, seconds;
-                if (route.getGoalPace() == Route.NO_GOAL_PACE) {
-                    minutes = BaseDialog.NO_FLOAT_TEXT;
-                    seconds = BaseDialog.NO_FLOAT_TEXT;
-                }
-                else {
-                    float[] timeParts = M.getTimeParts(route.getGoalPace());
-                    minutes = (int) timeParts[1];
-                    seconds = (int) timeParts[0];
-                }
-
-                TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES, minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_ROUTE)
-                        .show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_hideRoute:
-                route.invertHidden();
-                writer.updateRoute(route);
-                invalidateOptionsMenu();
-                return true;
-
-            case R.id.action_routeMap:
-                RouteMapActivity.startActivity(route.get_id(), this);
-
-            default: return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_filter) {
+            FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getRouteVisibleTypes(),
+                    R.string.dialog_btn_filter, DIALOG_FILTER_ROUTE)
+                    .show(getSupportFragmentManager());
+            return true;
         }
+        else if (itemId == R.id.action_renameRoute) {
+            if (route != null) {
+                TextDialog.newInstance(R.string.dialog_title_rename_route, BaseDialog.NO_RES,
+                        route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME_ROUTE)
+                        .show(getSupportFragmentManager());
+            }
+            return true;
+        }
+        else if (itemId == R.id.action_setGoal) {
+            int minutes, seconds;
+            if (route.getGoalPace() == Route.NO_GOAL_PACE) {
+                minutes = BaseDialog.NO_FLOAT_TEXT;
+                seconds = BaseDialog.NO_FLOAT_TEXT;
+            }
+            else {
+                float[] timeParts = M.getTimeParts(route.getGoalPace());
+                minutes = (int) timeParts[1];
+                seconds = (int) timeParts[0];
+            }
+
+            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES,
+                    minutes, seconds, "min", "sec",
+                    R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_ROUTE)
+                    .show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_hideRoute) {
+            route.invertHidden();
+            writer.updateRoute(route);
+            invalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.action_routeMap) {
+            RouteMapActivity.startActivity(route.get_id(), this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // extends RecActivity

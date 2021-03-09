@@ -58,7 +58,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     // fields
     private int distance = 0;
     private TreeMap<Float, Coordinate> coordinates = new TreeMap<>();
-    private double[] lastFourAlts = new double[] {-1,-1,-1,-1};
+    private double[] lastFourAlts = new double[] { -1, -1, -1, -1 };
     private boolean recording = false;
     private boolean loaded = false;
     private boolean mapExpanded = false;
@@ -75,7 +75,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         c.startActivity(intent);
     }
 
-    // on
+    // extends AppCompatActivity
 
     @SuppressLint("MissingPermission") @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +109,10 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         finishDialog();
     }
 
+    // implements OnMapReadyCallback
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         gMap = googleMap;
         if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
         gMap.getUiSettings().setAllGesturesEnabled(false);
@@ -134,7 +135,6 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
             }
         });
-
     }
 
     // set
@@ -182,6 +182,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
     }
+
     private void setMap() {
 
         mapFrame = findViewById(R.id.frameLayout_mapFragment);
@@ -239,7 +240,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         writer.close();*/
     }
 
-    // implements
+    // implements dialogs
 
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
@@ -250,7 +251,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    // LocationListener implements
+    // implements LocationListener
 
     @SuppressLint("SetTextI18n") @Override
     public void onLocationChanged(@NonNull Location location) {

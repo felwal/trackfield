@@ -22,7 +22,7 @@ public class Writer extends Helper {
     private static Writer instance;
     private static boolean useUpdateTool = false;
 
-    ////
+    //
 
     private Writer(Context context) {
         super(context);
@@ -78,7 +78,7 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean addExercise(@NonNull Exercise e, Context c) {
-        e.setRouteId((int) addRouteIfNotAdded(new Route(e.getRouteId(), e.getRoute()), c));
+        e.setRouteId((int) addRoute(new Route(e.getRouteId(), e.getRoute()), c));
 
         final ContentValues cv = fillExerciseContentValues(e);
 
@@ -164,6 +164,7 @@ public class Writer extends Helper {
      * @param routeId The routeId to edit effective distance of
      * @param routeVar The routeVar to edit effective distance of
      * @param c Context
+     * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
         int effectiveDistance = Reader.get(c).avgDistance(routeId, routeVar);
@@ -180,7 +181,7 @@ public class Writer extends Helper {
     }
 
     /**
-     * Checks whether a route has no exercíses, deletes the route if true
+     * Checks whether a route has no referencing exercíses, deletes the route if true
      * <p>Must be called when:
      * <p>1) the route of an exercise is edited in {@link #updateExercise(Exercise, Context)}
      * <p>2) an exercise is deleted in {@link #deleteExercise(Exercise, Context)}
@@ -195,10 +196,17 @@ public class Writer extends Helper {
         return false;
     }
 
+    /**
+     * Cleans database routes table from unused routes.
+     * Should not be called, unless as a one-time operation.
+     *
+     * @param c Context
+     * @return True if operation successful
+     */
     @ZeroAccessors
     public boolean deleteEmptyRoutes(Context c) {
         boolean success = true;
-        for (Route route : Reader.get(c).getRoutes(C.SortMode.DATE, true, true)) {
+        for (Route route : Reader.get(c).getRoutes(true)) {
             success &= deleteRouteIfEmpty(route.get_id(), c);
         }
         return success;
@@ -288,10 +296,18 @@ public class Writer extends Helper {
     // routes
 
     public void addRoutes(@NonNull ArrayList<Route> routes, Context c) {
-        for (Route r : routes) addRouteIfNotAdded(r, c);
+        for (Route r : routes) addRoute(r, c);
     }
 
-    public long addRouteIfNotAdded(@NonNull Route route, Context c) {
+    /**
+     * Adds a rotue if not already added; if the route's routeName doesn't already exist.
+     * This does NOT update any existing rows.
+     *
+     * @param route The route to add.
+     * @param c Context
+     * @return The routeId of the added or already existing route
+     */
+    public long addRoute(@NonNull Route route, Context c) {
         Route existingRoute = Reader.get(c).getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
 
@@ -304,7 +320,7 @@ public class Writer extends Helper {
      * Updates a route. Merges with existing route if new name already exists.
      *
      * @param route Route to update
-     * @return The routeId for the updated route
+     * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
     public int updateRoute(Route route) {
         Route oldRoute = Reader.get().getRoute(route.get_id());
@@ -356,17 +372,9 @@ public class Writer extends Helper {
     }
 
     @Deprecated
-    public boolean deleteRoute(String name) {
-        final String selection = Contract.RouteEntry.COLUMN_NAME + " = ?";
-        final String[] selectionArgs = { name };
-
-        final long result = db.delete(Contract.RouteEntry.TABLE_NAME, selection, selectionArgs);
-
-        return success(result);
-    }
-
     public boolean updateRouteName(String oldRoute, String newRoute) {
         // update name in exercises
+        // TODO: ta bort när routeName column borttagen
 
         ContentValues newCv = new ContentValues();
         newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newRoute);

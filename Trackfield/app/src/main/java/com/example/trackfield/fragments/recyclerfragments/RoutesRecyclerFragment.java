@@ -47,6 +47,7 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        menu.clear(); // remove R.menu.menu_toolbar_main_recs
         inflater.inflate(R.menu.menu_toolbar_main_recs_routes, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

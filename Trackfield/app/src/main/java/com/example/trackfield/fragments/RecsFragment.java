@@ -24,8 +24,6 @@ public class RecsFragment extends MainFragment {
     private View view;
     private RecsPagerAdapter recsPagerAdapter;
 
-    ////
-
     // extends Fragment
 
     @Override
@@ -39,7 +37,7 @@ public class RecsFragment extends MainFragment {
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recs, container, false);
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 
         setToolbarTitle();
         setPagerAdapter();
@@ -47,11 +45,18 @@ public class RecsFragment extends MainFragment {
         return view;
     }
 
-    /*@Override
+    /**
+     * Inflates placeholder menu in order to cover time for recyclerfragments to inflate menus.
+     *
+     * @see com.example.trackfield.fragments.recyclerfragments.DistancesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see com.example.trackfield.fragments.recyclerfragments.RoutesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see com.example.trackfield.fragments.recyclerfragments.IntervalsRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     */
+    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_toolbar_main_recs, menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }*/
+    }
 
     // set
 

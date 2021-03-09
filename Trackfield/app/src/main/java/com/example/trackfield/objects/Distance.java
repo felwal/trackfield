@@ -16,6 +16,7 @@ public class Distance implements JSONObjectable {
 
     public enum SortMode { DISTANCE, AMOUNT, BEST_TIME, BEST_PACE }
 
+    public static final int NO_DISTANCE = -1;
     public static final int NO_GOAL_PACE = -1;
 
     // json

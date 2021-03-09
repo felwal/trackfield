@@ -22,8 +22,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     private final Context c;
 
     private final ViewPager viewPager;
-    private RecyclerFragment intervalFragment;
+    private RecyclerFragment distanceFragment;
     private RecyclerFragment routeFragment;
+    private RecyclerFragment intervalFragment;
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
@@ -31,7 +32,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     private static final int POS_ROUTES = 1;
     private static final int POS_INTERVALS = 2;
 
-    ////
+    //
 
     public RecsPagerAdapter(ViewPager viewPager, Context context, FragmentManager fm) {
         super(fm);
@@ -45,14 +46,13 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case POS_DISTANCES:
-                return new DistancesRecyclerFragment();
             case POS_ROUTES:
                 return (routeFragment = new RoutesRecyclerFragment());
             case POS_INTERVALS:
                 return (intervalFragment = new IntervalsRecyclerFragment());
+            case POS_DISTANCES:
             default:
-                return new DistancesRecyclerFragment();
+                return (distanceFragment = new DistancesRecyclerFragment());
         }
     }
 
@@ -80,16 +80,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void updateAdapter() {
-        RecyclerFragment currentFragment = getCurrentFragment();
-        currentFragment.updateRecycler();
-
-        // sync showHidden TODO: bättre sätt
-        if (currentFragment instanceof RoutesRecyclerFragment) {
-            intervalFragment.updateRecycler();
-        }
-        else if (currentFragment instanceof IntervalsRecyclerFragment) {
-            routeFragment.updateRecycler();
-        }
+        distanceFragment.updateRecycler();
+        routeFragment.updateRecycler();
+        intervalFragment.updateRecycler();
     }
 
     public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {

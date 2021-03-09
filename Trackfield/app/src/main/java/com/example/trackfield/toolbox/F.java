@@ -57,8 +57,6 @@ public class F {
     public static final String SP_SHARED_PREFERENCES = "shared preferences";
     private static final String SP_PREFS = "prefs";
 
-    ////
-
     // general tools
 
     private static void writeFile(String pathname, String content, Context c) {
@@ -182,8 +180,8 @@ public class F {
 
     public static void exportJson(Context c) {
         writeJSONObjectList(PATH + FILENAME_EJ, Reader.get(c).getExercises(), c);
-        writeJSONObjectList(PATH + FILENAME_RJ, Reader.get(c).getRoutes(C.SortMode.DATE, true, true), c);
-        writeJSONObjectList(PATH + FILENAME_DJ, Reader.get(c).getDistances(Distance.SortMode.DISTANCE, true), c);
+        writeJSONObjectList(PATH + FILENAME_RJ, Reader.get(c).getRoutes(true), c);
+        writeJSONObjectList(PATH + FILENAME_DJ, Reader.get(c).getDistances(), c);
     }
 
     public static void importJson(Context c) {
@@ -273,7 +271,7 @@ public class F {
             java.io.File rFile = new java.io.File(PATH + FILENAME_R);
             FileOutputStream rFos = new FileOutputStream(rFile);
             OutputStreamWriter rWriter = new OutputStreamWriter(rFos);
-            for (Route r : Reader.get(c).getRoutes(C.SortMode.DATE, true, true)) {
+            for (Route r : Reader.get(c).getRoutes(true)) {
                 rWriter.append(r.getName() + "\n");
             }
             rWriter.close(); rFos.flush(); rFos.close();
@@ -282,7 +280,7 @@ public class F {
             java.io.File dFile = new java.io.File(PATH + FILENAME_D);
             FileOutputStream dFos = new FileOutputStream(dFile);
             OutputStreamWriter dWriter = new OutputStreamWriter(dFos);
-            for (Distance d : Reader.get(c).getDistances(Distance.SortMode.DISTANCE, true)) {
+            for (Distance d : Reader.get(c).getDistances()) {
                 dWriter.append(d.getDistance() + "\n");
             }
             dWriter.close(); dFos.flush(); dFos.close();
@@ -457,7 +455,7 @@ public class F {
             BufferedReader rReader = new BufferedReader(new InputStreamReader(rFis));
             while ((line = rReader.readLine()) != null) {
                 //D.routes.add(line);
-                Writer.get(c).addRouteIfNotAdded(new Route(-1, line), c);
+                Writer.get(c).addRoute(new Route(line), c);
             }
             rReader.close(); rFis.close();
 

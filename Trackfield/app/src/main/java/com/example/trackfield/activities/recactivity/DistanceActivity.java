@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
+import com.example.trackfield.database.Reader;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
@@ -32,12 +33,16 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     ////
 
     public static void startActivity(Context c, int distance) {
+        if (distance == Distance.NO_DISTANCE) return;
+
         Intent intent = new Intent(c, DistanceActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
         c.startActivity(intent);
     }
 
     public static void startActivity(Context c, int distance, int originId) {
+        if (distance == Distance.NO_DISTANCE) return;
+
         Intent intent = new Intent(c, DistanceActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
         if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
@@ -59,42 +64,36 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getDistanceVisibleTypes(),
-                        R.string.dialog_btn_filter, DIALOG_FILTER_DISTANCE)
-                        .show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_deleteDistance:
-                BinaryDialog.newInstance(R.string.dialog_title_delete_distance, R.string.dialog_message_delete_distance,
-                        R.string.dialog_btn_delete, DIALOG_DELETE_DISTANCE)
-                        .show(getSupportFragmentManager());
-                return true;
-
-            case R.id.action_setGoal:
-                //Helper.Reader reader = new Helper.Reader(this);
-                float goalPace = reader.getDistanceGoal(length);
-                //reader.close();
-
-                int minutes, seconds;
-                if (goalPace == Distance.NO_GOAL_PACE) {
-                    minutes = BaseDialog.NO_FLOAT_TEXT;
-                    seconds = BaseDialog.NO_FLOAT_TEXT;
-                }
-                else {
-                    float[] timeParts = M.getTimeParts(goalPace);
-                    minutes = (int) timeParts[1];
-                    seconds = (int) timeParts[0];
-                }
-
-                TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES, minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "distanceGoal")
-                        .show(getSupportFragmentManager());
-                return true;
-
-            default: return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_filter) {
+            FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getDistanceVisibleTypes(),
+                    R.string.dialog_btn_filter, DIALOG_FILTER_DISTANCE)
+                    .show(getSupportFragmentManager());
+            return true;
         }
+        else if (itemId == R.id.action_deleteDistance) {
+            BinaryDialog.newInstance(R.string.dialog_title_delete_distance, R.string.dialog_message_delete_distance,
+                    R.string.dialog_btn_delete, DIALOG_DELETE_DISTANCE)
+                    .show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_setGoal) {
+            float goalPace = Reader.get(this).getDistanceGoal(length);
+            int minutes, seconds;
+            if (goalPace == Distance.NO_GOAL_PACE) {
+                minutes = BaseDialog.NO_FLOAT_TEXT;
+                seconds = BaseDialog.NO_FLOAT_TEXT;
+            }
+            else {
+                float[] timeParts = M.getTimeParts(goalPace);
+                minutes = (int) timeParts[1];
+                seconds = (int) timeParts[0];
+            }
+            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES, minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "distanceGoal")
+                    .show(getSupportFragmentManager());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // extends RecActivity

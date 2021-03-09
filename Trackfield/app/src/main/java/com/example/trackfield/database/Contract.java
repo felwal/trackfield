@@ -36,7 +36,7 @@ public final class Contract {
         public static final String COLUMN_POLYLINE = "polyline";
 
         public static final String[] COLUMNS_EXERLITE = {
-                _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE, COLUMN_ROUTE_VAR,
+                _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR,
                 COLUMN_INTERVAL, COLUMN_DISTANCE, COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
         };
         public static final String[] COLUMNS_TRAIL = {
@@ -100,10 +100,6 @@ public final class Contract {
                 default:
                     return COLUMN_DATE;
             }
-        }
-
-        public static String orderBy(C.SortMode sortMode, boolean smallestFirst) {
-            return getColumn(sortMode) + sortOrder(smallestFirst);
         }
 
     }
@@ -179,16 +175,6 @@ public final class Contract {
             return "";
         }
 
-        public static String orderBy(Route.SortMode sortMode, boolean smallestFirst) {
-            return getColumn(sortMode) + sortOrder(smallestFirst);
-        }
-
-    }
-
-    // tools
-
-    public static String sortOrder(boolean smallestFirst) {
-        return smallestFirst ? " ASC" : " DESC";
     }
 
 }
