@@ -67,7 +67,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sortMode, smallestFirst, Prefs.getDistanceVisibleTypes());
         ArrayList<Exerlite> chronoList = reader.getExerlitesByDistance(distance, C.SortMode.DATE, true, Prefs.getDistanceVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        D.markTop(exerliteList);
+        //D.markTop(exerliteList);
 
         if (exerliteList.size() != 0) {
 
@@ -79,7 +79,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
             }
 
             itemList.add(getNewSorter(sortModes, sortModesTitle));
-            float goalPace = reader.getDistanceGoal(distance);
+            float goalPace = Reader.get(a).getDistanceGoal(distance);
             if (goalPace != Distance.NO_GOAL_PACE) {
                 Goal goal = new Goal(goalPace, distance);
                 itemList.add(goal);

@@ -228,7 +228,7 @@ public class M {
         return hours * 3600 + minutes * 60 + seconds;
     }
 
-    public static String drive(String s) {
+    public static String notateDriven(String s) {
         return "( " + s + " )";
     }
 

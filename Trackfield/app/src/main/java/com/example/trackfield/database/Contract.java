@@ -85,7 +85,16 @@ public final class Contract {
             return string;
         }
 
-        public static String getColumn(C.SortMode sortMode) {
+        /**
+         * Converts a {@link C.SortMode}  to the first parameter of a SQL ORDER BY clause string.
+         *
+         * @param sortMode Mode to sort by
+         * @return The column/columns with neccessary function calls, e.g. "time" or "(time / effective_distance)"
+         *
+         * @see Reader#sortOrder(boolean)
+         * @see Reader#orderBy(C.SortMode, boolean)
+         */
+        public static String sortColumn(C.SortMode sortMode) {
             switch (sortMode) {
                 case DATE:
                     return COLUMN_DATE;

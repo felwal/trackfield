@@ -490,6 +490,10 @@ public class D {
 
     // tools
 
+    /**
+     * TODO: inline in getter functions of list
+     */
+    @Deprecated
     public static void markTop(ArrayList<Exerlite> list) {
         if (list.size() == 0) return;
 

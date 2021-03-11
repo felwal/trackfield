@@ -67,7 +67,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst, Prefs.getRouteVisibleTypes());
         ArrayList<Exerlite> chronoList = reader.getExerlitesByRoute(route.get_id(), C.SortMode.DATE, true, Prefs.getRouteVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        D.markTop(exerliteList);
+        //D.markTop(exerliteList);
 
         if (exerliteList.size() != 0) {
 

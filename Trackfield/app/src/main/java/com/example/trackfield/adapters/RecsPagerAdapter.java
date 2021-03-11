@@ -80,9 +80,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void updateAdapter() {
-        distanceFragment.updateRecycler();
-        routeFragment.updateRecycler();
-        intervalFragment.updateRecycler();
+        if (distanceFragment != null) distanceFragment.updateRecycler();
+        if (routeFragment != null) routeFragment.updateRecycler();
+        if (intervalFragment != null) intervalFragment.updateRecycler();
     }
 
     public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {

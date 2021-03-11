@@ -111,7 +111,7 @@ public class Exerlite extends RecyclerItem {
 
     public String printDistance() {
         String print = distance == 0 ? C.NO_VALUE : M.round(distance / 1000f, DISTANCE_DECIMALS) + "";
-        return distanceDriven ? M.drive(print) : print;
+        return distanceDriven ? M.notateDriven(print) : print;
     }
 
     public String printTime() {
@@ -124,7 +124,7 @@ public class Exerlite extends RecyclerItem {
 
     public String printTimeByDistance(int distance) {
         String print = M.stringTime(getTimeByDistance(distance), true);
-        return distance <= this.distance ? print : M.drive(print);
+        return distance <= this.distance ? print : M.notateDriven(print);
     }
 
     public String printPrimary() {
@@ -152,7 +152,8 @@ public class Exerlite extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Exerlite)) return false;
         Exerlite e = (Exerlite) item;
-        return e.has_id(_id) && date.isEqual(e.getDate()) && route.equals(e.getRoute()) && distance == e.getDistance() && time == e.getTime();
+        return e.has_id(_id) && date.isEqual(e.getDate()) && route.equals(e.getRoute()) &&
+                distance == e.getDistance() && time == e.getTime() && e.isTop(top);
     }
 
 }

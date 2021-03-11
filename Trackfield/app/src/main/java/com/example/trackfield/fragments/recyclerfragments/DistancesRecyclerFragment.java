@@ -36,6 +36,9 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    /**
+     * Inflates toolbar menu in place of {@link com.example.trackfield.fragments.RecsFragment#onCreateOptionsMenu(Menu, MenuInflater)}
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         menu.clear(); // remove R.menu.menu_toolbar_main_recs

@@ -46,7 +46,7 @@ public class RecsFragment extends MainFragment {
     }
 
     /**
-     * Inflates placeholder menu in order to cover time for recyclerfragments to inflate menus.
+     * Inflates placeholder toolbar menu in order to cover time for recyclerfragments to inflate menus.
      *
      * @see com.example.trackfield.fragments.recyclerfragments.DistancesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
      * @see com.example.trackfield.fragments.recyclerfragments.RoutesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)

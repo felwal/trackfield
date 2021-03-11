@@ -402,7 +402,7 @@ public class Exercise implements JSONObjectable {
         int distance = distance();
         String print = distance == 0 ? C.NO_VALUE : unitlessKm ? M.round(distance / 1000f, DISTANCE_DECIMALS) + "" : M.prefix(distance, DISTANCE_DECIMALS, "m");
         //if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
-        return isDistanceDriven() ? M.drive(print) : print;
+        return isDistanceDriven() ? M.notateDriven(print) : print;
     }
 
     public String printElevation() {

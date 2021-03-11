@@ -30,8 +30,8 @@ public class Writer extends Helper {
     }
 
     /**
-     * Gets the current writer instance, or creates if null or closed
-     * @return Writer Instance
+     * Gets the current writer instance, or creates if null or closed.
+     * @return {@link Writer} instance
      */
     @NonNull
     public static Writer get(Context c) {
@@ -71,7 +71,7 @@ public class Writer extends Helper {
 
     /**
      * Adds an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
      *
      * @param e The exercise to add
      * @param c Context
@@ -94,7 +94,7 @@ public class Writer extends Helper {
 
     /**
      * Updates an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or distance
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or distance</p>
      *
      * @param e The exercise to update
      * @param c Context
@@ -129,7 +129,7 @@ public class Writer extends Helper {
 
     /**
      * Deletes an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
      *
      * @param e The exercise to delete
      * @param c Context
@@ -157,9 +157,12 @@ public class Writer extends Helper {
     /**
      * Updates effective distance for all exercises having routeId and routeVar
      * <p>Must be called in:
-     * <p>1) {@link #addExercise(Exercise, Context)} when an exercise is created
-     * <p>2) {@link #deleteExercise(Exercise, Context)} when an exercise is deleted
-     * <p>3) {@link #updateExercise(Exercise, Context)} when distance of an exercise is edited and (twice) when rotue or routeVar of is edited
+     * <ul>
+     *     <li>{@link #addExercise(Exercise, Context)} when an exercise is created</li>
+     *     <li>{@link #deleteExercise(Exercise, Context)} when an exercise is deleted</li>
+     *     <li>{@link #updateExercise(Exercise, Context)} when distance of an exercise is edited
+     *     and(twice) when rotue or routeVar of is edited</li>
+     * </ul></p>
      *
      * @param routeId The routeId to edit effective distance of
      * @param routeVar The routeVar to edit effective distance of
@@ -183,8 +186,10 @@ public class Writer extends Helper {
     /**
      * Checks whether a route has no referencing exercíses, deletes the route if true
      * <p>Must be called when:
-     * <p>1) the route of an exercise is edited in {@link #updateExercise(Exercise, Context)}
-     * <p>2) an exercise is deleted in {@link #deleteExercise(Exercise, Context)}
+     * <ul>
+     *     <li>the route of an exercise is edited in {@link #updateExercise(Exercise, Context)}</li>
+     *     <li>an exercise is deleted in {@link #deleteExercise(Exercise, Context)}</li>
+     * </ul></p>
      *
      * @param routeId RouteId of the route to check
      * @param c Context
