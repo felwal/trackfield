@@ -53,8 +53,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
                     M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
 
+                /*
                 TreeMap<Float, Float> oldNodes = Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
-                    LocalDate.now());
+                    LocalDate.now());*/
 
                 GraphData weekData = new GraphData(nodes, GraphData.GRAPH_BAR, false, false);
 

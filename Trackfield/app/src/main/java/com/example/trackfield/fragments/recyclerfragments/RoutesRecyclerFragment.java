@@ -25,7 +25,8 @@ import java.util.ArrayList;
 public class RoutesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Name", "Amount", "Avg distance", "Best pace" };
-    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.NAME, C.SortMode.AMOUNT, C.SortMode.DISTANCE, C.SortMode.PACE };
+    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.NAME, C.SortMode.AMOUNT, C.SortMode.DISTANCE,
+        C.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, true, false, false, true };
 
     // extends Fragment
@@ -41,12 +42,14 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
         // show hidden
         MenuItem hiddenItem = menu.findItem(R.id.action_showHidden);
         hiddenItem.setChecked(Prefs.areHiddenRoutesShown());
-        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden_24dp).setTitle(R.string.action_hide_hidden);
+        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden_24dp).setTitle(
+            R.string.action_hide_hidden);
         else hiddenItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_show_hidden);
     }
 
     /**
-     * Inflates toolbar menu in place of {@link com.example.trackfield.fragments.RecsFragment#onCreateOptionsMenu(Menu, MenuInflater)}
+     * Inflates toolbar menu in place of {@link com.example.trackfield.fragments.RecsFragment#onCreateOptionsMenu(Menu,
+     * MenuInflater)}
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -60,7 +63,8 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
+        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(),
+            Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
         Sorter sorter = getNewSorter(sortModes, sortModesTitle);

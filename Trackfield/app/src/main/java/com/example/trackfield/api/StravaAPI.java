@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trackfield.BuildConfig;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.MainActivity;
 import com.example.trackfield.database.Reader;
@@ -34,22 +35,25 @@ import java.util.ArrayList;
 public class StravaApi {
 
     private Activity a;
-
     private static RequestQueue queue;
     private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter
         .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"); // 2020-11-04T11:16:08Z
 
-    private static final String CLIENT_ID = "***REMOVED***";
-    private static final String CLIENT_SECRET = "***REMOVED***";
-    private static final String REDIRECT_URI = "https://felwal.github.io/Trackfield_web/callback";
+    // secrets
+    private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
+    private static final String CLIENT_SECRET = BuildConfig.STRAVA_CLIENT_SECRET;
+
+    private static final String REDIRECT_URI = "https://felwal.github.io/callback";
     private static final int PER_PAGE = 200; // max = 200
-
-    // request codes
     public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
-
     private static final String LOG_TAG = "Strava API";
 
-    // strava response json keys
+    // token response json keys
+    private static final String JSON_ACCESS_TOKEN = "access_token";
+    private static final String JSON_REFRESH_TOKEN = "refresh_token";
+    private static final String JSON_EXPIRES_AT = "expires_at";
+
+    // activity response json keys
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
     private static final String JSON_DISTANCE = "distance";
@@ -61,10 +65,6 @@ public class StravaApi {
     private static final String JSON_START = "start_latlng";
     private static final String JSON_END = "end_latlng";
 
-    private static final String JSON_ACCESS_TOKEN = "access_token";
-    private static final String JSON_REFRESH_TOKEN = "refresh_token";
-    private static final String JSON_EXPIRES_AT = "expires_at";
-
     ////
 
     public StravaApi(Activity a) {
@@ -75,10 +75,14 @@ public class StravaApi {
     // authorize
 
     public void authorizeStrava() {
-        Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize").buildUpon()
-            .appendQueryParameter("client_id", CLIENT_ID).appendQueryParameter("redirect_uri", REDIRECT_URI)
-            .appendQueryParameter("response_type", "code").appendQueryParameter("approval_prompt", "auto")
-            .appendQueryParameter("scope", "activity:read_all").build();
+        Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
+            .buildUpon()
+            .appendQueryParameter("client_id", CLIENT_ID)
+            .appendQueryParameter("redirect_uri", REDIRECT_URI)
+            .appendQueryParameter("response_type", "code")
+            .appendQueryParameter("approval_prompt", "auto")
+            .appendQueryParameter("scope", "activity:read_all")
+            .build();
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         a.startActivity(intent);

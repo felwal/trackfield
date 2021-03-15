@@ -150,10 +150,9 @@
 
   <!-- api certificate -->
 
-  <!-- debug, gotten from debug keystore -->
-  <string name="sha1_certificate_fingerprint">***REMOVED***</string>
   <!-- restricted to: Maps SDK for Android, Fitness API -->
-  <string name="google_api_key">***REMOVED***</string>
+  <string name="google_api_key_debug">${GOOGLE_API_KEY_DEBUG}</string>
+  <string name="google_api_key_release">${GOOGLE_API_KEY_RELEASE}</string>
 
   <!-- map styles -->
 

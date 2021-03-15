@@ -76,7 +76,7 @@
                 <data
                     android:scheme="https"
                     android:host="felwal.github.io"
-                    android:pathPrefix="/Trackfield_web/callback" />
+                    android:pathPrefix="/callback" />
             </intent-filter>
         </activity>
         <activity
@@ -97,7 +97,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_api_key_debug" />
     </application>
 
 </manifest>
