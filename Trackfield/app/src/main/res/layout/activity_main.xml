@@ -70,6 +70,42 @@
         tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_stravaFab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_strava"
+                style="@style/FabMini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:theme="@style/FabMini"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_fab_strava_24dp"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textView_stravaFab"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Request last"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/fab_strava"
+                app:layout_constraintEnd_toStartOf="@+id/fab_strava"
+                app:layout_constraintTop_toTopOf="@+id/fab_strava"
+                app:layout_constraintVertical_bias="0.4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_trackFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

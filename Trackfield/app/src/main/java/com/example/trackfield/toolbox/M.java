@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
@@ -282,12 +283,13 @@ public class M {
         hours = minutes / 60;
         minutes = minutes % 60;
 
-        return new float[]{seconds, minutes, hours};
+        return new float[] { seconds, minutes, hours };
     }
 
     // lists
 
     public static boolean treeMapsEquals(TreeMap<Float, Float> map1, TreeMap<Float, Float> map2) {
+        if (map1.size() != map2.size()) return false;
 
         for (TreeMap.Entry<Float, Float> entry : map1.entrySet()) {
             float key = entry.getKey();
@@ -324,19 +326,32 @@ public class M {
 
     // dates
 
+    public static ChronoField toChronoField(ChronoUnit unit) {
+        switch (unit) {
+            case DAYS:
+                return ChronoField.DAY_OF_MONTH;
+            case WEEKS:
+                return ChronoField.ALIGNED_WEEK_OF_YEAR;
+            case YEARS:
+                return ChronoField.YEAR;
+            default:
+                return ChronoField.DAY_OF_MONTH;
+        }
+    }
+
     public static LocalDateTime dateTime(LocalDate date) {
-        return LocalDateTime.of(date, LocalTime.of(12, 0));
+        return LocalDateTime.of(date, LocalTime.of(0, 0));
     }
 
     public static LocalDateTime truncateSecs(LocalDateTime dateTime) {
         return dateTime.truncatedTo(ChronoUnit.MINUTES);
     }
 
-    public static LocalDateTime ofEpoch(long seconds) {
+    public static LocalDateTime ofEpochSecond(long seconds) {
         return LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.UTC);
     }
 
-    public static long epoch(LocalDateTime dateTime) {
+    public static long toEpochSecond(LocalDateTime dateTime) {
         return dateTime.atZone(ZoneId.of("UTC")).toEpochSecond();
     }
 

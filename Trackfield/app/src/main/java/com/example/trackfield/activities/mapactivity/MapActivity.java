@@ -28,7 +28,8 @@ import com.google.maps.android.PolyUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, PeekSheet.DismissListener {
+public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
+    GoogleMap.OnPolylineClickListener, PeekSheet.DismissListener {
 
     protected int _id;
 
@@ -67,7 +68,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
-        googleMap.getUiSettings().setCompassEnabled(false);
+        googleMap.getUiSettings()
+            .setCompassEnabled(false);
 
         // set padding (for compass)
         //int mapPaddingTop = /*L.statusBarHeight +*/ L.getAttr(R.attr.actionBarSize, this);
@@ -88,16 +90,20 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             return true;
         }
         else if (itemId == R.id.action_maptype) {
-            googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID : GoogleMap.MAP_TYPE_NORMAL);
+            //googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
+            //    (googleMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID ? GoogleMap.MAP_TYPE_TERRAIN : GoogleMap.MAP_TYPE_NORMAL));
+            googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
+                GoogleMap.MAP_TYPE_NORMAL);
             return true;
         }
         else if (itemId == R.id.action_heatmap) {
             togglePolylines();
             return true;
         }
-        else if (itemId == R.id.action_filter) {
+        /*else if (itemId == R.id.action_filter) {
+            // TODO
             return true;
-        }
+        }*/
         else if (itemId == R.id.action_recentre) {
             recentre();
             return true;
@@ -166,13 +172,21 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected static void moveCamera(GoogleMap googleMap, LatLngBounds bounds, int padding, boolean animate) {
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         try {
-            if (animate) googleMap.animateCamera(cu);
-            else googleMap.moveCamera(cu);
+            if (animate) {
+                googleMap.animateCamera(cu);
+            }
+            else {
+                googleMap.moveCamera(cu);
+            }
         }
         catch (Exception e) {
             googleMap.setOnMapLoadedCallback(() -> {
-                if (animate) googleMap.animateCamera(cu);
-                else googleMap.moveCamera(cu);
+                if (animate) {
+                    googleMap.animateCamera(cu);
+                }
+                else {
+                    googleMap.moveCamera(cu);
+                }
             });
         }
     }
@@ -185,7 +199,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
         // sheet
         int id = (int) polyline.getTag();
-        PeekSheet.newInstance(id).show(getSupportFragmentManager());
+        PeekSheet.newInstance(id)
+            .show(getSupportFragmentManager());
 
         // focus camera
         //LatLngBounds bounds = Trail.bounds(polyline.getPoints());
@@ -219,17 +234,20 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return c.getResources().getColor(R.color.colorGreenLight);
+        return c.getResources()
+            .getColor(R.color.colorGreenLight);
     }
 
     @ColorInt
     protected static int getColorDeselected(Context c) {
-        return c.getResources().getColor(R.color.colorGreenLightTrans);
+        return c.getResources()
+            .getColor(R.color.colorGreenLightTrans);
     }
 
     @ColorInt
     protected static int getColorHidden(Context c) {
-        return c.getResources().getColor(R.color.colorTrans);
+        return c.getResources()
+            .getColor(R.color.colorTrans);
     }
 
 }

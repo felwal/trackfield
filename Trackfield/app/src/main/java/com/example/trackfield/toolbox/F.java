@@ -407,7 +407,7 @@ public class F {
                         switch (section) {
                             case 0: _id = Integer.parseInt(temp); break;
                             case 1: type = Integer.parseInt(temp); break;
-                            case 2: date = M.ofEpoch(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
+                            case 2: date = M.ofEpochSecond(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
                             case 3: route = temp; break;
                             case 4: routeVar = temp; break;
                             case 5: interval = temp; break;

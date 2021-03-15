@@ -1,1 +1,1 @@
-SELECT _id from exercises
+select * from exercises as e

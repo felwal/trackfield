@@ -15,16 +15,19 @@ import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.items.headers.Sorter;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.L;
+import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = {"Date", "Distance", "Time", "Pace"};
-    private final C.SortMode[] sortModes = {C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE};
-    private final boolean[] smallestFirsts = {false, false, false, true};
+    private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
+    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
+    private final boolean[] smallestFirsts = { false, false, false, true };
 
     private String search = "";
 
@@ -47,7 +50,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 dailyChart.setType(ChartOld.TYPE_DAILY);
                 itemList.add(dailyChart);*/
 
-                GraphData weekData = new GraphData(Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
+                    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
+
+                TreeMap<Float, Float> oldNodes = Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
+                    LocalDate.now());
+
+                GraphData weekData = new GraphData(nodes, GraphData.GRAPH_BAR, false, false);
+
                 Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false, true);
                 weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
                 itemList.add(weekGraph);
@@ -100,7 +110,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 month = newMonth;
             }
             // week
-            if ((((newWeek = e.getWeek()) != week) || e.getDate().getYear() != yearOfLast) && Prefs.isWeekHeadersShown()) {
+            if ((((newWeek = e.getWeek()) != week) || e.getDate().getYear() != yearOfLast) &&
+                Prefs.isWeekHeadersShown()) {
                 weekHeader.setLastIndex(itemList.size());
                 weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size());
                 itemList.add(weekHeader);
@@ -171,7 +182,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             if (false && header.isType(Header.Type.YEAR)) {
                 ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
-                GraphData yearData = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
+                GraphData yearData = new GraphData(
+                    Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    GraphData.GRAPH_BAR, false, false);
                 Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
                 yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
                 newItems.add(position + 1, yearGraph);
@@ -224,8 +237,12 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             //adapter.notifyDataSetChanged();
 
             // animate header
-            int collapsedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month_collapsed) : (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
-            int expandedHeight = header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) : (int) getResources().getDimension(R.dimen.layout_header_year);
+            int collapsedHeight = header.isType(Header.Type.MONTH) ?
+                (int) getResources().getDimension(R.dimen.layout_header_month_collapsed) :
+                (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
+            int expandedHeight =
+                header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) :
+                    (int) getResources().getDimension(R.dimen.layout_header_year);
             View itemView = manager.findViewByPosition(position);
             L.animateHeight(itemView, collapsedHeight, expandedHeight, !header.isChildrenExpanded());
             //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());

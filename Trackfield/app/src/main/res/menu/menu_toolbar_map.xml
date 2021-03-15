@@ -8,11 +8,12 @@
         android:icon="@drawable/ic_map_recentre_24dp"
         app:showAsAction="always"/>
 
+    <!--
     <item
         android:id="@+id/action_filter"
         android:title="@string/action_filter"
         android:icon="@drawable/ic_filter_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="always"/>-->
 
     <item
         android:id="@+id/action_heatmap"

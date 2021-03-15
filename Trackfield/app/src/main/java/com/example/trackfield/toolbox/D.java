@@ -12,35 +12,28 @@ import java.util.ArrayList;
 // Data
 public class D {
 
-    @Deprecated
-    public static ArrayList<Exercise> exercises = new ArrayList<>();
-    @Deprecated
-    public static ArrayList<Integer> distances = new ArrayList<>();
-    @Deprecated
-    public static ArrayList<String> routes = new ArrayList<>();
+    @Deprecated public static ArrayList<Exercise> exercises = new ArrayList<>();
+    @Deprecated public static ArrayList<Integer> distances = new ArrayList<>();
+    @Deprecated public static ArrayList<String> routes = new ArrayList<>();
 
     // stats & more
-    @Deprecated
-    public static int totalDistance = 0;
-    @Deprecated
-    public static float totalTime = 0;
-    @Deprecated
-    public static boolean gameOn = false;
+    @Deprecated public static int totalDistance = 0;
+    @Deprecated public static float totalTime = 0;
+    @Deprecated public static boolean gameOn = false;
 
     // bort
-    @Deprecated
-    public static int[] weeks;
-    @Deprecated
-    public static int weekAmount = 12;
-    @Deprecated
-    public static int distanceTopX = 3;
+    @Deprecated public static int[] weeks;
+    @Deprecated public static int weekAmount = 12;
+    @Deprecated public static int distanceTopX = 3;
 
     // theme
 
     public static boolean updateTheme(Activity a) {
         int newTheme = C.LOOKS[M.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
         try {
-            int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
+            int currentTheme = a.getPackageManager()
+                .getActivityInfo(a.getComponentName(), 0)
+                .getThemeResource();
             if (currentTheme != newTheme) {
                 a.setTheme(newTheme);
                 return true;
@@ -54,7 +47,8 @@ public class D {
 
     // sort
 
-    public static ArrayList<Exercise> sortExercises(ArrayList<Exercise> listToSort, boolean smallestFirst, C.SortMode sortBy) {
+    public static ArrayList<Exercise> sortExercises(ArrayList<Exercise> listToSort, boolean smallestFirst,
+        C.SortMode sortBy) {
 
         ArrayList<Exercise> sorted = new ArrayList<>(listToSort);
         for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -65,20 +59,32 @@ public class D {
                 float compareValue2 = 0;
                 switch (sortBy) {
                     case DATE: // date
-                        compareValue1 = M.heaviside(sorted.get(j).getDate().isAfter(sorted.get(j + 1).getDate()));
-                        compareValue2 = M.heaviside(sorted.get(j + 1).getDate().isAfter(sorted.get(j).getDate()));
+                        compareValue1 = M.heaviside(sorted.get(j)
+                            .getDate()
+                            .isAfter(sorted.get(j + 1)
+                                .getDate()));
+                        compareValue2 = M.heaviside(sorted.get(j + 1)
+                            .getDate()
+                            .isAfter(sorted.get(j)
+                                .getDate()));
                         break;
                     case DISTANCE:// distance
-                        compareValue1 = sorted.get(j).distance();
-                        compareValue2 = sorted.get(j + 1).distance();
+                        compareValue1 = sorted.get(j)
+                            .distance();
+                        compareValue2 = sorted.get(j + 1)
+                            .distance();
                         break;
                     case TIME: // time
-                        compareValue1 = sorted.get(j).time();
-                        compareValue2 = sorted.get(j + 1).time();
+                        compareValue1 = sorted.get(j)
+                            .time();
+                        compareValue2 = sorted.get(j + 1)
+                            .time();
                         break;
                     case PACE: // pace
-                        compareValue1 = sorted.get(j).pace();
-                        compareValue2 = sorted.get(j + 1).pace();
+                        compareValue1 = sorted.get(j)
+                            .pace();
+                        compareValue2 = sorted.get(j + 1)
+                            .pace();
                         break;
                     default:
                         break;
@@ -105,7 +111,8 @@ public class D {
         return sorted;
     }
 
-    public static ArrayList<Exercise> sortExercisesByDistance(ArrayList<Exercise> listToSort, boolean smallestFirst, C.SortMode sortBy) {
+    public static ArrayList<Exercise> sortExercisesByDistance(ArrayList<Exercise> listToSort, boolean smallestFirst,
+        C.SortMode sortBy) {
 
         ArrayList<Exercise> sorted = new ArrayList<>(listToSort);
         for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -116,18 +123,28 @@ public class D {
                 float compareValue2 = 0;
                 switch (sortBy) {
                     case DATE: // date
-                        compareValue1 = M.heaviside(sorted.get(j).getDate().isAfter(sorted.get(j + 1).getDate()));
-                        compareValue2 = M.heaviside(sorted.get(j + 1).getDate().isAfter(sorted.get(j).getDate()));
+                        compareValue1 = M.heaviside(sorted.get(j)
+                            .getDate()
+                            .isAfter(sorted.get(j + 1)
+                                .getDate()));
+                        compareValue2 = M.heaviside(sorted.get(j + 1)
+                            .getDate()
+                            .isAfter(sorted.get(j)
+                                .getDate()));
                         break;
                     case DISTANCE: // full distance
-                        compareValue1 = sorted.get(j).distance();
-                        compareValue2 = sorted.get(j + 1).distance();
+                        compareValue1 = sorted.get(j)
+                            .distance();
+                        compareValue2 = sorted.get(j + 1)
+                            .distance();
                         break;
                     case PACE: // time & pace (by distance)
                         //compareValue1 = sorted.get(j).getTimeByDistance(distance);
                         //compareValue2 = sorted.get(j+1).getTimeByDistance(distance);
-                        compareValue1 = sorted.get(j).pace();
-                        compareValue2 = sorted.get(j + 1).pace();
+                        compareValue1 = sorted.get(j)
+                            .pace();
+                        compareValue2 = sorted.get(j + 1)
+                            .pace();
                         break;
                     default:
                         break;
@@ -154,7 +171,8 @@ public class D {
         return sorted;
     }
 
-    public static ArrayList<String> sortRoutes(ArrayList<String> listToSort, boolean smallestFirst, C.SortMode sortBy, boolean alwaysIncludeLesser) {
+    public static ArrayList<String> sortRoutes(ArrayList<String> listToSort, boolean smallestFirst, C.SortMode sortBy,
+        boolean alwaysIncludeLesser) {
 
         ArrayList<String> sorted = new ArrayList<>(listToSort);
         for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -188,8 +206,11 @@ public class D {
                         compareValue2 = averageDistance(filterByRoute(sorted.get(j + 1)));
                         break;
                     case DATE: // recent
-                        boolean jBigger = sortExercises(filterByRoute(sorted.get(j)), false, C.SortMode.DATE).get(0).getDate().
-                                isAfter(sortExercises(filterByRoute(sorted.get(j + 1)), false, C.SortMode.DATE).get(0).getDate());
+                        boolean jBigger = sortExercises(filterByRoute(sorted.get(j)), false, C.SortMode.DATE).get(0)
+                            .getDate()
+                            .
+                                isAfter(sortExercises(filterByRoute(sorted.get(j + 1)), false, C.SortMode.DATE).get(0)
+                                    .getDate());
                         compareValue1 = M.heaviside(jBigger);
                         compareValue2 = M.heaviside(!jBigger);
                         break;
@@ -218,7 +239,8 @@ public class D {
         return sorted;
     }
 
-    public static ArrayList<Integer> sortDistances(ArrayList<Integer> listToSort, boolean smallestFirst, C.SortMode sortBy) {
+    public static ArrayList<Integer> sortDistances(ArrayList<Integer> listToSort, boolean smallestFirst,
+        C.SortMode sortBy) {
 
         ArrayList<Integer> sorted = new ArrayList<>(listToSort);
         for (int i = sorted.size() - 1; i >= 0; i--) {
@@ -237,8 +259,10 @@ public class D {
                         compareValue2 = filterByDistance(sorted.get(j + 1)).size();
                         break;
                     case TIME: // best time
-                        compareValue1 = shortestTime(filterByDistance(sorted.get(j)), sorted.get(j)).timeByDistance(sorted.get(j));
-                        compareValue2 = shortestTime(filterByDistance(sorted.get(j + 1)), sorted.get(j + 1)).timeByDistance(sorted.get(j + 1));
+                        compareValue1 = shortestTime(filterByDistance(sorted.get(j)), sorted.get(j)).timeByDistance(
+                            sorted.get(j));
+                        compareValue2 = shortestTime(filterByDistance(sorted.get(j + 1)),
+                            sorted.get(j + 1)).timeByDistance(sorted.get(j + 1));
                         break;
                     case PACE: // best pace
                         compareValue1 = fastestPace(filterByDistance(sorted.get(j))).pace();
@@ -279,20 +303,32 @@ public class D {
                 float compareValue2 = 0;
                 switch (sortMode) {
                     case DATE: // date
-                        compareValue1 = M.heaviside(listToSort.get(j).getDate().isAfter(listToSort.get(j + 1).getDate()));
-                        compareValue2 = M.heaviside(listToSort.get(j + 1).getDate().isAfter(listToSort.get(j).getDate()));
+                        compareValue1 = M.heaviside(listToSort.get(j)
+                            .getDate()
+                            .isAfter(listToSort.get(j + 1)
+                                .getDate()));
+                        compareValue2 = M.heaviside(listToSort.get(j + 1)
+                            .getDate()
+                            .isAfter(listToSort.get(j)
+                                .getDate()));
                         break;
                     case DISTANCE:// distance
-                        compareValue1 = listToSort.get(j).getDistance();
-                        compareValue2 = listToSort.get(j + 1).getDistance();
+                        compareValue1 = listToSort.get(j)
+                            .getDistance();
+                        compareValue2 = listToSort.get(j + 1)
+                            .getDistance();
                         break;
                     case TIME: // time
-                        compareValue1 = listToSort.get(j).getTime();
-                        compareValue2 = listToSort.get(j + 1).getTime();
+                        compareValue1 = listToSort.get(j)
+                            .getTime();
+                        compareValue2 = listToSort.get(j + 1)
+                            .getTime();
                         break;
                     case PACE: // pace
-                        compareValue1 = listToSort.get(j).getPace();
-                        compareValue2 = listToSort.get(j + 1).getPace();
+                        compareValue1 = listToSort.get(j)
+                            .getPace();
+                        compareValue2 = listToSort.get(j + 1)
+                            .getPace();
                         break;
                     default:
                         break;
@@ -302,7 +338,9 @@ public class D {
                 boolean moveBack = smallestFirst ? compareValue1 > compareValue2 : compareValue1 < compareValue2;
                 ;
                 if ((sortMode == C.SortMode.PACE || sortMode == C.SortMode.TIME)) {
-                    if (compareValue2 == 0) moveBack = false;
+                    if (compareValue2 == 0) {
+                        moveBack = false;
+                    }
                     else if (compareValue1 == 0) moveBack = true;
                 }
                 if (moveBack) {
@@ -321,7 +359,8 @@ public class D {
 
         ArrayList<Exercise> filtered = new ArrayList<>();
         for (Exercise e : exercises) {
-            if (e.getRoute().equalsIgnoreCase(route)) {
+            if (e.getRoute()
+                .equalsIgnoreCase(route)) {
                 filtered.add(e);
             }
         }
@@ -333,7 +372,9 @@ public class D {
 
         ArrayList<Exercise> filtered = new ArrayList<>();
         for (Exercise e : exercises) {
-            if (e.getRoute().equalsIgnoreCase(route) && e.getRouteVar().equalsIgnoreCase(routeVar)) {
+            if (e.getRoute()
+                .equalsIgnoreCase(route) && e.getRouteVar()
+                .equalsIgnoreCase(routeVar)) {
                 filtered.add(e);
             }
         }
@@ -345,7 +386,8 @@ public class D {
 
         ArrayList<Exercise> filtered = new ArrayList<>();
         for (Exercise e : exercises) {
-            if (e.getInterval().equalsIgnoreCase(interval)) {
+            if (e.getInterval()
+                .equalsIgnoreCase(interval)) {
                 filtered.add(e);
             }
         }
@@ -356,7 +398,8 @@ public class D {
     public static ArrayList<Exercise> filterByDistance(int distance) {
 
         ArrayList<Exercise> filteredByMin = filterByMinDistance(distance);
-        ArrayList<Exercise> top10 = new ArrayList<>(sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0, Math.min(distanceTopX, filteredByMin.size())));
+        ArrayList<Exercise> top10 = new ArrayList<>(sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0,
+            Math.min(distanceTopX, filteredByMin.size())));
         ArrayList<Exercise> filtered = new ArrayList<>(top10);
         for (Exercise e : exercises) {
             int eDistance = e.distance();
@@ -370,12 +413,13 @@ public class D {
     public static ArrayList<Exercise> filterByDistance(int distance, int type) {
 
         ArrayList<Exercise> filteredByMin = filterByMinDistance(distance);
-        ArrayList<Exercise> top10 = filterByType(new ArrayList<>(sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0, Math.min(distanceTopX, filteredByMin.size()))), type);
+        ArrayList<Exercise> top10 = filterByType(new ArrayList<>(
+            sortExercises(filteredByMin, true, C.SortMode.PACE).subList(0,
+                Math.min(distanceTopX, filteredByMin.size()))), type);
         ArrayList<Exercise> filtered = new ArrayList<>(top10);
         for (Exercise e : exercises) {
             int eDistance = e.distance();
-            if (M.insideLimits(eDistance, distance) && !filtered.contains(e) && e.isType(type))
-                filtered.add(e);
+            if (M.insideLimits(eDistance, distance) && !filtered.contains(e) && e.isType(type)) filtered.add(e);
         }
 
         return filtered;
@@ -413,12 +457,42 @@ public class D {
         ArrayList<Exercise> filtered = new ArrayList<>();
 
         for (Exercise e : exercises) {
-            if (e.getRoute().toLowerCase().contains(search) || e.getRouteVar().toLowerCase().contains(search) || e.getNote().toLowerCase().contains(search) ||
-                    Exercise.TYPES[e.getType()].toLowerCase().contains(search) || e.getDataSource().toLowerCase().contains(search) || e.getRecordingMethod().toLowerCase().contains(search) ||
-                    e.getDate().format(C.FORMATTERS_SEARCH[0]).toLowerCase().contains(search) || e.getDate().format(C.FORMATTERS_SEARCH[1]).toLowerCase().contains(search) ||
-                    e.getDate().format(C.FORMATTERS_SEARCH[2]).toLowerCase().contains(search) || e.getDate().format(C.FORMATTERS_SEARCH[3]).toLowerCase().contains(search) ||
-                    e.getDate().format(C.FORMATTERS_SEARCH[4]).toLowerCase().contains(search) || e.getDate().format(C.FORMATTERS_SEARCH[5]).toLowerCase().contains(search) ||
-                    e.getDate().format(C.FORMATTERS_SEARCH[6]).toLowerCase().contains(search) || e.getDate().format(C.FORMATTERS_SEARCH[7]).toLowerCase().contains(search)) {
+            if (e.getRoute()
+                .toLowerCase()
+                .contains(search) || e.getRouteVar()
+                .toLowerCase()
+                .contains(search) || e.getNote()
+                .toLowerCase()
+                .contains(search) || Exercise.TYPES[e.getType()].toLowerCase()
+                .contains(search) || e.getDataSource()
+                .toLowerCase()
+                .contains(search) || e.getRecordingMethod()
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[0])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[1])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[2])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[3])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[4])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[5])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[6])
+                .toLowerCase()
+                .contains(search) || e.getDate()
+                .format(C.FORMATTERS_SEARCH[7])
+                .toLowerCase()
+                .contains(search)) {
                 filtered.add(e);
             }
         }
@@ -445,7 +519,8 @@ public class D {
 
         Exercise fastest = list.get(0);
         for (int i = 1; i < list.size(); i++) {
-            if (list.get(i).pace() != 0) {
+            if (list.get(i)
+                .pace() != 0) {
                 fastest = list.get(i);
             }
         }
@@ -498,30 +573,42 @@ public class D {
         if (list.size() == 0) return;
 
         // get top
-        int[] top = {-1, -1, -1};
+        int[] top = { -1, -1, -1 };
         for (int i = 0; i < list.size(); i++) {
             Exerlite e = list.get(i);
             float pace = e.getPace();
             if (pace == 0) continue;
 
-            if (top[0] == -1 || pace < list.get(top[0]).getPace()) {
+            if (top[0] == -1 || pace < list.get(top[0])
+                .getPace()) {
                 top[2] = top[1];
                 top[1] = top[0];
                 top[0] = i;
             }
-            else if (top[1] == -1 || pace < list.get(top[1]).getPace()) {
+            else if (top[1] == -1 || pace < list.get(top[1])
+                .getPace()) {
                 top[2] = top[1];
                 top[1] = i;
             }
-            else if (top[2] == -1 || pace < list.get(top[2]).getPace()) {
+            else if (top[2] == -1 || pace < list.get(top[2])
+                .getPace()) {
                 top[2] = i;
             }
         }
 
         // mark
-        if (top[2] != -1) list.get(top[2]).setTop(3);
-        if (top[1] != -1) list.get(top[1]).setTop(2);
-        if (top[0] != -1) list.get(top[0]).setTop(1);
+        if (top[2] != -1) {
+            list.get(top[2])
+                .setTop(3);
+        }
+        if (top[1] != -1) {
+            list.get(top[1])
+                .setTop(2);
+        }
+        if (top[0] != -1) {
+            list.get(top[0])
+                .setTop(1);
+        }
     }
 
     /**
@@ -543,7 +630,7 @@ public class D {
         sortExerlites(longer, C.SortMode.PACE, true);
 
         // get top
-        Exerlite[] top = {null, null, null};
+        Exerlite[] top = { null, null, null };
         for (int i = 0; i < 3 && i < list.size(); i++) {
             Exerlite e = list.get(i);
             if (e.getPace() == 0) continue;
@@ -594,16 +681,26 @@ public class D {
 
                 // consider length
                 int charIndex = 0;
-                int shortestLength = routes.get(j).length();
-                if (routes.get(j + 1).length() < routes.get(j).length()) {
-                    shortestLength = routes.get(j + 1).length();
+                int shortestLength = routes.get(j)
+                    .length();
+                if (routes.get(j + 1)
+                    .length() < routes.get(j)
+                    .length()) {
+                    shortestLength = routes.get(j + 1)
+                        .length();
                 }
-                while (charIndex < shortestLength - 1 && routes.get(j).charAt(charIndex) == routes.get(j + 1).charAt(charIndex)) {
+                while (charIndex < shortestLength - 1 && routes.get(j)
+                    .charAt(charIndex) == routes.get(j + 1)
+                    .charAt(charIndex)) {
                     charIndex++;
                 }
 
                 // move back j
-                if (routes.get(j).charAt(charIndex) > routes.get(j + 1).charAt(charIndex) || (charIndex == shortestLength - 1 && routes.get(j).length() > routes.get(j + 1).length())) {
+                if (routes.get(j)
+                    .charAt(charIndex) > routes.get(j + 1)
+                    .charAt(charIndex) || (charIndex == shortestLength - 1 && routes.get(j)
+                    .length() > routes.get(j + 1)
+                    .length())) {
                     String temp = routes.get(j + 1);
                     routes.set(j + 1, routes.get(j));
                     routes.set(j, temp);
@@ -640,11 +737,11 @@ public class D {
     }
 
     // charts
-    
+
     @Deprecated
     public static float[] weekDailyDistance() {
 
-        float[] distances = {0, 0, 0, 0, 0, 0, 0};
+        float[] distances = { 0, 0, 0, 0, 0, 0, 0 };
         LocalDate now = LocalDate.now();
         int week = now.get(C.WEEK_OF_YEAR);
 
@@ -652,7 +749,8 @@ public class D {
             if (e.getWeek() != week) {
                 break;
             }
-            distances[e.getDate().get(C.DAY_OF_WEEK) - 1] += e.distance();
+            distances[e.getDate()
+                .get(C.DAY_OF_WEEK) - 1] += e.distance();
         }
         return distances;
     }
@@ -661,7 +759,8 @@ public class D {
     public static float[] yearMonthlyDistance(int year) {
 
         LocalDate startDate = LocalDate.of(year, 1, 1);
-        LocalDate endDate = LocalDate.of(year + 1, 1, 1).minusDays(1);
+        LocalDate endDate = LocalDate.of(year + 1, 1, 1)
+            .minusDays(1);
 
         float[] distances = new float[12];
 

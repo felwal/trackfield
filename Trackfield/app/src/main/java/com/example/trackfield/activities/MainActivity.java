@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
@@ -37,14 +38,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener, FilterDialog.DialogListener, SortSheet.DismissListener {
+public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
+    FilterDialog.DialogListener, SortSheet.DismissListener {
 
     private MainFragment mainFragment;
     private ActionBar ab;
+    StravaApi strava;
 
     // fabs
-    private FloatingActionButton fab, addFab, trackFab;
-    private ConstraintLayout addCl, trackCl;
+    private FloatingActionButton fab, addFab, trackFab, stravaFab;
+    private ConstraintLayout addCl, trackCl, stravaCl;
     private View overlayView;
     private boolean isFabMenuOpen = true;
 
@@ -72,7 +75,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
 
         // TODO: dev tool
-        Writer.get(this).useUpdateToolIfEnabled(this);
+        Writer.get(this)
+            .useUpdateToolIfEnabled(this);
+
+        strava = new StravaApi(this);
 
         // layout
         setBottomNavbar();
@@ -108,13 +114,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         }
         else if (itemId == R.id.action_filter) {
             FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getExerciseVisibleTypes(),
-                    R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
-                    .show(getSupportFragmentManager());
+                R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_addDistance) {
-            DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT, "",
-                    R.string.dialog_btn_add, DIALOG_ADD_DISTANCE).show(getSupportFragmentManager());
+            DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, DIALOG_ADD_DISTANCE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_showHidden) {
@@ -180,12 +187,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         fab = findViewById(R.id.fab_menu);
         addFab = findViewById(R.id.fab_add);
         trackFab = findViewById(R.id.fab_track);
+        stravaFab = findViewById(R.id.fab_strava);
 
         addCl = findViewById(R.id.constraintLayout_addFab);
         trackCl = findViewById(R.id.constraintLayout_trackFab);
+        stravaCl = findViewById(R.id.constraintLayout_stravaFab);
         overlayView = findViewById(R.id.view_overlay);
 
         // hide
+        stravaCl.setVisibility(View.GONE);
         trackCl.setVisibility(View.GONE);
         addCl.setVisibility(View.GONE);
         closeFabMenu();
@@ -200,6 +210,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 
+        stravaFab.setOnClickListener(view -> {
+            strava.requestLastActivity();
+            closeFabMenu();
+        });
+
         overlayView.setOnClickListener(view -> closeFabMenu());
     }
 
@@ -213,8 +228,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 // fab
                 if (recyclerFragment instanceof ExercisesRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment)
-                        fab.show();
+                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment) fab.show();
                 }
             }
 
@@ -232,7 +246,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     private void selectFragment(MainFragment fragment) {
         this.mainFragment = fragment;
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_fragmentContainer, this.mainFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.frameLayout_fragmentContainer, this.mainFragment)
+            .commit();
     }
 
     // tools
@@ -241,9 +257,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         animateFab();
         addFab.show();
         trackFab.show();
+        stravaFab.show();
 
         L.crossfadeIn(addCl, 1);
         L.crossfadeIn(trackCl, 1);
+        L.crossfadeIn(stravaCl, 1);
         L.crossfadeIn(overlayView, OVERLAY_ΑLPHA);
 
         isFabMenuOpen = true;
@@ -251,9 +269,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     private void closeFabMenu() {
         animateFab();
+        stravaFab.hide();
         trackFab.hide();
         addFab.hide();
 
+        L.crossfadeOut(stravaCl);
         L.crossfadeOut(trackCl);
         L.crossfadeOut(addCl);
         L.crossfadeOut(overlayView);
@@ -269,9 +289,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         @ColorInt int fromColor = isFabMenuOpen ? surface : primaryVariant;
         @ColorInt int toColor = !isFabMenuOpen ? surface : primaryVariant;
-        Drawable toIcon = isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp) : getDrawable(R.drawable.ic_cancel_fab_24dp);
+        Drawable toIcon =
+            isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp) : getDrawable(R.drawable.ic_cancel_fab_24dp);
 
         L.animateFab(fab, fromColor, toColor, toIcon);
+    }
+
+    public void updateFragment() {
+        mainFragment.updateFragment();
     }
 
     // implements dialogs
@@ -282,7 +307,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             int distance = (int) (input * 1000);
             D.addDistance(distance);
 
-            Writer.get(this).addDistance(new Distance(-1, distance));
+            Writer.get(this)
+                .addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }
     }

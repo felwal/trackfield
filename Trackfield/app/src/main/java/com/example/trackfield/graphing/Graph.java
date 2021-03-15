@@ -41,7 +41,8 @@ public class Graph extends RecyclerItem {
 
     //
 
-    public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder, boolean bBorder, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
+    public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder,
+        boolean bBorder, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
         this.widthFixed = widthFixed;
         this.yInverted = yInverted;
         this.zeroAsMin = zeroAsMin;
@@ -58,17 +59,20 @@ public class Graph extends RecyclerItem {
     }
 
     // set
+
     public void addData(GraphData data) {
         if (data.isEmpty()) return;
         this.data.add(0, data);
         updateDomainAndRange(data);
     }
+
     private void setDomainAndRange(GraphData data) {
         start = data.getStart();
         end = data.getEnd();
         min = zeroAsMin ? 0 : data.getMin();
         max = data.getMax();
     }
+
     private void updateDomainAndRange(GraphData newData) {
         start = Math.min(start, newData.getStart());
         end = Math.max(end, newData.getEnd());
@@ -77,12 +81,15 @@ public class Graph extends RecyclerItem {
     }
 
     // get
+
     public ArrayList<GraphData> getData() {
         return data;
     }
+
     public boolean hasData() {
         return data != null && data.size() > 0;
     }
+
     public boolean hasMoreThanOnePoint() {
         for (GraphData datum : data) {
             if (datum.getPointCount() > 1) return true;
@@ -93,18 +100,23 @@ public class Graph extends RecyclerItem {
     public float getStart() {
         return start;
     }
+
     public float getEnd() {
         return end;
     }
+
     public float getMin() {
         return min;
     }
+
     public float getMax() {
         return max;
     }
+
     public float getDomainSize() {
         return end - start;
     }
+
     public float getRangeSize() {
         return max - min;
     }
@@ -112,16 +124,20 @@ public class Graph extends RecyclerItem {
     public boolean isWidthFixed() {
         return widthFixed;
     }
+
     public boolean isxGridShown() {
         return grids[0];
     }
+
     public boolean isyGridShown() {
         return grids[1];
     }
+
     public boolean isBorderShown(int border) {
         if (border < 0 || border > borders.length) return false;
         return borders[border];
     }
+
     public boolean[] getBorders() {
         return borders;
     }
@@ -131,9 +147,12 @@ public class Graph extends RecyclerItem {
     }
 
     // compare
+
     private boolean sameArgsAs(Graph graph) {
-        return Arrays.equals(grids, graph.grids) && Arrays.equals(borders, graph.borders) && widthFixed == graph.widthFixed && yInverted == graph.yInverted;
+        return Arrays.equals(grids, graph.grids) && Arrays.equals(borders, graph.borders) &&
+            widthFixed == graph.widthFixed && yInverted == graph.yInverted;
     }
+
     private boolean sameDataAs(Graph graph) {
         if (data.size() != graph.data.size()) return false;
         for (int i = 0; i < graph.data.size(); i++) {
@@ -142,12 +161,16 @@ public class Graph extends RecyclerItem {
         return true;
     }
 
-    // recycler
-    @Override public boolean sameItemAs(RecyclerItem item) {
+    // extends RecyclerItem
+
+    @Override
+    public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof Graph)) return false;
         return sameArgsAs((Graph) item) && item.hasTag(tag);
     }
-    @Override public boolean sameContentAs(RecyclerItem item) {
+
+    @Override
+    public boolean sameContentAs(RecyclerItem item) {
         return sameItemAs(item) && sameDataAs((Graph) item);
     }
 

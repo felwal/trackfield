@@ -31,6 +31,7 @@ public class Writer extends Helper {
 
     /**
      * Gets the current writer instance, or creates if null or closed.
+     *
      * @return {@link Writer} instance
      */
     @NonNull
@@ -94,14 +95,16 @@ public class Writer extends Helper {
 
     /**
      * Updates an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or distance</p>
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or
+     * distance</p>
      *
      * @param e The exercise to update
      * @param c Context
      * @return True if the exercise was added successfully
      */
     public boolean updateExercise(@NonNull Exercise e, Context c) {
-        Exercise old = Reader.get(c).getExercise(e.get_id());
+        Exercise old = Reader.get(c)
+            .getExercise(e.get_id());
         ContentValues newCv = fillExerciseContentValues(e);
 
         String where = Contract.ExerciseEntry._ID + " = ?";
@@ -116,7 +119,8 @@ public class Writer extends Helper {
         }
 
         // update effective distance if routeId, routeVar or distance updated
-        if (old.getRouteId() != e.getRouteId() || !old.getRouteVar().equals(e.getRouteVar())) {
+        if (old.getRouteId() != e.getRouteId() || !old.getRouteVar()
+            .equals(e.getRouteVar())) {
             updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
             updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
         }
@@ -170,7 +174,8 @@ public class Writer extends Helper {
      * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
-        int effectiveDistance = Reader.get(c).avgDistance(routeId, routeVar);
+        int effectiveDistance = Reader.get(c)
+            .avgDistance(routeId, routeVar);
 
         ContentValues cv = new ContentValues();
         cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
@@ -196,14 +201,15 @@ public class Writer extends Helper {
      * @return True if the route was empty and successfully deleted
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
-        int remainingOfRoute = Reader.get(c).getExerlitesByRoute(routeId, C.SortMode.DATE, false, new ArrayList<>()).size();
+        int remainingOfRoute = Reader.get(c)
+            .getExerlitesByRoute(routeId, C.SortMode.DATE, false, new ArrayList<>())
+            .size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
         return false;
     }
 
     /**
-     * Cleans database routes table from unused routes.
-     * Should not be called, unless as a one-time operation.
+     * Cleans database routes table from unused routes. Should not be called, unless as a one-time operation.
      *
      * @param c Context
      * @return True if operation successful
@@ -211,7 +217,8 @@ public class Writer extends Helper {
     @ZeroAccessors
     public boolean deleteEmptyRoutes(Context c) {
         boolean success = true;
-        for (Route route : Reader.get(c).getRoutes(true)) {
+        for (Route route : Reader.get(c)
+            .getRoutes(true)) {
             success &= deleteRouteIfEmpty(route.get_id(), c);
         }
         return success;
@@ -305,15 +312,16 @@ public class Writer extends Helper {
     }
 
     /**
-     * Adds a rotue if not already added; if the route's routeName doesn't already exist.
-     * This does NOT update any existing rows.
+     * Adds a rotue if not already added; if the route's routeName doesn't already exist. This does NOT update any
+     * existing rows.
      *
      * @param route The route to add.
      * @param c Context
      * @return The routeId of the added or already existing route
      */
     public long addRoute(@NonNull Route route, Context c) {
-        Route existingRoute = Reader.get(c).getRoute(route.getName());
+        Route existingRoute = Reader.get(c)
+            .getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
 
         final ContentValues cv = fillRouteContentValues(route);
@@ -328,9 +336,12 @@ public class Writer extends Helper {
      * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
     public int updateRoute(Route route) {
-        Route oldRoute = Reader.get().getRoute(route.get_id());
-        boolean nameNotChanged = route.getName().equals(oldRoute.getName());
-        int existingIdForNewName = Reader.get().getRouteId(route.getName());
+        Route oldRoute = Reader.get()
+            .getRoute(route.get_id());
+        boolean nameNotChanged = route.getName()
+            .equals(oldRoute.getName());
+        int existingIdForNewName = Reader.get()
+            .getRouteId(route.getName());
         boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;
 
         boolean dontMerge = nameNotChanged || newNameFree;
