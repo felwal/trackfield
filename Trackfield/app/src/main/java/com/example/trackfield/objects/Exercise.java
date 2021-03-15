@@ -40,19 +40,24 @@ public class Exercise implements JSONObjectable {
 
     public enum SortMode { DATE, DISTANCE, TIME, PACE, NAME }
 
-    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other" };
-    public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Others" };
+    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other", "Strength",
+        "Dance", "Yoga" };
+    public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Other",
+        "Strength", "Dances", "Yoga" };
     public static final int TYPE_RUN = 0;
     public static final int TYPE_INTERVALS = 1;
     public static final int TYPE_WALK = 2;
     public static final int TYPE_TRACK = 3;
     public static final int TYPE_RIDE = 4;
     public static final int TYPE_OTHER = 5;
+    public static final int TYPE_STRENGTH = 6;
+    public static final int TYPE_DANCE = 7;
+    public static final int TYPE_YOGA = 8;
 
     private static final int DISTANCE_DECIMALS = 2;
     public static final int DISTANCE_DRIVEN = -1;
 
-    // json
+    // json keys
     private static final String JSON_ID = "id";
     private static final String JSON_EXTERNAL_ID = "external_id";
     private static final String JSON_TYPE = "type";
@@ -185,7 +190,7 @@ public class Exercise implements JSONObjectable {
         }
     }
 
-    public void updateWithStravaActivity(Exercise strava) {
+    public void mergeStravaPull(Exercise strava) {
         if (externalId != strava.externalId) {
             return;
         }
@@ -627,6 +632,7 @@ public class Exercise implements JSONObjectable {
             case "Backcountry Ski":
             case "Canoe":
             case "Crossfit":
+                return TYPE_STRENGTH;
             case "E-Bike Ride":
             case "Elliptical":
             case "Handcycle":
@@ -648,6 +654,7 @@ public class Exercise implements JSONObjectable {
             case "Wheelchair":
             case "Workout":
             case "Yoga":
+                return TYPE_YOGA;
             default:
                 return TYPE_OTHER;
         }

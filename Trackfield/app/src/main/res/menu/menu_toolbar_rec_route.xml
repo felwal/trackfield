@@ -16,16 +16,16 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_hideRoute"
-        android:title="@string/action_hide"
-        android:icon="@drawable/ic_hide_24dp"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_renameRoute"
         android:title="@string/action_rename"
         android:icon="@drawable/ic_edit_24dp"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_hideRoute"
+        android:title="@string/action_hide"
+        android:icon="@drawable/ic_hide_24dp"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_routeMap"

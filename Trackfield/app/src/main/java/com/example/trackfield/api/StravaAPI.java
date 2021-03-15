@@ -106,7 +106,7 @@ public class StravaApi {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                    updateExistingManually(convertToExercise(response));
+                    pullMerge(convertToExercise(response));
 
                     Log.i(LOG_TAG, "response: " + response.toString());
                     L.toast(a.getString(R.string.toast_strava_req_activity_successful), a);
@@ -123,7 +123,7 @@ public class StravaApi {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
                 try {
                     JSONObject obj = response.getJSONObject(index);
-                    mergeWithExisting(convertToExercise(obj));
+                    requestMerge(convertToExercise(obj));
 
                     Log.i(LOG_TAG, "response: " + obj.toString());
                     //L.toast("response: " + obj.toString(), a);
@@ -148,7 +148,7 @@ public class StravaApi {
                     for (int index = 0; index < response.length(); index++) {
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            mergeWithExisting(convertToExercise(obj));
+                            requestMerge(convertToExercise(obj));
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -229,7 +229,7 @@ public class StravaApi {
         }
     }
 
-    private void updateExistingManually(Exercise strava) {
+    private void pullMerge(Exercise strava) {
         if (strava == null) return;
 
         Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
@@ -239,13 +239,13 @@ public class StravaApi {
             Log.i(LOG_TAG, "Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
         }
         else {
-            existing.updateWithStravaActivity(strava);
+            existing.mergeStravaPull(strava);
             Writer.get(a).updateExercise(existing, a);
-            L.toast("Exercise updated manually", a);
+            L.toast("Pull successful", a);
         }
     }
 
-    private void mergeWithExisting(Exercise strava) {
+    private void requestMerge(Exercise strava) {
         if (strava == null) return;
 
         ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(strava.getDateTime(), strava.getType());

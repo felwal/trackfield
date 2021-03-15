@@ -56,7 +56,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hideRoute);
         hideItem.setChecked(route.isHidden());
-        if (route.isHidden()) hideItem.setIcon(R.drawable.ic_unarchive_24dp).setTitle(R.string.action_unhide);
+        if (route.isHidden()) hideItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_unhide);
         else hideItem.setIcon(R.drawable.ic_archive_24dp).setTitle(R.string.action_hide);
 
         // goal

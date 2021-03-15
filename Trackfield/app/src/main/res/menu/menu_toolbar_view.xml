@@ -15,9 +15,15 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_update"
-        android:title="@string/action_update_from_strava"
+        android:id="@+id/action_pull"
+        android:title="@string/action_pull_strava"
         app:showAsAction="never"/>
+
+    <!--
+    <item
+        android:id="@+id/action_push"
+        android:title="@string/action_push_strava"
+        app:showAsAction="never"/>-->
 
 
 </menu>

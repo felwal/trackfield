@@ -52,9 +52,9 @@ public class Prefs {
     private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
-    @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS, Exercise.TYPE_WALK));
-    @NonNull private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN, Exercise.TYPE_INTERVALS));
-    @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>(Arrays.asList(Exercise.TYPE_RUN));
+    @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
 
     // sorting
     private static C.SortMode[] sortModePrefs = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE };

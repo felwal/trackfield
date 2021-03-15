@@ -76,7 +76,8 @@
   <string name="action_continue">Continue</string>
   <string name="action_delete">Delete</string>
   <string name="action_include_longer">Include longer</string>
-  <string name="action_update_from_strava">Update with Strava activity</string>
+  <string name="action_pull_strava">Pull from Strava</string>
+  <string name="action_push_strava">Push to Strava</string>
 
   <!-- empty states -->
 
