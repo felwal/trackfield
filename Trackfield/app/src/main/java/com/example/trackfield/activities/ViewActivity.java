@@ -32,6 +32,7 @@ import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -240,7 +241,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
         if (fromRecycler != FROM_DISTANCE) {
             distanceTv.setOnClickListener(v -> {
-                int longestDistance = Reader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.distance());
+                int longestDistance = Reader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.getEffectiveDistance());
                 DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.get_id());
 
                 /*ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
@@ -272,10 +273,10 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         energyTv.setOnClickListener(v -> {
 
             String text = energyTv.getText().toString();
-            String joules = M.prefix(exercise.energy(C.UnitEnergy.JOULES), 2, "J");
-            String calories = M.prefix(exercise.energy(C.UnitEnergy.CALORIES), 2, "cal");
-            String watthours = M.prefix(exercise.energy(C.UnitEnergy.WATTHOURS), 2, "Wh");
-            String electronvolts = M.bigPrefix(exercise.energy(C.UnitEnergy.ELECTRONVOLTS), 19, "eV");
+            String joules = M.prefix(exercise.getEnergy(C.UnitEnergy.JOULES), 2, "J");
+            String calories = M.prefix(exercise.getEnergy(C.UnitEnergy.CALORIES), 2, "cal");
+            String watthours = M.prefix(exercise.getEnergy(C.UnitEnergy.WATTHOURS), 2, "Wh");
+            String electronvolts = M.bigPrefix(exercise.getEnergy(C.UnitEnergy.ELECTRONVOLTS), 19, "eV");
 
             if (text.equals(joules)) {
                 energyTv.setText(calories);

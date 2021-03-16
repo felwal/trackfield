@@ -56,11 +56,11 @@ import java.util.ArrayList;
             xId[i] = e.get_id();
 
             switch (y) {
-                case DISTANCE:  this.y[i] = ((float) e.distance()); break;
-                case TIME:      this.y[i] = (e.time()); break;
-                case PACE:      this.y[i] = (e.pace()); break;
-                case ENERGY:    this.y[i] = ((float) e.energy(C.UnitEnergy.JOULES)); break;
-                case POWER:     this.y[i] = ((float) e.power()); break;
+                case DISTANCE:  this.y[i] = ((float) e.getEffectiveDistance()); break;
+                case TIME:      this.y[i] = (e.getTime()); break;
+                case PACE:      this.y[i] = (e.getPace()); break;
+                case ENERGY:    this.y[i] = ((float) e.getEnergy(C.UnitEnergy.JOULES)); break;
+                case POWER:     this.y[i] = ((float) e.getPower()); break;
             }
             switch (xLabel) {
                 case INDEX: this.xLabel[i] = Integer.toString(i + 1); break;

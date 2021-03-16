@@ -14,6 +14,7 @@ import com.example.trackfield.objects.Trails;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -25,7 +26,7 @@ public class ExerciseMapActivity extends MapActivity {
     private Trail trail;
     private Trails routeTrails;
 
-    ////
+    //
 
     public static void startActivity(int _id, Context c) {
         Intent intent = new Intent(c, ExerciseMapActivity.class);
@@ -69,6 +70,7 @@ public class ExerciseMapActivity extends MapActivity {
 
     public static Polyline setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
 
+        // style
         if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
 
         // polyline

@@ -124,7 +124,7 @@ public class Writer extends Helper {
             updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
             updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
         }
-        else if (old.getDistancePrimary() != e.getDistancePrimary()) {
+        else if (old.getDistance() != e.getDistance()) {
             updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
         }
 
@@ -433,8 +433,8 @@ public class Writer extends Helper {
         cv.put(Contract.ExerciseEntry.COLUMN_NOTE, e.getNote());
         cv.put(Contract.ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
         cv.put(Contract.ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
-        cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistancePrimary());
-        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.distance()); // TODO: eller effectiveDistance?
+        cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
+        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
         cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
 
         Trail trail = e.getTrail();

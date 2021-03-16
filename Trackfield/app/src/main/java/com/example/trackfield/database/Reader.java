@@ -34,6 +34,8 @@ public class Reader extends Helper {
 
     private static Reader instance;
 
+    private static final String LOG_TAG = "Reader";
+
     //
 
     private Reader(Context context) {
@@ -78,7 +80,7 @@ public class Reader extends Helper {
         cursor.close();
 
         if (exercises.size() > 1) {
-            Log.w("reader", "more than one exercise with externalId " + externalId);
+            Log.w(LOG_TAG + " getExercise", "more than one exercise with externalId " + externalId);
         }
 
         return getFirst(exercises);
@@ -192,9 +194,7 @@ public class Reader extends Helper {
     public ArrayList<Exerlite> getExerlitesByRoute(int routeId, C.SortMode sortMode, boolean smallestFirst,
         @NonNull ArrayList<Integer> types) {
         String[] colums = Contract.ExerciseEntry.COLUMNS_EXERLITE;
-        String selection =
-            Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + typeFilter(" AND", types);
-        //String[] selectionArgs = { Integer.toString(routeId) };
+        String selection = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + typeFilter(" AND", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy);
@@ -239,11 +239,13 @@ public class Reader extends Helper {
                 " ORDER BY " + orderBy(sortMode, smallestFirst);*/
 
         String queryString =
-            "SELECT " + exerliteColumns + " FROM " + table + " WHERE (" + id + " IN (SELECT " + id + " FROM " + table +
-                " WHERE " + dist + " >= " + minDist + " AND " + dist + " <= " + maxDist + ") " + andTypeFilter +
+            "SELECT " + exerliteColumns +
+                " FROM " + table +
+                " WHERE (" + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist +
+                " AND " + dist + " <= " + maxDist + ") " + andTypeFilter +
                 " OR " + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist +
-                andTypeFilter + " ORDER BY " + orderByPace + " LIMIT 3))" + " ORDER BY " +
-                orderBy(sortMode, smallestFirst);
+                andTypeFilter + " ORDER BY " + orderByPace + " LIMIT 3))" +
+                " ORDER BY " + orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.rawQuery(queryString, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
@@ -445,6 +447,7 @@ public class Reader extends Helper {
         return getFirst(distances);
     }
 
+    @Deprecated
     public float getDistanceGoal(int distance) {
         String[] columns = { Contract.DistanceEntry.COLUMN_GOAL_PACE };
         String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = " + distance;
@@ -636,7 +639,7 @@ public class Reader extends Helper {
                 " group by e." +
                 col_e_rid + " order by " + orderBy;*/
 
-        Log.i("getRouteItems", query);
+        Log.i(LOG_TAG + " getRouteItems", query);
 
         Cursor cursor = db.rawQuery(query, null);
         ArrayList<RouteItem> routeItems = new ArrayList<>();
@@ -842,9 +845,8 @@ public class Reader extends Helper {
         return longestDistance;
     }
 
-    // graph data
+    // streamlined graph data
 
-    // TODO: streamline
     public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<Integer> types, LocalDate startDate,
         int nodeCount, ChronoUnit groupUnit) {
 
@@ -893,6 +895,67 @@ public class Reader extends Helper {
 
         return nodes;
     }
+
+    public TreeMap<Float, Float> getPaceNodesByDistance(int distance, @NonNull ArrayList<Integer> types) {
+        int minDist = M.minDistance(distance);
+        int maxDist = M.maxDistance(distance);
+
+        String table = Contract.ExerciseEntry.TABLE_NAME;
+        String col_id = Contract.ExerciseEntry._ID;
+        String col_dist = Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
+        String col_time = Contract.ExerciseEntry.COLUMN_TIME;
+        String sel_pace = "pace";
+
+        String columns = "1000*(" + col_time + "/" + col_dist + ") AS " + sel_pace;
+        String andTypeFilter = typeFilter(" AND", types);
+        String orderByPace = orderBy(C.SortMode.PACE, true);
+        String orderByDate = orderBy(C.SortMode.DATE, true);
+
+        String query =
+            "SELECT " + columns +
+                " FROM " + table +
+                " WHERE (" + col_id + " IN (SELECT " + col_id + " FROM " + table + " WHERE " + sel_pace + " > 0 AND " +
+                col_dist + " >= " + minDist + " AND " + col_dist + " <= " + maxDist + ")" + andTypeFilter +
+                " OR " + col_id + " IN (SELECT " + col_id + " FROM " + table + " WHERE " + col_dist + " >= " + minDist +
+                " AND " + sel_pace + " > 0" + andTypeFilter + " ORDER BY " + orderByPace + " LIMIT 3))" +
+                " ORDER BY " + orderByDate;
+
+        Log.i(LOG_TAG + " getPaceNodesByDistance", query);
+
+        Cursor cursor = db.rawQuery(query, null);
+        TreeMap<Float, Float> nodes = new TreeMap<>();
+        int rowNum = 0;
+        while (cursor.moveToNext()) {
+            float pace = cursor.getFloat(cursor.getColumnIndex(sel_pace));
+            nodes.put((float) rowNum++, pace);
+        }
+        cursor.close();
+
+        return nodes;
+    }
+
+    public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, @NonNull ArrayList<Integer> types) {
+        String sel_pace = "pace";
+
+        String[] select = { Contract.ExerciseEntry.SELECTION_PACE + " AS " + sel_pace };
+        String from = Contract.ExerciseEntry.TABLE_NAME;
+        String where = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + sel_pace + " > 0" +
+            typeFilter(" AND", types);
+        String orderBy = orderBy(C.SortMode.DATE, true);
+
+        Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
+        TreeMap<Float, Float> nodes = new TreeMap<>();
+        int rowNum = 0;
+        while (cursor.moveToNext()) {
+            float pace = cursor.getFloat(cursor.getColumnIndex(sel_pace));
+            nodes.put((float) rowNum++, pace);
+        }
+        cursor.close();
+
+        return nodes;
+    }
+
+    // graph data
 
     public TreeMap<Float, Float> weekDailyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();

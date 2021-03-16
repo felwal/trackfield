@@ -20,7 +20,7 @@ public class RouteMapActivity extends MapActivity {
 
     private Trails trails;
 
-    ////
+    //
 
     public static void startActivity(int routeId, Context c) {
         Intent intent = new Intent(c, RouteMapActivity.class);

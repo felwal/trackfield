@@ -100,7 +100,6 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
 
     @Override
     protected void getExtras(Intent intent) {
-
         if (!intent.hasExtra(EXTRA_DISTANCE)) return;
         length = intent.getIntExtra(EXTRA_DISTANCE, 0);
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;

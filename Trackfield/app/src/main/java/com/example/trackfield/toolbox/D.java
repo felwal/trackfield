@@ -70,21 +70,21 @@ public class D {
                         break;
                     case DISTANCE:// distance
                         compareValue1 = sorted.get(j)
-                            .distance();
+                            .getEffectiveDistance();
                         compareValue2 = sorted.get(j + 1)
-                            .distance();
+                            .getEffectiveDistance();
                         break;
                     case TIME: // time
                         compareValue1 = sorted.get(j)
-                            .time();
+                            .getTime();
                         compareValue2 = sorted.get(j + 1)
-                            .time();
+                            .getTime();
                         break;
                     case PACE: // pace
                         compareValue1 = sorted.get(j)
-                            .pace();
+                            .getPace();
                         compareValue2 = sorted.get(j + 1)
-                            .pace();
+                            .getPace();
                         break;
                     default:
                         break;
@@ -134,17 +134,17 @@ public class D {
                         break;
                     case DISTANCE: // full distance
                         compareValue1 = sorted.get(j)
-                            .distance();
+                            .getEffectiveDistance();
                         compareValue2 = sorted.get(j + 1)
-                            .distance();
+                            .getEffectiveDistance();
                         break;
                     case PACE: // time & pace (by distance)
                         //compareValue1 = sorted.get(j).getTimeByDistance(distance);
                         //compareValue2 = sorted.get(j+1).getTimeByDistance(distance);
                         compareValue1 = sorted.get(j)
-                            .pace();
+                            .getPace();
                         compareValue2 = sorted.get(j + 1)
-                            .pace();
+                            .getPace();
                         break;
                     default:
                         break;
@@ -198,8 +198,8 @@ public class D {
                         compareValue2 = filterByRoute(sorted.get(j + 1)).size();
                         break;
                     case PACE: // best pace
-                        compareValue1 = fastestPace(filterByRoute(sorted.get(j))).pace();
-                        compareValue2 = fastestPace(filterByRoute(sorted.get(j + 1))).pace();
+                        compareValue1 = fastestPace(filterByRoute(sorted.get(j))).getPace();
+                        compareValue2 = fastestPace(filterByRoute(sorted.get(j + 1))).getPace();
                         break;
                     case DISTANCE: // average distance
                         compareValue1 = averageDistance(filterByRoute(sorted.get(j)));
@@ -259,14 +259,14 @@ public class D {
                         compareValue2 = filterByDistance(sorted.get(j + 1)).size();
                         break;
                     case TIME: // best time
-                        compareValue1 = shortestTime(filterByDistance(sorted.get(j)), sorted.get(j)).timeByDistance(
+                        compareValue1 = shortestTime(filterByDistance(sorted.get(j)), sorted.get(j)).getTimeByDistance(
                             sorted.get(j));
                         compareValue2 = shortestTime(filterByDistance(sorted.get(j + 1)),
-                            sorted.get(j + 1)).timeByDistance(sorted.get(j + 1));
+                            sorted.get(j + 1)).getTimeByDistance(sorted.get(j + 1));
                         break;
                     case PACE: // best pace
-                        compareValue1 = fastestPace(filterByDistance(sorted.get(j))).pace();
-                        compareValue2 = fastestPace(filterByDistance(sorted.get(j + 1))).pace();
+                        compareValue1 = fastestPace(filterByDistance(sorted.get(j))).getPace();
+                        compareValue2 = fastestPace(filterByDistance(sorted.get(j + 1))).getPace();
                         break;
                     default:
                         break;
@@ -402,7 +402,7 @@ public class D {
             Math.min(distanceTopX, filteredByMin.size())));
         ArrayList<Exercise> filtered = new ArrayList<>(top10);
         for (Exercise e : exercises) {
-            int eDistance = e.distance();
+            int eDistance = e.getEffectiveDistance();
             if (M.insideLimits(eDistance, distance) && !filtered.contains(e)) filtered.add(e);
         }
 
@@ -418,7 +418,7 @@ public class D {
                 Math.min(distanceTopX, filteredByMin.size()))), type);
         ArrayList<Exercise> filtered = new ArrayList<>(top10);
         for (Exercise e : exercises) {
-            int eDistance = e.distance();
+            int eDistance = e.getEffectiveDistance();
             if (M.insideLimits(eDistance, distance) && !filtered.contains(e) && e.isType(type)) filtered.add(e);
         }
 
@@ -430,7 +430,7 @@ public class D {
 
         ArrayList<Exercise> filtered = new ArrayList<>();
         for (Exercise e : exercises) {
-            if (e.distance() >= distance) {
+            if (e.getEffectiveDistance() >= distance) {
                 filtered.add(e);
             }
         }
@@ -507,7 +507,7 @@ public class D {
 
         Exercise shortest = list.get(0);
         for (Exercise e : list) {
-            if (e.timeByDistance(distance) < shortest.timeByDistance(distance) && e.timeByDistance(distance) != 0) {
+            if (e.getTimeByDistance(distance) < shortest.getTimeByDistance(distance) && e.getTimeByDistance(distance) != 0) {
                 shortest = e;
             }
         }
@@ -520,13 +520,13 @@ public class D {
         Exercise fastest = list.get(0);
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i)
-                .pace() != 0) {
+                .getPace() != 0) {
                 fastest = list.get(i);
             }
         }
 
         for (Exercise e : list) {
-            if (e.pace() < fastest.pace() && e.pace() != 0) {
+            if (e.getPace() < fastest.getPace() && e.getPace() != 0) {
                 fastest = e;
             }
         }
@@ -540,7 +540,7 @@ public class D {
         int count = 0;
         for (Exercise e : list) {
             if (e.isDistanceDriven()) continue;
-            totalDistance += e.distance();
+            totalDistance += e.getEffectiveDistance();
             count++;
         }
         if (count == 0) {
@@ -554,7 +554,7 @@ public class D {
 
         int longestDistance = 0;
         for (Exercise e : list) {
-            int distance = e.distance();
+            int distance = e.getEffectiveDistance();
             if (distance > longestDistance) {
                 longestDistance = distance;
             }
@@ -750,7 +750,7 @@ public class D {
                 break;
             }
             distances[e.getDate()
-                .get(C.DAY_OF_WEEK) - 1] += e.distance();
+                .get(C.DAY_OF_WEEK) - 1] += e.getEffectiveDistance();
         }
         return distances;
     }
@@ -772,7 +772,7 @@ public class D {
             if (date.isAfter(endDate)) {
                 break;
             }
-            distances[date.getMonthValue() - 1] += e.distance();
+            distances[date.getMonthValue() - 1] += e.getEffectiveDistance();
         }
         return distances;
     }

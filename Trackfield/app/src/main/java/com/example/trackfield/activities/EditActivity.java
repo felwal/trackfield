@@ -211,7 +211,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         dateEt.setText(exercise.getDate().format(C.FORMATTER_EDIT_DATE));
         timeEt.setText(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME));
         noteEt.setText(exercise.getNote());
-        distanceEt.setText((float) exercise.getDistancePrimary() / 1000 + "");
+        distanceEt.setText((float) exercise.getDistance() / 1000 + "");
         hoursEt.setText((int) time[2] + "");
         minutesEt.setText((int) time[1] + "");
         secondsEt.setText(time[0] + "");
@@ -250,7 +250,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!dateEt.getText().toString().equals(exercise.getDate().format(C.FORMATTER_EDIT_DATE))) return true;
             if (!timeEt.getText().toString().equals(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME))) return true;
             if (!noteEt.getText().toString().equals(exercise.getNote())) return true;
-            if (!distanceEt.getText().toString().equals((float) exercise.getDistancePrimary() / 1000 + "")) return true;
+            if (!distanceEt.getText().toString().equals((float) exercise.getDistance() / 1000 + "")) return true;
             if (!hoursEt.getText().toString().equals((int) time[2] + "")) return true;
             if (!minutesEt.getText().toString().equals((int) time[1] + "")) return true;
             if (!secondsEt.getText().toString().equals(time[0] + "")) return true;

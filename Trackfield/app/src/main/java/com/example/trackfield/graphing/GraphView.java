@@ -88,7 +88,7 @@ public class GraphView extends View implements View.OnTouchListener {
         for (GraphData datum : graph.getData()) {
             ArrayList<PointF> surPoints = new ArrayList<>();
 
-            for (TreeMap.Entry<Float, Float> entry : datum.getDataPoints().entrySet()) {
+            for (TreeMap.Entry<Float, Float> entry : datum.getNodes().entrySet()) {
                 //float y = height - (entry.getValue() / data.getMax() * height) + MARGIN_Y;
                 //float bias = (data.isInvertY() ? 1 : 0) + (entry.getValue() - data.getMin()) / (data.getMax() - data.getMin()) * (data.isInvertY() ? -1 : 1);
                 float y = height + getPaddingTop() - graph.bias(entry.getValue()) * height;

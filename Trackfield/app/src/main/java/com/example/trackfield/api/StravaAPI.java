@@ -106,7 +106,7 @@ public class StravaApi {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                    pullMerge(convertToExercise(response));
+                    mergePull(convertToExercise(response));
 
                     Log.i(LOG_TAG, "response: " + response.toString());
                     L.toast(a.getString(R.string.toast_strava_req_activity_successful), a);
@@ -123,7 +123,7 @@ public class StravaApi {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
                 try {
                     JSONObject obj = response.getJSONObject(index);
-                    requestMerge(convertToExercise(obj));
+                    mergeRequest(convertToExercise(obj));
 
                     Log.i(LOG_TAG, "response: " + obj.toString());
                     //L.toast("response: " + obj.toString(), a);
@@ -148,7 +148,7 @@ public class StravaApi {
                     for (int index = 0; index < response.length(); index++) {
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            requestMerge(convertToExercise(obj));
+                            mergeRequest(convertToExercise(obj));
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -229,7 +229,7 @@ public class StravaApi {
         }
     }
 
-    private void pullMerge(Exercise strava) {
+    private void mergePull(Exercise strava) {
         if (strava == null) return;
 
         Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
@@ -245,7 +245,7 @@ public class StravaApi {
         }
     }
 
-    private void requestMerge(Exercise strava) {
+    private void mergeRequest(Exercise strava) {
         if (strava == null) return;
 
         ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(strava.getDateTime(), strava.getType());
@@ -254,7 +254,7 @@ public class StravaApi {
             Exercise x = matching.get(0);
             Exercise merged = new Exercise(x.get_id(), strava.getExternalId(), x.getType(), strava.getDateTime(),
                 x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(), x.getDataSource(),
-                x.getRecordingMethod(), strava.getDistancePrimary(), strava.getTimePrimary(), x.getSubs(),
+                x.getRecordingMethod(), strava.getDistance(), strava.getTimePrimary(), x.getSubs(),
                 strava.getTrail());
             //x.setExternalId(fromStrava.getExternalId());
             //x.setDateTime(fromStrava.getDateTime());

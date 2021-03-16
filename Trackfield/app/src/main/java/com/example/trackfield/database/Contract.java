@@ -12,7 +12,7 @@ public final class Contract {
     }
 
     // entries
-
+    
     public static class ExerciseEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "exercises";
@@ -34,6 +34,8 @@ public final class Contract {
         public static final String COLUMN_END_LAT = "end_lat";
         public static final String COLUMN_END_LNG = "end_lng";
         public static final String COLUMN_POLYLINE = "polyline";
+
+        public static final String SELECTION_PACE = "1000*(" + COLUMN_TIME  + "/" + COLUMN_EFFECTIVE_DISTANCE + ")";
 
         public static final String[] COLUMNS_EXERLITE = {
                 _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR,

@@ -33,7 +33,6 @@ public class Exercise implements JSONObjectable {
     private String recordingMethod;
 
     private int distance;
-    private int effectiveDistance;
     private float time;
     private ArrayList<Sub> subs;
     private Trail trail;
@@ -96,8 +95,6 @@ public class Exercise implements JSONObjectable {
         this.time = time;
         this.subs = subs == null ? new ArrayList<>() : subs;
         this.trail = trail;
-
-        effectiveDistance = distance();
     }
 
     public Exercise(JSONObject obj, Context c) throws JSONException {
@@ -106,12 +103,10 @@ public class Exercise implements JSONObjectable {
         type = obj.getInt(JSON_TYPE);
         dateTime = M.ofEpochSecond(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
-        //route = obj.getString(JSON_ROUTE);
-        route = Reader.get(c).getRouteName(routeId);//.getName();
+        route = Reader.get(c).getRouteName(routeId);//obj.getString(JSON_ROUTE);
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
-        effectiveDistance = obj.getInt(JSON_EFFECTIVE_DISTANCE);
         time = (float) obj.getDouble(JSON_TIME);
         dataSource = obj.getString(JSON_DATA_SOURCE);
         recordingMethod = obj.getString(JSON_RECORDING_METHOD);
@@ -253,12 +248,8 @@ public class Exercise implements JSONObjectable {
         return recordingMethod;
     }
 
-    public int getDistancePrimary() {
+    public int getDistance() {
         return distance;
-    }
-
-    public int getEffectiveDistance() {
-        return effectiveDistance;
     }
 
     public float getTimePrimary() {
@@ -296,8 +287,7 @@ public class Exercise implements JSONObjectable {
         return externalId != -1;
     }
 
-    // TODO: bara effectiveDistance, assigna i helper?
-    public int distance() {
+    public int getEffectiveDistance() {
         if (isDistanceDriven()) {
             return Reader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
         }
@@ -305,22 +295,22 @@ public class Exercise implements JSONObjectable {
         return distance;
     }
 
-    public float time() {
+    public float getTime() {
         if (time == 0 && distance == 0) return getSubsTime();
         return time;
     }
 
-    public float pace() {
-        int distance = distance();
+    public float getPace() {
+        int distance = getEffectiveDistance();
         if (distance == 0) {
             return 0;
         }
-        return time() / ((float) distance / 1000f);
+        return getTime() / ((float) distance / 1000f);
     }
 
-    public float velocity(C.UnitVelocity unit) {
-        int distance = distance();
-        float time = time();
+    public float getVelocity(C.UnitVelocity unit) {
+        int distance = getEffectiveDistance();
+        float time = getTime();
         if (time == 0) {
             return 0;
         }
@@ -333,10 +323,10 @@ public class Exercise implements JSONObjectable {
         return -1;
     }
 
-    public int energy(C.UnitEnergy unit) {
+    public int getEnergy(C.UnitEnergy unit) {
         // 0J, 1cal, 2Wh, 3eV
 
-        int calories = (int) (Prefs.getMass() * distance());
+        int calories = (int) (Prefs.getMass() * getEffectiveDistance());
         if (unit == C.UnitEnergy.CALORIES) {
             return calories;
         }
@@ -359,19 +349,19 @@ public class Exercise implements JSONObjectable {
         return -1;
     }
 
-    public int power() {
-        float time = time();
+    public int getPower() {
+        float time = getTime();
         if (time != 0) {
-            return (int) (energy(C.UnitEnergy.JOULES) / time);
+            return (int) (getEnergy(C.UnitEnergy.JOULES) / time);
         }
         return 0;
     }
 
-    public int timeByDistance(int d) {
-        if (time() == 0) {
+    public int getTimeByDistance(int d) {
+        if (getTime() == 0) {
             return 0;
         }
-        return (int) (d / velocity(C.UnitVelocity.METERS_PER_SECOND));
+        return (int) (d / getVelocity(C.UnitVelocity.METERS_PER_SECOND));
     }
 
     public boolean isDistanceDriven() {
@@ -429,7 +419,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public String printDistance(boolean unitlessKm) {
-        int distance = distance();
+        int distance = getEffectiveDistance();
         String print = distance == 0 ? C.NO_VALUE :
             unitlessKm ? M.round(distance / 1000f, DISTANCE_DECIMALS) + "" : M.prefix(distance, DISTANCE_DECIMALS, "m");
         //if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
@@ -443,7 +433,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public String printTime(boolean unit) {
-        String timePrint = M.stringTime(time(), false);
+        String timePrint = M.stringTime(getTime(), false);
         if (!unit || timePrint.equals(C.NO_VALUE_TIME)) {
             return timePrint;
         }
@@ -451,7 +441,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public String printPace(boolean unit) {
-        String pacePrint = M.stringTime(pace(), true);
+        String pacePrint = M.stringTime(getPace(), true);
         if (!unit || pacePrint.equals(C.NO_VALUE_TIME)) {
             return pacePrint;
         }
@@ -460,7 +450,7 @@ public class Exercise implements JSONObjectable {
 
     public String printVelocity(C.UnitVelocity unit, boolean showUnit) {
 
-        String v = M.round(velocity(unit), 1) + "";
+        String v = M.round(getVelocity(unit), 1) + "";
         if (showUnit) {
             if (unit == C.UnitVelocity.METERS_PER_SECOND) {
                 return v + " m/s";
@@ -473,7 +463,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public String printTimeByDistance(int d, boolean unit) {
-        String time = M.stringTime(timeByDistance(d), true);
+        String time = M.stringTime(getTimeByDistance(d), true);
         if (unit) {
             return time + " s";
         }
@@ -482,7 +472,7 @@ public class Exercise implements JSONObjectable {
 
     public String printEnergy() {
         int energy;
-        if ((energy = energy(C.UnitEnergy.JOULES)) == 0) {
+        if ((energy = getEnergy(C.UnitEnergy.JOULES)) == 0) {
             return C.NO_VALUE;
         }
         return M.prefix(energy, 2, "J");
@@ -490,7 +480,7 @@ public class Exercise implements JSONObjectable {
 
     public String printPower() {
         int power;
-        if ((power = power()) == 0) {
+        if ((power = getPower()) == 0) {
             return C.NO_VALUE;
         }
         return M.prefix(power, 2, "W");
@@ -520,7 +510,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_ROUTEVAR, routeVar);
             obj.put(JSON_INTERVAL, interval);
             obj.put(JSON_DISTANCE, distance);
-            obj.put(JSON_EFFECTIVE_DISTANCE, distance());
+            obj.put(JSON_EFFECTIVE_DISTANCE, getEffectiveDistance());
             obj.put(JSON_TIME, time);
             obj.put(JSON_DATA_SOURCE, dataSource);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);

@@ -42,7 +42,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected static final int MAP_PADDING = 100;
     protected static final int MAP_MAX_ZOOM = 18;
 
-    ////
+    //
 
     // extends AppCompatActivity
 

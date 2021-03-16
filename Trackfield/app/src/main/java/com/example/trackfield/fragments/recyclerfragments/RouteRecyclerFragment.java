@@ -20,6 +20,7 @@ import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class RouteRecyclerFragment extends RecyclerFragment {
 
@@ -55,7 +56,8 @@ public class RouteRecyclerFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Reader.get(a).getExercise(originId).getType()));
+            Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : M.createList(Reader.get(a)
+                .getExercise(originId).getType()));
         }
     }
 
@@ -64,15 +66,16 @@ public class RouteRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
 
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst, Prefs.getRouteVisibleTypes());
-        ArrayList<Exerlite> chronoList = reader.getExerlitesByRoute(route.get_id(), C.SortMode.DATE, true, Prefs.getRouteVisibleTypes());
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sortMode, smallestFirst,
+            Prefs.getRouteVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        //D.markTop(exerliteList);
 
         if (exerliteList.size() != 0) {
-
-            GraphData data = new GraphData(GraphData.ofExerlites(chronoList), GraphData.GRAPH_BEZIER, false, false);
+            TreeMap<Float, Float> nodes = Reader.get(a).getPaceNodesByRoute(route.get_id(),
+                Prefs.getRouteVisibleTypes());
+            GraphData data = new GraphData(nodes, GraphData.GRAPH_BEZIER, false, false);
             Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
+
             if (graph.hasMoreThanOnePoint()) {
                 graph.setTag(RecyclerItem.TAG_GRAPH_REC);
                 itemList.add(graph);

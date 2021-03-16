@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public class GraphData {
 
-    private TreeMap<Float, Float> dataPoints;
+    private TreeMap<Float, Float> nodes;
     private float min, max;
 
     private ArrayList<PointF> surPoints = new ArrayList<>();
@@ -44,8 +44,8 @@ public class GraphData {
 
     //
 
-    public GraphData(TreeMap<Float, Float> dataPoints, int graphType, boolean showPoints, boolean showArea) {
-        this.dataPoints = dataPoints;
+    public GraphData(TreeMap<Float, Float> nodes, int graphType, boolean showPoints, boolean showArea) {
+        this.nodes = nodes;
         this.graphType = graphType;
         this.showPoints = showPoints;
         this.showArea = showArea;
@@ -78,10 +78,10 @@ public class GraphData {
     private void calcMinAndMax() {
         if (getDataPointCount() == 0) return;
 
-        min = dataPoints.firstEntry().getValue();
-        max = dataPoints.firstEntry().getValue();
+        min = nodes.firstEntry().getValue();
+        max = nodes.firstEntry().getValue();
 
-        for (TreeMap.Entry<Float, Float> entry : dataPoints.entrySet()) {
+        for (TreeMap.Entry<Float, Float> entry : nodes.entrySet()) {
             float y = entry.getValue();
             if (y < min) min = y;
             if (y > max) max = y;
@@ -106,8 +106,8 @@ public class GraphData {
 
     // get
 
-    public TreeMap<Float, Float> getDataPoints() {
-        return dataPoints;
+    public TreeMap<Float, Float> getNodes() {
+        return nodes;
     }
 
     public ArrayList<PointF> getSurPoints() {
@@ -156,11 +156,11 @@ public class GraphData {
     //
 
     public float getStart() {
-        return dataPoints.firstKey();
+        return nodes.firstKey();
     }
 
     public float getEnd() {
-        return dataPoints.lastKey();
+        return nodes.lastKey();
     }
 
     public float getMin() {
@@ -172,31 +172,31 @@ public class GraphData {
     }
 
     public float getDomainSize() {
-        return dataPoints.lastKey() - dataPoints.firstKey();
+        return nodes.lastKey() - nodes.firstKey();
     }
 
     public float getPointCount() {
-        if (dataPoints == null) return 0;
-        return dataPoints.size();
+        if (nodes == null) return 0;
+        return nodes.size();
     }
 
     //
 
     public boolean isEmpty() {
-        return dataPoints == null || dataPoints.size() == 0;
+        return nodes == null || nodes.size() == 0;
     }
 
     public boolean sameDataPointsAs(GraphData data) {
         //return dataPoints.equals(data.dataPoints);
-        return M.treeMapsEquals(dataPoints, data.dataPoints);
+        return M.treeMapsEquals(nodes, data.nodes);
     }
 
     public int getDataPointCount() {
-        return dataPoints.size();
+        return nodes.size();
     }
 
+    @Deprecated
     public static TreeMap<Float, Float> ofExerlites(ArrayList<Exerlite> exerlites) {
-
         TreeMap<Float, Float> map = new TreeMap<>();
         for (int i = 0; i < exerlites.size(); i++) {
             float pace = exerlites.get(i).getPace();
