@@ -12,7 +12,7 @@ public final class Contract {
     }
 
     // entries
-    
+
     public static class ExerciseEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "exercises";
@@ -97,17 +97,17 @@ public final class Contract {
          * @see Reader#orderBy(C.SortMode, boolean)
          */
         public static String sortColumn(C.SortMode sortMode) {
+            // column=0, column: sorts all with column = 0 last
             switch (sortMode) {
-                case DATE:
-                    return COLUMN_DATE;
                 case DISTANCE:
-                    return COLUMN_EFFECTIVE_DISTANCE;
+                    return COLUMN_EFFECTIVE_DISTANCE + "=0, " + COLUMN_EFFECTIVE_DISTANCE;
                 case TIME:
-                    return COLUMN_TIME;
+                    return COLUMN_TIME + "=0, " + COLUMN_TIME;
                 case PACE:
-                    return "(" + COLUMN_TIME + " / " + COLUMN_EFFECTIVE_DISTANCE + ")"; // TODO
+                    return COLUMN_TIME + "=0, " + SELECTION_PACE;
                 case NAME:
                     return COLUMN_ROUTE;
+                case DATE:
                 default:
                     return COLUMN_DATE;
             }

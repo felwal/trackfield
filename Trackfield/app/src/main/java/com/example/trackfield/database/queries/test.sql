@@ -1,2 +1,3 @@
-select 1000*(time/effective_distance) as pace from exercises as e
-where pace > 200
+select time, effective_distance
+from exercises as e
+order by time=0 desc, time asc

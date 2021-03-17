@@ -72,8 +72,7 @@
   <string name="action_unhide">Unhide</string>
   <string name="action_show_hidden">Show hidden</string>
   <string name="action_hide_hidden">Hide hidden</string>
-  <string name="action_set_goal">Set Goal</string>
-  <string name="action_continue">Continue</string>
+  <string name="action_set_goal">Set goal</string>
   <string name="action_delete">Delete</string>
   <string name="action_include_longer">Include longer</string>
   <string name="action_pull_strava">Pull from Strava</string>

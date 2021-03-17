@@ -18,6 +18,7 @@ import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 import com.google.android.gms.maps.model.LatLng;
@@ -33,7 +34,6 @@ import java.util.TreeMap;
 public class Reader extends Helper {
 
     private static Reader instance;
-
     private static final String LOG_TAG = "Reader";
 
     //
@@ -41,6 +41,8 @@ public class Reader extends Helper {
     private Reader(Context context) {
         super(context);
         db = getReadableDatabase();
+        L.toast("ver " + db.getVersion(), context);
+        Log.i(LOG_TAG, "ver " + db.getVersion());
     }
 
     @NonNull
@@ -1307,10 +1309,6 @@ public class Reader extends Helper {
     @NonNull
     private String orderBy(C.SortMode sortMode, boolean smallestFirst) {
         return Contract.ExerciseEntry.sortColumn(sortMode) + sortOrder(smallestFirst);
-    }
-
-    private String orderBy(Distance.SortMode sortMode, boolean smallestFirst) {
-        return Contract.DistanceEntry.COLUMN_DISTANCE + sortOrder(smallestFirst);
     }
 
     /**

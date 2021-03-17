@@ -103,8 +103,7 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean updateExercise(@NonNull Exercise e, Context c) {
-        Exercise old = Reader.get(c)
-            .getExercise(e.get_id());
+        Exercise old = Reader.get(c).getExercise(e.get_id());
         ContentValues newCv = fillExerciseContentValues(e);
 
         String where = Contract.ExerciseEntry._ID + " = ?";
@@ -119,8 +118,7 @@ public class Writer extends Helper {
         }
 
         // update effective distance if routeId, routeVar or distance updated
-        if (old.getRouteId() != e.getRouteId() || !old.getRouteVar()
-            .equals(e.getRouteVar())) {
+        if (old.getRouteId() != e.getRouteId() || !old.getRouteVar().equals(e.getRouteVar())) {
             updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
             updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
         }
