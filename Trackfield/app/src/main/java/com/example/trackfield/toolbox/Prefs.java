@@ -30,7 +30,6 @@ public class Prefs {
     //
     private static boolean developer = true;
     private static boolean firstLogin = true;
-    private static int databaseVersion = 1;
 
     // display options
     private static boolean showWeekHeaders = true;
@@ -74,7 +73,6 @@ public class Prefs {
     private static final String SHARED_PREFERENCES = "shared preferences";
     private static final String DEVELOPER = "developer";
     private static final String FIRST_LOGIN = "firstLogin";
-    private static final String DATABASE_VERSION = "databaseVersion";
     private static final String WEEK_HEADERS = "weekHeaders";
     private static final String WEEK_DISTANCE = "weekDistance";
     private static final String WEEK_CHART = "weekChart";
@@ -114,7 +112,6 @@ public class Prefs {
 
         developer = loadPref(bool, DEVELOPER);
         firstLogin = loadPref(bool, FIRST_LOGIN);
-        databaseVersion = loadPref(in, DATABASE_VERSION);
 
         showWeekHeaders = loadPref(bool, WEEK_HEADERS);
         weekDistance = loadPref(bool, WEEK_DISTANCE);
@@ -164,7 +161,6 @@ public class Prefs {
         switch (tag) {
             case DEVELOPER: return developer;
             case FIRST_LOGIN: return firstLogin;
-            case DATABASE_VERSION: return databaseVersion;
             case WEEK_HEADERS: return showWeekHeaders;
             case WEEK_DISTANCE: return weekDistance;
             case WEEK_CHART: return showWeekChart;
@@ -200,11 +196,6 @@ public class Prefs {
     public static void setFirstLogin(boolean firstLogin) {
         Prefs.firstLogin = firstLogin;
         savePref(firstLogin, FIRST_LOGIN);
-    }
-
-    public static void setDatabaseVersion(int newVersion) {
-        databaseVersion = newVersion;
-        savePref(databaseVersion, DATABASE_VERSION);
     }
 
     public static void showWeekHeaders(boolean show) {
@@ -328,10 +319,6 @@ public class Prefs {
 
     public static boolean isFirstLogin() {
         return firstLogin;
-    }
-
-    public static int getDatabaseVersion() {
-        return databaseVersion;
     }
 
     public static boolean isWeekHeadersShown() {

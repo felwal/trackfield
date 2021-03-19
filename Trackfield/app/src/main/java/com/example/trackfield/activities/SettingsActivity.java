@@ -33,7 +33,8 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.time.LocalDate;
 
-public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener, DecimalDialog.DialogListener {
+public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener,
+    DecimalDialog.DialogListener {
 
     private Activity a;
     private LayoutInflater inflater;
@@ -133,42 +134,43 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // display options
         inflateHeader("Display Options");
         //inflateSwitchItem("Hide singleton routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
-        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
-        inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
+        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), true, Prefs::showWeekHeaders);
+        //inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
         //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
         //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
         // look
         inflateHeader("Look");
         inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false,
-                RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
-                        C.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
+            RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
+                C.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
         inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true,
-                RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
-                        C.colorNames, Prefs.getColor(), DIALOG_COLOR));
-
-        // file
-        inflateHeader("File");
-        inflateClickItem("Export json", "", false, v -> F.exportJson(a));
-        inflateClickItem("Import json", "", true, v -> F.importJson(a));
+            RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
+                C.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
         // Strava
         inflateHeader("Strava");
         inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
         inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
         inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
-        inflateClickItem("Status", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true, v -> strava.authorizeStrava());
+        inflateClickItem("Status", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true,
+            v -> strava.authorizeStrava());
 
         // Google Fit
         //inflateHeader("Google Fit");
         //inflateClickItem("Request all", "", false, v -> fit.requestActivities());
         //inflateClickItem("Status", "Unknown", true, v -> fit.hasPermissionsElseRequest());
 
+        // file
+        inflateHeader("File");
+        inflateClickItem("Export json", "", false, v -> F.exportJson(a));
+        inflateClickItem("Import json", "", true, v -> F.importJson(a));
+
         // profile
         inflateHeader("Profile");
         inflateDialogItem("Mass", Prefs.getMass() + " kg", false,
-                DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
-                        Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
+            DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
+                Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
 
         final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(C.FORMATTER_CAPTION), true);
@@ -199,9 +201,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 Prefs.setFirstLogin(true);
                 BoardingActivity.startActivity(this);
             });
-            inflateClickItem("Recreate database", "", false, v -> Writer.get(this).recreate());
-            inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
-            inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
+            inflateClickItem("Recreate database", "", true, v -> Writer.get(this).recreate());
+            //inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
+            //inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
         }
     }
 

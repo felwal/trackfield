@@ -289,8 +289,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         @ColorInt int fromColor = isFabMenuOpen ? surface : primaryVariant;
         @ColorInt int toColor = !isFabMenuOpen ? surface : primaryVariant;
-        Drawable toIcon =
-            isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp) : getDrawable(R.drawable.ic_cancel_fab_24dp);
+        Drawable toIcon = isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp) :
+            getDrawable(R.drawable.ic_cancel_fab_24dp);
 
         L.animateFab(fab, fromColor, toColor, toIcon);
     }
@@ -307,8 +307,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             int distance = (int) (input * 1000);
             D.addDistance(distance);
 
-            Writer.get(this)
-                .addDistance(new Distance(-1, distance));
+            Writer.get(this).addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }
     }

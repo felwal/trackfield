@@ -40,17 +40,25 @@ public class Writer extends Helper {
         return instance;
     }
 
-    // database tools
+    // recreate
 
     public void recreate() {
-        onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
+        onUpgrade(db, 0, DATABASE_TARGET_VERSION);
     }
+
+    public void recreate(int toVersion) {
+        onUpgrade(db, 0, Math.min(toVersion, DATABASE_TARGET_VERSION));
+    }
+
+    public void upgradeToTargetVersion(int oldVersion) {
+        onUpgrade(db, oldVersion, DATABASE_TARGET_VERSION);
+    }
+
+    // database tools
 
     public void useUpdateToolIfEnabled(Context c) {
         if (!useUpdateTool) return;
-
         recreate();
-
         useUpdateTool = false;
     }
 
@@ -79,7 +87,8 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean addExercise(@NonNull Exercise e, Context c) {
-        e.setRouteId((int) addRoute(new Route(e.getRouteId(), e.getRoute()), c));
+        int routeId = Reader.get(c).getRouteId(e.getRoute());
+        e.setRouteId((int) addRoute(new Route(routeId, e.getRoute()), c));
 
         final ContentValues cv = fillExerciseContentValues(e);
 
@@ -318,8 +327,7 @@ public class Writer extends Helper {
      * @return The routeId of the added or already existing route
      */
     public long addRoute(@NonNull Route route, Context c) {
-        Route existingRoute = Reader.get(c)
-            .getRoute(route.getName());
+        Route existingRoute = Reader.get(c).getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
 
         final ContentValues cv = fillRouteContentValues(route);
@@ -334,14 +342,11 @@ public class Writer extends Helper {
      * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
     public int updateRoute(Route route) {
-        Route oldRoute = Reader.get()
-            .getRoute(route.get_id());
-        boolean nameNotChanged = route.getName()
-            .equals(oldRoute.getName());
-        int existingIdForNewName = Reader.get()
-            .getRouteId(route.getName());
-        boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;
+        Route oldRoute = Reader.get().getRoute(route.get_id());
+        int existingIdForNewName = Reader.get().getRouteId(route.getName());
 
+        boolean nameNotChanged = route.getName().equals(oldRoute.getName());
+        boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;
         boolean dontMerge = nameNotChanged || newNameFree;
 
         // update route
@@ -385,16 +390,20 @@ public class Writer extends Helper {
         return success(result);
     }
 
+    /**
+     * Update route name in exercises table.
+     * Call whenever updating route name via {@link #updateRoute(Route)}.
+     * TODO: remove when routeName column is removed
+     */
     @Deprecated
-    public boolean updateRouteName(String oldRoute, String newRoute) {
-        // update name in exercises
-        // TODO: ta bort när routeName column borttagen
+    public boolean updateRouteName(String oldName, String newName) {
+        //if (newName.equals(oldName)) return true;
 
         ContentValues newCv = new ContentValues();
-        newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newRoute);
+        newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newName);
 
         String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
-        String[] selectionArgs = { oldRoute };
+        String[] selectionArgs = { oldName };
 
         int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
@@ -487,6 +496,9 @@ public class Writer extends Helper {
     private ContentValues fillRouteContentValues(@NonNull Route route) {
         ContentValues cv = new ContentValues();
 
+        if (route.get_id() != Route.ID_NON_EXISTANT) {
+            cv.put(Contract.RouteEntry._ID, route.get_id());
+        }
         cv.put(Contract.RouteEntry.COLUMN_NAME, route.getName());
         cv.put(Contract.RouteEntry.COLUMN_HIDDEN, route.isHidden() ? 1 : 0);
         cv.put(Contract.RouteEntry.COLUMN_GOAL_PACE, route.getGoalPace());

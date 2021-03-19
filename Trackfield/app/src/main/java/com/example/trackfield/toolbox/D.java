@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 // Data
+@Deprecated
 public class D {
 
     @Deprecated public static ArrayList<Exercise> exercises = new ArrayList<>();
@@ -565,9 +566,6 @@ public class D {
 
     // tools
 
-    /**
-     * TODO: inline in getter functions of list
-     */
     @Deprecated
     public static void markTop(ArrayList<Exerlite> list) {
         if (list.size() == 0) return;

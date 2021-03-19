@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
+import com.example.trackfield.database.Helper;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.objects.Distance;
@@ -41,17 +42,20 @@ import java.util.List;
 public class F {
 
     // file keys
-    private static final String FILENAME_E = "exercises.txt";
-    private static final String FILENAME_S = "subs.txt";
-    private static final String FILENAME_R = "routes.txt";
-    private static final String FILENAME_D = "distances.txt";
-    private static final String FILENAME_EJ = "exercises.json";
-    private static final String FILENAME_RJ = "routes.json";
-    private static final String FILENAME_DJ = "distances.json";
+    private static final String FILENAME_E_TXT = "exercises.txt";
+    private static final String FILENAME_S_TXT = "subs.txt";
+    private static final String FILENAME_R_TXT = "routes.txt";
+    private static final String FILENAME_D_TXT = "distances.txt";
+    private static final String FILENAME_E = "exercises.json";
+    private static final String FILENAME_R = "routes.json";
+    private static final String FILENAME_D = "distances.json";
+    private static final String FILENAME_VER = "version.json";
     private static final String FOLDER = "Trackfield";
     private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/" + FOLDER + "/";
     private static final char DIV_READ = '•';
     private static final char DIV_WRITE = '•';
+
+    private static final String JSON_DB_VERSION = "database_version";
 
     // prefs keys
     public static final String SP_SHARED_PREFERENCES = "shared preferences";
@@ -80,7 +84,6 @@ public class F {
             L.handleError(e, c);
             e.printStackTrace();
         }
-
     }
 
     private static List<String> readFile(String pathname, Context c) {
@@ -130,13 +133,10 @@ public class F {
         catch (JSONException e) {
             L.handleError(e, c);
         }
-
     }
 
-    private static List<JSONObject> readJSONObjectList(String pathname, Context c) {
-
-        List<JSONObject> objs = new ArrayList<>();
-
+    private static String readJson(String pathname, Context c) {
+        String response = "";
         try {
             // open
             java.io.File file = new java.io.File(pathname);
@@ -152,8 +152,21 @@ public class F {
             }
             bufferedReader.close();
 
-            // to array
-            String response = builder.toString();
+            response = builder.toString();
+        }
+        catch (IOException e) {
+            L.handleError(e, c);
+        }
+
+        return response;
+    }
+
+    private static List<JSONObject> readJSONObjectList(String pathname, Context c) {
+
+        List<JSONObject> objs = new ArrayList<>();
+
+        try {
+            String response = readJson(pathname, c);
             JSONArray array = new JSONArray(response);
 
             // get objs
@@ -169,7 +182,7 @@ public class F {
 
             //L.toast("Imported", c);
         }
-        catch (IOException | JSONException e) {
+        catch (JSONException e) {
             L.handleError(e, c);
         }
 
@@ -179,22 +192,54 @@ public class F {
     // json
 
     public static void exportJson(Context c) {
-        writeJSONObjectList(PATH + FILENAME_EJ, Reader.get(c).getExercises(), c);
-        writeJSONObjectList(PATH + FILENAME_RJ, Reader.get(c).getRoutes(true), c);
-        writeJSONObjectList(PATH + FILENAME_DJ, Reader.get(c).getDistances(), c);
+        // version.json
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put(JSON_DB_VERSION, Reader.get(c).getVersion());
+            String jsonStr = obj.toString(2);
+            writeFile(PATH + FILENAME_VER, jsonStr, c);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // jsonarrays
+        writeJSONObjectList(PATH + FILENAME_E, Reader.get(c).getExercises(), c);
+        writeJSONObjectList(PATH + FILENAME_R, Reader.get(c).getRoutes(true), c);
+        writeJSONObjectList(PATH + FILENAME_D, Reader.get(c).getDistances(), c);
     }
 
     public static void importJson(Context c) {
-        Writer.get(c).recreate();
+        int dbVersion = importVersionJson(c);
+        Writer.get(c).recreate(dbVersion);
+
         importRoutesJson(c);
         importDistancesJson(c);
         importExercisesJson(c);
+
+        Writer.get(c).upgradeToTargetVersion(dbVersion);
+    }
+
+    private static int importVersionJson(Context c) {
+        int dbVersion = Helper.DATABASE_TARGET_VERSION;
+        String pathname = PATH + FILENAME_VER;
+
+        try {
+            String response = readJson(pathname, c);
+            JSONObject obj = new JSONObject(response);
+            dbVersion = obj.getInt(JSON_DB_VERSION);
+        }
+        catch (JSONException e) {
+            L.handleError("Failed to find database version in json file, using target version instead", e, c);
+        }
+
+        return dbVersion;
     }
 
     private static void importExercisesJson(Context c) {
 
         ArrayList<Exercise> exercises = new ArrayList<>();
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_EJ, c)) {
+        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_E, c)) {
             try {
                 Reader.get(c);
                 Exercise e = new Exercise(obj, c);
@@ -212,7 +257,7 @@ public class F {
     private static void importRoutesJson(Context c) {
 
         ArrayList<Route> routes = new ArrayList<>();
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_RJ, c)) {
+        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_R, c)) {
             try {
                 Route r = new Route(obj);
                 routes.add(r);
@@ -229,7 +274,7 @@ public class F {
     private static void importDistancesJson(Context c) {
 
         ArrayList<Distance> distances = new ArrayList<>();
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_DJ, c)) {
+        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_D, c)) {
             try {
                 Distance d = new Distance(obj);
                 distances.add(d);
@@ -245,15 +290,16 @@ public class F {
 
     // txt
 
-    @Deprecated public static void exportTxt(Context c) {
+    @Deprecated
+    public static void exportTxt(Context c) {
 
         //D.moveExercise();
         //D.trimRoutes();
 
         try {
             // exercise
-            java.io.File eFile = new java.io.File(PATH + FILENAME_E);
-            java.io.File sFile = new java.io.File(PATH + FILENAME_S);
+            java.io.File eFile = new java.io.File(PATH + FILENAME_E_TXT);
+            java.io.File sFile = new java.io.File(PATH + FILENAME_S_TXT);
             FileOutputStream eFos = new FileOutputStream(eFile);
             FileOutputStream sFos = new FileOutputStream(sFile);
             OutputStreamWriter eWriter = new OutputStreamWriter(eFos);
@@ -264,26 +310,34 @@ public class F {
                     sWriter.append(e.getSub(index).extractToFile(DIV_WRITE, e.get_id(), index) + "\n");
                 }
             }
-            eWriter.close(); eFos.flush(); eFos.close();
-            sWriter.close(); sFos.flush(); sFos.close();
+            eWriter.close();
+            eFos.flush();
+            eFos.close();
+            sWriter.close();
+            sFos.flush();
+            sFos.close();
 
             // routes
-            java.io.File rFile = new java.io.File(PATH + FILENAME_R);
+            java.io.File rFile = new java.io.File(PATH + FILENAME_R_TXT);
             FileOutputStream rFos = new FileOutputStream(rFile);
             OutputStreamWriter rWriter = new OutputStreamWriter(rFos);
             for (Route r : Reader.get(c).getRoutes(true)) {
                 rWriter.append(r.getName() + "\n");
             }
-            rWriter.close(); rFos.flush(); rFos.close();
+            rWriter.close();
+            rFos.flush();
+            rFos.close();
 
             // distance
-            java.io.File dFile = new java.io.File(PATH + FILENAME_D);
+            java.io.File dFile = new java.io.File(PATH + FILENAME_D_TXT);
             FileOutputStream dFos = new FileOutputStream(dFile);
             OutputStreamWriter dWriter = new OutputStreamWriter(dFos);
             for (Distance d : Reader.get(c).getDistances()) {
                 dWriter.append(d.getDistance() + "\n");
             }
-            dWriter.close(); dFos.flush(); dFos.close();
+            dWriter.close();
+            dFos.flush();
+            dFos.close();
 
             //Toast.makeText(c,"Done writing to '" + PATH + "'", Toast.LENGTH_SHORT).show();
             L.toast(c.getString(R.string.toast_file_exported), c);
@@ -291,10 +345,10 @@ public class F {
         catch (Exception e) {
             L.handleError(e, c);
         }
-
     }
 
-    @Deprecated public static void importTxt(Context c) {
+    @Deprecated
+    public static void importTxt(Context c) {
 
         // are you sure?
 
@@ -309,8 +363,10 @@ public class F {
             ArrayList<ArrayList<Sub>> subSets = new ArrayList<>();
             ArrayList<Sub> subs = new ArrayList<>();
 
-            java.io.File sFile = new java.io.File(PATH + FILENAME_S);
-            if (!sFile.exists()) { return; }
+            java.io.File sFile = new java.io.File(PATH + FILENAME_S_TXT);
+            if (!sFile.exists()) {
+                return;
+            }
             FileInputStream sFis = new FileInputStream(sFile);
             BufferedReader sReader = new BufferedReader(new InputStreamReader(sFis));
             String previousLine = null;
@@ -331,7 +387,7 @@ public class F {
                     if (line.charAt(ch) != DIV_READ) {
                         temp += line.charAt(ch);
                     }
-                    if (line.charAt(ch) == DIV_READ || ch == line.length()-1) {
+                    if (line.charAt(ch) == DIV_READ || ch == line.length() - 1) {
                         switch (section) {
                             case 0: // superId
                                 superId = Integer.valueOf(temp);
@@ -345,7 +401,8 @@ public class F {
                             case 3: // time
                                 time = M.round(Float.valueOf(temp), 2);
                                 break;
-                            default: break;
+                            default:
+                                break;
                         }
                         temp = "";
                         section++;
@@ -367,13 +424,15 @@ public class F {
                 previousLine = line;
                 line = nextLine;
                 nextLine = sReader.readLine();
-
             }
-            sReader.close(); sFis.close();
+            sReader.close();
+            sFis.close();
 
             // exercise
-            java.io.File eFile = new java.io.File(PATH + FILENAME_E);
-            if (!eFile.exists()) { return; }
+            java.io.File eFile = new java.io.File(PATH + FILENAME_E_TXT);
+            if (!eFile.exists()) {
+                return;
+            }
             FileInputStream eFis = new FileInputStream(eFile);
             BufferedReader eReader = new BufferedReader(new InputStreamReader(eFis));
             while ((line = eReader.readLine()) != null) {
@@ -405,23 +464,55 @@ public class F {
                     }
                     if (line.charAt(ch) == DIV_READ || ch == line.length() - 1) {
                         switch (section) {
-                            case 0: _id = Integer.parseInt(temp); break;
-                            case 1: type = Integer.parseInt(temp); break;
-                            case 2: date = M.ofEpochSecond(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
-                            case 3: route = temp; break;
-                            case 4: routeVar = temp; break;
-                            case 5: interval = temp; break;
-                            case 6: distance = Integer.parseInt(temp); break;
-                            case 7: time = Float.parseFloat(temp); break;
-                            case 8: dataSource = temp; break;
-                            case 9: recordingMethod = temp; break;
-                            case 10: note = temp; break;
-                            case 11: startLat = temp; break;
-                            case 12: startLng = temp; break;
-                            case 13: endLat = temp; break;
-                            case 14: endLng = temp; break;
-                            case 15: polyline = temp; break;
-                            default: break;
+                            case 0:
+                                _id = Integer.parseInt(temp);
+                                break;
+                            case 1:
+                                type = Integer.parseInt(temp);
+                                break;
+                            case 2:
+                                date = M.ofEpochSecond(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
+                            case 3:
+                                route = temp;
+                                break;
+                            case 4:
+                                routeVar = temp;
+                                break;
+                            case 5:
+                                interval = temp;
+                                break;
+                            case 6:
+                                distance = Integer.parseInt(temp);
+                                break;
+                            case 7:
+                                time = Float.parseFloat(temp);
+                                break;
+                            case 8:
+                                dataSource = temp;
+                                break;
+                            case 9:
+                                recordingMethod = temp;
+                                break;
+                            case 10:
+                                note = temp;
+                                break;
+                            case 11:
+                                startLat = temp;
+                                break;
+                            case 12:
+                                startLng = temp;
+                                break;
+                            case 13:
+                                endLat = temp;
+                                break;
+                            case 14:
+                                endLng = temp;
+                                break;
+                            case 15:
+                                polyline = temp;
+                                break;
+                            default:
+                                break;
                         }
                         temp = "";
                         section++;
@@ -441,33 +532,36 @@ public class F {
                         else trail = new Trail(polyline);
                     }
 
-                    Exercise e = new Exercise(_id, -1, type, date, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
+                    Exercise e = new Exercise(_id, -1, type, date, routeId, route, routeVar, interval, note, dataSource,
+                        recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
                     Writer.get(c).addExercise(e, c);
                     //D.exercises.add(e);
                 }
-
             }
-            eReader.close(); eFis.close();
+            eReader.close();
+            eFis.close();
 
             // route
-            java.io.File rFile = new java.io.File(PATH + FILENAME_R);
+            java.io.File rFile = new java.io.File(PATH + FILENAME_R_TXT);
             FileInputStream rFis = new FileInputStream(rFile);
             BufferedReader rReader = new BufferedReader(new InputStreamReader(rFis));
             while ((line = rReader.readLine()) != null) {
                 //D.routes.add(line);
                 Writer.get(c).addRoute(new Route(line), c);
             }
-            rReader.close(); rFis.close();
+            rReader.close();
+            rFis.close();
 
             // distance
-            java.io.File dFile = new java.io.File(PATH + FILENAME_D);
+            java.io.File dFile = new java.io.File(PATH + FILENAME_D_TXT);
             FileInputStream dFis = new FileInputStream(dFile);
             BufferedReader dReader = new BufferedReader(new InputStreamReader(dFis));
             while ((line = dReader.readLine()) != null) {
                 //D.distances.add(Integer.valueOf(line));
                 Writer.get(c).addDistance(new Distance(-1, Integer.parseInt(line)));
             }
-            dReader.close(); dFis.close();
+            dReader.close();
+            dFis.close();
 
             //Toast.makeText(c,"Done reading to '" + PATH + "'", Toast.LENGTH_SHORT).show();
             L.toast(c.getString(R.string.toast_file_imported), c);
@@ -486,25 +580,30 @@ public class F {
         return !permissionToStorage(c) || !permissionToLocation(c);
     }
 
-    @TargetApi(23) public static void askPermissions(Activity a) {
+    @TargetApi(23)
+    public static void askPermissions(Activity a) {
         String[] permissions = {
-                "android.permission.READ_EXTERNAL_STORAGE",
-                "android.permission.WRITE_EXTERNAL_STORAGE",
-                "android.permission.ACCESS_FINE_LOCATION",
-                "android.permission.ACCESS_COARSE_LOCATION" };
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            "android.permission.ACCESS_FINE_LOCATION",
+            "android.permission.ACCESS_COARSE_LOCATION" };
         int requestCode = 200;
         ActivityCompat.requestPermissions(a, permissions, requestCode);
     }
 
     public static boolean permissionToStorage(Context c) {
-        return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
+        return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+            PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+            PackageManager.PERMISSION_GRANTED
+            && Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
     public static boolean permissionToLocation(Context c) {
-        return ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED;
     }
 
     //
@@ -512,7 +611,9 @@ public class F {
     private static ArrayList<Sub> getSubsBySuperId(ArrayList<ArrayList<Sub>> subSets, int superId) {
 
         for (ArrayList<Sub> subSet : subSets) {
-            if (subSet.get(0).get_superId() == superId) { return subSet; }
+            if (subSet.get(0).get_superId() == superId) {
+                return subSet;
+            }
         }
 
         return new ArrayList<>();

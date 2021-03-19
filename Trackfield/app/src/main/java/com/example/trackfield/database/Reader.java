@@ -41,8 +41,6 @@ public class Reader extends Helper {
     private Reader(Context context) {
         super(context);
         db = getReadableDatabase();
-        L.toast("ver " + db.getVersion(), context);
-        Log.i(LOG_TAG, "ver " + db.getVersion());
     }
 
     @NonNull
@@ -55,6 +53,12 @@ public class Reader extends Helper {
     @Nullable
     public static Reader get() {
         return instance;
+    }
+
+    // version
+
+    public int getVersion() {
+        return db.getVersion();
     }
 
     // get exercises

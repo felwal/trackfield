@@ -102,7 +102,7 @@ public class Exercise implements JSONObjectable {
         externalId = obj.getLong(JSON_EXTERNAL_ID);
         type = obj.getInt(JSON_TYPE);
         dateTime = M.ofEpochSecond(obj.getInt(JSON_EPOCH));
-        routeId = obj.getInt(JSON_ROUTE_ID);
+        routeId = obj.getInt(JSON_ROUTE_ID);//Reader.get(c).getRouteId(route);
         route = Reader.get(c).getRouteName(routeId);//obj.getString(JSON_ROUTE);
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
