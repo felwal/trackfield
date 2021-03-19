@@ -71,13 +71,6 @@ public class L {
         typedArray.recycle();
     }
 
-    public static int getAttr(int attrResId, Context c) {
-        int[] attrs = new int[] { attrResId };
-        TypedArray typedArray = c.obtainStyledAttributes(attrs);
-        int backgroundResource = typedArray.getResourceId(0, 0);
-        return backgroundResource;
-    }
-
     public static void setColor(TextView view, String fulltext, String subtext, int color) {
         view.setText(fulltext, TextView.BufferType.SPANNABLE);
         Spannable str = (Spannable) view.getText();
@@ -168,6 +161,20 @@ public class L {
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(resId, typedValue, true);
         return typedValue.data;
+    }
+
+    /**
+     * Gets resource id from attribute id.
+     *
+     * @param attrResId Attribute id to get
+     * @param c Context
+     * @return The resource id pointed to by the attribute id
+     */
+    public static int getAttr(int attrResId, Context c) {
+        int[] attrs = new int[] { attrResId };
+        TypedArray typedArray = c.obtainStyledAttributes(attrs);
+        int backgroundResource = typedArray.getResourceId(0, 0);
+        return backgroundResource;
     }
 
     public static boolean isEmpty(EditText et) {

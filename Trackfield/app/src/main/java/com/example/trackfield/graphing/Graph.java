@@ -80,7 +80,7 @@ public class Graph extends RecyclerItem {
         max = Math.max(max, newData.getMax());
     }
 
-    // get
+    // get data
 
     public ArrayList<GraphData> getData() {
         return data;
@@ -121,6 +121,8 @@ public class Graph extends RecyclerItem {
         return max - min;
     }
 
+    // get canvas properties
+
     public boolean isWidthFixed() {
         return widthFixed;
     }
@@ -141,6 +143,8 @@ public class Graph extends RecyclerItem {
     public boolean[] getBorders() {
         return borders;
     }
+
+    // calc
 
     public float bias(float y) {
         return max == min ? 0 : M.heaviside(yInverted) + M.signum(!yInverted) * (y - min) / (max - min);
