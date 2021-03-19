@@ -133,8 +133,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // display options
         inflateHeader("Display Options");
-        //inflateSwitchItem("Hide singleton routes", Prefs.areHiddenRoutesShown(), false, Prefs::showHiddenRoutes);
-        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), true, Prefs::showWeekHeaders);
+        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
+        inflateSwitchItem("Hide singleton routes", Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
         //inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
         //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
         //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);

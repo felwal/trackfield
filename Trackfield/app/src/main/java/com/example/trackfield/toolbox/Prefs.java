@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.objects.Exercise;
 
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
@@ -16,7 +15,6 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,6 +45,7 @@ public class Prefs {
 
     // filtering
     private static boolean showHiddenRoutes = true;
+    private static boolean hideSingletonRoutes = true;
     private static boolean includeLonger = false;
     private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
@@ -81,7 +80,8 @@ public class Prefs {
     private static final String THEME = "theme";
     private static final String MASS = "mass";
     private static final String BIRTHDAY = "birthday";
-    private static final String LESSER_ROUTES = "lesserRoutes";
+    private static final String SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
+    private static final String HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
     private static final String INCLCUDE_LONGER = "includeLonger";
     private static final String INCLCUDE_PACELESS = "includePaceless";
     private static final String LIMIT_LOWER = "lowerLimit";
@@ -124,7 +124,8 @@ public class Prefs {
         mass = loadPref(new TypeToken<Float>(){}, MASS);
         birthday = loadPref(new TypeToken<LocalDate>(){}, BIRTHDAY);
 
-        showHiddenRoutes = loadPref(bool, LESSER_ROUTES);
+        showHiddenRoutes = loadPref(bool, SHOW_HIDDEN_ROUTES);
+        hideSingletonRoutes = loadPref(bool, HIDE_SINGLETON_ROUTES);
         includeLonger = loadPref(bool, INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, LIMIT_LOWER);
         distanceUpperLimit = loadPref(in, LIMIT_UPPER);
@@ -169,7 +170,8 @@ public class Prefs {
             case THEME: return theme;
             case MASS: return mass;
             case BIRTHDAY: return birthday;
-            case LESSER_ROUTES: return showHiddenRoutes;
+            case SHOW_HIDDEN_ROUTES: return showHiddenRoutes;
+            case HIDE_SINGLETON_ROUTES: return hideSingletonRoutes;
             case INCLCUDE_LONGER: return includeLonger;
             case LIMIT_LOWER: return distanceLowerLimit;
             case LIMIT_UPPER: return distanceUpperLimit;
@@ -240,7 +242,12 @@ public class Prefs {
 
     public static void showHiddenRoutes(boolean show) {
         showHiddenRoutes = show;
-        savePref(show, LESSER_ROUTES);
+        savePref(show, SHOW_HIDDEN_ROUTES);
+    }
+
+    public static void hideSingletonRoutes(boolean hide) {
+        hideSingletonRoutes = hide;
+        savePref(hide, HIDE_SINGLETON_ROUTES);
     }
 
     public static void includeLonger(boolean include) {
@@ -355,6 +362,10 @@ public class Prefs {
 
     public static boolean areHiddenRoutesShown() {
         return showHiddenRoutes;
+    }
+
+    public static boolean areSingletonRoutesHidden() {
+        return hideSingletonRoutes;
     }
 
     public static boolean includeLonger() {

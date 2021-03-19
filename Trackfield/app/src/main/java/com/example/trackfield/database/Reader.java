@@ -582,7 +582,7 @@ public class Reader extends Helper {
         final String col_s_avg_dist = "avg_distance";
         final String col_s_best_pace = "best_pace";
 
-        String havingAmount = includeHidden ? "" : " HAVING count(1) > 1";
+        String havingAmount = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : " HAVING count(1) > 1";
         String whereHidden = includeHidden ? "" : " AND " + col(tab_r, col_r_hidden) + " != 1";
 
         String orderBy;
