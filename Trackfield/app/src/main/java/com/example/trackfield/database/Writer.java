@@ -12,8 +12,6 @@ import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.annotations.ZeroAccessors;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
-import com.example.trackfield.toolbox.L;
 
 import java.util.ArrayList;
 
@@ -60,12 +58,6 @@ public class Writer extends Helper {
         if (!useUpdateTool) return;
         recreate();
         useUpdateTool = false;
-    }
-
-    @Deprecated
-    public void importFromToolbox(Context c) {
-        recreate();
-        L.toast(addExercises(D.exercises, c), c);
     }
 
     // exercises

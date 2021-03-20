@@ -15,7 +15,6 @@ import com.example.trackfield.dialogs.FilterDialog;
 import com.example.trackfield.dialogs.TimeDialog;
 import com.example.trackfield.fragments.recyclerfragments.DistanceRecyclerFragment;
 import com.example.trackfield.objects.Distance;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 
@@ -119,15 +118,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_DISTANCE)) {
-            if (D.distances.contains(length)) {
-                D.distances.remove(D.distances.indexOf(length));
-                D.sortDistancesData();
-            }
-
-            //Helper.Writer writer = new Helper.Writer(this);
             writer.deleteDistance(distance);
-            //writer.close();
-
             finish();
         }
     }

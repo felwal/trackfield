@@ -17,8 +17,6 @@ import com.example.trackfield.objects.Route;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
-import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -272,12 +269,10 @@ public class Reader extends Helper {
         String[] selectionArgs = { interval };
         String orderBy = orderBy(sortMode, smallestFirst);
 
-        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs, null, null,
-            orderBy);
+        Cursor cursor = db.query(Contract.ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs,
+            null, null, orderBy);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
         cursor.close();
-
-        D.sortExerlites(exerlites, sortMode, smallestFirst);
 
         return exerlites;
     }

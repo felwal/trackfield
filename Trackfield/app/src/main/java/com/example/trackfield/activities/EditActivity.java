@@ -29,7 +29,6 @@ import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.objects.Trail;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 
@@ -74,7 +73,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         setToolbar();

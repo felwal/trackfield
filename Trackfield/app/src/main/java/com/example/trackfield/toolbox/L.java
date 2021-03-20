@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -43,6 +44,23 @@ public class L {
 
     public static int px(float dp) {
         return (int) (dp * scale + 0.5f);
+    }
+
+    public static boolean updateTheme(Activity a) {
+        int newTheme = C.LOOKS[M.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
+        try {
+            int currentTheme = a.getPackageManager()
+                .getActivityInfo(a.getComponentName(), 0)
+                .getThemeResource();
+            if (currentTheme != newTheme) {
+                a.setTheme(newTheme);
+                return true;
+            }
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // set

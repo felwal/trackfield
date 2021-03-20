@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.dialogs.sheets.PeekSheet;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,7 +47,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setToolbar();

@@ -16,7 +16,7 @@ import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.sheets.SortSheet;
 import com.example.trackfield.fragments.recyclerfragments.RecyclerFragment;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
+import com.example.trackfield.toolbox.L;
 
 public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
 
@@ -36,7 +36,7 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec);
         frame = findViewById(R.id.frameLayout_scrollerFrameRec);

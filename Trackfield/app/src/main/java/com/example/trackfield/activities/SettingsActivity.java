@@ -26,7 +26,6 @@ import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.dialogs.RadioDialog;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
@@ -60,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         a = this;
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 

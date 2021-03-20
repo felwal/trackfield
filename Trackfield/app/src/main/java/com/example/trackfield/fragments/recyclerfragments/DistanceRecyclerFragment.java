@@ -15,7 +15,6 @@ import com.example.trackfield.items.headers.Goal;
 import com.example.trackfield.items.headers.RecyclerItem;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.M;
 import com.example.trackfield.toolbox.Prefs;
 

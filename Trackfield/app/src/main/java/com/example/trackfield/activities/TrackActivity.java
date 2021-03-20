@@ -12,7 +12,6 @@ import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Coordinate;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
@@ -80,7 +79,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @SuppressLint("MissingPermission") @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track);
         L.makeStatusBarTransparent(getWindow(), false, null);

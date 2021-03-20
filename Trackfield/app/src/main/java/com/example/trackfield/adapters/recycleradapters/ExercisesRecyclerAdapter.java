@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.items.headers.RecyclerItem;
-import com.example.trackfield.toolbox.D;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Deprecated public class ExercisesRecyclerAdapter extends RecyclerAdapter {
+
+    @Deprecated public static int weekAmount = 12;
+
+    //
 
     public ExercisesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);
@@ -35,8 +38,8 @@ import java.util.ArrayList;
         // deprecated
         else if (viewType == ITEM_CHART_OLD) {
             ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.dep_chart, parent, false);
-            ConstraintLayout[] elements = new ConstraintLayout[D.weekAmount];
-            for (int i = 0; i < D.weekAmount; i++) {
+            ConstraintLayout[] elements = new ConstraintLayout[weekAmount];
+            for (int i = 0; i < weekAmount; i++) {
                 elements[i] = (ConstraintLayout) inflater.inflate(R.layout.dep_chart_element_bar, parent, false);
             }
             return new ChartVH(cl, elements);
@@ -58,15 +61,15 @@ import java.util.ArrayList;
 
         public ConstraintLayout constraintLayout;
         public LinearLayout linearLayout;
-        public TextView[] weeks = new TextView[D.weekAmount];
-        public TextView[] distances = new TextView[D.weekAmount];
-        public View[] bars = new View[D.weekAmount];
+        public TextView[] weeks = new TextView[weekAmount];
+        public TextView[] distances = new TextView[weekAmount];
+        public View[] bars = new View[weekAmount];
 
         public ChartVH(ConstraintLayout cl, ConstraintLayout[] elements) {
             super(cl);
             constraintLayout = cl;
             linearLayout = cl.findViewById(R.id.linearLayout_elementContainer);
-            for (int i = 0; i < D.weekAmount; i++) {
+            for (int i = 0; i < weekAmount; i++) {
                 linearLayout.addView(elements[i]);
                 weeks[i] = elements[i].findViewById(R.id.textView_week);
                 distances[i] = elements[i].findViewById(R.id.textView_distance);

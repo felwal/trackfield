@@ -28,11 +28,9 @@ import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.M;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -78,7 +76,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         setToolbar();

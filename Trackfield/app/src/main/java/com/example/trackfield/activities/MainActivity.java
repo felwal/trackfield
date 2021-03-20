@@ -29,7 +29,6 @@ import com.example.trackfield.fragments.recyclerfragments.ExercisesRecyclerFragm
 import com.example.trackfield.fragments.recyclerfragments.RecyclerFragment;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.toolbox.C;
-import com.example.trackfield.toolbox.D;
 import com.example.trackfield.toolbox.F;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private View overlayView;
     private boolean isFabMenuOpen = true;
 
+    @Deprecated public static boolean gameOn = false;
     public static boolean recreate = false;
 
     // dialog tags
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         initApp();
-        D.updateTheme(this);
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         L.setScale(this);
@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // set
 
     private void initApp() {
-        if (!D.gameOn) {
+        if (!gameOn) {
             if (F.shouldAskPermissions(this)) F.askPermissions(this);
             Prefs.SetUpAndLoad(this);
-            D.gameOn = true;
+            gameOn = true;
         }
     }
 
@@ -305,8 +305,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     public void onDecimalDialogPositiveClick(float input, String tag) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
             int distance = (int) (input * 1000);
-            D.addDistance(distance);
-
             Writer.get(this).addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }
