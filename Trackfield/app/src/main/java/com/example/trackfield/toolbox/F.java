@@ -63,7 +63,7 @@ public class F {
 
     // general tools
 
-    private static void writeFile(String pathname, String content, Context c) {
+    private static boolean writeFile(String pathname, String content, Context c) {
 
         // export
         try {
@@ -79,10 +79,13 @@ public class F {
             writer.close();
             stream.flush();
             stream.close();
+
+            return true;
         }
         catch (IOException e) {
-            L.handleError(e, c);
+            //L.handleError(e, c);
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -114,7 +117,7 @@ public class F {
         return lines;
     }
 
-    private static void writeJSONObjectList(String pathname, ArrayList<? extends JSONObjectable> objs, Context c) {
+    private static boolean writeJSONObjectList(String pathname, ArrayList<? extends JSONObjectable> objs, Context c) {
 
         JSONArray array = new JSONArray();
 
@@ -126,12 +129,13 @@ public class F {
         // export
         try {
             String jsonStr = array.toString(2);
-            writeFile(pathname, jsonStr, c);
+            return writeFile(pathname, jsonStr, c);
 
-            L.toast(c.getString(R.string.toast_file_exported), c);
+            //L.toast(c.getString(R.string.toast_file_exported), c);
         }
         catch (JSONException e) {
-            L.handleError(e, c);
+            //L.handleError(e, c);
+            return false;
         }
     }
 
@@ -191,33 +195,43 @@ public class F {
 
     // json
 
-    public static void exportJson(Context c) {
+    public static boolean exportJson(Context c) {
+        boolean success = true;
+
         // version.json
         JSONObject obj = new JSONObject();
         try {
             obj.put(JSON_DB_VERSION, Reader.get(c).getVersion());
             String jsonStr = obj.toString(2);
-            writeFile(PATH + FILENAME_VER, jsonStr, c);
+            success &= writeFile(PATH + FILENAME_VER, jsonStr, c);
         }
         catch (JSONException e) {
             e.printStackTrace();
+            success = false;
         }
 
         // jsonarrays
-        writeJSONObjectList(PATH + FILENAME_E, Reader.get(c).getExercises(), c);
-        writeJSONObjectList(PATH + FILENAME_R, Reader.get(c).getRoutes(true), c);
-        writeJSONObjectList(PATH + FILENAME_D, Reader.get(c).getDistances(), c);
+        success &= writeJSONObjectList(PATH + FILENAME_E, Reader.get(c).getExercises(), c);
+        success &= writeJSONObjectList(PATH + FILENAME_R, Reader.get(c).getRoutes(true), c);
+        success &= writeJSONObjectList(PATH + FILENAME_D, Reader.get(c).getDistances(), c);
+
+        return success;
     }
 
-    public static void importJson(Context c) {
+    public static boolean importJson(Context c) {
         int dbVersion = importVersionJson(c);
+        if (dbVersion == -1) dbVersion = Helper.DATABASE_TARGET_VERSION;
         Writer.get(c).recreate(dbVersion);
 
-        importRoutesJson(c);
-        importDistancesJson(c);
-        importExercisesJson(c);
+        boolean success;
+
+        success = importRoutesJson(c);
+        success &= importDistancesJson(c);
+        success &= importExercisesJson(c);
 
         Writer.get(c).upgradeToTargetVersion(dbVersion);
+
+        return success;
     }
 
     private static int importVersionJson(Context c) {
@@ -230,13 +244,15 @@ public class F {
             dbVersion = obj.getInt(JSON_DB_VERSION);
         }
         catch (JSONException e) {
-            L.handleError("Failed to find database version in json file, using target version instead", e, c);
+            //L.handleError("Failed to find database version in json file, using target version instead", e, c);
+            dbVersion = -1;
         }
 
         return dbVersion;
     }
 
-    private static void importExercisesJson(Context c) {
+    private static boolean importExercisesJson(Context c) {
+        boolean success = true;
 
         ArrayList<Exercise> exercises = new ArrayList<>();
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_E, c)) {
@@ -246,15 +262,18 @@ public class F {
                 exercises.add(e);
             }
             catch (JSONException e) {
-                L.handleError(c.getString(R.string.toast_err_parse_jsonobj), e, c);
+                //L.handleError(c.getString(R.string.toast_err_parse_jsonobj), e, c);
+                success = false;
             }
         }
 
         Writer.get(c).addExercises(exercises, c);
-        L.toast(c.getString(R.string.toast_file_imported), c);
+        //L.toast(c.getString(R.string.toast_file_imported), c);
+        return success;
     }
 
-    private static void importRoutesJson(Context c) {
+    private static boolean importRoutesJson(Context c) {
+        boolean success = true;
 
         ArrayList<Route> routes = new ArrayList<>();
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_R, c)) {
@@ -263,15 +282,18 @@ public class F {
                 routes.add(r);
             }
             catch (JSONException e) {
-                L.handleError(e, c);
+                //L.handleError(e, c);
+                success = false;
             }
         }
 
         Writer.get(c).addRoutes(routes, c);
-        L.toast(c.getString(R.string.toast_file_imported), c);
+        //L.toast(c.getString(R.string.toast_file_imported), c);s
+        return success;
     }
 
-    private static void importDistancesJson(Context c) {
+    private static boolean importDistancesJson(Context c) {
+        boolean success = true;
 
         ArrayList<Distance> distances = new ArrayList<>();
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_D, c)) {
@@ -280,12 +302,14 @@ public class F {
                 distances.add(d);
             }
             catch (JSONException e) {
-                L.handleError(e, c);
+                //L.handleError(e, c);
+                success = false;
             }
         }
 
         Writer.get(c).addDistances(distances);
-        L.toast(c.getString(R.string.toast_file_imported), c);
+        //L.toast(c.getString(R.string.toast_file_imported), c);
+        return success;
     }
 
     // txt

@@ -16,6 +16,7 @@ import com.example.trackfield.activities.ViewActivity;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.toolbox.C;
+import com.example.trackfield.toolbox.L;
 
 public class PeekSheet extends BaseSheet {
 
@@ -108,11 +109,17 @@ public class PeekSheet extends BaseSheet {
         timeTv.setText(exercise.printTime(false));
         paceTv.setText(exercise.printPace(false));
 
-        // open full view
-        view.setOnClickListener(view -> {
-            ViewActivity.startActivity(a, exercise.get_id());
-        });
+        // set text color - TODO: xml attribute does not work - why?
+        int textColor = L.getColorInt(android.R.attr.textColorPrimary, a);
+        routeTv.setTextColor(textColor);
+        routeVarTv.setTextColor(textColor);
+        dateTv.setTextColor(textColor);
+        distanceTv.setTextColor(textColor);
+        timeTv.setTextColor(textColor);
+        paceTv.setTextColor(textColor);
 
+        // open full view
+        view.setOnClickListener(view -> ViewActivity.startActivity(a, exercise.get_id()));
     }
 
     // interface

@@ -162,8 +162,26 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // file
         inflateHeader("File");
-        inflateClickItem("Export json", "", false, v -> F.exportJson(a));
-        inflateClickItem("Import json", "", true, v -> F.importJson(a));
+        inflateClickItem("Export json", "", false, v -> {
+            L.toast("Exporting json...", this);
+            new Thread(() -> {
+                boolean success = F.exportJson(a);
+                runOnUiThread(() -> {
+                    L.toast(getString(success ? R.string.toast_file_exported : R.string.toast_file_err_export), this);
+                });
+            }).start();
+
+        });
+        inflateClickItem("Import json", "", true, v -> {
+            L.toast("Importing json...", this);
+            new Thread(() -> {
+                boolean success = F.importJson(a);
+                runOnUiThread(() -> {
+                    L.toast(getString(success ? R.string.toast_file_imported : R.string.toast_file_err_import), this);
+                });
+            });
+
+        });
 
         // profile
         inflateHeader("Profile");

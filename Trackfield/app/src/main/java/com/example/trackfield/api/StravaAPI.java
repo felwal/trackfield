@@ -219,8 +219,9 @@ public class StravaApi {
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
 
-            return new Exercise(-1, stravaId, type, dateTime, routeId, name, "", "", "", device, method, distance, time,
-                null, trail);
+            return new Exercise(Exercise.NO_ID, stravaId, type, dateTime, routeId, name,
+                "", "", "",
+                device, method, distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();

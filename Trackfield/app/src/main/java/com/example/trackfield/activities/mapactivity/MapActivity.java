@@ -33,6 +33,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected int _id;
 
     protected GoogleMap googleMap;
+    protected ArrayList<Polyline> seletedPolylines = new ArrayList<>();
     protected ArrayList<Polyline> tempPolylines = new ArrayList<>();
     protected ArrayList<PolylineOptions> tempOptions = new ArrayList<>();
     protected boolean tempShown = false;
@@ -67,8 +68,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
-        googleMap.getUiSettings()
-            .setCompassEnabled(false);
+        googleMap.getUiSettings().setCompassEnabled(false);
 
         // set padding (for compass)
         //int mapPaddingTop = /*L.statusBarHeight +*/ L.getAttr(R.attr.actionBarSize, this);
@@ -198,8 +198,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
         // sheet
         int id = (int) polyline.getTag();
-        PeekSheet.newInstance(id)
-            .show(getSupportFragmentManager());
+        PeekSheet.newInstance(id).show(getSupportFragmentManager());
 
         // focus camera
         //LatLngBounds bounds = Trail.bounds(polyline.getPoints());
@@ -208,6 +207,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         // appearence
         polyline.setColor(getColorSelected(this));
         for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorHidden(this));
+        for (Polyline line : seletedPolylines) line.setColor(getColorHidden(this));
     }
 
     @Override
@@ -224,9 +224,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
         // appearence
         polyline.setColor(getColorDeselected(this));
-        for (Polyline line : getPolylineComplement(polyline)) {
-            line.setColor(getColorDeselected(this));
-        }
+        for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorDeselected(this));
+        for (Polyline line : seletedPolylines) line.setColor(getColorSelected(this));
     }
 
     // get static

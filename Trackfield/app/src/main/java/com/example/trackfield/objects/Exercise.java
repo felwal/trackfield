@@ -55,6 +55,7 @@ public class Exercise implements JSONObjectable {
 
     private static final int DISTANCE_DECIMALS = 2;
     public static final int DISTANCE_DRIVEN = -1;
+    public static final int NO_ID = -1;
 
     // json keys
     private static final String JSON_ID = "id";
@@ -191,8 +192,11 @@ public class Exercise implements JSONObjectable {
         }
 
         // update policy
+        route = strava.route;
         type = strava.type;
         dateTime = strava.dateTime;
+        //dataSource = strava.dataSource;
+        //recordingMethod = strava.recordingMethod;
         distance = strava.distance;
         time = strava.time;
         trail = strava.trail;

@@ -11,8 +11,10 @@ import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class RouteMapActivity extends MapActivity {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        setReadyMap(googleMap, trails, MAP_PADDING, this);
+        seletedPolylines = setReadyMap(googleMap, trails, MAP_PADDING, this);
         googleMap.setOnPolylineClickListener(this);
     }
 
@@ -50,17 +52,17 @@ public class RouteMapActivity extends MapActivity {
 
     // set
 
-    public static void setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
-
+    public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
         if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
-        if (trails.trailCount() == 0) return;
+        if (trails.trailCount() == 0) new ArrayList<Polyline>();
 
         // polyline
+        ArrayList<Polyline> polylines = new ArrayList<>();
         for (List<LatLng> latLngs : trails.getLatLngs()) {
             PolylineOptions polyline = new PolylineOptions();
             polyline.color(c.getResources().getColor(R.color.colorGreenLight));
             polyline.addAll(latLngs);
-            googleMap.addPolyline(polyline);
+            polylines.add(googleMap.addPolyline(polyline));
         }
 
         // avg poly
@@ -72,6 +74,7 @@ public class RouteMapActivity extends MapActivity {
         // focus
         moveCamera(googleMap, trails.getBounds(), padding, false);
 
+        return polylines;
     }
 
     // extends

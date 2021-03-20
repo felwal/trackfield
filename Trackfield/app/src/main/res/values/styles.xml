@@ -37,6 +37,10 @@
         <item name="strokeColor">@color/colorGrey4</item>
         <item name="color">@color/colorGreenDarker</item>
 
+        <!-- action overflow menu -->
+        <item name="android:itemBackground">@color/colorGrey3</item>
+        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
+
         <!-- other items -->
         <item name="textAllCaps">false</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -64,6 +68,10 @@
         <item name="colorSurface">@color/colorWhite</item>
         <item name="colorOnSurface">@color/colorGrey6</item>
         <item name="colorOnBackground">@color/colorGrey8</item>
+
+        <!-- action overflow menu (text color funkar inte) -->
+        <!--<item name="android:itemBackground">@color/colorWhite</item>
+        <item name="android:itemTextAppearance">@style/Heading2</item>-->
 
         <item name="strokeColor">@color/colorGrey8</item>
         <item name="panelBackground">@color/colorGrey9</item>

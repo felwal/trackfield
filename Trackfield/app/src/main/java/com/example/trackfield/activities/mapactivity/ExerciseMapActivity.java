@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExerciseMapActivity extends MapActivity {
@@ -47,7 +48,7 @@ public class ExerciseMapActivity extends MapActivity {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        Polyline polyline = setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
+        seletedPolylines = setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
         googleMap.setOnPolylineClickListener(this);
 
         // markers
@@ -68,7 +69,7 @@ public class ExerciseMapActivity extends MapActivity {
 
     // set
 
-    public static Polyline setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
+    public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
 
         // style
         if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
@@ -78,6 +79,9 @@ public class ExerciseMapActivity extends MapActivity {
         options.color(getColorSelected(a));
         options.addAll(trail.getLatLngs());
         Polyline polyline = googleMap.addPolyline(options);
+
+        ArrayList<Polyline> polylines = new ArrayList<>();
+        polylines.add(polyline);
 
         // avg poly
         /*if (trails != null) {
@@ -89,7 +93,7 @@ public class ExerciseMapActivity extends MapActivity {
 
         moveCamera(googleMap, trail.getBounds(), padding, false);
 
-        return polyline;
+        return polylines;
     }
 
     // extends
