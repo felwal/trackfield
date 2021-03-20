@@ -14,26 +14,25 @@ public class C {
     // enums
 
     public enum Layout {
-        EXERCISE,
+        EXERCISES,
+        DISTANCES,
+        ROUTES,
+        INTERVALS,
         DISTANCE,
         ROUTE,
-        EXERCISE_DISTANCE,
-        EXERCISE_ROUTE;
+        INTERVAL;
 
         public static Layout fromInt(int i) {
             switch (i) {
-                case 0:
-                    return EXERCISE;
-                case 1:
-                    return DISTANCE;
-                case 2:
-                    return ROUTE;
-                case 3:
-                    return EXERCISE_DISTANCE;
-                case 4:
-                    return EXERCISE_ROUTE;
+                case 0: return EXERCISES;
+                case 1: return DISTANCES;
+                case 2: return ROUTES;
+                case 3: return INTERVALS;
+                case 4: return DISTANCE;
+                case 5: return ROUTE;
+                case 6: return INTERVAL;
             }
-            return EXERCISE;
+            return EXERCISES;
         }
     }
 
@@ -98,9 +97,17 @@ public class C {
         }
     }
 
-    public enum UnitVelocity { METERS_PER_SECOND, KILOMETERS_PER_HOUR }
+    public enum UnitVelocity {
+        METERS_PER_SECOND,
+        KILOMETERS_PER_HOUR
+    }
 
-    public enum UnitEnergy { JOULES, CALORIES, WATTHOURS, ELECTRONVOLTS }
+    public enum UnitEnergy {
+        JOULES,
+        CALORIES,
+        WATTHOURS,
+        ELECTRONVOLTS
+    }
 
     // text
 

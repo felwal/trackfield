@@ -137,8 +137,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
+        sortMode = Prefs.getSortModePref(C.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISES);
     }
 
     @Override
@@ -148,14 +148,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE);
+        sortMode = Prefs.getSortModePref(C.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISES);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.EXERCISE, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.EXERCISE, smallestFirst);
+        Prefs.setSortModePref(C.Layout.EXERCISES, sortMode);
+        Prefs.setSmallestFirstPref(C.Layout.EXERCISES, smallestFirst);
     }
 
     @Override

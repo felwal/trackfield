@@ -97,8 +97,8 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
+        sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
     }
 
     @Override
@@ -108,14 +108,14 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_DISTANCE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_DISTANCE);
+        sortMode = Prefs.getSortModePref(C.Layout.DISTANCE);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.DISTANCE);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.EXERCISE_DISTANCE, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.EXERCISE_DISTANCE, smallestFirst);
+        Prefs.setSortModePref(C.Layout.DISTANCE, sortMode);
+        Prefs.setSmallestFirstPref(C.Layout.DISTANCE, smallestFirst);
     }
 
     @Override

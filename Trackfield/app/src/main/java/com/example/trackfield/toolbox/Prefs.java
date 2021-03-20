@@ -23,9 +23,10 @@ public class Prefs {
     // file
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
-    //
+    // app
+    private static String appVersion;
     private static boolean developer = true;
     private static boolean firstLogin = true;
 
@@ -55,14 +56,16 @@ public class Prefs {
     @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
 
     // sorting
-    private static C.SortMode[] sortModePrefs = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE };
-    private static boolean[] smallestFirstPrefs = { false, true, false, false, false };
+    private static C.SortMode[] sortModePrefs = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.DATE,
+        C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE, C.SortMode.DATE };
+    private static boolean[] smallestFirstPrefs = { false, true, false,
+        false, false, false, false };
 
     // Strava API
     private static String authCode = "";
     private static String refreshToken = "";
     private static String accessToken = "";
-    private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;// = LocalDateTime.ofEpochSecond(0,0, ZoneOffset.UTC);
+    private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
 
     // consts
     public static final int COLOR_MONO = 0;
@@ -70,6 +73,7 @@ public class Prefs {
 
     // tags
     private static final String SHARED_PREFERENCES = "shared preferences";
+    private static final String APP_VERSION = "appVersion";
     private static final String DEVELOPER = "developer";
     private static final String FIRST_LOGIN = "firstLogin";
     private static final String WEEK_HEADERS = "weekHeaders";
@@ -96,34 +100,100 @@ public class Prefs {
     private static final String STRAVA_ACCESS = "stravaAccessToken";
     private static final String STRAVA_ACCESS_EXP = "stravaAccessExpiration";
 
-    ////
+    //
 
+    /**
+     * Sets up Shared Preferences and loads previously saved fields.
+     * If first time loading, this also saves default values to Shared Preferences.
+     *
+     * <p>Must be called when initializing application.</p>
+     *
+     * @param c Context
+     */
     public static void SetUpAndLoad(Context c) {
         sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         editor = sp.edit();
-        load();
+        appVersion = c.getString(R.string.app_version);
+        load(c);
     }
 
-    private static void load() {
+    private static void save() {
+        // app
+        savePref(appVersion, APP_VERSION);
+        savePref(developer, DEVELOPER);
+        savePref(firstLogin, FIRST_LOGIN); // do not save first login if not to reboard with every app update.
+
+        // display
+        savePref(showWeekHeaders, WEEK_HEADERS);
+        savePref(weekDistance, WEEK_DISTANCE);
+        savePref(showWeekChart, WEEK_CHART);
+        savePref(showDailyChart, DAILY_CHART);
+
+        // look
+        savePref(color, COLOR);
+        savePref(theme, THEME);
+
+        // profile
+        savePref(mass, MASS);
+        savePref(birthday, BIRTHDAY);
+
+        // filtering
+        savePref(showHiddenRoutes, SHOW_HIDDEN_ROUTES);
+        savePref(hideSingletonRoutes, HIDE_SINGLETON_ROUTES);
+        savePref(includeLonger, INCLCUDE_LONGER);
+        savePref(distanceLowerLimit, LIMIT_LOWER);
+        savePref(distanceUpperLimit, LIMIT_UPPER);
+        savePref(exerciseVisibleTypes, TYPES_EXERCISE);
+        savePref(routeVisibleTypes, TYPES_ROUTE);
+        savePref(distanceVisibleTypes, TYPES_DISTANCE);
+
+        // sorting
+        savePref(sortModePrefs, SORT_MODE);
+        savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
+
+        // strava
+        savePref(authCode, STRAVA_AUTH);
+        savePref(refreshToken, STRAVA_REFRESH);
+        savePref(accessToken, STRAVA_ACCESS);
+        savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
+    }
+
+    private static void load(Context c) {
+        // type tokens used more than once
         TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
         TypeToken<String> str = new TypeToken<String>(){};
         TypeToken<Integer> in = new TypeToken<Integer>(){};
         TypeToken<ArrayList<Integer>> intArr = new TypeToken<ArrayList<Integer>>(){};
 
+        // version
+        appVersion = loadPref(str, APP_VERSION);
+        String targetVersion = c.getString(R.string.app_version);
+        if (!appVersion.equals(targetVersion)) {
+            // reset prefs in case of added/removed prefs in new version
+            appVersion = targetVersion;
+            save();
+            return;
+        }
+
+        // app
         developer = loadPref(bool, DEVELOPER);
         firstLogin = loadPref(bool, FIRST_LOGIN);
 
+        // display
         showWeekHeaders = loadPref(bool, WEEK_HEADERS);
         weekDistance = loadPref(bool, WEEK_DISTANCE);
         showWeekChart = loadPref(bool, WEEK_CHART);
         showDailyChart = loadPref(bool, DAILY_CHART);
 
+        // look
         color = loadPref(new TypeToken<Integer>(){}, COLOR);
         theme = loadPref(bool, THEME);
 
+        // profile
         mass = loadPref(new TypeToken<Float>(){}, MASS);
         birthday = loadPref(new TypeToken<LocalDate>(){}, BIRTHDAY);
 
+        // filtering
         showHiddenRoutes = loadPref(bool, SHOW_HIDDEN_ROUTES);
         hideSingletonRoutes = loadPref(bool, HIDE_SINGLETON_ROUTES);
         includeLonger = loadPref(bool, INCLCUDE_LONGER);
@@ -133,9 +203,11 @@ public class Prefs {
         routeVisibleTypes = loadPref(intArr, TYPES_ROUTE);
         distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
 
+        // sorting
         sortModePrefs = loadPref(new TypeToken<C.SortMode[]>(){}, SORT_MODE);
         smallestFirstPrefs = loadPref(new TypeToken<boolean[]>(){}, SORT_SMALLEST_FIRST);
 
+        // strava
         authCode = loadPref(str, STRAVA_AUTH);
         refreshToken = loadPref(str, STRAVA_REFRESH);
         accessToken = loadPref(str, STRAVA_ACCESS);
@@ -160,6 +232,7 @@ public class Prefs {
 
     private static Object ofTag(String tag) {
         switch (tag) {
+            case APP_VERSION: return appVersion;
             case DEVELOPER: return developer;
             case FIRST_LOGIN: return firstLogin;
             case WEEK_HEADERS: return showWeekHeaders;

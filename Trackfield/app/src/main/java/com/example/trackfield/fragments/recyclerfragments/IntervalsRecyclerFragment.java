@@ -78,8 +78,8 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+        sortMode = Prefs.getSortModePref(C.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVALS);
     }
 
     @Override
@@ -89,14 +89,14 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
+        sortMode = Prefs.getSortModePref(C.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVALS);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.ROUTE, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.ROUTE, smallestFirst);
+        Prefs.setSortModePref(C.Layout.INTERVALS, sortMode);
+        Prefs.setSmallestFirstPref(C.Layout.INTERVALS, smallestFirst);
     }
 
     @Override

@@ -97,8 +97,8 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+        sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
 
     @Override
@@ -108,14 +108,14 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
+        sortMode = Prefs.getSortModePref(C.Layout.ROUTE);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTE);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.EXERCISE_ROUTE, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.EXERCISE_ROUTE, smallestFirst);
+        Prefs.setSortModePref(C.Layout.ROUTE, sortMode);
+        Prefs.setSmallestFirstPref(C.Layout.ROUTE, smallestFirst);
     }
 
     @Override

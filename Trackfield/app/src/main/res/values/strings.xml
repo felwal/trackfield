@@ -4,6 +4,7 @@
 
   <string name="app_name">Trackfield</string>
   <string name="package_name">com.example.trackfield</string>
+  <string name="app_version">0.0.0</string>
 
   <!-- activities -->
 

@@ -26,7 +26,7 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
     private final static String BUNDLE_INTERVAL = "interval";
     private final static String BUNDLE_ORIGINID = "originId";
 
-    ////
+    //
 
     public static IntervalRecyclerFragment newInstance(String interval, int originId) {
         IntervalRecyclerFragment instance = new IntervalRecyclerFragment();
@@ -36,7 +36,11 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
         instance.setArguments(bundle);
         return instance;
     }
-    @Override public void onCreate(Bundle savedInstanceState) {
+
+    // extends Fragment
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -45,7 +49,10 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
         }
     }
 
-    @Override protected ArrayList<RecyclerItem> getRecyclerItems() {
+    // extends RecyclerFragment
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
 
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sortMode, smallestFirst);
         //ArrayList<Exerlite> chronoList = reader.getExerlitesByInterval(interval, C.SortMode.DATE, false);
@@ -79,23 +86,32 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
 
         return itemList;
     }
-    @Override protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
-    }
-    @Override protected void getAdapter() {
-        adapter = new IntervalRecyclerAdapter(items, originId, a);
-    }
-    @Override protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISE_ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISE_ROUTE);
-    }
-    @Override protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.EXERCISE_ROUTE, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.EXERCISE_ROUTE, smallestFirst);
+
+    @Override
+    protected void setSortModes() {
+        sortMode = Prefs.getSortModePref(C.Layout.INTERVAL);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVAL);
     }
 
-    @Override public void onItemClick(View view, int position, int itemType) {
+    @Override
+    protected void getAdapter() {
+        adapter = new IntervalRecyclerAdapter(items, originId, a);
+    }
+
+    @Override
+    protected void getPrefs() {
+        sortMode = Prefs.getSortModePref(C.Layout.INTERVAL);
+        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVAL);
+    }
+
+    @Override
+    protected void setPrefs() {
+        Prefs.setSortModePref(C.Layout.INTERVAL, sortMode);
+        Prefs.setSmallestFirstPref(C.Layout.INTERVAL, smallestFirst);
+    }
+
+    @Override
+    public void onItemClick(View view, int position, int itemType) {
         if (itemType == RecyclerAdapter.ITEM_ITEM) {
             int _id = ((Exerlite) items.get(position)).get_id();
             if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_INTERVAL);

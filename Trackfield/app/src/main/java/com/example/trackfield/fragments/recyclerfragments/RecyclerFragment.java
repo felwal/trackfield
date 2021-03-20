@@ -136,69 +136,6 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
 
-    protected String getSortModeTitle(C.Layout layout, C.SortMode sortMode) {
-
-        switch (layout) {
-            case EXERCISE:
-                switch (sortMode) {
-                    case DATE:
-                        return "Date";
-                    case DISTANCE:
-                        return "Distance";
-                    case TIME:
-                        return "Time";
-                    case PACE:
-                        return "Pace";
-                }
-            case DISTANCE:
-                switch (sortMode) {
-                    case DISTANCE:
-                        return "Distance";
-                    case AMOUNT:
-                        return "Amount";
-                    case TIME:
-                        return "Best time";
-                    case PACE:
-                        return "Best pace";
-                }
-            case ROUTE:
-                switch (sortMode) {
-                    case NAME:
-                        return "Name";
-                    case AMOUNT:
-                        return "Amount";
-                    case PACE:
-                        return "Best pace";
-                    case DISTANCE:
-                        return "Avg distance";
-                    case DATE:
-                        return "Recent";
-                }
-            case EXERCISE_DISTANCE:
-                switch (sortMode) {
-                    case DATE:
-                        return "Date";
-                    case PACE:
-                        return "Pace & avg time";
-                    case DISTANCE:
-                        return "Full distance";
-                }
-            case EXERCISE_ROUTE:
-                switch (sortMode) {
-                    case DATE:
-                        return "Date";
-                    case DISTANCE:
-                        return "Distance";
-                    case TIME:
-                        return "Time";
-                    case PACE:
-                        return "Pace";
-                }
-        }
-
-        return "???";
-    }
-
     // calls
 
     public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
