@@ -71,12 +71,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         // TODO: prefs
         Prefs.setDeveloper(true);
-        //Prefs.setFirstLogin(true);
-        if (Prefs.isFirstLogin()) BoardingActivity.startActivity(this);
+        if (Prefs.isFirstLogin()) OnboardingActivity.startActivity(this);
 
         // TODO: dev tool
-        Writer.get(this)
-            .useUpdateToolIfEnabled(this);
+        Writer.get(this).useUpdateToolIfEnabled(this);
 
         strava = new StravaApi(this);
 

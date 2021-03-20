@@ -12,33 +12,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.trackfield.toolbox.L;
 import com.example.trackfield.toolbox.Prefs;
 
-public class BoardingActivity extends AppCompatActivity {
+public class OnboardingActivity extends AppCompatActivity {
 
-    ////
+    //
 
     public static void startActivity(Context c) {
-        Intent startIntent = new Intent(c.getApplicationContext(), BoardingActivity.class);
+        Intent startIntent = new Intent(c.getApplicationContext(), OnboardingActivity.class);
         c.startActivity(startIntent);
     }
 
     // extends AppCompatActivity
 
     @Override protected void onCreate(Bundle savedInstanceState) {
-
+        L.updateTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_boarding);
-        L.makeStatusBarTransparent(getWindow(), true, findViewById(R.id.textView_boardingSubtitle));
+        setContentView(R.layout.activity_onboarding);
+        L.makeStatusBarTransparent(getWindow(), !L.isThemeLight(), findViewById(R.id.textView_onboardingSubtitle));
 
         //adapter = new BoardingPagerAdapter(this, getSupportFragmentManager());
         //pager = findViewById(R.id.view_pager);
         //pager.setAdapter(adapter);
 
-        setBtn();
+        setViews();
     }
 
     // set
 
-    private void setBtn() {
+    private void setViews() {
         final Button nextBtn = findViewById(R.id.button_start);
         nextBtn.setOnClickListener(view -> {
             Prefs.setFirstLogin(false);

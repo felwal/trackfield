@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorGreen"
-    tools:context=".activities.BoardingActivity">
+    tools:context=".activities.OnboardingActivity">
 
     <!--<androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
@@ -20,14 +20,14 @@
     </androidx.viewpager.widget.ViewPager>-->
 
     <TextView
-        android:id="@+id/textView_boardingSubtitle"
+        android:id="@+id/textView_onboardingSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/tv_text_boarding_subtitle"
+        android:text="@string/tv_text_onboarding_subtitle"
         android:textAppearance="@style/Headline"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimaryInverse"
         android:textSize="24sp"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,37 +35,37 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_boardingTitle"
+        android:id="@+id/textView_onboardingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/tv_text_boarding_title"
+        android:text="@string/tv_text_onboarding_title"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="@style/Headline"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimaryInverse"
         android:textSize="36sp"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_boardingSubtitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_onboardingSubtitle" />
 
     <TextView
-        android:id="@+id/textView_boardingCaption"
+        android:id="@+id/textView_onboardingCaption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/tv_text_boarding_caption"
+        android:text="@string/tv_text_onboarding_caption"
         android:textAlignment="center"
         android:textAppearance="@style/Body"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimaryInverse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_boardingTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_onboardingTitle" />
 
     <Button
         android:id="@+id/button_start"
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
         android:text="@string/btn_text_boarding_start"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimaryInverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

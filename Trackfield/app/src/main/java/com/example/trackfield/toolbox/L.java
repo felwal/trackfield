@@ -46,12 +46,18 @@ public class L {
         return (int) (dp * scale + 0.5f);
     }
 
+    /**
+     * Updates activity theme to chosen theme.
+     * Should be called first thing in every activities onCreate.
+     *
+     * @param a Activity
+     * @return True if theme was updated, false otherwise
+     */
     public static boolean updateTheme(Activity a) {
         int newTheme = C.LOOKS[M.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
         try {
-            int currentTheme = a.getPackageManager()
-                .getActivityInfo(a.getComponentName(), 0)
-                .getThemeResource();
+            // currentTheme är alltid default?
+            int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
             if (currentTheme != newTheme) {
                 a.setTheme(newTheme);
                 return true;
@@ -60,6 +66,18 @@ public class L {
         catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public static boolean isThemeLight() {
+        int lightThemeMono = C.LOOKS[1][0];
+        int lightThemeGreen = C.LOOKS[1][1];
+
+        int currentTheme = C.LOOKS[M.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
+        if (currentTheme == lightThemeMono || currentTheme == lightThemeGreen) {
+            return true;
+        }
+
         return false;
     }
 

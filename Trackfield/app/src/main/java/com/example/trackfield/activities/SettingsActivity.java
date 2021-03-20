@@ -199,7 +199,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             inflateHeader("Developer Options");
             inflateClickItem("Reboard", "", false, v -> {
                 Prefs.setFirstLogin(true);
-                BoardingActivity.startActivity(this);
+                OnboardingActivity.startActivity(this);
             });
             inflateClickItem("Recreate database", "", true, v -> Writer.get(this).recreate());
             //inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));

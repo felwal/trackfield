@@ -4,7 +4,7 @@
 
   <string name="app_name">Trackfield</string>
   <string name="package_name">com.example.trackfield</string>
-  <string name="app_version">0.0.0</string>
+  <string name="app_version">v0.0.0</string>
 
   <!-- activities -->
 
@@ -12,7 +12,7 @@
   <string name="activity_view">Exercise</string>
   <string name="activity_maps">Map</string>
   <string name="activity_track">Track</string>
-  <string name="activity_boarding">BoardingActivity</string>
+  <string name="activity_onboarding">Onboarding</string>
 
   <!-- fragments -->
 
@@ -27,12 +27,12 @@
   <string name="tab_routes">Routes</string>
   <string name="tab_intervals">Intervals</string>
 
-  <string name="tab_boarding1_title">Exercise</string>
-  <string name="tab_boarding2_title">Analyze</string>
-  <string name="tab_boarding3_title">Organize</string>
-  <string name="tab_boarding1_message">You do you.</string>
-  <string name="tab_boarding2_message">Chart, graph, compare.</string>
-  <string name="tab_boarding3_message">Your exercises, exactly where you need them.</string>
+  <string name="tab_onboarding1_title">Exercise</string>
+  <string name="tab_onboarding2_title">Analyze</string>
+  <string name="tab_onboarding3_title">Organize</string>
+  <string name="tab_onboarding1_message">You do you.</string>
+  <string name="tab_onboarding2_message">Chart, graph, compare.</string>
+  <string name="tab_onboarding3_message">Your exercises, exactly where you need them.</string>
 
   <!-- edit texts -->
 
@@ -52,9 +52,9 @@
 
   <!-- text views -->
 
-  <string name="tv_text_boarding_subtitle">Welcome to</string>
-  <string name="tv_text_boarding_title">Trackfield!</string>
-  <string name="tv_text_boarding_caption">Hej mamma</string>
+  <string name="tv_text_onboarding_subtitle">Welcome to</string>
+  <string name="tv_text_onboarding_title">Trackfield!</string>
+  <string name="tv_text_onboarding_caption">@string/app_version</string>
 
   <!-- buttons -->
 
