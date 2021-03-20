@@ -41,7 +41,8 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
         // show hidden
         MenuItem hiddenItem = menu.findItem(R.id.action_showHidden);
         hiddenItem.setChecked(Prefs.areHiddenRoutesShown());
-        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden_24dp).setTitle(R.string.action_hide_hidden);
+        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden_24dp)
+            .setTitle(R.string.action_hide_hidden);
         else hiddenItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_show_hidden);
     }
 

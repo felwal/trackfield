@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_recentre"
-        android:title="Recentre map"
+        android:title="@string/action_map_recentre"
         android:icon="@drawable/ic_map_recentre_24dp"
         app:showAsAction="always"/>
 
@@ -17,13 +17,13 @@
 
     <item
         android:id="@+id/action_heatmap"
-        android:title="Heatmap"
+        android:title="@string/action_map_history"
         android:icon="@drawable/ic_heatmap_24dp"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_maptype"
-        android:title="Map Type"
+        android:title="@string/action_map_type"
         android:icon="@drawable/ic_map_type_24dp"
         app:showAsAction="always"/>
 

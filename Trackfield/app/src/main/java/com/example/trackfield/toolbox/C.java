@@ -98,17 +98,17 @@ public class C {
         }
     }
 
-    public enum UnitVelocity {METERS_PER_SECOND, KILOMETERS_PER_HOUR}
+    public enum UnitVelocity { METERS_PER_SECOND, KILOMETERS_PER_HOUR }
 
-    public enum UnitEnergy {JOULES, CALORIES, WATTHOURS, ELECTRONVOLTS}
+    public enum UnitEnergy { JOULES, CALORIES, WATTHOURS, ELECTRONVOLTS }
 
     // text
 
     public static final String TAB = "       "; // 7
-    public static final char[] ARROWS = {'↓', '↑'};
+    public static final char[] ARROWS = { '↓', '↑' };
     public static final String NO_VALUE = "—";
     public static final String NO_VALUE_TIME = "– : –";
-    public static final String[] M = {"J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"};
+    public static final String[] MONTH_M = { "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D" };
 
     // formatter
     public static final DateTimeFormatter FORMATTER_FILE = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -122,18 +122,20 @@ public class C {
     public static final DateTimeFormatter FORMATTER_REC = DateTimeFormatter.ofPattern("d MMM ’yy");
     public static final DateTimeFormatter FORMATTER_REC_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
     public static final DateTimeFormatter[] FORMATTERS_SEARCH = {
-            DateTimeFormatter.ofPattern("dd MMMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMMM dd"), DateTimeFormatter.ofPattern("yyyy MMMM d"),
-            DateTimeFormatter.ofPattern("dd MMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMM dd"), DateTimeFormatter.ofPattern("yyyy MMM d"),
-            DateTimeFormatter.ofPattern("dd/MM/yyyy"), DateTimeFormatter.ofPattern("yyyy/MM/dd")};
+        DateTimeFormatter.ofPattern("dd MMMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMMM dd"),
+        DateTimeFormatter.ofPattern("yyyy MMMM d"),
+        DateTimeFormatter.ofPattern("dd MMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMM dd"),
+        DateTimeFormatter.ofPattern("yyyy MMM d"),
+        DateTimeFormatter.ofPattern("dd/MM/yyyy"), DateTimeFormatter.ofPattern("yyyy/MM/dd") };
 
     public static final TemporalField WEEK_OF_YEAR = WeekFields.ISO.weekOfWeekBasedYear();
     public static final TemporalField DAY_OF_WEEK = WeekFields.ISO.dayOfWeek();
 
     // theme
-    public static final ArrayList<String> themeNames = new ArrayList<>(Arrays.asList("Dark", "Light", "Set by Battery Saver"));
+    public static final ArrayList<String> themeNames = new ArrayList<>(Arrays.asList("Dark", "Light"));
     public static final ArrayList<String> colorNames = new ArrayList<>(Arrays.asList("Mono", "Green"));
     public static final int[][] LOOKS = {
-            {R.style.AppTheme_Dark_Mono, R.style.AppTheme_Dark_Green, R.style.AppTheme_Splash},
-            {R.style.AppTheme_Light_Mono, R.style.AppTheme_Light_Green}};
+        { R.style.AppTheme_Dark_Mono, R.style.AppTheme_Dark_Green, R.style.AppTheme_Splash },
+        { R.style.AppTheme_Light_Mono, R.style.AppTheme_Light_Green } };
 
 }

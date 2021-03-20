@@ -187,7 +187,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             }
             DatePickerDialog picker = new DatePickerDialog(a, (view, year, month, dayOfMonth) -> {
                 Prefs.setBirthday(LocalDate.of(year, month + 1, dayOfMonth));
-                ((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(C.FORMATTER_CAPTION));
+                recreate();
+                //((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(C.FORMATTER_CAPTION));
             }, yearSelect, monthSelect, daySelect);
             picker.getDatePicker().setMaxDate(System.currentTimeMillis());
             picker.show();
@@ -208,18 +209,20 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // inflate items
 
-    private void inflateHeader(String title) {
+    private View inflateHeader(String title) {
         View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
         ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
         ll.addView(v);
+        return v;
     }
 
-    private void inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
+    private View inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager()));
+        return v;
     }
 
-    private void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
+    private View inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
         final Switch sw = v.findViewById(R.id.switch_setting);
         sw.setChecked(checked);
@@ -227,11 +230,13 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             sw.setChecked(!sw.isChecked());
             listener.onSwitch(sw.isChecked());
         });
+        return v;
     }
 
-    private void inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
+    private View inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(listener);
+        return v;
     }
 
     // inflate views
@@ -267,7 +272,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 case 1:
                     if (!Prefs.isThemeLight()) Prefs.setTheme(true);
                     break;
-                case 2:
+                default:
                     break;
             }
         }
@@ -290,6 +295,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     public void onDecimalDialogPositiveClick(float input, String tag) {
         if (tag.equals(DIALOG_MASS)) {
             Prefs.setMass(input);
+            recreate();
         }
     }
 

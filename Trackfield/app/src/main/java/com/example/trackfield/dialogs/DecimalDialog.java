@@ -29,7 +29,6 @@ public class DecimalDialog extends BaseDialog {
     ////
 
     public static DecimalDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, float text, String hint, @StringRes int posBtnTxtRes, String tag) {
-
         DecimalDialog instance = new DecimalDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
@@ -59,19 +58,16 @@ public class DecimalDialog extends BaseDialog {
 
     @Override
     protected void unpackBundle() {
-
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         if (bundle != null) {
             text = bundle.getFloat(BUNDLE_TEXT, 0);
             hint = bundle.getString(BUNDLE_HINT, "");
         }
-
     }
 
     @Override
     protected AlertDialog buildDialog() {
-
         final View dialogView = inflater.inflate(R.layout.dialog_decimal, null);
         final EditText et = dialogView.findViewById(R.id.editText_numberDecimalField);
 
