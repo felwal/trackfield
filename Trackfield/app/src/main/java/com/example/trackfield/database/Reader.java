@@ -763,7 +763,7 @@ public class Reader extends Helper {
     }
 
     @NonNull
-    public ArrayList<IntervalItem> getIntervalItems(C.SortMode sortMode, boolean smallestFirst, boolean includeLesser) {
+    public ArrayList<IntervalItem> getIntervalItems(C.SortMode sortMode, boolean smallestFirst, boolean includeHidden) {
         /*String[] columns = { Contract.ExerciseEntry.COLUMN_INTERVAL };
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -792,7 +792,7 @@ public class Reader extends Helper {
         String[] columns = { Contract.ExerciseEntry.COLUMN_INTERVAL, "count(1) AS " + col_amount };
         String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " != ''";
         String groupBy = Contract.ExerciseEntry.COLUMN_INTERVAL;
-        String having = includeLesser ? "" : "count(1) > 1";
+        String having = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : "count(1) > 1";
         String orderBy = orderBy(sortMode, smallestFirst);
 
         Cursor cursor = db.query(table, columns, selection, null, groupBy, having, orderBy);
@@ -912,7 +912,7 @@ public class Reader extends Helper {
         String col_time = Contract.ExerciseEntry.COLUMN_TIME;
         String sel_pace = "pace";
 
-        String columns = "1000*(" + col_time + "/" + col_dist + ") AS " + sel_pace;
+        String columns = Contract.ExerciseEntry.SELECTION_PACE + " AS " + sel_pace;
         String andTypeFilter = typeFilter(" AND", types);
         String orderByPace = orderBy(C.SortMode.PACE, true);
         String orderByDate = orderBy(C.SortMode.DATE, true);

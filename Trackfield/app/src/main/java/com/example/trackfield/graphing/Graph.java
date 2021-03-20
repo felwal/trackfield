@@ -60,6 +60,11 @@ public class Graph extends RecyclerItem {
 
     // set
 
+    /**
+     * Adds data nodes, topmost first.
+     *
+     * @param data Data to add
+     */
     public void addData(GraphData data) {
         if (data.isEmpty()) return;
         this.data.add(0, data);

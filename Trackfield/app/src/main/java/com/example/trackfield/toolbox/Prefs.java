@@ -47,7 +47,7 @@ public class Prefs {
     private static boolean showHiddenRoutes = true;
     private static boolean hideSingletonRoutes = true;
     private static boolean includeLonger = false;
-    private static boolean includePaceless = true;
+    private static boolean includePaceless = true; // TODO
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
     @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>();

@@ -62,9 +62,6 @@
     <color name="colorRipple">@color/colorGreenDarker</color>
     <color name="colorDivider">@color/colorGrey5</color>
 
-
-
-
     <!-- light -->
     <!--
     <color name="colorPrimaryDark">@color/colorGreenDark</color>

@@ -358,7 +358,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
         default void interruptAndStart() {
             if (bgThread != null) bgThread.interrupt();
-            bgThread = new Thread(() -> Threader.this.run());
+            bgThread = new Thread(Threader.this::run);
             bgThread.start();
         }
 

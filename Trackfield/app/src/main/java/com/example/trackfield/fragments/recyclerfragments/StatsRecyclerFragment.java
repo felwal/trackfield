@@ -38,34 +38,47 @@ public class StatsRecyclerFragment extends RecyclerFragment {
 
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-        GraphData dataGoal = new GraphData(Reader.get(a).monthIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-        dataGoal.setPaint("#003E3F43", "#FF252528");
-        GraphData dataNow = new GraphData(Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-        GraphData dataLastMonth = new GraphData(Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)), GraphData.GRAPH_LINE, false, false);
-        dataLastMonth.setPaint("#FF3E3F43", "#FF252528");
+        //GraphData dataGoalMonth = new GraphData(Reader.get(a).monthIntegralDistanceGoal(LocalDate.now()),
+        //    GraphData.GRAPH_LINE, false, true);
+        //dataGoalMonth.setPaint("#003E3F43", "#FF252528");
+        GraphData dataThisMonth = new GraphData(
+            Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            GraphData.GRAPH_LINE, false, false);
+        GraphData dataLastMonth = new GraphData(
+            Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
+            GraphData.GRAPH_LINE, false, false);
+        dataLastMonth.setPaint(R.attr.colorOnBackground, a);
 
-        Graph monthGraph = new Graph(dataNow, false, true, true, true, true, true, false, true);
+        Graph monthGraph = new Graph(dataThisMonth, false, true, true, true, true, true, false, true);
         monthGraph.addData(dataLastMonth);
-        monthGraph.addData(dataGoal);
+        //monthGraph.addData(dataGoalMonth);
         itemList.add(monthGraph);
 
-        GraphData dataGoalYear = new GraphData(Reader.get(a).yearIntegralDistanceGoal(LocalDate.now()), GraphData.GRAPH_LINE, false, true);
-        dataGoalYear.setPaint("#003E3F43", "#FF252528");
-        GraphData dataNowYear = new GraphData(Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_LINE, false, false);
-        GraphData dataLastYear = new GraphData(Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)), GraphData.GRAPH_LINE, false, false);
-        dataLastYear.setPaint("#FF3E3F43", "#FF252528");
+        //GraphData dataGoalYear = new GraphData(Reader.get(a).yearIntegralDistanceGoal(LocalDate.now()),
+        //    GraphData.GRAPH_LINE, false, true);
+        //dataGoalYear.setPaint("#003E3F43", "#FF252528");
+        GraphData dataThisYear = new GraphData(
+            Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            GraphData.GRAPH_LINE, false, false);
+        GraphData dataLastYear = new GraphData(
+            Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            GraphData.GRAPH_LINE, false, false);
+        dataLastYear.setPaint(R.attr.colorOnBackground, a);
 
-        Graph yearGraph = new Graph(dataNowYear, false, true, true, true, true, true, false, true);
+        Graph yearGraph = new Graph(dataThisYear, false, true, true, true, true, true, false, true);
         yearGraph.addData(dataLastYear);
-        yearGraph.addData(dataGoalYear);
+        //yearGraph.addData(dataGoalYear);
         itemList.add(yearGraph);
 
-        GraphData dataNowYear2 = new GraphData(Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR, false, false);
-        GraphData dataGoalYear2 = new GraphData(Reader.get(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false, false);
-        dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
+        //GraphData dataGoalYear2 = new GraphData(Reader.get(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false,
+        //    false);
+        GraphData dataThisYear2 = new GraphData(
+            Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
+            false, false);
+        //dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
 
-        Graph yearGraph2 = new Graph(dataNowYear2, false, true, true, true, true, true, false, true);
-        yearGraph2.addData(dataGoalYear2);
+        Graph yearGraph2 = new Graph(dataThisYear2, false, true, true, true, true, true, false, true);
+        //yearGraph2.addData(dataGoalYear2);
         itemList.add(yearGraph2);
 
         return itemList;

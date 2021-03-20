@@ -217,12 +217,10 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         typeTv.setText(exercise.printType());
         setTvHideIfEmpty(exercise.getDataSource(), dataSourceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
-        setTvHideIfEmpty(exercise.printExternalId(), extIdTv);
+        setTvHideIfEmpty("", extIdTv);
 
         TextView sTv = findViewById(R.id.textView_s);
-        if (exercise.isDistanceDriven()) {
-            sTv.setText("s.");
-        }
+        if (exercise.isDistanceDriven()) sTv.setText("s.");
 
         setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.textView_sigma));
         setTvHideIfEmpty(exercise.printDistance(false), distanceTv, sTv);

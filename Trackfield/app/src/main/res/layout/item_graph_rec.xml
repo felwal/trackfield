@@ -25,8 +25,8 @@
 
             <com.example.trackfield.graphing.GraphView
                 android:id="@+id/graphSurface_rec"
-                android:layout_width="175dp"
-                android:layout_height="175dp"
+                android:layout_width="@dimen/layout_graph_medium"
+                android:layout_height="@dimen/layout_graph_medium"
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="24dp"
                 android:paddingTop="16dp"

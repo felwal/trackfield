@@ -1,5 +1,6 @@
 package com.example.trackfield.graphing;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -71,6 +72,15 @@ public class GraphData {
     public void setPaint(String colorString, String areaColorString) {
         paint.setColor(Color.parseColor(colorString));
         areaPaint.setColor(Color.parseColor(areaColorString));
+    }
+
+    public void setPaint(int colorAttrResId, Context c) {
+        paint.setColor(c.getColor(L.getAttr(colorAttrResId, c)));
+    }
+
+    public void setPaint(int colorAttrResId, int areaColorAttrResId, Context c) {
+        paint.setColor(c.getColor(L.getAttr(colorAttrResId, c)));
+        areaPaint.setColor(c.getColor(L.getAttr(areaColorAttrResId, c)));
     }
 
     // calc

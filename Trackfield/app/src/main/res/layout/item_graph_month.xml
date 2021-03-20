@@ -10,7 +10,7 @@
     <com.example.trackfield.graphing.GraphView
         android:id="@+id/graphSurface_base"
         android:layout_width="0dp"
-        android:layout_height="225dp"
+        android:layout_height="@dimen/layout_graph_large"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:fadingEdge="horizontal"
