@@ -35,13 +35,12 @@ import java.time.LocalDate;
 public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener,
     DecimalDialog.DialogListener {
 
-    private Activity a;
     private LayoutInflater inflater;
     private LinearLayout ll;
 
     // api
-    FitnessApi fit;
     StravaApi strava;
+    //FitnessApi fit;
 
     // dialog tags
     private static final String DIALOG_THEME = "themeDialog";
@@ -51,14 +50,14 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     //
 
     public static void startActivity(@NonNull Context c) {
-        c.startActivity(new Intent(c, SettingsActivity.class));
+        Intent intent = new Intent(c, SettingsActivity.class);
+        c.startActivity(intent);
     }
 
     // extends AppcompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        a = this;
         L.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
@@ -70,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateViews();
 
         // api
-        fit = new FitnessApi(this);
+        //fit = new FitnessApi(this);
         strava = new StravaApi(this);
         strava.handleIntent(getIntent());
     }
@@ -97,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == FitnessApi.REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) fit.permissionsGained();
+            //if (requestCode == FitnessApi.REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) fit.permissionsGained();
             //if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
         }
     }
@@ -120,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // set
 
-    private void setToolbar() {
+    protected void setToolbar() {
         final Toolbar tb = findViewById(R.id.toolbar_settings);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
@@ -128,7 +127,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void inflateViews() {
+    protected void inflateViews() {
 
         // display options
         inflateHeader("Display Options");
@@ -147,13 +146,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
                 C.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
-        // Strava
-        inflateHeader("Strava");
-        inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
-        inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
-        inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
-        inflateClickItem("Authorize", "", true,
-            v -> strava.authorizeStrava());
+        // third party services
+        inflateHeader("Third party services");
+        inflateClickItem("Strava", ". . .", true, v -> StravaSettingsActivity.startActivity(this));
 
         // Google Fit
         //inflateHeader("Google Fit");
@@ -165,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateClickItem("Export json", "", false, v -> {
             L.toast(R.string.toast_json_exporting, this);
             new Thread(() -> {
-                boolean success = F.exportJson(a);
+                boolean success = F.exportJson(this);
                 runOnUiThread(() -> {
                     L.toast(success ? R.string.toast_json_export_successful : R.string.toast_json_export_err, this);
                 });
@@ -174,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateClickItem("Import json", "", true, v -> {
             L.toast(R.string.toast_json_importing, this);
             new Thread(() -> {
-                boolean success = F.importJson(a);
+                boolean success = F.importJson(this);
                 runOnUiThread(() -> {
                     L.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
                 });
@@ -201,7 +196,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 monthSelect = bd.getMonthValue() - 1;
                 daySelect = bd.getDayOfMonth();
             }
-            DatePickerDialog picker = new DatePickerDialog(a, (view, year, month, dayOfMonth) -> {
+            DatePickerDialog picker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
                 Prefs.setBirthday(LocalDate.of(year, month + 1, dayOfMonth));
                 recreate();
                 //((TextView) birth.findViewById(R.id.textView_value)).setText(bd.format(C.FORMATTER_CAPTION));
@@ -225,20 +220,20 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // inflate items
 
-    private View inflateHeader(String title) {
+    protected View inflateHeader(String title) {
         View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
         ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
         ll.addView(v);
         return v;
     }
 
-    private View inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
+    protected View inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager()));
         return v;
     }
 
-    private View inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
+    protected View inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
         final Switch sw = v.findViewById(R.id.switch_setting);
         sw.setChecked(checked);
@@ -249,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         return v;
     }
 
-    private View inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
+    protected View inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(listener);
         return v;
@@ -320,6 +315,39 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     interface OnSwitchListener {
 
         void onSwitch(boolean checked);
+
+    }
+
+    // sub-settings classes
+
+    public static class StravaSettingsActivity extends SettingsActivity {
+
+        public static void startActivity(@NonNull Context c) {
+            Intent intent = new Intent(c, StravaSettingsActivity.class);
+            c.startActivity(intent);
+        }
+
+        //
+
+        @Override
+        protected void setToolbar() {
+            final Toolbar tb = findViewById(R.id.toolbar_settings);
+            setSupportActionBar(tb);
+            ActionBar ab = getSupportActionBar();
+            ab.setTitle(getResources().getString(R.string.fragment_settings_strava));
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+
+        @Override
+        protected void inflateViews() {
+            inflateHeader("Request activities");
+            inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
+            inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
+            inflateClickItem("Request all", "", true, v -> strava.requestAllActivities());
+
+            inflateHeader("Connection");
+            inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
+        }
 
     }
 
