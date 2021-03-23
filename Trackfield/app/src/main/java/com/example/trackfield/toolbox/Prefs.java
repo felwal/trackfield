@@ -46,7 +46,7 @@ public class Prefs {
 
     // filtering
     private static boolean showHiddenRoutes = true;
-    private static boolean hideSingletonRoutes = true;
+    private static boolean hideSingletonRoutes = false;
     private static boolean includeLonger = false;
     private static boolean includePaceless = true; // TODO
     private static int distanceLowerLimit = 630;

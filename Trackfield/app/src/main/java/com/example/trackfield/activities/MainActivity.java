@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private FloatingActionButton fab, addFab, trackFab, stravaFab;
     private ConstraintLayout addCl, trackCl, stravaCl;
     private View overlayView;
-    private boolean isFabMenuOpen = true;
+    private boolean isFabMenuOpen = false;
 
     @Deprecated public static boolean gameOn = false;
     public static boolean recreate = false;
@@ -193,10 +193,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         overlayView = findViewById(R.id.view_overlay);
 
         // hide
-        stravaCl.setVisibility(View.GONE);
-        trackCl.setVisibility(View.GONE);
-        addCl.setVisibility(View.GONE);
-        closeFabMenu();
+        //stravaCl.setVisibility(View.GONE);
+        //trackCl.setVisibility(View.GONE);
+        //addCl.setVisibility(View.GONE);
+        //closeFabMenu();
 
         // click
         fab.setOnClickListener(v -> {

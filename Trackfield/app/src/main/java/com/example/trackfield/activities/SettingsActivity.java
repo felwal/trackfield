@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private static final String DIALOG_COLOR = "colorDialog";
     private static final String DIALOG_MASS = "massDialog";
 
-    ////
+    //
 
     public static void startActivity(@NonNull Context c) {
         c.startActivity(new Intent(c, SettingsActivity.class));
@@ -83,10 +83,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     @Override
     protected void onNewIntent(Intent intent) {
-        // strava
-
         super.onNewIntent(intent);
         setIntent(intent);
+
+        // handle intent for strava authorization result
         strava.handleIntent(getIntent());
     }
 
@@ -98,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == FitnessApi.REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) fit.permissionsGained();
-            if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
+            //if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
         }
     }
 
@@ -152,7 +152,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
         inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
         inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
-        inflateClickItem("Status", Prefs.isRefreshTokenCurrent() ? "Connected" : "Not Connected", true,
+        inflateClickItem("Authorize", "", true,
             v -> strava.authorizeStrava());
 
         // Google Fit
@@ -163,24 +163,22 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // file
         inflateHeader("File");
         inflateClickItem("Export json", "", false, v -> {
-            L.toast("Exporting json...", this);
+            L.toast(R.string.toast_json_exporting, this);
             new Thread(() -> {
                 boolean success = F.exportJson(a);
                 runOnUiThread(() -> {
-                    L.toast(getString(success ? R.string.toast_file_exported : R.string.toast_file_err_export), this);
+                    L.toast(success ? R.string.toast_json_export_successful : R.string.toast_json_export_err, this);
                 });
             }).start();
-
         });
         inflateClickItem("Import json", "", true, v -> {
-            L.toast("Importing json...", this);
+            L.toast(R.string.toast_json_importing, this);
             new Thread(() -> {
                 boolean success = F.importJson(a);
                 runOnUiThread(() -> {
-                    L.toast(getString(success ? R.string.toast_file_imported : R.string.toast_file_err_import), this);
+                    L.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
                 });
-            });
-
+            }).start();
         });
 
         // profile

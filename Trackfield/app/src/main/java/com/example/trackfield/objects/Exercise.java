@@ -186,13 +186,12 @@ public class Exercise implements JSONObjectable {
         }
     }
 
-    public void mergeStravaPull(Exercise strava) {
-        if (externalId != strava.externalId) {
-            return;
-        }
+    public boolean mergeStravaPull(Exercise strava, Context c) {
+        if (externalId != strava.externalId) return false;
 
         // update policy
         route = strava.route;
+        routeId = Reader.get(c).getRouteIdOrCreate(route, c);
         type = strava.type;
         dateTime = strava.dateTime;
         //dataSource = strava.dataSource;
@@ -200,6 +199,8 @@ public class Exercise implements JSONObjectable {
         distance = strava.distance;
         time = strava.time;
         trail = strava.trail;
+
+        return true;
     }
 
     // get
@@ -295,7 +296,7 @@ public class Exercise implements JSONObjectable {
         if (isDistanceDriven()) {
             return Reader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
         }
-        if (distance == 0 && time == 0) return getSubsDistance();
+        //if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
     }
 

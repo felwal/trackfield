@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -88,7 +89,7 @@ public class L {
             scale = a.getResources().getDisplayMetrics().density;
         }
         catch (Exception e) {
-            handleError(a.getString(R.string.toast_err_display_density), e, a);
+            handleError(R.string.toast_err_display_density, e, a);
         }
 
         // funkar inte / gör status svart
@@ -224,6 +225,10 @@ public class L {
         Toast.makeText(c, s, Toast.LENGTH_LONG).show();
     }
 
+    public static void toast(@StringRes int stringResId, Context c) {
+        Toast.makeText(c, c.getString(stringResId), Toast.LENGTH_LONG).show();
+    }
+
     public static void toast(boolean b, Context c) {
         if (b) return;
         Toast.makeText(c, "success: " + b, Toast.LENGTH_SHORT).show();
@@ -237,6 +242,11 @@ public class L {
     public static void handleError(String desc, Exception e, Context c) {
         e.printStackTrace();
         Toast.makeText(c, desc + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    public static void handleError(@StringRes int stringResId, Exception e, Context c) {
+        e.printStackTrace();
+        Toast.makeText(c, c.getString(stringResId) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     // animate

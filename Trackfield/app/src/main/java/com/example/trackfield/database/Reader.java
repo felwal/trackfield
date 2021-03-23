@@ -172,9 +172,10 @@ public class Reader extends Helper {
 
         String[] columns = Contract.ExerciseEntry.COLUMNS_EXERLITE;
         String selection =
-            "(" + Contract.ExerciseEntry._ID + " LIKE" + "'%" + search + "%' OR " + Contract.ExerciseEntry.COLUMN_DATE +
-                " LIKE" + "'%" + search + "%' OR " + Contract.ExerciseEntry.COLUMN_ROUTE + " LIKE" + "'%" + search +
-                "%' OR " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE" + "'%" + search + "%' OR " +
+            "(" + Contract.ExerciseEntry._ID + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_DATE + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_ROUTE + " LIKE" + "'%" + search + "%' OR " +
+                Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_DATA_SOURCE + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE" + "'%" + search + "%' OR " +
                 Contract.ExerciseEntry.COLUMN_NOTE + " LIKE" + "'%" + search + "%' OR " +

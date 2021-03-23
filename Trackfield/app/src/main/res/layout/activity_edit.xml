@@ -155,7 +155,7 @@
 
                 <EditText
                     android:id="@+id/editText_distance"
-                    android:layout_width="45dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:focusedByDefault="false"
@@ -165,6 +165,20 @@
                     android:textSize="@dimen/type_heading1"
                     app:layout_constraintBottom_toBottomOf="@+id/textView_s"
                     app:layout_constraintStart_toEndOf="@+id/textView_s"
+                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
+
+                <Switch
+                    android:id="@+id/switch_driven"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="right|center_vertical"
+                    android:switchPadding="10dp"
+                    android:text="@string/switch_text_driven"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/editText_distance"
                     app:layout_constraintTop_toTopOf="@+id/textView_s" />
 
                 <TextView

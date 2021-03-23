@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -37,17 +39,28 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, BinaryDialog.DialogListener {
+public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+    BinaryDialog.DialogListener {
 
     private Exercise exercise;
     private int _id;
-    private boolean driveDistance = false;
     private boolean edit;
 
     private String createDate, createTime;
 
-    private TextView sTv;
-    private EditText routeEt, routeVarEt, intervalEt, noteEt, distanceEt, hoursEt, minutesEt, secondsEt, dataSourceEt, recordingMethodEt, dateEt, timeEt;
+    private EditText routeEt,
+        routeVarEt,
+        intervalEt,
+        noteEt,
+        distanceEt,
+        hoursEt,
+        minutesEt,
+        secondsEt,
+        dataSourceEt,
+        recordingMethodEt,
+        dateEt,
+        timeEt;
+    private Switch drivenSw;
     private Spinner typeSpinner;
     private ArrayList<View> subViews = new ArrayList<>();
 
@@ -136,7 +149,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void findEditTexts() {
-
         // edittexts
         routeEt = findViewById(R.id.editText_route);
         routeVarEt = findViewById(R.id.editText_routeVar);
@@ -151,11 +163,12 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         //polylineEt = findViewById(R.id.editText_polyline);
         dataSourceEt = findViewById(R.id.editText_dataSource);
         recordingMethodEt = findViewById(R.id.editText_recordingMethod);
+        drivenSw = findViewById(R.id.switch_driven);
         typeSpinner = findViewById(R.id.spinner_type);
-        sTv = findViewById(R.id.textView_s);
 
         // spinner
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Exercise.TYPES);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+            Exercise.TYPES);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(spinnerAdapter);
         typeSpinner.setOnItemSelectedListener(this);
@@ -164,13 +177,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private void setTexts() {
         if (edit) setTextsEdit();
         else setTextsCreate();
-
-        driveDistanceTvListener();
-        dateEtListener();
+        setListeners();
     }
 
     private void setTextsCreate() {
-
         dateEt.setText(createDate = LocalDate.now().format(C.FORMATTER_EDIT_DATE));
         timeEt.setText(createTime = LocalDateTime.now().format(C.FORMATTER_EDIT_TIME));
     }
@@ -210,13 +220,19 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         dateEt.setText(exercise.getDate().format(C.FORMATTER_EDIT_DATE));
         timeEt.setText(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME));
         noteEt.setText(exercise.getNote());
-        distanceEt.setText((float) exercise.getDistance() / 1000 + "");
+        distanceEt.setText((float) exercise.getEffectiveDistance() / 1000 + "");
         hoursEt.setText((int) time[2] + "");
         minutesEt.setText((int) time[1] + "");
         secondsEt.setText(time[0] + "");
         dataSourceEt.setText(exercise.getDataSource());
         recordingMethodEt.setText(exercise.getRecordingMethod());
+        drivenSw.setChecked(exercise.isDistanceDriven());
         typeSpinner.setSelection(exercise.getType());
+
+        if (exercise.isDistanceDriven()) {
+            distanceEt.setEnabled(false);
+            distanceEt.setTextColor(L.getColorInt(android.R.attr.textColorSecondary, this));
+        }
 
         // polyline
         /*if (exercise.hasTrail()) {
@@ -230,12 +246,30 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             intervalEt.setText(exercise.getInterval());
         }
         else intervalEt.setVisibility(View.GONE);
+    }
 
-        if (exercise.isDistanceDriven()) {
-            distanceEt.setEnabled(false);
-            sTv.setText("s.");
-            driveDistance = true;
-        }
+    private void setListeners() {
+        // distance driven listener
+        drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            distanceEt.setEnabled(!isChecked);
+            distanceEt.setTextColor(
+                L.getColorInt(isChecked ? android.R.attr.textColorSecondary :
+                android.R.attr.textColorPrimary, this));
+        });
+
+        // date listener
+        dateEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) return;
+            LocalDate dateSelect = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
+
+            DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, (view, year, month, dayOfMonth) ->
+                dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(C.FORMATTER_EDIT_DATE)),
+                dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
+
+            dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            dialog.show();
+            dateEt.clearFocus();
+        });
     }
 
     // get
@@ -249,14 +283,14 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!dateEt.getText().toString().equals(exercise.getDate().format(C.FORMATTER_EDIT_DATE))) return true;
             if (!timeEt.getText().toString().equals(exercise.getDateTime().format(C.FORMATTER_EDIT_TIME))) return true;
             if (!noteEt.getText().toString().equals(exercise.getNote())) return true;
-            if (!distanceEt.getText().toString().equals((float) exercise.getDistance() / 1000 + "")) return true;
+            if (!distanceEt.getText().toString().equals((float) exercise.getEffectiveDistance() / 1000 + "")) return true;
             if (!hoursEt.getText().toString().equals((int) time[2] + "")) return true;
             if (!minutesEt.getText().toString().equals((int) time[1] + "")) return true;
             if (!secondsEt.getText().toString().equals(time[0] + "")) return true;
             if (!dataSourceEt.getText().toString().equals(exercise.getDataSource())) return true;
             if (!recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())) return true;
             if (typeSpinner.getSelectedItemPosition() != exercise.getType()) return true;
-            if (driveDistance != exercise.isDistanceDriven()) return true;
+            return drivenSw.isChecked() != exercise.isDistanceDriven();
         }
         else {
             if (!routeEt.getText().toString().equals("Route")) return true;
@@ -264,7 +298,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!dateEt.getText().toString().equals(createDate)) return true;
             if (!timeEt.getText().toString().equals(createTime)) return true;
             if (!noteEt.getText().toString().equals("")) return true;
-
             if (!distanceEt.getText().toString().equals("0")) return true;
             if (!hoursEt.getText().toString().equals("0")) return true;
             if (!minutesEt.getText().toString().equals("0")) return true;
@@ -272,15 +305,14 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!dataSourceEt.getText().toString().equals("")) return true;
             if (!recordingMethodEt.getText().toString().equals("")) return true;
             if (typeSpinner.getSelectedItemPosition() != 0) return true;
-            if (driveDistance) return true;
+            return drivenSw.isChecked();
         }
-
-        return false;
     }
 
     private void showDiscardDialog() {
-        BinaryDialog.newInstance(R.string.dialog_title_discard, BaseDialog.NO_RES, R.string.dialog_btn_discard, DIALOG_DISCARD)
-                .show(getSupportFragmentManager());
+        BinaryDialog.newInstance(R.string.dialog_title_discard, BaseDialog.NO_RES, R.string.dialog_btn_discard,
+            DIALOG_DISCARD)
+            .show(getSupportFragmentManager());
     }
 
     // parse
@@ -293,7 +325,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             LocalDate date = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
             LocalTime localTime = LocalTime.parse(timeEt.getText(), C.FORMATTER_EDIT_TIME);
             String note = noteEt.getText().toString();
-            int distance = !driveDistance ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) : Exercise.DISTANCE_DRIVEN;
+            int distance = !drivenSw.isChecked() ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) :
+                Exercise.DISTANCE_DRIVEN;
             int hours = Integer.parseInt(hoursEt.getText().toString());
             int minutes = Integer.parseInt(minutesEt.getText().toString());
             float seconds = Float.parseFloat(secondsEt.getText().toString());
@@ -316,13 +349,15 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(-1, -1, type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, (Trail) null);
+                exercise = new Exercise(-1, -1, type, dateTime, routeId, route, routeVar, interval, note, dataSource,
+                    recordingMethod, distance, time, subs, (Trail) null);
                 L.toast(Writer.get(this).addExercise(exercise, this), this);
                 //D.exercises.add(exercise);
             }
             // save edit
             else {
-                exercise = new Exercise(exercise.get_id(), exercise.getExternalId(), type, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
+                exercise = new Exercise(exercise.get_id(), exercise.getExternalId(), type, dateTime, routeId, route,
+                    routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
                 L.toast(Writer.get(this).updateExercise(exercise, this), this);
                 //D.exercises.set(exercise.getId(), exercise);
             }
@@ -330,10 +365,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             finish();
         }
         catch (NumberFormatException e) {
-            L.toast(getString(R.string.toast_err_save_empty), this);
+            L.toast(R.string.toast_err_save_empty, this);
         }
         catch (StringIndexOutOfBoundsException e) {
-            L.toast(getString(R.string.toast_err_decode_polyline), this);
+            L.toast(R.string.toast_err_decode_polyline, this);
         }
         catch (Exception e) {
             L.handleError(e, this);
@@ -373,7 +408,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         return subs;
     }
 
-    // set listeners
+    // sub listeners
 
     private void addSubViewBtnListener() {
         final Button addSubBtn = findViewById(R.id.button_addSub);
@@ -396,47 +431,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
                 ll.removeView(subView);
                 subViews.remove(subView);
-            }
-        });
-    }
-
-    private void driveDistanceTvListener() {
-
-        sTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!driveDistance) {
-                    distanceEt.setEnabled(false);
-                    sTv.setText("s.");
-                    driveDistance = true;
-                }
-                else {
-                    distanceEt.setEnabled(true);
-                    sTv.setText("s");
-                    driveDistance = false;
-                }
-            }
-        });
-    }
-
-    private void dateEtListener() {
-
-        dateEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) return;
-                LocalDate dateSelect = LocalDate.parse(dateEt.getText(), C.FORMATTER_EDIT_DATE);
-
-                DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(C.FORMATTER_EDIT_DATE));
-                    }
-                }, dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
-
-                dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-                dialog.show();
-                dateEt.clearFocus();
             }
         });
     }

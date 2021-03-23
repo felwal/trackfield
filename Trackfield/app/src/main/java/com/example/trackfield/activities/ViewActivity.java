@@ -114,6 +114,12 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
+
+        // remove pull action if no externalId
+        if (!exercise.hasExternalId()) {
+            menu.findItem(R.id.action_pull).setVisible(false);
+        }
+
         return true;
     }
 
@@ -137,10 +143,10 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         else if (itemId == R.id.action_pull) {
             if (exercise.hasExternalId()) {
                 StravaApi api = new StravaApi(this);
-                api.requestActivity(exercise.getExternalId());
+                api.pullActivity(exercise.getExternalId());
             }
             else {
-                L.toast("No Strava id present", this);
+                L.toast(R.string.toast_strava_pull_activity_gone, this);
             }
             return true;
         }
@@ -217,11 +223,11 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
         setTvHideIfEmpty("", extIdTv);
 
-        TextView sTv = findViewById(R.id.textView_s);
-        if (exercise.isDistanceDriven()) sTv.setText("s.");
+        //TextView sTv = findViewById(R.id.textView_s);
+        //if (exercise.isDistanceDriven()) sTv.setText("s.");
 
         setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.textView_sigma));
-        setTvHideIfEmpty(exercise.printDistance(false), distanceTv, sTv);
+        setTvHideIfEmpty(exercise.printDistance(false), distanceTv, findViewById(R.id.textView_s));
         setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.textView_t));
         setTvHideIfEmpty(exercise.printPace(true), paceTv, findViewById(R.id.textView_v));
         setTvHideIfEmpty(exercise.printEnergy(), energyTv, findViewById(R.id.textView_E));

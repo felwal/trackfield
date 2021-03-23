@@ -61,7 +61,7 @@ public class F {
     public static final String SP_SHARED_PREFERENCES = "shared preferences";
     private static final String SP_PREFS = "prefs";
 
-    // general tools
+    // general file tools
 
     private static boolean writeFile(String pathname, String content, Context c) {
 
@@ -116,6 +116,8 @@ public class F {
 
         return lines;
     }
+
+    // general json tools
 
     private static boolean writeJSONObjectList(String pathname, ArrayList<? extends JSONObjectable> objs, Context c) {
 
@@ -364,7 +366,7 @@ public class F {
             dFos.close();
 
             //Toast.makeText(c,"Done writing to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            L.toast(c.getString(R.string.toast_file_exported), c);
+            L.toast(R.string.toast_json_export_successful, c);
         }
         catch (Exception e) {
             L.handleError(e, c);
@@ -588,7 +590,7 @@ public class F {
             dFis.close();
 
             //Toast.makeText(c,"Done reading to '" + PATH + "'", Toast.LENGTH_SHORT).show();
-            L.toast(c.getString(R.string.toast_file_imported), c);
+            L.toast(R.string.toast_json_import_successful, c);
         }
         catch (Exception e) {
             L.handleError(e, c);

@@ -59,6 +59,7 @@
   <!-- buttons -->
 
   <string name="btn_text_boarding_start">Get started</string>
+  <string name="switch_text_driven">Use route average</string>
 
   <!-- actions -->
 
@@ -92,11 +93,13 @@
   <string name="empty_title_distance">No exercises</string>
   <string name="empty_title_route">No exercises</string>
 
-  <string name="empty_message_exercises">Record your first run, add manually or connect to third party services to get started</string>
-  <string name="empty_message_search">Try a different term, or check spelling and filters</string>
+  <string name="empty_message_exercises">Add exercises manually with +
+    or connect to Strava in Settings to get started</string>
+  <string name="empty_message_search">Check spelling and filters.
+    You can search for: id, route, rotue variation, source, method, note and type</string>
   <string name="empty_message_distances">Press + to add a distance</string>
-  <string name="empty_message_routes">Run a route two times or more and it will show up here</string>
-  <string name="empty_message_intervals">Run a interval two times or more and it will show up here</string>
+  <string name="empty_message_routes">Your routes will show up here</string>
+  <string name="empty_message_intervals">Your intervals will show up here</string>
   <string name="empty_message_distance">Check filters, or set a goal</string>
   <string name="empty_message_route">Check filters</string>
 
@@ -142,17 +145,23 @@
   <string name="toast_err_decode_polyline">Problem decoding polyline</string>
   <string name="toast_err_display_density">Couldn\'t fetch display density</string>
   <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
-  <string name="toast_file_exported">Export successful</string>
-  <string name="toast_file_imported">Import successful</string>
-  <string name="toast_file_err_export">Failed to export</string>
-  <string name="toast_file_err_import">Failed to import</string>
 
-  <string name="toast_strava_auth_successful">Authorization successful, please request an activity to get Connected status</string>
+  <string name="toast_json_exporting">Exporting json…</string>
+  <string name="toast_json_importing">Importing json…</string>
+  <string name="toast_json_export_successful">Export successful</string>
+  <string name="toast_json_import_successful">Import successful</string>
+  <string name="toast_json_export_err">Failed to export</string>
+  <string name="toast_json_import_err">Failed to import</string>
+
+  <string name="toast_strava_auth_successful">Authorization successful</string>
   <string name="toast_strava_req_activity_successful">Request successful</string>
   <string name="toast_strava_req_activity_err">Failed to request activities</string>
   <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
   <string name="toast_strava_req_refresh_err">Failed to request refreshToken, authorize yourself!</string>
   <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>
+  <string name="toast_strava_pull_activity_successful">Pull successful</string>
+  <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
+  <string name="toast_strava_pull_activity_err">Failed to pull activity</string>
 
   <!-- api certificate -->
 

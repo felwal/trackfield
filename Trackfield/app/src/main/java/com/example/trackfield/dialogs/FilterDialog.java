@@ -82,7 +82,7 @@ public class FilterDialog extends BaseDialog {
                         listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag);
                     }
                     catch (NumberFormatException e) {
-                        L.toast(a.getString(R.string.toast_err_no_input), a);
+                        L.toast(R.string.toast_err_no_input, a);
                     }
                 })
                 .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
