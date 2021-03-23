@@ -97,7 +97,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key_debug" />
+            android:value="${GOOGLE_API_KEY_DEBUG}" />
     </application>
 
 </manifest>
