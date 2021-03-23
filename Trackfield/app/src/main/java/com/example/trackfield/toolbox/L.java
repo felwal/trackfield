@@ -39,7 +39,12 @@ public class L {
     public static float scale;
     public static int statusBarHeight;
 
-    public enum Direction { LEFT, TOP, RIGHT, BOTTOM }
+    public enum Direction {
+        LEFT,
+        TOP,
+        RIGHT,
+        BOTTOM
+    }
 
     // screen
 

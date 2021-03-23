@@ -20,6 +20,7 @@
   <string name="fragment_records">Records</string>
   <string name="fragment_stats">Stats</string>
   <string name="fragment_settings">Settings</string>
+  <string name="fragment_settings_strava">Strava</string>
 
   <!-- tabs -->
 
