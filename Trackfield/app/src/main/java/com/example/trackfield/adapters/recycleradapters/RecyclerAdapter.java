@@ -34,7 +34,8 @@ import com.example.trackfield.toolbox.M;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-@Deprecated public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+@Deprecated
+public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int ITEM_SORTER = 0;
     public static final int ITEM_ITEM = 1;
@@ -142,35 +143,46 @@ import java.util.ArrayList;
 
             DistanceExerciseVH holder = (DistanceExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
-            String values = this instanceof DistanceRecyclerAdapter ? e.printDistance() + C.TAB + e.printTimeByDistance(((DistanceRecyclerAdapter) this).distance) + C.TAB + e.printPace() : "";
-            String date = e.getDate().format(sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR : C.FORMATTER_REC);
+            String values = this instanceof DistanceRecyclerAdapter ? e.printDistance() + C.TAB + e.printTimeByDistance(
+                ((DistanceRecyclerAdapter) this).distance) + C.TAB + e.printPace() : "";
+            String date = e.getDate().format(
+                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
+                    C.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
             holder.caption.setText(e.getRoute());
             holder.originMarker.setVisibility(e.has_id(originId) ? View.VISIBLE : View.GONE);
             holder.recordMarker.setVisibility(e.isTop() ? View.VISIBLE : View.GONE);
-            holder.recordMarker.getBackground().setColorFilter(c.getColor(e.isTop(1) ? R.color.colorGold : e.isTop(2) ? R.color.colorSilver : R.color.colorBronze), PorterDuff.Mode.MULTIPLY);
+            holder.recordMarker.getBackground().setColorFilter(
+                c.getColor(e.isTop(1) ? R.color.colorGold : e.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
+                PorterDuff.Mode.MULTIPLY);
         }
         else if (viewHolder instanceof RouteExerciseVH) {
 
             RouteExerciseVH holder = (RouteExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
             String values = e.printDistance() + C.TAB + e.printTime() + C.TAB + e.printPace();
-            String date = e.getDate().format(sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR : C.FORMATTER_REC);
+            String date = e.getDate().format(
+                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
+                    C.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
             holder.originMarker.setVisibility(e.has_id(originId) ? View.VISIBLE : View.GONE);
             holder.recordMarker.setVisibility(e.isTop() ? View.VISIBLE : View.GONE);
-            holder.recordMarker.getBackground().setColorFilter(c.getColor(e.isTop(1) ? R.color.colorGold : e.isTop(2) ? R.color.colorSilver : R.color.colorBronze), PorterDuff.Mode.MULTIPLY);
+            holder.recordMarker.getBackground().setColorFilter(
+                c.getColor(e.isTop(1) ? R.color.colorGold : e.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
+                PorterDuff.Mode.MULTIPLY);
         }
         else if (viewHolder instanceof IntervalExerciseVH) {
 
             IntervalExerciseVH holder = (IntervalExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
             String values = e.printDistance() + C.TAB + e.printTime() + C.TAB + e.printPace();
-            String date = e.getDate().format(sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR : C.FORMATTER_REC);
+            String date = e.getDate().format(
+                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
+                    C.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
@@ -212,10 +224,18 @@ import java.util.ArrayList;
             holder.primary.setText(header.getTitle());
             holder.secondary.setText(header.printValues());
 
-            if (!header.isChildrenExpanded()) {
-                int collapsedHeight = header.isType(Header.Type.MONTH) ? (int) c.getResources().getDimension(R.dimen.layout_header_month_collapsed) :
-                        (int) c.getResources().getDimension(R.dimen.layout_header_year_collapsed);
-                holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, collapsedHeight));
+            // set height depending on if children are expanded
+            if (header.isType(Header.Type.MONTH)) {
+                int height = (int) c.getResources().getDimension(header.areChildrenExpanded() ?
+                    R.dimen.layout_header_month : R.dimen.layout_header_month_collapsed);
+                holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, height));
+            }
+            else if (header.isType(Header.Type.YEAR)) {
+                int height = (int) c.getResources().getDimension(header.areChildrenExpanded() ?
+                    R.dimen.layout_header_year : R.dimen.layout_header_year_collapsed);
+                holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, height));
             }
         }
         else if (viewHolder instanceof RecHeaderVH) {
@@ -324,7 +344,8 @@ import java.util.ArrayList;
 
             for (int i = chart.length() - 1; i >= 0; i--) {
 
-                ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.dep_chart_element_bar_small, h.parent, false);
+                ConstraintLayout element = (ConstraintLayout) inflater.inflate(R.layout.dep_chart_element_bar_small,
+                    h.parent, false);
                 h.linearLayout.addView(element);
                 View bar = element.findViewById(R.id.view_barSmall);
                 //((TextView) element.findViewById(R.id.textView_week)).setText(labels[i] + "");

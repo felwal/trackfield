@@ -72,7 +72,7 @@ public class Header extends RecyclerItem {
         return type;
     }
 
-    public boolean isChildrenExpanded() {
+    public boolean areChildrenExpanded() {
         return childrenExpanded;
     }
 
@@ -122,7 +122,8 @@ public class Header extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Header)) return false;
         Header h = (Header) item;
-        return type == h.getType() && title.equals(h.getTitle()) && value == h.getValue() && count == h.getCount();
+        return type == h.getType() && title.equals(h.getTitle()) && value == h.getValue() &&
+            count == h.getCount() && childrenExpanded == h.childrenExpanded;
     }
 
 }

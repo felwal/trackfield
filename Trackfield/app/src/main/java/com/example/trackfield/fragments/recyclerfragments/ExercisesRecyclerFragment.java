@@ -228,7 +228,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             // animate children
             for (int childPos = header.getFirstIndex(); childPos <= header.getLastIndex(); childPos++) {
                 RecyclerItem childItem = getItemOfAll(childPos);
-                childItem.changeVisibility(header.isChildrenExpanded());
+                childItem.changeVisibility(header.areChildrenExpanded());
                 //L.expandOrCollapseHeight(manager.findViewByPosition(childPos), M.px(62), childItem.isVisible());
 
                 //adapter.notifyItemChanged(childPos);
@@ -245,7 +245,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) :
                     (int) getResources().getDimension(R.dimen.layout_header_year);
             View itemView = manager.findViewByPosition(position);
-            L.animateHeight(itemView, collapsedHeight, expandedHeight, !header.isChildrenExpanded());
+            L.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
             //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
 
         }

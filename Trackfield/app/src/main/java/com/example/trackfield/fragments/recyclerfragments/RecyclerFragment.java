@@ -184,7 +184,6 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     }
 
     public void updateRecycler() {
-
         ((Threader) () -> {
             allItems = getRecyclerItems();
             final ArrayList<RecyclerItem> newItems = getVisibleItems();//getRecyclerItems();
