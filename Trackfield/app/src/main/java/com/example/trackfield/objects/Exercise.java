@@ -2,6 +2,8 @@ package com.example.trackfield.objects;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.objects.interfaces.JSONObjectable;
 import com.example.trackfield.toolbox.C;
@@ -80,7 +82,7 @@ public class Exercise implements JSONObjectable {
 
     public Exercise(int _id, long externalId, int type, LocalDateTime dateTime, int routeId, String route,
         String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance,
-        float time, ArrayList<Sub> subs, Trail trail) {
+        float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
         this._id = _id;
         this.externalId = externalId;
         this.type = type;

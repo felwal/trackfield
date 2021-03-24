@@ -77,9 +77,8 @@ public class StravaApi {
     // authorize
 
     /**
-     *
-     * @param flow The AuthfFlow with lamdbda with what to do when authorization is complete
-     * and refreshToken is requested
+     * @param flow The AuthfFlow with lamdbda with what to do when authorization is complete and refreshToken is
+     * requested
      */
     public void authorizeStrava() {
         Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
@@ -113,10 +112,10 @@ public class StravaApi {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                    boolean success = mergePull(convertToExercise(response));
+                    boolean success = handlePull(convertToExercise(response));
 
                     Log.i(LOG_TAG, "response: " + response.toString());
-                    L.toast(success ? R.string.toast_strava_req_activity_successful :
+                    L.toast(success, R.string.toast_strava_pull_activity_successful,
                         R.string.toast_strava_pull_activity_err, a);
                 }, e -> L.handleError(R.string.toast_strava_pull_activity_err, e, a));
 
@@ -131,11 +130,11 @@ public class StravaApi {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
                 try {
                     JSONObject obj = response.getJSONObject(index);
-                    mergeRequest(convertToExercise(obj));
+                    boolean success = handleRequest(convertToExercise(obj));
 
                     Log.i(LOG_TAG, "response: " + obj.toString());
-                    //L.toast("response: " + obj.toString(), a);
-                    L.toast(R.string.toast_strava_req_activity_successful, a);
+                    L.toast(success, R.string.toast_strava_req_activity_successful,
+                        R.string.toast_strava_req_activity_err, a);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -151,23 +150,30 @@ public class StravaApi {
         ((TokenRequester) accessToken -> {
             L.toast("Requesting activities...", a);
 
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page),null,
                 response -> {
+                    int errorCount = 0;
                     for (int index = 0; index < response.length(); index++) {
+                        boolean success = true;
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            mergeRequest(convertToExercise(obj));
+                            success &= handleRequest(convertToExercise(obj));
                         }
                         catch (JSONException e) {
+                            success = false;
                             e.printStackTrace();
                             L.handleError(R.string.toast_err_parse_jsonobj, e, a);
                         }
+                        errorCount += success ? 0 : 1;
                     }
+
+                    // request next page
                     if (response.length() == PER_PAGE) {
                         requestActivities(page + 1);
                     }
 
-                    L.toast(R.string.toast_strava_req_activity_successful, a);
+                    L.toast(errorCount < 1, R.string.toast_strava_req_activity_successful,
+                        R.string.toast_strava_req_activity_err, a);
                 }, e -> L.handleError(R.string.toast_strava_req_activity_err, e, a));
 
             queue.add(request);
@@ -202,18 +208,20 @@ public class StravaApi {
             String stravaType = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
 
-            JSONObject map = obj.getJSONObject(JSON_MAP);
-            String polyline = map.getString(JSON_POLYLINE);
+            // trail
+            String polyline = null;
             LatLng start = null;
             LatLng end = null;
             try {
+                JSONObject map = obj.getJSONObject(JSON_MAP);
+                polyline = map.getString(JSON_POLYLINE);
                 JSONArray startLatLng = obj.getJSONArray(JSON_START);
                 JSONArray endLatLng = obj.getJSONArray(JSON_END);
                 start = new LatLng(startLatLng.getDouble(0), startLatLng.getDouble(1));
                 end = new LatLng(endLatLng.getDouble(0), endLatLng.getDouble(1));
             }
             catch (Exception e) {
-                // no start or end, leave as null; do nothing
+                // no polyline or start or end, leave as null; do nothing
             }
 
             // TODO: import
@@ -238,20 +246,19 @@ public class StravaApi {
         }
     }
 
-    private boolean mergePull(Exercise strava) {
+    private boolean handlePull(Exercise strava) {
         if (strava == null) return false;
         boolean success = true;
 
         Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
         if (existing == null) {
             success &= Writer.get(a).addExercise(strava, a);
-            L.toast("Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE), a);
-            Log.i(LOG_TAG, "Manual update resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
+            L.toast("Pull resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE), a);
+            Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
         }
         else {
             success &= existing.mergeStravaPull(strava, a);
             success &= Writer.get(a).updateExercise(existing, a);
-            L.toast(R.string.toast_strava_pull_activity_successful, a);
         }
 
         if (a instanceof ViewActivity) a.recreate();
@@ -259,33 +266,40 @@ public class StravaApi {
         return success;
     }
 
-    private void mergeRequest(Exercise strava) {
-        if (strava == null) return;
+    private boolean handleRequest(Exercise strava) {
+        if (strava == null) return false;
+        boolean success = true;
 
         ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(strava.getDateTime(), strava.getType());
 
+        // merge
         if (matching.size() == 1) {
             Exercise x = matching.get(0);
             Exercise merged = new Exercise(x.get_id(), strava.getExternalId(), x.getType(), strava.getDateTime(),
                 x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(), x.getDataSource(),
                 x.getRecordingMethod(), strava.getDistance(), strava.getTimePrimary(), x.getSubs(),
                 strava.getTrail());
-            //x.setExternalId(fromStrava.getExternalId());
-            //x.setDateTime(fromStrava.getDateTime());
 
-            Writer.get(a).updateExercise(merged, a);
+            success &= Writer.get(a).updateExercise(merged, a);
         }
+
+        // import
         else if (matching.size() == 0) {
-            Writer.get(a).addExercise(strava, a);
+            success &= Writer.get(a).addExercise(strava, a);
             Log.i(LOG_TAG, "Import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
+
+        // nothing
         else {
+            success = false;
             Log.i(LOG_TAG, "Multiple choice on " + strava.getDateTime().format(C.FORMATTER_SQL_DATE));
             //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
         }
 
         if (a instanceof MainActivity) ((MainActivity) a).updateFragment();
+
+        return success;
     }
 
     // get url:s
@@ -336,7 +350,8 @@ public class StravaApi {
                     try {
                         Prefs.setAccessToken(response.getString(JSON_ACCESS_TOKEN));
                         Prefs
-                            .setAccessTokenExpiration(M.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
+                            .setAccessTokenExpiration(
+                                M.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
 
                         //L.toast("accessToken: " + Prefs.getAccessToken(), c);
                         Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());

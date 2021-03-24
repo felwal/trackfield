@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.trackfield.database.Contract.*;
 import com.example.trackfield.objects.Distance;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Route;
@@ -84,7 +85,7 @@ public class Writer extends Helper {
 
         final ContentValues cv = fillExerciseContentValues(e);
 
-        final long _id = db.insert(Contract.ExerciseEntry.TABLE_NAME, null, cv);
+        final long _id = db.insert(ExerciseEntry.TABLE_NAME, null, cv);
         e.setSubs_superId((int) _id);
         final boolean subSuccess = addSubs(e.getSubs());
 
@@ -107,10 +108,10 @@ public class Writer extends Helper {
         Exercise old = Reader.get(c).getExercise(e.get_id());
         ContentValues newCv = fillExerciseContentValues(e);
 
-        String where = Contract.ExerciseEntry._ID + " = ?";
+        String where = ExerciseEntry._ID + " = ?";
         String[] whereArgs = { Integer.toString(e.get_id()) };
 
-        final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
+        final int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
         final boolean subSuccess = updateSubs(e.getSubs());
 
         // delete route if changed and empty
@@ -139,12 +140,12 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean deleteExercise(@NonNull Exercise e, Context c) {
-        final String selection = Contract.ExerciseEntry._ID + " = ?";
-        final String subSelection = Contract.SubEntry.COLUMN_SUPERID + " = ?";
+        final String selection = ExerciseEntry._ID + " = ?";
+        final String subSelection = SubEntry.COLUMN_SUPERID + " = ?";
         final String[] selectionArgs = { Integer.toString(e.get_id()) };
 
-        final long result = db.delete(Contract.ExerciseEntry.TABLE_NAME, selection, selectionArgs);
-        final long subResult = db.delete(Contract.SubEntry.TABLE_NAME, subSelection, selectionArgs);
+        final long result = db.delete(ExerciseEntry.TABLE_NAME, selection, selectionArgs);
+        final long subResult = db.delete(SubEntry.TABLE_NAME, subSelection, selectionArgs);
 
         // route
         deleteRouteIfEmpty(e.getRouteId(), c);
@@ -177,12 +178,13 @@ public class Writer extends Helper {
             .avgDistance(routeId, routeVar);
 
         ContentValues cv = new ContentValues();
-        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
+        cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
 
-        String where = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + Contract.ExerciseEntry.COLUMN_ROUTE_VAR + " = ? AND " + Contract.ExerciseEntry.COLUMN_DISTANCE + " = ?";
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = ? AND " +
+            ExerciseEntry.COLUMN_DISTANCE + " = ?";
         String[] whereArgs = { Integer.toString(routeId), routeVar, Integer.toString(Exercise.DISTANCE_DRIVEN) };
 
-        int count = db.update(Contract.ExerciseEntry.TABLE_NAME, cv, where, whereArgs);
+        int count = db.update(ExerciseEntry.TABLE_NAME, cv, where, whereArgs);
 
         return success(count);
     }
@@ -235,7 +237,7 @@ public class Writer extends Helper {
 
     private boolean addSub(Sub sub) {
         final ContentValues cvSub = fillSubContentValues(sub);
-        final long result = db.insert(Contract.SubEntry.TABLE_NAME, null, cvSub);
+        final long result = db.insert(SubEntry.TABLE_NAME, null, cvSub);
         return success(result);
     }
 
@@ -245,10 +247,10 @@ public class Writer extends Helper {
 
             if (sub.get_id() != -1) {
                 ContentValues newCv = fillSubContentValues(sub);
-                String selection = Contract.SubEntry._ID + " = ?";
+                String selection = SubEntry._ID + " = ?";
                 String[] selectionArgs = { Integer.toString(sub.get_id()) };
 
-                int count = db.update(Contract.SubEntry.TABLE_NAME, newCv, selection, selectionArgs);
+                int count = db.update(SubEntry.TABLE_NAME, newCv, selection, selectionArgs);
                 success &= count > 0;
             }
             else {
@@ -260,10 +262,10 @@ public class Writer extends Helper {
     }
 
     public boolean deleteSub(@NonNull Sub sub) {
-        final String selection = Contract.SubEntry._ID + " = ?";
+        final String selection = SubEntry._ID + " = ?";
         final String[] selectionArgs = { Integer.toString(sub.get_id()) };
 
-        final long result = db.delete(Contract.SubEntry.TABLE_NAME, selection, selectionArgs);
+        final long result = db.delete(SubEntry.TABLE_NAME, selection, selectionArgs);
 
         return success(result);
     }
@@ -280,26 +282,26 @@ public class Writer extends Helper {
 
     public boolean addDistance(Distance distance) {
         final ContentValues cv = fillDistanceContentValues(distance);
-        final long result = db.insert(Contract.DistanceEntry.TABLE_NAME, null, cv);
+        final long result = db.insert(DistanceEntry.TABLE_NAME, null, cv);
         return success(result);
     }
 
     public boolean updateDistance(Distance distance) {
         ContentValues newCv = fillDistanceContentValues(distance);
 
-        String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
+        String selection = DistanceEntry.COLUMN_DISTANCE + " = ?";
         String[] selectionArgs = { Integer.toString((distance.getDistance())) };
 
-        final int count = db.update(Contract.DistanceEntry.TABLE_NAME, newCv, selection, selectionArgs);
+        final int count = db.update(DistanceEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
         return count > 0;
     }
 
     public boolean deleteDistance(@NonNull Distance distance) {
-        final String selection = Contract.DistanceEntry.COLUMN_DISTANCE + " = ?";
+        final String selection = DistanceEntry.COLUMN_DISTANCE + " = ?";
         final String[] selectionArgs = { Integer.toString(distance.getDistance()) };
 
-        final long result = db.delete(Contract.DistanceEntry.TABLE_NAME, selection, selectionArgs);
+        final long result = db.delete(DistanceEntry.TABLE_NAME, selection, selectionArgs);
 
         return success(result);
     }
@@ -323,7 +325,7 @@ public class Writer extends Helper {
         if (existingRoute != null) return existingRoute.get_id();
 
         final ContentValues cv = fillRouteContentValues(route);
-        final long _id = db.insert(Contract.RouteEntry.TABLE_NAME, null, cv);
+        final long _id = db.insert(RouteEntry.TABLE_NAME, null, cv);
         return _id;
     }
 
@@ -345,10 +347,10 @@ public class Writer extends Helper {
         if (dontMerge) {
             ContentValues newCv = fillRouteContentValues(route);
 
-            String selection = Contract.RouteEntry._ID + " = ?";
+            String selection = RouteEntry._ID + " = ?";
             String[] selectionArgs = { Integer.toString(route.get_id()) };
 
-            final int count = db.update(Contract.RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
+            final int count = db.update(RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
             return route.get_id();
             //return count > 0;
@@ -358,12 +360,12 @@ public class Writer extends Helper {
         else {
             // update routeId to mergeree routeId
             ContentValues newCv = new ContentValues();
-            newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, existingIdForNewName);
+            newCv.put(ExerciseEntry.COLUMN_ROUTE_ID, existingIdForNewName);
 
-            String where = Contract.ExerciseEntry.COLUMN_ROUTE_ID + " = ?";
+            String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ?";
             String[] whereArgs = { Integer.toString(route.get_id()) };
 
-            final int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
+            final int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
 
             // delete merger route
             boolean deleteSuccess = deleteRoute(route.get_id());
@@ -374,30 +376,29 @@ public class Writer extends Helper {
     }
 
     public boolean deleteRoute(int routeId) {
-        final String selection = Contract.RouteEntry._ID + " = ?";
+        final String selection = RouteEntry._ID + " = ?";
         final String[] selectionArgs = { Integer.toString(routeId) };
 
-        final long result = db.delete(Contract.RouteEntry.TABLE_NAME, selection, selectionArgs);
+        final long result = db.delete(RouteEntry.TABLE_NAME, selection, selectionArgs);
 
         return success(result);
     }
 
     /**
-     * Update route name in exercises table.
-     * Call whenever updating route name via {@link #updateRoute(Route)}.
-     * TODO: remove when routeName column is removed
+     * Update route name in exercises table. Call whenever updating route name via {@link #updateRoute(Route)}. TODO:
+     * remove when routeName column is removed
      */
     @Deprecated
     public boolean updateRouteName(String oldName, String newName) {
         //if (newName.equals(oldName)) return true;
 
         ContentValues newCv = new ContentValues();
-        newCv.put(Contract.ExerciseEntry.COLUMN_ROUTE, newName);
+        newCv.put(ExerciseEntry.COLUMN_ROUTE, newName);
 
-        String selection = Contract.ExerciseEntry.COLUMN_ROUTE + " = ?";
+        String selection = ExerciseEntry.COLUMN_ROUTE + " = ?";
         String[] selectionArgs = { oldName };
 
-        int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
+        int count = db.update(ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
         return count > 0;
     }
@@ -406,12 +407,12 @@ public class Writer extends Helper {
 
     public boolean updateInterval(String oldInterval, String newInterval) {
         ContentValues newCv = new ContentValues();
-        newCv.put(Contract.ExerciseEntry.COLUMN_INTERVAL, newInterval);
+        newCv.put(ExerciseEntry.COLUMN_INTERVAL, newInterval);
 
-        String selection = Contract.ExerciseEntry.COLUMN_INTERVAL + " = ?";
+        String selection = ExerciseEntry.COLUMN_INTERVAL + " = ?";
         String[] selectionArgs = { oldInterval };
 
-        int count = db.update(Contract.ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
+        int count = db.update(ExerciseEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
         return count > 0;
     }
@@ -422,42 +423,42 @@ public class Writer extends Helper {
     private ContentValues fillExerciseContentValues(@NonNull Exercise e) {
         ContentValues cv = new ContentValues();
 
-        cv.put(Contract.ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
-        cv.put(Contract.ExerciseEntry.COLUMN_TYPE, e.getType());
-        cv.put(Contract.ExerciseEntry.COLUMN_DATE, e.getEpoch());
-        cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
-        cv.put(Contract.ExerciseEntry.COLUMN_ROUTE, e.getRoute());
-        cv.put(Contract.ExerciseEntry.COLUMN_ROUTE_VAR, e.getRouteVar());
-        cv.put(Contract.ExerciseEntry.COLUMN_INTERVAL, e.getInterval());
-        cv.put(Contract.ExerciseEntry.COLUMN_NOTE, e.getNote());
-        cv.put(Contract.ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
-        cv.put(Contract.ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
-        cv.put(Contract.ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
-        cv.put(Contract.ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
-        cv.put(Contract.ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
+        cv.put(ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
+        cv.put(ExerciseEntry.COLUMN_TYPE, e.getType());
+        cv.put(ExerciseEntry.COLUMN_DATE, e.getEpoch());
+        cv.put(ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
+        cv.put(ExerciseEntry.COLUMN_ROUTE, e.getRoute());
+        cv.put(ExerciseEntry.COLUMN_ROUTE_VAR, e.getRouteVar());
+        cv.put(ExerciseEntry.COLUMN_INTERVAL, e.getInterval());
+        cv.put(ExerciseEntry.COLUMN_NOTE, e.getNote());
+        cv.put(ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
+        cv.put(ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
+        cv.put(ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
+        cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
+        cv.put(ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
 
         Trail trail = e.getTrail();
         if (trail != null) {
-            cv.put(Contract.ExerciseEntry.COLUMN_POLYLINE, trail.getPolyline());
+            cv.put(ExerciseEntry.COLUMN_POLYLINE, trail.getPolyline());
             if (trail.hasStartEnd()) {
-                cv.put(Contract.ExerciseEntry.COLUMN_START_LAT, trail.getStartLat());
-                cv.put(Contract.ExerciseEntry.COLUMN_START_LNG, trail.getStartLng());
-                cv.put(Contract.ExerciseEntry.COLUMN_END_LAT, trail.getEndLat());
-                cv.put(Contract.ExerciseEntry.COLUMN_END_LNG, trail.getEndLng());
+                cv.put(ExerciseEntry.COLUMN_START_LAT, trail.getStartLat());
+                cv.put(ExerciseEntry.COLUMN_START_LNG, trail.getStartLng());
+                cv.put(ExerciseEntry.COLUMN_END_LAT, trail.getEndLat());
+                cv.put(ExerciseEntry.COLUMN_END_LNG, trail.getEndLng());
             }
             else {
-                cv.put(Contract.ExerciseEntry.COLUMN_START_LAT, (Double) null);
-                cv.put(Contract.ExerciseEntry.COLUMN_START_LNG, (Double) null);
-                cv.put(Contract.ExerciseEntry.COLUMN_END_LAT, (Double) null);
-                cv.put(Contract.ExerciseEntry.COLUMN_END_LNG, (Double) null);
+                cv.put(ExerciseEntry.COLUMN_START_LAT, (Double) null);
+                cv.put(ExerciseEntry.COLUMN_START_LNG, (Double) null);
+                cv.put(ExerciseEntry.COLUMN_END_LAT, (Double) null);
+                cv.put(ExerciseEntry.COLUMN_END_LNG, (Double) null);
             }
         }
         else {
-            cv.put(Contract.ExerciseEntry.COLUMN_START_LAT, (Double) null);
-            cv.put(Contract.ExerciseEntry.COLUMN_START_LNG, (Double) null);
-            cv.put(Contract.ExerciseEntry.COLUMN_END_LAT, (Double) null);
-            cv.put(Contract.ExerciseEntry.COLUMN_END_LNG, (Double) null);
-            cv.put(Contract.ExerciseEntry.COLUMN_POLYLINE, (String) null);
+            cv.put(ExerciseEntry.COLUMN_START_LAT, (Double) null);
+            cv.put(ExerciseEntry.COLUMN_START_LNG, (Double) null);
+            cv.put(ExerciseEntry.COLUMN_END_LAT, (Double) null);
+            cv.put(ExerciseEntry.COLUMN_END_LNG, (Double) null);
+            cv.put(ExerciseEntry.COLUMN_POLYLINE, (String) null);
         }
 
         return cv;
@@ -467,9 +468,9 @@ public class Writer extends Helper {
     private ContentValues fillSubContentValues(@NonNull Sub sub) {
         ContentValues cv = new ContentValues();
 
-        cv.put(Contract.SubEntry.COLUMN_SUPERID, sub.get_superId());
-        cv.put(Contract.SubEntry.COLUMN_DISTANCE, sub.getDistance());
-        cv.put(Contract.SubEntry.COLUMN_TIME, sub.getTime());
+        cv.put(SubEntry.COLUMN_SUPERID, sub.get_superId());
+        cv.put(SubEntry.COLUMN_DISTANCE, sub.getDistance());
+        cv.put(SubEntry.COLUMN_TIME, sub.getTime());
 
         return cv;
     }
@@ -478,8 +479,8 @@ public class Writer extends Helper {
     private ContentValues fillDistanceContentValues(@NonNull Distance distance) {
         ContentValues cv = new ContentValues();
 
-        cv.put(Contract.DistanceEntry.COLUMN_DISTANCE, distance.getDistance());
-        cv.put(Contract.DistanceEntry.COLUMN_GOAL_PACE, distance.getGoalPace());
+        cv.put(DistanceEntry.COLUMN_DISTANCE, distance.getDistance());
+        cv.put(DistanceEntry.COLUMN_GOAL_PACE, distance.getGoalPace());
 
         return cv;
     }
@@ -489,11 +490,11 @@ public class Writer extends Helper {
         ContentValues cv = new ContentValues();
 
         if (route.get_id() != Route.ID_NON_EXISTANT) {
-            cv.put(Contract.RouteEntry._ID, route.get_id());
+            cv.put(RouteEntry._ID, route.get_id());
         }
-        cv.put(Contract.RouteEntry.COLUMN_NAME, route.getName());
-        cv.put(Contract.RouteEntry.COLUMN_HIDDEN, route.isHidden() ? 1 : 0);
-        cv.put(Contract.RouteEntry.COLUMN_GOAL_PACE, route.getGoalPace());
+        cv.put(RouteEntry.COLUMN_NAME, route.getName());
+        cv.put(RouteEntry.COLUMN_HIDDEN, route.isHidden() ? 1 : 0);
+        cv.put(RouteEntry.COLUMN_GOAL_PACE, route.getGoalPace());
 
         return cv;
     }
