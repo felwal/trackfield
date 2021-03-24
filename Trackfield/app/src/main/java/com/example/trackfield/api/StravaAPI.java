@@ -48,7 +48,7 @@ public class StravaApi {
     private static final String REDIRECT_URI = "https://felwal.github.io/callback";
     private static final int PER_PAGE = 200; // max = 200
     public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
-    private static final String LOG_TAG = "Strava API";
+    private static final String LOG_TAG = "StravaAPI";
 
     // token response json keys
     private static final String JSON_ACCESS_TOKEN = "access_token";
@@ -66,6 +66,7 @@ public class StravaApi {
     private static final String JSON_POLYLINE = "summary_polyline";
     private static final String JSON_START = "start_latlng";
     private static final String JSON_END = "end_latlng";
+    private static final String JSON_DEVICE = "device_name";
 
     //
 
@@ -200,6 +201,7 @@ public class StravaApi {
         if (obj == null) return null;
 
         try {
+            // keys which always exist
             Log.i(LOG_TAG, "response: " + obj.toString());
             long stravaId = obj.getLong(JSON_ID);
             String name = obj.getString(JSON_NAME);
@@ -207,6 +209,9 @@ public class StravaApi {
             int time = obj.getInt(JSON_TIME);
             String stravaType = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
+
+            String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : "";
+            String method = Prefs.getRecordingMethod();
 
             // trail
             String polyline = null;
@@ -223,10 +228,6 @@ public class StravaApi {
             catch (Exception e) {
                 // no polyline or start or end, leave as null; do nothing
             }
-
-            // TODO: import
-            String device = "Garmin Forerunner 745";
-            String method = "GPS + Galileo";
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
@@ -320,7 +321,7 @@ public class StravaApi {
     }
 
     private static String getActivityURL(long id) {
-        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=false" + "&access_token=" +
+        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" + "&access_token=" +
             Prefs.getAccessToken();
     }
 

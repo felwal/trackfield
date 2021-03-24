@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         setContentView(R.layout.activity_main);
         L.setScale(this);
 
-        // TODO: prefs
-        Prefs.setDeveloper(true);
+        //Prefs.setDeveloper(true);
         if (Prefs.isFirstLogin()) OnboardingActivity.startActivity(this);
 
         // TODO: dev tool
@@ -254,11 +253,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void openFabMenu() {
         animateFab();
         addFab.show();
-        trackFab.show();
+        //trackFab.show();
         stravaFab.show();
 
         L.crossfadeIn(addCl, 1);
-        L.crossfadeIn(trackCl, 1);
+        //L.crossfadeIn(trackCl, 1);
         L.crossfadeIn(stravaCl, 1);
         L.crossfadeIn(overlayView, OVERLAY_ΑLPHA);
 
@@ -268,11 +267,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void closeFabMenu() {
         animateFab();
         stravaFab.hide();
-        trackFab.hide();
+        //trackFab.hide();
         addFab.hide();
 
         L.crossfadeOut(stravaCl);
-        L.crossfadeOut(trackCl);
+        //L.crossfadeOut(trackCl);
         L.crossfadeOut(addCl);
         L.crossfadeOut(overlayView);
 

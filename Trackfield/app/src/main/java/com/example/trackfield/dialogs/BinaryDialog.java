@@ -72,8 +72,8 @@ public class BinaryDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setTitle(title)
-                .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onBinaryDialogPositiveClick(passValue, tag))
-                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onBinaryDialogPositiveClick(passValue, tag))
+            .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }

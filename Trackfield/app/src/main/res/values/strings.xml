@@ -4,7 +4,7 @@
 
   <string name="app_name">Trackfield</string>
   <string name="package_name">com.example.trackfield</string>
-  <string name="app_version">v0.0.0</string>
+  <string name="app_version">0.0.0</string>
 
   <!-- activities -->
 
@@ -135,9 +135,12 @@
   <string name="dialog_title_mass">Mass (kg)</string>
   <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
   <string name="dialog_title_merge_routes">Merge routes?</string>
+  <string name="dialog_title_recording_method">Default recording method</string>
 
+  <string name="dialog_message_delete_exercise"></string>
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
   <string name="dialog_message_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
+  <string name="dialog_message_recording_method">Select default recording method when requesting from Strava</string>
 
   <!-- toasts -->
 

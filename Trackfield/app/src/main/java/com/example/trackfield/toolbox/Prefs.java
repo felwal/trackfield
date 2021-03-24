@@ -27,7 +27,7 @@ public class Prefs {
 
     // app
     private static String appVersion;
-    private static boolean developer = true;
+    private static boolean developer = false;
     private static boolean firstLogin = true;
 
     // display options
@@ -66,6 +66,7 @@ public class Prefs {
     private static String refreshToken = "";
     private static String accessToken = "";
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
+    private static String recordingMethod = "GPS";
 
     // consts
     public static final int COLOR_MONO = 0;
@@ -99,6 +100,7 @@ public class Prefs {
     private static final String STRAVA_REFRESH = "stravaRefreshToken";
     private static final String STRAVA_ACCESS = "stravaAccessToken";
     private static final String STRAVA_ACCESS_EXP = "stravaAccessExpiration";
+    private static final String STRAVA_METHOD = "stravaRecordingMethod";
 
     //
 
@@ -121,7 +123,7 @@ public class Prefs {
         // app
         savePref(appVersion, APP_VERSION);
         savePref(developer, DEVELOPER);
-        savePref(firstLogin, FIRST_LOGIN); // do not save first login if not to reboard with every app update.
+        savePref(firstLogin, FIRST_LOGIN); //
 
         // display
         savePref(showWeekHeaders, WEEK_HEADERS);
@@ -156,6 +158,7 @@ public class Prefs {
         savePref(refreshToken, STRAVA_REFRESH);
         savePref(accessToken, STRAVA_ACCESS);
         savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
+        savePref(recordingMethod, STRAVA_METHOD);
     }
 
     private static void load(Context c) {
@@ -169,10 +172,9 @@ public class Prefs {
         appVersion = loadPref(str, APP_VERSION);
         String targetVersion = c.getString(R.string.app_version);
         if (!appVersion.equals(targetVersion)) {
-            // reset prefs in case of added/removed prefs in new version
+            // do upgrades here; resolve conflicts or save new default values
             appVersion = targetVersion;
-            save();
-            return;
+            savePref(appVersion, APP_VERSION);
         }
 
         // app
@@ -212,6 +214,7 @@ public class Prefs {
         refreshToken = loadPref(str, STRAVA_REFRESH);
         accessToken = loadPref(str, STRAVA_ACCESS);
         accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
+        recordingMethod = loadPref(str, STRAVA_METHOD);
     }
 
     // tools
@@ -257,6 +260,7 @@ public class Prefs {
             case STRAVA_REFRESH: return refreshToken;
             case STRAVA_ACCESS: return accessToken;
             case STRAVA_ACCESS_EXP: return accessTokenExpiration;
+            case STRAVA_METHOD: return recordingMethod;
             default: return new Object();
         }
     }
@@ -383,6 +387,11 @@ public class Prefs {
         savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
     }
 
+    public static void setRecordingMethod(String recordingMethod) {
+        Prefs.recordingMethod = recordingMethod;
+        savePref(recordingMethod, STRAVA_METHOD);
+    }
+
     public static void setColorGreen() {
         setColor(COLOR_GREEN);
     }
@@ -490,6 +499,10 @@ public class Prefs {
 
     public static LocalDateTime getAccessTokenExpiration() {
         return accessTokenExpiration;
+    }
+
+    public static String getRecordingMethod() {
+        return recordingMethod;
     }
 
     // get driven

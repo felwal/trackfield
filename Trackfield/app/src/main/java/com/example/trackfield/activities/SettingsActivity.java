@@ -25,6 +25,7 @@ import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.dialogs.RadioDialog;
+import com.example.trackfield.dialogs.TextDialog;
 import com.example.trackfield.toolbox.C;
 import com.example.trackfield.toolbox.F;
 import com.example.trackfield.toolbox.L;
@@ -320,7 +321,11 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // sub-settings classes
 
-    public static class StravaSettingsActivity extends SettingsActivity {
+    public static class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
+
+        private static final String DIALOG_RECORDING_METHOD = "methodDialog";
+
+        //
 
         public static void startActivity(@NonNull Context c) {
             Intent intent = new Intent(c, StravaSettingsActivity.class);
@@ -345,8 +350,24 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
             inflateClickItem("Request all", "", true, v -> strava.requestAllActivities());
 
+            inflateHeader("Request preferences");
+            inflateDialogItem("Default recording method", Prefs.getRecordingMethod(), true,
+                TextDialog.newInstance(R.string.dialog_title_recording_method,
+                    R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
+                    "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+
             inflateHeader("Connection");
             inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
+        }
+
+        // implements dialogs
+
+        @Override
+        public void onTextDialogPositiveClick(String input, String tag) {
+            if (tag.equals(DIALOG_RECORDING_METHOD)) {
+                Prefs.setRecordingMethod(input);
+                recreate();
+            }
         }
 
     }

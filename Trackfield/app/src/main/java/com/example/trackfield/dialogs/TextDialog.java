@@ -78,11 +78,11 @@ public class TextDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                    final String input = et.getText().toString();
-                    listener.onTextDialogPositiveClick(input, tag);
-                })
-                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
+                final String input = et.getText().toString();
+                listener.onTextDialogPositiveClick(input, tag);
+            })
+            .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }

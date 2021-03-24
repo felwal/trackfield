@@ -135,7 +135,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             return true;
         }
         else if (itemId == R.id.action_delete) {
-            BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, BaseDialog.NO_RES,
+            BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, R.string.dialog_message_delete_exercise,
                     R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
                     .show(getSupportFragmentManager());
             return true;
