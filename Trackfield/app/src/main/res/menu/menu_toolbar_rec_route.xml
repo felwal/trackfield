@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/action_hideRoute"
-        android:title="@string/action_hide"
+        android:title="@string/action_hide_route"
         android:icon="@drawable/ic_hide_24dp"
         app:showAsAction="never"/>
 

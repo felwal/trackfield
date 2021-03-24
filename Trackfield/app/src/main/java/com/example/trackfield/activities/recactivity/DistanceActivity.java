@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.database.Reader;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
@@ -20,7 +21,8 @@ import com.example.trackfield.toolbox.Prefs;
 
 import java.util.ArrayList;
 
-public class DistanceActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener, FilterDialog.DialogListener {
+public class DistanceActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener,
+    FilterDialog.DialogListener {
 
     private Distance distance;
     private int length;
@@ -28,8 +30,9 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     public static final String EXTRA_DISTANCE = "distance";
     private static final String DIALOG_DELETE_DISTANCE = "deleteDistanceDialog";
     private static final String DIALOG_FILTER_DISTANCE = "filterDistanceDialog";
+    private static final String DIALOG_GOAL_DISTANCE = "goalDistanceDialog";
 
-    ////
+    //
 
     public static void startActivity(Context c, int distance) {
         if (distance == Distance.NO_DISTANCE) return;
@@ -66,14 +69,14 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
         int itemId = item.getItemId();
         if (itemId == R.id.action_filter) {
             FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getDistanceVisibleTypes(),
-                    R.string.dialog_btn_filter, DIALOG_FILTER_DISTANCE)
-                    .show(getSupportFragmentManager());
+                R.string.dialog_btn_filter, DIALOG_FILTER_DISTANCE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_deleteDistance) {
             BinaryDialog.newInstance(R.string.dialog_title_delete_distance, R.string.dialog_message_delete_distance,
-                    R.string.dialog_btn_delete, DIALOG_DELETE_DISTANCE)
-                    .show(getSupportFragmentManager());
+                R.string.dialog_btn_delete, DIALOG_DELETE_DISTANCE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_setGoal) {
@@ -88,8 +91,10 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
                 minutes = (int) timeParts[1];
                 seconds = (int) timeParts[0];
             }
-            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES, minutes, seconds, "min", "sec", R.string.dialog_btn_set, R.string.dialog_btn_delete, "distanceGoal")
-                    .show(getSupportFragmentManager());
+            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES,
+                minutes, seconds, "min", "sec",
+                R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_DISTANCE)
+                .show(getSupportFragmentManager());
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -103,7 +108,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
         length = intent.getIntExtra(EXTRA_DISTANCE, 0);
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
 
-        distance = reader.getDistance(length);
+        distance = Reader.get(this).getDistance(length);
         setToolbar(M.prefix(length, 2, "m"));
         selectFragment(DistanceRecyclerFragment.newInstance(length, originId));
     }
@@ -118,33 +123,31 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_DISTANCE)) {
-            writer.deleteDistance(distance);
+            Writer.get(this).deleteDistance(distance);
             finish();
         }
     }
 
     @Override
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
+        if (tag.equals(DIALOG_GOAL_DISTANCE)) {
+            distance.setGoalPace(M.seconds(0, input1, input2));
+            Writer.get(this).updateDistance(distance);
 
-        distance.setGoalPace(M.seconds(0, input1, input2));
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.updateDistance(distance);
-        //writer.close();
-
-        invalidateOptionsMenu();
-        recyclerFragment.updateRecycler();
+            invalidateOptionsMenu();
+            recyclerFragment.updateRecycler();
+        }
     }
 
     @Override
     public void onTimeDialogNegativeClick(String tag) {
+        if (tag.equals(DIALOG_GOAL_DISTANCE)) {
+            distance.removeGoalPace();
+            Writer.get(this).updateDistance(distance);
 
-        distance.removeGoalPace();
-        //Helper.Writer writer = new Helper.Writer(this);
-        writer.updateDistance(distance);
-        //writer.close();
-
-        invalidateOptionsMenu();
-        recyclerFragment.updateRecycler();
+            invalidateOptionsMenu();
+            recyclerFragment.updateRecycler();
+        }
     }
 
     @Override

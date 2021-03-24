@@ -71,8 +71,8 @@
   <string name="action_rename">Rename</string>
   <string name="action_save">Save</string>
   <string name="action_add">Add</string>
-  <string name="action_hide">Hide</string>
-  <string name="action_unhide">Unhide</string>
+  <string name="action_hide_route">Hide route</string>
+  <string name="action_unhide_route">Unhide route</string>
   <string name="action_show_hidden">Show hidden</string>
   <string name="action_hide_hidden">Hide hidden</string>
   <string name="action_set_goal">Set goal</string>
@@ -117,6 +117,8 @@
   <string name="dialog_btn_reset"><b>Reset</b></string>
   <string name="dialog_btn_discard"><b>Discard</b></string>
   <string name="dialog_btn_merge"><b>Merge</b></string>
+  <string name="dialog_btn_export"><b>Export</b></string>
+  <string name="dialog_btn_import"><b>Import</b></string>
 
   <string name="dialog_chip_time">Time</string>
   <string name="dialog_chip_pace">Pace</string>
@@ -136,6 +138,8 @@
   <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
   <string name="dialog_title_merge_routes">Merge routes?</string>
   <string name="dialog_title_recording_method">Default recording method</string>
+  <string name="dialog_title_export">Export JSON?</string>
+  <string name="dialog_title_import">Import JSON?</string>
 
   <string name="dialog_message_delete_exercise"></string>
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>

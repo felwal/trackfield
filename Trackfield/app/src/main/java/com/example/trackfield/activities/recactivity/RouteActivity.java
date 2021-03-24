@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.example.trackfield.R;
 import com.example.trackfield.activities.mapactivity.RouteMapActivity;
 import com.example.trackfield.database.Reader;
+import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.FilterDialog;
@@ -56,8 +57,8 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hideRoute);
         hideItem.setChecked(route.isHidden());
-        if (route.isHidden()) hideItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_unhide);
-        else hideItem.setIcon(R.drawable.ic_archive_24dp).setTitle(R.string.action_hide);
+        if (route.isHidden()) hideItem.setIcon(R.drawable.ic_hide_24dp).setTitle(R.string.action_unhide_route);
+        else hideItem.setIcon(R.drawable.ic_archive_24dp).setTitle(R.string.action_hide_route);
 
         // goal
         MenuItem goalItem = menu.findItem(R.id.action_setGoal);
@@ -104,7 +105,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         }
         else if (itemId == R.id.action_hideRoute) {
             route.invertHidden();
-            writer.updateRoute(route);
+            Writer.get(this).updateRoute(route);
             invalidateOptionsMenu();
             return true;
         }
@@ -121,7 +122,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     protected void getExtras(Intent intent) {
 
         if (!intent.hasExtra(EXTRA_ROUTE_ID)) return;
-        route = reader.getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, -1));
+        route = Reader.get(this).getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, -1));
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
 
         setToolbar(route.getName());
@@ -154,9 +155,9 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
                         .show(getSupportFragmentManager());
             }
             else {
-                writer.updateRouteName(route.getName(), input);
+                Writer.get(this).updateRouteName(route.getName(), input);
                 route.setName(input);
-                writer.updateRoute(route);
+                Writer.get(this).updateRoute(route);
                 finish();
                 startActivity(this, route.get_id(), originId);
             }
@@ -166,9 +167,9 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_MERGE_ROUTES)) {
-            writer.updateRouteName(route.getName(), passValue);
+            Writer.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
-            int newId = writer.updateRoute(route);
+            int newId = Writer.get(this).updateRoute(route);
             finish();
             startActivity(this, newId, originId);
         }
@@ -178,9 +179,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.setGoalPace(M.seconds(0, input1, input2));
-            //Helper.Writer writer = new Helper.Writer(this);
-            writer.updateRoute(route);
-            //writer.close();
+            Writer.get(this).updateRoute(route);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -191,9 +190,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogNegativeClick(String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.removeGoalPace();
-            //Helper.Writer writer = new Helper.Writer(this);
-            writer.updateRoute(route);
-            //writer.close();
+            Writer.get(this).updateRoute(route);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();

@@ -20,10 +20,6 @@ import com.example.trackfield.toolbox.L;
 
 public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
 
-    // TODO: bort
-    protected Reader reader;
-    protected Writer writer;
-
     private ActionBar ab;
     protected FrameLayout frame;
     protected RecyclerFragment recyclerFragment;
@@ -41,9 +37,6 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
         setContentView(R.layout.activity_rec);
         frame = findViewById(R.id.frameLayout_scrollerFrameRec);
 
-        //reader = new Helper.Reader(this);
-        reader = Reader.get(this);
-        writer = Writer.get(this);
         getExtras(getIntent());
     }
 
@@ -96,10 +89,6 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
     protected void selectFragment(RecyclerFragment recyclerFragment) {
         this.recyclerFragment = recyclerFragment;
         getSupportFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
-    }
-
-    public Reader getReader() {
-        return reader;
     }
 
     // abstract

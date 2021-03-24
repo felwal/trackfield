@@ -23,6 +23,7 @@ import com.example.trackfield.api.FitnessApi;
 import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
+import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.dialogs.DecimalDialog;
 import com.example.trackfield.dialogs.RadioDialog;
 import com.example.trackfield.dialogs.TextDialog;
@@ -34,7 +35,7 @@ import com.example.trackfield.toolbox.Prefs;
 import java.time.LocalDate;
 
 public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener,
-    DecimalDialog.DialogListener {
+    DecimalDialog.DialogListener, BinaryDialog.DialogListener {
 
     private LayoutInflater inflater;
     private LinearLayout ll;
@@ -47,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private static final String DIALOG_THEME = "themeDialog";
     private static final String DIALOG_COLOR = "colorDialog";
     private static final String DIALOG_MASS = "massDialog";
+    private static final String DIALOG_EXPORT = "exportDialog";
+    private static final String DIALOG_IMPORT = "importDialog";
 
     //
 
@@ -158,24 +161,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // file
         inflateHeader("File");
-        inflateClickItem("Export json", "", false, v -> {
-            L.toast(R.string.toast_json_exporting, this);
-            new Thread(() -> {
-                boolean success = F.exportJson(this);
-                runOnUiThread(() -> {
-                    L.toast(success ? R.string.toast_json_export_successful : R.string.toast_json_export_err, this);
-                });
-            }).start();
-        });
-        inflateClickItem("Import json", "", true, v -> {
-            L.toast(R.string.toast_json_importing, this);
-            new Thread(() -> {
-                boolean success = F.importJson(this);
-                runOnUiThread(() -> {
-                    L.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
-                });
-            }).start();
-        });
+        inflateDialogItem("Export json", "", false,
+            BinaryDialog.newInstance(R.string.dialog_title_export, BaseDialog.NO_RES,
+                R.string.dialog_btn_export, DIALOG_EXPORT));
+        inflateDialogItem("Import json", "", true,
+            BinaryDialog.newInstance(R.string.dialog_title_import, BaseDialog.NO_RES,
+                R.string.dialog_btn_import, DIALOG_IMPORT));
 
         // profile
         inflateHeader("Profile");
@@ -308,6 +299,28 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         if (tag.equals(DIALOG_MASS)) {
             Prefs.setMass(input);
             recreate();
+        }
+    }
+
+    @Override
+    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+        if (tag.equals(DIALOG_EXPORT)) {
+            L.toast(R.string.toast_json_exporting, this);
+            new Thread(() -> {
+                boolean success = F.exportJson(this);
+                runOnUiThread(() -> {
+                    L.toast(success ? R.string.toast_json_export_successful : R.string.toast_json_export_err, this);
+                });
+            }).start();
+        }
+        else if (tag.equals(DIALOG_IMPORT)) {
+            L.toast(R.string.toast_json_importing, this);
+            new Thread(() -> {
+                boolean success = F.importJson(this);
+                runOnUiThread(() -> {
+                    L.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
+                });
+            }).start();
         }
     }
 
