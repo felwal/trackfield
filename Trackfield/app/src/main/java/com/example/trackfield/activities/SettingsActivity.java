@@ -132,7 +132,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     }
 
     protected void inflateViews() {
-
         // display options
         inflateHeader("Display Options");
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
