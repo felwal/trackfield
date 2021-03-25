@@ -35,6 +35,8 @@ import java.util.ArrayList;
 
 public class StravaApi {
 
+    private static StravaApi instance;
+
     private Activity a;
     private static RequestQueue queue;
 
@@ -70,9 +72,13 @@ public class StravaApi {
 
     //
 
-    public StravaApi(Activity a) {
+    private StravaApi(Activity a) {
         this.a = a;
         queue = Volley.newRequestQueue(a);
+    }
+
+    public static StravaApi getInstance(Activity a) {
+        return instance != null ? instance : (instance = new StravaApi(a));
     }
 
     // authorize
@@ -95,6 +101,13 @@ public class StravaApi {
         a.startActivity(intent);
     }
 
+    /**
+     * Handles intent for strava authorization result;
+     * checks if intent contains any URI appLinkData
+     * and finishes authorization.
+     *
+     * @param appLinkIntent The intent possibly containing appLinkData
+     */
     public void handleIntent(Intent appLinkIntent) {
         //String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();

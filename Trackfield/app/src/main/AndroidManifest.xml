@@ -66,21 +66,11 @@
             android:name=".activities.SettingsActivity"
             android:parentActivityName=".activities.MainActivity">
             <tools:validation testUrl="https://felwal.github.io/callback" />
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="felwal.github.io"
-                    android:pathPrefix="/callback" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.SettingsActivity$StravaSettingsActivity"
-            android:parentActivityName=".activities.SettingsActivity">
+            android:parentActivityName=".activities.SettingsActivity"
+            android:launchMode="singleTask">
             <tools:validation testUrl="https://felwal.github.io/callback" />
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />

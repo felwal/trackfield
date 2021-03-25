@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         // TODO: dev tool
         Writer.get(this).useUpdateToolIfEnabled(this);
 
-        strava = new StravaApi(this);
+        strava = StravaApi.getInstance(this);
 
         // layout
         setBottomNavbar();

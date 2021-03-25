@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,10 +41,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private LayoutInflater inflater;
     private LinearLayout ll;
 
-    // api
-    StravaApi strava;
-    //FitnessApi fit;
-
     // dialog tags
     private static final String DIALOG_THEME = "themeDialog";
     private static final String DIALOG_COLOR = "colorDialog";
@@ -71,26 +68,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         setToolbar();
         inflateViews();
-
-        // api
-        //fit = new FitnessApi(this);
-        strava = new StravaApi(this);
-        strava.handleIntent(getIntent());
     }
 
     @Override
     protected void onDestroy() {
         //F.savePrefs(this);
         super.onDestroy();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-
-        // handle intent for strava authorization result
-        strava.handleIntent(getIntent());
     }
 
     @Override
@@ -335,6 +318,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     public static class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
 
+        private StravaApi strava;
+
         private static final String DIALOG_RECORDING_METHOD = "methodDialog";
 
         //
@@ -344,7 +329,23 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             c.startActivity(intent);
         }
 
-        //
+        // extends AppCompatActivity
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            strava = StravaApi.getInstance(this);
+            strava.handleIntent(getIntent());
+        }
+
+        @Override
+        protected void onNewIntent(Intent intent) {
+            super.onNewIntent(intent);
+            setIntent(intent);
+            strava.handleIntent(getIntent());
+        }
+
+        // extends SettingsActivity
 
         @Override
         protected void setToolbar() {

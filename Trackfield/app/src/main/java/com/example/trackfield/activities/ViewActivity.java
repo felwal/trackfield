@@ -142,8 +142,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
         else if (itemId == R.id.action_pull) {
             if (exercise.hasExternalId()) {
-                StravaApi api = new StravaApi(this);
-                api.pullActivity(exercise.getExternalId());
+                StravaApi.getInstance(this).pullActivity(exercise.getExternalId());
             }
             else {
                 L.toast(R.string.toast_strava_pull_activity_gone, this);
