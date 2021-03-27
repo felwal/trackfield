@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         setContentView(R.layout.activity_main);
         L.setScale(this);
 
-        //Prefs.setDeveloper(true);
         if (Prefs.isFirstLogin()) OnboardingActivity.startActivity(this);
 
-        // TODO: dev tool
-        Writer.get(this).useUpdateToolIfEnabled(this);
+        // TODO: dev
+        //Prefs.setDeveloper(true);
+        //Writer.get(this).useUpdateToolIfEnabled(this);
 
         strava = StravaApi.getInstance(this);
 

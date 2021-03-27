@@ -109,7 +109,7 @@ public class Reader extends Helper {
             ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(M.dateTime(dateTime.toLocalDate())) + ")" +
             " AND (" +
             ExerciseEntry.COLUMN_TYPE + " = " + type + (type == Exercise.TYPE_RUN ?
-                " OR " + ExerciseEntry.COLUMN_TYPE + " = " + Exercise.TYPE_INTERVALS : "") +
+            " OR " + ExerciseEntry.COLUMN_TYPE + " = " + Exercise.TYPE_INTERVALS : "") +
             ")";
 
         Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, null, selection,
@@ -575,9 +575,12 @@ public class Reader extends Helper {
         final String col_r_hidden = RouteEntry.COLUMN_HIDDEN;
         final String col_r_id = RouteEntry._ID;
 
-        final String col_s_amount = "amount";
-        final String col_s_avg_dist = "avg_distance";
-        final String col_s_best_pace = "best_pace";
+        final String ali_e = "e";
+        final String ali_e2 = "e2";
+        final String ali_a = "a";
+        final String ali_amount = "amount";
+        final String ali_avg_dist = "avg_distance";
+        final String ali_best_pace = "best_pace";
 
         String havingAmount = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : " HAVING count(1) > 1";
         String whereHidden = includeHidden ? "" : " AND " + col(tab_r, col_r_hidden) + " != 1";
@@ -588,13 +591,13 @@ public class Reader extends Helper {
                 orderBy = "max(" + col_r_name + ")";
                 break;
             case AMOUNT:
-                orderBy = col_s_amount;
+                orderBy = ali_amount;
                 break;
             case DISTANCE:
-                orderBy = col_s_avg_dist;
+                orderBy = ali_avg_dist;
                 break;
             case PACE:
-                orderBy = col_s_best_pace;
+                orderBy = ali_best_pace;
                 break;
             case DATE:
             default:
@@ -604,43 +607,22 @@ public class Reader extends Helper {
         orderBy += sortOrder(smallestFirst);
 
         String query =
-            "SELECT " + col(tab_e, col_e_rid) + ", " + col(tab_r, col_r_name) + ", count(1) AS " + col_s_amount + ", " +
-                "avg(" + col(tab_e, col_e_dist) + ") AS " + col_s_avg_dist +
-                ", min(" + col(tab_e, col_e_time) + "/" + col(tab_e, col_e_dist) + ")*1000" + " AS " + col_s_best_pace +
-                " FROM " + tab_e + " INNER JOIN " + tab_r +
-                " ON " + col(tab_e, col_e_rid) + " = " + col(tab_r, col_r_id) +
-                " WHERE " + col(tab_e, col_e_time) + " > 0 AND " + col(tab_e, col_e_dist) + " > 0" +
-                whereHidden + typeFilter(" AND", types) +
-                " GROUP BY " + col(tab_e, col_e_rid) +
+            "SELECT " + com(col(ali_e, col_e_rid), col(tab_r, col_r_name), "count(1) AS " + ali_amount,
+                fun("avg", col(ali_e, col_e_dist)) + " AS " + ali_avg_dist, col(ali_a, ali_best_pace)) +
+                " FROM " + tab_e + " AS " + ali_e +
+                " INNER JOIN " + tab_r + " ON " + col(ali_e, col_e_rid) + " = " + col(tab_r, col_r_id) +
+                " INNER JOIN (" +
+                "SELECT " + col(ali_e2, col_e_rid) + ", " +
+                "min(" + col(ali_e2, col_e_time) + "/" + col(ali_e2, col_e_dist) + ")*1000" + " AS " + ali_best_pace +
+                " FROM " + tab_e + " AS " + ali_e2 +
+                " WHERE " + col(ali_e2, col_e_time) + " > 0 AND " + col(ali_e2, col_e_dist) + " > 0" + typeFilter(
+                    " AND", types) +
+                " GROUP BY "  + col(ali_e2, col_e_rid) +
+                ") AS " + ali_a + " ON " + col(ali_a, col_e_rid) + " = " + col(ali_e, col_e_rid) +
+                " WHERE 1=1" + whereHidden + typeFilter(" AND", types) +
+                " GROUP BY " + col(ali_e, col_e_rid) +
                 havingAmount +
                 " ORDER BY " + orderBy;
-
-        /*String queryStringOld =
-            "select e." + col_e_rid + ", r." + col_r_name + ", " + col_s_amount + ", avg(e." + col_e_dist + ") as " +
-                col_s_avg_dist +
-                ", case when varPaceDrv is null or pace < varPaceDrv then pace else varPaceDrv end " + col_s_best_pace +
-                " " + "from " + tab_e + " as e inner join " + tab_r + " as r on e." + col_e_rid + " = r." + col_r_id +
-                " inner join " + "(select " + col_e_rid + ", count(1) as " + col_s_amount + " from " + tab_e +
-                whereTypesLone +
-                " group by " + col_e_rid + havingCount + ") as a on e." + col_e_rid + " = a." + col_e_rid +
-                " inner join " +
-                "(select " + col_e_rid + ", min(" + col_e_time + "/" + col_e_dist + ")*1000 as pace from " + tab_e +
-                " where " +
-                col_e_dist + " > 0 and " + col_e_time + " != 0" + whereTypes + " group by " + col_e_rid +
-                ") as v on e." + col_e_rid +
-                " = v." + col_e_rid + " left outer join " + "(select e2." + col_e_rid + ", min(" + col_e_time +
-                "/varDistAvg)*1000 as varPaceDrv from " + tab_e + " as e2 inner join " + "(select " + col_e_rid + ", " +
-                col_e_rvar + ", avg(" + col_e_dist + ") as varDistAvg from " + tab_e + " where " + col_e_dist +
-                " > 0 and " + col_e_time +
-                " != 0 group by " + col_e_rvar + ", " + col_e_rid + ") as vAvg on e2." + col_e_rid + " = vAvg." +
-                col_e_rid +
-                " and e2." + col_e_rvar + " = vAvg." + col_e_rvar + " " + "where e2." + col_e_dist + " = -1 and e2." +
-                col_e_time +
-                " != 0 " + whereTypesAs + " group by e2." + col_e_rvar + ", e2." + col_e_rid + ") as vDrv on e." +
-                col_e_rid +
-                " = vDrv." + col_e_rid + " " + "where e." + col_e_dist + " != -1" + whereHidden + whereTypes +
-                " group by e." +
-                col_e_rid + " order by " + orderBy;*/
 
         Log.i(LOG_TAG + " getRouteItems", query);
 
@@ -649,9 +631,9 @@ public class Reader extends Helper {
         while (cursor.moveToNext()) {
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(col_e_rid));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(col_r_name));
-            int count = cursor.getInt(cursor.getColumnIndexOrThrow(col_s_amount));
-            int avgDistance = cursor.getInt(cursor.getColumnIndexOrThrow(col_s_avg_dist));
-            int bestPace = cursor.getInt(cursor.getColumnIndexOrThrow(col_s_best_pace));
+            int count = cursor.getInt(cursor.getColumnIndexOrThrow(ali_amount));
+            int avgDistance = cursor.getInt(cursor.getColumnIndexOrThrow(ali_avg_dist));
+            int bestPace = cursor.getInt(cursor.getColumnIndexOrThrow(ali_best_pace));
             routeItems.add(new RouteItem(routeId, name, count, avgDistance, bestPace));
         }
         cursor.close();
@@ -1293,6 +1275,14 @@ public class Reader extends Helper {
 
     private String col(String table, String column) {
         return table + "." + column;
+    }
+
+    private String com(String... s) {
+        String expression = s[0];
+        for (int i = 1; i < s.length; i++) {
+            expression += ", " + s[i];
+        }
+        return expression;
     }
 
     // sql clauses

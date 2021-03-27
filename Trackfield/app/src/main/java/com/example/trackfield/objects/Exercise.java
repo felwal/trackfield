@@ -581,55 +581,16 @@ public class Exercise implements JSONObjectable {
     }
 
     public static int typeFromStravaType(String stravaType) {
-
-        /*
-        Ride
-        Run
-        Swim
-        Walk
-        Hike
-        Alpine Ski
-        Backcountry Ski
-        Canoe
-        Crossfit
-        E-Bike Ride
-        Elliptical
-        Handcycle
-        Ice Skate
-        Inline Skate
-        Kayak
-        Kitesurf Session
-        Nordic Ski
-        Rock Climb
-        Roller Ski
-        Row
-        Snowboard
-        Snowshoe
-        Stair Stepper
-        Stand Up Paddle
-        Surf
-        Virtual Ride
-        Virtual Run
-        Weight Training
-        Windsurf Session
-        Wheelchair
-        Workout
-        Yoga
-        */
         switch (stravaType) {
-            case "Run":
-                return TYPE_RUN;
+            case "Run": return TYPE_RUN;
             case "Walk":
-            case "Hike":
-                return TYPE_WALK;
-            case "Ride":
-                return TYPE_RIDE;
+            case "Hike": return TYPE_WALK;
+            case "Ride": return TYPE_RIDE;
             case "Swim":
             case "Apline Ski":
             case "Backcountry Ski":
             case "Canoe":
-            case "Crossfit":
-                return TYPE_STRENGTH;
+            case "Crossfit": return TYPE_STRENGTH;
             case "E-Bike Ride":
             case "Elliptical":
             case "Handcycle":
@@ -650,10 +611,8 @@ public class Exercise implements JSONObjectable {
             case "Windsurf Session":
             case "Wheelchair":
             case "Workout":
-            case "Yoga":
-                return TYPE_YOGA;
-            default:
-                return TYPE_OTHER;
+            case "Yoga": return TYPE_YOGA;
+            default: return TYPE_OTHER;
         }
     }
 
