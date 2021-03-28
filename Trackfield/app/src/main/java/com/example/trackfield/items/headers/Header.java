@@ -16,9 +16,14 @@ public class Header extends RecyclerItem {
     private int firstIndex = 0;
     private int lastIndex = 0;
 
-    public enum Type { YEAR, MONTH, WEEK, REC }
+    public enum Type {
+        YEAR,
+        MONTH,
+        WEEK,
+        REC
+    }
 
-    ////
+    //
 
     public Header(String title, Type type, int itemListSize) {
         this.title = title;

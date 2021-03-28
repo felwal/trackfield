@@ -170,6 +170,7 @@
   <string name="toast_strava_pull_activity_successful">Pull successful</string>
   <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
   <string name="toast_strava_pull_activity_err">Failed to pull activity</string>
+  <string name="toast_strava_pull_activities_finished">Pulls finished</string>
 
   <!-- api certificate -->
 

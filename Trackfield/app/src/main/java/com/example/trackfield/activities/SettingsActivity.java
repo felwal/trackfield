@@ -358,19 +358,23 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         @Override
         protected void inflateViews() {
+            // requests
             inflateHeader("Request activities");
             inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
             inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
-            inflateClickItem("Request all", "", true, v -> strava.requestAllActivities());
+            inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
+            inflateClickItem("Pull all", "", true, v -> strava.pullAllActivities());
 
-            inflateHeader("Request preferences");
-            inflateDialogItem("Default recording method", Prefs.getRecordingMethod(), true,
-                TextDialog.newInstance(R.string.dialog_title_recording_method,
-                    R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
-                    "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
-
+            // connection
             inflateHeader("Connection");
             inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
+
+            // preferences
+            inflateHeader("Request preferences");
+            inflateDialogItem("Default recording method", Prefs.getRecordingMethod(), true,
+                    TextDialog.newInstance(R.string.dialog_title_recording_method,
+                            R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
+                            "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
         }
 
         // implements dialogs

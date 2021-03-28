@@ -40,8 +40,7 @@ public class StravaApi {
     private Activity a;
     private static RequestQueue queue;
 
-    private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter
-        .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"); // 2020-11-04T11:16:08Z
+    private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     // secrets
     private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
@@ -83,10 +82,6 @@ public class StravaApi {
 
     // authorize
 
-    /**
-     * @param flow The AuthfFlow with lamdbda with what to do when authorization is complete and refreshToken is
-     * requested
-     */
     public void authorizeStrava() {
         Uri uri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
             .buildUpon()
@@ -119,10 +114,11 @@ public class StravaApi {
         L.toast(R.string.toast_strava_auth_successful, a);
     }
 
-    // request activities
+    // request activities: primary
 
     public void pullActivity(final long stravaId) {
         ((TokenRequester) accessToken -> {
+            L.toast("Pulling activity...", a);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
@@ -134,6 +130,28 @@ public class StravaApi {
                 }, e -> L.handleError(R.string.toast_strava_pull_activity_err, e, a));
 
             queue.add(request);
+        }).requestAccessToken(a);
+    }
+
+    public void pullAllActivities() {
+        ArrayList<Long> stravaIds = Reader.get(a).getExternalIds();
+        if (stravaIds.size() == 0) return;
+
+        ((TokenRequester) accessToken -> {
+            L.toast("Pulling activities...", a);
+
+            for (long stravaId : stravaIds) {
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
+                        response -> {
+                            boolean success = handlePull(convertToExercise(response));
+
+                            Log.i(LOG_TAG, "response: " + response.toString());
+                            L.toast(success, R.string.toast_strava_pull_activity_successful,
+                                    R.string.toast_strava_pull_activity_err, a);
+                        }, e -> L.handleError(R.string.toast_strava_pull_activity_err, e, a));
+
+                queue.add(request);
+            }
         }).requestAccessToken(a);
     }
 
@@ -193,6 +211,8 @@ public class StravaApi {
             queue.add(request);
         }).requestAccessToken(a);
     }
+
+    // request activities: secondary
 
     public void requestLastActivity() {
         requestActivity(0);
@@ -284,7 +304,7 @@ public class StravaApi {
         if (strava == null) return false;
         boolean success = true;
 
-        ArrayList<Exercise> matching = Reader.get(a).getExercisesForMerge(strava.getDateTime(), strava.getType());
+        ArrayList<Exercise> matching = Reader.get(a).getExercises(strava.getDateTime(), strava.getType());
 
         // merge
         if (matching.size() == 1) {
@@ -334,7 +354,7 @@ public class StravaApi {
     }
 
     private static String getActivityURL(long id) {
-        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" + "&access_token=" +
+        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" +"&access_token=" +
             Prefs.getAccessToken();
     }
 

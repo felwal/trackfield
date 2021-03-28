@@ -23,7 +23,6 @@ import com.example.trackfield.activities.recactivity.RouteActivity;
 import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Reader;
 import com.example.trackfield.database.Writer;
-import com.example.trackfield.dialogs.BaseDialog;
 import com.example.trackfield.dialogs.BinaryDialog;
 import com.example.trackfield.objects.Exercise;
 import com.example.trackfield.objects.Sub;
@@ -87,7 +86,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         fromRecycler = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
         // db
-        //Helper.Reader reader = new Helper.Reader(this);
         exercise = Reader.get(this).getExercise(_id);
         if (exercise == null) {
             finish();
@@ -106,8 +104,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     @Override
     protected void onDestroy() {
-        //Helper.closeReader();
-        //Helper.closeWriter();
         super.onDestroy();
     }
 
@@ -244,22 +240,14 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             distanceTv.setOnClickListener(v -> {
                 int longestDistance = Reader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.getEffectiveDistance());
                 DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.get_id());
-
-                /*ArrayList<Distance> distances = Reader.get(ViewActivity.this).getDistances(Distance.SortMode.DISTANCE, false);
-                for (Distance d : distances) {
-                    if (M.insideLimits(exercise.distance(), d.getDistance())) {
-                        DistanceActivity.startActivity(ViewActivity.this, d.getDistance(), exercise.get_id());
-                        break;
-                    }
-                }*/
             });
         }
         paceTv.setOnClickListener(v -> {
 
             String text = paceTv.getText().toString();
             String perKm = exercise.printPace(true);
-            String mPerS = exercise.printVelocity(C.UnitVelocity.METERS_PER_SECOND, true); //M.round(exercise.getVelocity(C.UNIT_METERS_PER_SECOND), 1) + " m/s";
-            String kmPerH = exercise.printVelocity(C.UnitVelocity.KILOMETERS_PER_HOUR, true); //M.round(exercise.getVelocity(C.UNIT_KILOMETERS_PER_HOUR), 1) + " km/h";
+            String mPerS = exercise.printVelocity(C.UnitVelocity.METERS_PER_SECOND, true);
+            String kmPerH = exercise.printVelocity(C.UnitVelocity.KILOMETERS_PER_HOUR, true);
 
             if (text.equals(perKm)) {
                 paceTv.setText(mPerS);
@@ -344,10 +332,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             catch (Exception e) {
                 L.handleError(e, this);
             }
-
-            /*try { D.exercises.remove(exercise.getId()); }
-            catch (Exception e) { L.handleError(e, this); }
-            D.edited();*/
 
             finish();
         }

@@ -196,7 +196,7 @@ public class Exercise implements JSONObjectable {
         routeId = Reader.get(c).getRouteIdOrCreate(route, c);
         type = strava.type;
         dateTime = strava.dateTime;
-        //dataSource = strava.dataSource;
+        dataSource = strava.dataSource;
         //recordingMethod = strava.recordingMethod;
         distance = strava.distance;
         time = strava.time;

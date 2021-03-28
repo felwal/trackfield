@@ -102,7 +102,7 @@ public class Reader extends Helper {
     }
 
     @NonNull
-    public ArrayList<Exercise> getExercisesForMerge(LocalDateTime dateTime, int type) {
+    public ArrayList<Exercise> getExercises(LocalDateTime dateTime, int type) {
         String selection = "(" + ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(dateTime) + " OR " +
             ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES)) +
             " OR " +
@@ -830,6 +830,22 @@ public class Reader extends Helper {
         return longestDistance;
     }
 
+    @NonNull
+    public ArrayList<Long> getExternalIds() {
+        String[] columns = { ExerciseEntry.COLUMN_EXTERNAL_ID };
+        String selection = ExerciseEntry.COLUMN_EXTERNAL_ID + " != ''";
+
+        Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection,null, null, null, null);
+        ArrayList<Long> externalIds = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            long externalId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry.COLUMN_EXTERNAL_ID));
+            externalIds.add(externalId);
+        }
+        cursor.close();
+
+        return externalIds;
+    }
+
     // streamlined graph data
 
     public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<Integer> types, LocalDate startDate,
@@ -1089,10 +1105,8 @@ public class Reader extends Helper {
             String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_NOTE));
-            String dataSource = cursor.getString(
-                cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATA_SOURCE));
-            String recordingMethod = cursor.getString(
-                cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_RECORDING_METHOD));
+            String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATA_SOURCE));
+            String recordingMethod = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
 
@@ -1100,10 +1114,8 @@ public class Reader extends Helper {
             Trail trail = null;
             String polyline = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_POLYLINE));
             if (polyline != null) {
-                double startLat = cursor.getDouble(
-                    cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
-                double startLng = cursor.getDouble(
-                    cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
+                double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
+                double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
                 double endLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_END_LAT));
                 double endLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_END_LNG));
                 trail = new Trail(polyline, new LatLng(startLat, startLng), new LatLng(endLat, endLng));
