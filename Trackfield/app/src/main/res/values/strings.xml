@@ -172,12 +172,6 @@
   <string name="toast_strava_pull_activity_err">Failed to pull activity</string>
   <string name="toast_strava_pull_activities_finished">Pulls finished</string>
 
-  <!-- api certificate -->
-
-  <!-- restricted to: Maps SDK for Android, Fitness API -->
-  <string name="google_api_key_debug">A${GOOGLE_API_KEY_DEBUG}</string>
-  <string name="google_api_key_release">${GOOGLE_API_KEY_RELEASE}</string>
-
   <!-- map styles -->
 
   <string name="map_id_dark">4b9ca6aad68c1f4d</string>

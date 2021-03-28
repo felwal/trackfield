@@ -15,6 +15,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // declare resource api keys
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(rootProject.file("local.properties").newDataInputStream())
+        }
+        resValue "string", "google_api_key_debug", properties.getProperty("GOOGLE_API_KEY_DEBUG", "")
+        resValue "string", "google_api_key_release", properties.getProperty("GOOGLE_API_KEY_RELEASE", "")
     }
     buildTypes {
         release {
@@ -51,6 +59,6 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation 'junit:junit:4.13'
 
+    testImplementation 'junit:junit:4.13'
 }
