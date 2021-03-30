@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:scrollbars="none">
 
-    <com.example.trackfield.graphing.GraphView
+    <com.example.trackfield.view.graphs.GraphView
         android:id="@+id/graphSurface_base"
         android:layout_width="0dp"
         android:layout_height="@dimen/layout_graph_large"

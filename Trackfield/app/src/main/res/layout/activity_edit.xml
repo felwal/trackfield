@@ -6,7 +6,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.EditActivity">
+    tools:context=".ui.main.exercises.exercise.EditActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_edit"
