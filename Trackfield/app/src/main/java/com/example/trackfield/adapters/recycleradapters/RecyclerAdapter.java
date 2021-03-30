@@ -34,7 +34,6 @@ import com.example.trackfield.toolbox.M;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-@Deprecated
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int ITEM_SORTER = 0;

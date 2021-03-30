@@ -16,7 +16,7 @@ import com.example.trackfield.items.headers.RecyclerItem;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-@Deprecated public class ExercisesRecyclerAdapter extends RecyclerAdapter {
+public class ExercisesRecyclerAdapter extends RecyclerAdapter {
 
     @Deprecated public static int weekAmount = 12;
 

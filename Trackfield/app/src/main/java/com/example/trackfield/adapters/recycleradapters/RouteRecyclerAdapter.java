@@ -13,7 +13,7 @@ import com.example.trackfield.items.headers.archive.GraphOld;
 
 import java.util.ArrayList;
 
-@Deprecated public class RouteRecyclerAdapter extends RecyclerAdapter {
+public class RouteRecyclerAdapter extends RecyclerAdapter {
 
     public RouteRecyclerAdapter(ArrayList<RecyclerItem> itemList, int originId, Context c) {
         super(itemList, c);

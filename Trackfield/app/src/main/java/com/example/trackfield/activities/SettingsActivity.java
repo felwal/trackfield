@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.api.FitnessApi;
 import com.example.trackfield.api.StravaApi;
 import com.example.trackfield.database.Writer;
 import com.example.trackfield.dialogs.BaseDialog;
@@ -83,7 +82,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            //if (requestCode == FitnessApi.REQUEST_CODE_PERMISSIONS_GOOGLE_FIT) fit.permissionsGained();
             //if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
         }
     }
@@ -135,11 +133,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // third party services
         inflateHeader("Third party services");
         inflateClickItem("Strava", ". . .", true, v -> StravaSettingsActivity.startActivity(this));
-
-        // Google Fit
-        //inflateHeader("Google Fit");
-        //inflateClickItem("Request all", "", false, v -> fit.requestActivities());
-        //inflateClickItem("Status", "Unknown", true, v -> fit.hasPermissionsElseRequest());
 
         // file
         inflateHeader("File");

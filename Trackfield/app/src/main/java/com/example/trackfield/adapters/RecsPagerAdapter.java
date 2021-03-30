@@ -26,8 +26,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     private RecyclerFragment routeFragment;
     private RecyclerFragment intervalFragment;
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
+    @StringRes private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
     private static final int POS_DISTANCES = 0;
     private static final int POS_ROUTES = 1;
     private static final int POS_INTERVALS = 2;

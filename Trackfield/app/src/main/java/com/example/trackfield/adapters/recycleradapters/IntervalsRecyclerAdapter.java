@@ -12,7 +12,7 @@ import com.example.trackfield.items.headers.RecyclerItem;
 
 import java.util.ArrayList;
 
-@Deprecated public class IntervalsRecyclerAdapter extends RecyclerAdapter {
+public class IntervalsRecyclerAdapter extends RecyclerAdapter {
 
     public IntervalsRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);
