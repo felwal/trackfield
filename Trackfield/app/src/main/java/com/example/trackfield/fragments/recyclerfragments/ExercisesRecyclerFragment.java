@@ -50,12 +50,11 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 dailyChart.setType(ChartOld.TYPE_DAILY);
                 itemList.add(dailyChart);*/
 
-                TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
-                    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
+                //TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
+                //    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
 
-                /*
-                TreeMap<Float, Float> oldNodes = Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
-                    LocalDate.now());*/
+                TreeMap<Float, Float> nodes = Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
+                    LocalDate.now());
 
                 GraphData weekData = new GraphData(nodes, GraphData.GRAPH_BAR, false, false);
 

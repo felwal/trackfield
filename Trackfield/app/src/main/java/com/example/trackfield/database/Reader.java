@@ -848,6 +848,7 @@ public class Reader extends Helper {
 
     // streamlined graph data
 
+    // TODO
     public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<Integer> types, LocalDate startDate,
         int nodeCount, ChronoUnit groupUnit) {
 
@@ -891,6 +892,7 @@ public class Reader extends Helper {
         return nodes;
     }
 
+    // TODO
     public TreeMap<Float, Float> accummulateDistance() {
         TreeMap<Float, Float> nodes = new TreeMap<>();
 

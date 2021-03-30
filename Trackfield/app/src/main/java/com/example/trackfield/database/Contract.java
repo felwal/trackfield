@@ -104,7 +104,7 @@ public final class Contract {
                 case TIME:
                     return COLUMN_TIME + "=0, " + COLUMN_TIME;
                 case PACE:
-                    return COLUMN_TIME + "=0, " + SELECTION_PACE;
+                    return COLUMN_TIME + "=0 OR " + COLUMN_EFFECTIVE_DISTANCE + "=0, " + SELECTION_PACE;
                 case NAME:
                     return COLUMN_ROUTE;
                 case DATE:

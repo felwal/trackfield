@@ -162,6 +162,7 @@
   <string name="toast_json_import_err">Failed to import</string>
 
   <string name="toast_strava_auth_successful">Authorization successful</string>
+  <string name="toast_strava_auth_err">Authorization failed</string>
   <string name="toast_strava_req_activity_successful">Request successful</string>
   <string name="toast_strava_req_activity_err">Failed to request activities</string>
   <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>

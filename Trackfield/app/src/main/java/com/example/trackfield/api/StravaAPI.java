@@ -110,8 +110,14 @@ public class StravaApi {
     }
 
     private void finishAuthorization(Uri appLinkData) {
-        Prefs.setAuthCode(appLinkData.getQueryParameter("code"));
-        L.toast(R.string.toast_strava_auth_successful, a);
+        String authCode = appLinkData.getQueryParameter("code");
+        if (authCode != null) {
+            Prefs.setAuthCode(authCode);
+            L.toast(R.string.toast_strava_auth_successful, a);
+        }
+        else {
+            L.toast(R.string.toast_strava_auth_err, a);
+        }
     }
 
     // request activities: primary
