@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (Prefs.isFirstLogin()) OnboardingActivity.startActivity(this);
 
         // TODO: dev
-        //Prefs.setDeveloper(true);
-        //Writer.get(this).useUpdateToolIfEnabled(this);
+        Prefs.setDeveloper(true);
+        Writer.get(this).useUpdateToolIfEnabled(this);
 
         strava = StravaApi.getInstance(this);
 

@@ -138,8 +138,8 @@
   <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
   <string name="dialog_title_merge_routes">Merge routes?</string>
   <string name="dialog_title_recording_method">Default recording method</string>
-  <string name="dialog_title_export">Export JSON?</string>
-  <string name="dialog_title_import">Import JSON?</string>
+  <string name="dialog_title_export">Export json?</string>
+  <string name="dialog_title_import">Import json?</string>
 
   <string name="dialog_message_delete_exercise"></string>
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>

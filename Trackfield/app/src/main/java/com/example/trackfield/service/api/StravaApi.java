@@ -120,7 +120,7 @@ public class StravaApi {
         }
     }
 
-    // request activities: primary
+    // pull activities
 
     public void pullActivity(final long stravaId) {
         ((TokenRequester) accessToken -> {
@@ -161,6 +161,8 @@ public class StravaApi {
         }).requestAccessToken(a);
     }
 
+    // request activities: primary
+
     private void requestActivity(final int index) {
         ((TokenRequester) accessToken -> {
             L.toast("Requesting activity...", a);
@@ -168,7 +170,8 @@ public class StravaApi {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
                 try {
                     JSONObject obj = response.getJSONObject(index);
-                    boolean success = handleRequest(convertToExercise(obj));
+                    Exercise requested = convertToExercise(obj);
+                    boolean success = handleRequest(requested);
 
                     Log.i(LOG_TAG, "response: " + obj.toString());
                     L.toast(success, R.string.toast_strava_req_activity_successful,
@@ -195,7 +198,8 @@ public class StravaApi {
                         boolean success = true;
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            success &= handleRequest(convertToExercise(obj));
+                            Exercise requested = convertToExercise(obj);
+                            success &= handleRequest(requested);
                         }
                         catch (JSONException e) {
                             success = false;
@@ -291,11 +295,15 @@ public class StravaApi {
         boolean success = true;
 
         Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
+
+        // import
         if (existing == null) {
             success &= Writer.get(a).addExercise(strava, a);
             L.toast("Pull resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE), a);
             Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(C.FORMATTER_SQL_DATE));
         }
+
+        // merge
         else {
             success &= existing.mergeStravaPull(strava, a);
             success &= Writer.get(a).updateExercise(existing, a);
@@ -310,7 +318,12 @@ public class StravaApi {
         if (strava == null) return false;
         boolean success = true;
 
-        ArrayList<Exercise> matching = Reader.get(a).getExercises(strava.getDateTime(), strava.getType());
+        // dont override already existing (use pull for that)
+        Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
+        if (existing != null) return true;
+
+        // merge with matching, ie not already linked to strava activity
+        ArrayList<Exercise> matching = Reader.get(a).getExercises(strava.getDateTime());
 
         // merge
         if (matching.size() == 1) {
@@ -338,6 +351,9 @@ public class StravaApi {
         }
 
         if (a instanceof MainActivity) ((MainActivity) a).updateFragment();
+
+        // also pull to get data not available to request
+        pullActivity(strava.getExternalId());
 
         return success;
     }

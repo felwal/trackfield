@@ -102,15 +102,10 @@ public class Reader extends Helper {
     }
 
     @NonNull
-    public ArrayList<Exercise> getExercises(LocalDateTime dateTime, int type) {
+    public ArrayList<Exercise> getExercises(LocalDateTime dateTime) {
         String selection = "(" + ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(dateTime) + " OR " +
-            ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES)) +
-            " OR " +
-            ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(M.dateTime(dateTime.toLocalDate())) + ")" +
-            " AND (" +
-            ExerciseEntry.COLUMN_TYPE + " = " + type + (type == Exercise.TYPE_RUN ?
-            " OR " + ExerciseEntry.COLUMN_TYPE + " = " + Exercise.TYPE_INTERVALS : "") +
-            ")";
+            ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES)) + " OR " +
+            ExerciseEntry.COLUMN_DATE + " = " + M.toEpochSecond(M.dateTime(dateTime.toLocalDate())) + ")";
 
         Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, null, selection,
             null, null, null, null, null);
@@ -597,7 +592,7 @@ public class Reader extends Helper {
                 orderBy = ali_avg_dist;
                 break;
             case PACE:
-                orderBy = ali_best_pace;
+                orderBy = col(ali_a, ali_best_pace);
                 break;
             case DATE:
             default:
