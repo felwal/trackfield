@@ -1,14 +1,17 @@
 package com.example.trackfield.model.recycleritems;
 
+import androidx.annotation.Nullable;
+
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.M;
 
+import java.util.Arrays;
+
 public class Header extends RecyclerItem {
 
-    private String title;
-    private int value = 0;
-    private int count = 0;
-    private Type type;
+    private final String title;
+    private final HeaderValue[] headerValues;
+    private final Type type;
 
     // as recycler item
     private boolean childrenExpanded = true;
@@ -25,30 +28,31 @@ public class Header extends RecyclerItem {
 
     //
 
-    public Header(String title, Type type, int itemListSize) {
+    public Header(String title, Type type, int itemListSize, @Nullable HeaderValue... values) {
         this.title = title;
         this.type = type;
         this.firstIndex = itemListSize + 1;
+
+        if (values == null) this.headerValues = new HeaderValue[0];
+        else this.headerValues = values;
     }
 
-    public Header(String title, Type type) {
+    public Header(String title, Type type, @Nullable HeaderValue... values) {
         this.title = title;
         this.type = type;
+
+        if (values == null) this.headerValues = new HeaderValue[0];
+        else this.headerValues = values;
     }
 
     // set
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void addValue(int value) {
-        this.value += value;
-        count++;
-    }
-
-    public void setFirstIndex(int index) {
-        firstIndex = index;
+    public void addValues(float... values) {
+        for (int i = 0; i < this.headerValues.length; i++) {
+            if (i < values.length) {
+                this.headerValues[i].addValue(values[i]);
+            }
+        }
     }
 
     public void setLastIndex(int itemListSize) {
@@ -65,18 +69,6 @@ public class Header extends RecyclerItem {
         return title;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
     public boolean areChildrenExpanded() {
         return childrenExpanded;
     }
@@ -89,29 +81,23 @@ public class Header extends RecyclerItem {
         return lastIndex;
     }
 
-    public int getChildItemCount() {
-        return lastIndex - firstIndex - 1;
-    }
-
     // get driven
 
-    public boolean isType(Type type) {
-        return this.type == type;
-    }
-
-    public boolean isType(Type type, Type orType) {
-        return this.type == type || this.type == orType;
+    public boolean isType(Type... types) {
+        for (Type type : types) {
+            if (this.type == type) return true;
+        }
+        return false;
     }
 
     public String printValues() {
-        switch (type) {
-            case WEEK:
-                return M.hours(value);
-            case REC:
-                return "";
-            default:
-                return M.kiloPrefix(value, 0, "m") + C.TAB + count + " activities";
+        String print = "";
+        for (int i = 0; i < headerValues.length; i++) {
+            if (i != 0) print += C.TAB;
+            HeaderValue value = headerValues[i];
+            print += M.roundToString(value.getValue(), value.getDecimals()) + " " + value.getUnit();
         }
+        return print;
     }
 
     // extends RecyclerItem
@@ -127,8 +113,8 @@ public class Header extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Header)) return false;
         Header h = (Header) item;
-        return type == h.getType() && title.equals(h.getTitle()) && value == h.getValue() &&
-            count == h.getCount() && childrenExpanded == h.childrenExpanded;
+        return type == h.type && title.equals(h.getTitle()) && Arrays.equals(headerValues, h.headerValues)
+                && childrenExpanded == h.childrenExpanded;
     }
 
 }

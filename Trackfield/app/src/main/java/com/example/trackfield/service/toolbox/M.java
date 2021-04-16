@@ -54,6 +54,11 @@ public class M {
         return bd.floatValue();
     }
 
+    public static String roundToString(float f, int decimals) {
+        float rounded = round(f, decimals);
+        return decimals == 0 ? Integer.toString((int) rounded) : Float.toString(rounded);
+    }
+
     public static double round(double d, int decimals) {
         BigDecimal bd = new BigDecimal(Double.toString(d));
         bd = bd.setScale(decimals, BigDecimal.ROUND_HALF_UP);

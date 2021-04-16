@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.example.trackfield.R;
 import com.example.trackfield.model.recycleritems.Exerlite;
+import com.example.trackfield.model.recycleritems.HeaderValue;
 import com.example.trackfield.ui.main.RecyclerFragment;
 import com.example.trackfield.ui.main.exercises.exercise.ViewActivity;
 import com.example.trackfield.ui.main.RecyclerAdapter;
@@ -89,7 +90,10 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             if ((newYear = e.getDate().getYear()) != year) {
                 monthHeader.setLastIndex(itemList.size());
                 yearHeader.setLastIndex(itemList.size());
-                yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size());
+                yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size(),
+                        new HeaderValue("km", 0),
+                        new HeaderValue("h", 1),
+                        new HeaderValue("ex", 0));
                 itemList.add(yearHeader);
                 //itemList.add(new Chart(D.yearWeeklyDistance(newYear), Chart.TYPE_YEAR));
                 yearOfLast = year;
@@ -103,7 +107,10 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                     title += " " + year;
                 }
                 monthHeader.setLastIndex(itemList.size());
-                monthHeader = new Header(title, Header.Type.MONTH, itemList.size());
+                monthHeader = new Header(title, Header.Type.MONTH, itemList.size(),
+                        new HeaderValue("km", 0),
+                        new HeaderValue("h", 1),
+                        new HeaderValue("ex", 0));
                 itemList.add(monthHeader);
                 month = newMonth;
             }
@@ -111,16 +118,19 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             if ((((newWeek = e.getWeek()) != week) || e.getDate().getYear() != yearOfLast) &&
                 Prefs.isWeekHeadersShown()) {
                 weekHeader.setLastIndex(itemList.size());
-                weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size());
+                weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size(),
+                        new HeaderValue("km", 0),
+                        new HeaderValue("h", 1),
+                        new HeaderValue("ex", 0));
                 itemList.add(weekHeader);
                 week = newWeek;
             }
             yearOfLast = year;
 
             // add values
-            yearHeader.addValue(e.getDistance());
-            monthHeader.addValue(e.getDistance());
-            weekHeader.addValue((int) e.getTime());
+            yearHeader.addValues(e.getDistance() / 1000f, e.getTime() / 3600f, 1);
+            monthHeader.addValues(e.getDistance() / 1000f, e.getTime() / 3600f, 1);
+            weekHeader.addValues(e.getDistance() / 1000f, e.getTime() / 3600f, 1);
             itemList.add(e);
         }
 

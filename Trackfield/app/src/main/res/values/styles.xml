@@ -161,9 +161,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Summary" parent="Heading2">
+    <style name="HeaderValues" parent="Heading2">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">normal</item>
+        <!--<item name="android:textSize">12sp</item>-->
     </style>
 
     <style name="Sorter" parent="Heading2">
