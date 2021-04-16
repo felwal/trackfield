@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.exercises.exercise;
+package com.example.trackfield.model;
 
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.M;

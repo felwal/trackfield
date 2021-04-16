@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
+import com.example.trackfield.model.Exercise;
 import com.example.trackfield.service.toolbox.L;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;

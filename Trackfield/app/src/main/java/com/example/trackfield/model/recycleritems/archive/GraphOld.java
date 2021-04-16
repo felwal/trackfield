@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.recs.general.items.archive;
+package com.example.trackfield.model.recycleritems.archive;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.exercises.Exerlite;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+import com.example.trackfield.model.recycleritems.Exerlite;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
 
 import java.util.ArrayList;
 import java.util.Map;

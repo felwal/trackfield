@@ -1,8 +1,7 @@
-package com.example.trackfield.ui.main.recs.distances.distance;
+package com.example.trackfield.model;
 
 import android.content.Context;
 
-import com.example.trackfield.service.file.JSONObjectable;
 import com.example.trackfield.service.toolbox.L;
 
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.recs.general.items;
+package com.example.trackfield.model.recycleritems;
 
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.M;

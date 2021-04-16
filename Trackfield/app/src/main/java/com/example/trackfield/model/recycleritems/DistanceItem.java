@@ -1,6 +1,5 @@
-package com.example.trackfield.ui.main.recs.distances;
+package com.example.trackfield.model.recycleritems;
 
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.M;
 

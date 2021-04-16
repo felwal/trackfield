@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.map;
+package com.example.trackfield.model;
 
 import android.location.Location;
 

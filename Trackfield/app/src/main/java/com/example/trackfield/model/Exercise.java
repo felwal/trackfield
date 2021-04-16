@@ -1,11 +1,10 @@
-package com.example.trackfield.ui.main.exercises.exercise;
+package com.example.trackfield.model;
 
 import android.content.Context;
 
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.service.file.JSONObjectable;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.L;
 import com.example.trackfield.service.toolbox.M;

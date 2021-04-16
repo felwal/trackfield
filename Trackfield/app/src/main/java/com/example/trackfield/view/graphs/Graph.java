@@ -5,7 +5,7 @@ import android.graphics.Paint;
 
 import androidx.annotation.NonNull;
 
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
 import com.example.trackfield.service.toolbox.L;
 import com.example.trackfield.service.toolbox.M;
 

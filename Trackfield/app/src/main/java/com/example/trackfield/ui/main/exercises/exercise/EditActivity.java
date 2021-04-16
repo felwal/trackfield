@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
+import com.example.trackfield.model.Exercise;
+import com.example.trackfield.model.Sub;
+import com.example.trackfield.model.Trail;
 import com.example.trackfield.service.database.Reader;
 import com.example.trackfield.service.database.Writer;
 import com.example.trackfield.view.dialogs.BaseDialog;

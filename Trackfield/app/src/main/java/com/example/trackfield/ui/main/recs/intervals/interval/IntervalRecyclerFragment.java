@@ -6,9 +6,9 @@ import android.view.View;
 import com.example.trackfield.ui.main.RecyclerFragment;
 import com.example.trackfield.ui.main.exercises.exercise.ViewActivity;
 import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.exercises.Exerlite;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
-import com.example.trackfield.ui.main.recs.general.items.Sorter;
+import com.example.trackfield.model.recycleritems.Exerlite;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.model.recycleritems.Sorter;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.file.Prefs;
 

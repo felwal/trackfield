@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
+import com.example.trackfield.model.Distance;
 import com.example.trackfield.service.database.Reader;
 import com.example.trackfield.service.database.Writer;
 import com.example.trackfield.view.dialogs.BaseDialog;

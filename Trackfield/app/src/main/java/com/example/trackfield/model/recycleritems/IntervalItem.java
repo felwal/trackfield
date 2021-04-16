@@ -1,6 +1,4 @@
-package com.example.trackfield.ui.main.recs.intervals;
-
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+package com.example.trackfield.model.recycleritems;
 
 public class IntervalItem extends RecyclerItem {
 

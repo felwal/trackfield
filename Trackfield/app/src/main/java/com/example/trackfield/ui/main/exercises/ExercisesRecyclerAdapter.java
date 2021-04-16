@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main;
+package com.example.trackfield.ui.main.exercises;
 
 import android.content.Context;
 import android.view.View;
@@ -11,7 +11,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

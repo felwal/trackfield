@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
-import com.example.trackfield.ui.main.exercises.exercise.Trail;
-import com.example.trackfield.ui.main.exercises.exercise.Trails;
+import com.example.trackfield.model.Exercise;
+import com.example.trackfield.model.Trail;
+import com.example.trackfield.model.Trails;
 import com.example.trackfield.service.toolbox.L;
 import com.example.trackfield.service.file.Prefs;
 import com.google.android.gms.maps.GoogleMap;

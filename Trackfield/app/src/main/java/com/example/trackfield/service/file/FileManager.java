@@ -12,16 +12,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
+import com.example.trackfield.model.JSONObjectable;
 import com.example.trackfield.service.database.Helper;
 import com.example.trackfield.service.database.Reader;
 import com.example.trackfield.service.database.Writer;
 import com.example.trackfield.service.toolbox.L;
 import com.example.trackfield.service.toolbox.M;
-import com.example.trackfield.ui.main.recs.distances.distance.Distance;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
-import com.example.trackfield.ui.main.recs.routes.route.Route;
-import com.example.trackfield.ui.main.exercises.exercise.Sub;
-import com.example.trackfield.ui.main.exercises.exercise.Trail;
+import com.example.trackfield.model.Distance;
+import com.example.trackfield.model.Exercise;
+import com.example.trackfield.model.Route;
+import com.example.trackfield.model.Sub;
+import com.example.trackfield.model.Trail;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

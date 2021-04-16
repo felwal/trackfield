@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.example.trackfield.ui.main.exercises.Exerlite;
+import com.example.trackfield.model.recycleritems.Exerlite;
 import com.example.trackfield.service.toolbox.L;
 import com.example.trackfield.service.toolbox.M;
 

@@ -12,7 +12,7 @@ import com.example.trackfield.service.database.Reader;
 import com.example.trackfield.ui.main.RecyclerFragment;
 import com.example.trackfield.view.graphs.Graph;
 import com.example.trackfield.view.graphs.GraphData;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
 import com.example.trackfield.service.file.Prefs;
 
 import java.time.LocalDate;

@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
+import com.example.trackfield.model.recycleritems.IntervalItem;
 import com.example.trackfield.ui.main.RecyclerFragment;
 import com.example.trackfield.ui.main.recs.general.RecsFragment;
 import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
-import com.example.trackfield.ui.main.recs.general.items.Sorter;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.model.recycleritems.Sorter;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.file.Prefs;
 import com.example.trackfield.ui.main.recs.intervals.interval.IntervalActivity;

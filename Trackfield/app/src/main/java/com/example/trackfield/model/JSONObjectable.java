@@ -1,4 +1,4 @@
-package com.example.trackfield.service.file;
+package com.example.trackfield.model;
 
 import android.content.Context;
 

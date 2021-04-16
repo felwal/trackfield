@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
 import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.util.ArrayList;

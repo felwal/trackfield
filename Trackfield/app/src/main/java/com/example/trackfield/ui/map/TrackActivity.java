@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.example.trackfield.model.Coordinate;
 import com.example.trackfield.view.dialogs.BaseDialog;
 import com.example.trackfield.view.dialogs.BinaryDialog;
 import com.example.trackfield.service.toolbox.C;

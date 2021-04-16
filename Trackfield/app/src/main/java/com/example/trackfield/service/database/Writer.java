@@ -6,11 +6,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.service.database.Contract.*;
-import com.example.trackfield.ui.main.recs.distances.distance.Distance;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
-import com.example.trackfield.ui.main.recs.routes.route.Route;
-import com.example.trackfield.ui.main.exercises.exercise.Sub;
-import com.example.trackfield.ui.main.exercises.exercise.Trail;
+import com.example.trackfield.model.Distance;
+import com.example.trackfield.model.Exercise;
+import com.example.trackfield.model.Route;
+import com.example.trackfield.model.Sub;
+import com.example.trackfield.model.Trail;
 import com.example.trackfield.service.toolbox.C;
 
 import java.util.ArrayList;

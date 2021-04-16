@@ -23,7 +23,7 @@ import com.example.trackfield.view.dialogs.DecimalDialog;
 import com.example.trackfield.view.dialogs.FilterDialog;
 import com.example.trackfield.view.sheets.SortSheet;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
-import com.example.trackfield.ui.main.recs.distances.distance.Distance;
+import com.example.trackfield.model.Distance;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.file.FileManager;
 import com.example.trackfield.service.toolbox.L;

@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.service.database.Reader;
 import com.example.trackfield.view.sheets.SortSheet;
-import com.example.trackfield.ui.main.exercises.Exerlite;
-import com.example.trackfield.ui.main.recs.general.items.Header;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
-import com.example.trackfield.ui.main.recs.general.items.Sorter;
+import com.example.trackfield.model.recycleritems.Exerlite;
+import com.example.trackfield.model.recycleritems.Header;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.model.recycleritems.Sorter;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.L;
 

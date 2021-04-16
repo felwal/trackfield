@@ -2,7 +2,7 @@ package com.example.trackfield.service.database;
 
 import android.provider.BaseColumns;
 
-import com.example.trackfield.ui.main.recs.routes.route.Route;
+import com.example.trackfield.model.Route;
 import com.example.trackfield.service.toolbox.C;
 
 public final class Contract {

@@ -1,6 +1,6 @@
-package com.example.trackfield.ui.main.exercises.exercise;
+package com.example.trackfield.model;
 
-import com.example.trackfield.ui.main.exercises.exercise.Trail;
+import com.example.trackfield.model.Trail;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 

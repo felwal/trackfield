@@ -1,7 +1,7 @@
-package com.example.trackfield.ui.main.recs.general.items.archive;
+package com.example.trackfield.model.recycleritems.archive;
 
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.model.Exercise;
 import com.example.trackfield.service.toolbox.C;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.recs.general.items;
+package com.example.trackfield.model.recycleritems;
 
 public abstract class RecyclerItem {
 

@@ -8,8 +8,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.recs.general.items.RecyclerItem;
-import com.example.trackfield.ui.main.recs.general.items.archive.GraphOld;
+import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.model.recycleritems.archive.GraphOld;
 import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.util.ArrayList;

@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.exercises.exercise.ViewActivity;
 import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.ui.main.exercises.exercise.Exercise;
+import com.example.trackfield.model.Exercise;
 import com.example.trackfield.service.toolbox.C;
 import com.example.trackfield.service.toolbox.L;
 
