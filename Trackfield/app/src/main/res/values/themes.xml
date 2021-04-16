@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- base -->
+
+    <style name="AppTheme">
+        <!--<item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- text -->
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorGrey7</item>
+        <item name="android:textColorHighlight">@color/colorGreenLight</item>
+
+        <!-- primary -->
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorPrimaryVariant">@color/colorGreenLight</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
+        <item name="chipSurfaceColor">@color/colorGrey1</item>
+
+        <!-- elements -->
+        <item name="android:colorBackground">@color/colorGrey1</item>
+        <item name="colorSurface">@color/colorGrey3</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+
+        <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
+        <item name="android:colorButtonNormal">@color/colorGrey3</item>
+        <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
+        <item name="panelBackground">@color/colorGrey2</item>
+
+        <!-- ta bort -->
+        <item name="colorOnSurface">@color/colorGrey7</item>
+        <item name="colorOnBackground">@color/colorGrey5</item>
+        <item name="strokeColor">@color/colorGrey4</item>
+        <item name="color">@color/colorGreenDarker</item>
+
+        <!-- action overflow menu -->
+        <item name="android:itemBackground">@color/colorGrey3</item>
+        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
+
+        <!-- other items -->
+        <item name="textAllCaps">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
+        <!--<item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeDark</item>-->
+    </style>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+        <item name="android:textColorSecondary">@color/colorGrey6</item>
+        <item name="android:textColorHighlight">@color/colorGreen</item>
+        <item name="android:textColorPrimaryInverse">@color/colorWhite</item>
+        <item name="textAllCaps">false</item>
+
+        <item name="colorPrimaryVariant">@color/colorGreen</item>
+        <item name="chipBackgroundColor">@color/colorGreenLighter</item>
+        <item name="chipSurfaceColor">@color/colorGrey9</item>
+
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:colorBackgroundFloating">@color/colorWhite</item>
+        <item name="android:colorButtonNormal">@color/colorWhite</item>
+        <item name="android:colorActivatedHighlight">@color/colorGreen</item>
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeLight</item>
+
+        <item name="colorSurface">@color/colorWhite</item>
+        <item name="colorOnSurface">@color/colorGrey6</item>
+        <item name="colorOnBackground">@color/colorGrey8</item>
+
+        <!-- action overflow menu (text color funkar inte) -->
+        <!--<item name="android:itemBackground">@color/colorWhite</item>
+        <item name="android:itemTextAppearance">@style/Heading2</item>-->
+
+        <item name="strokeColor">@color/colorGrey8</item>
+        <item name="panelBackground">@color/colorGrey9</item>
+
+        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
+    </style>
+
+    <!-- theme/color combinations -->
+
+    <style name="AppTheme.Dark.Green" parent="AppTheme.Dark">
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+    </style>
+
+    <style name="AppTheme.Light.Green" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.Dark.Mono" parent="AppTheme.Dark">
+        <item name="colorPrimary">@color/colorGrey3</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorGrey1</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+    </style>
+
+    <style name="AppTheme.Light.Mono" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/colorBlack</item>
+        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- other -->
+
+    <style name="AppTheme.Splash" parent="AppTheme.Dark.Green">
+        <item name="colorPrimaryDark">?android:attr/colorPrimary</item>
+        <item name="android:windowBackground">@drawable/layer_splash</item>
+        <item name="android:navigationBarColor">@color/colorGreen</item>
+    </style>
+
+</resources>
