@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.service.toolbox.C;
+import com.example.trackfield.utils.Constants;
 
 public class StatsFragment extends MainActivity.MainFragment {
 
@@ -71,7 +71,7 @@ public class StatsFragment extends MainActivity.MainFragment {
     }
 
     @Override
-    protected void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+    protected void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
         recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 

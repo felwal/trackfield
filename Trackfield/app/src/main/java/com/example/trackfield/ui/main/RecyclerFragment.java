@@ -16,14 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.view.sheets.SortSheet;
-import com.example.trackfield.model.recycleritems.Exerlite;
-import com.example.trackfield.model.recycleritems.Header;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.model.recycleritems.Sorter;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.toolbox.L;
+import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.ui.custom.sheet.SortSheet;
+import com.example.trackfield.ui.main.model.Exerlite;
+import com.example.trackfield.ui.main.model.Header;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.ui.main.model.Sorter;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.LayoutUtils;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
     protected ArrayList<RecyclerItem> items = new ArrayList<>();
-    protected C.SortMode sortMode = C.SortMode.DATE;
+    protected Constants.SortMode sortMode = Constants.SortMode.DATE;
     protected boolean smallestFirst = false;
 
     ////
@@ -91,7 +91,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
                     getAdapter();
                     adapter.setClickListener(RecyclerFragment.this);
                     recycler.setAdapter(adapter);
-                    L.crossfadeRecycler(recycler);
+                    LayoutUtils.crossfadeRecycler(recycler);
                 });
             }).interruptAndStart();
 
@@ -130,7 +130,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         return visibleItems;
     }
 
-    protected Sorter getNewSorter(C.SortMode[] sortModes, String[] sortModesTitle) {
+    protected Sorter getNewSorter(Constants.SortMode[] sortModes, String[] sortModesTitle) {
         return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
 
@@ -200,7 +200,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         recycler.smoothScrollToPosition(0);
     }
 
-    public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+    public void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
         this.sortMode = sortMode;
         this.smallestFirst = smallestFirst;
         setPrefs();
@@ -209,13 +209,13 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     // item clicks
 
-    protected void onItemClick(int itemType, C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    protected void onItemClick(int itemType, Constants.SortMode[] sortModes, Constants.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
         if (itemType == RecyclerAdapter.ITEM_SORTER) {
             onSorterClick(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
         }
     }
 
-    protected void onSorterClick(C.SortMode[] sortModes, C.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    protected void onSorterClick(Constants.SortMode[] sortModes, Constants.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         getPrefs();
         //final BottomSheetDialog sheet = new BottomSheetDialog(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst, this);
@@ -230,7 +230,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList) {
 
-        if (sortMode == C.SortMode.DATE) {
+        if (sortMode == Constants.SortMode.DATE) {
             int year = -1;
             int newYear;
             for (Exerlite e : exerliteList) {
@@ -259,11 +259,11 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
     }
 
     protected void fadeInEmpty() {
-        a.runOnUiThread(() -> L.crossfadeIn(emptyCl, 1));
+        a.runOnUiThread(() -> LayoutUtils.crossfadeIn(emptyCl, 1));
     }
 
     protected void fadeOutEmpty() {
-        a.runOnUiThread(() -> L.crossfadeOut(emptyCl));
+        a.runOnUiThread(() -> LayoutUtils.crossfadeOut(emptyCl));
     }
 
     // implements RecyclerAdapter

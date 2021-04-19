@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.model.Exercise;
-import com.example.trackfield.model.Trail;
-import com.example.trackfield.model.Trails;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.model.Exercise;
+import com.example.trackfield.ui.map.model.Trail;
+import com.example.trackfield.ui.map.model.Trails;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -69,7 +69,7 @@ public class ExerciseMapActivity extends MapActivity {
     public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
 
         // style
-        if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
+        if (!Prefs.isThemeLight()) LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
 
         // polyline
         PolylineOptions options = new PolylineOptions();

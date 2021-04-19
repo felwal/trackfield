@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.view.sheets.PeekSheet;
-import com.example.trackfield.service.toolbox.L;
+import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.ui.custom.sheet.PeekSheet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,11 +48,11 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        L.updateTheme(this);
+        ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setToolbar();
-        L.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.toolbar_map));
+        ScreenUtils.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.toolbar_map));
 
         // intent
         Intent intent = getIntent();
@@ -148,7 +148,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
                     // options
                     PolylineOptions options = new PolylineOptions();
                     options.color(getColorDeselected(this));
-                    options.width(L.px(3));
+                    options.width(ScreenUtils.px(3));
                     options.addAll(PolyUtil.decode(entry.getValue()));
                     tempOptions.add(options);
 

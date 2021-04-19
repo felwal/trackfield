@@ -16,25 +16,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.service.api.StravaApi;
-import com.example.trackfield.service.database.Writer;
-import com.example.trackfield.view.dialogs.BaseDialog;
-import com.example.trackfield.view.dialogs.DecimalDialog;
-import com.example.trackfield.view.dialogs.FilterDialog;
-import com.example.trackfield.view.sheets.SortSheet;
+import com.example.trackfield.data.network.StravaApi;
+import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.ui.custom.dialog.BaseDialog;
+import com.example.trackfield.ui.custom.dialog.DecimalDialog;
+import com.example.trackfield.ui.custom.dialog.FilterDialog;
+import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
-import com.example.trackfield.model.Distance;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.file.FileManager;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.data.db.model.Distance;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.FileUtils;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.main.exercises.ExercisesFragment;
-import com.example.trackfield.ui.main.recs.general.RecsFragment;
+import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.stats.StatsFragment;
 import com.example.trackfield.ui.onboarding.OnboardingActivity;
-import com.example.trackfield.ui.settings.SettingsActivity;
+import com.example.trackfield.ui.setting.SettingsActivity;
 import com.example.trackfield.ui.map.TrackActivity;
-import com.example.trackfield.ui.main.exercises.exercise.EditActivity;
+import com.example.trackfield.ui.exercise.EditActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -67,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         initApp();
-        L.updateTheme(this);
+        ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        L.setScale(this);
+        ScreenUtils.setScale(this);
 
         if (Prefs.isFirstLogin()) OnboardingActivity.startActivity(this);
 
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     private void initApp() {
         if (!gameOn) {
-            if (FileManager.shouldAskPermissions(this)) FileManager.askPermissions(this);
+            if (FileUtils.shouldAskPermissions(this)) FileUtils.askPermissions(this);
             Prefs.SetUpAndLoad(this);
             gameOn = true;
         }
@@ -259,10 +260,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         //trackFab.show();
         stravaFab.show();
 
-        L.crossfadeIn(addCl, 1);
+        LayoutUtils.crossfadeIn(addCl, 1);
         //L.crossfadeIn(trackCl, 1);
-        L.crossfadeIn(stravaCl, 1);
-        L.crossfadeIn(overlayView, OVERLAY_ΑLPHA);
+        LayoutUtils.crossfadeIn(stravaCl, 1);
+        LayoutUtils.crossfadeIn(overlayView, OVERLAY_ΑLPHA);
 
         isFabMenuOpen = true;
     }
@@ -273,10 +274,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         //trackFab.hide();
         addFab.hide();
 
-        L.crossfadeOut(stravaCl);
+        LayoutUtils.crossfadeOut(stravaCl);
         //L.crossfadeOut(trackCl);
-        L.crossfadeOut(addCl);
-        L.crossfadeOut(overlayView);
+        LayoutUtils.crossfadeOut(addCl);
+        LayoutUtils.crossfadeOut(overlayView);
 
         isFabMenuOpen = false;
     }
@@ -284,15 +285,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void animateFab() {
         Context fabContext = fab.getContext();
 
-        @ColorInt int primaryVariant = L.getColorInt(R.attr.colorPrimaryVariant, fabContext);
-        @ColorInt int surface = L.getColorInt(R.attr.colorSurface, fabContext);
+        @ColorInt int primaryVariant = LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, fabContext);
+        @ColorInt int surface = LayoutUtils.getColorInt(R.attr.colorSurface, fabContext);
 
         @ColorInt int fromColor = isFabMenuOpen ? surface : primaryVariant;
         @ColorInt int toColor = !isFabMenuOpen ? surface : primaryVariant;
         Drawable toIcon = isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp) :
             getDrawable(R.drawable.ic_cancel_fab_24dp);
 
-        L.animateFab(fab, fromColor, toColor, toIcon);
+        LayoutUtils.animateFab(fab, fromColor, toColor, toIcon);
     }
 
     public void updateFragment() {
@@ -321,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // implements SortSheet
 
     @Override
-    public void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst) {
+    public void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
         mainFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
@@ -335,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         protected abstract void updateFragment();
 
-        protected abstract void onSortSheetDismiss(C.SortMode sortMode, boolean smallestFirst);
+        protected abstract void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst);
 
     }
 

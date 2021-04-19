@@ -3,20 +3,20 @@ package com.example.trackfield.ui.main.exercises;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.model.recycleritems.Exerlite;
-import com.example.trackfield.model.recycleritems.HeaderValue;
+import com.example.trackfield.ui.main.model.Exerlite;
+import com.example.trackfield.ui.main.model.HeaderValue;
 import com.example.trackfield.ui.main.RecyclerFragment;
-import com.example.trackfield.ui.main.exercises.exercise.ViewActivity;
+import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.view.graphs.Graph;
-import com.example.trackfield.view.graphs.GraphData;
-import com.example.trackfield.model.recycleritems.Header;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.model.recycleritems.Sorter;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.ui.custom.graph.Graph;
+import com.example.trackfield.ui.custom.graph.GraphData;
+import com.example.trackfield.ui.main.model.Header;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.ui.main.model.Sorter;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.data.prefs.Prefs;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.TreeMap;
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.DISTANCE, C.SortMode.TIME, C.SortMode.PACE };
+    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.DISTANCE, Constants.SortMode.TIME, Constants.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, false, false, true };
 
     private String search = "";
@@ -66,7 +66,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
                 //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
             }
-            if (sortMode != C.SortMode.DATE) {
+            if (sortMode != Constants.SortMode.DATE) {
                 itemList.addAll(exerliteList);
                 return itemList;
             }
@@ -93,7 +93,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size(),
                         new HeaderValue("km", 0),
                         new HeaderValue("h", 1),
-                        new HeaderValue("ex", 0));
+                        new HeaderValue("", 0));
                 itemList.add(yearHeader);
                 //itemList.add(new Chart(D.yearWeeklyDistance(newYear), Chart.TYPE_YEAR));
                 yearOfLast = year;
@@ -110,7 +110,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 monthHeader = new Header(title, Header.Type.MONTH, itemList.size(),
                         new HeaderValue("km", 0),
                         new HeaderValue("h", 1),
-                        new HeaderValue("ex", 0));
+                        new HeaderValue("", 0));
                 itemList.add(monthHeader);
                 month = newMonth;
             }
@@ -121,7 +121,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size(),
                         new HeaderValue("km", 0),
                         new HeaderValue("h", 1),
-                        new HeaderValue("ex", 0));
+                        new HeaderValue("", 0));
                 itemList.add(weekHeader);
                 week = newWeek;
             }
@@ -144,8 +144,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISES);
+        sortMode = Prefs.getSortModePref(Constants.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.EXERCISES);
     }
 
     @Override
@@ -155,14 +155,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.EXERCISES);
+        sortMode = Prefs.getSortModePref(Constants.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.EXERCISES);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.EXERCISES, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.EXERCISES, smallestFirst);
+        Prefs.setSortModePref(Constants.Layout.EXERCISES, sortMode);
+        Prefs.setSmallestFirstPref(Constants.Layout.EXERCISES, smallestFirst);
     }
 
     @Override
@@ -252,7 +252,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) :
                     (int) getResources().getDimension(R.dimen.layout_header_year);
             View itemView = manager.findViewByPosition(position);
-            L.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
+            LayoutUtils.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
             //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
 
         }

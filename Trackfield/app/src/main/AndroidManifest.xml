@@ -37,10 +37,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.exercises.exercise.ViewActivity"
+            android:name=".ui.exercise.ViewActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.main.exercises.exercise.EditActivity"
+            android:name=".ui.exercise.EditActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.map.TrackActivity"
@@ -48,28 +48,28 @@
         <activity
             android:name=".ui.map.ExerciseMapActivity"
             android:label="@string/activity_maps"
-            android:parentActivityName=".ui.main.exercises.exercise.ViewActivity" />
+            android:parentActivityName=".ui.exercise.ViewActivity" />
         <activity
             android:name=".ui.map.RouteMapActivity"
             android:label="@string/activity_maps"
-            android:parentActivityName=".ui.main.exercises.exercise.ViewActivity" />
+            android:parentActivityName=".ui.exercise.ViewActivity" />
         <activity
-            android:name=".ui.main.recs.distances.distance.DistanceActivity"
+            android:name=".ui.rec.distance.DistanceActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.main.recs.routes.route.RouteActivity"
+            android:name=".ui.rec.route.RouteActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.main.recs.intervals.interval.IntervalActivity"
+            android:name=".ui.rec.interval.IntervalActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".ui.setting.SettingsActivity"
             android:parentActivityName=".ui.main.MainActivity">
             <tools:validation testUrl="https://felwal.github.io/callback" />
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity$StravaSettingsActivity"
-            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:name=".ui.setting.SettingsActivity$StravaSettingsActivity"
+            android:parentActivityName=".ui.setting.SettingsActivity"
             android:launchMode="singleTask">
             <tools:validation testUrl="https://felwal.github.io/callback" />
             <intent-filter android:autoVerify="true">

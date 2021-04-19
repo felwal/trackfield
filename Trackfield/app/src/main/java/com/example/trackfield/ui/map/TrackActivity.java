@@ -8,14 +8,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.example.trackfield.model.Coordinate;
-import com.example.trackfield.view.dialogs.BaseDialog;
-import com.example.trackfield.view.dialogs.BinaryDialog;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.file.FileManager;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.toolbox.M;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.ui.map.model.Coordinate;
+import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.ui.custom.dialog.BaseDialog;
+import com.example.trackfield.ui.custom.dialog.BinaryDialog;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.FileUtils;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -79,13 +80,13 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @SuppressLint("MissingPermission") @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        L.updateTheme(this);
+        ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track);
-        L.makeStatusBarTransparent(getWindow(), false, null);
+        ScreenUtils.makeStatusBarTransparent(getWindow(), false, null);
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!FileManager.permissionToLocation(this)) return;
+        if (!FileUtils.permissionToLocation(this)) return;
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
         timeTv = findViewById(R.id.textView_time);
@@ -113,22 +114,22 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        if (!Prefs.isThemeLight()) L.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
+        if (!Prefs.isThemeLight()) LayoutUtils.toast(gMap.setMapStyle(Prefs.getMapStyle(this)), this);
         gMap.getUiSettings().setAllGesturesEnabled(false);
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override public void onMapClick(LatLng latLng) {
                 if (mapExpanded) {
-                    L.crossfadeIn(paceTv, 1);
-                    L.crossfadeIn(avgPaceTv, 1);
-                    L.animateHeight(mapFrame, M.goldenRatioSmall(L.getScreenHeight(TrackActivity.this)));
+                    LayoutUtils.crossfadeIn(paceTv, 1);
+                    LayoutUtils.crossfadeIn(avgPaceTv, 1);
+                    LayoutUtils.animateHeight(mapFrame, MathUtils.goldenRatioSmall(ScreenUtils.getScreenHeight(TrackActivity.this)));
                     gMap.getUiSettings().setAllGesturesEnabled(false);
                     mapExpanded = false;
                 }
                 else {
-                    L.crossfadeOut(paceTv);
-                    L.crossfadeOut(avgPaceTv);
-                    L.animateHeight(mapFrame, M.goldenRatioLarge(L.getScreenHeight(TrackActivity.this)));
+                    LayoutUtils.crossfadeOut(paceTv);
+                    LayoutUtils.crossfadeOut(avgPaceTv);
+                    LayoutUtils.animateHeight(mapFrame, MathUtils.goldenRatioLarge(ScreenUtils.getScreenHeight(TrackActivity.this)));
                     gMap.getUiSettings().setAllGesturesEnabled(true);
                     mapExpanded = true;
                 }
@@ -153,8 +154,8 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                     recording = false;
                     finishFab.show();
 
-                    L.animateFab(playPauseFab,
-                            L.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
+                    LayoutUtils.animateFab(playPauseFab,
+                            LayoutUtils.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
                             getResources().getColor(R.color.colorPrimaryAccent),
                             getDrawable(R.drawable.ic_fab_play_24dp));
                     //playPauseFab.setImageDrawable(getDrawable(R.drawable.ic_fab_play_24dp));
@@ -163,9 +164,9 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                     recording = true;
                     finishFab.hide();
 
-                    L.animateFab(playPauseFab,
+                    LayoutUtils.animateFab(playPauseFab,
                             getResources().getColor(R.color.colorPrimaryAccent),
-                            L.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
+                            LayoutUtils.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
                             getDrawable(R.drawable.ic_fab_pause_24dp));
                     //playPauseFab.setImageDrawable(getDrawable(R.drawable.ic_fab_pause_24dp));
                 }
@@ -185,7 +186,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     private void setMap() {
 
         mapFrame = findViewById(R.id.frameLayout_mapFragment);
-        mapFrame.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, M.goldenRatioSmall(L.getScreenHeight(this))));
+        mapFrame.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MathUtils.goldenRatioSmall(ScreenUtils.getScreenHeight(this))));
         mapFrame.setClipToOutline(true);
 
         polyline = new PolylineOptions();
@@ -202,7 +203,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
     private void updateMap(Location location) {
 
-        final LatLng latLng = M.toLatLng(location);
+        final LatLng latLng = MathUtils.toLatLng(location);
         if (marker == null) marker = gMap.addMarker(new MarkerOptions().position(latLng));
         else marker.setPosition(latLng);
 
@@ -263,26 +264,26 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         distance += coordinates.size() == 0 ? 0 : location.distanceTo(coordinates.lastEntry().getValue());
 
         // textViews
-        timeTv.setText(M.stringTime(time, true) + " s");
-        distanceTv.setText(M.prefix(distance, DISTANCE_DECIMALS, "m"));
-        avgPaceTv.setText((distance == 0 ? C.NO_VALUE_TIME : M.stringTime(time / ((float) distance / 1000), true)) + " s/km");
+        timeTv.setText(MathUtils.stringTime(time, true) + " s");
+        distanceTv.setText(MathUtils.prefix(distance, DISTANCE_DECIMALS, "m"));
+        avgPaceTv.setText((distance == 0 ? Constants.NO_VALUE_TIME : MathUtils.stringTime(time / ((float) distance / 1000), true)) + " s/km");
 
         // altitude correction
         lastFourAlts[3] = lastFourAlts[2];
         lastFourAlts[2] = lastFourAlts[1];
         lastFourAlts[1] = lastFourAlts[0];
         lastFourAlts[0] = location.getAltitude();
-        location.setAltitude(M.arrayAvg(lastFourAlts, -1));
+        location.setAltitude(MathUtils.arrayAvg(lastFourAlts, -1));
 
         coordsTv.setText(
-                M.round(location.getLatitude(), 6) + " °N, " +
-                M.round(location.getLongitude(), 6) + " °E, " +
-                M.round(location.getAltitude(), 2) + " m");
+                MathUtils.round(location.getLatitude(), 6) + " °N, " +
+                MathUtils.round(location.getLongitude(), 6) + " °E, " +
+                MathUtils.round(location.getAltitude(), 2) + " m");
         if (coordinates.size() > 0) {
             coordsDiffTv.setText(
-                    M.round(location.getLatitude() - coordinates.lastEntry().getValue().getLatitude(), 6) + " °N, " +
-                    M.round(location.getLongitude() - coordinates.lastEntry().getValue().getLongitude(), 6) + " °E, " +
-                    M.round(location.getAltitude() - coordinates.lastEntry().getValue().getAltitude(), 2) + " m");
+                    MathUtils.round(location.getLatitude() - coordinates.lastEntry().getValue().getLatitude(), 6) + " °N, " +
+                    MathUtils.round(location.getLongitude() - coordinates.lastEntry().getValue().getLongitude(), 6) + " °E, " +
+                    MathUtils.round(location.getAltitude() - coordinates.lastEntry().getValue().getAltitude(), 2) + " m");
         }
 
         coordinates.put(time, new Coordinate(-1, location));
@@ -291,12 +292,12 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onProviderEnabled(@NonNull String provider) {
-        L.crossfade(mapFrame, 1);
+        LayoutUtils.crossfade(mapFrame, 1);
     }
 
     @Override
     public void onProviderDisabled(@NonNull String provider) {
-        L.crossfade(mapFrame, 0.5f);
+        LayoutUtils.crossfade(mapFrame, 0.5f);
     }
 
     @Override

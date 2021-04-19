@@ -8,12 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerAdapter;
-import com.example.trackfield.service.database.Reader;
+import com.example.trackfield.data.db.Reader;
 import com.example.trackfield.ui.main.RecyclerFragment;
-import com.example.trackfield.view.graphs.Graph;
-import com.example.trackfield.view.graphs.GraphData;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.ui.custom.graph.Graph;
+import com.example.trackfield.ui.custom.graph.GraphData;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.data.prefs.Prefs;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

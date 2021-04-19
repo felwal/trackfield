@@ -16,22 +16,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerAdapter;
-import com.example.trackfield.view.graphs.Graph;
-import com.example.trackfield.view.graphs.GraphView;
-import com.example.trackfield.model.recycleritems.DistanceItem;
-import com.example.trackfield.model.recycleritems.Exerlite;
-import com.example.trackfield.model.recycleritems.IntervalItem;
-import com.example.trackfield.model.recycleritems.RouteItem;
-import com.example.trackfield.model.recycleritems.Goal;
-import com.example.trackfield.model.recycleritems.Header;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.model.recycleritems.Sorter;
-import com.example.trackfield.model.recycleritems.archive.ChartOld;
-import com.example.trackfield.model.recycleritems.archive.GraphOld;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.toolbox.M;
-import com.example.trackfield.ui.main.recs.distances.distance.DistanceRecyclerAdapter;
+import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.ui.custom.graph.Graph;
+import com.example.trackfield.ui.custom.graph.GraphView;
+import com.example.trackfield.ui.main.model.DistanceItem;
+import com.example.trackfield.ui.main.model.Exerlite;
+import com.example.trackfield.ui.main.model.IntervalItem;
+import com.example.trackfield.ui.main.model.RouteItem;
+import com.example.trackfield.ui.main.model.Goal;
+import com.example.trackfield.ui.main.model.Header;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.ui.main.model.Sorter;
+import com.example.trackfield.ui.main.model.archive.ChartOld;
+import com.example.trackfield.ui.main.model.archive.GraphOld;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.ui.rec.distance.DistanceRecyclerAdapter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     protected ItemClickListener listener;
 
     protected ArrayList<RecyclerItem> itemList;
-    protected C.SortMode sortMode = C.SortMode.DATE;
+    protected Constants.SortMode sortMode = Constants.SortMode.DATE;
     protected int originId;
     protected LocalDate now;
 
@@ -144,11 +145,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             DistanceExerciseVH holder = (DistanceExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
-            String values = this instanceof DistanceRecyclerAdapter ? e.printDistance() + C.TAB + e.printTimeByDistance(
-                ((DistanceRecyclerAdapter) this).distance) + C.TAB + e.printPace() : "";
+            String values = this instanceof DistanceRecyclerAdapter ? e.printDistance() + Constants.TAB + e.printTimeByDistance(
+                ((DistanceRecyclerAdapter) this).distance) + Constants.TAB + e.printPace() : "";
             String date = e.getDate().format(
-                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
-                    C.FORMATTER_REC);
+                sortMode == Constants.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? Constants.FORMATTER_REC_NOYEAR :
+                    Constants.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
@@ -163,10 +164,10 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             RouteExerciseVH holder = (RouteExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
-            String values = e.printDistance() + C.TAB + e.printTime() + C.TAB + e.printPace();
+            String values = e.printDistance() + Constants.TAB + e.printTime() + Constants.TAB + e.printPace();
             String date = e.getDate().format(
-                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
-                    C.FORMATTER_REC);
+                sortMode == Constants.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? Constants.FORMATTER_REC_NOYEAR :
+                    Constants.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
@@ -180,10 +181,10 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             IntervalExerciseVH holder = (IntervalExerciseVH) viewHolder;
             Exerlite e = (Exerlite) getItem(pos);
-            String values = e.printDistance() + C.TAB + e.printTime() + C.TAB + e.printPace();
+            String values = e.printDistance() + Constants.TAB + e.printTime() + Constants.TAB + e.printPace();
             String date = e.getDate().format(
-                sortMode == C.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? C.FORMATTER_REC_NOYEAR :
-                    C.FORMATTER_REC);
+                sortMode == Constants.SortMode.DATE || e.isYear(LocalDate.now().getYear()) ? Constants.FORMATTER_REC_NOYEAR :
+                    Constants.FORMATTER_REC);
 
             holder.primary.setText(date);
             holder.secondary.setText(values);
@@ -197,7 +198,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             DistanceVH holder = (DistanceVH) viewHolder;
             DistanceItem distance = ((DistanceItem) getItem(pos));
 
-            holder.primary.setText(M.prefix(distance.getDistance(), 2, "m"));
+            holder.primary.setText(MathUtils.prefix(distance.getDistance(), 2, "m"));
             holder.secondary.setText(distance.printValues());
         }
         else if (viewHolder instanceof RouteVH) {
@@ -277,8 +278,8 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             holder.surface.restoreDefaultFocus();
             holder.surface.setGraph(graph);
-            holder.low.setText(M.stringTime(graph.getMax(), true));
-            holder.high.setText(M.stringTime(graph.getMin(), true));
+            holder.low.setText(MathUtils.stringTime(graph.getMax(), true));
+            holder.high.setText(MathUtils.stringTime(graph.getMin(), true));
         }
         else if (viewHolder instanceof GraphBaseVH) {
 
@@ -295,7 +296,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             //float[] y = c.getY();
             String[] xLabel = chart.getxLabel();
             float[] yRel = chart.getyRel();
-            int maxHeight = L.px(42);
+            int maxHeight = ScreenUtils.px(42);
 
             for (int i = 0; i < chart.length(); i++) {
                 ExercisesRecyclerAdapter.ChartVH h = (ExercisesRecyclerAdapter.ChartVH) viewHolder;
@@ -304,7 +305,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
                 if (params.height == 0) {
-                    params.height = L.px(1);
+                    params.height = ScreenUtils.px(1);
                 }
                 h.bars[i].setLayoutParams(params);
             }
@@ -313,7 +314,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             final ChartOld chart = (ChartOld) getItem(pos);
             float[] yRel = chart.getyRel();
-            int maxHeight = L.px(22);
+            int maxHeight = ScreenUtils.px(22);
 
             for (int i = 0; i < chart.length(); i++) {
                 ExercisesRecyclerAdapter.DailyChartVH h = (ExercisesRecyclerAdapter.DailyChartVH) viewHolder;
@@ -322,14 +323,14 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 ViewGroup.LayoutParams params = h.bars[i].getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
                 if (params.height == 0) {
-                    params.height = L.px(1);
+                    params.height = ScreenUtils.px(1);
                 }
                 h.bars[i].setLayoutParams(params);
 
                 // color
                 //if (i == now.get(C.DAY_OF_WEEK)-1)      { h.bars[i].setBackgroundColor(c.getResources().getColor(Toolbox.L.getBackgroundResourceFromAttr(R.attr.colorPrimary, c))); }
-                if (i <= now.get(C.DAY_OF_WEEK) - 1) {
-                    h.bars[i].setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorAccent, c)));
+                if (i <= now.get(Constants.DAY_OF_WEEK) - 1) {
+                    h.bars[i].setBackgroundColor(c.getResources().getColor(LayoutUtils.getAttr(R.attr.colorAccent, c)));
                 }
             }
         }
@@ -337,7 +338,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             final ChartOld chart = (ChartOld) getItem(pos);
             float[] yRel = chart.getyRel();
-            int maxHeight = L.px(22); //22
+            int maxHeight = ScreenUtils.px(22); //22
             //char[] labels = chart.getxLabelC();
 
             ExercisesRecyclerAdapter.YearChartVH h = (ExercisesRecyclerAdapter.YearChartVH) viewHolder;
@@ -355,16 +356,16 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 ViewGroup.LayoutParams params = bar.getLayoutParams();
                 params.height = (int) (maxHeight * yRel[i]);
                 if (params.height == 0) {
-                    params.height = L.px(1);
+                    params.height = ScreenUtils.px(1);
                 }
                 bar.setLayoutParams(params);
 
                 // color
-                if (i == now.get(C.WEEK_OF_YEAR) - 1) {
-                    bar.setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorPrimary, c)));
+                if (i == now.get(Constants.WEEK_OF_YEAR) - 1) {
+                    bar.setBackgroundColor(c.getResources().getColor(LayoutUtils.getAttr(R.attr.colorPrimary, c)));
                 }
-                else if (i < now.get(C.WEEK_OF_YEAR) - 1) {
-                    bar.setBackgroundColor(c.getResources().getColor(L.getAttr(R.attr.colorAccent, c)));
+                else if (i < now.get(Constants.WEEK_OF_YEAR) - 1) {
+                    bar.setBackgroundColor(c.getResources().getColor(LayoutUtils.getAttr(R.attr.colorAccent, c)));
                 }
             }
         }

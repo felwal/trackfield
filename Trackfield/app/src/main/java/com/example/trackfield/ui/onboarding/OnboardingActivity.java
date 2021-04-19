@@ -9,8 +9,8 @@ import com.example.trackfield.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.utils.ScreenUtils;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -24,10 +24,10 @@ public class OnboardingActivity extends AppCompatActivity {
     // extends AppCompatActivity
 
     @Override protected void onCreate(Bundle savedInstanceState) {
-        L.updateTheme(this);
+        ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-        L.makeStatusBarTransparent(getWindow(), !L.isThemeLight(), findViewById(R.id.textView_onboardingSubtitle));
+        ScreenUtils.makeStatusBarTransparent(getWindow(), !ScreenUtils.isThemeLight(), findViewById(R.id.textView_onboardingSubtitle));
 
         //adapter = new BoardingPagerAdapter(this, getSupportFragmentManager());
         //pager = findViewById(R.id.view_pager);

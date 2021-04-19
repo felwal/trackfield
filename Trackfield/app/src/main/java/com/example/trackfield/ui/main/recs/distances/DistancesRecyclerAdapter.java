@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
+import com.example.trackfield.ui.main.model.RecyclerItem;
 import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.util.ArrayList;

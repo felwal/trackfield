@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.trackfield.R;
-import com.example.trackfield.service.database.Reader;
-import com.example.trackfield.model.Trails;
-import com.example.trackfield.service.toolbox.L;
-import com.example.trackfield.service.file.Prefs;
+import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.ui.map.model.Trails;
+import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -53,7 +53,7 @@ public class RouteMapActivity extends MapActivity {
     // set
 
     public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trails trails, int padding, Context c) {
-        if (!Prefs.isThemeLight()) L.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
+        if (!Prefs.isThemeLight()) LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
         if (trails.trailCount() == 0) new ArrayList<Polyline>();
 
         // polyline

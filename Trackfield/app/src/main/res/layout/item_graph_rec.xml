@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.example.trackfield.view.graphs.GraphView
+            <com.example.trackfield.ui.custom.graph.GraphView
                 android:id="@+id/graphSurface_rec"
                 android:layout_width="@dimen/layout_graph_medium"
                 android:layout_height="@dimen/layout_graph_medium"

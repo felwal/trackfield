@@ -11,23 +11,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.model.recycleritems.RouteItem;
+import com.example.trackfield.ui.main.model.RouteItem;
 import com.example.trackfield.ui.main.RecyclerFragment;
 import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.model.recycleritems.Sorter;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.file.Prefs;
-import com.example.trackfield.ui.main.recs.general.RecsFragment;
-import com.example.trackfield.ui.main.recs.routes.route.RouteActivity;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.ui.main.model.Sorter;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.main.recs.RecsFragment;
+import com.example.trackfield.ui.rec.route.RouteActivity;
 
 import java.util.ArrayList;
 
 public class RoutesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Name", "Amount", "Avg distance", "Best pace" };
-    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.NAME, C.SortMode.AMOUNT, C.SortMode.DISTANCE,
-        C.SortMode.PACE };
+    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.NAME, Constants.SortMode.AMOUNT, Constants.SortMode.DISTANCE,
+        Constants.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, true, false, false, true };
 
     // extends Fragment
@@ -82,8 +82,8 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.ROUTES);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTES);
+        sortMode = Prefs.getSortModePref(Constants.Layout.ROUTES);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.ROUTES);
     }
 
     @Override
@@ -93,14 +93,14 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.ROUTES);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.ROUTES);
+        sortMode = Prefs.getSortModePref(Constants.Layout.ROUTES);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.ROUTES);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.ROUTES, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.ROUTES, smallestFirst);
+        Prefs.setSortModePref(Constants.Layout.ROUTES, sortMode);
+        Prefs.setSmallestFirstPref(Constants.Layout.ROUTES, smallestFirst);
     }
 
     @Override

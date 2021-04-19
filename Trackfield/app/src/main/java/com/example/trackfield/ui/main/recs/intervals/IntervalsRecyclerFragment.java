@@ -11,22 +11,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.model.recycleritems.IntervalItem;
+import com.example.trackfield.ui.main.model.IntervalItem;
 import com.example.trackfield.ui.main.RecyclerFragment;
-import com.example.trackfield.ui.main.recs.general.RecsFragment;
+import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.model.recycleritems.RecyclerItem;
-import com.example.trackfield.model.recycleritems.Sorter;
-import com.example.trackfield.service.toolbox.C;
-import com.example.trackfield.service.file.Prefs;
-import com.example.trackfield.ui.main.recs.intervals.interval.IntervalActivity;
+import com.example.trackfield.ui.main.model.RecyclerItem;
+import com.example.trackfield.ui.main.model.Sorter;
+import com.example.trackfield.utils.Constants;
+import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.rec.interval.IntervalActivity;
 
 import java.util.ArrayList;
 
 public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Amount" };
-    private final C.SortMode[] sortModes = { C.SortMode.DATE, C.SortMode.AMOUNT };
+    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.AMOUNT };
     private final boolean[] smallestFirsts = { false, false };
 
     // extends Fragment
@@ -79,8 +79,8 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(C.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVALS);
+        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVALS);
     }
 
     @Override
@@ -90,14 +90,14 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(C.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(C.Layout.INTERVALS);
+        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVALS);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(C.Layout.INTERVALS, sortMode);
-        Prefs.setSmallestFirstPref(C.Layout.INTERVALS, smallestFirst);
+        Prefs.setSortModePref(Constants.Layout.INTERVALS, sortMode);
+        Prefs.setSmallestFirstPref(Constants.Layout.INTERVALS, smallestFirst);
     }
 
     @Override
