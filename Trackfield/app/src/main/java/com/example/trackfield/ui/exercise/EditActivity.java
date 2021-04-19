@@ -23,8 +23,8 @@ import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.ui.map.model.Trail;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
@@ -184,7 +184,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void setTextsEdit() {
-        exercise = Reader.get(this).getExercise(_id);
+        exercise = DbReader.get(this).getExercise(_id);
 
         // subs
         for (int i = 0; i < exercise.subCount(); i++) {
@@ -335,7 +335,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             ArrayList<Sub> subs = parseSubs();
             String interval = type == Exercise.TYPE_INTERVALS ? intervalEt.getText().toString() : "";
 
-            int routeId = Reader.get(this).getRouteIdOrCreate(route, this);
+            int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
 
             // save create
@@ -349,14 +349,14 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 exercise = new Exercise(-1, -1, type, dateTime, routeId, route, routeVar, interval, note, dataSource,
                     recordingMethod, distance, time, subs, (Trail) null);
-                LayoutUtils.toast(Writer.get(this).addExercise(exercise, this), this);
+                LayoutUtils.toast(DbWriter.get(this).addExercise(exercise, this), this);
                 //D.exercises.add(exercise);
             }
             // save edit
             else {
                 exercise = new Exercise(exercise.get_id(), exercise.getExternalId(), type, dateTime, routeId, route,
                     routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
-                LayoutUtils.toast(Writer.get(this).updateExercise(exercise, this), this);
+                LayoutUtils.toast(DbWriter.get(this).updateExercise(exercise, this), this);
                 //D.exercises.set(exercise.getId(), exercise);
             }
 
@@ -399,7 +399,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         // delete
         for (int i = 0; exercise != null && i < exercise.subCount(); i++) {
             if (i >= subs.size()) {
-                Writer.get(this).deleteSub(exercise.getSub(i));
+                DbWriter.get(this).deleteSub(exercise.getSub(i));
             }
         }
 

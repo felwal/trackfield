@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
@@ -121,7 +121,7 @@ public class ExercisesFragment extends MainFragment {
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-            Reader.get(a);
+            DbReader.get(a);
             ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public class ExercisesFragment extends MainFragment {
                     //TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
                     //    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
 
-                    TreeMap<Float, Float> nodes = Reader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
+                    TreeMap<Float, Float> nodes = DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
                         LocalDate.now());
 
                     GraphData weekData = new GraphData(nodes, GraphData.GRAPH_BAR, false, false);
@@ -276,7 +276,7 @@ public class ExercisesFragment extends MainFragment {
                     ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
                     GraphData yearData = new GraphData(
-                        Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                        DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                         GraphData.GRAPH_BAR, false, false);
                     Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
                     yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);

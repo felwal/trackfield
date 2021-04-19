@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.Distance;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
@@ -92,7 +92,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
             return true;
         }
         else if (itemId == R.id.action_setGoal) {
-            float goalPace = Reader.get(this).getDistanceGoal(length);
+            float goalPace = DbReader.get(this).getDistanceGoal(length);
             int minutes, seconds;
             if (goalPace == Distance.NO_GOAL_PACE) {
                 minutes = BaseDialog.NO_FLOAT_TEXT;
@@ -120,7 +120,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
         length = intent.getIntExtra(EXTRA_DISTANCE, 0);
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
 
-        distance = Reader.get(this).getDistance(length);
+        distance = DbReader.get(this).getDistance(length);
         setToolbar(MathUtils.prefix(length, 2, "m"));
         selectFragment(DistanceRecyclerFragment.newInstance(length, originId));
     }
@@ -135,7 +135,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_DISTANCE)) {
-            Writer.get(this).deleteDistance(distance);
+            DbWriter.get(this).deleteDistance(distance);
             finish();
         }
     }
@@ -144,7 +144,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
         if (tag.equals(DIALOG_GOAL_DISTANCE)) {
             distance.setGoalPace(MathUtils.seconds(0, input1, input2));
-            Writer.get(this).updateDistance(distance);
+            DbWriter.get(this).updateDistance(distance);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -155,7 +155,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     public void onTimeDialogNegativeClick(String tag) {
         if (tag.equals(DIALOG_GOAL_DISTANCE)) {
             distance.removeGoalPace();
-            Writer.get(this).updateDistance(distance);
+            DbWriter.get(this).updateDistance(distance);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -206,7 +206,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
                 originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
                 // filtering depending on origin
-                Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : MathUtils.createList(Reader.get(a)
+                Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : MathUtils.createList(DbReader.get(a)
                     .getExercise(originId).getType()));
             }
         }
@@ -221,7 +221,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             if (exerliteList.size() != 0) {
-                TreeMap<Float, Float> nodes = Reader.get(a).getPaceNodesByDistance(distance,
+                TreeMap<Float, Float> nodes = DbReader.get(a).getPaceNodesByDistance(distance,
                     Prefs.getDistanceVisibleTypes());
                 GraphData data = new GraphData(nodes, GraphData.GRAPH_BEZIER, false, false);
                 Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
@@ -232,7 +232,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
                 }
 
                 itemList.add(getNewSorter(sortModes, sortModesTitle));
-                float goalPace = Reader.get(a).getDistanceGoal(distance);
+                float goalPace = DbReader.get(a).getDistanceGoal(distance);
                 if (goalPace != Distance.NO_GOAL_PACE) {
                     Goal goal = new Goal(goalPace, distance);
                     itemList.add(goal);

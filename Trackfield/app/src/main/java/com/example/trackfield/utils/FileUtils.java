@@ -13,9 +13,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.JSONObjectable;
-import com.example.trackfield.data.db.Helper;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbHelper;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Route;
@@ -209,7 +209,7 @@ public final class FileUtils {
         // version.json
         JSONObject obj = new JSONObject();
         try {
-            obj.put(JSON_DB_VERSION, Reader.get(c).getVersion());
+            obj.put(JSON_DB_VERSION, DbReader.get(c).getVersion());
             String jsonStr = obj.toString(2);
             success &= writeFile(PATH + FILENAME_VER, jsonStr, c);
         }
@@ -219,17 +219,17 @@ public final class FileUtils {
         }
 
         // jsonarrays
-        success &= writeJSONObjectList(PATH + FILENAME_E, Reader.get(c).getExercises(), c);
-        success &= writeJSONObjectList(PATH + FILENAME_R, Reader.get(c).getRoutes(true), c);
-        success &= writeJSONObjectList(PATH + FILENAME_D, Reader.get(c).getDistances(), c);
+        success &= writeJSONObjectList(PATH + FILENAME_E, DbReader.get(c).getExercises(), c);
+        success &= writeJSONObjectList(PATH + FILENAME_R, DbReader.get(c).getRoutes(true), c);
+        success &= writeJSONObjectList(PATH + FILENAME_D, DbReader.get(c).getDistances(), c);
 
         return success;
     }
 
     public static boolean importJson(Context c) {
         int dbVersion = importVersionJson(c);
-        if (dbVersion == -1) dbVersion = Helper.DATABASE_TARGET_VERSION;
-        Writer.get(c).recreate(dbVersion);
+        if (dbVersion == -1) dbVersion = DbHelper.DATABASE_TARGET_VERSION;
+        DbWriter.get(c).recreate(dbVersion);
 
         boolean success;
 
@@ -237,13 +237,13 @@ public final class FileUtils {
         success &= importDistancesJson(c);
         success &= importExercisesJson(c);
 
-        Writer.get(c).upgradeToTargetVersion(dbVersion);
+        DbWriter.get(c).upgradeToTargetVersion(dbVersion);
 
         return success;
     }
 
     private static int importVersionJson(Context c) {
-        int dbVersion = Helper.DATABASE_TARGET_VERSION;
+        int dbVersion = DbHelper.DATABASE_TARGET_VERSION;
         String pathname = PATH + FILENAME_VER;
 
         try {
@@ -265,7 +265,7 @@ public final class FileUtils {
         ArrayList<Exercise> exercises = new ArrayList<>();
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_E, c)) {
             try {
-                Reader.get(c);
+                DbReader.get(c);
                 Exercise e = new Exercise(obj, c);
                 exercises.add(e);
             }
@@ -275,7 +275,7 @@ public final class FileUtils {
             }
         }
 
-        Writer.get(c).addExercises(exercises, c);
+        DbWriter.get(c).addExercises(exercises, c);
         //L.toast(c.getString(R.string.toast_file_imported), c);
         return success;
     }
@@ -295,7 +295,7 @@ public final class FileUtils {
             }
         }
 
-        Writer.get(c).addRoutes(routes, c);
+        DbWriter.get(c).addRoutes(routes, c);
         //L.toast(c.getString(R.string.toast_file_imported), c);s
         return success;
     }
@@ -315,7 +315,7 @@ public final class FileUtils {
             }
         }
 
-        Writer.get(c).addDistances(distances);
+        DbWriter.get(c).addDistances(distances);
         //L.toast(c.getString(R.string.toast_file_imported), c);
         return success;
     }
@@ -336,7 +336,7 @@ public final class FileUtils {
             FileOutputStream sFos = new FileOutputStream(sFile);
             OutputStreamWriter eWriter = new OutputStreamWriter(eFos);
             OutputStreamWriter sWriter = new OutputStreamWriter(sFos);
-            for (Exercise e : Reader.get(c).getExercises()) {
+            for (Exercise e : DbReader.get(c).getExercises()) {
                 eWriter.append(e.extractToFile(DIV_WRITE) + "\n");
                 for (int index = 0; index < e.getSubs().size(); index++) {
                     sWriter.append(e.getSub(index).extractToFile(DIV_WRITE, e.get_id(), index) + "\n");
@@ -353,7 +353,7 @@ public final class FileUtils {
             java.io.File rFile = new java.io.File(PATH + FILENAME_R_TXT);
             FileOutputStream rFos = new FileOutputStream(rFile);
             OutputStreamWriter rWriter = new OutputStreamWriter(rFos);
-            for (Route r : Reader.get(c).getRoutes(true)) {
+            for (Route r : DbReader.get(c).getRoutes(true)) {
                 rWriter.append(r.getName() + "\n");
             }
             rWriter.close();
@@ -364,7 +364,7 @@ public final class FileUtils {
             java.io.File dFile = new java.io.File(PATH + FILENAME_D_TXT);
             FileOutputStream dFos = new FileOutputStream(dFile);
             OutputStreamWriter dWriter = new OutputStreamWriter(dFos);
-            for (Distance d : Reader.get(c).getDistances()) {
+            for (Distance d : DbReader.get(c).getDistances()) {
                 dWriter.append(d.getDistance() + "\n");
             }
             dWriter.close();
@@ -388,7 +388,7 @@ public final class FileUtils {
         //D.routes.clear();
         //D.distances.clear();
         //Helper.getWriter(c).deleteAllExercises();
-        Writer.get(c).recreate();
+        DbWriter.get(c).recreate();
 
         try {
             // sub
@@ -503,7 +503,7 @@ public final class FileUtils {
                                 type = Integer.parseInt(temp);
                                 break;
                             case 2:
-                                date = MathUtils.ofEpochSecond(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
+                                date = DateUtils.ofEpochSecond(Long.parseLong(temp));//.parse(temp, C.FORMATTER_FILE); break;
                             case 3:
                                 route = temp;
                                 break;
@@ -553,7 +553,7 @@ public final class FileUtils {
 
                 // add exercise
                 if (_id != -1) {
-                    int routeId = Reader.get(c).getRouteId(route);
+                    int routeId = DbReader.get(c).getRouteId(route);
                     Trail trail = null;
                     if (!polyline.equals("")) {
                         if (!startLat.equals("") && !startLng.equals("") && !endLat.equals("") && !endLng.equals("")) {
@@ -566,7 +566,7 @@ public final class FileUtils {
 
                     Exercise e = new Exercise(_id, -1, type, date, routeId, route, routeVar, interval, note, dataSource,
                         recordingMethod, distance, time, getSubsBySuperId(subSets, _id), trail);
-                    Writer.get(c).addExercise(e, c);
+                    DbWriter.get(c).addExercise(e, c);
                     //D.exercises.add(e);
                 }
             }
@@ -579,7 +579,7 @@ public final class FileUtils {
             BufferedReader rReader = new BufferedReader(new InputStreamReader(rFis));
             while ((line = rReader.readLine()) != null) {
                 //D.routes.add(line);
-                Writer.get(c).addRoute(new Route(line), c);
+                DbWriter.get(c).addRoute(new Route(line), c);
             }
             rReader.close();
             rFis.close();
@@ -590,7 +590,7 @@ public final class FileUtils {
             BufferedReader dReader = new BufferedReader(new InputStreamReader(dFis));
             while ((line = dReader.readLine()) != null) {
                 //D.distances.add(Integer.valueOf(line));
-                Writer.get(c).addDistance(new Distance(-1, Integer.parseInt(line)));
+                DbWriter.get(c).addDistance(new Distance(-1, Integer.parseInt(line)));
             }
             dReader.close();
             dFis.close();

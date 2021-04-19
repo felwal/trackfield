@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.ui.map.model.Trails;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
@@ -35,7 +35,7 @@ public class RouteMapActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        trails = new Trails(Reader.get(this).getPolylinesByRoute(_id));
+        trails = new Trails(DbReader.get(this).getPolylinesByRoute(_id));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RouteMapActivity extends MapActivity {
     // extends
 
     @Override protected HashMap<Integer, String> getRestOfPolylines(int exceptId) {
-        return Reader.get(this).getPolylinesByRouteExcept(exceptId);
+        return DbReader.get(this).getPolylinesByRouteExcept(exceptId);
     }
 
 }

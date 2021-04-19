@@ -5,9 +5,10 @@ import android.provider.BaseColumns;
 import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.utils.Constants;
 
-public final class Contract {
+public final class DbContract {
 
-    private Contract() {
+    private DbContract() {
+        // this utility class is not publicly instantiable
     }
 
     // entries
@@ -92,8 +93,8 @@ public final class Contract {
          * @param sortMode Mode to sort by
          * @return The column/columns with neccessary function calls, e.g. "time" or "(time / effective_distance)"
          *
-         * @see Reader#sortOrder(boolean)
-         * @see Reader#orderBy(Constants.SortMode, boolean)
+         * @see DbReader#sortOrder(boolean)
+         * @see DbReader#orderBy(Constants.SortMode, boolean)
          */
         public static String sortColumn(Constants.SortMode sortMode) {
             // column=0, column: sorts all with column = 0 last

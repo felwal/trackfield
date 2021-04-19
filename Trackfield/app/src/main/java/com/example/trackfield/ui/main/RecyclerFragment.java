@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.Header;
@@ -31,7 +31,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
 
     protected Activity a;
     protected static Thread bgThread;
-    protected Reader reader;
+    protected DbReader reader;
     protected RecyclerView recycler;
     protected RecyclerView.LayoutManager manager;
     protected RecyclerAdapter adapter;
@@ -62,7 +62,7 @@ public abstract class RecyclerFragment extends Fragment implements RecyclerAdapt
         //if (a instanceof MainActivity)          reader = ((MainActivity) a)     .getReader() != null ? ((MainActivity) a).getReader() : new Helper.Reader(a);
         //else if (a instanceof RecActivity.Base) reader = ((RecActivity.Base) a) .getReader() != null ? ((MainActivity) a).getReader() : new Helper.Reader(a);
         //else reader = new Helper.Reader(a);
-        reader = Reader.get(a);
+        reader = DbReader.get(a);
 
         recycler = view.findViewById(R.id.recyclerView);
         recycler.setHasFixedSize(true);

@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.exercise.ViewActivity;
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.LayoutUtils;
@@ -82,7 +82,7 @@ public class PeekSheet extends BaseSheet {
 
         if (bundle != null) {
             int id = bundle.getInt(BUNDLE_ID, 0);
-            exercise = Reader.get(a).getExercise(id);
+            exercise = DbReader.get(a).getExercise(id);
         }
 
         tag = TAG;

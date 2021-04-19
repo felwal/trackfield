@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.network.StravaApi;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         // TODO: dev
         Prefs.setDeveloper(true);
-        Writer.get(this).useUpdateToolIfEnabled(this);
+        DbWriter.get(this).useUpdateToolIfEnabled(this);
 
         strava = StravaApi.getInstance(this);
 
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     public void onDecimalDialogPositiveClick(float input, String tag) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
             int distance = (int) (input * 1000);
-            Writer.get(this).addDistance(new Distance(-1, distance));
+            DbWriter.get(this).addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }
     }

@@ -4,9 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.data.prefs.Prefs;
@@ -104,9 +105,9 @@ public class Exercise implements JSONObjectable {
         _id = obj.getInt(JSON_ID);
         externalId = obj.getLong(JSON_EXTERNAL_ID);
         type = obj.getInt(JSON_TYPE);
-        dateTime = MathUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
+        dateTime = DateUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);//Reader.get(c).getRouteId(route);
-        route = Reader.get(c).getRouteName(routeId);//obj.getString(JSON_ROUTE);
+        route = DbReader.get(c).getRouteName(routeId);//obj.getString(JSON_ROUTE);
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
@@ -193,7 +194,7 @@ public class Exercise implements JSONObjectable {
 
         // update policy
         route = strava.route;
-        routeId = Reader.get(c).getRouteIdOrCreate(route, c);
+        routeId = DbReader.get(c).getRouteIdOrCreate(route, c);
         type = strava.type;
         dateTime = strava.dateTime;
         dataSource = strava.dataSource;
@@ -296,7 +297,7 @@ public class Exercise implements JSONObjectable {
 
     public int getEffectiveDistance() {
         if (isDistanceDriven()) {
-            return Reader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
+            return DbReader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
         }
         //if (distance == 0 && time == 0) return getSubsDistance();
         return distance;
@@ -404,7 +405,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public long getEpoch() {
-        return MathUtils.toEpochSecond(dateTime);
+        return DateUtils.toEpochSecond(dateTime);
     }
 
     public int getWeek() {

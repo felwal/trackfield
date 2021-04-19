@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.trackfield.data.db.Contract.*;
+import com.example.trackfield.data.db.DbContract.*;
 import com.example.trackfield.ui.main.model.DistanceItem;
 import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.IntervalItem;
@@ -18,6 +18,7 @@ import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,27 +30,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-public class Reader extends Helper {
+public class DbReader extends DbHelper {
 
-    private static Reader instance;
+    private static DbReader instance;
     private static final String LOG_TAG = "Reader";
 
     //
 
-    private Reader(Context context) {
+    private DbReader(Context context) {
         super(context);
         db = getReadableDatabase();
     }
 
     @NonNull
-    public static Reader get(Context c) {
-        if (instance == null || !instance.db.isOpen()) instance = new Reader(c);
+    public static DbReader get(Context c) {
+        if (instance == null || !instance.db.isOpen()) instance = new DbReader(c);
         return instance;
     }
 
     @Deprecated
     @Nullable
-    public static Reader get() {
+    public static DbReader get() {
         return instance;
     }
 
@@ -103,9 +104,9 @@ public class Reader extends Helper {
 
     @NonNull
     public ArrayList<Exercise> getExercises(LocalDateTime dateTime) {
-        String selection = "(" + ExerciseEntry.COLUMN_DATE + " = " + MathUtils.toEpochSecond(dateTime) + " OR " +
-            ExerciseEntry.COLUMN_DATE + " = " + MathUtils.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES)) + " OR " +
-            ExerciseEntry.COLUMN_DATE + " = " + MathUtils.toEpochSecond(MathUtils.dateTime(dateTime.toLocalDate())) + ")";
+        String selection = "(" + ExerciseEntry.COLUMN_DATE + " = " + DateUtils.toEpochSecond(dateTime) + " OR " +
+            ExerciseEntry.COLUMN_DATE + " = " + DateUtils.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES)) + " OR " +
+            ExerciseEntry.COLUMN_DATE + " = " + DateUtils.toEpochSecond(DateUtils.dateTime(dateTime.toLocalDate())) + ")";
 
         Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, null, selection,
             null, null, null, null, null);
@@ -278,8 +279,8 @@ public class Reader extends Helper {
     public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, Constants.SortMode sortMode,
         boolean smallestFirst, @NonNull ArrayList<Integer> types) {
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
-        String selection = ExerciseEntry.COLUMN_DATE + " >= " + MathUtils.toEpochSecond(MathUtils.first(min, max)) + " AND " +
-            ExerciseEntry.COLUMN_DATE + " <= " + MathUtils.toEpochSecond(MathUtils.last(min, max)) +
+        String selection = ExerciseEntry.COLUMN_DATE + " >= " + DateUtils.toEpochSecond(DateUtils.first(min, max)) + " AND " +
+            ExerciseEntry.COLUMN_DATE + " <= " + DateUtils.toEpochSecond(DateUtils.last(min, max)) +
             typeFilter(" AND", types);
         String orderBy = orderBy(sortMode, smallestFirst);
 
@@ -405,16 +406,16 @@ public class Reader extends Helper {
 
     /**
      * Gets the routeId by corresponding routeName. Internally calls {@link #getRouteId(String)} to query routeId, and
-     * {@link Writer#addRoute(Route, Context)} if not existing.
+     * {@link DbWriter#addRoute(Route, Context)} if not existing.
      *
      * @param name Name of route
-     * @param c Context, used to get {@link Writer} instance
+     * @param c Context, used to get {@link DbWriter} instance
      * @return The routeId of the existing or created route
      */
     public int getRouteIdOrCreate(String name, Context c) {
         int routeId = getRouteId(name);
         if (routeId == Route.ID_NON_EXISTANT) {
-            routeId = (int) Writer.get(c)
+            routeId = (int) DbWriter.get(c)
                 .addRoute(new Route(name), c);
         }
         return routeId;
@@ -848,8 +849,8 @@ public class Reader extends Helper {
         int nodeCount, ChronoUnit groupUnit) {
 
         LocalDate endDate = startDate.plus(nodeCount, groupUnit);
-        long startEpoch = MathUtils.toEpochSecond(MathUtils.dateTime(startDate));
-        long endEpoch = MathUtils.toEpochSecond(MathUtils.dateTime(endDate));
+        long startEpoch = DateUtils.toEpochSecond(DateUtils.dateTime(startDate));
+        long endEpoch = DateUtils.toEpochSecond(DateUtils.dateTime(endDate));
 
         String col_date = ExerciseEntry.COLUMN_DATE;
         String col_dist = ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
@@ -876,8 +877,8 @@ public class Reader extends Helper {
         cursor.close();
 
         // create empty nodes
-        int startGroup = startDate.get(MathUtils.toChronoField(groupUnit));
-        int endGroup = endDate.get(MathUtils.toChronoField(groupUnit));
+        int startGroup = startDate.get(DateUtils.toChronoField(groupUnit));
+        int endGroup = endDate.get(DateUtils.toChronoField(groupUnit));
         for (int group = startGroup; group < endGroup; group++) {
             if (!nodes.containsKey((float) group)) {
                 nodes.put((float) group, 0f);
@@ -958,7 +959,7 @@ public class Reader extends Helper {
     public TreeMap<Float, Float> weekDailyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
-        ArrayList<Exerlite> exerlites = getExerlitesByDate(MathUtils.atStartOfWeek(includingDate), MathUtils.atEndOfWeek(includingDate),
+        ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfWeek(includingDate), DateUtils.atEndOfWeek(includingDate),
             Constants.SortMode.DATE, false, types);
 
         for (Exerlite e : exerlites) {
@@ -977,7 +978,7 @@ public class Reader extends Helper {
     public TreeMap<Float, Float> yearMonthlyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
-        ArrayList<Exerlite> exerlites = getExerlitesByDate(MathUtils.atStartOfYear(includingDate), MathUtils.atEndOfYear(includingDate),
+        ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate), DateUtils.atEndOfYear(includingDate),
             Constants.SortMode.DATE, false, types);
 
         for (Exerlite e : exerlites) {
@@ -1010,8 +1011,8 @@ public class Reader extends Helper {
         LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
-        ArrayList<Exerlite> exerlites = getExerlitesByDate(MathUtils.atStartOfMonth(includingDate),
-            MathUtils.atEndOfMonth(includingDate), Constants.SortMode.DATE, false, types);
+        ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfMonth(includingDate),
+            DateUtils.atEndOfMonth(includingDate), Constants.SortMode.DATE, false, types);
 
         float totalDistance = 0;
 
@@ -1038,7 +1039,7 @@ public class Reader extends Helper {
     public TreeMap<Float, Float> yearWeeklyIntegralDistance(@NonNull ArrayList<Integer> types,
         LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
-        ArrayList<Exerlite> exerlites = getExerlitesByDate(MathUtils.atStartOfYear(includingDate), MathUtils.atEndOfYear(includingDate),
+        ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate), DateUtils.atEndOfYear(includingDate),
             Constants.SortMode.DATE, true, types);
 
         float totalDistance = 0;
@@ -1119,7 +1120,7 @@ public class Reader extends Helper {
             }
 
             // convert
-            LocalDateTime dateTime = MathUtils.ofEpochSecond(epoch);//LocalDateTime.parse(epoch, Toolbox.C.FORMATTER_SQL);
+            LocalDateTime dateTime = DateUtils.ofEpochSecond(epoch);//LocalDateTime.parse(epoch, Toolbox.C.FORMATTER_SQL);
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
 
@@ -1147,7 +1148,7 @@ public class Reader extends Helper {
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
 
             // convert
-            LocalDate date = MathUtils.ofEpochSecond(epoch)
+            LocalDate date = DateUtils.ofEpochSecond(epoch)
                 .toLocalDate();
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);

@@ -15,13 +15,13 @@ import com.example.trackfield.BuildConfig;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.exercise.ViewActivity;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -140,7 +140,7 @@ public class StravaApi {
     }
 
     public void pullAllActivities() {
-        ArrayList<Long> stravaIds = Reader.get(a).getExternalIds();
+        ArrayList<Long> stravaIds = DbReader.get(a).getExternalIds();
         if (stravaIds.size() == 0) return;
 
         ((TokenRequester) accessToken -> {
@@ -274,7 +274,7 @@ public class StravaApi {
 
             // convert
             int type = Exercise.typeFromStravaType(stravaType);
-            int routeId = Reader.get(a).getRouteIdOrCreate(name, a);
+            int routeId = DbReader.get(a).getRouteIdOrCreate(name, a);
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
@@ -294,11 +294,11 @@ public class StravaApi {
         if (strava == null) return false;
         boolean success = true;
 
-        Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
+        Exercise existing = DbReader.get(a).getExercise(strava.getExternalId());
 
         // import
         if (existing == null) {
-            success &= Writer.get(a).addExercise(strava, a);
+            success &= DbWriter.get(a).addExercise(strava, a);
             LayoutUtils.toast("Pull resulted in import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE), a);
             Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE));
         }
@@ -306,7 +306,7 @@ public class StravaApi {
         // merge
         else {
             success &= existing.mergeStravaPull(strava, a);
-            success &= Writer.get(a).updateExercise(existing, a);
+            success &= DbWriter.get(a).updateExercise(existing, a);
         }
 
         if (a instanceof ViewActivity) a.recreate();
@@ -319,11 +319,11 @@ public class StravaApi {
         boolean success = true;
 
         // dont override already existing (use pull for that)
-        Exercise existing = Reader.get(a).getExercise(strava.getExternalId());
+        Exercise existing = DbReader.get(a).getExercise(strava.getExternalId());
         if (existing != null) return true;
 
         // merge with matching, ie not already linked to strava activity
-        ArrayList<Exercise> matching = Reader.get(a).getExercises(strava.getDateTime());
+        ArrayList<Exercise> matching = DbReader.get(a).getExercises(strava.getDateTime());
 
         // merge
         if (matching.size() == 1) {
@@ -333,12 +333,12 @@ public class StravaApi {
                 x.getRecordingMethod(), strava.getDistance(), strava.getTimePrimary(), x.getSubs(),
                 strava.getTrail());
 
-            success &= Writer.get(a).updateExercise(merged, a);
+            success &= DbWriter.get(a).updateExercise(merged, a);
         }
 
         // import
         else if (matching.size() == 0) {
-            success &= Writer.get(a).addExercise(strava, a);
+            success &= DbWriter.get(a).addExercise(strava, a);
             Log.i(LOG_TAG, "Import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
@@ -407,7 +407,7 @@ public class StravaApi {
                         Prefs.setAccessToken(response.getString(JSON_ACCESS_TOKEN));
                         Prefs
                             .setAccessTokenExpiration(
-                                MathUtils.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
+                                DateUtils.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
 
                         //L.toast("accessToken: " + Prefs.getAccessToken(), c);
                         Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());

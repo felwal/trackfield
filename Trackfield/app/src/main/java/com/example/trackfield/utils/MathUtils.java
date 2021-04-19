@@ -336,67 +336,6 @@ public final class MathUtils {
 
     // dates
 
-    public static ChronoField toChronoField(ChronoUnit unit) {
-        switch (unit) {
-            case DAYS:
-                return ChronoField.DAY_OF_MONTH;
-            case WEEKS:
-                return ChronoField.ALIGNED_WEEK_OF_YEAR;
-            case YEARS:
-                return ChronoField.YEAR;
-            default:
-                return ChronoField.DAY_OF_MONTH;
-        }
-    }
-
-    public static LocalDateTime dateTime(LocalDate date) {
-        return LocalDateTime.of(date, LocalTime.of(0, 0));
-    }
-
-    public static LocalDateTime truncateSecs(LocalDateTime dateTime) {
-        return dateTime.truncatedTo(ChronoUnit.MINUTES);
-    }
-
-    public static LocalDateTime ofEpochSecond(long seconds) {
-        return LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.UTC);
-    }
-
-    public static long toEpochSecond(LocalDateTime dateTime) {
-        return dateTime.atZone(ZoneId.of("UTC")).toEpochSecond();
-    }
-
-    public static LocalDateTime first(LocalDateTime a, LocalDateTime b) {
-        return a.isBefore(b) ? a : b;
-    }
-
-    public static LocalDateTime last(LocalDateTime a, LocalDateTime b) {
-        return a.isAfter(b) ? a : b;
-    }
-
-    public static LocalDateTime atStartOfWeek(LocalDate date) {
-        return date.minusDays(date.getDayOfWeek().getValue() - 1).atStartOfDay();
-    }
-
-    public static LocalDateTime atEndOfWeek(LocalDate date) {
-        return date.plusDays(7 - date.getDayOfWeek().getValue()).atTime(23, 59, 59);
-    }
-
-    public static LocalDateTime atStartOfMonth(LocalDate date) {
-        return date.minusDays(date.getDayOfMonth() - 1).atStartOfDay();
-    }
-
-    public static LocalDateTime atEndOfMonth(LocalDate date) {
-        return date.plusDays(date.lengthOfMonth() - date.getDayOfMonth()).atTime(23, 59, 59);
-    }
-
-    public static LocalDateTime atStartOfYear(LocalDate date) {
-        return date.minusDays(date.getDayOfYear() - 1).atStartOfDay();
-    }
-
-    public static LocalDateTime atEndOfYear(LocalDate date) {
-        return date.plusDays(date.lengthOfYear() - date.getDayOfYear()).atTime(23, 59, 59);
-    }
-
     // map
 
     public static LatLng toLatLng(Location location) {

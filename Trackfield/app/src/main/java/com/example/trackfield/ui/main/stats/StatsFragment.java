@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.Reader;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
@@ -110,10 +110,10 @@ public class StatsFragment extends MainActivity.MainFragment {
             //    GraphData.GRAPH_LINE, false, true);
             //dataGoalMonth.setPaint("#003E3F43", "#FF252528");
             GraphData dataThisMonth = new GraphData(
-                Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                 GraphData.GRAPH_LINE, false, false);
             GraphData dataLastMonth = new GraphData(
-                Reader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
+                DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
                 GraphData.GRAPH_LINE, false, false);
             dataLastMonth.setPaint(R.attr.colorOnBackground, a);
 
@@ -126,10 +126,10 @@ public class StatsFragment extends MainActivity.MainFragment {
             //    GraphData.GRAPH_LINE, false, true);
             //dataGoalYear.setPaint("#003E3F43", "#FF252528");
             GraphData dataThisYear = new GraphData(
-                Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                 GraphData.GRAPH_LINE, false, false);
             GraphData dataLastYear = new GraphData(
-                Reader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+                DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
                 GraphData.GRAPH_LINE, false, false);
             dataLastYear.setPaint(R.attr.colorOnBackground, a);
 
@@ -141,7 +141,7 @@ public class StatsFragment extends MainActivity.MainFragment {
             //GraphData dataGoalYear2 = new GraphData(Reader.get(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false,
             //    false);
             GraphData dataThisYear2 = new GraphData(
-                Reader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
+                DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
                 false, false);
             //dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
 

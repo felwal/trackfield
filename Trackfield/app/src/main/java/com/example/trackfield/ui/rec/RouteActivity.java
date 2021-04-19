@@ -20,8 +20,8 @@ import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.Goal;
 import com.example.trackfield.ui.main.model.RecyclerItem;
 import com.example.trackfield.ui.map.RouteMapActivity;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
@@ -117,7 +117,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         }
         else if (itemId == R.id.action_hideRoute) {
             route.invertHidden();
-            Writer.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route);
             invalidateOptionsMenu();
             return true;
         }
@@ -134,7 +134,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     protected void getExtras(Intent intent) {
 
         if (!intent.hasExtra(EXTRA_ROUTE_ID)) return;
-        route = Reader.get(this).getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, -1));
+        route = DbReader.get(this).getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, -1));
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
 
         setToolbar(route.getName());
@@ -158,7 +158,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
             //for (Exercise e : exercises) { e.setRoute(input); }
             //D.importRoutes();
 
-            int existingIdForNewName = Reader.get(this).getRouteId(input);
+            int existingIdForNewName = DbReader.get(this).getRouteId(input);
 
             // update route
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
@@ -167,9 +167,9 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
                         .show(getSupportFragmentManager());
             }
             else {
-                Writer.get(this).updateRouteName(route.getName(), input);
+                DbWriter.get(this).updateRouteName(route.getName(), input);
                 route.setName(input);
-                Writer.get(this).updateRoute(route);
+                DbWriter.get(this).updateRoute(route);
                 finish();
                 startActivity(this, route.get_id(), originId);
             }
@@ -179,9 +179,9 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_MERGE_ROUTES)) {
-            Writer.get(this).updateRouteName(route.getName(), passValue);
+            DbWriter.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
-            int newId = Writer.get(this).updateRoute(route);
+            int newId = DbWriter.get(this).updateRoute(route);
             finish();
             startActivity(this, newId, originId);
         }
@@ -191,7 +191,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.setGoalPace(MathUtils.seconds(0, input1, input2));
-            Writer.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -202,7 +202,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogNegativeClick(String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.removeGoalPace();
-            Writer.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -249,11 +249,11 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
             super.onCreate(savedInstanceState);
             Bundle bundle = getArguments();
             if (bundle != null) {
-                route = Reader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
+                route = DbReader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, -1));
                 originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
                 // filtering depending on origin
-                Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : MathUtils.createList(Reader.get(a)
+                Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes() : MathUtils.createList(DbReader.get(a)
                     .getExercise(originId).getType()));
             }
         }
@@ -268,7 +268,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             if (exerliteList.size() != 0) {
-                TreeMap<Float, Float> nodes = Reader.get(a).getPaceNodesByRoute(route.get_id(),
+                TreeMap<Float, Float> nodes = DbReader.get(a).getPaceNodesByRoute(route.get_id(),
                     Prefs.getRouteVisibleTypes());
                 GraphData data = new GraphData(nodes, GraphData.GRAPH_BEZIER, false, false);
                 Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
@@ -279,7 +279,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
                 }
 
                 itemList.add(getNewSorter(sortModes, sortModesTitle));
-                route = Reader.get(a).getRoute(route.get_id());
+                route = DbReader.get(a).getRoute(route.get_id());
                 if (route.getGoalPace() != Route.NO_GOAL_PACE) {
                     Goal goal = new Goal(route.getGoalPace());
                     itemList.add(goal);

@@ -23,8 +23,8 @@ import com.example.trackfield.ui.rec.DistanceActivity;
 import com.example.trackfield.ui.rec.IntervalActivity;
 import com.example.trackfield.ui.rec.RouteActivity;
 import com.example.trackfield.data.network.StravaApi;
-import com.example.trackfield.data.db.Reader;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.utils.Constants;
@@ -87,7 +87,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         fromRecycler = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
         // db
-        exercise = Reader.get(this).getExercise(_id);
+        exercise = DbReader.get(this).getExercise(_id);
         if (exercise == null) {
             finish();
             return;
@@ -239,7 +239,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
         if (fromRecycler != FROM_DISTANCE) {
             distanceTv.setOnClickListener(v -> {
-                int longestDistance = Reader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.getEffectiveDistance());
+                int longestDistance = DbReader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.getEffectiveDistance());
                 DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.get_id());
             });
         }
@@ -328,7 +328,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_EXERCISE)) {
             try {
-                LayoutUtils.toast(Writer.get(this).deleteExercise(exercise, this), this);
+                LayoutUtils.toast(DbWriter.get(this).deleteExercise(exercise, this), this);
             }
             catch (Exception e) {
                 LayoutUtils.handleError(e, this);

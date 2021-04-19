@@ -20,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.network.StravaApi;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
@@ -181,7 +181,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 Prefs.setFirstLogin(true);
                 OnboardingActivity.startActivity(this);
             });
-            inflateClickItem("Recreate database", "", true, v -> Writer.get(this).recreate());
+            inflateClickItem("Recreate database", "", true, v -> DbWriter.get(this).recreate());
             //inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
             //inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
         }

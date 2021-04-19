@@ -5,7 +5,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.example.trackfield.data.db.Contract.*;
+import com.example.trackfield.data.db.DbContract.*;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Route;
@@ -15,14 +15,14 @@ import com.example.trackfield.utils.Constants;
 
 import java.util.ArrayList;
 
-public class Writer extends Helper {
+public class DbWriter extends DbHelper {
 
-    private static Writer instance;
+    private static DbWriter instance;
     private static boolean useUpdateTool = false;
 
     //
 
-    private Writer(Context context) {
+    private DbWriter(Context context) {
         super(context);
         db = getWritableDatabase();
     }
@@ -30,11 +30,11 @@ public class Writer extends Helper {
     /**
      * Gets the current writer instance, or creates if null or closed.
      *
-     * @return {@link Writer} instance
+     * @return {@link DbWriter} instance
      */
     @NonNull
-    public static Writer get(Context c) {
-        if (instance == null || !instance.db.isOpen()) instance = new Writer(c);
+    public static DbWriter get(Context c) {
+        if (instance == null || !instance.db.isOpen()) instance = new DbWriter(c);
         return instance;
     }
 
@@ -79,7 +79,7 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean addExercise(@NonNull Exercise e, Context c) {
-        int routeId = Reader.get(c).getRouteId(e.getRoute());
+        int routeId = DbReader.get(c).getRouteId(e.getRoute());
         e.setRouteId((int) addRoute(new Route(routeId, e.getRoute()), c));
 
         final ContentValues cv = fillExerciseContentValues(e);
@@ -104,7 +104,7 @@ public class Writer extends Helper {
      * @return True if the exercise was added successfully
      */
     public boolean updateExercise(@NonNull Exercise e, Context c) {
-        Exercise old = Reader.get(c).getExercise(e.get_id());
+        Exercise old = DbReader.get(c).getExercise(e.get_id());
         ContentValues newCv = fillExerciseContentValues(e);
 
         String where = ExerciseEntry._ID + " = ?";
@@ -173,7 +173,7 @@ public class Writer extends Helper {
      * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
-        int effectiveDistance = Reader.get(c)
+        int effectiveDistance = DbReader.get(c)
             .avgDistance(routeId, routeVar);
 
         ContentValues cv = new ContentValues();
@@ -201,7 +201,7 @@ public class Writer extends Helper {
      * @return True if the route was empty and successfully deleted
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
-        int remainingOfRoute = Reader.get(c)
+        int remainingOfRoute = DbReader.get(c)
             .getExerlitesByRoute(routeId, Constants.SortMode.DATE, false, new ArrayList<>())
             .size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
@@ -216,7 +216,7 @@ public class Writer extends Helper {
      */
     public boolean deleteEmptyRoutes(Context c) {
         boolean success = true;
-        for (Route route : Reader.get(c)
+        for (Route route : DbReader.get(c)
             .getRoutes(true)) {
             success &= deleteRouteIfEmpty(route.get_id(), c);
         }
@@ -319,7 +319,7 @@ public class Writer extends Helper {
      * @return The routeId of the added or already existing route
      */
     public long addRoute(@NonNull Route route, Context c) {
-        Route existingRoute = Reader.get(c).getRoute(route.getName());
+        Route existingRoute = DbReader.get(c).getRoute(route.getName());
         if (existingRoute != null) return existingRoute.get_id();
 
         final ContentValues cv = fillRouteContentValues(route);
@@ -334,8 +334,8 @@ public class Writer extends Helper {
      * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
     public int updateRoute(Route route) {
-        Route oldRoute = Reader.get().getRoute(route.get_id());
-        int existingIdForNewName = Reader.get().getRouteId(route.getName());
+        Route oldRoute = DbReader.get().getRoute(route.get_id());
+        int existingIdForNewName = DbReader.get().getRouteId(route.getName());
 
         boolean nameNotChanged = route.getName().equals(oldRoute.getName());
         boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;

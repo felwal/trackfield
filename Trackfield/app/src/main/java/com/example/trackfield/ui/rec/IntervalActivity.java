@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.Writer;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
@@ -87,7 +87,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
         if (tag.equals(DIALOG_RENAME_INTERVAL)) {
             if (input.equals("")) return;
 
-            Writer.get(this).updateInterval(interval, input);
+            DbWriter.get(this).updateInterval(interval, input);
 
             finish();
             startActivity(this, input, originId);
