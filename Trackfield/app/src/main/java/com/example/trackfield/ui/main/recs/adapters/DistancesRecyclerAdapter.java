@@ -1,7 +1,8 @@
-package com.example.trackfield.ui.rec.distance;
+package com.example.trackfield.ui.main.recs.adapters;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,21 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.model.RecyclerItem;
-import com.example.trackfield.ui.main.model.archive.GraphOld;
 import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.util.ArrayList;
 
-public class DistanceRecyclerAdapter extends RecyclerAdapter {
+public class DistancesRecyclerAdapter extends RecyclerAdapter {
 
-    public int distance;
-
-    ////
-
-    public DistanceRecyclerAdapter(ArrayList<RecyclerItem> itemList, int distance, int originId, Context c) {
+    public DistancesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
         super(itemList, c);
-        this.distance = distance;
-        this.originId = originId;
     }
 
     @NonNull
@@ -31,11 +25,11 @@ public class DistanceRecyclerAdapter extends RecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
-            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_exercise_distance, parent, false);
-            return new DistanceExerciseVH(cl);
+            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.item_rec, parent, false);
+            return new DistanceVH(rl);
         }
         else if (viewType == ITEM_GRAPH_OLD) {
-            ConstraintLayout cl = GraphOld.inflateLayout(inflater, parent);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.dep_chart, parent, false);
             return new GraphVH(parent, cl);
         }
         return super.onCreateViewHolder(parent, viewType);

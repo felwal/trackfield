@@ -54,13 +54,13 @@
             android:label="@string/activity_maps"
             android:parentActivityName=".ui.exercise.ViewActivity" />
         <activity
-            android:name=".ui.rec.distance.DistanceActivity"
+            android:name=".ui.rec.DistanceActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.rec.route.RouteActivity"
+            android:name=".ui.rec.RouteActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.rec.interval.IntervalActivity"
+            android:name=".ui.rec.IntervalActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.setting.SettingsActivity"

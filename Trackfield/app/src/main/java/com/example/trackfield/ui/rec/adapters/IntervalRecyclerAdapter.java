@@ -1,10 +1,10 @@
-package com.example.trackfield.ui.main.recs.routes;
+package com.example.trackfield.ui.rec.adapters;
 
 import android.content.Context;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -13,10 +13,11 @@ import com.example.trackfield.ui.main.RecyclerAdapter;
 
 import java.util.ArrayList;
 
-public class RoutesRecyclerAdapter extends RecyclerAdapter {
+public class IntervalRecyclerAdapter extends RecyclerAdapter {
 
-    public RoutesRecyclerAdapter(ArrayList<RecyclerItem> itemList, Context c) {
+    public IntervalRecyclerAdapter(ArrayList<RecyclerItem> itemList, int originId, Context c) {
         super(itemList, c);
+        this.originId = originId;
     }
 
     @NonNull
@@ -24,8 +25,8 @@ public class RoutesRecyclerAdapter extends RecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == ITEM_ITEM) {
-            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.item_rec, parent, false);
-            return new RouteVH(rl);
+            ConstraintLayout cl = (ConstraintLayout) inflater.inflate(R.layout.item_exercise_distance, parent, false);
+            return new IntervalExerciseVH(cl);
         }
         return super.onCreateViewHolder(parent, viewType);
     }

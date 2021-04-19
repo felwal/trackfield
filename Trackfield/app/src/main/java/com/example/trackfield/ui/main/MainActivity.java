@@ -23,7 +23,6 @@ import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
-import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.FileUtils;
@@ -227,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 super.onScrolled(recyclerView, dx, dy);
 
                 // fab
-                if (recyclerFragment instanceof ExercisesRecyclerFragment) {
+                if (recyclerFragment instanceof ExercisesFragment.ExercisesRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
                     else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment) fab.show();
                 }

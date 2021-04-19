@@ -311,7 +311,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // sub-settings classes
 
-    public static class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
+    private static class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
 
         private StravaApi strava;
 

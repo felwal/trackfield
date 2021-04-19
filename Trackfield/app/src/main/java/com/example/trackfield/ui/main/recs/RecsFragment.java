@@ -16,9 +16,6 @@ import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainActivity.MainFragment;
 import com.example.trackfield.utils.Constants;
-import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
-import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
-import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsFragment extends MainFragment {
@@ -50,9 +47,9 @@ public class RecsFragment extends MainFragment {
     /**
      * Inflates placeholder toolbar menu in order to cover time for recyclerfragments to inflate menus.
      *
-     * @see DistancesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
-     * @see RoutesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
-     * @see IntervalsRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see RecsPagerAdapter.DistancesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see RecsPagerAdapter.RoutesRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see RecsPagerAdapter.IntervalsRecyclerFragment#onCreateOptionsMenu(Menu, MenuInflater)
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {

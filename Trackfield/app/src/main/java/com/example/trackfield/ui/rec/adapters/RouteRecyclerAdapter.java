@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.rec.route;
+package com.example.trackfield.ui.rec.adapters;
 
 import android.content.Context;
 import android.view.ViewGroup;

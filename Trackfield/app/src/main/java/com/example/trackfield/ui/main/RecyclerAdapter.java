@@ -32,7 +32,7 @@ import com.example.trackfield.ui.main.model.archive.GraphOld;
 import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.ui.rec.distance.DistanceRecyclerAdapter;
+import com.example.trackfield.ui.rec.adapters.DistanceRecyclerAdapter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
