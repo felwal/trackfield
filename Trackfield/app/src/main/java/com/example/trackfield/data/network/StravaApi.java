@@ -59,6 +59,7 @@ public class StravaApi {
     // activity response json keys
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
+    private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_TIME = "elapsed_time";
     private static final String JSON_TYPE = "type";
@@ -252,9 +253,11 @@ public class StravaApi {
             int time = obj.getInt(JSON_TIME);
             String stravaType = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
-
-            String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : "";
             String method = Prefs.getRecordingMethod();
+
+            // pull keys
+            String description = obj.has(JSON_DESCRIPTION) ? obj.getString(JSON_DESCRIPTION) : "";
+            String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : "";
 
             // trail
             String polyline = null;
@@ -280,7 +283,7 @@ public class StravaApi {
                 new Trail(polyline, start, end);
 
             return new Exercise(Exercise.NO_ID, stravaId, type, dateTime, routeId, name,
-                "", "", "",
+                "", "", description,
                 device, method, distance, time, null, trail);
         }
         catch (JSONException e) {

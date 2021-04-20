@@ -201,6 +201,7 @@ public class Exercise implements JSONObjectable {
         //recordingMethod = strava.recordingMethod;
         distance = strava.distance;
         time = strava.time;
+        if (note.equals("")) note = strava.note;
         trail = strava.trail;
 
         return true;
