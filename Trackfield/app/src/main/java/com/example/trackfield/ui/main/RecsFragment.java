@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.recs;
+package com.example.trackfield.ui.main;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainActivity.MainFragment;
 import com.example.trackfield.utils.Constants;
 import com.google.android.material.tabs.TabLayout;

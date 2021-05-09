@@ -63,13 +63,13 @@
             android:name=".ui.rec.IntervalActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.setting.SettingsActivity"
+            android:name=".ui.misc.SettingsActivity"
             android:parentActivityName=".ui.main.MainActivity">
             <tools:validation testUrl="https://felwal.github.io/callback" />
         </activity>
         <activity
-            android:name=".ui.setting.SettingsActivity$StravaSettingsActivity"
-            android:parentActivityName=".ui.setting.SettingsActivity"
+            android:name=".ui.misc.SettingsActivity$StravaSettingsActivity"
+            android:parentActivityName=".ui.misc.SettingsActivity"
             android:launchMode="singleTask">
             <tools:validation testUrl="https://felwal.github.io/callback" />
             <intent-filter android:autoVerify="true">
@@ -85,7 +85,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.onboarding.OnboardingActivity"
+            android:name=".ui.misc.OnboardingActivity"
             android:label="@string/activity_onboarding"
             android:parentActivityName=".ui.main.MainActivity" />
 

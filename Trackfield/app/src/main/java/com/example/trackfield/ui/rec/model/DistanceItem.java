@@ -1,5 +1,6 @@
-package com.example.trackfield.ui.main.model;
+package com.example.trackfield.ui.rec.model;
 
+import com.example.trackfield.ui.main.model.RecyclerItem;
 import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.MathUtils;
 

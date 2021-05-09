@@ -1,26 +1,34 @@
 package com.example.trackfield.ui.rec;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.ui.DelegateClickListener;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
 import com.example.trackfield.ui.exercise.ViewActivity;
-import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.RecyclerFragment;
+import com.example.trackfield.ui.RecyclerFragment;
 import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.RecyclerItem;
 import com.example.trackfield.ui.main.model.Sorter;
-import com.example.trackfield.ui.rec.adapters.IntervalRecyclerAdapter;
 import com.example.trackfield.utils.Constants;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class IntervalActivity extends RecActivity implements TextDialog.DialogListener {
 
@@ -135,7 +143,6 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
             ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sortMode, smallestFirst);
             //ArrayList<Exerlite> chronoList = reader.getExerlitesByInterval(interval, C.SortMode.DATE, false);
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
@@ -177,7 +184,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
 
         @Override
         protected void getAdapter() {
-            adapter = new IntervalRecyclerAdapter(items, originId, a);
+            adapter = new IntervalAdapter(a, this, items, originId);
         }
 
         @Override
@@ -192,13 +199,113 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
             Prefs.setSmallestFirstPref(Constants.Layout.INTERVAL, smallestFirst);
         }
 
+        // implements DelegateClickListener
+
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof Exerlite) {
                 int _id = ((Exerlite) items.get(position)).get_id();
                 if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_INTERVAL);
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        // adapter
+
+        private static class IntervalAdapter extends BaseAdapter {
+
+            public IntervalAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
+                delegatesManager
+                    .addDelegate(new ExerciseIntervalAdapterDelegate(activity, listener, this, originId))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GoalAdapterDelegate(activity))
+                    .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            public static class ExerciseIntervalAdapterDelegate extends
+                BaseAdapterDelegate<Exerlite, RecyclerItem, ExerciseIntervalAdapterDelegate.ExerciseMediumViewHolder> {
+
+                private BaseAdapter adapter;
+                private int originId;
+
+                //
+
+                public ExerciseIntervalAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
+                    int originId) {
+                    super(activity, listener);
+                    this.adapter = adapter;
+                    this.originId = originId;
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof Exerlite;
+                }
+
+                @NonNull
+                @Override
+                public ExerciseMediumViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new ExerciseMediumViewHolder(inflater.inflate(R.layout.item_exercise_distance, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
+                    String values = item.printDistance()
+                        + Constants.TAB + item.printTime()
+                        + Constants.TAB + item.printPace();
+
+                    String date = item.getDate().format(
+                        adapter.getSortMode() == Constants.SortMode.DATE || item.isYear(LocalDate.now().getYear()) ?
+                            Constants.FORMATTER_REC_NOYEAR : Constants.FORMATTER_REC);
+
+                    vh.primary.setText(date);
+                    vh.secondary.setText(values);
+                    vh.caption.setText(item.getRoute());
+                    vh.originMarker.setVisibility(item.has_id(originId) ? View.VISIBLE : View.GONE);
+                    vh.recordMarker.setVisibility(View.GONE);
+                }
+
+                // vh
+
+                class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+                    public TextView caption;
+                    public View originMarker;
+                    public View recordMarker;
+
+                    public ExerciseMediumViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        caption = itemView.findViewById(R.id.textView_caption);
+                        originMarker = itemView.findViewById(R.id.view_orignMarker);
+                        recordMarker = itemView.findViewById(R.id.view_recordMarker);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
     }

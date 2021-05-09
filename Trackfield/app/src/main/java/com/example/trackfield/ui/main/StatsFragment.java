@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.main.stats;
+package com.example.trackfield.ui.main;
 
 import android.os.Bundle;
 
@@ -17,10 +17,8 @@ import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
-import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.ui.main.RecyclerFragment;
+import com.example.trackfield.ui.RecyclerFragment;
 import com.example.trackfield.ui.main.model.RecyclerItem;
-import com.example.trackfield.ui.main.recs.adapters.RoutesRecyclerAdapter;
 import com.example.trackfield.utils.Constants;
 
 import java.time.LocalDate;
@@ -44,7 +42,7 @@ public class StatsFragment extends MainActivity.MainFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_dev, container, false);
+        view = inflater.inflate(R.layout.fragment_stats, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
@@ -95,7 +93,7 @@ public class StatsFragment extends MainActivity.MainFragment {
             super.onCreateOptionsMenu(menu, inflater);
         }
 
-        // extends RecyclerFragment
+        // extends DelegateClickListener
 
         @Override
         protected void setSortModes() {
@@ -103,7 +101,6 @@ public class StatsFragment extends MainActivity.MainFragment {
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             //GraphData dataGoalMonth = new GraphData(Reader.get(a).monthIntegralDistanceGoal(LocalDate.now()),
@@ -154,7 +151,7 @@ public class StatsFragment extends MainActivity.MainFragment {
 
         @Override
         protected void getAdapter() {
-            adapter = new RoutesRecyclerAdapter(items, a);
+            adapter = new RecsPagerAdapter.RoutesRecyclerFragment.RoutesAdapter(a, this, items);
         }
 
         @Override
@@ -168,7 +165,7 @@ public class StatsFragment extends MainActivity.MainFragment {
         // implements RecyclerAdapter
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
+        public void onDelegateClick(View view, int position) {
         }
 
     }

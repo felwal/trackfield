@@ -48,7 +48,7 @@ public class PeekSheet extends BaseSheet {
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialogsheet_peek, container, false);
+        view = inflater.inflate(R.layout.sheet_peek, container, false);
 
         setViews();
 

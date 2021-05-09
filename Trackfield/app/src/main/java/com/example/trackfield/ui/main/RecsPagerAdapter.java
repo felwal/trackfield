@@ -1,5 +1,6 @@
-package com.example.trackfield.ui.main.recs;
+package com.example.trackfield.ui.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,27 +17,27 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.trackfield.R;
+import com.example.trackfield.ui.DelegateClickListener;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.prefs.Prefs;
-import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.model.DistanceItem;
-import com.example.trackfield.ui.main.model.IntervalItem;
+import com.example.trackfield.ui.rec.model.DistanceItem;
+import com.example.trackfield.ui.rec.model.IntervalItem;
 import com.example.trackfield.ui.main.model.RecyclerItem;
-import com.example.trackfield.ui.main.model.RouteItem;
+import com.example.trackfield.ui.rec.model.RouteItem;
 import com.example.trackfield.ui.main.model.Sorter;
-import com.example.trackfield.ui.main.recs.adapters.DistancesRecyclerAdapter;
-import com.example.trackfield.ui.main.recs.adapters.IntervalsRecyclerAdapter;
-import com.example.trackfield.ui.main.RecyclerFragment;
-import com.example.trackfield.ui.main.recs.adapters.RoutesRecyclerAdapter;
+import com.example.trackfield.ui.RecyclerFragment;
 import com.example.trackfield.ui.rec.DistanceActivity;
 import com.example.trackfield.ui.rec.IntervalActivity;
 import com.example.trackfield.ui.rec.RouteActivity;
 import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.MathUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {
 
@@ -139,7 +141,6 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
             ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/,
                 smallestFirst, Prefs.getExerciseVisibleTypes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
@@ -164,7 +165,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected void getAdapter() {
-            adapter = new DistancesRecyclerAdapter(items, a);
+            adapter = new DistancesAdapter(a, this, items);
         }
 
         @Override
@@ -186,14 +187,86 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
             emptyImage.setImageResource(R.drawable.ic_empty_distances_24dp);
         }
 
-        // implements RecyclerAdapter
+        // implements DelegateClickListener
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof DistanceItem) {
                 DistanceActivity.startActivity(a, ((DistanceItem) items.get(position)).getDistance());
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        // adapter
+
+        public static class DistancesAdapter extends BaseAdapter {
+
+            public DistancesAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+                delegatesManager
+                    .addDelegate(new DistanceAdapterDelegate(activity, listener))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GraphAdapterDelegate(activity));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            public static class DistanceAdapterDelegate extends
+                BaseAdapterDelegate<DistanceItem, RecyclerItem, DistanceAdapterDelegate.DistanceViewHolder> {
+
+                public DistanceAdapterDelegate(Activity activity, DelegateClickListener listener) {
+                    super(activity, listener);
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof DistanceItem;
+                }
+
+                @NonNull
+                @Override
+                public DistanceViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new DistanceViewHolder(inflater.inflate(R.layout.item_rec, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(DistanceItem item, DistanceViewHolder vh, @Nullable List<Object> payloads) {
+                    vh.primary.setText(MathUtils.prefix(item.getDistance(), 2, "m"));
+                    vh.secondary.setText(item.printValues());
+                }
+
+                // vh
+
+                class DistanceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+
+                    public DistanceViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
     }
@@ -238,9 +311,8 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
             ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(),
-                Prefs.getExerciseVisibleTypes()); //reader.getRoutes(rList);
+                Prefs.getExerciseVisibleTypes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = getNewSorter(sortModes, sortModesTitle);
@@ -263,7 +335,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected void getAdapter() {
-            adapter = new RoutesRecyclerAdapter(items, a);
+            adapter = new RoutesAdapter(a, this, items);
         }
 
         @Override
@@ -285,14 +357,86 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
             emptyImage.setImageResource(R.drawable.ic_empty_routes_24dp);
         }
 
-        // implements RecyclerAdapter
+        // implements DelegateClickListener
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof RouteItem) {
                 RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        // adapter
+
+        public static class RoutesAdapter extends BaseAdapter {
+
+            public RoutesAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+                delegatesManager
+                    .addDelegate(new RouteAdapterDelegate(activity, listener))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GraphAdapterDelegate(activity));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            public static class RouteAdapterDelegate extends
+                BaseAdapterDelegate<RouteItem, RecyclerItem, RouteAdapterDelegate.RouteViewHolder> {
+
+                public RouteAdapterDelegate(Activity activity, DelegateClickListener listener) {
+                    super(activity, listener);
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof RouteItem;
+                }
+
+                @NonNull
+                @Override
+                public RouteViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new RouteViewHolder(inflater.inflate(R.layout.item_rec, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(RouteItem item, RouteViewHolder vh, @Nullable List<Object> payloads) {
+                    vh.primary.setText(item.getName());
+                    vh.secondary.setText(item.printValues());
+                }
+
+                // vh
+
+                class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+
+                    public RouteViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
     }
@@ -335,8 +479,8 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
-            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown());
+            ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst,
+                Prefs.areHiddenRoutesShown());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
             Sorter sorter = getNewSorter(sortModes, sortModesTitle);
@@ -359,7 +503,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         protected void getAdapter() {
-            adapter = new IntervalsRecyclerAdapter(items, a);
+            adapter = new IntervalsAdapter(a, this, items);
         }
 
         @Override
@@ -381,14 +525,86 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
             emptyImage.setImageResource(R.drawable.ic_empty_interval_24dp);
         }
 
-        // implements RecyclerAdapter
+        // implements DelegateClickListener
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof IntervalItem) {
                 IntervalActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval());
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        // adapter
+
+        public static class IntervalsAdapter extends BaseAdapter {
+
+            public IntervalsAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+                delegatesManager
+                    .addDelegate(new IntervalAdapterDelegate(activity, listener))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GraphAdapterDelegate(activity));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            public static class IntervalAdapterDelegate extends
+                BaseAdapterDelegate<IntervalItem, RecyclerItem, IntervalAdapterDelegate.IntervalViewHolder> {
+
+                public IntervalAdapterDelegate(Activity activity, DelegateClickListener listener) {
+                    super(activity, listener);
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof IntervalItem;
+                }
+
+                @NonNull
+                @Override
+                public IntervalViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new IntervalViewHolder(inflater.inflate(R.layout.item_rec, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(IntervalItem item, IntervalViewHolder vh, @Nullable List<Object> payloads) {
+                    vh.primary.setText(item.getInterval());
+                    vh.secondary.setText(item.printValues());
+                }
+
+                // vh
+
+                class IntervalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+
+                    public IntervalViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
     }

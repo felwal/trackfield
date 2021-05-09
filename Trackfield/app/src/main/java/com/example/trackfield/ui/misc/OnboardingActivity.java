@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.onboarding;
+package com.example.trackfield.ui.misc;
 
 import android.content.Context;
 import android.content.Intent;

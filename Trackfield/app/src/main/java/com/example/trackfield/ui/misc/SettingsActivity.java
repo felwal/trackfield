@@ -1,4 +1,4 @@
-package com.example.trackfield.ui.setting;
+package com.example.trackfield.ui.misc;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -31,7 +31,6 @@ import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
-import com.example.trackfield.ui.onboarding.OnboardingActivity;
 import com.example.trackfield.ui.main.MainActivity;
 
 import java.time.LocalDate;

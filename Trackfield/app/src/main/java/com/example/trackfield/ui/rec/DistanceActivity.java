@@ -1,15 +1,22 @@
 package com.example.trackfield.ui.rec;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.ui.DelegateClickListener;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
@@ -20,17 +27,17 @@ import com.example.trackfield.ui.custom.dialog.TimeDialog;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
-import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.RecyclerFragment;
+import com.example.trackfield.ui.RecyclerFragment;
 import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.Goal;
 import com.example.trackfield.ui.main.model.RecyclerItem;
-import com.example.trackfield.ui.rec.adapters.DistanceRecyclerAdapter;
 import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.data.prefs.Prefs;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class DistanceActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener,
@@ -215,7 +222,6 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
 
         @Override
         protected ArrayList<RecyclerItem> getRecyclerItems() {
-
             ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sortMode, smallestFirst,
                 Prefs.getDistanceVisibleTypes());
             ArrayList<RecyclerItem> itemList = new ArrayList<>();
@@ -254,7 +260,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
 
         @Override
         protected void getAdapter() {
-            adapter = new DistanceRecyclerAdapter(items, distance, originId, a);
+            adapter = new DistanceAdapter(a, this, items, originId, distance);
         }
 
         @Override
@@ -276,15 +282,120 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
             emptyImage.setImageResource(R.drawable.ic_empty_distance_24dp);
         }
 
-        // implements RecyclerAdapter
+        // implements DelegateClickListener
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof Exerlite) {
                 int _id = ((Exerlite) items.get(position)).get_id();
                 if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_DISTANCE);
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        // adapter
+
+        private static class DistanceAdapter extends BaseAdapter {
+
+            private DistanceAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items, int originId,
+                int distance) {
+                delegatesManager
+                    .addDelegate(new ExerciseDistanceAdapterDelegate(activity, listener, this, originId, distance))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GraphRecAdapterDelegate(activity))
+                    .addDelegate(new GoalAdapterDelegate(activity))
+                    .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            private static class ExerciseDistanceAdapterDelegate extends
+                BaseAdapterDelegate<Exerlite, RecyclerItem, ExerciseDistanceAdapterDelegate.ExerciseMediumViewHolder> {
+
+                private BaseAdapter adapter;
+                private int originId;
+                private int distance;
+
+                //
+
+                private ExerciseDistanceAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
+                    int originId, int distance) {
+                    super(activity, listener);
+                    this.adapter = adapter;
+                    this.originId = originId;
+                    this.distance = distance;
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof Exerlite;
+                }
+
+                @NonNull
+                @Override
+                public ExerciseMediumViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new ExerciseMediumViewHolder(inflater.inflate(R.layout.item_exercise_distance, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
+                    String values = item.printDistance()
+                        + Constants.TAB + item.printTimeByDistance(distance)
+                        + Constants.TAB + item.printPace();
+
+                    String date = item.getDate().format(
+                        adapter.getSortMode() == Constants.SortMode.DATE || item.isYear(LocalDate.now().getYear()) ?
+                            Constants.FORMATTER_REC_NOYEAR : Constants.FORMATTER_REC);
+
+                    vh.primary.setText(date);
+                    vh.secondary.setText(values);
+                    vh.caption.setText(item.getRoute());
+                    vh.originMarker.setVisibility(item.has_id(originId) ? View.VISIBLE : View.GONE);
+                    vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
+                    vh.recordMarker.getBackground().setColorFilter(context.getColor(
+                        item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
+                        PorterDuff.Mode.MULTIPLY);
+                }
+
+                // vh
+
+                class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+                    public TextView caption;
+                    public View originMarker;
+                    public View recordMarker;
+
+                    public ExerciseMediumViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        caption = itemView.findViewById(R.id.textView_caption);
+                        originMarker = itemView.findViewById(R.id.view_orignMarker);
+                        recordMarker = itemView.findViewById(R.id.view_recordMarker);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
     }

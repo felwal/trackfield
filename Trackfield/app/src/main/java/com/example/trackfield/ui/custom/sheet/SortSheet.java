@@ -63,7 +63,7 @@ public class SortSheet extends BaseSheet {
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialogsheet_sort, container, false);
+        view = inflater.inflate(R.layout.sheet_sort, container, false);
 
         setClick();
 

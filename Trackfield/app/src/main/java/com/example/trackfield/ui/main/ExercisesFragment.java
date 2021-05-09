@@ -1,5 +1,6 @@
-package com.example.trackfield.ui.main.exercises;
+package com.example.trackfield.ui.main;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -9,12 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
+import com.example.trackfield.ui.DelegateClickListener;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.graph.Graph;
@@ -22,8 +26,7 @@ import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainActivity.MainFragment;
-import com.example.trackfield.ui.main.RecyclerAdapter;
-import com.example.trackfield.ui.main.RecyclerFragment;
+import com.example.trackfield.ui.RecyclerFragment;
 import com.example.trackfield.ui.main.model.Exerlite;
 import com.example.trackfield.ui.main.model.Header;
 import com.example.trackfield.ui.main.model.HeaderValue;
@@ -34,6 +37,7 @@ import com.example.trackfield.utils.LayoutUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class ExercisesFragment extends MainFragment {
@@ -235,7 +239,7 @@ public class ExercisesFragment extends MainFragment {
 
         @Override
         protected void getAdapter() {
-            adapter = new ExercisesRecyclerAdapter(items, a);
+            adapter = new ExercisesAdapter(a, this, items);
         }
 
         @Override
@@ -252,7 +256,6 @@ public class ExercisesFragment extends MainFragment {
 
         @Override
         protected void setEmptyPage() {
-
             if (search.equals("")) {
                 emptyTitle.setText(R.string.empty_title_exercises);
                 emptyMessage.setText(R.string.empty_message_exercises);
@@ -262,31 +265,6 @@ public class ExercisesFragment extends MainFragment {
                 emptyTitle.setText(R.string.empty_title_search);
                 emptyMessage.setText(R.string.empty_message_search);
                 emptyImage.setImageResource(R.drawable.ic_empty_search_24dp);
-            }
-        }
-
-        @Override
-        public void onItemLongClick(View view, int position, int itemType) {
-            RecyclerItem item = adapter.getItem(position);
-
-            if (item instanceof Header) {
-                Header header = (Header) item;
-
-                if (false && header.isType(Header.Type.YEAR)) {
-                    ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
-
-                    GraphData yearData = new GraphData(
-                        DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
-                        GraphData.GRAPH_BAR, false, false);
-                    Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
-                    yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
-                    newItems.add(position + 1, yearGraph);
-
-                    updateRecycler(newItems);
-                }
-                else if (header.isType(Header.Type.MONTH)) {
-
-                }
             }
         }
 
@@ -302,17 +280,16 @@ public class ExercisesFragment extends MainFragment {
             return allItems.get(pos);
         }
 
-        // implements RecyclerAdapter
+        // implements DelegateClickListener
 
         @Override
-        public void onItemClick(View view, int position, int itemType) {
-            RecyclerItem item;
+        public void onDelegateClick(View view, int position) {
+            RecyclerItem item = getItem(position);
 
-            if (itemType == RecyclerAdapter.ITEM_ITEM) {
-                ViewActivity.startActivity(a, ((Exerlite) items.get(position)).get_id());
+            if (item instanceof Exerlite) {
+                ViewActivity.startActivity(a, ((Exerlite) item).get_id());
             }
-            else if ((item = adapter.getItem(position)) instanceof Header) {
-
+            else if (item instanceof Header) {
                 Header header = (Header) item;
                 if (header.isType(Header.Type.WEEK)) return;
                 header.invertExpanded();
@@ -339,9 +316,110 @@ public class ExercisesFragment extends MainFragment {
                 View itemView = manager.findViewByPosition(position);
                 LayoutUtils.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
                 //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
+            }
+
+            super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        }
+
+        @Override
+        public void onDelegateLongClick(View view, int position) {
+            RecyclerItem item = getItem(position);
+
+            if (item instanceof Header) {
+                Header header = (Header) item;
+
+                // TODO: header longclick
+                if (false && header.isType(Header.Type.YEAR)) {
+                    ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
+
+                    GraphData yearData = new GraphData(
+                        DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                        GraphData.GRAPH_BAR, false, false);
+                    Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
+                    yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
+                    newItems.add(position + 1, yearGraph);
+
+                    updateRecycler(newItems);
+                }
+                else if (header.isType(Header.Type.MONTH)) {
+
+                }
+            }
+        }
+
+        // adapter
+
+        private static class ExercisesAdapter extends BaseAdapter {
+
+            public ExercisesAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+                delegatesManager
+                    .addDelegate(new ExerciseAdapterDelegate(activity, listener))
+                    .addDelegate(new SorterAdapterDelegate(activity, listener, this))
+                    .addDelegate(new GraphAdapterDelegate(activity))
+                    .addDelegate(new HeaderBigAdapterDelegate(activity, listener))
+                    .addDelegate(new HeaderMediumAdapterDelegate(activity, listener))
+                    .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+
+                // Set the items from super class.
+                setItems(items);
+            }
+
+            // delegate
+
+            public static class ExerciseAdapterDelegate extends
+                BaseAdapterDelegate<Exerlite, RecyclerItem, ExerciseAdapterDelegate.ExerciseViewHolder> {
+
+                public ExerciseAdapterDelegate(Activity activity, DelegateClickListener listener) {
+                    super(activity, listener);
+                }
+
+                // extends AbsListItemAdapterDelegate
+
+                @Override
+                public boolean isForViewType(@NonNull RecyclerItem item) {
+                    return item instanceof Exerlite;
+                }
+
+                @NonNull
+                @Override
+                public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                    return new ExerciseViewHolder(inflater.inflate(R.layout.item_exercise, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(Exerlite item, ExerciseViewHolder vh, @Nullable List<Object> payloads) {
+                    vh.primary.setText(item.printPrimary());
+                    vh.secondary.setText(item.printDistanceTimePace());
+                    vh.caption.setText(item.printCaption());
+                }
+
+                // vh
+
+                class ExerciseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+                    public TextView primary;
+                    public TextView secondary;
+                    public TextView caption;
+
+                    public ExerciseViewHolder(View itemView) {
+                        super(itemView);
+                        primary = itemView.findViewById(R.id.textView_primary);
+                        secondary = itemView.findViewById(R.id.textView_secondary);
+                        caption = itemView.findViewById(R.id.textView_caption);
+                        itemView.setOnClickListener(this);
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        if (listener != null) {
+                            listener.onDelegateClick(view, getAdapterPosition());
+                        }
+                    }
+
+                }
 
             }
-            super.onItemClick(itemType, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+
         }
 
     }
