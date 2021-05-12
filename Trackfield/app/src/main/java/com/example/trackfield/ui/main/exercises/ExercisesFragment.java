@@ -16,7 +16,7 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.ui.main.MainActivity.MainFragment;
+import com.example.trackfield.ui.main.MainFragment;
 import com.example.trackfield.utils.AppConsts;
 
 public class ExercisesFragment extends MainFragment {

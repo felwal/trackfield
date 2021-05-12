@@ -14,9 +14,10 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
+import com.example.trackfield.ui.main.MainFragment;
 import com.example.trackfield.utils.AppConsts;
 
-public class StatsFragment extends MainActivity.MainFragment {
+public class StatsFragment extends MainFragment {
 
     private View view;
     private FrameLayout frame;

@@ -34,7 +34,6 @@ public class Prefs {
     // display options
     private static boolean showWeekHeaders = true;
     private static boolean weekDistance = true;
-    private static boolean showWeekChart = true;
     private static boolean showDailyChart = true;
 
     // look
@@ -129,7 +128,6 @@ public class Prefs {
         // display
         savePref(showWeekHeaders, WEEK_HEADERS);
         savePref(weekDistance, WEEK_DISTANCE);
-        savePref(showWeekChart, WEEK_CHART);
         savePref(showDailyChart, DAILY_CHART);
 
         // look
@@ -185,7 +183,6 @@ public class Prefs {
         // display
         showWeekHeaders = loadPref(bool, WEEK_HEADERS);
         weekDistance = loadPref(bool, WEEK_DISTANCE);
-        showWeekChart = loadPref(bool, WEEK_CHART);
         showDailyChart = loadPref(bool, DAILY_CHART);
 
         // look
@@ -241,7 +238,6 @@ public class Prefs {
             case FIRST_LOGIN: return firstLogin;
             case WEEK_HEADERS: return showWeekHeaders;
             case WEEK_DISTANCE: return weekDistance;
-            case WEEK_CHART: return showWeekChart;
             case DAILY_CHART: return showDailyChart;
             case COLOR: return color;
             case THEME: return theme;
@@ -286,11 +282,6 @@ public class Prefs {
     public static void showWeekDistance(boolean show) {
         weekDistance = show;
         savePref(show, WEEK_DISTANCE);
-    }
-
-    public static void showWeekChart(boolean show) {
-        showWeekChart = show;
-        savePref(show, WEEK_CHART);
     }
 
     public static void showDailyChart(boolean show) {
@@ -417,10 +408,6 @@ public class Prefs {
 
     public static boolean isWeekDistanceShown() {
         return weekDistance;
-    }
-
-    public static boolean isWeekChartShown() {
-        return showWeekChart;
     }
 
     public static boolean isDailyChartShown() {

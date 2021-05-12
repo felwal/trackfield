@@ -10,6 +10,7 @@ import com.example.trackfield.ui.common.model.Header;
 import com.example.trackfield.ui.common.model.HeaderValue;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Sorter;
+import com.example.trackfield.ui.custom.graph.Borders;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
@@ -39,30 +40,23 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
         // sorter & charts
         if (exerliteList.size() != 0) {
-            Sorter sorter = getNewSorter(sortModes, sortModesTitle);
-
             if (Prefs.isDailyChartShown()) {
-                /*dailyChart = new ChartOld(D.weekDailyDistance());
-                dailyChart.setType(ChartOld.TYPE_DAILY);
-                itemList.add(dailyChart);*/
-
                 //TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
                 //    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
 
-                TreeMap<Float, Float> nodes = DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(),
-                    LocalDate.now());
+                GraphData weekData = new GraphData(
+                    DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    GraphData.GRAPH_BAR, false, false);
 
-                GraphData weekData = new GraphData(nodes, GraphData.GRAPH_BAR, false, false);
-
-                Graph weekGraph = new Graph(weekData, false, false, false, false, false, true, false, true);
+                Graph weekGraph = new Graph(false, Borders.none(), true, false, true);
+                weekGraph.addData(weekData);
                 weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
                 itemList.add(weekGraph);
             }
-            else itemList.add(sorter);
-            if (Prefs.isWeekChartShown()) {
-                //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
-                //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
+            else {
+                itemList.add(getNewSorter(sortModes, sortModesTitle));
             }
+
             if (sortMode != AppConsts.SortMode.DATE) {
                 itemList.addAll(exerliteList);
                 return itemList;
@@ -243,14 +237,13 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 GraphData yearData = new GraphData(
                     DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
-                Graph yearGraph = new Graph(yearData, false, false, false, false, false, true, false, true);
-                yearGraph.setTag(RecyclerItem.TAG_GRAPH_YEAR);
+
+                Graph yearGraph = new Graph(false, Borders.none(), true, false, true);
+                yearGraph.addData(yearData);
+                yearGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
                 newItems.add(position + 1, yearGraph);
 
                 updateRecycler(newItems);
-            }
-            else if (header.isType(Header.Type.MONTH)) {
-
             }
         }
     }

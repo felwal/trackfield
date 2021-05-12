@@ -3,8 +3,6 @@ package com.example.trackfield.ui.custom.graph;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import androidx.annotation.NonNull;
-
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.ScreenUtils;
@@ -18,7 +16,8 @@ public class Graph extends RecyclerItem {
     private float start, end, min, max;
 
     private boolean[] grids = new boolean[2];
-    private boolean[] borders = new boolean[4];
+    private Borders borders;
+
     private boolean widthFixed;
     private boolean yInverted;
     private boolean zeroAsMin;
@@ -41,48 +40,42 @@ public class Graph extends RecyclerItem {
 
     //
 
-    public Graph(@NonNull GraphData data, boolean xGrid, boolean lBorder, boolean rBorder, boolean tBorder,
-        boolean bBorder, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
+    public Graph(boolean xGrid, Borders borders, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
+        grids[0] = xGrid;
+        this.borders = borders;
         this.widthFixed = widthFixed;
         this.yInverted = yInverted;
         this.zeroAsMin = zeroAsMin;
-
-        grids[0] = xGrid;
-        borders[0] = lBorder;
-        borders[1] = rBorder;
-        borders[2] = tBorder;
-        borders[3] = bBorder;
-
-        if (data.isEmpty()) return;
-        this.data.add(data);
-        setDomainAndRange(data);
     }
 
     // set
 
     /**
-     * Adds data nodes, topmost first.
+     * Adds data sets, topmost first.
      *
      * @param data Data to add
      */
-    public void addData(GraphData data) {
-        if (data.isEmpty()) return;
-        this.data.add(0, data);
-        updateDomainAndRange(data);
-    }
-
-    private void setDomainAndRange(GraphData data) {
-        start = data.getStart();
-        end = data.getEnd();
-        min = zeroAsMin ? 0 : data.getMin();
-        max = data.getMax();
+    public void addData(GraphData... data) {
+        for (GraphData datum : data) {
+            if (datum.isEmpty()) continue;
+            updateDomainAndRange(datum);
+            this.data.add(0, datum);
+        }
     }
 
     private void updateDomainAndRange(GraphData newData) {
-        start = Math.min(start, newData.getStart());
-        end = Math.max(end, newData.getEnd());
-        min = zeroAsMin ? 0 : Math.min(min, newData.getMin());
-        max = Math.max(max, newData.getMax());
+        if (hasData()) {
+            start = Math.min(start, newData.getStart());
+            end = Math.max(end, newData.getEnd());
+            min = zeroAsMin ? 0 : Math.min(min, newData.getMin());
+            max = Math.max(max, newData.getMax());
+        }
+        else {
+            start = newData.getStart();
+            end = newData.getEnd();
+            min = zeroAsMin ? 0 : newData.getMin();
+            max = newData.getMax();
+        }
     }
 
     // get data
@@ -140,12 +133,7 @@ public class Graph extends RecyclerItem {
         return grids[1];
     }
 
-    public boolean isBorderShown(int border) {
-        if (border < 0 || border > borders.length) return false;
-        return borders[border];
-    }
-
-    public boolean[] getBorders() {
+    public Borders getBorders() {
         return borders;
     }
 
@@ -158,8 +146,8 @@ public class Graph extends RecyclerItem {
     // compare
 
     private boolean sameArgsAs(Graph graph) {
-        return Arrays.equals(grids, graph.grids) && Arrays.equals(borders, graph.borders) &&
-            widthFixed == graph.widthFixed && yInverted == graph.yInverted;
+        return Arrays.equals(grids, graph.grids) && borders.equals(graph.borders) && widthFixed == graph.widthFixed &&
+            yInverted == graph.yInverted;
     }
 
     private boolean sameDataAs(Graph graph) {

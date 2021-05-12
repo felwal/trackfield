@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.trackfield.ui.base.BaseAdapter;
 import com.example.trackfield.ui.base.DelegateClickListener;
-import com.example.trackfield.ui.common.GraphAdapterDelegate;
+import com.example.trackfield.ui.common.GraphWeekAdapterDelegate;
 import com.example.trackfield.ui.common.HeaderBigAdapterDelegate;
 import com.example.trackfield.ui.common.HeaderMediumAdapterDelegate;
 import com.example.trackfield.ui.common.HeaderSmallAdapterDelegate;
@@ -19,7 +19,7 @@ class ExercisesAdapter extends BaseAdapter {
         delegatesManager
             .addDelegate(new ExerciseAdapterDelegate(activity, listener))
             .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphAdapterDelegate(activity))
+            .addDelegate(new GraphWeekAdapterDelegate(activity))
             .addDelegate(new HeaderBigAdapterDelegate(activity, listener))
             .addDelegate(new HeaderMediumAdapterDelegate(activity, listener))
             .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));

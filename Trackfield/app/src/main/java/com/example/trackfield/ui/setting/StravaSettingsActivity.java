@@ -23,7 +23,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     //
 
     public static void startActivity(@NonNull Context c) {
-        Intent intent = new Intent(c, com.example.trackfield.ui.setting.StravaSettingsActivity.class);
+        Intent intent = new Intent(c, StravaSettingsActivity.class);
         c.startActivity(intent);
     }
 

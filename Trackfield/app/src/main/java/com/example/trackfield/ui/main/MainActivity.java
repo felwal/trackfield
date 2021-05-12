@@ -12,7 +12,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -325,20 +324,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @Override
     public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
         mainFragment.onSortSheetDismiss(sortMode, smallestFirst);
-    }
-
-    // class
-
-    public static abstract class MainFragment extends Fragment {
-
-        protected abstract void setToolbarTitle();
-
-        protected abstract void scrollToTop();
-
-        protected abstract void updateFragment();
-
-        protected abstract void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst);
-
     }
 
 }

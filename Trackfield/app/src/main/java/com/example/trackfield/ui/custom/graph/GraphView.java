@@ -99,7 +99,7 @@ public class GraphView extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        // Handle touch events
+        // handle touch events
         return true;
     }
 
@@ -150,24 +150,24 @@ public class GraphView extends View implements View.OnTouchListener {
     // borders
 
     private void drawBorders(Canvas canvas) {
-        boolean[] borders = graph.getBorders();
+        Borders borders = graph.getBorders();
         Path path = new Path();
         path.reset();
 
         // left, right, top, bottom
-        if (borders[0]) {
+        if (borders.isLeft()) {
             path.moveTo(start, bottom);
             path.lineTo(start, top);
         }
-        if (borders[1]) {
+        if (borders.isRight()) {
             path.moveTo(end, bottom);
             path.lineTo(end, top);
         }
-        if (borders[2]) {
+        if (borders.isTop()) {
             path.moveTo(start, top);
             path.lineTo(end, top);
         }
-        if (borders[3]) {
+        if (borders.isBottom()) {
             path.moveTo(start, bottom);
             path.lineTo(end, bottom);
         }
@@ -237,6 +237,7 @@ public class GraphView extends View implements View.OnTouchListener {
     }
 
     private void drawSplineCurve(Canvas canvas, GraphData data) {
+        // TODO: implement drawing spline curve
         drawLineCurve(canvas, data);
     }
 

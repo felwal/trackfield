@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.ui.main.MainActivity.MainFragment;
+import com.example.trackfield.ui.main.MainFragment;
 import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;

@@ -16,10 +16,10 @@ import com.example.trackfield.ui.custom.graph.GraphView;
 
 import java.util.List;
 
-public class GraphAdapterDelegate extends
-    BaseAdapterDelegate<Graph, RecyclerItem, GraphAdapterDelegate.GraphViewHolder> {
+public class GraphWeekAdapterDelegate extends
+    BaseAdapterDelegate<Graph, RecyclerItem, GraphWeekAdapterDelegate.GraphWeekViewHolder> {
 
-    public GraphAdapterDelegate(Activity activity) {
+    public GraphWeekAdapterDelegate(Activity activity) {
         super(activity, null);
     }
 
@@ -27,28 +27,28 @@ public class GraphAdapterDelegate extends
 
     @Override
     public boolean isForViewType(@NonNull RecyclerItem item) {
-        return item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_BASE);
+        return item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_WEEK);
     }
 
     @NonNull
     @Override
-    public GraphViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GraphViewHolder(inflater.inflate(R.layout.item_graph_base, parent, false));
+    public GraphWeekViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+        return new GraphWeekViewHolder(inflater.inflate(R.layout.item_graph_week, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Graph item, GraphViewHolder vh, @Nullable List<Object> payloads) {
+    public void onBindViewHolder(@NonNull Graph item, GraphWeekViewHolder vh, @Nullable List<Object> payloads) {
         vh.surface.restoreDefaultFocus();
         vh.surface.setGraph(item);
     }
 
     // vh
 
-    static class GraphViewHolder extends RecyclerView.ViewHolder {
+    static class GraphWeekViewHolder extends RecyclerView.ViewHolder {
 
         public GraphView surface;
 
-        public GraphViewHolder(View itemView) {
+        public GraphWeekViewHolder(View itemView) {
             super(itemView);
             surface = itemView.findViewById(R.id.graphSurface_base);
         }

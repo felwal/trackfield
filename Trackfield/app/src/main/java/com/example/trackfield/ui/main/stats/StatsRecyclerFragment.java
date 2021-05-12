@@ -11,9 +11,9 @@ import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.base.RecyclerFragment;
 import com.example.trackfield.ui.common.model.RecyclerItem;
+import com.example.trackfield.ui.custom.graph.Borders;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
-import com.example.trackfield.ui.main.recs.routes.RoutesAdapter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,55 +38,60 @@ public class StatsRecyclerFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
-        //GraphData dataGoalMonth = new GraphData(Reader.get(a).monthIntegralDistanceGoal(LocalDate.now()),
-        //    GraphData.GRAPH_LINE, false, true);
-        //dataGoalMonth.setPaint("#003E3F43", "#FF252528");
+        // month graph
+
         GraphData dataThisMonth = new GraphData(
             DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
+
         GraphData dataLastMonth = new GraphData(
             DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
             GraphData.GRAPH_LINE, false, false);
         dataLastMonth.setPaint(R.attr.colorOnBackground, a);
 
-        Graph monthGraph = new Graph(dataThisMonth, false, true, true, true, true, true, false, true);
-        monthGraph.addData(dataLastMonth);
-        //monthGraph.addData(dataGoalMonth);
+        Graph monthGraph = new Graph(false, Borders.all(), true, false, true);
+        monthGraph.addData(dataThisMonth, dataLastMonth);
+        monthGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
         itemList.add(monthGraph);
 
-        //GraphData dataGoalYear = new GraphData(Reader.get(a).yearIntegralDistanceGoal(LocalDate.now()),
-        //    GraphData.GRAPH_LINE, false, true);
-        //dataGoalYear.setPaint("#003E3F43", "#FF252528");
+        // year graph
+
         GraphData dataThisYear = new GraphData(
             DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
+
         GraphData dataLastYear = new GraphData(
             DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
             GraphData.GRAPH_LINE, false, false);
         dataLastYear.setPaint(R.attr.colorOnBackground, a);
 
-        Graph yearGraph = new Graph(dataThisYear, false, true, true, true, true, true, false, true);
-        yearGraph.addData(dataLastYear);
-        //yearGraph.addData(dataGoalYear);
+        Graph yearGraph = new Graph(false, Borders.all(), true, false, true);
+        yearGraph.addData(dataThisYear, dataLastYear);
+        yearGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
         itemList.add(yearGraph);
 
-        //GraphData dataGoalYear2 = new GraphData(Reader.get(a).yearMonthlyDistanceGoal(), GraphData.GRAPH_BAR, false,
-        //    false);
-        GraphData dataThisYear2 = new GraphData(
+        // year chart
+
+        GraphData dataThisYearMonthly = new GraphData(
             DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
             false, false);
-        //dataGoalYear2.setPaint("#FF3E3F43", "#FF252528");
 
-        Graph yearGraph2 = new Graph(dataThisYear2, false, true, true, true, true, true, false, true);
-        //yearGraph2.addData(dataGoalYear2);
-        itemList.add(yearGraph2);
+        GraphData dataLastYearMonthly = new GraphData(
+            DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            GraphData.GRAPH_BAR, false, false);
+        dataLastYearMonthly.setPaint(R.attr.colorOnBackground, a);
+
+        Graph yearBar = new Graph(false, Borders.all(), true, false, true);
+        yearBar.addData(dataThisYearMonthly, dataLastYearMonthly);
+        yearBar.setTag(RecyclerItem.TAG_GRAPH_BASE);
+        itemList.add(yearBar);
 
         return itemList;
     }
 
     @Override
     protected void getAdapter() {
-        adapter = new RoutesAdapter(a, this, items);
+        adapter = new StatsAdapter(a, this, items);
     }
 
     @Override

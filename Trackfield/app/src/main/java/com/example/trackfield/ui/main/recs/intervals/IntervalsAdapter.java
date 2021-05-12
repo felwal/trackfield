@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.trackfield.ui.base.BaseAdapter;
 import com.example.trackfield.ui.base.DelegateClickListener;
-import com.example.trackfield.ui.common.GraphAdapterDelegate;
+import com.example.trackfield.ui.common.GraphWeekAdapterDelegate;
 import com.example.trackfield.ui.common.SorterAdapterDelegate;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 
@@ -16,7 +16,7 @@ public class IntervalsAdapter extends BaseAdapter {
         delegatesManager
             .addDelegate(new IntervalAdapterDelegate(activity, listener))
             .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphAdapterDelegate(activity));
+            .addDelegate(new GraphWeekAdapterDelegate(activity));
 
         setItems(items);
     }

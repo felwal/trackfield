@@ -8,6 +8,7 @@ import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.base.RecyclerFragment;
+import com.example.trackfield.ui.custom.graph.Borders;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
@@ -69,10 +70,12 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
 
         if (exerliteList.size() != 0) {
-            TreeMap<Float, Float> nodes = DbReader.get(a).getPaceNodesByDistance(distance,
-                Prefs.getDistanceVisibleTypes());
-            GraphData data = new GraphData(nodes, GraphData.GRAPH_BEZIER, false, false);
-            Graph graph = new Graph(data, true, false, false, true, true, false, true, false);
+            GraphData data = new GraphData(
+                DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getDistanceVisibleTypes()),
+                GraphData.GRAPH_BEZIER, false, false);
+
+            Graph graph = new Graph(true, Borders.horizontal(), false, true, false);
+            graph.addData(data);
 
             if (graph.hasMoreThanOnePoint()) {
                 graph.setTag(RecyclerItem.TAG_GRAPH_REC);
