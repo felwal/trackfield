@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.data.db.DbContract.*;
-import com.example.trackfield.ui.rec.model.DistanceItem;
-import com.example.trackfield.ui.main.model.Exerlite;
-import com.example.trackfield.ui.rec.model.IntervalItem;
-import com.example.trackfield.ui.rec.model.RouteItem;
+import com.example.trackfield.ui.main.recs.distances.model.DistanceItem;
+import com.example.trackfield.ui.common.model.Exerlite;
+import com.example.trackfield.ui.main.recs.intervals.model.IntervalItem;
+import com.example.trackfield.ui.main.recs.routes.model.RouteItem;
 import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Route;

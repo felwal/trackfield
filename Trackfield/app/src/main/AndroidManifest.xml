@@ -54,22 +54,22 @@
             android:label="@string/activity_maps"
             android:parentActivityName=".ui.exercise.ViewActivity" />
         <activity
-            android:name=".ui.rec.DistanceActivity"
+            android:name=".ui.rec.distance.DistanceActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.rec.RouteActivity"
+            android:name=".ui.rec.route.RouteActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.rec.IntervalActivity"
+            android:name=".ui.rec.interval.IntervalActivity"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ui.misc.SettingsActivity"
+            android:name=".ui.setting.SettingsActivity"
             android:parentActivityName=".ui.main.MainActivity">
             <tools:validation testUrl="https://felwal.github.io/callback" />
         </activity>
         <activity
-            android:name=".ui.misc.SettingsActivity$StravaSettingsActivity"
-            android:parentActivityName=".ui.misc.SettingsActivity"
+            android:name=".ui.setting.SettingsActivity$StravaSettingsActivity"
+            android:parentActivityName=".ui.setting.SettingsActivity"
             android:launchMode="singleTask">
             <tools:validation testUrl="https://felwal.github.io/callback" />
             <intent-filter android:autoVerify="true">
@@ -85,7 +85,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.misc.OnboardingActivity"
+            android:name=".ui.onboarding.OnboardingActivity"
             android:label="@string/activity_onboarding"
             android:parentActivityName=".ui.main.MainActivity" />
 

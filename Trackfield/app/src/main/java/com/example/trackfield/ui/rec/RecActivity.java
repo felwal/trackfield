@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
-import com.example.trackfield.ui.RecyclerFragment;
+import com.example.trackfield.ui.base.RecyclerFragment;
 import com.example.trackfield.utils.Constants;
 
 public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {

@@ -18,7 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.data.network.StravaApi;
 import com.example.trackfield.data.db.DbWriter;
-import com.example.trackfield.ui.RecyclerFragment;
+import com.example.trackfield.ui.base.RecyclerFragment;
+import com.example.trackfield.ui.main.exercises.ExercisesFragment;
+import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
+import com.example.trackfield.ui.main.recs.RecsFragment;
+import com.example.trackfield.ui.main.stats.StatsFragment;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
@@ -29,8 +33,8 @@ import com.example.trackfield.utils.Constants;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
-import com.example.trackfield.ui.misc.OnboardingActivity;
-import com.example.trackfield.ui.misc.SettingsActivity;
+import com.example.trackfield.ui.onboarding.OnboardingActivity;
+import com.example.trackfield.ui.setting.SettingsActivity;
 import com.example.trackfield.ui.map.TrackActivity;
 import com.example.trackfield.ui.exercise.EditActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 super.onScrolled(recyclerView, dx, dy);
 
                 // fab
-                if (recyclerFragment instanceof ExercisesFragment.ExercisesRecyclerFragment) {
+                if (recyclerFragment instanceof ExercisesRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
                     else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment) fab.show();
                 }
