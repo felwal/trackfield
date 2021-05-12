@@ -35,7 +35,7 @@ public final class ScreenUtils {
      * @return True if theme was updated, false otherwise
      */
     public static boolean updateTheme(Activity a) {
-        int newTheme = Constants.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
+        int newTheme = AppConsts.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
         try {
             // currentTheme är alltid default?
             int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
@@ -108,10 +108,10 @@ public final class ScreenUtils {
     }
 
     public static boolean isThemeLight() {
-        int lightThemeMono = Constants.LOOKS[1][0];
-        int lightThemeGreen = Constants.LOOKS[1][1];
+        int lightThemeMono = AppConsts.LOOKS[1][0];
+        int lightThemeGreen = AppConsts.LOOKS[1][1];
 
-        int currentTheme = Constants.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
+        int currentTheme = AppConsts.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
         if (currentTheme == lightThemeMono || currentTheme == lightThemeGreen) {
             return true;
         }

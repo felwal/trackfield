@@ -1,7 +1,7 @@
 package com.example.trackfield.ui.main.recs.routes.model;
 
 import com.example.trackfield.ui.common.model.RecyclerItem;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 public class RouteItem extends RecyclerItem {
@@ -55,15 +55,15 @@ public class RouteItem extends RecyclerItem {
     // print
 
     private String printAvgDistance() {
-        return avgDistance != 0 ? MathUtils.prefix(avgDistance, 1, "m") : Constants.NO_VALUE;
+        return avgDistance != 0 ? MathUtils.prefix(avgDistance, 1, "m") : AppConsts.NO_VALUE;
     }
 
     private String printBestPace() {
-        return bestPace != -1 ? MathUtils.stringTime(bestPace, true) : Constants.NO_VALUE_TIME;
+        return bestPace != -1 ? MathUtils.stringTime(bestPace, true) : AppConsts.NO_VALUE_TIME;
     }
 
     public String printValues() {
-        return count + Constants.TAB + printAvgDistance() + Constants.TAB + printBestPace();
+        return count + AppConsts.TAB + printAvgDistance() + AppConsts.TAB + printBestPace();
     }
 
     // extends RecyclerItem

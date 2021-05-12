@@ -1,7 +1,7 @@
 package com.example.trackfield.ui.main.recs.distances.model;
 
 import com.example.trackfield.ui.common.model.RecyclerItem;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 public class DistanceItem extends RecyclerItem {
@@ -41,15 +41,15 @@ public class DistanceItem extends RecyclerItem {
     // print
 
     private String printBestTime() {
-        return bestTime <= 0 ? Constants.NO_VALUE_TIME : MathUtils.stringTime(bestTime, true);
+        return bestTime <= 0 ? AppConsts.NO_VALUE_TIME : MathUtils.stringTime(bestTime, true);
     }
 
     private String printBestPace() {
-        return bestPace <= 0 ? Constants.NO_VALUE_TIME : MathUtils.stringTime(bestPace, true);
+        return bestPace <= 0 ? AppConsts.NO_VALUE_TIME : MathUtils.stringTime(bestPace, true);
     }
 
     public String printValues() {
-        return printBestTime() + Constants.TAB + printBestPace();
+        return printBestTime() + AppConsts.TAB + printBestPace();
     }
 
     // extends RecyclerItem

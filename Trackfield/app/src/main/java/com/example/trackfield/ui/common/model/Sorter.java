@@ -1,20 +1,20 @@
 package com.example.trackfield.ui.common.model;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 public class Sorter extends RecyclerItem {
 
-    private Constants.SortMode[] sortModes;
+    private AppConsts.SortMode[] sortModes;
     private String[] sortModesTitle;
-    private Constants.SortMode sortMode;
+    private AppConsts.SortMode sortMode;
     private boolean smallestFirst;
 
     private static final char[] ARROWS = { '↓', '↑' };
 
     //
 
-    public Sorter(Constants.SortMode[] sortModes, String[] sortModesTitle, Constants.SortMode sortMode, boolean smallestFirst) {
+    public Sorter(AppConsts.SortMode[] sortModes, String[] sortModesTitle, AppConsts.SortMode sortMode, boolean smallestFirst) {
         this.sortModes = sortModes;
         this.sortModesTitle = sortModesTitle;
         this.sortMode = sortMode;
@@ -22,7 +22,7 @@ public class Sorter extends RecyclerItem {
     }
 
     // set
-    public void setSortMode(Constants.SortMode sortMode) {
+    public void setSortMode(AppConsts.SortMode sortMode) {
         this.sortMode = sortMode;
     }
     public void setSmallestFirst(boolean smallestFirst) {
@@ -30,7 +30,7 @@ public class Sorter extends RecyclerItem {
     }
 
     // get
-    public Constants.SortMode getSortMode() {
+    public AppConsts.SortMode getSortMode() {
         return sortMode;
     }
     public boolean getSmallestFirst() {
@@ -39,7 +39,7 @@ public class Sorter extends RecyclerItem {
     public String getTitle() {
         return sortModesTitle[indexOfSortMode()] + " " + ARROWS[MathUtils.heaviside(smallestFirst)];
     }
-    public Constants.SortMode[] getSortModes() {
+    public AppConsts.SortMode[] getSortModes() {
         return sortModes;
     }
     public String[] getSortModesTitle() {

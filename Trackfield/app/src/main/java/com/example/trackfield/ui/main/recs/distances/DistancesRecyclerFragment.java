@@ -18,14 +18,14 @@ import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.recs.distances.model.DistanceItem;
 import com.example.trackfield.ui.rec.distance.DistanceActivity;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
 
 public class DistancesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Distance" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DISTANCE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DISTANCE };
     private final boolean[] smallestFirsts = { true };
 
     // extends Fragment
@@ -69,8 +69,8 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.DISTANCES);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.DISTANCES);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCES);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCES);
     }
 
     @Override
@@ -80,14 +80,14 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.DISTANCES);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.DISTANCES);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCES);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCES);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.DISTANCES, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.DISTANCES, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.DISTANCES, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.DISTANCES, smallestFirst);
     }
 
     @Override

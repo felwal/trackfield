@@ -12,7 +12,7 @@ import com.example.trackfield.ui.map.model.Coordinate;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
@@ -266,7 +266,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         // textViews
         timeTv.setText(MathUtils.stringTime(time, true) + " s");
         distanceTv.setText(MathUtils.prefix(distance, DISTANCE_DECIMALS, "m"));
-        avgPaceTv.setText((distance == 0 ? Constants.NO_VALUE_TIME : MathUtils.stringTime(time / ((float) distance / 1000), true)) + " s/km");
+        avgPaceTv.setText((distance == 0 ? AppConsts.NO_VALUE_TIME : MathUtils.stringTime(time / ((float) distance / 1000), true)) + " s/km");
 
         // altitude correction
         lastFourAlts[3] = lastFourAlts[2];

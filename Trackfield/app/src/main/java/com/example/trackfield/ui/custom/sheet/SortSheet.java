@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.ScreenUtils;
@@ -26,8 +26,8 @@ public class SortSheet extends BaseSheet {
     private DismissListener listener;
 
     // arguments
-    private Constants.SortMode[] sortModes;
-    private Constants.SortMode sortMode;
+    private AppConsts.SortMode[] sortModes;
+    private AppConsts.SortMode sortMode;
     private String[] sortModesTitle;
     private boolean[] smallestFirsts;
     private boolean smallestFirst;
@@ -43,13 +43,13 @@ public class SortSheet extends BaseSheet {
 
     ////
 
-    public static SortSheet newInstance(Constants.SortMode[] sortModes, Constants.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    public static SortSheet newInstance(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         SortSheet instance = new SortSheet();
         Bundle bundle = new Bundle();
 
-        bundle.putIntArray(BUNDLE_SORTMODES, Constants.SortMode.toInts(sortModes));
-        bundle.putInt(BUNDLE_SORTMODE, Constants.SortMode.toInt(sortMode));
+        bundle.putIntArray(BUNDLE_SORTMODES, AppConsts.SortMode.toInts(sortModes));
+        bundle.putInt(BUNDLE_SORTMODE, AppConsts.SortMode.toInt(sortMode));
         bundle.putStringArray(BUNDLE_SORTMODES_TITLE, sortModesTitle);
         bundle.putBooleanArray(BUNDLE_SMALLESTFIRSTS, smallestFirsts);
         bundle.putBoolean(BUNDLE_SMALLESTFIRST, smallestFirst);
@@ -90,8 +90,8 @@ public class SortSheet extends BaseSheet {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            sortModes = Constants.SortMode.fromInts(bundle.getIntArray(BUNDLE_SORTMODES));
-            sortMode = Constants.SortMode.fromInt(bundle.getInt(BUNDLE_SORTMODE, 0));
+            sortModes = AppConsts.SortMode.fromInts(bundle.getIntArray(BUNDLE_SORTMODES));
+            sortMode = AppConsts.SortMode.fromInt(bundle.getInt(BUNDLE_SORTMODE, 0));
             sortModesTitle = bundle.getStringArray(BUNDLE_SORTMODES_TITLE);
             smallestFirsts = bundle.getBooleanArray(BUNDLE_SMALLESTFIRSTS);
             smallestFirst = bundle.getBoolean(BUNDLE_SMALLESTFIRST, false);
@@ -130,7 +130,7 @@ public class SortSheet extends BaseSheet {
             if (sortMode == sortModes[rl]) {
                 textViews[rl].setTextColor(getResources().getColor(R.color.colorTextHighlight));
                 textViews[rl].setTypeface(null, Typeface.BOLD);
-                textViews[rl].setText(sortModesTitle[rl] + " " + Constants.ARROWS[MathUtils.heaviside(smallestFirst)]);
+                textViews[rl].setText(sortModesTitle[rl] + " " + AppConsts.ARROWS[MathUtils.heaviside(smallestFirst)]);
             } else {
                 //textViews[rl].setTextColor(getResources().getColor(R.attr.colorOnSurface));
                 textViews[rl].setTextAppearance(a, R.style.Heading1);
@@ -156,7 +156,7 @@ public class SortSheet extends BaseSheet {
     // interface
 
     public interface DismissListener {
-        void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst);
+        void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst);
     }
 
 }

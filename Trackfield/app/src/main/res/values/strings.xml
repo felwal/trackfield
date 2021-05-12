@@ -145,6 +145,8 @@
   <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
   <string name="dialog_message_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
   <string name="dialog_message_recording_method">Select default recording method when requesting from Strava</string>
+  <string name="dialog_message_export">Exercises, routes and distances will be exported to Trackfield folder</string>
+  <string name="dialog_message_import">Exercises, routes and distances will be imported from Trackfield folder</string>
 
   <!-- toasts -->
 

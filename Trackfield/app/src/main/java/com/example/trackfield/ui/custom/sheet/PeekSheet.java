@@ -15,7 +15,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.model.Exercise;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
 public class PeekSheet extends BaseSheet {
@@ -104,7 +104,7 @@ public class PeekSheet extends BaseSheet {
         // set
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
-        dateTv.setText(exercise.getDateTime().format(Constants.FORMATTER_CAPTION));
+        dateTv.setText(exercise.getDateTime().format(AppConsts.FORMATTER_CAPTION));
         distanceTv.setText(exercise.printDistance(true));
         timeTv.setText(exercise.printTime(false));
         paceTv.setText(exercise.printPace(false));

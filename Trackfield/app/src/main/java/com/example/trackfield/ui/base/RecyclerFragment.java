@@ -23,7 +23,7 @@ import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.ui.common.model.Header;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Sorter;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
     protected ArrayList<RecyclerItem> items = new ArrayList<>();
-    protected Constants.SortMode sortMode = Constants.SortMode.DATE;
+    protected AppConsts.SortMode sortMode = AppConsts.SortMode.DATE;
     protected boolean smallestFirst = false;
 
     // extends Fragment
@@ -129,7 +129,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         return visibleItems;
     }
 
-    protected Sorter getNewSorter(Constants.SortMode[] sortModes, String[] sortModesTitle) {
+    protected Sorter getNewSorter(AppConsts.SortMode[] sortModes, String[] sortModesTitle) {
         return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
 
@@ -199,7 +199,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         recycler.smoothScrollToPosition(0);
     }
 
-    public void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
+    public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
         this.sortMode = sortMode;
         this.smallestFirst = smallestFirst;
         setPrefs();
@@ -208,14 +208,14 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // item clicks
 
-    protected void onDelegateClick(RecyclerItem item, Constants.SortMode[] sortModes, Constants.SortMode sortMode,
+    protected void onDelegateClick(RecyclerItem item, AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode,
         String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
         if (item instanceof Sorter) {
             onSorterClick(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
         }
     }
 
-    protected void onSorterClick(Constants.SortMode[] sortModes, Constants.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    protected void onSorterClick(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         getPrefs();
         //final BottomSheetDialog sheet = new BottomSheetDialog(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst, this);
@@ -230,7 +230,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList) {
 
-        if (sortMode == Constants.SortMode.DATE) {
+        if (sortMode == AppConsts.SortMode.DATE) {
             int year = -1;
             int newYear;
             for (Exerlite e : exerliteList) {

@@ -18,14 +18,14 @@ import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.recs.intervals.model.IntervalItem;
 import com.example.trackfield.ui.rec.interval.IntervalActivity;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
 
 public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Recent", "Amount" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.AMOUNT };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.AMOUNT };
     private final boolean[] smallestFirsts = { false, false };
 
     // extends Fragment
@@ -78,8 +78,8 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVALS);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVALS);
     }
 
     @Override
@@ -89,14 +89,14 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVALS);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVALS);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVALS);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.INTERVALS, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.INTERVALS, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.INTERVALS, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.INTERVALS, smallestFirst);
     }
 
     @Override

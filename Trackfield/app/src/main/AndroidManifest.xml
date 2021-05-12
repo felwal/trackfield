@@ -68,7 +68,7 @@
             <tools:validation testUrl="https://felwal.github.io/callback" />
         </activity>
         <activity
-            android:name=".ui.setting.SettingsActivity$StravaSettingsActivity"
+            android:name=".ui.setting.StravaSettingsActivity"
             android:parentActivityName=".ui.setting.SettingsActivity"
             android:launchMode="singleTask">
             <tools:validation testUrl="https://felwal.github.io/callback" />

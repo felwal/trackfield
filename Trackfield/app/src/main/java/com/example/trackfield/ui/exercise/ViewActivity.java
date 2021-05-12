@@ -27,7 +27,7 @@ import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.google.android.gms.maps.GoogleMap;
@@ -210,7 +210,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
-        dateTv.setText(exercise.getDateTime().format(Constants.FORMATTER_VIEW));
+        dateTv.setText(exercise.getDateTime().format(AppConsts.FORMATTER_VIEW));
         setTvHideIfEmpty(exercise.getNote(), noteTv);
 
         idTv.setText(exercise.printId());
@@ -247,8 +247,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
             String text = paceTv.getText().toString();
             String perKm = exercise.printPace(true);
-            String mPerS = exercise.printVelocity(Constants.UnitVelocity.METERS_PER_SECOND, true);
-            String kmPerH = exercise.printVelocity(Constants.UnitVelocity.KILOMETERS_PER_HOUR, true);
+            String mPerS = exercise.printVelocity(AppConsts.UnitVelocity.METERS_PER_SECOND, true);
+            String kmPerH = exercise.printVelocity(AppConsts.UnitVelocity.KILOMETERS_PER_HOUR, true);
 
             if (text.equals(perKm)) {
                 paceTv.setText(mPerS);
@@ -263,10 +263,10 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         energyTv.setOnClickListener(v -> {
 
             String text = energyTv.getText().toString();
-            String joules = MathUtils.prefix(exercise.getEnergy(Constants.UnitEnergy.JOULES), 2, "J");
-            String calories = MathUtils.prefix(exercise.getEnergy(Constants.UnitEnergy.CALORIES), 2, "cal");
-            String watthours = MathUtils.prefix(exercise.getEnergy(Constants.UnitEnergy.WATTHOURS), 2, "Wh");
-            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(Constants.UnitEnergy.ELECTRONVOLTS), 19, "eV");
+            String joules = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.JOULES), 2, "J");
+            String calories = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.CALORIES), 2, "cal");
+            String watthours = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.WATTHOURS), 2, "Wh");
+            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(AppConsts.UnitEnergy.ELECTRONVOLTS), 19, "eV");
 
             if (text.equals(joules)) {
                 energyTv.setText(calories);
@@ -308,7 +308,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
 
     private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
-        if (value.equals(Constants.NO_VALUE) || value.equals(Constants.NO_VALUE_TIME) || value.equals("")) {
+        if (value.equals(AppConsts.NO_VALUE) || value.equals(AppConsts.NO_VALUE_TIME) || value.equals("")) {
             tv.setVisibility(View.GONE);
             alsoHide.setVisibility(View.GONE);
         }
@@ -316,7 +316,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     private void setTvHideIfEmpty(String value, TextView tv) {
-        if (value.equals(Constants.NO_VALUE) || value.equals(Constants.NO_VALUE_TIME) || value.equals("")) {
+        if (value.equals(AppConsts.NO_VALUE) || value.equals(AppConsts.NO_VALUE_TIME) || value.equals("")) {
             tv.setVisibility(View.GONE);
         }
         else tv.setText(value);

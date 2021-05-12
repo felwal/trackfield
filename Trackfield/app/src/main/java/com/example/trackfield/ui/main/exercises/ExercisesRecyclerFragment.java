@@ -14,7 +14,7 @@ import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.common.model.Exerlite;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
 import java.time.LocalDate;
@@ -24,7 +24,7 @@ import java.util.TreeMap;
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.DISTANCE, Constants.SortMode.TIME, Constants.SortMode.PACE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, false, false, true };
 
     private String search = "";
@@ -63,7 +63,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 //if (D.weekDistance) { itemList.add(new Chart(D.weekDistances, D.weeks)); }
                 //else { itemList.add(new Chart(D.weekActivities, D.weeks)); }
             }
-            if (sortMode != Constants.SortMode.DATE) {
+            if (sortMode != AppConsts.SortMode.DATE) {
                 itemList.addAll(exerliteList);
                 return itemList;
             }
@@ -141,8 +141,8 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.EXERCISES);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.EXERCISES);
     }
 
     @Override
@@ -152,14 +152,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.EXERCISES);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.EXERCISES);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.EXERCISES);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.EXERCISES, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.EXERCISES, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.EXERCISES, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.EXERCISES, smallestFirst);
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.ui.map.model.Trail;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
@@ -302,8 +302,8 @@ public class StravaApi {
         // import
         if (existing == null) {
             success &= DbWriter.get(a).addExercise(strava, a);
-            LayoutUtils.toast("Pull resulted in import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE), a);
-            Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE));
+            LayoutUtils.toast("Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE), a);
+            Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
         }
 
         // merge
@@ -342,14 +342,14 @@ public class StravaApi {
         // import
         else if (matching.size() == 0) {
             success &= DbWriter.get(a).addExercise(strava, a);
-            Log.i(LOG_TAG, "Import on " + strava.getDate().format(Constants.FORMATTER_SQL_DATE));
+            Log.i(LOG_TAG, "Import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
 
         // nothing
         else {
             success = false;
-            Log.i(LOG_TAG, "Multiple choice on " + strava.getDateTime().format(Constants.FORMATTER_SQL_DATE));
+            Log.i(LOG_TAG, "Multiple choice on " + strava.getDateTime().format(AppConsts.FORMATTER_SQL_DATE));
             //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
         }
 

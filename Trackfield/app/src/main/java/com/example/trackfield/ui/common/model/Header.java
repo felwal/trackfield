@@ -2,7 +2,7 @@ package com.example.trackfield.ui.common.model;
 
 import androidx.annotation.Nullable;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 import java.util.Arrays;
@@ -93,7 +93,7 @@ public class Header extends RecyclerItem {
     public String printValues() {
         String print = "";
         for (int i = 0; i < values.length; i++) {
-            if (i != 0) print += Constants.TAB;
+            if (i != 0) print += AppConsts.TAB;
             HeaderValue value = values[i];
             print += MathUtils.roundToString(value.getValue(), value.getDecimals()) + " " + value.getUnit();
         }

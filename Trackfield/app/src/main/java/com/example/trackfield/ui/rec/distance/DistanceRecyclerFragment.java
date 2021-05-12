@@ -14,7 +14,7 @@ import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.ui.common.model.Goal;
 import com.example.trackfield.ui.common.model.RecyclerItem;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 public class DistanceRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Pace & Avg time", "Full distance" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.PACE, Constants.SortMode.DISTANCE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.PACE, AppConsts.SortMode.DISTANCE };
     private final boolean[] smallestFirsts = { false, true, true, true };
 
     private int originId;
@@ -96,8 +96,8 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.DISTANCE);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.DISTANCE);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCE);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCE);
     }
 
     @Override
@@ -107,14 +107,14 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.DISTANCE);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.DISTANCE);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCE);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCE);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.DISTANCE, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.DISTANCE, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.DISTANCE, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.DISTANCE, smallestFirst);
     }
 
     @Override

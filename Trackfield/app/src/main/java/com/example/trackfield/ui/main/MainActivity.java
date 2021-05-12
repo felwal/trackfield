@@ -29,7 +29,7 @@ import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.data.db.model.Distance;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // implements SortSheet
 
     @Override
-    public void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
+    public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
         mainFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         protected abstract void updateFragment();
 
-        protected abstract void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst);
+        protected abstract void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst);
 
     }
 

@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.network.StravaApi;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.ui.onboarding.OnboardingActivity;
 import com.example.trackfield.utils.ScreenUtils;
@@ -27,8 +26,7 @@ import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.RadioDialog;
-import com.example.trackfield.ui.custom.dialog.TextDialog;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
@@ -116,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     protected void inflateViews() {
         // display options
-        inflateHeader("Display Options");
+        inflateHeader("Display options");
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
         inflateSwitchItem("Hide singleton routes", Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
         //inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
@@ -125,12 +123,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // look
         inflateHeader("Look");
-        inflateDialogItem("Theme", Prefs.isThemeLight() ? "Light" : "Dark", false,
+        inflateDialogItem("Theme", Prefs.printTheme(), false,
             RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
-                Constants.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
-        inflateDialogItem("Color", Prefs.getColor() == 0 ? "Mono" : "Green", true,
+                AppConsts.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
+        inflateDialogItem("Color", Prefs.printColor(), true,
             RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
-                Constants.colorNames, Prefs.getColor(), DIALOG_COLOR));
+                AppConsts.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
         // third party services
         inflateHeader("Third party services");
@@ -139,10 +137,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // file
         inflateHeader("File");
         inflateDialogItem("Export json", "", false,
-            BinaryDialog.newInstance(R.string.dialog_title_export, BaseDialog.NO_RES,
+            BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_message_export,
                 R.string.dialog_btn_export, DIALOG_EXPORT));
         inflateDialogItem("Import json", "", true,
-            BinaryDialog.newInstance(R.string.dialog_title_import, BaseDialog.NO_RES,
+            BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_message_import,
                 R.string.dialog_btn_import, DIALOG_IMPORT));
 
         // profile
@@ -151,8 +149,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
                 Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
 
+        // birthday
         final LocalDate bd = Prefs.getBirthday();
-        final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(Constants.FORMATTER_CAPTION), true);
+        final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(AppConsts.FORMATTER_CAPTION), true);
         birth.setOnClickListener(v -> {
             int yearSelect, monthSelect, daySelect;
             if (bd == null) {
@@ -176,7 +175,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         // developer options
         if (Prefs.isDeveloper()) {
-            inflateHeader("Developer Options");
+            inflateHeader("Developer options");
             inflateClickItem("Reboard", "", false, v -> {
                 Prefs.setFirstLogin(true);
                 OnboardingActivity.startActivity(this);
@@ -306,81 +305,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     interface OnSwitchListener {
 
         void onSwitch(boolean checked);
-
-    }
-
-    // sub-settings classes
-
-    private static class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
-
-        private StravaApi strava;
-
-        private static final String DIALOG_RECORDING_METHOD = "methodDialog";
-
-        //
-
-        public static void startActivity(@NonNull Context c) {
-            Intent intent = new Intent(c, StravaSettingsActivity.class);
-            c.startActivity(intent);
-        }
-
-        // extends AppCompatActivity
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            strava = StravaApi.getInstance(this);
-            strava.handleIntent(getIntent());
-        }
-
-        @Override
-        protected void onNewIntent(Intent intent) {
-            super.onNewIntent(intent);
-            setIntent(intent);
-            strava.handleIntent(getIntent());
-        }
-
-        // extends SettingsActivity
-
-        @Override
-        protected void setToolbar() {
-            final Toolbar tb = findViewById(R.id.toolbar_settings);
-            setSupportActionBar(tb);
-            ActionBar ab = getSupportActionBar();
-            ab.setTitle(getResources().getString(R.string.fragment_settings_strava));
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
-
-        @Override
-        protected void inflateViews() {
-            // connection
-            inflateHeader("Connection");
-            inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
-
-            // requests
-            inflateHeader("Request activities");
-            //inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
-            inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
-            inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
-            inflateClickItem("Pull all", "", true, v -> strava.pullAllActivities());
-
-            // preferences
-            inflateHeader("Request defaults");
-            inflateDialogItem("Recording method", Prefs.getRecordingMethod(), true,
-                    TextDialog.newInstance(R.string.dialog_title_recording_method,
-                            R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
-                            "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
-        }
-
-        // implements dialogs
-
-        @Override
-        public void onTextDialogPositiveClick(String input, String tag) {
-            if (tag.equals(DIALOG_RECORDING_METHOD)) {
-                Prefs.setRecordingMethod(input);
-                recreate();
-            }
-        }
 
     }
 

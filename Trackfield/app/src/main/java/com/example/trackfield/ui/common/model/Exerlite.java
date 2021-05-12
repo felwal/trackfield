@@ -1,6 +1,6 @@
 package com.example.trackfield.ui.common.model;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 import java.time.LocalDate;
@@ -79,7 +79,7 @@ public class Exerlite extends RecyclerItem {
     }
 
     public int getWeek() {
-        return date.get(Constants.WEEK_OF_YEAR);
+        return date.get(AppConsts.WEEK_OF_YEAR);
     }
 
     public int getMonthValue() {
@@ -105,11 +105,12 @@ public class Exerlite extends RecyclerItem {
     // print
 
     public String printDate() {
-        return LocalDate.now().getYear() == date.getYear() ? date.format(Constants.FORMATTER_CAPTION_NOYEAR) : date.format(Constants.FORMATTER_CAPTION);
+        return LocalDate.now().getYear() == date.getYear() ? date.format(AppConsts.FORMATTER_CAPTION_NOYEAR) : date.format(
+            AppConsts.FORMATTER_CAPTION);
     }
 
     public String printDistance() {
-        String print = distance == 0 ? Constants.NO_VALUE : MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + "";
+        String print = distance == 0 ? AppConsts.NO_VALUE : MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + "";
         return distanceDriven ? MathUtils.notateDriven(print) : print;
     }
 
@@ -131,7 +132,7 @@ public class Exerlite extends RecyclerItem {
     }
 
     public String printDistanceTimePace() {
-        return printDistance() + Constants.TAB + printTime() + Constants.TAB + printPace();
+        return printDistance() + AppConsts.TAB + printTime() + AppConsts.TAB + printPace();
     }
 
     public String printCaption() {

@@ -14,7 +14,7 @@ import com.example.trackfield.R;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.base.RecyclerFragment;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 
 public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
 
@@ -97,7 +97,7 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
 
     // implements SortSheet
 
-    @Override public void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
+    @Override public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
         recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
     }
 

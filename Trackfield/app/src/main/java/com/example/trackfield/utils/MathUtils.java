@@ -8,13 +8,6 @@ import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -181,7 +174,7 @@ public final class MathUtils {
     public static String stringTime(float timeToString, boolean round) {
 
         if (timeToString == 0) {
-            return Constants.NO_VALUE_TIME;
+            return AppConsts.NO_VALUE_TIME;
         }
 
         float[] parts = getTimeParts(timeToString);

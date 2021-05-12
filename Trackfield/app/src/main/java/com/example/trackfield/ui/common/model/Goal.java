@@ -1,6 +1,6 @@
 package com.example.trackfield.ui.common.model;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 public class Goal extends RecyclerItem {
@@ -13,10 +13,10 @@ public class Goal extends RecyclerItem {
         this.values = MathUtils.stringTime(goalPace, true);
     }
     public Goal(float goalPace, int distance) {
-        this.values = MathUtils.stringTime(getTime(distance, goalPace), true) + Constants.TAB + MathUtils.stringTime(goalPace, true);
+        this.values = MathUtils.stringTime(getTime(distance, goalPace), true) + AppConsts.TAB + MathUtils.stringTime(goalPace, true);
     }
     public Goal(int distance, float goalTime) {
-        this.values = MathUtils.stringTime(goalTime, true) + Constants.TAB + MathUtils.stringTime(getPace(distance, goalTime), true);
+        this.values = MathUtils.stringTime(goalTime, true) + AppConsts.TAB + MathUtils.stringTime(getPace(distance, goalTime), true);
     }
 
     // get
@@ -30,7 +30,7 @@ public class Goal extends RecyclerItem {
 
     // print
     public String printValues() {
-        return "Goal:" + Constants.TAB + values;
+        return "Goal:" + AppConsts.TAB + values;
     }
 
     @Override public boolean sameItemAs(RecyclerItem item) {

@@ -18,7 +18,7 @@ import com.example.trackfield.ui.main.MainActivity.MainFragment;
 import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsFragment extends MainFragment {
@@ -93,7 +93,7 @@ public class RecsFragment extends MainFragment {
     // implements dialog
 
     @Override
-    protected void onSortSheetDismiss(Constants.SortMode sortMode, boolean smallestFirst) {
+    protected void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
         recsPagerAdapter.onSortSheetDismiss(sortMode, smallestFirst);
     }
 

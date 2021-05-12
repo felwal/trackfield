@@ -9,14 +9,14 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.common.model.Exerlite;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
 
 public class IntervalRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.DISTANCE, Constants.SortMode.TIME, Constants.SortMode.PACE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, false, true, true };
 
     private String interval;
@@ -87,8 +87,8 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVAL);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVAL);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVAL);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVAL);
     }
 
     @Override
@@ -98,14 +98,14 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.INTERVAL);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.INTERVAL);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVAL);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVAL);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.INTERVAL, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.INTERVAL, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.INTERVAL, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.INTERVAL, smallestFirst);
     }
 
     // implements DelegateClickListener

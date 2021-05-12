@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // Consts
-public final class Constants {
+public final class AppConsts {
 
     // enums
 
@@ -147,7 +147,7 @@ public final class Constants {
 
     //
 
-    private Constants() {
+    private AppConsts() {
         // this utility class is not publicly instantiable
     }
 

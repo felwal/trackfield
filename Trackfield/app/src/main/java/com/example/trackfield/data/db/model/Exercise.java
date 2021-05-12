@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.ui.map.model.Trail;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
@@ -317,41 +317,41 @@ public class Exercise implements JSONObjectable {
         return getTime() / ((float) distance / 1000f);
     }
 
-    public float getVelocity(Constants.UnitVelocity unit) {
+    public float getVelocity(AppConsts.UnitVelocity unit) {
         int distance = getEffectiveDistance();
         float time = getTime();
         if (time == 0) {
             return 0;
         }
-        if (unit == Constants.UnitVelocity.METERS_PER_SECOND) {
+        if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) {
             return ((float) distance / time);
         }
-        else if (unit == Constants.UnitVelocity.KILOMETERS_PER_HOUR) {
+        else if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) {
             return ((float) distance) / 1000 / (time / 3600);
         }
         return -1;
     }
 
-    public int getEnergy(Constants.UnitEnergy unit) {
+    public int getEnergy(AppConsts.UnitEnergy unit) {
         // 0J, 1cal, 2Wh, 3eV
 
         int calories = (int) (Prefs.getMass() * getEffectiveDistance());
-        if (unit == Constants.UnitEnergy.CALORIES) {
+        if (unit == AppConsts.UnitEnergy.CALORIES) {
             return calories;
         }
 
         int joules = (int) (calories * 4.184);
-        if (unit == Constants.UnitEnergy.JOULES) {
+        if (unit == AppConsts.UnitEnergy.JOULES) {
             return joules;
         }
 
         // watthours
-        if (unit == Constants.UnitEnergy.WATTHOURS) {
+        if (unit == AppConsts.UnitEnergy.WATTHOURS) {
             return joules / 3600;
         }
 
         // electronvolts
-        if (unit == Constants.UnitEnergy.ELECTRONVOLTS) {
+        if (unit == AppConsts.UnitEnergy.ELECTRONVOLTS) {
             return (int) (joules / 1.602177);
         } // / Math.pow(10, -19)); }
 
@@ -361,7 +361,7 @@ public class Exercise implements JSONObjectable {
     public int getPower() {
         float time = getTime();
         if (time != 0) {
-            return (int) (getEnergy(Constants.UnitEnergy.JOULES) / time);
+            return (int) (getEnergy(AppConsts.UnitEnergy.JOULES) / time);
         }
         return 0;
     }
@@ -370,7 +370,7 @@ public class Exercise implements JSONObjectable {
         if (getTime() == 0) {
             return 0;
         }
-        return (int) (d / getVelocity(Constants.UnitVelocity.METERS_PER_SECOND));
+        return (int) (d / getVelocity(AppConsts.UnitVelocity.METERS_PER_SECOND));
     }
 
     public boolean isDistanceDriven() {
@@ -410,7 +410,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public int getWeek() {
-        return dateTime.get(Constants.WEEK_OF_YEAR);
+        return dateTime.get(AppConsts.WEEK_OF_YEAR);
     }
 
     // print
@@ -429,7 +429,7 @@ public class Exercise implements JSONObjectable {
 
     public String printDistance(boolean unitlessKm) {
         int distance = getEffectiveDistance();
-        String print = distance == 0 ? Constants.NO_VALUE :
+        String print = distance == 0 ? AppConsts.NO_VALUE :
             unitlessKm ? MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + "" : MathUtils.prefix(distance, DISTANCE_DECIMALS, "m");
         //if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
         return isDistanceDriven() ? MathUtils.notateDriven(print) : print;
@@ -438,12 +438,12 @@ public class Exercise implements JSONObjectable {
     public String printElevation() {
         int gain = getElevationGain();
         int loss = getElevationLoss();
-        return gain == 0 && loss == 0 ? Constants.NO_VALUE : "+" + gain + " m, " + loss + " m";
+        return gain == 0 && loss == 0 ? AppConsts.NO_VALUE : "+" + gain + " m, " + loss + " m";
     }
 
     public String printTime(boolean unit) {
         String timePrint = MathUtils.stringTime(getTime(), false);
-        if (!unit || timePrint.equals(Constants.NO_VALUE_TIME)) {
+        if (!unit || timePrint.equals(AppConsts.NO_VALUE_TIME)) {
             return timePrint;
         }
         return timePrint + " s";
@@ -451,20 +451,20 @@ public class Exercise implements JSONObjectable {
 
     public String printPace(boolean unit) {
         String pacePrint = MathUtils.stringTime(getPace(), true);
-        if (!unit || pacePrint.equals(Constants.NO_VALUE_TIME)) {
+        if (!unit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) {
             return pacePrint;
         }
         return pacePrint + " s/km";
     }
 
-    public String printVelocity(Constants.UnitVelocity unit, boolean showUnit) {
+    public String printVelocity(AppConsts.UnitVelocity unit, boolean showUnit) {
 
         String v = MathUtils.round(getVelocity(unit), 1) + "";
         if (showUnit) {
-            if (unit == Constants.UnitVelocity.METERS_PER_SECOND) {
+            if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) {
                 return v + " m/s";
             }
-            if (unit == Constants.UnitVelocity.KILOMETERS_PER_HOUR) {
+            if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) {
                 return v + " km/h";
             }
         }
@@ -481,8 +481,8 @@ public class Exercise implements JSONObjectable {
 
     public String printEnergy() {
         int energy;
-        if ((energy = getEnergy(Constants.UnitEnergy.JOULES)) == 0) {
-            return Constants.NO_VALUE;
+        if ((energy = getEnergy(AppConsts.UnitEnergy.JOULES)) == 0) {
+            return AppConsts.NO_VALUE;
         }
         return MathUtils.prefix(energy, 2, "J");
     }
@@ -490,7 +490,7 @@ public class Exercise implements JSONObjectable {
     public String printPower() {
         int power;
         if ((power = getPower()) == 0) {
-            return Constants.NO_VALUE;
+            return AppConsts.NO_VALUE;
         }
         return MathUtils.prefix(power, 2, "W");
     }
@@ -558,7 +558,7 @@ public class Exercise implements JSONObjectable {
     public static String printDistance(int distance, boolean unitlessKm, boolean distanceDriven) {
         String print;
         if (distance == 0) {
-            print = Constants.NO_VALUE;
+            print = AppConsts.NO_VALUE;
         }
         else {
             if (unitlessKm) {
@@ -576,7 +576,7 @@ public class Exercise implements JSONObjectable {
 
     public static String printTime(float time, String unit) {
         String timePrint = MathUtils.stringTime(time, false);
-        if (unit.equals("") || timePrint.equals(Constants.NO_VALUE_TIME)) {
+        if (unit.equals("") || timePrint.equals(AppConsts.NO_VALUE_TIME)) {
             return timePrint;
         }
         return timePrint + " " + unit;

@@ -1,6 +1,6 @@
 package com.example.trackfield.data.db.model;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 public class Sub {
@@ -61,19 +61,19 @@ public class Sub {
     // print
 
     public String printDistance() {
-        if (distance == 0) { return Constants.NO_VALUE; }
+        if (distance == 0) { return AppConsts.NO_VALUE; }
         return MathUtils.prefix(distance, 2, "m");
     }
 
     public String printTime(boolean unit) {
         String timePrint = MathUtils.stringTime(time, false);
-        if (!unit || timePrint.equals(Constants.NO_VALUE_TIME)) { return timePrint; }
+        if (!unit || timePrint.equals(AppConsts.NO_VALUE_TIME)) { return timePrint; }
         return timePrint + " s";
     }
 
     public String printPace(boolean unit) {
         String pacePrint = MathUtils.stringTime(getPace(), true);
-        if (!unit || pacePrint.equals(Constants.NO_VALUE_TIME)) { return pacePrint; }
+        if (!unit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) { return pacePrint; }
         return pacePrint + " s/km";
     }
 

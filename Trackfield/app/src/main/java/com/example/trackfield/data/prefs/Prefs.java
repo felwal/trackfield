@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
 
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,8 +57,8 @@ public class Prefs {
     @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
 
     // sorting
-    private static Constants.SortMode[] sortModePrefs = { Constants.SortMode.DATE, Constants.SortMode.DISTANCE, Constants.SortMode.DATE,
-        Constants.SortMode.DATE, Constants.SortMode.DATE, Constants.SortMode.DATE, Constants.SortMode.DATE };
+    private static AppConsts.SortMode[] sortModePrefs = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.DATE,
+        AppConsts.SortMode.DATE, AppConsts.SortMode.DATE, AppConsts.SortMode.DATE, AppConsts.SortMode.DATE };
     private static boolean[] smallestFirstPrefs = { false, true, false,
         false, false, false, false };
 
@@ -207,7 +207,7 @@ public class Prefs {
         distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
 
         // sorting
-        sortModePrefs = loadPref(new TypeToken<Constants.SortMode[]>(){}, SORT_MODE);
+        sortModePrefs = loadPref(new TypeToken<AppConsts.SortMode[]>(){}, SORT_MODE);
         smallestFirstPrefs = loadPref(new TypeToken<boolean[]>(){}, SORT_SMALLEST_FIRST);
 
         // strava
@@ -358,12 +358,12 @@ public class Prefs {
         savePref(types, TYPES_DISTANCE);
     }
 
-    public static void setSortModePref(Constants.Layout layout, Constants.SortMode sortMode) {
+    public static void setSortModePref(AppConsts.Layout layout, AppConsts.SortMode sortMode) {
         sortModePrefs[layout.ordinal()] = sortMode;
         savePref(sortModePrefs, SORT_MODE);
     }
 
-    public static void setSmallestFirstPref(Constants.Layout layout, boolean smallestFirst) {
+    public static void setSmallestFirstPref(AppConsts.Layout layout, boolean smallestFirst) {
         smallestFirstPrefs[layout.ordinal()] = smallestFirst;
         savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
     }
@@ -478,11 +478,11 @@ public class Prefs {
         return distanceVisibleTypes;
     }
 
-    public static Constants.SortMode getSortModePref(Constants.Layout layout) {
+    public static AppConsts.SortMode getSortModePref(AppConsts.Layout layout) {
         return sortModePrefs[layout.ordinal()];
     }
 
-    public static boolean getSmallestFirstPref(Constants.Layout layout) {
+    public static boolean getSmallestFirstPref(AppConsts.Layout layout) {
         return smallestFirstPrefs[layout.ordinal()];
     }
 
@@ -507,6 +507,14 @@ public class Prefs {
     }
 
     // get driven
+
+    public static String printTheme() {
+        return isThemeLight() ? "Light" : "Dark";
+    }
+
+    public static String printColor() {
+        return getColor() == 0 ? "Mono" : "Green";
+    }
 
     public static boolean isColorGreen() {
         return color == COLOR_GREEN;

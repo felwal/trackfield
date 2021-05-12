@@ -16,7 +16,7 @@ import com.example.trackfield.ui.base.BaseAdapterDelegate;
 import com.example.trackfield.ui.base.DelegateClickListener;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Exerlite;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -52,12 +52,12 @@ public class RouteExerciseAdapterDelegate extends
     @Override
     public void onBindViewHolder(Exerlite item, ExerciseSmallViewHolder vh, @Nullable List<Object> payloads) {
         String values = item.printDistance()
-            + Constants.TAB + item.printTime()
-            + Constants.TAB + item.printPace();
+            + AppConsts.TAB + item.printTime()
+            + AppConsts.TAB + item.printPace();
 
         String date = item.getDate().format(
-            adapter.getSortMode() == Constants.SortMode.DATE || item.isYear(LocalDate.now().getYear()) ?
-                Constants.FORMATTER_REC_NOYEAR : Constants.FORMATTER_REC);
+            adapter.getSortMode() == AppConsts.SortMode.DATE || item.isYear(LocalDate.now().getYear()) ?
+                AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
         vh.primary.setText(date);
         vh.secondary.setText(values);

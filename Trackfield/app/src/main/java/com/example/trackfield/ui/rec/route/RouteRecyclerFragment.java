@@ -14,7 +14,7 @@ import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.ui.common.model.Exerlite;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 public class RouteRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final Constants.SortMode[] sortModes = { Constants.SortMode.DATE, Constants.SortMode.DISTANCE, Constants.SortMode.TIME, Constants.SortMode.PACE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, false, true, true };
 
     private Route route;
@@ -95,8 +95,8 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.ROUTE);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.ROUTE);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.ROUTE);
     }
 
     @Override
@@ -106,14 +106,14 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(Constants.Layout.ROUTE);
-        smallestFirst = Prefs.getSmallestFirstPref(Constants.Layout.ROUTE);
+        sortMode = Prefs.getSortModePref(AppConsts.Layout.ROUTE);
+        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.ROUTE);
     }
 
     @Override
     protected void setPrefs() {
-        Prefs.setSortModePref(Constants.Layout.ROUTE, sortMode);
-        Prefs.setSmallestFirstPref(Constants.Layout.ROUTE, smallestFirst);
+        Prefs.setSortModePref(AppConsts.Layout.ROUTE, sortMode);
+        Prefs.setSmallestFirstPref(AppConsts.Layout.ROUTE, smallestFirst);
     }
 
     @Override

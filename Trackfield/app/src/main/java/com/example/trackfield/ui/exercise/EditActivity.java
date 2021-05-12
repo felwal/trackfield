@@ -28,7 +28,7 @@ import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
-import com.example.trackfield.utils.Constants;
+import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 
@@ -179,8 +179,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void setTextsCreate() {
-        dateEt.setText(createDate = LocalDate.now().format(Constants.FORMATTER_EDIT_DATE));
-        timeEt.setText(createTime = LocalDateTime.now().format(Constants.FORMATTER_EDIT_TIME));
+        dateEt.setText(createDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
+        timeEt.setText(createTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
     }
 
     private void setTextsEdit() {
@@ -215,8 +215,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         // set texts
         routeEt.setText(exercise.getRoute());
         routeVarEt.setText(exercise.getRouteVar());
-        dateEt.setText(exercise.getDate().format(Constants.FORMATTER_EDIT_DATE));
-        timeEt.setText(exercise.getDateTime().format(Constants.FORMATTER_EDIT_TIME));
+        dateEt.setText(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE));
+        timeEt.setText(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME));
         noteEt.setText(exercise.getNote());
         distanceEt.setText((float) exercise.getEffectiveDistance() / 1000 + "");
         hoursEt.setText((int) time[2] + "");
@@ -258,10 +258,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         // date listener
         dateEt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) return;
-            LocalDate dateSelect = LocalDate.parse(dateEt.getText(), Constants.FORMATTER_EDIT_DATE);
+            LocalDate dateSelect = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
 
             DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, (view, year, month, dayOfMonth) ->
-                dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(Constants.FORMATTER_EDIT_DATE)),
+                dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(AppConsts.FORMATTER_EDIT_DATE)),
                 dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
 
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -278,8 +278,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
             if (!routeEt.getText().toString().equals(exercise.getRoute())) return true;
             if (!routeVarEt.getText().toString().equals(exercise.getRouteVar())) return true;
-            if (!dateEt.getText().toString().equals(exercise.getDate().format(Constants.FORMATTER_EDIT_DATE))) return true;
-            if (!timeEt.getText().toString().equals(exercise.getDateTime().format(Constants.FORMATTER_EDIT_TIME))) return true;
+            if (!dateEt.getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))) return true;
+            if (!timeEt.getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))) return true;
             if (!noteEt.getText().toString().equals(exercise.getNote())) return true;
             if (!distanceEt.getText().toString().equals((float) exercise.getEffectiveDistance() / 1000 + "")) return true;
             if (!hoursEt.getText().toString().equals((int) time[2] + "")) return true;
@@ -320,8 +320,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             // parse
             String route = routeEt.getText().toString();
             String routeVar = routeVarEt.getText().toString();
-            LocalDate date = LocalDate.parse(dateEt.getText(), Constants.FORMATTER_EDIT_DATE);
-            LocalTime localTime = LocalTime.parse(timeEt.getText(), Constants.FORMATTER_EDIT_TIME);
+            LocalDate date = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
+            LocalTime localTime = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
             String note = noteEt.getText().toString();
             int distance = !drivenSw.isChecked() ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000) :
                 Exercise.DISTANCE_DRIVEN;
