@@ -1,186 +1,190 @@
 <resources>
 
-  <!-- app -->
+    <!-- app -->
 
-  <string name="app_name">Trackfield</string>
-  <string name="package_name">com.example.trackfield</string>
-  <string name="app_version">0.0.0</string>
+    <string name="app_name">Trackfield</string>
+    <string name="package_name">com.example.trackfield</string>
+    <string name="app_version">0.0.0</string>
 
-  <!-- activities -->
+    <!-- activities -->
 
-  <string name="activity_edit">Edit</string>
-  <string name="activity_view">Exercise</string>
-  <string name="activity_maps">Map</string>
-  <string name="activity_track">Track</string>
-  <string name="activity_onboarding">Onboarding</string>
+    <string name="activity_edit">Edit</string>
+    <string name="activity_view">Exercise</string>
+    <string name="activity_maps">Map</string>
+    <string name="activity_track">Track</string>
+    <string name="activity_onboarding">Onboarding</string>
 
-  <!-- fragments -->
+    <!-- fragments -->
 
-  <string name="fragment_exercises">Exercises</string>
-  <string name="fragment_records">Records</string>
-  <string name="fragment_stats">Stats</string>
-  <string name="fragment_settings">Settings</string>
-  <string name="fragment_settings_strava">Strava</string>
+    <string name="fragment_exercises">Exercises</string>
+    <string name="fragment_records">Records</string>
+    <string name="fragment_stats">Stats</string>
+    <string name="fragment_settings">Settings</string>
+    <string name="fragment_settings_strava">Strava</string>
 
-  <!-- tabs -->
+    <!-- tabs -->
 
-  <string name="tab_distances">Distances</string>
-  <string name="tab_routes">Routes</string>
-  <string name="tab_intervals">Intervals</string>
+    <string name="tab_distances">Distances</string>
+    <string name="tab_routes">Routes</string>
+    <string name="tab_intervals">Intervals</string>
 
-  <string name="tab_onboarding1_title">Exercise</string>
-  <string name="tab_onboarding2_title">Analyze</string>
-  <string name="tab_onboarding3_title">Organize</string>
-  <string name="tab_onboarding1_message">You do you.</string>
-  <string name="tab_onboarding2_message">Chart, graph, compare.</string>
-  <string name="tab_onboarding3_message">Your exercises, exactly where you need them.</string>
+    <string name="tab_onboarding1_title">Exercise</string>
+    <string name="tab_onboarding2_title">Analyze</string>
+    <string name="tab_onboarding3_title">Organize</string>
+    <string name="tab_onboarding1_message">You do you.</string>
+    <string name="tab_onboarding2_message">Chart, graph, compare.</string>
+    <string name="tab_onboarding3_message">Your exercises, exactly where you need them.</string>
 
-  <!-- edit texts -->
+    <!-- edit texts -->
 
-  <string name="et_text_edit_route">Route</string>
-  <string name="et_hint_edit_route">Route</string>
-  <string name="et_hint_edit_routevar">variation</string>
-  <string name="et_hint_edit_date">yyyy/MM/dd</string>
-  <string name="et_hint_edit_time">HH:mm:ss</string>
-  <string name="et_hint_edit_interval">Interval</string>
-  <string name="et_hint_edit_note">Note</string>
-  <string name="et_hint_edit_distance">km</string>
-  <string name="et_hint_edit_hours">HH</string>
-  <string name="et_hint_edit_minutes">mm</string>
-  <string name="et_hint_edit_seconds">ss</string>
-  <string name="et_hint_edit_datasource">Data source</string>
-  <string name="et_hint_edit_recordingmethod">Recording method</string>
+    <string name="et_text_edit_route">Route</string>
+    <string name="et_hint_edit_route">Route</string>
+    <string name="et_hint_edit_routevar">variation</string>
+    <string name="et_hint_edit_date">yyyy/MM/dd</string>
+    <string name="et_hint_edit_time">HH:mm:ss</string>
+    <string name="et_hint_edit_interval">Interval</string>
+    <string name="et_hint_edit_note">Note</string>
+    <string name="et_hint_edit_distance">km</string>
+    <string name="et_hint_edit_hours">HH</string>
+    <string name="et_hint_edit_minutes">mm</string>
+    <string name="et_hint_edit_seconds">ss</string>
+    <string name="et_hint_edit_datasource">Data source</string>
+    <string name="et_hint_edit_recordingmethod">Recording method</string>
 
-  <!-- text views -->
+    <!-- text views -->
 
-  <string name="tv_text_onboarding_subtitle">Welcome to</string>
-  <string name="tv_text_onboarding_title">Trackfield!</string>
-  <string name="tv_text_onboarding_caption">@string/app_version</string>
+    <string name="tv_text_onboarding_subtitle">Welcome to</string>
+    <string name="tv_text_onboarding_title">Trackfield!</string>
+    <string name="tv_text_onboarding_caption">@string/app_version</string>
 
-  <!-- buttons -->
+    <!-- buttons -->
 
-  <string name="btn_text_boarding_start">Get started</string>
-  <string name="switch_text_driven">Use route average</string>
+    <string name="btn_text_boarding_start">Get started</string>
+    <string name="switch_text_driven">Use route average</string>
 
-  <!-- actions -->
+    <!-- actions -->
 
-  <string name="action_search">Search</string>
-  <string name="action_filter">Filter</string>
-  <string name="action_settings">Settings</string>
-  <string name="action_edit">Edit</string>
-  <string name="action_rename">Rename</string>
-  <string name="action_save">Save</string>
-  <string name="action_add">Add</string>
-  <string name="action_hide_route">Hide route</string>
-  <string name="action_unhide_route">Unhide route</string>
-  <string name="action_show_hidden">Show hidden</string>
-  <string name="action_hide_hidden">Hide hidden</string>
-  <string name="action_set_goal">Set goal</string>
-  <string name="action_delete">Delete</string>
-  <string name="action_include_longer">Include longer</string>
-  <string name="action_pull_strava">Pull from Strava</string>
-  <string name="action_push_strava">Push to Strava</string>
-  <string name="action_map_history">Toggle history</string>
-  <string name="action_map_recentre">Recentre map</string>
-  <string name="action_map_type">Toggle satellite</string>
+    <string name="action_search">Search</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_save">Save</string>
+    <string name="action_add">Add</string>
+    <string name="action_hide_route">Hide route</string>
+    <string name="action_unhide_route">Unhide route</string>
+    <string name="action_show_hidden">Show hidden</string>
+    <string name="action_hide_hidden">Hide hidden</string>
+    <string name="action_set_goal">Set goal</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_include_longer">Include longer</string>
+    <string name="action_pull_strava">Pull from Strava</string>
+    <string name="action_push_strava">Push to Strava</string>
+    <string name="action_map_history">Toggle history</string>
+    <string name="action_map_recentre">Recentre map</string>
+    <string name="action_map_type">Toggle satellite</string>
 
-  <!-- empty states -->
+    <!-- empty states -->
 
-  <string name="empty_title_exercises">Welcome to Trackfield!</string>
-  <string name="empty_title_search">No results</string>
-  <string name="empty_title_distances">No distances</string>
-  <string name="empty_title_routes">No routes</string>
-  <string name="empty_title_intervals">No intervals</string>
-  <string name="empty_title_distance">No exercises</string>
-  <string name="empty_title_route">No exercises</string>
+    <string name="empty_title_exercises">Welcome to Trackfield!</string>
+    <string name="empty_title_search">No results</string>
+    <string name="empty_title_distances">No distances</string>
+    <string name="empty_title_routes">No routes</string>
+    <string name="empty_title_intervals">No intervals</string>
+    <string name="empty_title_distance">No exercises</string>
+    <string name="empty_title_route">No exercises</string>
 
-  <string name="empty_message_exercises">Add exercises manually with +
+    <string name="empty_message_exercises">Add exercises manually with +
     or connect to Strava in Settings to get started</string>
-  <string name="empty_message_search">Check spelling and filters.
+    <string name="empty_message_search">Check spelling and filters.
     You can search for: id, route, rotue variation, source, method, note and type</string>
-  <string name="empty_message_distances">Press + to add a distance</string>
-  <string name="empty_message_routes">Your routes will show up here</string>
-  <string name="empty_message_intervals">Your intervals will show up here</string>
-  <string name="empty_message_distance">Check filters, or set a goal</string>
-  <string name="empty_message_route">Check filters</string>
+    <string name="empty_message_distances">Press + to add a distance</string>
+    <string name="empty_message_routes">Your routes will show up here</string>
+    <string name="empty_message_intervals">Your intervals will show up here</string>
+    <string name="empty_message_distance">Check filters, or set a goal</string>
+    <string name="empty_message_route">Check filters</string>
 
-  <!-- dialogs -->
+    <!-- dialogs -->
 
-  <string name="dialog_btn_ok"><b>OK</b></string>
-  <string name="dialog_btn_cancel"><b>Cancel</b></string>
-  <string name="dialog_btn_delete"><b>Delete</b></string>
-  <string name="dialog_btn_rename"><b>Rename</b></string>
-  <string name="dialog_btn_add"><b>Add</b></string>
-  <string name="dialog_btn_set"><b>Set</b></string>
-  <string name="dialog_btn_finish"><b>Finish</b></string>
-  <string name="dialog_btn_filter"><b>Filter</b></string>
-  <string name="dialog_btn_reset"><b>Reset</b></string>
-  <string name="dialog_btn_discard"><b>Discard</b></string>
-  <string name="dialog_btn_merge"><b>Merge</b></string>
-  <string name="dialog_btn_export"><b>Export</b></string>
-  <string name="dialog_btn_import"><b>Import</b></string>
+    <string name="dialog_btn_ok"><b>OK</b></string>
+    <string name="dialog_btn_cancel"><b>Cancel</b></string>
+    <string name="dialog_btn_delete"><b>Delete</b></string>
+    <string name="dialog_btn_rename"><b>Rename</b></string>
+    <string name="dialog_btn_add"><b>Add</b></string>
+    <string name="dialog_btn_set"><b>Set</b></string>
+    <string name="dialog_btn_finish"><b>Finish</b></string>
+    <string name="dialog_btn_filter"><b>Filter</b></string>
+    <string name="dialog_btn_reset"><b>Reset</b></string>
+    <string name="dialog_btn_discard"><b>Discard</b></string>
+    <string name="dialog_btn_merge"><b>Merge</b></string>
+    <string name="dialog_btn_export"><b>Export</b></string>
+    <string name="dialog_btn_import"><b>Import</b></string>
+    <string name="dialog_btn_pull"><b>Pull</b></string>
+    <string name="dialog_btn_continue"><b>Continue</b></string>
 
-  <string name="dialog_chip_time">Time</string>
-  <string name="dialog_chip_pace">Pace</string>
+    <string name="dialog_chip_time">Time</string>
+    <string name="dialog_chip_pace">Pace</string>
 
-  <string name="dialog_title_delete_exercise">Delete exercise?</string>
-  <string name="dialog_title_rename_route">Rename route</string>
-  <string name="dialog_title_rename_interval">Rename interval</string>
-  <string name="dialog_title_add_distance">Add distance (km)</string>
-  <string name="dialog_title_delete_distance">Delete distance?</string>
-  <string name="dialog_title_set_goal">Set pace goal</string>
-  <string name="dialog_title_filter">Filter exercises</string>
-  <string name="dialog_title_finish_recording">Finish recording?</string>
-  <string name="dialog_title_discard">Discard edits?</string>
-  <string name="dialog_title_theme">Theme</string>
-  <string name="dialog_title_color">Color</string>
-  <string name="dialog_title_mass">Mass (kg)</string>
-  <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
-  <string name="dialog_title_merge_routes">Merge routes?</string>
-  <string name="dialog_title_recording_method">Default recording method</string>
-  <string name="dialog_title_export">Export json?</string>
-  <string name="dialog_title_import">Import json?</string>
+    <string name="dialog_title_delete_exercise">Delete exercise?</string>
+    <string name="dialog_title_rename_route">Rename route</string>
+    <string name="dialog_title_rename_interval">Rename interval</string>
+    <string name="dialog_title_add_distance">Add distance (km)</string>
+    <string name="dialog_title_delete_distance">Delete distance?</string>
+    <string name="dialog_title_set_goal">Set pace goal</string>
+    <string name="dialog_title_filter">Filter exercises</string>
+    <string name="dialog_title_finish_recording">Finish recording?</string>
+    <string name="dialog_title_discard">Discard edits?</string>
+    <string name="dialog_title_theme">Theme</string>
+    <string name="dialog_title_color">Color</string>
+    <string name="dialog_title_mass">Mass (kg)</string>
+    <string name="dialog_title_week_chart_weeks">Week chart weeks</string>
+    <string name="dialog_title_merge_routes">Merge routes?</string>
+    <string name="dialog_title_recording_method">Default recording method</string>
+    <string name="dialog_title_export">Export json?</string>
+    <string name="dialog_title_import">Import json?</string>
+    <string name="dialog_title_pull">Pull policy</string>
+    <string name="dialog_title_continue">Continue?</string>
 
-  <string name="dialog_message_delete_exercise"></string>
-  <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
-  <string name="dialog_message_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
-  <string name="dialog_message_recording_method">Select default recording method when requesting from Strava</string>
-  <string name="dialog_message_export">Exercises, routes and distances will be exported to Trackfield folder</string>
-  <string name="dialog_message_import">Exercises, routes and distances will be imported from Trackfield folder</string>
+    <string name="dialog_message_delete_exercise"></string>
+    <string name="dialog_message_delete_distance">Your exercises won\'t be affected</string>
+    <string name="dialog_message_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
+    <string name="dialog_message_recording_method">Select default recording method when requesting from Strava</string>
+    <string name="dialog_message_export">Exercises, routes and distances will be exported to Trackfield folder</string>
+    <string name="dialog_message_import">Exercises, routes and distances will be imported from Trackfield folder</string>
 
-  <!-- toasts -->
+    <!-- toasts -->
 
-  <string name="toast_err_no_input">No input</string>
-  <string name="toast_err_save_empty">Can\'t save empty</string>
-  <string name="toast_err_decode_polyline">Problem decoding polyline</string>
-  <string name="toast_err_display_density">Couldn\'t fetch display density</string>
-  <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
+    <string name="toast_err_no_input">No input</string>
+    <string name="toast_err_save_empty">Can\'t save empty</string>
+    <string name="toast_err_decode_polyline">Problem decoding polyline</string>
+    <string name="toast_err_display_density">Couldn\'t fetch display density</string>
+    <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
 
-  <string name="toast_json_exporting">Exporting json…</string>
-  <string name="toast_json_importing">Importing json…</string>
-  <string name="toast_json_export_successful">Export successful</string>
-  <string name="toast_json_import_successful">Import successful</string>
-  <string name="toast_json_export_err">Failed to export</string>
-  <string name="toast_json_import_err">Failed to import</string>
+    <string name="toast_json_exporting">Exporting json…</string>
+    <string name="toast_json_importing">Importing json…</string>
+    <string name="toast_json_export_successful">Export successful</string>
+    <string name="toast_json_import_successful">Import successful</string>
+    <string name="toast_json_export_err">Failed to export</string>
+    <string name="toast_json_import_err">Failed to import</string>
 
-  <string name="toast_strava_auth_successful">Authorization successful</string>
-  <string name="toast_strava_auth_err">Authorization failed</string>
-  <string name="toast_strava_req_activity_successful">Request successful</string>
-  <string name="toast_strava_req_activity_err">Failed to request activities</string>
-  <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
-  <string name="toast_strava_req_refresh_err">Failed to request refreshToken, authorize yourself!</string>
-  <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>
-  <string name="toast_strava_pull_activity_successful">Pull successful</string>
-  <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
-  <string name="toast_strava_pull_activity_err">Failed to pull activity</string>
-  <string name="toast_strava_pull_activities_finished">Pulls finished</string>
+    <string name="toast_strava_auth_successful">Authorization successful</string>
+    <string name="toast_strava_auth_err">Authorization failed</string>
+    <string name="toast_strava_req_activity_successful">Request successful</string>
+    <string name="toast_strava_req_activity_err">Failed to request activities</string>
+    <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
+    <string name="toast_strava_req_refresh_err">Failed to request refreshToken, authorize yourself!</string>
+    <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>
+    <string name="toast_strava_pull_activity_successful">Pull successful</string>
+    <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
+    <string name="toast_strava_pull_activity_err">Failed to pull activity</string>
+    <string name="toast_strava_pull_activities_finished">Pulls finished</string>
 
-  <!-- map styles -->
+    <!-- map styles -->
 
-  <string name="map_id_dark">4b9ca6aad68c1f4d</string>
-  <string name="map_id_light">4b9ca6aad68c1f4d</string>
+    <string name="map_id_dark">4b9ca6aad68c1f4d</string>
+    <string name="map_id_light">4b9ca6aad68c1f4d</string>
 
-  <string name="mapstyle_night_json">
+    <string name="mapstyle_night_json">
     [
     {
       \"featureType\": \"all\",
@@ -373,7 +377,7 @@
     }
     ]
   </string>
-  <string name="mapstyle_retro_json">
+    <string name="mapstyle_retro_json">
     [
     {
       \"elementType\": \"geometry\",
@@ -590,7 +594,7 @@
     }
     ]
   </string>
-  <string name="mapstyle_mono_json">
+    <string name="mapstyle_mono_json">
     [
     {
        \"featureType\": \"all\",

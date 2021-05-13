@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
-import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.model.Exercise;
+import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
@@ -30,7 +30,7 @@ public class PeekSheet extends BaseSheet {
     // bundle
     public static final String BUNDLE_ID = "id";
 
-    ////
+    //
 
     public static PeekSheet newInstance(int id) {
 
@@ -46,8 +46,11 @@ public class PeekSheet extends BaseSheet {
 
     // extends DialogFragment
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.sheet_peek, container, false);
 
         setViews();
@@ -86,7 +89,6 @@ public class PeekSheet extends BaseSheet {
         }
 
         tag = TAG;
-
     }
 
     // set
@@ -125,7 +127,9 @@ public class PeekSheet extends BaseSheet {
     // interface
 
     public interface DismissListener {
+
         void onPeekSheetDismiss(int id);
+
     }
 
 }

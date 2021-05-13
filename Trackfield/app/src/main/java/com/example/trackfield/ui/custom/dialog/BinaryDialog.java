@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import com.example.trackfield.R;
+
 public class BinaryDialog extends BaseDialog {
 
     protected DialogListener listener;
@@ -19,20 +21,20 @@ public class BinaryDialog extends BaseDialog {
 
     private final static String TAG_DEFAULT = "binaryDialog";
 
-    ////
+    //
 
-    public static BinaryDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, @StringRes int posBtnTxtRes, String tag) {
+    public static BinaryDialog newInstance(@StringRes int titleRes, @StringRes int messageRes,
+        @StringRes int posBtnTxtRes, String tag) {
 
         BinaryDialog instance = new BinaryDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
-
         instance.setArguments(bundle);
 
         return instance;
     }
 
     public static BinaryDialog newInstance(@StringRes int titleRes, @StringRes int messageRes,
-                                           @StringRes int posBtnTxtRes, @Nullable String passValue, String tag) {
+        @StringRes int posBtnTxtRes, @Nullable String passValue, String tag) {
 
         BinaryDialog instance = new BinaryDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
@@ -40,8 +42,11 @@ public class BinaryDialog extends BaseDialog {
         bundle.putString(BUNDLE_PASS_VALUE, passValue);
 
         instance.setArguments(bundle);
-
         return instance;
+    }
+
+    public static BinaryDialog generic(String tag) {
+        return newInstance(R.string.dialog_title_continue, NO_RES, R.string.dialog_btn_continue, tag);
     }
 
     // extends DialogFragment
@@ -68,7 +73,6 @@ public class BinaryDialog extends BaseDialog {
 
     @Override
     protected AlertDialog buildDialog() {
-
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setTitle(title)

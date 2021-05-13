@@ -11,14 +11,23 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.data.network.StravaApi;
 import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.custom.dialog.BaseDialog;
+import com.example.trackfield.ui.custom.dialog.BinaryDialog;
+import com.example.trackfield.ui.custom.dialog.SwitchDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
+import com.example.trackfield.utils.model.PairList;
 
-public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener {
+import java.util.ArrayList;
+
+public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener, SwitchDialog.DialogListener {
 
     private StravaApi strava;
 
     // dialog tags
     private static final String DIALOG_RECORDING_METHOD = "methodDialog";
+    private static final String DIALOG_REQUEST_ALL = "requestAllDialog";
+    private static final String DIALOG_PULL_ALL = "pullAllDialog";
+    private static final String DIALOG_PULL_POLICY = "pullPolicyDialog";
 
     //
 
@@ -64,15 +73,18 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         inflateHeader("Request activities");
         //inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
         inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
-        inflateClickItem("Request all", "", false, v -> strava.requestAllActivities());
-        inflateClickItem("Pull all", "", true, v -> strava.pullAllActivities());
+        inflateDialogItem("Request all", "", false, BinaryDialog.generic(DIALOG_REQUEST_ALL));
+        inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
 
-        // preferences
-        inflateHeader("Request defaults");
-        inflateDialogItem("Recording method", Prefs.getRecordingMethod(), true,
+        // request options
+        inflateHeader("Request options");
+        inflateDialogItem("Recording method", Prefs.getRecordingMethod(), false,
                 TextDialog.newInstance(R.string.dialog_title_recording_method,
-                        R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
-                        "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+                    R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
+                    "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+        inflateDialogItem("Pull policy", "", true,
+            SwitchDialog.newInstance(R.string.dialog_title_pull, BaseDialog.NO_RES, R.string.dialog_btn_set,
+                Prefs.getPullSettings(), DIALOG_PULL_POLICY));
     }
 
     // implements dialogs
@@ -81,7 +93,27 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     public void onTextDialogPositiveClick(String input, String tag) {
         if (tag.equals(DIALOG_RECORDING_METHOD)) {
             Prefs.setRecordingMethod(input);
-            recreate();
+            reflateViews();
+        }
+    }
+
+    @Override
+    public void onSwitchDialogPositiveClick(ArrayList<Boolean> switchStates, String tag) {
+        if (tag.equals(DIALOG_PULL_POLICY)) {
+            PairList<String, Boolean> pullSettings = Prefs.getPullSettings();
+            pullSettings.setSeconds(switchStates);
+            Prefs.setPullSettings(pullSettings);
+            reflateViews();
+        }
+    }
+
+    @Override
+    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+        if (tag.equals(DIALOG_REQUEST_ALL)) {
+            strava.requestAllActivities();
+        }
+        else if (tag.equals(DIALOG_PULL_ALL)) {
+            strava.pullAllActivities();
         }
     }
 

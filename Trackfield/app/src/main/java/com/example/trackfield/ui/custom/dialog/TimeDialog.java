@@ -32,10 +32,10 @@ public class TimeDialog extends BaseDialog {
 
     private final static String TAG_DEFAULT = "timeDialog";
 
-    ////
+    //
 
-    public static TimeDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, int text1, int text2, String hint1, String hint2,
-                                         @StringRes int posBtnTxtRes, @StringRes int neuBtnTxtRes, String tag) {
+    public static TimeDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, int text1, int text2,
+        String hint1, String hint2, @StringRes int posBtnTxtRes, @StringRes int neuBtnTxtRes, String tag) {
 
         TimeDialog instance = new TimeDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
@@ -47,7 +47,6 @@ public class TimeDialog extends BaseDialog {
         bundle.putInt(BUNDLE_NEUTRAL_BUTTON_RES, neuBtnTxtRes);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
@@ -80,7 +79,6 @@ public class TimeDialog extends BaseDialog {
 
     @Override
     protected AlertDialog buildDialog() {
-
         final View dialogView = inflater.inflate(R.layout.dialog_time, null);
         final EditText et1 = dialogView.findViewById(R.id.editText_numberField1);
         final EditText et2 = dialogView.findViewById(R.id.editText_numberField2);
@@ -98,18 +96,18 @@ public class TimeDialog extends BaseDialog {
         //chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                    try {
-                        final int input1 = Integer.parseInt(et1.getText().toString());
-                        final int input2 = Integer.parseInt(et2.getText().toString());
-                        listener.onTimeDialogPositiveClick(input1, input2, tag);
-                    }
-                    catch (NumberFormatException e) {
-                        LayoutUtils.toast(R.string.toast_err_no_input, a);
-                    }
-                })
-                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel())
-                .setNeutralButton(neuBtnTxtId, (dialog, id) -> listener.onTimeDialogNegativeClick(tag));
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
+                try {
+                    final int input1 = Integer.parseInt(et1.getText().toString());
+                    final int input2 = Integer.parseInt(et2.getText().toString());
+                    listener.onTimeDialogPositiveClick(input1, input2, tag);
+                }
+                catch (NumberFormatException e) {
+                    LayoutUtils.toast(R.string.toast_err_no_input, a);
+                }
+            })
+            .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel())
+            .setNeutralButton(neuBtnTxtId, (dialog, id) -> listener.onTimeDialogNegativeClick(tag));
 
         return builder.show();
     }

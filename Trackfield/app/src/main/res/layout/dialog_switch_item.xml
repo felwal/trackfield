@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Switch xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/switch_item"
+    style="@style/Body"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginStart="@dimen/padding_dialog_side"
+    android:layout_marginEnd="@dimen/padding_dialog_side"
+    android:text="Text">
+
+</Switch>

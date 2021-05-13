@@ -13,16 +13,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.trackfield.BuildConfig;
 import com.example.trackfield.R;
-import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.db.model.Exercise;
+import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.exercise.ViewActivity;
+import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.data.prefs.Prefs;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -98,9 +98,8 @@ public class StravaApi {
     }
 
     /**
-     * Handles intent for strava authorization result;
-     * checks if intent contains any URI appLinkData
-     * and finishes authorization.
+     * Handles intent for strava authorization result; checks if intent contains any URI appLinkData and finishes
+     * authorization.
      *
      * @param appLinkIntent The intent possibly containing appLinkData
      */
@@ -149,13 +148,16 @@ public class StravaApi {
 
             for (long stravaId : stravaIds) {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
-                        response -> {
-                            boolean success = handlePull(convertToExercise(response));
+                    response -> {
+                        boolean success = handlePull(convertToExercise(response));
 
-                            Log.i(LOG_TAG, "response: " + response.toString());
-                            LayoutUtils.toast(success, R.string.toast_strava_pull_activity_successful,
-                                    R.string.toast_strava_pull_activity_err, a);
-                        }, e -> LayoutUtils.handleError(R.string.toast_strava_pull_activity_err, e, a));
+                        Log.i(LOG_TAG, "response: " + response.toString());
+                        LayoutUtils.toast(success, R.string.toast_strava_pull_activity_successful,
+                            R.string.toast_strava_pull_activity_err, a);
+                    },
+                    e -> LayoutUtils.handleError(a.getString(R.string.toast_strava_pull_activity_err) + " "
+                            + stravaId, e,
+                        a));
 
                 queue.add(request);
             }
@@ -192,7 +194,7 @@ public class StravaApi {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast("Requesting activities...", a);
 
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page),null,
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
                     int errorCount = 0;
                     for (int index = 0; index < response.length(); index++) {
@@ -379,7 +381,7 @@ public class StravaApi {
     }
 
     private static String getActivityURL(long id) {
-        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" +"&access_token=" +
+        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" + "&access_token=" +
             Prefs.getAccessToken();
     }
 

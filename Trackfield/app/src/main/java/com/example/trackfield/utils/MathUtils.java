@@ -23,6 +23,7 @@ public final class MathUtils {
     }
 
     // real maths
+
     public static double sqr(double d) {
         return d * d;
     }
@@ -307,6 +308,22 @@ public final class MathUtils {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(valueToAdd);
         return list;
+    }
+
+    public static boolean[] castToPrimitive(Boolean[] genericArray) {
+        boolean[] primitiveArray = new boolean[genericArray.length];
+        for (int i = 0; i < genericArray.length; i++) {
+            primitiveArray[i] = genericArray[i];
+        }
+        return primitiveArray;
+    }
+
+    public static Boolean[] castToGeneric(boolean[] primitiveArray) {
+        Boolean[] genericArray = new Boolean[primitiveArray.length];
+        for (int i = 0; i < primitiveArray.length; i++) {
+            genericArray[i] = primitiveArray[i];
+        }
+        return genericArray;
     }
 
     // distance

@@ -28,7 +28,7 @@ public class RadioDialog extends BaseDialog {
 
     public static final String TAG_DEFAULT = "radioDialog";
 
-    ////
+    //
 
     public static RadioDialog newInstance(@StringRes int titleRes, @StringRes int messageRes,
         ArrayList<String> radioButtonTexts, int selectedIndex, String tag) {
@@ -40,7 +40,6 @@ public class RadioDialog extends BaseDialog {
         bundle.putInt(BUNDLE_SELECTED_INDEX, selectedIndex);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 

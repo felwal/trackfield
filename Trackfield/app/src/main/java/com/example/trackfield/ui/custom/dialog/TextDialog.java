@@ -24,9 +24,10 @@ public class TextDialog extends BaseDialog {
 
     private final static String TAG_DEFAULT = "textDialog";
 
-    ////
+    //
 
-    public static TextDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, String text, String hint, @StringRes int posBtnTxtRes, String tag) {
+    public static TextDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, String text, String hint,
+        @StringRes int posBtnTxtRes, String tag) {
 
         TextDialog instance = new TextDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
@@ -35,7 +36,6 @@ public class TextDialog extends BaseDialog {
         bundle.putString(BUNDLE_HINT, hint);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
@@ -64,12 +64,10 @@ public class TextDialog extends BaseDialog {
             text = bundle.getString(BUNDLE_TEXT, "");
             hint = bundle.getString(BUNDLE_HINT, "");
         }
-
     }
 
     @Override
     protected AlertDialog buildDialog() {
-
         final View dialogView = inflater.inflate(R.layout.dialog_text, null);
         final EditText et = dialogView.findViewById(R.id.editText_textField);
 
@@ -90,7 +88,9 @@ public class TextDialog extends BaseDialog {
     // interface
 
     public interface DialogListener {
+
         void onTextDialogPositiveClick(String input, String tag);
+
     }
 
 }

@@ -54,14 +54,15 @@ public abstract class BaseDialog extends DialogFragment {
 
     // tools
 
-    protected static Bundle putBundleBase(@StringRes int titleRes, @StringRes int messageRes, @StringRes int posBtnTxtRes, String tag) {
+    protected static Bundle putBundleBase(@StringRes int titleRes, @StringRes int messageRes,
+        @StringRes int posBtnTxtRes, String tag) {
+
         Bundle bundle = new Bundle();
 
         bundle.putInt(BUNDLE_TITLE_RES, titleRes);
         bundle.putInt(BUNDLE_MESSAGE_RES, messageRes);
         bundle.putInt(BUNDLE_POSITIVE_BUTTON_RES, posBtnTxtRes);
         bundle.putString(BUNDLE_TAG, tag);
-
         return bundle;
     }
 
@@ -104,7 +105,7 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     public void show(FragmentManager fm) {
-        super.show(fm, tag);
+        if (!isAdded()) super.show(fm, tag);
     }
 
     // abstract

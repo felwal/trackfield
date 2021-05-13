@@ -186,6 +186,11 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         }
     }
 
+    protected void reflateViews() {
+        ll.removeAllViews();
+        inflateViews();
+    }
+
     // inflate items
 
     protected View inflateHeader(String title) {
@@ -274,7 +279,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     public void onDecimalDialogPositiveClick(float input, String tag) {
         if (tag.equals(DIALOG_MASS)) {
             Prefs.setMass(input);
-            recreate();
+            reflateViews();
         }
     }
 

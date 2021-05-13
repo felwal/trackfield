@@ -41,9 +41,10 @@ public class SortSheet extends BaseSheet {
     public static final String BUNDLE_SMALLESTFIRSTS = "smallestFirsts";
     public static final String BUNDLE_SMALLESTFIRST = "smallestFirst";
 
-    ////
+    //
 
-    public static SortSheet newInstance(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    public static SortSheet newInstance(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode,
+        String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         SortSheet instance = new SortSheet();
         Bundle bundle = new Bundle();
@@ -55,14 +56,16 @@ public class SortSheet extends BaseSheet {
         bundle.putBoolean(BUNDLE_SMALLESTFIRST, smallestFirst);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
     // extends DialogFragment
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.sheet_sort, container, false);
 
         setClick();
@@ -98,7 +101,6 @@ public class SortSheet extends BaseSheet {
         }
 
         tag = TAG;
-
     }
 
     // set
@@ -109,8 +111,10 @@ public class SortSheet extends BaseSheet {
         RelativeLayout[] layouts = new RelativeLayout[sortModesTitle.length];
         TextView[] textViews = new TextView[sortModesTitle.length];
 
-        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ScreenUtils.px(40));
-        RelativeLayout.LayoutParams tvParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            ScreenUtils.px(40));
+        RelativeLayout.LayoutParams tvParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT);
 
         // add views
         for (int rl = 0; rl < sortModesTitle.length; rl++) {
@@ -131,7 +135,8 @@ public class SortSheet extends BaseSheet {
                 textViews[rl].setTextColor(getResources().getColor(R.color.colorTextHighlight));
                 textViews[rl].setTypeface(null, Typeface.BOLD);
                 textViews[rl].setText(sortModesTitle[rl] + " " + AppConsts.ARROWS[MathUtils.heaviside(smallestFirst)]);
-            } else {
+            }
+            else {
                 //textViews[rl].setTextColor(getResources().getColor(R.attr.colorOnSurface));
                 textViews[rl].setTextAppearance(a, R.style.Heading1);
                 textViews[rl].setText(sortModesTitle[rl]);
@@ -143,20 +148,25 @@ public class SortSheet extends BaseSheet {
             // click
             final int RL = rl;
             layouts[rl].setOnClickListener(v -> {
-                if (sortMode == sortModes[RL]) { smallestFirst = !smallestFirst; }
-                else { sortMode = sortModes[RL]; smallestFirst = smallestFirsts[RL]; }
+                if (sortMode == sortModes[RL]) {
+                    smallestFirst = !smallestFirst;
+                }
+                else {
+                    sortMode = sortModes[RL];
+                    smallestFirst = smallestFirsts[RL];
+                }
                 listener.onSortSheetDismiss(sortMode, smallestFirst);
                 dismiss();
             });
-
         }
-
     }
 
     // interface
 
     public interface DismissListener {
+
         void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst);
+
     }
 
 }

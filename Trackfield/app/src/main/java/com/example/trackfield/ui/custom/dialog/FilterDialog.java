@@ -28,9 +28,10 @@ public class FilterDialog extends BaseDialog {
 
     private final static String TAG_DEFAULT = "filterDialog";
 
-    ////
+    //
 
-    public static FilterDialog newInstance(@StringRes int titleRes, ArrayList<Integer> checkedTypes, @StringRes int posBtnTxtRes, String tag) {
+    public static FilterDialog newInstance(@StringRes int titleRes, ArrayList<Integer> checkedTypes,
+        @StringRes int posBtnTxtRes, String tag) {
 
         FilterDialog instance = new FilterDialog();
         Bundle bundle = putBundleBase(titleRes, NO_RES, posBtnTxtRes, tag);
@@ -38,13 +39,13 @@ public class FilterDialog extends BaseDialog {
         bundle.putIntegerArrayList(BUNDLE_CHECKED_TYPES, checkedTypes);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
     // on
 
-    @Override public void onAttach(@NonNull Context context) {
+    @Override
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         try {
@@ -65,11 +66,10 @@ public class FilterDialog extends BaseDialog {
         if (bundle != null) {
             checkedTypes = bundle.getIntegerArrayList(BUNDLE_CHECKED_TYPES);
         }
-
     }
 
-    @Override protected AlertDialog buildDialog() {
-
+    @Override
+    protected AlertDialog buildDialog() {
         View dialogView = inflater.inflate(R.layout.dialog_filter_main, null);
         final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_types);
 
@@ -77,15 +77,15 @@ public class FilterDialog extends BaseDialog {
         setChips(chipGroup);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                    try {
-                        listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag);
-                    }
-                    catch (NumberFormatException e) {
-                        LayoutUtils.toast(R.string.toast_err_no_input, a);
-                    }
-                })
-                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
+                try {
+                    listener.onFilterDialogPositiveClick(getCheckedTypes(chipGroup), tag);
+                }
+                catch (NumberFormatException e) {
+                    LayoutUtils.toast(R.string.toast_err_no_input, a);
+                }
+            })
+            .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }
@@ -93,8 +93,7 @@ public class FilterDialog extends BaseDialog {
     // tools
 
     protected void setChips(ChipGroup chipGroup) {
-
-        for (int type = 0; type < Exercise.TYPES_PLURAL.length; type++){
+        for (int type = 0; type < Exercise.TYPES_PLURAL.length; type++) {
             Chip chip;
             if (type < chipGroup.getChildCount()) {
                 chip = (Chip) chipGroup.getChildAt(type);
@@ -106,14 +105,13 @@ public class FilterDialog extends BaseDialog {
             chip.setText(Exercise.TYPES_PLURAL[type]);
             if (checkedTypes.contains(type)) chip.setChecked(true);
         }
-
     }
 
     @NonNull
     protected ArrayList<Integer> getCheckedTypes(ChipGroup chipGroup) {
 
         ArrayList<Integer> checkedTypes = new ArrayList<>();
-        for (int type = 0; type < chipGroup.getChildCount(); type++){
+        for (int type = 0; type < chipGroup.getChildCount(); type++) {
             Chip chip = (Chip) chipGroup.getChildAt(type);
             if (chip.isChecked()) checkedTypes.add(type);
         }
@@ -124,7 +122,9 @@ public class FilterDialog extends BaseDialog {
     // interface
 
     public interface DialogListener {
+
         void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag);
+
     }
 
 }

@@ -11,6 +11,7 @@ import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.utils.model.PairList;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -192,17 +193,33 @@ public class Exercise implements JSONObjectable {
     public boolean mergeStravaPull(Exercise strava, Context c) {
         if (externalId != strava.externalId) return false;
 
-        // update policy
-        route = strava.route;
-        routeId = DbReader.get(c).getRouteIdOrCreate(route, c);
-        type = strava.type;
-        dateTime = strava.dateTime;
-        dataSource = strava.dataSource;
-        //recordingMethod = strava.recordingMethod;
-        distance = strava.distance;
-        time = strava.time;
-        if (note.equals("")) note = strava.note;
-        trail = strava.trail;
+        PairList<String, Boolean> settings = Prefs.getPullSettings();
+
+        if (settings.getSecond("Route")) {
+            route = strava.route;
+            routeId = DbReader.get(c).getRouteIdOrCreate(route, c);
+        }
+        if (settings.getSecond("Type")) {
+            type = strava.type;
+        }
+        if (settings.getSecond("Date and time")) {
+            dateTime = strava.dateTime;
+        }
+        if (settings.getSecond("Data source")) {
+            dataSource = strava.dataSource;
+        }
+        if (settings.getSecond("Distance")) {
+            distance = strava.distance;
+        }
+        if (settings.getSecond("Time")) {
+            time = strava.time;
+        }
+        if (settings.getSecond("Note") && !strava.note.equals("")) {
+            note = strava.note;
+        }
+        if (settings.getSecond("Trail")) {
+            trail = strava.trail;
+        }
 
         return true;
     }
@@ -265,13 +282,13 @@ public class Exercise implements JSONObjectable {
         return time;
     }
 
-    // TODO
     public int getElevationGain() {
+        // TODO
         return 0;
     }
 
-    // TODO
     public int getElevationLoss() {
+        // TODO
         return 0;
     }
 

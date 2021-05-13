@@ -26,9 +26,11 @@ public class DecimalDialog extends BaseDialog {
 
     private final static String TAG_DEFAULT = "decimalDialog";
 
-    ////
+    //
 
-    public static DecimalDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, float text, String hint, @StringRes int posBtnTxtRes, String tag) {
+    public static DecimalDialog newInstance(@StringRes int titleRes, @StringRes int messageRes, float text, String hint,
+        @StringRes int posBtnTxtRes, String tag) {
+
         DecimalDialog instance = new DecimalDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
@@ -36,7 +38,6 @@ public class DecimalDialog extends BaseDialog {
         bundle.putString(BUNDLE_HINT, hint);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
@@ -76,16 +77,16 @@ public class DecimalDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         builder.setView(dialogView).setTitle(title)
-                .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                    try {
-                        final float input = Float.parseFloat(et.getText().toString());
-                        listener.onDecimalDialogPositiveClick(input, tag);
-                    }
-                    catch (NumberFormatException e) {
-                        LayoutUtils.toast(R.string.toast_err_no_input, a);
-                    }
-                })
-                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
+                try {
+                    final float input = Float.parseFloat(et.getText().toString());
+                    listener.onDecimalDialogPositiveClick(input, tag);
+                }
+                catch (NumberFormatException e) {
+                    LayoutUtils.toast(R.string.toast_err_no_input, a);
+                }
+            })
+            .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         return builder.show();
     }
@@ -93,7 +94,9 @@ public class DecimalDialog extends BaseDialog {
     // interface
 
     public interface DialogListener {
+
         void onDecimalDialogPositiveClick(float input, String tag);
+
     }
 
 }

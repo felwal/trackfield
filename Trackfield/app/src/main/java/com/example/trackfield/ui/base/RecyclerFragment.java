@@ -218,9 +218,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected void onSorterClick(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
 
         getPrefs();
-        //final BottomSheetDialog sheet = new BottomSheetDialog(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst, this);
         final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
-        //sheet.setDismissListener(this);
 
         sheet.show(getChildFragmentManager());
         getChildFragmentManager().executePendingTransactions();

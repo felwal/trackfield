@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import com.example.trackfield.R;
 
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.PairList;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -67,6 +69,16 @@ public class Prefs {
     private static String accessToken = "";
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
     private static String recordingMethod = "GPS";
+    private static PairList<String, Boolean> pullSettings = new PairList<>(
+        new Pair<>("Route", true),
+        new Pair<>("Type", true),
+        new Pair<>("Date and time", true),
+        new Pair<>("Data source", true),
+        new Pair<>("Distance", true),
+        new Pair<>("Time", true),
+        new Pair<>("Note", true),
+        new Pair<>("Trail", true)
+    );
 
     // consts
     public static final int COLOR_MONO = 0;
@@ -101,6 +113,7 @@ public class Prefs {
     private static final String STRAVA_ACCESS = "stravaAccessToken";
     private static final String STRAVA_ACCESS_EXP = "stravaAccessExpiration";
     private static final String STRAVA_METHOD = "stravaRecordingMethod";
+    private static final String STRAVA_PULL_SETTINGS = "stravaPullSettings";
 
     //
 
@@ -158,6 +171,7 @@ public class Prefs {
         savePref(accessToken, STRAVA_ACCESS);
         savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
         savePref(recordingMethod, STRAVA_METHOD);
+        savePref(pullSettings, STRAVA_PULL_SETTINGS);
     }
 
     private static void load(Context c) {
@@ -213,6 +227,7 @@ public class Prefs {
         accessToken = loadPref(str, STRAVA_ACCESS);
         accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
         recordingMethod = loadPref(str, STRAVA_METHOD);
+        pullSettings = loadPref(new TypeToken<PairList<String, Boolean>>(){}, STRAVA_PULL_SETTINGS);
     }
 
     // tools
@@ -258,6 +273,7 @@ public class Prefs {
             case STRAVA_ACCESS: return accessToken;
             case STRAVA_ACCESS_EXP: return accessTokenExpiration;
             case STRAVA_METHOD: return recordingMethod;
+            case STRAVA_PULL_SETTINGS: return pullSettings;
             default: return new Object();
         }
     }
@@ -384,6 +400,11 @@ public class Prefs {
         savePref(recordingMethod, STRAVA_METHOD);
     }
 
+    public static void setPullSettings(PairList<String, Boolean> pullSettings) {
+        Prefs.pullSettings = pullSettings;
+        savePref(pullSettings, STRAVA_PULL_SETTINGS);
+    }
+
     public static void setColorGreen() {
         setColor(COLOR_GREEN);
     }
@@ -491,6 +512,10 @@ public class Prefs {
 
     public static String getRecordingMethod() {
         return recordingMethod;
+    }
+
+    public static PairList<String, Boolean> getPullSettings() {
+        return pullSettings;
     }
 
     // get driven
