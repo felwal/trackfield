@@ -6,26 +6,25 @@ import com.example.trackfield.R;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.base.RecyclerFragment;
+import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.ui.common.model.Header;
 import com.example.trackfield.ui.common.model.HeaderValue;
 import com.example.trackfield.ui.common.model.RecyclerItem;
-import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.custom.graph.Borders;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
-import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
+    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE,
+        AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
     private final boolean[] smallestFirsts = { false, false, false, true };
 
     private String search = "";
@@ -75,23 +74,23 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         int newYear, newMonth, newWeek;
         int yearOfLast = -1;
         boolean notCurrentYear = false;
+        LocalDate lastDate = LocalDate.MIN;
 
         for (Exerlite e : exerliteList) {
-            // year
+            // add new year header
             if ((newYear = e.getDate().getYear()) != year) {
                 monthHeader.setLastIndex(itemList.size());
                 yearHeader.setLastIndex(itemList.size());
                 yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size(),
-                        new HeaderValue("km", 0),
-                        new HeaderValue("h", 1),
-                        new HeaderValue("", 0));
+                    new HeaderValue("km", 0),
+                    new HeaderValue("h", 1),
+                    new HeaderValue("", 0));
                 itemList.add(yearHeader);
-                //itemList.add(new Chart(D.yearWeeklyDistance(newYear), Chart.TYPE_YEAR));
                 yearOfLast = year;
                 year = newYear;
                 notCurrentYear = year != LocalDate.now().getYear();
             }
-            // month
+            // add new month header
             if ((newMonth = e.getMonthValue()) != month || e.getDate().getYear() != yearOfLast) {
                 String title = e.getMonth();
                 if (notCurrentYear) {
@@ -99,24 +98,25 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 }
                 monthHeader.setLastIndex(itemList.size());
                 monthHeader = new Header(title, Header.Type.MONTH, itemList.size(),
-                        new HeaderValue("km", 0),
-                        new HeaderValue("h", 1),
-                        new HeaderValue("", 0));
+                    new HeaderValue("km", 0),
+                    new HeaderValue("h", 1),
+                    new HeaderValue("", 0));
                 itemList.add(monthHeader);
                 month = newMonth;
             }
-            // week
-            if ((((newWeek = e.getWeek()) != week) || e.getDate().getYear() != yearOfLast) &&
-                Prefs.isWeekHeadersShown()) {
+            // add new week header
+            if (Prefs.isWeekHeadersShown() &&
+                (((newWeek = e.getWeek()) != week) || Math.abs(e.getDate().toEpochDay() - lastDate.toEpochDay()) > 7)) {
                 weekHeader.setLastIndex(itemList.size());
                 weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size(),
-                        new HeaderValue("km", 0),
-                        new HeaderValue("h", 1),
-                        new HeaderValue("", 0));
+                    new HeaderValue("km", 0),
+                    new HeaderValue("h", 1),
+                    new HeaderValue("", 0));
                 itemList.add(weekHeader);
                 week = newWeek;
             }
             yearOfLast = year;
+            lastDate = e.getDate();
 
             // add values
             yearHeader.addValues(e.getDistance() / 1000f, e.getTime() / 3600f, 1);
