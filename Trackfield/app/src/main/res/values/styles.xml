@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- views -->
+    <!-- toolbar -->
 
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
@@ -11,6 +11,12 @@
         <item name="theme">@style/ToolbarTheme</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
+
+    <style name="ToolbarTheme">
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+    </style>
+
+    <!-- -->
 
     <style name="Navbar">
         <item name="android:layout_width">match_parent</item>
@@ -68,18 +74,6 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="DatePickerDialogThemeDark" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorGreen</item>
-    </style>
-
-    <style name="DatePickerDialogThemeLight" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorGreen</item>
-    </style>
-
-    <style name="ToolbarTheme">
-        <item name="colorControlNormal">?attr/colorOnPrimary</item>
-    </style>
-
     <style name="DialogCustom" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@drawable/shape_dialog_bg</item>
     </style>
@@ -91,6 +85,53 @@
         <item name="android:enabled">true</item>
         <item name="android:checkable">true</item>
         <item name="checkedIconEnabled">false</item>
+    </style>
+
+    <!-- date picker -->
+
+    <style name="DatePickerDialogThemeDark" parent="android:Theme.Material.Dialog">
+        <item name="android:datePickerStyle">@style/DatePickerStyleDark</item>
+        <item name="android:colorAccent">@color/colorGreenLight</item>
+        <item name="android:colorBackground">@color/colorGrey3</item>
+        <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
+    </style>
+
+    <style name="DatePickerDialogThemeLight" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:datePickerStyle">@style/DatePickerStyleLight</item>
+        <item name="android:colorAccent">@color/colorGreen</item>
+        <item name="android:textColorSecondary">@color/colorGrey6</item>
+    </style>
+
+    <style name="DatePickerStyleDark" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/colorGreen</item>
+    </style>
+
+    <style name="DatePickerStyleLight" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/colorGreen</item>
+    </style>
+
+    <!-- time picker -->
+
+    <style name="TimePickerDialogThemeDark" parent="android:Theme.Material.Dialog">
+        <item name="android:timePickerStyle">@style/TimePickerStyleDark</item>
+        <item name="android:colorAccent">@color/colorGreenLight</item>
+        <item name="android:colorBackground">@color/colorGrey3</item>
+        <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
+    </style>
+
+    <style name="TimePickerDialogThemeLight" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:timePickerStyle">@style/TimePickerStyleLight</item>
+        <item name="android:colorAccent">@color/colorGreen</item>
+        <item name="android:textColorSecondary">@color/colorGrey6</item>
+    </style>
+
+    <style name="TimePickerStyleDark" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:headerBackground">@color/colorGreen</item>
+        <item name="android:numbersBackgroundColor">@color/colorGrey4</item>
+    </style>
+
+    <style name="TimePickerStyleLight" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">@color/colorGreen</item>
     </style>
 
     <!-- text -->

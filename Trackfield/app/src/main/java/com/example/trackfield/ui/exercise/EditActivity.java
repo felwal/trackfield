@@ -1,6 +1,7 @@
 package com.example.trackfield.ui.exercise;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -260,7 +261,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!hasFocus) return;
             LocalDate dateSelect = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
 
-            DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, (view, year, month, dayOfMonth) ->
+            DatePickerDialog dialog = new DatePickerDialog(EditActivity.this, (picker, year, month, dayOfMonth) ->
                 dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(AppConsts.FORMATTER_EDIT_DATE)),
                 dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
 
@@ -268,6 +269,20 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             dialog.show();
             dateEt.clearFocus();
         });
+
+        // time listener
+        timeEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) return;
+            LocalTime timeSelect = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
+
+            TimePickerDialog dialog = new TimePickerDialog(EditActivity.this, (picker, hour, minute) ->
+                timeEt.setText(LocalTime.of(hour, minute, 0).format(AppConsts.FORMATTER_EDIT_TIME)),
+                timeSelect.getHour(), timeSelect.getMinute(), true);
+
+            dialog.show();
+            timeEt.clearFocus();
+        });
+
     }
 
     // get

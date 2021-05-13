@@ -82,7 +82,7 @@
                     android:id="@+id/editText_time"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:editable="true"
+                    android:editable="false"
                     android:ems="10"
                     android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_time"

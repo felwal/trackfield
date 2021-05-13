@@ -7,6 +7,8 @@
         <!--<item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
     </style>
 
+    <!-- themes -->
+
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <!-- text -->
         <item name="android:textColorPrimary">@color/colorWhite</item>
@@ -46,7 +48,10 @@
         <item name="textAllCaps">false</item>
         <item name="android:windowLightStatusBar">false</item>
         <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
-        <!--<item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeDark</item>-->
+
+        <!-- styles -->
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeDark</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerDialogThemeDark</item>
     </style>
 
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
@@ -64,7 +69,6 @@
         <item name="android:colorBackgroundFloating">@color/colorWhite</item>
         <item name="android:colorButtonNormal">@color/colorWhite</item>
         <item name="android:colorActivatedHighlight">@color/colorGreen</item>
-        <item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeLight</item>
 
         <item name="colorSurface">@color/colorWhite</item>
         <item name="colorOnSurface">@color/colorGrey6</item>
@@ -78,6 +82,10 @@
         <item name="panelBackground">@color/colorGrey9</item>
 
         <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
+
+        <!-- styles -->
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialogThemeLight</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerDialogThemeLight</item>
     </style>
 
     <!-- theme/color combinations -->
@@ -93,7 +101,7 @@
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="colorAccent">@color/colorGreen</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
@@ -108,7 +116,7 @@
         <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorOnPrimary">@color/colorBlack</item>
         <item name="colorPrimaryDark">@color/colorWhite</item>
-        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="colorAccent">@color/colorGreen</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
