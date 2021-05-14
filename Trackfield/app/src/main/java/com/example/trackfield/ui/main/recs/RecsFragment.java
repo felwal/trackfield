@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 public class RecsFragment extends MainFragment {
 
     private View view;
-    private RecsPagerAdapter recsPagerAdapter;
+    private RecsPagerAdapter pagerAdapter;
 
     // extends Fragment
 
@@ -63,13 +63,13 @@ public class RecsFragment extends MainFragment {
     // set
 
     private void setPagerAdapter() {
-        // set pagerAdapter to viewPager
-        final ViewPager viewPager = view.findViewById(R.id.view_pager);
-        recsPagerAdapter = new RecsPagerAdapter(viewPager, getActivity().getApplicationContext(), getChildFragmentManager());
-        viewPager.setAdapter(recsPagerAdapter);
-
-        // set viewPager to tabs
+        ViewPager viewPager = view.findViewById(R.id.view_pager);
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+
+        pagerAdapter = new RecsPagerAdapter(viewPager, tabLayout, getActivity(), getChildFragmentManager());
+        // set up pager with adapter
+        viewPager.setAdapter(pagerAdapter);
+        // set up tabs with pager
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -82,19 +82,19 @@ public class RecsFragment extends MainFragment {
 
     @Override
     public void scrollToTop() {
-        recsPagerAdapter.scrollToTop();
+        pagerAdapter.scrollToTop();
     }
 
     @Override
     public void updateFragment() {
-        recsPagerAdapter.updateAdapter();
+        pagerAdapter.updateAdapter();
     }
 
     // implements dialog
 
     @Override
     protected void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
-        recsPagerAdapter.onSortSheetDismiss(sortMode, smallestFirst);
+        pagerAdapter.onSortSheetDismiss(sortMode, smallestFirst);
     }
 
 }

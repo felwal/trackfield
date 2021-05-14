@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.DbReader;
-import com.example.trackfield.ui.custom.sheet.SortSheet;
-import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.ui.common.model.Header;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Sorter;
+import com.example.trackfield.ui.custom.sheet.SortSheet;
+import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 
@@ -62,9 +62,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         reader = DbReader.get(a);
 
         recycler = view.findViewById(R.id.recyclerView);
-        recycler.setHasFixedSize(true);
         manager = new LinearLayoutManager(a);
         recycler.setLayoutManager(manager);
+        recycler.setHasFixedSize(true);
 
         // empty page
         emptyCl = view.findViewById(R.id.constraintLayout_empty);
@@ -121,8 +121,8 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     }
 
     protected ArrayList<RecyclerItem> getVisibleItems() {
-
         ArrayList<RecyclerItem> visibleItems = new ArrayList<>();
+
         for (RecyclerItem item : allItems) {
             if (item.isVisible()) visibleItems.add(item);
         }
@@ -139,7 +139,8 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
         class RecyclerItemCallback extends DiffUtil.Callback {
 
-            private ArrayList<RecyclerItem> oldList, newList;
+            private final ArrayList<RecyclerItem> oldList;
+            private final ArrayList<RecyclerItem> newList;
 
             private RecyclerItemCallback(ArrayList<RecyclerItem> oldList, ArrayList<RecyclerItem> newList) {
                 this.oldList = oldList;
@@ -215,10 +216,12 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         }
     }
 
-    protected void onSorterClick(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    protected void onSorterClick(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle,
+        boolean[] smallestFirsts, boolean smallestFirst) {
 
         getPrefs();
-        final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts,
+            smallestFirst);
 
         sheet.show(getChildFragmentManager());
         getChildFragmentManager().executePendingTransactions();

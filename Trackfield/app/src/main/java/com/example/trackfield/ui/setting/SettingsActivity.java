@@ -46,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private static final String DIALOG_MASS = "massDialog";
     private static final String DIALOG_EXPORT = "exportDialog";
     private static final String DIALOG_IMPORT = "importDialog";
+    private static final String DIALOG_RECREATE_DB = "recreateDbDialog";
 
     //
 
@@ -180,7 +181,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 Prefs.setFirstLogin(true);
                 OnboardingActivity.startActivity(this);
             });
-            inflateClickItem("Recreate database", "", true, v -> DbWriter.get(this).recreate());
+            inflateDialogItem("Recreate database", "", true, BinaryDialog.generic(DIALOG_RECREATE_DB));
             //inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
             //inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
         }
@@ -302,6 +303,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                     LayoutUtils.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
                 });
             }).start();
+        }
+        else if (tag.equals(DIALOG_RECREATE_DB)) {
+            DbWriter.get(this).recreate();
         }
     }
 

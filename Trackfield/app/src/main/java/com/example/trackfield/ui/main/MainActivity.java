@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void initApp() {
         if (!gameOn) {
             if (FileUtils.shouldAskPermissions(this)) FileUtils.askPermissions(this);
-            Prefs.SetUpAndLoad(this);
+            Prefs.setUpAndLoad(this);
             gameOn = true;
         }
     }

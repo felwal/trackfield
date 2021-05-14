@@ -16,27 +16,44 @@ import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
 import com.example.trackfield.utils.AppConsts;
+import com.google.android.material.tabs.TabLayout;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {
 
-    private final Context c;
+    @StringRes private static final int[] TAB_TITLES = new int[] {
+        R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
 
-    private final ViewPager viewPager;
-    private RecyclerFragment distanceFragment;
-    private RecyclerFragment routeFragment;
-    private RecyclerFragment intervalFragment;
-
-    @StringRes private static final int[] TAB_TITLES = new int[]{ R.string.tab_distances, R.string.tab_routes, R.string.tab_intervals };
     private static final int POS_DISTANCES = 0;
     private static final int POS_ROUTES = 1;
     private static final int POS_INTERVALS = 2;
 
+    private final Context c;
+    private final ViewPager viewPager;
+
+    private RecyclerFragment distancesFragment;
+    private RecyclerFragment routesFragment;
+    private RecyclerFragment intervalsFragment;
+
     //
 
-    public RecsPagerAdapter(ViewPager viewPager, Context context, FragmentManager fm) {
+    public RecsPagerAdapter(ViewPager viewPager, TabLayout tabLayout, Context context, FragmentManager fm) {
         super(fm);
         c = context;
         this.viewPager = viewPager;
+
+        // add tab listener
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if (tab.isSelected()) scrollToTop();
+            }
+        });
     }
 
     // extends FragmentPagerAdapter
@@ -45,13 +62,10 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case POS_ROUTES:
-                return (routeFragment = new RoutesRecyclerFragment());
-            case POS_INTERVALS:
-                return (intervalFragment = new IntervalsRecyclerFragment());
+            case POS_INTERVALS: return (intervalsFragment = new IntervalsRecyclerFragment());
+            case POS_ROUTES: return (routesFragment = new RoutesRecyclerFragment());
             case POS_DISTANCES:
-            default:
-                return (distanceFragment = new DistancesRecyclerFragment());
+            default: return (distancesFragment = new DistancesRecyclerFragment());
         }
     }
 
@@ -79,9 +93,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void updateAdapter() {
-        if (distanceFragment != null) distanceFragment.updateRecycler();
-        if (routeFragment != null) routeFragment.updateRecycler();
-        if (intervalFragment != null) intervalFragment.updateRecycler();
+        if (distancesFragment != null) distancesFragment.updateRecycler();
+        if (routesFragment != null) routesFragment.updateRecycler();
+        if (intervalsFragment != null) intervalsFragment.updateRecycler();
     }
 
     public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {

@@ -125,7 +125,7 @@ public class Prefs {
      *
      * @param c Context
      */
-    public static void SetUpAndLoad(Context c) {
+    public static void setUpAndLoad(Context c) {
         sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         editor = sp.edit();
         appVersion = c.getString(R.string.app_version);
