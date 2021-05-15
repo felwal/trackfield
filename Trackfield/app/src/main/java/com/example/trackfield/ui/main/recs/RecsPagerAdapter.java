@@ -15,7 +15,7 @@ import com.example.trackfield.ui.base.RecyclerFragment;
 import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
-import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {
@@ -98,8 +98,8 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
         if (intervalsFragment != null) intervalsFragment.updateRecycler();
     }
 
-    public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
-        getCurrentFragment().onSortSheetDismiss(sortMode, smallestFirst);
+    public void onSortSheetDismiss(int selectedIndex) {
+        getCurrentFragment().onSortSheetDismiss(selectedIndex);
     }
 
 }

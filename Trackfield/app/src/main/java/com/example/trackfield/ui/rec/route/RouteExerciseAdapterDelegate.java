@@ -17,6 +17,7 @@ import com.example.trackfield.ui.base.DelegateClickListener;
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -56,7 +57,7 @@ public class RouteExerciseAdapterDelegate extends
             + AppConsts.TAB + item.printPace();
 
         String date = item.getDate().format(
-            adapter.getSortMode() == AppConsts.SortMode.DATE || item.isYear(LocalDate.now().getYear()) ?
+            adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
                 AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
         vh.primary.setText(date);

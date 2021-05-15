@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.base.RecyclerFragment;
 import com.example.trackfield.ui.common.model.RecyclerItem;
@@ -19,14 +18,16 @@ import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.recs.distances.model.DistanceItem;
 import com.example.trackfield.ui.rec.distance.DistanceActivity;
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class DistancesRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = { "Distance" };
-    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DISTANCE };
-    private final boolean[] smallestFirsts = { true };
+    private final Sorter sorter = new Sorter(
+        new SortMode("Distance", SortMode.Mode.DISTANCE, true)
+        //new SortMode("Amount", SortMode.Mode.DISTANCE, false)
+    );
 
     // extends Fragment
 
@@ -51,12 +52,11 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
-        ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(Distance.SortMode.DISTANCE/*sortMode*/,
-            smallestFirst, Prefs.getExerciseVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
+        ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sorter.getMode(), sorter.isAscending(),
+            Prefs.getExerciseVisibleTypes());
 
-        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
-        itemList.add(sorter);
+        itemList.add(sorter.copy());
         itemList.addAll(distanceItemList);
         if (distanceItemList.size() == 0) {
             itemList.remove(sorter);
@@ -68,26 +68,15 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCES);
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.DISTANCES),
+            Prefs.getSorterInversion(AppConsts.Layout.DISTANCES));
     }
 
     @Override
-    protected void getAdapter() {
+    protected void setAdapter() {
         adapter = new DistancesAdapter(a, this, items);
-    }
-
-    @Override
-    protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.DISTANCES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.DISTANCES);
-    }
-
-    @Override
-    protected void setPrefs() {
-        Prefs.setSortModePref(AppConsts.Layout.DISTANCES, sortMode);
-        Prefs.setSmallestFirstPref(AppConsts.Layout.DISTANCES, smallestFirst);
     }
 
     @Override
@@ -95,6 +84,13 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
         emptyTitle.setText(getString(R.string.empty_title_distances));
         emptyMessage.setText(getString(R.string.empty_message_distances));
         emptyImage.setImageResource(R.drawable.ic_empty_distances_24dp);
+    }
+
+    @Override
+    public void onSortSheetDismiss(int selectedIndex) {
+        sorter.select(selectedIndex);
+        Prefs.setSorter(AppConsts.Layout.DISTANCES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        updateRecycler();
     }
 
     // implements DelegateClickListener
@@ -107,7 +103,7 @@ public class DistancesRecyclerFragment extends RecyclerFragment {
             DistanceActivity.startActivity(a, ((DistanceItem) items.get(position)).getDistance());
         }
 
-        super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        super.onDelegateClick(item);
     }
 
 }

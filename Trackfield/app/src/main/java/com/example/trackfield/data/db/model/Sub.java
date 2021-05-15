@@ -10,7 +10,7 @@ public class Sub {
     private int distance;
     private float time;
 
-    ////
+    //
 
     public Sub(int _id, int _superId, int distance, float time) {
         this._id = _id;

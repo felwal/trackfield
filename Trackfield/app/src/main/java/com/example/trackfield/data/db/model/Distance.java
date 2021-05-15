@@ -13,8 +13,6 @@ public class Distance implements JSONObjectable {
     private int distance;
     private float goalPace = NO_GOAL_PACE;
 
-    public enum SortMode { DISTANCE, AMOUNT, BEST_TIME, BEST_PACE }
-
     public static final int NO_DISTANCE = -1;
     public static final int NO_GOAL_PACE = -1;
 
@@ -23,7 +21,7 @@ public class Distance implements JSONObjectable {
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_GOAL_PACE = "goal_pace";
 
-    ////
+    //
 
     public Distance(int _id, int distance, float goalPace) {
         this._id = _id;

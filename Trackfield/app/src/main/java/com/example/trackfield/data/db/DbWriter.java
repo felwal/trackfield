@@ -11,7 +11,7 @@ import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.ui.map.model.Trail;
-import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
@@ -202,7 +202,7 @@ public class DbWriter extends DbHelper {
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
         int remainingOfRoute = DbReader.get(c)
-            .getExerlitesByRoute(routeId, AppConsts.SortMode.DATE, false, new ArrayList<>())
+            .getExerlitesByRoute(routeId, SortMode.Mode.DATE, false, new ArrayList<>())
             .size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
         return false;

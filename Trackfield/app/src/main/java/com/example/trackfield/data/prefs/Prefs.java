@@ -58,10 +58,8 @@ public class Prefs {
     @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
 
     // sorting
-    private static AppConsts.SortMode[] sortModePrefs = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE, AppConsts.SortMode.DATE,
-        AppConsts.SortMode.DATE, AppConsts.SortMode.DATE, AppConsts.SortMode.DATE, AppConsts.SortMode.DATE };
-    private static boolean[] smallestFirstPrefs = { false, true, false,
-        false, false, false, false };
+    private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0 };
+    private static boolean[] sorterSelectedInversions = { false, false, false, false, false, false, false, };
 
     // Strava API
     private static String authCode = "";
@@ -91,7 +89,6 @@ public class Prefs {
     private static final String FIRST_LOGIN = "firstLogin";
     private static final String WEEK_HEADERS = "weekHeaders";
     private static final String WEEK_DISTANCE = "weekDistance";
-    private static final String WEEK_CHART = "weekChart";
     private static final String DAILY_CHART = "dailyChart";
     private static final String COLOR = "color";
     private static final String THEME = "theme";
@@ -100,14 +97,14 @@ public class Prefs {
     private static final String SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
     private static final String HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
     private static final String INCLCUDE_LONGER = "includeLonger";
-    private static final String INCLCUDE_PACELESS = "includePaceless";
+    private static final String INCLCUDE_PACELESS = "includePaceless"; // TODO
     private static final String LIMIT_LOWER = "lowerLimit";
     private static final String LIMIT_UPPER = "upperLimit";
     private static final String TYPES_EXERCISE = "typesExercise";
     private static final String TYPES_ROUTE = "typesRoute";
     private static final String TYPES_DISTANCE = "typesDistance";
-    private static final String SORT_MODE = "sortModes";
-    private static final String SORT_SMALLEST_FIRST = "smallestFirsts";
+    private static final String SORT_SELECTED_INDICES = "sorterSelectedIndices";
+    private static final String SORT_SELECTED_INVERSIONS = "sorterSelectedInversions";
     private static final String STRAVA_AUTH = "stravaAuthCode";
     private static final String STRAVA_REFRESH = "stravaRefreshToken";
     private static final String STRAVA_ACCESS = "stravaAccessToken";
@@ -136,7 +133,7 @@ public class Prefs {
         // app
         savePref(appVersion, APP_VERSION);
         savePref(developer, DEVELOPER);
-        savePref(firstLogin, FIRST_LOGIN); //
+        savePref(firstLogin, FIRST_LOGIN);
 
         // display
         savePref(showWeekHeaders, WEEK_HEADERS);
@@ -162,8 +159,8 @@ public class Prefs {
         savePref(distanceVisibleTypes, TYPES_DISTANCE);
 
         // sorting
-        savePref(sortModePrefs, SORT_MODE);
-        savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
+        savePref(sorterSelectedIndices, SORT_SELECTED_INDICES);
+        savePref(sorterSelectedInversions, SORT_SELECTED_INVERSIONS);
 
         // strava
         savePref(authCode, STRAVA_AUTH);
@@ -179,7 +176,7 @@ public class Prefs {
         TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
         TypeToken<String> str = new TypeToken<String>(){};
         TypeToken<Integer> in = new TypeToken<Integer>(){};
-        TypeToken<ArrayList<Integer>> intArr = new TypeToken<ArrayList<Integer>>(){};
+        TypeToken<ArrayList<Integer>> intList = new TypeToken<ArrayList<Integer>>(){};
 
         // version
         appVersion = loadPref(str, APP_VERSION);
@@ -213,13 +210,13 @@ public class Prefs {
         includeLonger = loadPref(bool, INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, LIMIT_LOWER);
         distanceUpperLimit = loadPref(in, LIMIT_UPPER);
-        exerciseVisibleTypes = loadPref(intArr, TYPES_EXERCISE);
-        routeVisibleTypes = loadPref(intArr, TYPES_ROUTE);
-        distanceVisibleTypes = loadPref(intArr, TYPES_DISTANCE);
+        exerciseVisibleTypes = loadPref(intList, TYPES_EXERCISE);
+        routeVisibleTypes = loadPref(intList, TYPES_ROUTE);
+        distanceVisibleTypes = loadPref(intList, TYPES_DISTANCE);
 
         // sorting
-        sortModePrefs = loadPref(new TypeToken<AppConsts.SortMode[]>(){}, SORT_MODE);
-        smallestFirstPrefs = loadPref(new TypeToken<boolean[]>(){}, SORT_SMALLEST_FIRST);
+        sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, SORT_SELECTED_INDICES);
+        sorterSelectedInversions = loadPref(new TypeToken<boolean[]>(){}, SORT_SELECTED_INVERSIONS);
 
         // strava
         authCode = loadPref(str, STRAVA_AUTH);
@@ -266,8 +263,8 @@ public class Prefs {
             case TYPES_EXERCISE: return exerciseVisibleTypes;
             case TYPES_ROUTE: return routeVisibleTypes;
             case TYPES_DISTANCE: return distanceVisibleTypes;
-            case SORT_MODE: return sortModePrefs;
-            case SORT_SMALLEST_FIRST: return smallestFirstPrefs;
+            case SORT_SELECTED_INDICES: return sorterSelectedIndices;
+            case SORT_SELECTED_INVERSIONS: return sorterSelectedInversions;
             case STRAVA_AUTH: return authCode;
             case STRAVA_REFRESH: return refreshToken;
             case STRAVA_ACCESS: return accessToken;
@@ -365,14 +362,11 @@ public class Prefs {
         savePref(types, TYPES_DISTANCE);
     }
 
-    public static void setSortModePref(AppConsts.Layout layout, AppConsts.SortMode sortMode) {
-        sortModePrefs[layout.ordinal()] = sortMode;
-        savePref(sortModePrefs, SORT_MODE);
-    }
-
-    public static void setSmallestFirstPref(AppConsts.Layout layout, boolean smallestFirst) {
-        smallestFirstPrefs[layout.ordinal()] = smallestFirst;
-        savePref(smallestFirstPrefs, SORT_SMALLEST_FIRST);
+    public static void setSorter(AppConsts.Layout layout, int selectedIndex, boolean orderInverted) {
+        sorterSelectedIndices[layout.ordinal()] = selectedIndex;
+        sorterSelectedInversions[layout.ordinal()] = orderInverted;
+        savePref(sorterSelectedIndices, SORT_SELECTED_INDICES);
+        savePref(sorterSelectedInversions, SORT_SELECTED_INVERSIONS);
     }
 
     public static void setAuthCode(String authCode) {
@@ -486,12 +480,12 @@ public class Prefs {
         return distanceVisibleTypes;
     }
 
-    public static AppConsts.SortMode getSortModePref(AppConsts.Layout layout) {
-        return sortModePrefs[layout.ordinal()];
+    public static int getSorterIndex(AppConsts.Layout layout) {
+        return sorterSelectedIndices[layout.ordinal()];
     }
 
-    public static boolean getSmallestFirstPref(AppConsts.Layout layout) {
-        return smallestFirstPrefs[layout.ordinal()];
+    public static boolean getSorterInversion(AppConsts.Layout layout) {
+        return sorterSelectedInversions[layout.ordinal()];
     }
 
     public static String getAuthCode() {

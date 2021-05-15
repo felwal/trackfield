@@ -19,15 +19,19 @@ import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.recs.routes.model.RouteItem;
 import com.example.trackfield.ui.rec.route.RouteActivity;
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class RoutesRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = { "Recent", "Name", "Amount", "Avg distance", "Best pace" };
-    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.NAME, AppConsts.SortMode.AMOUNT, AppConsts.SortMode.DISTANCE,
-        AppConsts.SortMode.PACE };
-    private final boolean[] smallestFirsts = { false, true, false, false, true };
+    private final Sorter sorter = new Sorter(
+        new SortMode("Recent", SortMode.Mode.DATE, false),
+        new SortMode("Name", SortMode.Mode.NAME, true),
+        new SortMode("Amount", SortMode.Mode.AMOUNT, false),
+        new SortMode("Avg distance", SortMode.Mode.DISTANCE, false),
+        new SortMode("Best pace", SortMode.Mode.PACE, true)
+    );
 
     // extends Fragment
 
@@ -62,12 +66,11 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
-        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sortMode, smallestFirst, Prefs.areHiddenRoutesShown(),
-            Prefs.getExerciseVisibleTypes());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
+        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.isAscending(),
+            Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes());
 
-        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
-        itemList.add(sorter);
+        itemList.add(sorter.copy());
         itemList.addAll(routeItemList);
         if (routeItemList.size() == 0) {
             itemList.remove(sorter);
@@ -79,26 +82,15 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.ROUTES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.ROUTES);
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.ROUTES),
+            Prefs.getSorterInversion(AppConsts.Layout.ROUTES));
     }
 
     @Override
-    protected void getAdapter() {
+    protected void setAdapter() {
         adapter = new RoutesAdapter(a, this, items);
-    }
-
-    @Override
-    protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.ROUTES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.ROUTES);
-    }
-
-    @Override
-    protected void setPrefs() {
-        Prefs.setSortModePref(AppConsts.Layout.ROUTES, sortMode);
-        Prefs.setSmallestFirstPref(AppConsts.Layout.ROUTES, smallestFirst);
     }
 
     @Override
@@ -106,6 +98,13 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
         emptyTitle.setText(getString(R.string.empty_title_routes));
         emptyMessage.setText(getString(R.string.empty_message_routes));
         emptyImage.setImageResource(R.drawable.ic_empty_routes_24dp);
+    }
+
+    @Override
+    public void onSortSheetDismiss(int selectedIndex) {
+        sorter.select(selectedIndex);
+        Prefs.setSorter(AppConsts.Layout.ROUTES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        updateRecycler();
     }
 
     // implements DelegateClickListener
@@ -118,7 +117,7 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
             RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
         }
 
-        super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        super.onDelegateClick(item);
     }
 
 }

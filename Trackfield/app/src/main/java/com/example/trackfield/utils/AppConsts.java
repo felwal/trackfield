@@ -36,67 +36,6 @@ public final class AppConsts {
         }
     }
 
-    public enum SortMode {
-        DATE,
-        DISTANCE,
-        TIME,
-        PACE,
-        NAME,
-        AMOUNT;
-
-        public static SortMode fromInt(int i) {
-            switch (i) {
-                case 0:
-                    return DATE;
-                case 1:
-                    return DISTANCE;
-                case 2:
-                    return TIME;
-                case 3:
-                    return PACE;
-                case 4:
-                    return NAME;
-                case 5:
-                    return AMOUNT;
-            }
-            return DATE;
-        }
-
-        public static int toInt(SortMode sortMode) {
-            switch (sortMode) {
-                case DATE:
-                    return 0;
-                case DISTANCE:
-                    return 1;
-                case TIME:
-                    return 2;
-                case PACE:
-                    return 3;
-                case NAME:
-                    return 4;
-                case AMOUNT:
-                    return 5;
-            }
-            return 0;
-        }
-
-        public static int[] toInts(SortMode[] sortModes) {
-            int[] ints = new int[sortModes.length];
-            for (int i = 0; i < sortModes.length; i++) {
-                ints[i] = toInt(sortModes[i]);
-            }
-            return ints;
-        }
-
-        public static SortMode[] fromInts(int[] ints) {
-            SortMode[] sortModes = new SortMode[ints.length];
-            for (int i = 0; i < ints.length; i++) {
-                sortModes[i] = fromInt(ints[i]);
-            }
-            return sortModes;
-        }
-    }
-
     public enum UnitVelocity {
         METERS_PER_SECOND,
         KILOMETERS_PER_HOUR

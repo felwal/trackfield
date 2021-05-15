@@ -2,7 +2,7 @@ package com.example.trackfield.ui.main;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 public abstract class MainFragment extends Fragment {
 
@@ -12,6 +12,6 @@ public abstract class MainFragment extends Fragment {
 
     protected abstract void updateFragment();
 
-    protected abstract void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst);
+    protected abstract void onSortSheetDismiss(int selectedIndex);
 
 }

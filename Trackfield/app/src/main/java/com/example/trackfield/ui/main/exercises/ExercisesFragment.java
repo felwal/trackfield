@@ -17,7 +17,7 @@ import androidx.appcompat.widget.SearchView;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainFragment;
-import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 public class ExercisesFragment extends MainFragment {
 
@@ -86,8 +86,8 @@ public class ExercisesFragment extends MainFragment {
     }
 
     @Override
-    protected void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
-        recyclerFragment.onSortSheetDismiss(sortMode, smallestFirst);
+    protected void onSortSheetDismiss(int selectedIndex) {
+        recyclerFragment.onSortSheetDismiss(selectedIndex);
     }
 
 }

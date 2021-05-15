@@ -31,7 +31,7 @@ public class StatsRecyclerFragment extends RecyclerFragment {
     // extends DelegateClickListener
 
     @Override
-    protected void setSortModes() {
+    protected void setSorter() {
     }
 
     @Override
@@ -90,16 +90,12 @@ public class StatsRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void getAdapter() {
+    protected void setAdapter() {
         adapter = new StatsAdapter(a, this, items);
     }
 
     @Override
-    protected void getPrefs() {
-    }
-
-    @Override
-    protected void setPrefs() {
+    public void onSortSheetDismiss(int selectedIndex) {
     }
 
     // implements RecyclerAdapter

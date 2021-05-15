@@ -47,7 +47,7 @@ public class SorterAdapterDelegate extends
     @Override
     public void onBindViewHolder(Sorter item, SorterViewHolder vh, @Nullable List<Object> payloads) {
         vh.title.setText(item.getTitle());
-        adapter.setSortMode(item.getSortMode());
+        adapter.setSortMode(item.getMode());
     }
 
     // vh

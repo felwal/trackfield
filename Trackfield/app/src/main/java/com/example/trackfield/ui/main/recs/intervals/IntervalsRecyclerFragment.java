@@ -19,14 +19,16 @@ import com.example.trackfield.ui.main.recs.RecsFragment;
 import com.example.trackfield.ui.main.recs.intervals.model.IntervalItem;
 import com.example.trackfield.ui.rec.interval.IntervalActivity;
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class IntervalsRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = { "Recent", "Amount" };
-    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.AMOUNT };
-    private final boolean[] smallestFirsts = { false, false };
+    private final Sorter sorter = new Sorter(
+        new SortMode("Recent", SortMode.Mode.DATE, false),
+        new SortMode("Amount", SortMode.Mode.AMOUNT, false)
+    );
 
     // extends Fragment
 
@@ -60,12 +62,11 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
-        ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sortMode, smallestFirst,
-            Prefs.areHiddenRoutesShown());
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
+        ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.isAscending(),
+            Prefs.areHiddenRoutesShown());
 
-        Sorter sorter = getNewSorter(sortModes, sortModesTitle);
-        itemList.add(sorter);
+        itemList.add(sorter.copy());
         itemList.addAll(intervalItemList);
         if (intervalItemList.size() == 0) {
             itemList.remove(sorter);
@@ -77,26 +78,15 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVALS);
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.INTERVALS),
+            Prefs.getSorterInversion(AppConsts.Layout.INTERVALS));
     }
 
     @Override
-    protected void getAdapter() {
+    protected void setAdapter() {
         adapter = new IntervalsAdapter(a, this, items);
-    }
-
-    @Override
-    protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.INTERVALS);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.INTERVALS);
-    }
-
-    @Override
-    protected void setPrefs() {
-        Prefs.setSortModePref(AppConsts.Layout.INTERVALS, sortMode);
-        Prefs.setSmallestFirstPref(AppConsts.Layout.INTERVALS, smallestFirst);
     }
 
     @Override
@@ -104,6 +94,13 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
         emptyTitle.setText(getString(R.string.empty_title_intervals));
         emptyMessage.setText(getString(R.string.empty_message_intervals));
         emptyImage.setImageResource(R.drawable.ic_empty_interval_24dp);
+    }
+
+    @Override
+    public void onSortSheetDismiss(int selectedIndex) {
+        sorter.select(selectedIndex);
+        Prefs.setSorter(AppConsts.Layout.INTERVALS, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        updateRecycler();
     }
 
     // implements DelegateClickListener
@@ -116,7 +113,7 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
             IntervalActivity.startActivity(a, ((IntervalItem) items.get(position)).getInterval());
         }
 
-        super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        super.onDelegateClick(item);
     }
 
 }

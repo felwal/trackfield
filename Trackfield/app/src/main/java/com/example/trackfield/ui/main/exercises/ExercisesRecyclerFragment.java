@@ -10,22 +10,26 @@ import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.ui.common.model.Header;
 import com.example.trackfield.ui.common.model.HeaderValue;
 import com.example.trackfield.ui.common.model.RecyclerItem;
+import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.custom.graph.Borders;
 import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ExercisesRecyclerFragment extends RecyclerFragment {
 
-    private final String[] sortModesTitle = { "Date", "Distance", "Time", "Pace" };
-    private final AppConsts.SortMode[] sortModes = { AppConsts.SortMode.DATE, AppConsts.SortMode.DISTANCE,
-        AppConsts.SortMode.TIME, AppConsts.SortMode.PACE };
-    private final boolean[] smallestFirsts = { false, false, false, true };
+    private final Sorter sorter = new Sorter(
+        new SortMode("Date", SortMode.Mode.DATE, false),
+        new SortMode("Distance", SortMode.Mode.DISTANCE, false),
+        new SortMode("Time", SortMode.Mode.TIME, false),
+        new SortMode("Pace", SortMode.Mode.PACE, true)
+    );
 
     private String search = "";
 
@@ -33,9 +37,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
-        DbReader.get(a);
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sortMode, smallestFirst);
+        //DbReader.get(a); // TODO: varför är den här?
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.isAscending());
 
         // sorter & charts
         if (exerliteList.size() != 0) {
@@ -53,10 +57,10 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
                 itemList.add(weekGraph);
             }
             else {
-                itemList.add(getNewSorter(sortModes, sortModesTitle));
+                itemList.add(sorter.copy());
             }
 
-            if (sortMode != AppConsts.SortMode.DATE) {
+            if (sorter.getMode() != SortMode.Mode.DATE) {
                 itemList.addAll(exerliteList);
                 return itemList;
             }
@@ -134,26 +138,15 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void setSortModes() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.EXERCISES);
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.EXERCISES),
+            Prefs.getSorterInversion(AppConsts.Layout.EXERCISES));
     }
 
     @Override
-    protected void getAdapter() {
+    protected void setAdapter() {
         adapter = new ExercisesAdapter(a, this, items);
-    }
-
-    @Override
-    protected void getPrefs() {
-        sortMode = Prefs.getSortModePref(AppConsts.Layout.EXERCISES);
-        smallestFirst = Prefs.getSmallestFirstPref(AppConsts.Layout.EXERCISES);
-    }
-
-    @Override
-    protected void setPrefs() {
-        Prefs.setSortModePref(AppConsts.Layout.EXERCISES, sortMode);
-        Prefs.setSmallestFirstPref(AppConsts.Layout.EXERCISES, smallestFirst);
     }
 
     @Override
@@ -168,6 +161,13 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             emptyMessage.setText(R.string.empty_message_search);
             emptyImage.setImageResource(R.drawable.ic_empty_search_24dp);
         }
+    }
+
+    @Override
+    public void onSortSheetDismiss(int selectedIndex) {
+        sorter.select(selectedIndex);
+        Prefs.setSorter(AppConsts.Layout.EXERCISES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        updateRecycler();
     }
 
     //
@@ -220,7 +220,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
         }
 
-        super.onDelegateClick(item, sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+        super.onDelegateClick(item);
     }
 
     @Override

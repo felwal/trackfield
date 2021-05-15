@@ -24,10 +24,8 @@ public abstract class BaseDialog extends DialogFragment {
     protected String title;
     protected String message;
     protected String tag;
-    @StringRes
-    protected int posBtnTxtRes = R.string.dialog_btn_ok;
-    @StringRes
-    protected int negBtnTxtRes = R.string.dialog_btn_cancel;
+    @StringRes protected int posBtnTxtRes = R.string.dialog_btn_ok;
+    @StringRes protected int negBtnTxtRes = R.string.dialog_btn_cancel;
 
     public final static int NO_RES = -1;
     public final static int NO_FLOAT_TEXT = -1;
@@ -44,10 +42,11 @@ public abstract class BaseDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        unpackBundle();
         a = getActivity();
         builder = new AlertDialog.Builder(a);
         inflater = requireActivity().getLayoutInflater();
+
+        unpackBundle();
 
         return customizeDialog(buildDialog());
     }

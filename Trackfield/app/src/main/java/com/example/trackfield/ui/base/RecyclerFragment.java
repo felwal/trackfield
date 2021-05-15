@@ -23,8 +23,8 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Sorter;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.main.MainActivity;
-import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected Activity a;
     protected static Thread bgThread;
     protected DbReader reader;
-
     protected RecyclerView recycler;
     protected RecyclerView.LayoutManager manager;
     protected BaseAdapter adapter;
@@ -45,15 +44,8 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
     protected ArrayList<RecyclerItem> items = new ArrayList<>();
-    protected AppConsts.SortMode sortMode = AppConsts.SortMode.DATE;
-    protected boolean smallestFirst = false;
 
     // extends Fragment
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,15 +68,18 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
         //((SimpleItemAnimator) recycler.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        setSortModes();
+        setSorter();
+
+        // set adapter
         if (adapter == null) {
             ((Threader) () -> {
+                // add items
                 if (items.size() == 0) {
                     items.addAll(getRecyclerItems());
                     allItems.addAll(items);
                 }
                 a.runOnUiThread(() -> {
-                    getAdapter();
+                    setAdapter();
                     recycler.setAdapter(adapter);
                     LayoutUtils.crossfadeRecycler(recycler);
                 });
@@ -106,6 +101,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
             recycler.setAdapter(adapter);
         }
 
+        // set scroll listener
         if (a instanceof MainActivity) {
             ((MainActivity) a).setRecyclerScrollListener(recycler, this);
         }
@@ -127,10 +123,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
             if (item.isVisible()) visibleItems.add(item);
         }
         return visibleItems;
-    }
-
-    protected Sorter getNewSorter(AppConsts.SortMode[] sortModes, String[] sortModesTitle) {
-        return new Sorter(sortModes, sortModesTitle, sortMode, smallestFirst);
     }
 
     // calls
@@ -200,38 +192,28 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         recycler.smoothScrollToPosition(0);
     }
 
-    public void onSortSheetDismiss(AppConsts.SortMode sortMode, boolean smallestFirst) {
-        this.sortMode = sortMode;
-        this.smallestFirst = smallestFirst;
-        setPrefs();
-        updateRecycler();
-    }
-
     // item clicks
 
-    protected void onDelegateClick(RecyclerItem item, AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode,
-        String[] sortModesTitle, boolean[] smallestFirsts, boolean smallestFirst) {
+    /**
+     * Delegation of delegate click to handle common item {@link Sorter}
+     */
+    protected void onDelegateClick(RecyclerItem item) {
         if (item instanceof Sorter) {
-            onSorterClick(sortModes, sortMode, sortModesTitle, smallestFirsts, smallestFirst);
+            Sorter sorter = (Sorter) item;
+            //getPrefs(); // varför är den här?
+
+            SortSheet sheet = SortSheet.newInstance(sorter);
+            sheet.show(getChildFragmentManager());
+            getChildFragmentManager().executePendingTransactions();
         }
-    }
-
-    protected void onSorterClick(AppConsts.SortMode[] sortModes, AppConsts.SortMode sortMode, String[] sortModesTitle,
-        boolean[] smallestFirsts, boolean smallestFirst) {
-
-        getPrefs();
-        final SortSheet sheet = SortSheet.newInstance(sortModes, sortMode, sortModesTitle, smallestFirsts,
-            smallestFirst);
-
-        sheet.show(getChildFragmentManager());
-        getChildFragmentManager().executePendingTransactions();
     }
 
     // add items
 
-    protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList) {
+    protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList,
+        SortMode.Mode sortMode) {
 
-        if (sortMode == AppConsts.SortMode.DATE) {
+        if (sortMode == SortMode.Mode.DATE) {
             int year = -1;
             int newYear;
             for (Exerlite e : exerliteList) {
@@ -242,7 +224,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
                 itemList.add(e);
             }
         }
-        else //(/*sortMode == C.SortMode.PACE &&*/ /*smallestFirst*/ /*&& exerliteList.size() > 3*/)
+        else //(/*sortMode == C.SortMode.PACE &&*/ /*ascending*/ /*&& exerliteList.size() > 3*/)
         {
             for (int i = 0; i < exerliteList.size(); i++) {
                 if (i == 0) itemList.add(new Header("Top " + 3, Header.Type.REC));
@@ -269,15 +251,13 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // abstract
 
-    protected abstract void setSortModes();
-
     protected abstract ArrayList<RecyclerItem> getRecyclerItems();
 
-    protected abstract void getAdapter();
+    protected abstract void setSorter();
 
-    protected abstract void getPrefs();
+    protected abstract void setAdapter();
 
-    protected abstract void setPrefs();
+    public abstract void onSortSheetDismiss(int selectedIndex);
 
     // interface
 

@@ -53,7 +53,7 @@ public class PeekSheet extends BaseSheet {
 
         view = inflater.inflate(R.layout.sheet_peek, container, false);
 
-        setViews();
+        buildSheet();
 
         return view;
     }
@@ -93,8 +93,7 @@ public class PeekSheet extends BaseSheet {
 
     // set
 
-    private void setViews() {
-
+    private void buildSheet() {
         // find
         TextView routeTv = view.findViewById(R.id.textView_route);
         TextView routeVarTv = view.findViewById(R.id.textView_routeVar);
