@@ -19,8 +19,8 @@ import java.util.List;
 public class GraphAdapterDelegate extends
     BaseAdapterDelegate<Graph, RecyclerItem, GraphAdapterDelegate.GraphViewHolder> {
 
-    public GraphAdapterDelegate(Activity activity) {
-        super(activity, null);
+    public GraphAdapterDelegate(Activity a) {
+        super(a, null);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -38,19 +38,19 @@ public class GraphAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(@NonNull Graph item, GraphViewHolder vh, @Nullable List<Object> payloads) {
-        vh.surface.restoreDefaultFocus();
-        vh.surface.setGraph(item);
+        vh.graphView.restoreDefaultFocus();
+        vh.graphView.setGraph(item);
     }
 
     // vh
 
     static class GraphViewHolder extends RecyclerView.ViewHolder {
 
-        public GraphView surface;
+        public GraphView graphView;
 
         public GraphViewHolder(View itemView) {
             super(itemView);
-            surface = itemView.findViewById(R.id.graphSurface_base);
+            graphView = itemView.findViewById(R.id.graphSurface_base);
         }
 
     }

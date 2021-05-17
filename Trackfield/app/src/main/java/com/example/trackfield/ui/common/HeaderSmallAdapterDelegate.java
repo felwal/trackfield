@@ -20,8 +20,8 @@ import java.util.List;
 public class HeaderSmallAdapterDelegate extends
     BaseAdapterDelegate<Header, RecyclerItem, HeaderSmallAdapterDelegate.HeaderSmallViewHolder> {
 
-    public HeaderSmallAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public HeaderSmallAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -39,8 +39,8 @@ public class HeaderSmallAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Header item, @NonNull HeaderSmallViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(item.getTitle());
-        vh.secondary.setText(item.printValues());
+        vh.primaryTv.setText(item.getTitle());
+        vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
@@ -48,13 +48,13 @@ public class HeaderSmallAdapterDelegate extends
     class HeaderSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public HeaderSmallViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

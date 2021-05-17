@@ -13,12 +13,12 @@ import java.util.List;
 
 class IntervalAdapter extends BaseAdapter {
 
-    public IntervalAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
+    public IntervalAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
         delegatesManager
-            .addDelegate(new IntervalExerciseAdapterDelegate(activity, listener, this, originId))
-            .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GoalAdapterDelegate(activity))
-            .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+            .addDelegate(new IntervalExerciseAdapterDelegate(a, listener, this, originId))
+            .addDelegate(new SorterAdapterDelegate(a, listener, this))
+            .addDelegate(new GoalAdapterDelegate(a))
+            .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 
         setItems(items);
     }

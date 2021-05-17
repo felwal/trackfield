@@ -9,47 +9,46 @@ import org.json.JSONObject;
 
 public class Route implements JSONObjectable {
 
-    private final int _id;
-    private String name;
-    private float goalPace = NO_GOAL_PACE;
-    private boolean hidden = false;
+    private static final String JSON_ID = "id";
+    private static final String JSON_NAME = "name";
+    private static final String JSON_GOAL_PACE = "goalPace";
+    private static final String JSON_HIDDEN = "hidden";
 
     public static final String NO_NAME = "[Route not found]";
     public static final int NO_GOAL_PACE = -1;
     public static final int ID_NON_EXISTANT = -1;
 
-    // json
-    private static final String JSON_ID = "id";
-    private static final String JSON_NAME = "name";
-    private static final String JSON_GOAL_PACE = "goal_pace";
-    private static final String JSON_HIDDEN = "hidden";
+    private final int id;
+    private String name;
+    private float goalPace = NO_GOAL_PACE;
+    private boolean hidden = false;
 
     //
 
-    public Route(int _id, String name, float goalPace, boolean hidden) {
-        this._id = _id;
+    public Route(int id, String name, float goalPace, boolean hidden) {
+        this.id = id;
         this.name = name;
         this.goalPace = goalPace;
         this.hidden = hidden;
     }
 
-    public Route(int _id, String name) {
-        this._id = _id;
+    public Route(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     public Route(String name) {
-        _id = ID_NON_EXISTANT;
+        id = ID_NON_EXISTANT;
         this.name = name;
     }
 
     public Route() {
-        _id = ID_NON_EXISTANT;
+        id = ID_NON_EXISTANT;
         name = NO_NAME;
     }
 
     public Route(JSONObject obj) throws JSONException {
-        _id = obj.getInt(JSON_ID);
+        id = obj.getInt(JSON_ID);
         name = obj.getString(JSON_NAME);
         goalPace = (float) obj.getDouble(JSON_GOAL_PACE);
         hidden = obj.getBoolean(JSON_HIDDEN);
@@ -79,8 +78,8 @@ public class Route implements JSONObjectable {
 
     // get
 
-    public int get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -101,11 +100,12 @@ public class Route implements JSONObjectable {
 
     // extends
 
-    @Override public JSONObject toJSONObject(Context c) {
+    @Override
+    public JSONObject toJSONObject(Context c) {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put(JSON_ID, _id);
+            obj.put(JSON_ID, id);
             obj.put(JSON_NAME, name);
             obj.put(JSON_GOAL_PACE, goalPace);
             obj.put(JSON_HIDDEN, hidden);

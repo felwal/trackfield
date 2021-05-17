@@ -11,19 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
-import com.example.trackfield.utils.ScreenUtils;
-import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.base.RecyclerFragment;
+import com.example.trackfield.ui.custom.sheet.SortSheet;
+import com.example.trackfield.utils.ScreenUtils;
 
-public abstract class RecActivity extends AppCompatActivity implements SortSheet.DismissListener {
+public abstract class RecActivity extends AppCompatActivity implements SortSheet.SheetListener {
 
-    private ActionBar ab;
-    protected FrameLayout frame;
+    // extras names
+    protected static final String EXTRA_ORIGIN_ID = "orignId";
+
     protected RecyclerFragment recyclerFragment;
-
     protected int originId = -1;
 
-    public static final String EXTRA_ORIGIN_ID = "orignId";
+    private FrameLayout frame;
 
     // extends AppCompatActivity
 
@@ -41,15 +41,6 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
     protected void onRestart() {
         super.onRestart();
         recyclerFragment.updateRecycler();
-        //recreate();
-    }
-
-    @Override
-    protected void onDestroy() {
-        //reader.close();
-        //Helper.closeReader();
-        //Helper.closeWriter();
-        super.onDestroy();
     }
 
     @Override
@@ -72,16 +63,12 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
     protected void setToolbar(String title) {
         final Toolbar tb = findViewById(R.id.toolbar_rec);
         setSupportActionBar(tb);
-        ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // up btn
         ab.setTitle(title);
     }
 
     // tools
-
-    public void setToolbarTitle(String title) {
-        ab.setTitle(title);
-    }
 
     protected void selectFragment(RecyclerFragment recyclerFragment) {
         this.recyclerFragment = recyclerFragment;
@@ -96,7 +83,8 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
 
     // implements SortSheet
 
-    @Override public void onSortSheetDismiss(int selectedIndex) {
+    @Override
+    public void onSortSheetClick(int selectedIndex) {
         recyclerFragment.onSortSheetDismiss(selectedIndex);
     }
 

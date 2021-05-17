@@ -11,9 +11,9 @@ import java.util.List;
 
 public class StatsAdapter extends BaseAdapter {
 
-    public StatsAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+    public StatsAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new GraphAdapterDelegate(activity));
+            .addDelegate(new GraphAdapterDelegate(a));
 
         setItems(items);
     }

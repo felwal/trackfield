@@ -25,23 +25,27 @@ import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.model.SortMode;
+import com.example.trackfield.utils.model.Unfinished;
 
 import java.util.ArrayList;
 
 public abstract class RecyclerFragment extends Fragment implements DelegateClickListener {
 
-    protected Activity a;
     protected static Thread bgThread;
+
+    protected Activity a;
     protected DbReader reader;
     protected RecyclerView recycler;
     protected RecyclerView.LayoutManager manager;
     protected BaseAdapter adapter;
 
+    // empty page
     protected ConstraintLayout emptyCl;
     protected TextView emptyTitle;
     protected TextView emptyMessage;
     protected ImageView emptyImage;
 
+    // items
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
     protected ArrayList<RecyclerItem> items = new ArrayList<>();
 
@@ -65,8 +69,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         emptyImage = emptyCl.findViewById(R.id.imageView_emptyImage);
         emptyCl.setVisibility(View.GONE);
         setEmptyPage();
-
-        //((SimpleItemAnimator) recycler.getItemAnimator()).setSupportsChangeAnimations(false);
 
         setSorter();
 
@@ -128,7 +130,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     // calls
 
     public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
-
         class RecyclerItemCallback extends DiffUtil.Callback {
 
             private final ArrayList<RecyclerItem> oldList;
@@ -200,7 +201,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected void onDelegateClick(RecyclerItem item) {
         if (item instanceof Sorter) {
             Sorter sorter = (Sorter) item;
-            //getPrefs(); // varför är den här?
 
             SortSheet sheet = SortSheet.newInstance(sorter);
             sheet.show(getChildFragmentManager());
@@ -224,8 +224,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
                 itemList.add(e);
             }
         }
-        else //(/*sortMode == C.SortMode.PACE &&*/ /*ascending*/ /*&& exerliteList.size() > 3*/)
-        {
+        else {
             for (int i = 0; i < exerliteList.size(); i++) {
                 if (i == 0) itemList.add(new Header("Top " + 3, Header.Type.REC));
                 else if (i == 3) itemList.add(new Header("Top " + 10, Header.Type.REC));
@@ -233,12 +232,12 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
                 itemList.add(exerliteList.get(i));
             }
         }
-        //else itemList.addAll(exerliteList);
     }
 
     // empty page
 
     protected void setEmptyPage() {
+        // use the default empty page if not overridden
     }
 
     protected void fadeInEmpty() {
@@ -261,6 +260,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // interface
 
+    @Unfinished
     interface Threader {
 
         void run();

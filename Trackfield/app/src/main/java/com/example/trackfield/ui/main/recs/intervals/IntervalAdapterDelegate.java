@@ -20,8 +20,8 @@ import java.util.List;
 public class IntervalAdapterDelegate extends
     BaseAdapterDelegate<IntervalItem, RecyclerItem, IntervalAdapterDelegate.IntervalViewHolder> {
 
-    public IntervalAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public IntervalAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -39,21 +39,21 @@ public class IntervalAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(IntervalItem item, IntervalViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(item.getInterval());
-        vh.secondary.setText(item.printValues());
+        vh.primaryTv.setText(item.getInterval());
+        vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
     class IntervalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public IntervalViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             itemView.setOnClickListener(this);
         }
 

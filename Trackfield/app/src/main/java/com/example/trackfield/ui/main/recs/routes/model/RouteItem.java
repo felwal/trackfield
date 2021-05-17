@@ -6,24 +6,16 @@ import com.example.trackfield.utils.MathUtils;
 
 public class RouteItem extends RecyclerItem {
 
-    private final int _id;
-    private String name;
-    private int count;
-    private int avgDistance;
-    private float bestPace;
-
-    public enum SortMode {
-        RECENT,
-        NAME,
-        AMOUNT,
-        AVG_DISTANCE,
-        BEST_PACE
-    }
+    private final int id;
+    private final String name;
+    private final int count;
+    private final int avgDistance;
+    private final float bestPace;
 
     //
 
-    public RouteItem(int _id, String name, int count, int avgDistance, float bestPace) {
-        this._id = _id;
+    public RouteItem(int id, String name, int count, int avgDistance, float bestPace) {
+        this.id = id;
         this.name = name;
         this.count = count;
         this.avgDistance = avgDistance;
@@ -32,8 +24,8 @@ public class RouteItem extends RecyclerItem {
 
     // get
 
-    public int get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -68,16 +60,19 @@ public class RouteItem extends RecyclerItem {
 
     // extends RecyclerItem
 
-    @Override public boolean sameItemAs(RecyclerItem item) {
+    @Override
+    public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof RouteItem)) return false;
-        RouteItem r = (RouteItem) item;
-        return _id == r._id;
+        RouteItem other = (RouteItem) item;
+        return id == other.id;
     }
 
-    @Override public boolean sameContentAs(RecyclerItem item) {
+    @Override
+    public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof RouteItem)) return false;
         RouteItem r = (RouteItem) item;
-        return name.equals(r.getName()) && count == r.getCount() && avgDistance == r.getAvgDistance() && bestPace == r.getBestPace();
+        return name.equals(r.getName()) && count == r.getCount() && avgDistance == r.getAvgDistance() && bestPace == r
+            .getBestPace();
     }
 
 }

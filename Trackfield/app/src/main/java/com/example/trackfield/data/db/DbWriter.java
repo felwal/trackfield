@@ -11,6 +11,7 @@ import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.ui.map.model.Trail;
+import com.example.trackfield.utils.model.Debug;
 import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
@@ -82,16 +83,16 @@ public class DbWriter extends DbHelper {
         int routeId = DbReader.get(c).getRouteId(e.getRoute());
         e.setRouteId((int) addRoute(new Route(routeId, e.getRoute()), c));
 
-        final ContentValues cv = fillExerciseContentValues(e);
+        ContentValues cv = fillExerciseContentValues(e, c);
 
-        final long _id = db.insert(ExerciseEntry.TABLE_NAME, null, cv);
-        e.setSubs_superId((int) _id);
+        long id = db.insert(ExerciseEntry.TABLE_NAME, null, cv);
+        e.setSubsSuperId((int) id);
         final boolean subSuccess = addSubs(e.getSubs());
 
         // must be called to keep effective distance current
         updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
 
-        return success(_id) && subSuccess;
+        return success(id) && subSuccess;
     }
 
     /**
@@ -104,14 +105,14 @@ public class DbWriter extends DbHelper {
      * @return True if the exercise was added successfully
      */
     public boolean updateExercise(@NonNull Exercise e, Context c) {
-        Exercise old = DbReader.get(c).getExercise(e.get_id());
-        ContentValues newCv = fillExerciseContentValues(e);
+        Exercise old = DbReader.get(c).getExercise(e.getId());
+        ContentValues newCv = fillExerciseContentValues(e, c);
 
         String where = ExerciseEntry._ID + " = ?";
-        String[] whereArgs = { Integer.toString(e.get_id()) };
+        String[] whereArgs = { Integer.toString(e.getId()) };
 
-        final int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
-        final boolean subSuccess = updateSubs(e.getSubs());
+        int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
+        boolean subSuccess = updateSubs(e.getSubs());
 
         // delete route if changed and empty
         if (old.getRouteId() != e.getRouteId()) {
@@ -139,12 +140,12 @@ public class DbWriter extends DbHelper {
      * @return True if the exercise was added successfully
      */
     public boolean deleteExercise(@NonNull Exercise e, Context c) {
-        final String selection = ExerciseEntry._ID + " = ?";
-        final String subSelection = SubEntry.COLUMN_SUPERID + " = ?";
-        final String[] selectionArgs = { Integer.toString(e.get_id()) };
+        String selection = ExerciseEntry._ID + " = ?";
+        String subSelection = SubEntry.COLUMN_SUPERID + " = ?";
+        String[] selectionArgs = { Integer.toString(e.getId()) };
 
-        final long result = db.delete(ExerciseEntry.TABLE_NAME, selection, selectionArgs);
-        final long subResult = db.delete(SubEntry.TABLE_NAME, subSelection, selectionArgs);
+        long result = db.delete(ExerciseEntry.TABLE_NAME, selection, selectionArgs);
+        long subResult = db.delete(SubEntry.TABLE_NAME, subSelection, selectionArgs);
 
         // route
         deleteRouteIfEmpty(e.getRouteId(), c);
@@ -173,14 +174,13 @@ public class DbWriter extends DbHelper {
      * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
-        int effectiveDistance = DbReader.get(c)
-            .avgDistance(routeId, routeVar);
+        int effectiveDistance = DbReader.get(c).avgDistance(routeId, routeVar);
 
         ContentValues cv = new ContentValues();
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
 
-        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = ? AND " +
-            ExerciseEntry.COLUMN_DISTANCE + " = ?";
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = ?" +
+            " AND " + ExerciseEntry.COLUMN_DISTANCE + " = ?";
         String[] whereArgs = { Integer.toString(routeId), routeVar, Integer.toString(Exercise.DISTANCE_DRIVEN) };
 
         int count = db.update(ExerciseEntry.TABLE_NAME, cv, where, whereArgs);
@@ -202,8 +202,7 @@ public class DbWriter extends DbHelper {
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
         int remainingOfRoute = DbReader.get(c)
-            .getExerlitesByRoute(routeId, SortMode.Mode.DATE, false, new ArrayList<>())
-            .size();
+            .getExerlitesByRoute(routeId, SortMode.Mode.DATE, false, new ArrayList<>()).size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
         return false;
     }
@@ -214,11 +213,11 @@ public class DbWriter extends DbHelper {
      * @param c Context
      * @return True if operation successful
      */
+    @Debug
     public boolean deleteEmptyRoutes(Context c) {
         boolean success = true;
-        for (Route route : DbReader.get(c)
-            .getRoutes(true)) {
-            success &= deleteRouteIfEmpty(route.get_id(), c);
+        for (Route route : DbReader.get(c).getRoutes(true)) {
+            success &= deleteRouteIfEmpty(route.getId(), c);
         }
         return success;
     }
@@ -234,8 +233,8 @@ public class DbWriter extends DbHelper {
     }
 
     private boolean addSub(Sub sub) {
-        final ContentValues cvSub = fillSubContentValues(sub);
-        final long result = db.insert(SubEntry.TABLE_NAME, null, cvSub);
+        ContentValues cvSub = fillSubContentValues(sub);
+        long result = db.insert(SubEntry.TABLE_NAME, null, cvSub);
         return success(result);
     }
 
@@ -243,10 +242,10 @@ public class DbWriter extends DbHelper {
         boolean success = true;
         for (Sub sub : subs) {
 
-            if (sub.get_id() != -1) {
+            if (sub.getId() != -1) {
                 ContentValues newCv = fillSubContentValues(sub);
                 String selection = SubEntry._ID + " = ?";
-                String[] selectionArgs = { Integer.toString(sub.get_id()) };
+                String[] selectionArgs = { Integer.toString(sub.getId()) };
 
                 int count = db.update(SubEntry.TABLE_NAME, newCv, selection, selectionArgs);
                 success &= count > 0;
@@ -260,10 +259,10 @@ public class DbWriter extends DbHelper {
     }
 
     public boolean deleteSub(@NonNull Sub sub) {
-        final String selection = SubEntry._ID + " = ?";
-        final String[] selectionArgs = { Integer.toString(sub.get_id()) };
+        String selection = SubEntry._ID + " = ?";
+        String[] selectionArgs = { Integer.toString(sub.getId()) };
 
-        final long result = db.delete(SubEntry.TABLE_NAME, selection, selectionArgs);
+        long result = db.delete(SubEntry.TABLE_NAME, selection, selectionArgs);
 
         return success(result);
     }
@@ -279,8 +278,8 @@ public class DbWriter extends DbHelper {
     }
 
     public boolean addDistance(Distance distance) {
-        final ContentValues cv = fillDistanceContentValues(distance);
-        final long result = db.insert(DistanceEntry.TABLE_NAME, null, cv);
+        ContentValues cv = fillDistanceContentValues(distance);
+        long result = db.insert(DistanceEntry.TABLE_NAME, null, cv);
         return success(result);
     }
 
@@ -290,16 +289,16 @@ public class DbWriter extends DbHelper {
         String selection = DistanceEntry.COLUMN_DISTANCE + " = ?";
         String[] selectionArgs = { Integer.toString((distance.getDistance())) };
 
-        final int count = db.update(DistanceEntry.TABLE_NAME, newCv, selection, selectionArgs);
+        int count = db.update(DistanceEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
         return count > 0;
     }
 
     public boolean deleteDistance(@NonNull Distance distance) {
-        final String selection = DistanceEntry.COLUMN_DISTANCE + " = ?";
-        final String[] selectionArgs = { Integer.toString(distance.getDistance()) };
+        String selection = DistanceEntry.COLUMN_DISTANCE + " = ?";
+        String[] selectionArgs = { Integer.toString(distance.getDistance()) };
 
-        final long result = db.delete(DistanceEntry.TABLE_NAME, selection, selectionArgs);
+        long result = db.delete(DistanceEntry.TABLE_NAME, selection, selectionArgs);
 
         return success(result);
     }
@@ -320,22 +319,23 @@ public class DbWriter extends DbHelper {
      */
     public long addRoute(@NonNull Route route, Context c) {
         Route existingRoute = DbReader.get(c).getRoute(route.getName());
-        if (existingRoute != null) return existingRoute.get_id();
+        if (existingRoute != null) return existingRoute.getId();
 
-        final ContentValues cv = fillRouteContentValues(route);
-        final long _id = db.insert(RouteEntry.TABLE_NAME, null, cv);
-        return _id;
+        ContentValues cv = fillRouteContentValues(route);
+        long id = db.insert(RouteEntry.TABLE_NAME, null, cv);
+        return id;
     }
 
     /**
      * Updates a route. Merges with existing route if new name already exists.
      *
      * @param route Route to update
+     * @param c
      * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
-    public int updateRoute(Route route) {
-        Route oldRoute = DbReader.get().getRoute(route.get_id());
-        int existingIdForNewName = DbReader.get().getRouteId(route.getName());
+    public int updateRoute(Route route, Context c) {
+        Route oldRoute = DbReader.get(c).getRoute(route.getId());
+        int existingIdForNewName = DbReader.get(c).getRouteId(route.getName());
 
         boolean nameNotChanged = route.getName().equals(oldRoute.getName());
         boolean newNameFree = existingIdForNewName == Route.ID_NON_EXISTANT;
@@ -346,12 +346,11 @@ public class DbWriter extends DbHelper {
             ContentValues newCv = fillRouteContentValues(route);
 
             String selection = RouteEntry._ID + " = ?";
-            String[] selectionArgs = { Integer.toString(route.get_id()) };
+            String[] selectionArgs = { Integer.toString(route.getId()) };
 
-            final int count = db.update(RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
+            int count = db.update(RouteEntry.TABLE_NAME, newCv, selection, selectionArgs);
 
-            return route.get_id();
-            //return count > 0;
+            return route.getId();
         }
 
         // merge routes, update routeId and delete merger
@@ -361,15 +360,14 @@ public class DbWriter extends DbHelper {
             newCv.put(ExerciseEntry.COLUMN_ROUTE_ID, existingIdForNewName);
 
             String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ?";
-            String[] whereArgs = { Integer.toString(route.get_id()) };
+            String[] whereArgs = { Integer.toString(route.getId()) };
 
-            final int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
+            int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
 
             // delete merger route
-            boolean deleteSuccess = deleteRoute(route.get_id());
+            boolean deleteSuccess = deleteRoute(route.getId());
 
             return existingIdForNewName;
-            //return count > 0 && deleteSuccess;
         }
     }
 
@@ -383,12 +381,11 @@ public class DbWriter extends DbHelper {
     }
 
     /**
-     * Update route name in exercises table. Call whenever updating route name via {@link #updateRoute(Route)}. TODO:
-     * remove when routeName column is removed
+     * Update route name in exercises table. Call whenever updating route name via {@link #updateRoute(Route, Context)}.
      */
     @Deprecated
     public boolean updateRouteName(String oldName, String newName) {
-        //if (newName.equals(oldName)) return true;
+        // TODO: remove this when routeName column is removed
 
         ContentValues newCv = new ContentValues();
         newCv.put(ExerciseEntry.COLUMN_ROUTE, newName);
@@ -418,7 +415,7 @@ public class DbWriter extends DbHelper {
     // fill ContentValues
 
     @NonNull
-    private ContentValues fillExerciseContentValues(@NonNull Exercise e) {
+    private ContentValues fillExerciseContentValues(@NonNull Exercise e, Context c) {
         ContentValues cv = new ContentValues();
 
         cv.put(ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
@@ -432,8 +429,8 @@ public class DbWriter extends DbHelper {
         cv.put(ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
         cv.put(ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
         cv.put(ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
-        cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance());
-        cv.put(ExerciseEntry.COLUMN_TIME, e.getTimePrimary());
+        cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance(c));
+        cv.put(ExerciseEntry.COLUMN_TIME, e.getTime());
 
         Trail trail = e.getTrail();
         if (trail != null) {
@@ -466,7 +463,7 @@ public class DbWriter extends DbHelper {
     private ContentValues fillSubContentValues(@NonNull Sub sub) {
         ContentValues cv = new ContentValues();
 
-        cv.put(SubEntry.COLUMN_SUPERID, sub.get_superId());
+        cv.put(SubEntry.COLUMN_SUPERID, sub.getSuperId());
         cv.put(SubEntry.COLUMN_DISTANCE, sub.getDistance());
         cv.put(SubEntry.COLUMN_TIME, sub.getTime());
 
@@ -487,8 +484,8 @@ public class DbWriter extends DbHelper {
     private ContentValues fillRouteContentValues(@NonNull Route route) {
         ContentValues cv = new ContentValues();
 
-        if (route.get_id() != Route.ID_NON_EXISTANT) {
-            cv.put(RouteEntry._ID, route.get_id());
+        if (route.getId() != Route.ID_NON_EXISTANT) {
+            cv.put(RouteEntry._ID, route.getId());
         }
         cv.put(RouteEntry.COLUMN_NAME, route.getName());
         cv.put(RouteEntry.COLUMN_HIDDEN, route.isHidden() ? 1 : 0);

@@ -24,6 +24,7 @@ import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.model.SortMode;
+import com.example.trackfield.utils.model.Unfinished;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ import java.util.TreeMap;
 public class DbReader extends DbHelper {
 
     private static final String LOG_TAG = "Reader";
+
     private static DbReader instance;
 
     //
@@ -66,9 +68,9 @@ public class DbReader extends DbHelper {
     // get exercises
 
     @Nullable
-    public Exercise getExercise(int _id) {
+    public Exercise getExercise(int id) {
         String selection = ExerciseEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(_id) };
+        String[] selectionArgs = { Integer.toString(id) };
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Exercise> exercises = unpackCursor(cursor);
@@ -124,10 +126,10 @@ public class DbReader extends DbHelper {
     // get exerlites
 
     @Nullable
-    public Exerlite getExerlite(int _id) {
+    public Exerlite getExerlite(int id) {
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(_id) };
+        String[] selectionArgs = { Integer.toString(id) };
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, null, null,
             null);
@@ -186,8 +188,6 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" +
                 typeFilter(" AND", Prefs.getExerciseVisibleTypes());
 
-        //String selection = ExerciseEntry.COLUMN_ROUTE + " LIKE ?";
-        //String[] selectionArgs = { "%" + filter + "%" };
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy,
@@ -262,11 +262,6 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return exerlites;
-
-        /*String selection = ExerciseEntry.COLUMN_DISTANCE + (Prefs.includeLonger() ? " >= " + minDist : " BETWEEN " + minDist + " AND " + maxDist) + filter;
-        // temp, behöver sortera igen
-        if (!Prefs.includeLonger()) D.removeLonger(top3, maxDist);
-        D.sortExerlites(top3, sortMode, ascending);*/
     }
 
     @NonNull
@@ -276,8 +271,7 @@ public class DbReader extends DbHelper {
         String[] selectionArgs = { interval };
         String orderBy = orderBy(sortMode, ascending);
 
-        Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs,
-            null, null, orderBy);
+        Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, colums, selection, selectionArgs, null, null, orderBy);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
         cursor.close();
 
@@ -290,13 +284,11 @@ public class DbReader extends DbHelper {
 
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry.COLUMN_DATE + " >= " + DateUtils.toEpochSecond(DateUtils.first(min, max)) +
-            " AND " +
-            ExerciseEntry.COLUMN_DATE + " <= " + DateUtils.toEpochSecond(DateUtils.last(min, max)) +
+            " AND " + ExerciseEntry.COLUMN_DATE + " <= " + DateUtils.toEpochSecond(DateUtils.last(min, max)) +
             typeFilter(" AND", types);
         String orderBy = orderBy(sortMode, ascending);
 
-        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy,
-            null);
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, colums, selection, null, null, null, orderBy, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, false);
         cursor.close();
 
@@ -306,9 +298,9 @@ public class DbReader extends DbHelper {
     // get subs
 
     @NonNull
-    private ArrayList<Sub> getSubs(int _superId) {
+    private ArrayList<Sub> getSubs(int superId) {
         String selection = SubEntry.COLUMN_SUPERID + " = ?";
-        String[] selectionArgs = { Integer.toString(_superId) };
+        String[] selectionArgs = { Integer.toString(superId) };
 
         Cursor cursor = db.query(SubEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
         ArrayList<Sub> subs = unpackSubCursor(cursor);
@@ -321,12 +313,9 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Route> getRoutes(boolean includeHidden) {
-        String selection = includeHidden ? null : RouteEntry.COLUMN_HIDDEN +
-            " = ?"; //+ 0 + " AND " + RouteEntry.COLUMN_AMOUNT + " >= " + 2;
-        String[] selectionArgs = includeHidden ? null : new String[] { Integer.toString(0) };
-        String orderBy = null;//orderBy(sortMode, ascending);
+        String selection = includeHidden ? null : RouteEntry.COLUMN_HIDDEN + " = 0";
 
-        Cursor cursor = db.query(RouteEntry.TABLE_NAME, null, selection, selectionArgs, null, null, orderBy);
+        Cursor cursor = db.query(RouteEntry.TABLE_NAME, null, selection, null, null, null, null);
         ArrayList<Route> routes = unpackRouteCursor(cursor);
         cursor.close();
 
@@ -406,13 +395,13 @@ public class DbReader extends DbHelper {
         String[] selectionArgs = { name };
 
         Cursor cursor = db.query(RouteEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-        int _id = Route.ID_NON_EXISTANT;
+        int id = Route.ID_NON_EXISTANT;
         while (cursor.moveToNext()) {
-            _id = cursor.getInt(cursor.getColumnIndexOrThrow(RouteEntry._ID));
+            id = cursor.getInt(cursor.getColumnIndexOrThrow(RouteEntry._ID));
         }
         cursor.close();
 
-        return _id;
+        return id;
     }
 
     /**
@@ -426,8 +415,7 @@ public class DbReader extends DbHelper {
     public int getRouteIdOrCreate(String name, Context c) {
         int routeId = getRouteId(name);
         if (routeId == Route.ID_NON_EXISTANT) {
-            routeId = (int) DbWriter.get(c)
-                .addRoute(new Route(name), c);
+            routeId = (int) DbWriter.get(c).addRoute(new Route(name), c);
         }
         return routeId;
     }
@@ -477,16 +465,15 @@ public class DbReader extends DbHelper {
     @NonNull
     public HashMap<Integer, String> getPolylines(int exceptId) {
         String[] columns = { ExerciseEntry._ID, ExerciseEntry.COLUMN_POLYLINE };
-        String selection =
-            ExerciseEntry._ID + " != " + exceptId + " AND " + ExerciseEntry.COLUMN_POLYLINE +
-                " IS NOT NULL";
+        String selection = ExerciseEntry._ID + " != " + exceptId +
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         HashMap<Integer, String> polylines = new HashMap<>();
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
             String polyline = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_POLYLINE));
-            polylines.put(_id, polyline);
+            polylines.put(id, polyline);
         }
         cursor.close();
 
@@ -496,8 +483,8 @@ public class DbReader extends DbHelper {
     @NonNull
     public ArrayList<String> getPolylinesByRoute(int routeId) {
         String[] columns = { ExerciseEntry.COLUMN_POLYLINE };
-        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " +
-            ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         ArrayList<String> polylines = new ArrayList<>();
@@ -513,9 +500,9 @@ public class DbReader extends DbHelper {
     @NonNull
     public ArrayList<String> getPolylinesByRoute(int routeId, String routeVar) {
         String[] columns = { ExerciseEntry.COLUMN_POLYLINE };
-        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " +
-            ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "' AND " +
-            ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
+            " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" +
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         ArrayList<String> polylines = new ArrayList<>();
@@ -531,15 +518,15 @@ public class DbReader extends DbHelper {
     @NonNull
     public HashMap<Integer, String> getPolylinesByRouteExcept(int exceptRouteId) {
         String[] columns = { ExerciseEntry._ID, ExerciseEntry.COLUMN_POLYLINE };
-        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " != " + exceptRouteId + " AND " +
-            ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " != " + exceptRouteId +
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         HashMap<Integer, String> polylines = new HashMap<>();
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
             String polyline = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_POLYLINE));
-            polylines.put(_id, polyline);
+            polylines.put(id, polyline);
         }
         cursor.close();
 
@@ -547,9 +534,9 @@ public class DbReader extends DbHelper {
     }
 
     @Nullable
-    public Trail getTrail(int _id) {
+    public Trail getTrail(int id) {
         String[] columns = ExerciseEntry.COLUMNS_TRAIL;
-        String selection = ExerciseEntry._ID + " = " + _id;
+        String selection = ExerciseEntry._ID + " = " + id;
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         Trail trail = null;
@@ -615,7 +602,7 @@ public class DbReader extends DbHelper {
         orderBy += sortOrder(ascending);
 
         String query =
-            "SELECT " + com(col(ali_e, col_e_rid), col(tab_r, col_r_name), "count(1) AS " + ali_amount,
+            "SELECT " + con(col(ali_e, col_e_rid), col(tab_r, col_r_name), "count(1) AS " + ali_amount,
                 fun("avg", col(ali_e, col_e_dist)) + " AS " + ali_avg_dist, col(ali_a, ali_best_pace)) +
                 " FROM " + tab_e + " AS " + ali_e +
                 " INNER JOIN " + tab_r + " ON " + col(ali_e, col_e_rid) + " = " + col(tab_r, col_r_id) +
@@ -653,46 +640,13 @@ public class DbReader extends DbHelper {
     public ArrayList<DistanceItem> getDistanceItems(SortMode.Mode sortMode, boolean ascending,
         @NonNull ArrayList<Integer> types) {
 
-        // ver 1
-        /*ArrayList<Integer> dList = D.sortDistances(D.distances, ascending, sortMode);
-        for (int d : dList) {
-            distanceItems.add(getDistanceItem(d));
-        }*/
-
-        // ver 2
-        /*String queryString = "SELECT d.distance, AVG(e.distance), pace FROM exercises AS e, distances as d," +
-                " (SELECT routeId, COUNT(1) AS antal FROM exercises GROUP BY routeId HAVING COUNT(1) > 1) AS a," +
-                " (SELECT routeId, MIN(time/distance)*1000 as pace FROM exercises WHERE distance > 0 AND time != 0 GROUP BY routeId) AS v" +
-                " WHERE e.routeId = r._id AND e.routeId = a.routeId AND e.routeId = v.routeId AND e.distance != -1 GROUP BY e.routeId" +
-                " ORDER BY " + orderBy;
-
-        Cursor cursor = db.rawQuery(queryString, null);
-        ArrayList<DistanceItem> distanceItems = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            int distance = cursor.getInt(0);
-            int minTime = cursor.getInt(1);
-            int minPace = cursor.getInt(2);
-
-            distanceItems.add(new DistanceItem(distance, minTime, minPace));
-        }
-        cursor.close();*/
-
-        // ver 3
-        /*ArrayList<Distance> distances = getDistances();
-        for (Distance distance : distances) {
-            distanceItems.add(getDistanceItem(distance.getDistance(), types));
-        }*/
-
         String tab_e = ExerciseEntry.TABLE_NAME;
         String tab_d = DistanceEntry.TABLE_NAME;
-        String tab_s = "sub";
         String col_d_dist = DistanceEntry.COLUMN_DISTANCE;
         String col_e_eff_dist = ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
         String col_e_time = ExerciseEntry.COLUMN_TIME;
         String tab_col_e_pace = "(1000 * " + col(tab_e, col_e_time) + " / " + col(tab_e, col_e_eff_dist) + ")";
         String col_s_best_pace = "best_pace";
-        String col_s_dist = "distance";
-        String col_s_best_time = "best_time";
 
         String orderBy;
         switch (sortMode) {
@@ -705,21 +659,6 @@ public class DbReader extends DbHelper {
                 break;
         }
         orderBy += sortOrder(ascending);
-
-        // ver 4
-        /*String queryString =
-            "SELECT " + col(tab_d, col_d_dist) + ", " + col(tab_s, col_s_best_pace) + ", " + col(tab_s, col_s_best_time) +
-                " FROM " + tab_d +
-                " LEFT OUTER JOIN (" +
-                "SELECT " + col(tab_d, col_d_dist) + " AS " + col_s_dist + "," +
-                " min(" + tab_col_e_pace + ") AS " + col_s_best_pace + ", " +
-                col(tab_d, col_d_dist) + " * min(" + tab_col_e_pace + " / 1000) AS " + col_s_best_time +
-                " FROM " + tab_e + ", " + tab_d +
-                " WHERE " + col(tab_e, col_e_eff_dist) + " >= " + col(tab_d, col_d_dist) +
-                " AND " + col(tab_e, col_e_time) + " != 0 " +
-                rawSelectionTypeFilter("AND", types, tab_e) +
-                " GROUP BY " + col(tab_d, col_d_dist) + ")" +
-                " AS " + tab_s + " ON " + col(tab_d, col_d_dist) + " = " + col(tab_s, col_s_dist);*/
 
         // ver 5
         String queryString = "SELECT " + col_d_dist + ", (" +
@@ -736,7 +675,6 @@ public class DbReader extends DbHelper {
         while (cursor.moveToNext()) {
             int distance = cursor.getInt(cursor.getColumnIndex(col_d_dist));
             float bestPace = cursor.getFloat(cursor.getColumnIndex(col_s_best_pace));
-            //int bestTime = cursor.getInt(cursor.getColumnIndex(col_s_best_time));
 
             DistanceItem item = new DistanceItem(distance, bestPace);
             distanceItems.add(item);
@@ -748,33 +686,10 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<IntervalItem> getIntervalItems(SortMode.Mode sortMode, boolean ascending, boolean includeHidden) {
-
-        /*String[] columns = { ExerciseEntry.COLUMN_INTERVAL };
-        String orderBy = orderBy(sortMode, ascending);
-
-        Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, null, null, null, null, orderBy);
-        HashMap<String, Integer> names = new HashMap<>();
-        ArrayList<IntervalItem> intervalItems = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
-            if (!name.equals("")) {
-                if (names.containsKey(name)) {
-                    int count = names.get(name);
-                    if (!includeLesser && count == 1) intervalItems.add(getIntervalItem(name));
-                    names.put(name, count + 1);
-                }
-                else {
-                    if (includeLesser) intervalItems.add(getIntervalItem(name));
-                    names.put(name, 1);
-                }
-            }
-        }
-        cursor.close();*/
-
-        String col_amount = "amount";
+        String colAmount = "amount";
 
         String table = ExerciseEntry.TABLE_NAME;
-        String[] columns = { ExerciseEntry.COLUMN_INTERVAL, "count(1) AS " + col_amount };
+        String[] columns = { ExerciseEntry.COLUMN_INTERVAL, "count(1) AS " + colAmount };
         String selection = ExerciseEntry.COLUMN_INTERVAL + " != ''";
         String groupBy = ExerciseEntry.COLUMN_INTERVAL;
         String having = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : "count(1) > 1";
@@ -784,7 +699,7 @@ public class DbReader extends DbHelper {
         ArrayList<IntervalItem> intervalItems = new ArrayList<>();
         while (cursor.moveToNext()) {
             String interval = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_INTERVAL));
-            int amount = cursor.getInt(cursor.getColumnIndex(col_amount));
+            int amount = cursor.getInt(cursor.getColumnIndex(colAmount));
             intervalItems.add(new IntervalItem(interval, amount));
         }
         cursor.close();
@@ -795,10 +710,10 @@ public class DbReader extends DbHelper {
     // projections
 
     public int avgDistance(int routeId, String routeVar) {
-        String columnAvgDistance = "avg_distance";
+        String colAvgDistance = "avg_distance";
 
         String queryString =
-            "select avg(" + ExerciseEntry.COLUMN_DISTANCE + ") as " + columnAvgDistance + " from " +
+            "select avg(" + ExerciseEntry.COLUMN_DISTANCE + ") as " + colAvgDistance + " from " +
                 ExerciseEntry.TABLE_NAME + " where " + ExerciseEntry.COLUMN_ROUTE_ID + " = " +
                 routeId + " and " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" + " and " +
                 ExerciseEntry.COLUMN_DISTANCE + " != " + Exercise.DISTANCE_DRIVEN + " and " +
@@ -807,7 +722,7 @@ public class DbReader extends DbHelper {
         Cursor cursor = db.rawQuery(queryString, null);
         int avgDistance = 0;
         while (cursor.moveToNext()) {
-            avgDistance = cursor.getInt(cursor.getColumnIndex(columnAvgDistance));
+            avgDistance = cursor.getInt(cursor.getColumnIndex(colAvgDistance));
         }
         cursor.close();
 
@@ -819,13 +734,12 @@ public class DbReader extends DbHelper {
         int maxDist = MathUtils.maxDistance(ofDistance);
 
         String[] columns = { DistanceEntry.COLUMN_DISTANCE };
-        String selection = DistanceEntry.COLUMN_DISTANCE + " >= " + minDist + " AND " +
-            DistanceEntry.COLUMN_DISTANCE + " <= " + maxDist;
+        String selection = DistanceEntry.COLUMN_DISTANCE + " >= " + minDist +
+            " AND " + DistanceEntry.COLUMN_DISTANCE + " <= " + maxDist;
         String orderBy = DistanceEntry.COLUMN_DISTANCE + sortOrder(false);
         String limit = "1";
 
-        Cursor cursor = db.query(DistanceEntry.TABLE_NAME, columns, selection, null, null, null, orderBy,
-            limit);
+        Cursor cursor = db.query(DistanceEntry.TABLE_NAME, columns, selection, null, null, null, orderBy, limit);
         int longestDistance = Distance.NO_DISTANCE;
         while (cursor.moveToNext()) {
             longestDistance = cursor.getInt(cursor.getColumnIndex(DistanceEntry.COLUMN_DISTANCE));
@@ -854,9 +768,10 @@ public class DbReader extends DbHelper {
 
     // streamlined graph data
 
-    // TODO
+    @Unfinished
     public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<Integer> types, LocalDate startDate,
         int nodeCount, ChronoUnit groupUnit) {
+        // TODO
 
         LocalDate endDate = startDate.plus(nodeCount, groupUnit);
         long startEpoch = DateUtils.toEpochSecond(DateUtils.dateTime(startDate));
@@ -898,8 +813,9 @@ public class DbReader extends DbHelper {
         return nodes;
     }
 
-    // TODO
+    @Unfinished
     public TreeMap<Float, Float> accummulateDistance() {
+        // TODO
         TreeMap<Float, Float> nodes = new TreeMap<>();
 
         return nodes;
@@ -944,11 +860,11 @@ public class DbReader extends DbHelper {
     }
 
     public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, @NonNull ArrayList<Integer> types) {
-        String sel_pace = "pace";
+        String colPace = "pace";
 
-        String[] select = { ExerciseEntry.SELECTION_PACE + " AS " + sel_pace };
+        String[] select = { ExerciseEntry.SELECTION_PACE + " AS " + colPace };
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + sel_pace + " > 0" +
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + colPace + " > 0" +
             typeFilter(" AND", types);
         String orderBy = orderBy(SortMode.Mode.DATE, true);
 
@@ -956,7 +872,7 @@ public class DbReader extends DbHelper {
         TreeMap<Float, Float> nodes = new TreeMap<>();
         int rowNum = 0;
         while (cursor.moveToNext()) {
-            float pace = cursor.getFloat(cursor.getColumnIndex(sel_pace));
+            float pace = cursor.getFloat(cursor.getColumnIndex(colPace));
             nodes.put((float) rowNum++, pace);
         }
         cursor.close();
@@ -970,8 +886,7 @@ public class DbReader extends DbHelper {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfWeek(includingDate),
-            DateUtils.atEndOfWeek(includingDate),
-            SortMode.Mode.DATE, false, types);
+            DateUtils.atEndOfWeek(includingDate), SortMode.Mode.DATE, false, types);
 
         for (Exerlite e : exerlites) {
             int key = e.getDate().getDayOfWeek().getValue();
@@ -980,7 +895,7 @@ public class DbReader extends DbHelper {
         }
 
         for (int d = 1; d <= 7; d++) {
-            points.put((float) d, dayAndDistance.containsKey(d) ? (float) dayAndDistance.get(d).intValue() : 0);
+            points.put((float) d, dayAndDistance.containsKey(d) ? (float) dayAndDistance.get(d) : 0);
         }
 
         return points;
@@ -1002,8 +917,7 @@ public class DbReader extends DbHelper {
         }
 
         for (int m = 1; m <= 12; m++) {
-            points.put((float) m, monthAndDistance.containsKey(m) ? (float) monthAndDistance.get(m)
-                .intValue() : 0);
+            points.put((float) m, monthAndDistance.containsKey(m) ? (float) monthAndDistance.get(m) : 0);
         }
 
         return points;
@@ -1054,23 +968,11 @@ public class DbReader extends DbHelper {
 
         TreeMap<Float, Float> points = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
-            DateUtils.atEndOfYear(includingDate),
-            SortMode.Mode.DATE, true, types);
+            DateUtils.atEndOfYear(includingDate), SortMode.Mode.DATE, true, types);
 
         float totalDistance = 0;
-
-        /*for (Exerlite e : exerlites) {
-            map.put(e.getDate().getDayOfYear(), e);
-        }
-        if (map.size() == 0) return points;
-
-        for (int d = 0; d <= includingDate.lengthOfYear(); d++) {
-            if (map.containsKey(d)) totalDistance += map.get(d).getDistance();
-            points.put((float) d, totalDistance);
-            if (d == map.lastKey() && includingDate.isEqual(LocalDate.now())) break;
-        }*/
-
         float lastWeek = 0;
+
         for (Exerlite e : exerlites) {
             float week = (float) Math.ceil(e.getDate()
                 .getDayOfYear() / 7f);//e.getWeek();
@@ -1084,16 +986,17 @@ public class DbReader extends DbHelper {
         return points;
     }
 
+    @Deprecated
     public TreeMap<Float, Float> monthIntegralDistanceGoal(LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
 
         points.put(0f, 0f);
-        points.put((float) includingDate.getMonth()
-            .length(includingDate.isLeapYear()), 100_000f);
+        points.put((float) includingDate.getMonth().length(includingDate.isLeapYear()), 100_000f);
 
         return points;
     }
 
+    @Deprecated
     public TreeMap<Float, Float> yearIntegralDistanceGoal(LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
 
@@ -1109,7 +1012,7 @@ public class DbReader extends DbHelper {
         ArrayList<Exercise> exercises = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
             long externalId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EXTERNAL_ID));
             int type = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
@@ -1119,8 +1022,8 @@ public class DbReader extends DbHelper {
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_NOTE));
             String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATA_SOURCE));
-            String recordingMethod = cursor.getString(
-                cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_RECORDING_METHOD));
+            String recordingMethod = cursor.getString(cursor.getColumnIndexOrThrow(
+                ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
 
@@ -1136,28 +1039,26 @@ public class DbReader extends DbHelper {
             }
 
             // convert
-            LocalDateTime dateTime = DateUtils.ofEpochSecond(
-                epoch);//LocalDateTime.parse(epoch, Toolbox.C.FORMATTER_SQL);
+            LocalDateTime dateTime = DateUtils.ofEpochSecond(epoch);
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
 
-            Exercise exercise = new Exercise(_id, externalId, type, dateTime, routeId, routeName, routeVar, interval,
-                note, dataSource, recordingMethod, distance, time, getSubs(_id), trail);
+            Exercise exercise = new Exercise(id, externalId, type, dateTime, routeId, routeName, routeVar, interval,
+                note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
             exercises.add(exercise);
         }
 
         return exercises;
     }
 
-    private ArrayList<Exerlite> unpackLiteCursor(Cursor cursor, boolean markTop) {
+    private ArrayList<Exerlite> unpackLiteCursor(Cursor cursor, boolean markTop3) {
         ArrayList<Exerlite> exerlites = new ArrayList<>();
         int[] indexTop = { -1, -1, -1 };
 
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
-            //String route = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
             int effectiveDistance = cursor.getInt(
@@ -1165,8 +1066,7 @@ public class DbReader extends DbHelper {
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
 
             // convert
-            LocalDate date = DateUtils.ofEpochSecond(epoch)
-                .toLocalDate();
+            LocalDate date = DateUtils.ofEpochSecond(epoch).toLocalDate();
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
@@ -1174,7 +1074,7 @@ public class DbReader extends DbHelper {
             // TODO: subs
             /*if (effectiveDistance == 0 && time == 0) {
                 String selection = SubEntry.COLUMN_SUPERID + " = ?";
-                String[] selectionArgs = { Integer.toString(_id) };
+                String[] selectionArgs = { Integer.toString(id) };
                 String[] columns = { SubEntry.COLUMN_DISTANCE, SubEntry.COLUMN_TIME };
 
                 Cursor subCursor = db.query(SubEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
@@ -1187,47 +1087,35 @@ public class DbReader extends DbHelper {
                 subCursor.close();
             }*/
 
-            Exerlite exerlite = new Exerlite(_id, date, routeName, interval, effectiveDistance, time, distanceDriven);
+            Exerlite exerlite = new Exerlite(id, date, routeName, interval, effectiveDistance, time, distanceDriven);
             exerlites.add(exerlite);
 
-            // mark top 3
-            if (markTop) {
+            // check pace ranking against previous
+            if (markTop3) {
                 int index = exerlites.size() - 1;
                 float pace = exerlite.getPace();
                 if (pace == 0) continue;
 
-                if (indexTop[0] == -1 || pace < exerlites.get(indexTop[0])
-                    .getPace()) {
+                if (indexTop[0] == -1 || pace < exerlites.get(indexTop[0]).getPace()) {
                     indexTop[2] = indexTop[1];
                     indexTop[1] = indexTop[0];
                     indexTop[0] = index;
                 }
-                else if (indexTop[1] == -1 || pace < exerlites.get(indexTop[1])
-                    .getPace()) {
+                else if (indexTop[1] == -1 || pace < exerlites.get(indexTop[1]).getPace()) {
                     indexTop[2] = indexTop[1];
                     indexTop[1] = index;
                 }
-                else if (indexTop[2] == -1 || pace < exerlites.get(indexTop[2])
-                    .getPace()) {
+                else if (indexTop[2] == -1 || pace < exerlites.get(indexTop[2]).getPace()) {
                     indexTop[2] = index;
                 }
             }
         }
 
         // mark top 3
-        if (markTop) {
-            if (indexTop[2] != -1) {
-                exerlites.get(indexTop[2])
-                    .setTop(3);
-            }
-            if (indexTop[1] != -1) {
-                exerlites.get(indexTop[1])
-                    .setTop(2);
-            }
-            if (indexTop[0] != -1) {
-                exerlites.get(indexTop[0])
-                    .setTop(1);
-            }
+        if (markTop3) {
+            if (indexTop[2] != -1) exerlites.get(indexTop[2]).setTop(3);
+            if (indexTop[1] != -1) exerlites.get(indexTop[1]).setTop(2);
+            if (indexTop[0] != -1) exerlites.get(indexTop[0]).setTop(1);
         }
 
         return exerlites;
@@ -1237,12 +1125,12 @@ public class DbReader extends DbHelper {
         ArrayList<Sub> subs = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry._ID));
             int superId = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_SUPERID));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_DISTANCE));
             float time = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_TIME));
 
-            Sub sub = new Sub(_id, superId, distance, time);
+            Sub sub = new Sub(id, superId, distance, time);
             subs.add(sub);
         }
 
@@ -1253,11 +1141,11 @@ public class DbReader extends DbHelper {
         ArrayList<Distance> distances = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(DistanceEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(DistanceEntry._ID));
             int length = cursor.getInt(cursor.getColumnIndexOrThrow(DistanceEntry.COLUMN_DISTANCE));
             float goalPace = cursor.getFloat(cursor.getColumnIndexOrThrow(DistanceEntry.COLUMN_GOAL_PACE));
 
-            Distance distance = new Distance(_id, length, goalPace);
+            Distance distance = new Distance(id, length, goalPace);
             distances.add(distance);
         }
 
@@ -1268,12 +1156,12 @@ public class DbReader extends DbHelper {
         ArrayList<Route> routes = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            int _id = cursor.getInt(cursor.getColumnIndexOrThrow(RouteEntry._ID));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(RouteEntry._ID));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(RouteEntry.COLUMN_NAME));
             float goalPace = cursor.getFloat(cursor.getColumnIndexOrThrow(RouteEntry.COLUMN_GOAL_PACE));
             boolean hidden = cursor.getInt(cursor.getColumnIndexOrThrow(RouteEntry.COLUMN_HIDDEN)) != 0;
 
-            Route route = new Route(_id, name, goalPace, hidden);
+            Route route = new Route(id, name, goalPace, hidden);
             routes.add(route);
         }
 
@@ -1304,7 +1192,7 @@ public class DbReader extends DbHelper {
         return table + "." + column;
     }
 
-    private String com(String... s) {
+    private String con(String... s) {
         String expression = s[0];
         for (int i = 1; i < s.length; i++) {
             expression += ", " + s[i];
@@ -1366,7 +1254,6 @@ public class DbReader extends DbHelper {
         }
 
         return fun("strftime", format, column, "'unixepoch'");
-        //return "strftime(" + format + ", " + column + ", 'unixepoch')";
     }
 
     private String sum(String column) {

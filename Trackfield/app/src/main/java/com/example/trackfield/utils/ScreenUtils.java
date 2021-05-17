@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.custom.graph.Borders;
 
 public final class ScreenUtils {
 
@@ -28,26 +29,22 @@ public final class ScreenUtils {
     // set
 
     /**
-     * Updates activity theme to chosen theme.
-     * Should be called first thing in every activities onCreate.
+     * Updates activity theme to chosen theme. Should be called first thing in every activities onCreate.
      *
      * @param a Activity
-     * @return True if theme was updated, false otherwise
      */
-    public static boolean updateTheme(Activity a) {
+    public static void updateTheme(Activity a) {
         int newTheme = AppConsts.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
         try {
-            // currentTheme är alltid default?
+            // currentTheme är alltid default theme?
             int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
             if (currentTheme != newTheme) {
                 a.setTheme(newTheme);
-                return true;
             }
         }
         catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public static void setScale(Activity a) {
@@ -69,9 +66,9 @@ public final class ScreenUtils {
     public static void makeStatusBarTransparent(Window window, boolean darkIcons, @Nullable View top) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.getDecorView().setSystemUiVisibility(
-                darkIcons ? View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR :
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        window.getDecorView().setSystemUiVisibility(darkIcons
+            ? View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            : View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         window.setStatusBarColor(Color.TRANSPARENT);
 
         // set optional margins
@@ -80,18 +77,10 @@ public final class ScreenUtils {
                 // TODO: params margin finns inte?
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) top.getLayoutParams();
                 int margin = params.topMargin + insets.getSystemWindowInsetTop();
-                LayoutUtils.setMargin(top, margin, LayoutUtils.Direction.TOP);
+                LayoutUtils.setMargin(top, margin, Borders.top());
             }
             return insets;
         });
-        //getWindow().getDecorView().requestApplyInsets();
-
-        // försök 2
-        //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-        // försök 1
-        //setWindowFlag(window, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-        //window.setStatusBarColor(Color.TRANSPARENT);
     }
 
     public static void setWindowFlag(Window window, final int bits, boolean on) {
@@ -112,11 +101,7 @@ public final class ScreenUtils {
         int lightThemeGreen = AppConsts.LOOKS[1][1];
 
         int currentTheme = AppConsts.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];
-        if (currentTheme == lightThemeMono || currentTheme == lightThemeGreen) {
-            return true;
-        }
-
-        return false;
+        return currentTheme == lightThemeMono || currentTheme == lightThemeGreen;
     }
 
     public static int getScreenWidth(Activity a) {

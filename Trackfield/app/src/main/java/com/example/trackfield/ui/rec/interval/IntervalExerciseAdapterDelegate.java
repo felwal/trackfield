@@ -13,8 +13,8 @@ import com.example.trackfield.R;
 import com.example.trackfield.ui.base.BaseAdapter;
 import com.example.trackfield.ui.base.BaseAdapterDelegate;
 import com.example.trackfield.ui.base.DelegateClickListener;
-import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Exerlite;
+import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.model.SortMode;
 
@@ -24,13 +24,14 @@ import java.util.List;
 public class IntervalExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, IntervalExerciseAdapterDelegate.ExerciseMediumViewHolder> {
 
-    private BaseAdapter adapter;
-    private int originId;
+    private final BaseAdapter adapter;
+    private final int originId;
 
     //
 
     public IntervalExerciseAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
         int originId) {
+
         super(activity, listener);
         this.adapter = adapter;
         this.originId = originId;
@@ -59,10 +60,10 @@ public class IntervalExerciseAdapterDelegate extends
             adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
                 AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
-        vh.primary.setText(date);
-        vh.secondary.setText(values);
-        vh.caption.setText(item.getRoute());
-        vh.originMarker.setVisibility(item.has_id(originId) ? View.VISIBLE : View.GONE);
+        vh.primaryTv.setText(date);
+        vh.secondaryTv.setText(values);
+        vh.captionTv.setText(item.getRoute());
+        vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(View.GONE);
     }
 
@@ -70,17 +71,17 @@ public class IntervalExerciseAdapterDelegate extends
 
     class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
-        public TextView caption;
+        public TextView primaryTv;
+        public TextView secondaryTv;
+        public TextView captionTv;
         public View originMarker;
         public View recordMarker;
 
         public ExerciseMediumViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
-            caption = itemView.findViewById(R.id.textView_caption);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            captionTv = itemView.findViewById(R.id.textView_caption);
             originMarker = itemView.findViewById(R.id.view_orignMarker);
             recordMarker = itemView.findViewById(R.id.view_recordMarker);
             itemView.setOnClickListener(this);

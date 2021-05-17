@@ -19,15 +19,16 @@ import com.example.trackfield.utils.model.PairList;
 
 import java.util.ArrayList;
 
-public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener, SwitchDialog.DialogListener {
-
-    private StravaApi strava;
+public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener,
+    SwitchDialog.DialogListener {
 
     // dialog tags
     private static final String DIALOG_RECORDING_METHOD = "methodDialog";
     private static final String DIALOG_REQUEST_ALL = "requestAllDialog";
     private static final String DIALOG_PULL_ALL = "pullAllDialog";
     private static final String DIALOG_PULL_POLICY = "pullPolicyDialog";
+
+    private StravaApi strava;
 
     //
 
@@ -79,9 +80,9 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         // request options
         inflateHeader("Request options");
         inflateDialogItem("Recording method", Prefs.getRecordingMethod(), false,
-                TextDialog.newInstance(R.string.dialog_title_recording_method,
-                    R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
-                    "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+            TextDialog.newInstance(R.string.dialog_title_recording_method,
+                R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
+                "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
         inflateDialogItem("Pull policy", "", true,
             SwitchDialog.newInstance(R.string.dialog_title_pull, BaseDialog.NO_RES, R.string.dialog_btn_set,
                 Prefs.getPullSettings(), DIALOG_PULL_POLICY));

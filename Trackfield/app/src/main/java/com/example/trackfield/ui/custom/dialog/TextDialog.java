@@ -13,16 +13,18 @@ import com.example.trackfield.R;
 
 public class TextDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    private static final String BUNDLE_TEXT = "text";
+    private static final String BUNDLE_HINT = "hint";
+
+    // dialog tags
+    private static final String TAG_DEFAULT = "textDialog";
+
+    private DialogListener listener;
 
     // arguments
-    private String text, hint;
-
-    // bundle
-    private final static String BUNDLE_TEXT = "text";
-    private final static String BUNDLE_HINT = "hint";
-
-    private final static String TAG_DEFAULT = "textDialog";
+    private String text;
+    private String hint;
 
     //
 
@@ -57,7 +59,6 @@ public class TextDialog extends BaseDialog {
 
     @Override
     protected void unpackBundle() {
-
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         if (bundle != null) {
@@ -77,7 +78,7 @@ public class TextDialog extends BaseDialog {
 
         builder.setView(dialogView).setTitle(title)
             .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                final String input = et.getText().toString();
+                String input = et.getText().toString();
                 listener.onTextDialogPositiveClick(input, tag);
             })
             .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());

@@ -15,7 +15,6 @@ import com.example.trackfield.ui.base.RecyclerFragment;
 import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
-import com.example.trackfield.utils.model.SortMode;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsPagerAdapter extends FragmentPagerAdapter {
@@ -44,10 +43,14 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
         // add tab listener
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {}
+            public void onTabSelected(TabLayout.Tab tab) {
+                // we are only interested in reselection
+            }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // we are only interested in reselection
+            }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
@@ -98,7 +101,7 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
         if (intervalsFragment != null) intervalsFragment.updateRecycler();
     }
 
-    public void onSortSheetDismiss(int selectedIndex) {
+    public void onSortSheetClick(int selectedIndex) {
         getCurrentFragment().onSortSheetDismiss(selectedIndex);
     }
 

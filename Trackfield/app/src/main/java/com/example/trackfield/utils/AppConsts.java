@@ -20,20 +20,7 @@ public final class AppConsts {
         INTERVALS,
         DISTANCE,
         ROUTE,
-        INTERVAL;
-
-        public static Layout fromInt(int i) {
-            switch (i) {
-                case 0: return EXERCISES;
-                case 1: return DISTANCES;
-                case 2: return ROUTES;
-                case 3: return INTERVALS;
-                case 4: return DISTANCE;
-                case 5: return ROUTE;
-                case 6: return INTERVAL;
-            }
-            return EXERCISES;
-        }
+        INTERVAL
     }
 
     public enum UnitVelocity {
@@ -50,14 +37,11 @@ public final class AppConsts {
 
     // text
 
-    public static final String TAB = "       "; // 7
-    public static final char[] ARROWS = { '↓', '↑' };
+    public static final String TAB = "       "; // 7 tabs
     public static final String NO_VALUE = "—";
     public static final String NO_VALUE_TIME = "– : –";
-    public static final String[] MONTH_M = { "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D" };
 
-    // formatter
-    public static final DateTimeFormatter FORMATTER_FILE = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    // formatters
     public static final DateTimeFormatter FORMATTER_SQL = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     public static final DateTimeFormatter FORMATTER_SQL_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter FORMATTER_EDIT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -67,15 +51,8 @@ public final class AppConsts {
     public static final DateTimeFormatter FORMATTER_CAPTION_NOYEAR = DateTimeFormatter.ofPattern("d MMM");
     public static final DateTimeFormatter FORMATTER_REC = DateTimeFormatter.ofPattern("d MMM ’yy");
     public static final DateTimeFormatter FORMATTER_REC_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
-    public static final DateTimeFormatter[] FORMATTERS_SEARCH = {
-        DateTimeFormatter.ofPattern("dd MMMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMMM dd"),
-        DateTimeFormatter.ofPattern("yyyy MMMM d"),
-        DateTimeFormatter.ofPattern("dd MMM yyyy"), DateTimeFormatter.ofPattern("yyyy MMM dd"),
-        DateTimeFormatter.ofPattern("yyyy MMM d"),
-        DateTimeFormatter.ofPattern("dd/MM/yyyy"), DateTimeFormatter.ofPattern("yyyy/MM/dd") };
 
     public static final TemporalField WEEK_OF_YEAR = WeekFields.ISO.weekOfWeekBasedYear();
-    public static final TemporalField DAY_OF_WEEK = WeekFields.ISO.dayOfWeek();
 
     // theme
     public static final ArrayList<String> themeNames = new ArrayList<>(Arrays.asList("Dark", "Light"));

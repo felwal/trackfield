@@ -10,8 +10,9 @@ import java.util.List;
 
 public class Trail {
 
-    private String polyline;
-    private List<LatLng> latLngs;
+    private final String polyline;
+    private final List<LatLng> latLngs;
+
     private LatLng start;
     private LatLng end;
     private LatLngBounds bounds;
@@ -49,7 +50,6 @@ public class Trail {
     // set
 
     private void setBounds() {
-
         if (latLngs.size() == 0) return;
         LatLng ll0 = latLngs.get(0);
 
@@ -118,7 +118,6 @@ public class Trail {
     }
 
     public int getDistance() {
-
         int distance = 0;
 
         for (int i = 0; i < latLngs.size() - 1; i++) {
@@ -196,7 +195,6 @@ public class Trail {
     }
 
     public static LatLngBounds bounds(List<LatLng> latLngs) {
-
         if (latLngs.size() == 0) return null;
         LatLng ll0 = latLngs.get(0);
 

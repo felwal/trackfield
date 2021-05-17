@@ -17,13 +17,14 @@ import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.utils.AppConsts;
-import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.TypeUtils;
 import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class DistanceRecyclerFragment extends RecyclerFragment {
 
+    // bundle keys
     private final static String BUNDLE_DISTANCE = "distance";
     private final static String BUNDLE_ORIGIN_ID = "originId";
 
@@ -54,6 +55,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             distance = bundle.getInt(BUNDLE_DISTANCE, -1);
@@ -61,7 +63,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
 
             // filtering depending on origin
             Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes()
-                : MathUtils.createList(DbReader.get(a).getExercise(originId).getType()));
+                : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }
 
@@ -134,8 +136,8 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         RecyclerItem item = getItem(position);
 
         if (item instanceof Exerlite) {
-            int _id = ((Exerlite) items.get(position)).get_id();
-            if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_DISTANCE);
+            int id = ((Exerlite) items.get(position)).getId();
+            if (originId != id) ViewActivity.startActivity(a, id, ViewActivity.FROM_DISTANCE);
         }
 
         super.onDelegateClick(item);

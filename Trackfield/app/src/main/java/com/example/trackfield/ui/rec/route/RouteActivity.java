@@ -8,31 +8,34 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.model.Route;
-import com.example.trackfield.ui.map.RouteMapActivity;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
+import com.example.trackfield.data.db.model.Route;
+import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
 import com.example.trackfield.ui.custom.dialog.TimeDialog;
+import com.example.trackfield.ui.map.RouteMapActivity;
 import com.example.trackfield.ui.rec.RecActivity;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.data.prefs.Prefs;
 
 import java.util.ArrayList;
 
 public class RouteActivity extends RecActivity implements TextDialog.DialogListener,
-        TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
+    TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
 
-    private Route route;
+    // extras names
     public static final String EXTRA_ROUTE_ID = "routeId";
 
+    // dialog tags
     private static final String DIALOG_RENAME_ROUTE = "renameRouteDialog";
     private static final String DIALOG_MERGE_ROUTES = "mergeRouteDialog";
     private static final String DIALOG_GOAL_ROUTE = "goalRouteDialog";
     private static final String DIALOG_FILTER_ROUTE = "filterRouteDialog";
+
+    private Route route;
 
     //
 
@@ -72,15 +75,15 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         int itemId = item.getItemId();
         if (itemId == R.id.action_filter) {
             FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getRouteVisibleTypes(),
-                    R.string.dialog_btn_filter, DIALOG_FILTER_ROUTE)
-                    .show(getSupportFragmentManager());
+                R.string.dialog_btn_filter, DIALOG_FILTER_ROUTE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_renameRoute) {
             if (route != null) {
                 TextDialog.newInstance(R.string.dialog_title_rename_route, BaseDialog.NO_RES,
-                        route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME_ROUTE)
-                        .show(getSupportFragmentManager());
+                    route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME_ROUTE)
+                    .show(getSupportFragmentManager());
             }
             return true;
         }
@@ -97,19 +100,19 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
             }
 
             TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES,
-                    minutes, seconds, "min", "sec",
-                    R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_ROUTE)
-                    .show(getSupportFragmentManager());
+                minutes, seconds, "min", "sec",
+                R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_ROUTE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_hideRoute) {
             route.invertHidden();
-            DbWriter.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route, this);
             invalidateOptionsMenu();
             return true;
         }
         else if (itemId == R.id.action_routeMap) {
-            RouteMapActivity.startActivity(route.get_id(), this);
+            RouteMapActivity.startActivity(route.getId(), this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -124,7 +127,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
 
         setToolbar(route.getName());
-        selectFragment(RouteRecyclerFragment.newInstance(route.get_id(), originId));
+        selectFragment(RouteRecyclerFragment.newInstance(route.getId(), originId));
     }
 
     @Override
@@ -139,24 +142,20 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         if (tag.equals(DIALOG_RENAME_ROUTE)) {
             if (input.equals("") || input.equals(route.getName())) return;
 
-            //ArrayList<Exercise> exercises = D.filterByRoute(route.getName());
-            //for (Exercise e : exercises) { e.setRoute(input); }
-            //D.importRoutes();
-
             int existingIdForNewName = DbReader.get(this).getRouteId(input);
 
             // update route
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
                 BinaryDialog.newInstance(R.string.dialog_title_merge_routes, R.string.dialog_message_merge_routes,
-                        R.string.dialog_btn_merge, input, DIALOG_MERGE_ROUTES)
-                        .show(getSupportFragmentManager());
+                    R.string.dialog_btn_merge, input, DIALOG_MERGE_ROUTES)
+                    .show(getSupportFragmentManager());
             }
             else {
                 DbWriter.get(this).updateRouteName(route.getName(), input);
                 route.setName(input);
-                DbWriter.get(this).updateRoute(route);
+                DbWriter.get(this).updateRoute(route, this);
                 finish();
-                startActivity(this, route.get_id(), originId);
+                startActivity(this, route.getId(), originId);
             }
         }
     }
@@ -166,7 +165,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
         if (tag.equals(DIALOG_MERGE_ROUTES)) {
             DbWriter.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
-            int newId = DbWriter.get(this).updateRoute(route);
+            int newId = DbWriter.get(this).updateRoute(route, this);
             finish();
             startActivity(this, newId, originId);
         }
@@ -176,7 +175,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogPositiveClick(int input1, int input2, String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.setGoalPace(MathUtils.seconds(0, input1, input2));
-            DbWriter.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route, this);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
@@ -187,7 +186,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     public void onTimeDialogNegativeClick(String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.removeGoalPace();
-            DbWriter.get(this).updateRoute(route);
+            DbWriter.get(this).updateRoute(route, this);
 
             invalidateOptionsMenu();
             recyclerFragment.updateRecycler();

@@ -5,44 +5,41 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.example.trackfield.ui.common.model.Exerlite;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.utils.TypeUtils;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class GraphData {
 
-    private TreeMap<Float, Float> nodes;
-    private float min, max;
-
-    private ArrayList<PointF> surPoints = new ArrayList<>();
-    private ArrayList<PointF> surFirstConPoints = new ArrayList<>();
-    private ArrayList<PointF> surSecondConPoints = new ArrayList<>();
-
-    private Paint paint = new Paint() {{
-        setColor(Color.parseColor("#FF5BB974"));
-        setAntiAlias(true);
-        setStrokeWidth(ScreenUtils.px(3));
-        setStyle(Style.STROKE);
-    }};
-    private Paint areaPaint = new Paint() {{
-        setColor(Color.parseColor("#FF5BB974"));
-        setAntiAlias(true);
-        setStyle(Style.FILL);
-    }};
-
-    private int graphType;
-    private boolean showPoints;
-    private boolean showArea;
-
+    // graph types
     public static final int GRAPH_LINE = 0;
     public static final int GRAPH_BEZIER = 1;
     public static final int GRAPH_SPLINE = 2;
     public static final int GRAPH_BAR = 3;
     public static final int GRAPH_POINTS = 4;
+
+    // value nodes
+    private TreeMap<Float, Float> nodes;
+    private float min, max;
+
+    // surface points
+    private ArrayList<PointF> surPoints = new ArrayList<>();
+    private ArrayList<PointF> surFirstConPoints = new ArrayList<>();
+    private ArrayList<PointF> surSecondConPoints = new ArrayList<>();
+
+    private final int graphType;
+    private final boolean showPoints;
+    private final boolean showArea;
+
+    private final Paint paint = new Paint() {{
+        setColor(Color.parseColor("#FF5BB974"));
+        setAntiAlias(true);
+        setStrokeWidth(ScreenUtils.px(3));
+        setStyle(Style.STROKE);
+    }};
 
     //
 
@@ -66,22 +63,8 @@ public class GraphData {
         calcConPoints();
     }
 
-    public void setPaint(String colorString) {
-        paint.setColor(Color.parseColor(colorString));
-    }
-
-    public void setPaint(String colorString, String areaColorString) {
-        paint.setColor(Color.parseColor(colorString));
-        areaPaint.setColor(Color.parseColor(areaColorString));
-    }
-
     public void setPaint(int colorAttrResId, Context c) {
         paint.setColor(c.getColor(LayoutUtils.getAttr(colorAttrResId, c)));
-    }
-
-    public void setPaint(int colorAttrResId, int areaColorAttrResId, Context c) {
-        paint.setColor(c.getColor(LayoutUtils.getAttr(colorAttrResId, c)));
-        areaPaint.setColor(c.getColor(LayoutUtils.getAttr(areaColorAttrResId, c)));
     }
 
     // calc
@@ -105,17 +88,22 @@ public class GraphData {
         }*/
     }
 
+    /**
+     * Calculates the bezier connection points
+     */
     private void calcConPoints() {
         if (graphType != GRAPH_BEZIER) return;
 
         for (int i = 1; i < surPoints.size(); i++) {
-            surFirstConPoints
-                .add(new PointF((surPoints.get(i).x + surPoints.get(i - 1).x) / 2, surPoints.get(i - 1).y));
-            surSecondConPoints.add(new PointF((surPoints.get(i).x + surPoints.get(i - 1).x) / 2, surPoints.get(i).y));
+            PointF firstPoint = new PointF((surPoints.get(i).x + surPoints.get(i - 1).x) / 2, surPoints.get(i - 1).y);
+            PointF secondPoint = new PointF((surPoints.get(i).x + surPoints.get(i - 1).x) / 2, surPoints.get(i).y);
+
+            surFirstConPoints.add(firstPoint);
+            surSecondConPoints.add(secondPoint);
         }
     }
 
-    // get
+    // get points
 
     public TreeMap<Float, Float> getNodes() {
         return nodes;
@@ -133,7 +121,7 @@ public class GraphData {
         return surSecondConPoints;
     }
 
-    //
+    // get paint
 
     public Paint getPaint() {
         return paint;
@@ -146,13 +134,13 @@ public class GraphData {
         return areaPaint;
     }
 
-    //
+    // get
 
-    public boolean isShowPoints() {
+    public boolean arePointsShown() {
         return showPoints;
     }
 
-    public boolean isShowArea() {
+    public boolean isAreaShown() {
         return showArea;
     }
 
@@ -164,7 +152,20 @@ public class GraphData {
         return this.graphType == graphType;
     }
 
-    //
+    public boolean isEmpty() {
+        return nodes == null || nodes.size() == 0;
+    }
+
+    public boolean sameDataPointsAs(GraphData data) {
+        //return dataPoints.equals(data.dataPoints);
+        return TypeUtils.treeMapsEquals(nodes, data.nodes);
+    }
+
+    public int getDataPointCount() {
+        return nodes.size();
+    }
+
+    // get domain and range
 
     public float getStart() {
         return nodes.firstKey();
@@ -189,33 +190,6 @@ public class GraphData {
     public float getPointCount() {
         if (nodes == null) return 0;
         return nodes.size();
-    }
-
-    //
-
-    public boolean isEmpty() {
-        return nodes == null || nodes.size() == 0;
-    }
-
-    public boolean sameDataPointsAs(GraphData data) {
-        //return dataPoints.equals(data.dataPoints);
-        return MathUtils.treeMapsEquals(nodes, data.nodes);
-    }
-
-    public int getDataPointCount() {
-        return nodes.size();
-    }
-
-    @Deprecated
-    public static TreeMap<Float, Float> ofExerlites(ArrayList<Exerlite> exerlites) {
-        TreeMap<Float, Float> map = new TreeMap<>();
-        for (int i = 0; i < exerlites.size(); i++) {
-            float pace = exerlites.get(i).getPace();
-            float key = map.size() == 0 ? 0 : map.lastKey() + 1;
-            if (pace != 0) map.put(key, pace);
-        }
-
-        return map;
     }
 
 }

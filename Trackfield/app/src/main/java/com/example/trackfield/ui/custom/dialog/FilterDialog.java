@@ -18,15 +18,16 @@ import java.util.ArrayList;
 
 public class FilterDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    private static final String BUNDLE_CHECKED_TYPES = "checkedTypes";
+
+    // dialog tags
+    private static final String TAG_DEFAULT = "filterDialog";
+
+    private DialogListener listener;
 
     // arguments
-    protected ArrayList<Integer> checkedTypes;
-
-    // bundle
-    private final static String BUNDLE_CHECKED_TYPES = "checkedTypes";
-
-    private final static String TAG_DEFAULT = "filterDialog";
+    private ArrayList<Integer> checkedTypes;
 
     //
 
@@ -60,7 +61,6 @@ public class FilterDialog extends BaseDialog {
 
     @Override
     protected void unpackBundle() {
-
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         if (bundle != null) {
@@ -99,7 +99,7 @@ public class FilterDialog extends BaseDialog {
                 chip = (Chip) chipGroup.getChildAt(type);
             }
             else {
-                chip = (Chip) inflater.inflate(R.layout.layout_chip, null);
+                chip = (Chip) inflater.inflate(R.layout.layout_chip, chipGroup, false);
                 chipGroup.addView(chip);
             }
             chip.setText(Exercise.TYPES_PLURAL[type]);
@@ -109,8 +109,8 @@ public class FilterDialog extends BaseDialog {
 
     @NonNull
     protected ArrayList<Integer> getCheckedTypes(ChipGroup chipGroup) {
-
         ArrayList<Integer> checkedTypes = new ArrayList<>();
+
         for (int type = 0; type < chipGroup.getChildCount(); type++) {
             Chip chip = (Chip) chipGroup.getChildAt(type);
             if (chip.isChecked()) checkedTypes.add(type);

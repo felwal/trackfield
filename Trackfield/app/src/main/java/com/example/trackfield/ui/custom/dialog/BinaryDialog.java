@@ -12,14 +12,16 @@ import com.example.trackfield.R;
 
 public class BinaryDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    private static final String BUNDLE_PASS_VALUE = "passValue";
 
-    @Nullable
-    private String passValue = null;
+    // dialog tags
+    private static final String TAG_DEFAULT = "binaryDialog";
 
-    private final static String BUNDLE_PASS_VALUE = "passValue";
+    private DialogListener listener;
 
-    private final static String TAG_DEFAULT = "binaryDialog";
+    // arguments
+    @Nullable private String passValue = null;
 
     //
 
@@ -86,7 +88,7 @@ public class BinaryDialog extends BaseDialog {
 
     public interface DialogListener {
 
-        default void onBinaryDialogPositiveClick(String passValue, String tag) {}
+        void onBinaryDialogPositiveClick(String passValue, String tag);
 
     }
 

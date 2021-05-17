@@ -2,7 +2,6 @@ package com.example.trackfield.data.db;
 
 import android.provider.BaseColumns;
 
-import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.utils.model.SortMode;
 
 public final class DbContract {
@@ -35,50 +34,43 @@ public final class DbContract {
         public static final String COLUMN_END_LNG = "end_lng";
         public static final String COLUMN_POLYLINE = "polyline";
 
-        public static final String SELECTION_PACE = "1000*(" + COLUMN_TIME  + "/" + COLUMN_EFFECTIVE_DISTANCE + ")";
+        public static final String SELECTION_PACE = "1000*(" + COLUMN_TIME + "/" + COLUMN_EFFECTIVE_DISTANCE + ")";
 
         public static final String[] COLUMNS_EXERLITE = {
-                _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR,
-                COLUMN_INTERVAL, COLUMN_DISTANCE, COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
+            _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR, COLUMN_INTERVAL, COLUMN_DISTANCE,
+            COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
         };
         public static final String[] COLUMNS_TRAIL = {
-                COLUMN_POLYLINE, COLUMN_START_LAT, COLUMN_START_LNG,
-                COLUMN_END_LAT, COLUMN_END_LNG
+            COLUMN_POLYLINE, COLUMN_START_LAT, COLUMN_START_LNG, COLUMN_END_LAT, COLUMN_END_LNG
         };
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_EXTERNAL_ID + " INTEGER," +
-                COLUMN_TYPE + " INTEGER," +
-                COLUMN_DATE + " INTEGER," +
-                COLUMN_ROUTE_ID + " INTEGER," +
-                COLUMN_ROUTE + " TEXT," +
-                COLUMN_ROUTE_VAR + " TEXT," +
-                COLUMN_INTERVAL + " TEXT," +
-                COLUMN_NOTE + " TEXT," +
-                COLUMN_DATA_SOURCE + " TEXT," +
-                COLUMN_RECORDING_METHOD + " TEXT," +
-                COLUMN_DISTANCE + " INTEGER," +
-                COLUMN_EFFECTIVE_DISTANCE + " INTEGER," +
-                COLUMN_TIME + " REAL," +
-                COLUMN_START_LAT + " REAL," +
-                COLUMN_START_LNG + " REAL," +
-                COLUMN_END_LAT + " REAL," +
-                COLUMN_END_LNG + " REAL," +
-                COLUMN_POLYLINE + " TEXT)";
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_EXTERNAL_ID + " INTEGER," +
+            COLUMN_TYPE + " INTEGER," +
+            COLUMN_DATE + " INTEGER," +
+            COLUMN_ROUTE_ID + " INTEGER," +
+            COLUMN_ROUTE + " TEXT," +
+            COLUMN_ROUTE_VAR + " TEXT," +
+            COLUMN_INTERVAL + " TEXT," +
+            COLUMN_NOTE + " TEXT," +
+            COLUMN_DATA_SOURCE + " TEXT," +
+            COLUMN_RECORDING_METHOD + " TEXT," +
+            COLUMN_DISTANCE + " INTEGER," +
+            COLUMN_EFFECTIVE_DISTANCE + " INTEGER," +
+            COLUMN_TIME + " REAL," +
+            COLUMN_START_LAT + " REAL," +
+            COLUMN_START_LNG + " REAL," +
+            COLUMN_END_LAT + " REAL," +
+            COLUMN_END_LNG + " REAL," +
+            COLUMN_POLYLINE + " TEXT)";
 
         public static final String ALTER_TO_VER_2 = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN (" +
-                COLUMN_EXTERNAL_ID + " INTEGER," +
-                COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
+            COLUMN_EXTERNAL_ID + " INTEGER," +
+            COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
         public static String toString(String[] strings) {
-            /*if (strings == null) return "";
-            String string = strings.toString();
-            string.replace("[", "");
-            string.replace("]", "");
-            return string;*/
-
             String string = "";
             for (int i = 0; i < strings.length; i++) {
                 string += strings[i];
@@ -124,10 +116,10 @@ public final class DbContract {
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_SUPERID + " INTEGER," +
-                COLUMN_DISTANCE + " INTEGER," +
-                COLUMN_TIME + " REAL)";
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_SUPERID + " INTEGER," +
+            COLUMN_DISTANCE + " INTEGER," +
+            COLUMN_TIME + " REAL)";
 
     }
 
@@ -141,11 +133,11 @@ public final class DbContract {
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_DISTANCE + " INTEGER," +
-                COLUMN_BEST_TIME + " REAL," +
-                COLUMN_BEST_PACE + " REAL," +
-                COLUMN_GOAL_PACE + " REAL)";
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_DISTANCE + " INTEGER," +
+            COLUMN_BEST_TIME + " REAL," +
+            COLUMN_BEST_PACE + " REAL," +
+            COLUMN_GOAL_PACE + " REAL)";
 
     }
 
@@ -161,13 +153,13 @@ public final class DbContract {
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_NAME + " TEXT," +
-                COLUMN_AMOUNT + " INTEGER," +
-                COLUMN_AVG_DISTANCE + " INTEGER," +
-                COLUMN_BEST_PACE + " REAL," +
-                COLUMN_GOAL_PACE + " REAL," +
-                COLUMN_HIDDEN + " INTEGER)";
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_NAME + " TEXT," +
+            COLUMN_AMOUNT + " INTEGER," +
+            COLUMN_AVG_DISTANCE + " INTEGER," +
+            COLUMN_BEST_PACE + " REAL," +
+            COLUMN_GOAL_PACE + " REAL," +
+            COLUMN_HIDDEN + " INTEGER)";
 
     }
 

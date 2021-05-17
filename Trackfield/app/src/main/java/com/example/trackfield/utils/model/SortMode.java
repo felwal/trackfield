@@ -6,7 +6,7 @@ public class SortMode {
 
     private final String title;
     private final Mode mode;
-    private final boolean ascendingDefault;
+    private final boolean ascendingByDefault;
 
     public enum Mode {
         DATE,
@@ -19,10 +19,10 @@ public class SortMode {
 
     //
 
-    public SortMode(String title, Mode mode, boolean ascendingDefault) {
+    public SortMode(String title, Mode mode, boolean ascendingByDefault) {
         this.title = title;
         this.mode = mode;
-        this.ascendingDefault = ascendingDefault;
+        this.ascendingByDefault = ascendingByDefault;
     }
 
     // get
@@ -35,8 +35,8 @@ public class SortMode {
         return mode;
     }
 
-    public boolean isAscendingDefault() {
-        return ascendingDefault;
+    public boolean isAscendingByDefault() {
+        return ascendingByDefault;
     }
 
     // extends Object
@@ -45,7 +45,7 @@ public class SortMode {
     public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof SortMode)) return false;
         SortMode other = (SortMode) obj;
-        return title.equals(other.title) && mode == other.mode && ascendingDefault == other.ascendingDefault;
+        return title.equals(other.title) && mode == other.mode && ascendingByDefault == other.ascendingByDefault;
     }
 
 }

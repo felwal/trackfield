@@ -85,7 +85,7 @@ public class Sorter extends RecyclerItem {
     }
 
     public boolean isAscending() {
-        return orderInverted ? !getSortMode().isAscendingDefault() : getSortMode().isAscendingDefault();
+        return orderInverted ? !getSortMode().isAscendingByDefault() : getSortMode().isAscendingByDefault();
     }
 
     public String getTitle() {

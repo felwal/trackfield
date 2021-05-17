@@ -11,63 +11,66 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
+import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Sub;
+import com.example.trackfield.data.network.StravaApi;
+import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.map.ExerciseMapActivity;
 import com.example.trackfield.ui.rec.distance.DistanceActivity;
 import com.example.trackfield.ui.rec.interval.IntervalActivity;
 import com.example.trackfield.ui.rec.route.RouteActivity;
-import com.example.trackfield.data.network.StravaApi;
-import com.example.trackfield.data.db.DbReader;
-import com.example.trackfield.data.db.DbWriter;
-import com.example.trackfield.utils.ScreenUtils;
-import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.ScreenUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class ViewActivity extends AppCompatActivity implements BinaryDialog.DialogListener, OnMapReadyCallback {
 
-    private Exercise exercise;
-    private int _id;
-    private int fromRecycler = FROM_NONE;
-
-    private GoogleMap gMap;
-    private SupportMapFragment mapFragment;
-
-    // extras
-    public static final String EXTRA_FROM = "from";
-    public static final String EXTRA_ID = "_id";
-
     public static final int FROM_NONE = 0;
     public static final int FROM_DISTANCE = 1;
     public static final int FROM_ROUTE = 2;
     public static final int FROM_INTERVAL = 3;
 
+    // extras names
+    private static final String EXTRA_ID = "id";
+    private static final String EXTRA_FROM = "from";
+
+    // dialog tags
+    private static final String DIALOG_DELETE_EXERCISE = "deleteExerciseDialog";
+
     private static final int MAP_MAX_ZOOM = 17;
-    protected static final int MAP_PADDING = 50;
+    private static final int MAP_PADDING = 50;
 
-    private final static String DIALOG_DELETE_EXERCISE = "deleteExerciseDialog";
+    private GoogleMap map;
+    private SupportMapFragment mapFragment;
 
-    ////
+    // arguments
+    private int exerciseId;
+    private Exercise exercise;
+    private int fromRecycler = FROM_NONE;
 
-    public static void startActivity(Context c, int _id) {
+    //
+
+    public static void startActivity(Context c, int exerciseId) {
         Intent intent = new Intent(c, ViewActivity.class);
-        intent.putExtra(EXTRA_ID, _id);
+        intent.putExtra(EXTRA_ID, exerciseId);
         c.startActivity(intent);
     }
 
-    public static void startActivity(Context c, int _id, int from) {
+    public static void startActivity(Context c, int exerciseId, int from) {
         Intent intent = new Intent(c, ViewActivity.class);
-        intent.putExtra(EXTRA_ID, _id);
+        intent.putExtra(EXTRA_ID, exerciseId);
         intent.putExtra(EXTRA_FROM, from);
         c.startActivity(intent);
     }
@@ -81,13 +84,13 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setContentView(R.layout.activity_view);
         setToolbar();
 
-        // intent
+        // extras
         Intent intent = getIntent();
-        _id = intent.getIntExtra(EXTRA_ID, -1);
+        exerciseId = intent.getIntExtra(EXTRA_ID, -1);
         fromRecycler = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
-        // db
-        exercise = DbReader.get(this).getExercise(_id);
+        // get exercise
+        exercise = DbReader.get(this).getExercise(exerciseId);
         if (exercise == null) {
             finish();
             return;
@@ -100,12 +103,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     @Override
     protected void onRestart() {
         super.onRestart();
+        // reload edits
         recreate();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -128,13 +127,13 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             return true;
         }
         else if (itemId == R.id.action_edit) {
-            EditActivity.startActivity(this, _id);
+            EditActivity.startActivity(this, exerciseId);
             return true;
         }
         else if (itemId == R.id.action_delete) {
             BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, R.string.dialog_message_delete_exercise,
-                    R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
-                    .show(getSupportFragmentManager());
+                R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
+                .show(getSupportFragmentManager());
             return true;
         }
         else if (itemId == R.id.action_pull) {
@@ -160,7 +159,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     private void setTexts() {
-
         // subs
         if (exercise.subCount() > 0) {
             final LinearLayout ll = findViewById(R.id.linearLayout_view);
@@ -180,7 +178,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.textView_v));
 
                 if (i % 2 == 0) {
-                    subView.setBackgroundColor(getResources().getColor(LayoutUtils.getAttr(R.attr.panelBackground, this)));
+                    subView.setBackgroundColor(
+                        getResources().getColor(LayoutUtils.getAttr(R.attr.panelBackground, this)));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
@@ -188,23 +187,23 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
 
         // get
-        final TextView routeTv = findViewById(R.id.textView_primary);
-        final TextView routeVarTv = findViewById(R.id.textView_routeVar);
-        final TextView intervalTv = findViewById(R.id.textView_interval);
-        final TextView dateTv = findViewById(R.id.textView_caption);
-        final TextView distanceTv = findViewById(R.id.textView_distance);
-        final TextView timeTv = findViewById(R.id.textView_time);
-        final TextView paceTv = findViewById(R.id.textView_velocity);
-        final TextView energyTv = findViewById(R.id.textView_energy);
-        final TextView powerTv = findViewById(R.id.textView_power);
-        final TextView elevationTv = findViewById(R.id.textView_elevation);
-        final TextView noteTv = findViewById(R.id.textView_note);
-        final TextView idTv = findViewById(R.id.textView_id);
-        final TextView typeTv = findViewById(R.id.textView_type);
-        final TextView dataSourceTv = findViewById(R.id.textView_dataSource);
-        final TextView recordingMethodTv = findViewById(R.id.textView_recordingMethod);
-        final TextView extIdTv = findViewById(R.id.textView_external);
-        final ImageView stravaIv = findViewById(R.id.imageView_strava);
+        TextView routeTv = findViewById(R.id.textView_primary);
+        TextView routeVarTv = findViewById(R.id.textView_routeVar);
+        TextView intervalTv = findViewById(R.id.textView_interval);
+        TextView dateTv = findViewById(R.id.textView_caption);
+        TextView distanceTv = findViewById(R.id.textView_distance);
+        TextView timeTv = findViewById(R.id.textView_time);
+        TextView paceTv = findViewById(R.id.textView_velocity);
+        TextView energyTv = findViewById(R.id.textView_energy);
+        TextView powerTv = findViewById(R.id.textView_power);
+        TextView elevationTv = findViewById(R.id.textView_elevation);
+        TextView noteTv = findViewById(R.id.textView_note);
+        TextView idTv = findViewById(R.id.textView_id);
+        TextView typeTv = findViewById(R.id.textView_type);
+        TextView dataSourceTv = findViewById(R.id.textView_dataSource);
+        TextView recordingMethodTv = findViewById(R.id.textView_recordingMethod);
+        TextView extIdTv = findViewById(R.id.textView_external);
+        ImageView stravaIv = findViewById(R.id.imageView_strava);
 
         // set
 
@@ -219,36 +218,35 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
         setTvHideIfEmpty("", extIdTv);
 
-        //TextView sTv = findViewById(R.id.textView_s);
-        //if (exercise.isDistanceDriven()) sTv.setText("s.");
-
         setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.textView_sigma));
-        setTvHideIfEmpty(exercise.printDistance(false), distanceTv, findViewById(R.id.textView_s));
+        setTvHideIfEmpty(exercise.printDistance(false, this), distanceTv, findViewById(R.id.textView_s));
         setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.textView_t));
-        setTvHideIfEmpty(exercise.printPace(true), paceTv, findViewById(R.id.textView_v));
-        setTvHideIfEmpty(exercise.printEnergy(), energyTv, findViewById(R.id.textView_E));
-        setTvHideIfEmpty(exercise.printPower(), powerTv, findViewById(R.id.textView_P));
+        setTvHideIfEmpty(exercise.printPace(true, this), paceTv, findViewById(R.id.textView_v));
+        setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.textView_E));
+        setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.textView_P));
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.textView_h));
 
         // set listeners
         if (fromRecycler != FROM_ROUTE) {
-            routeTv.setOnClickListener(v -> RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.get_id()));
+            routeTv.setOnClickListener(v ->
+                RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.getId()));
         }
         if (fromRecycler != FROM_INTERVAL) {
-            intervalTv.setOnClickListener(v -> IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.get_id()));
+            intervalTv.setOnClickListener(v ->
+                IntervalActivity.startActivity(ViewActivity.this, exercise.getInterval(), exercise.getId()));
         }
         if (fromRecycler != FROM_DISTANCE) {
             distanceTv.setOnClickListener(v -> {
-                int longestDistance = DbReader.get(ViewActivity.this).longestDistanceWithinLimits(exercise.getEffectiveDistance());
-                DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.get_id());
+                int longestDistance = DbReader.get(ViewActivity.this).longestDistanceWithinLimits(
+                    exercise.getEffectiveDistance(this));
+                DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.getId());
             });
         }
         paceTv.setOnClickListener(v -> {
-
             String text = paceTv.getText().toString();
-            String perKm = exercise.printPace(true);
-            String mPerS = exercise.printVelocity(AppConsts.UnitVelocity.METERS_PER_SECOND, true);
-            String kmPerH = exercise.printVelocity(AppConsts.UnitVelocity.KILOMETERS_PER_HOUR, true);
+            String perKm = exercise.printPace(true, this);
+            String mPerS = exercise.printVelocity(AppConsts.UnitVelocity.METERS_PER_SECOND, true, this);
+            String kmPerH = exercise.printVelocity(AppConsts.UnitVelocity.KILOMETERS_PER_HOUR, true, this);
 
             if (text.equals(perKm)) {
                 paceTv.setText(mPerS);
@@ -261,12 +259,12 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             }
         });
         energyTv.setOnClickListener(v -> {
-
             String text = energyTv.getText().toString();
-            String joules = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.JOULES), 2, "J");
-            String calories = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.CALORIES), 2, "cal");
-            String watthours = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.WATTHOURS), 2, "Wh");
-            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(AppConsts.UnitEnergy.ELECTRONVOLTS), 19, "eV");
+            String joules = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.JOULES, this), 2, "J");
+            String calories = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.CALORIES, this), 2, "cal");
+            String watthours = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.WATTHOURS, this), 2, "Wh");
+            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(AppConsts.UnitEnergy.ELECTRONVOLTS, this), 19,
+                "eV");
 
             if (text.equals(joules)) {
                 energyTv.setText(calories);
@@ -306,7 +304,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
     }
 
-
     private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
         if (value.equals(AppConsts.NO_VALUE) || value.equals(AppConsts.NO_VALUE_TIME) || value.equals("")) {
             tv.setVisibility(View.GONE);
@@ -339,14 +336,14 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        if (gMap == null) {
-            gMap = googleMap;
-            ExerciseMapActivity.setReadyMap(gMap, exercise.getTrail(), null, MAP_PADDING, this);
-            gMap.getUiSettings().setAllGesturesEnabled(false);
-            gMap.setMaxZoomPreference(MAP_MAX_ZOOM);
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        if (map == null) {
+            map = googleMap;
+            ExerciseMapActivity.setReadyMap(map, exercise.getTrail(), MAP_PADDING, this);
+            map.getUiSettings().setAllGesturesEnabled(false);
+            map.setMaxZoomPreference(MAP_MAX_ZOOM);
 
-            gMap.setOnMapClickListener(latLng -> ExerciseMapActivity.startActivity(_id, ViewActivity.this));
+            map.setOnMapClickListener(latLng -> ExerciseMapActivity.startActivity(exerciseId, ViewActivity.this));
         }
 
         LayoutUtils.crossfadeInLong(mapFragment.getView(), 1);

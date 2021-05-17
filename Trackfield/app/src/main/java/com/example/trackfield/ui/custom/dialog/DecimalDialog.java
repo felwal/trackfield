@@ -14,17 +14,18 @@ import com.example.trackfield.utils.LayoutUtils;
 
 public class DecimalDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    private static final String BUNDLE_TEXT = "text";
+    private static final String BUNDLE_HINT = "hint";
+
+    // dialog tags
+    private static final String TAG_DEFAULT = "decimalDialog";
+
+    private DialogListener listener;
 
     // arguments
     private float text;
     private String hint;
-
-    // bundle
-    private final static String BUNDLE_TEXT = "text";
-    private final static String BUNDLE_HINT = "hint";
-
-    private final static String TAG_DEFAULT = "decimalDialog";
 
     //
 

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class IntervalRecyclerFragment extends RecyclerFragment {
 
+    // bundle keys
     private final static String BUNDLE_INTERVAL = "interval";
     private final static String BUNDLE_ORIGINID = "originId";
 
@@ -95,8 +96,8 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
         RecyclerItem item = getItem(position);
 
         if (item instanceof Exerlite) {
-            int _id = ((Exerlite) items.get(position)).get_id();
-            if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_INTERVAL);
+            int id = ((Exerlite) items.get(position)).getId();
+            if (originId != id) ViewActivity.startActivity(a, id, ViewActivity.FROM_INTERVAL);
         }
 
         super.onDelegateClick(item);

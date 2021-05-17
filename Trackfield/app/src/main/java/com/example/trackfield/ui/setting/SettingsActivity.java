@@ -1,6 +1,5 @@
 package com.example.trackfield.ui.setting;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,25 +19,22 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.DbWriter;
-import com.example.trackfield.ui.onboarding.OnboardingActivity;
-import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.RadioDialog;
+import com.example.trackfield.ui.main.MainActivity;
+import com.example.trackfield.ui.onboarding.OnboardingActivity;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.FileUtils;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.data.prefs.Prefs;
-import com.example.trackfield.ui.main.MainActivity;
+import com.example.trackfield.utils.ScreenUtils;
 
 import java.time.LocalDate;
 
 public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener,
     DecimalDialog.DialogListener, BinaryDialog.DialogListener {
-
-    private LayoutInflater inflater;
-    private LinearLayout ll;
 
     // dialog tags
     private static final String DIALOG_THEME = "themeDialog";
@@ -47,6 +43,9 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     private static final String DIALOG_EXPORT = "exportDialog";
     private static final String DIALOG_IMPORT = "importDialog";
     private static final String DIALOG_RECREATE_DB = "recreateDbDialog";
+
+    private LayoutInflater inflater;
+    private LinearLayout ll;
 
     //
 
@@ -68,23 +67,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         setToolbar();
         inflateViews();
-    }
-
-    @Override
-    protected void onDestroy() {
-        //F.savePrefs(this);
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // api authorization flow result
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            //if (requestCode == StravaApi.REQUEST_CODE_PERMISSIONS_STRAVA) strava.authorizeStrava();
-        }
     }
 
     @Override
@@ -118,9 +100,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateHeader("Display options");
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
         inflateSwitchItem("Hide singleton routes", Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
-        //inflateSwitchItem("Daily chart", Prefs.isDailyChartShown(), true, Prefs::showDailyChart);
-        //inflateSwitchItem("Week chart", Prefs.isWeekChartShown(), false, Prefs::showWeekChart);
-        //inflateSwitchItem("Week chart distance", Prefs.isWeekDistanceShown(), true, Prefs::showWeekDistance);
 
         // look
         inflateHeader("Look");
@@ -182,8 +161,6 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
                 OnboardingActivity.startActivity(this);
             });
             inflateDialogItem("Recreate database", "", true, BinaryDialog.generic(DIALOG_RECREATE_DB));
-            //inflateClickItem("Export .txt", "", false, v -> F.exportTxt(a));
-            //inflateClickItem("Import .txt", "", true, v -> F.importTxt(a));
         }
     }
 
@@ -194,20 +171,18 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     // inflate items
 
-    protected View inflateHeader(String title) {
+    protected void inflateHeader(String title) {
         View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
         ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
         ll.addView(v);
-        return v;
     }
 
-    protected View inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
+    protected void inflateDialogItem(String title, String value, boolean hideDivider, final BaseDialog dialog) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(v1 -> dialog.show(getSupportFragmentManager()));
-        return v;
     }
 
-    protected View inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
+    protected void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
         final Switch sw = v.findViewById(R.id.switch_setting);
         sw.setChecked(checked);
@@ -215,13 +190,11 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             sw.setChecked(!sw.isChecked());
             listener.onSwitch(sw.isChecked());
         });
-        return v;
     }
 
-    protected View inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
+    protected void inflateClickItem(String title, String value, boolean hideDivider, View.OnClickListener listener) {
         View v = inflateTextView(title, value, hideDivider);
         v.setOnClickListener(listener);
-        return v;
     }
 
     // inflate views
@@ -272,7 +245,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             }
         }
 
-        MainActivity.recreate = true;
+        MainActivity.recreateOnRestart = true;
         recreate();
     }
 
@@ -291,7 +264,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             new Thread(() -> {
                 boolean success = FileUtils.exportJson(this);
                 runOnUiThread(() -> {
-                    LayoutUtils.toast(success ? R.string.toast_json_export_successful : R.string.toast_json_export_err, this);
+                    LayoutUtils.toast(success
+                            ? R.string.toast_json_export_successful
+                            : R.string.toast_json_export_err,
+                        this);
                 });
             }).start();
         }
@@ -300,7 +276,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             new Thread(() -> {
                 boolean success = FileUtils.importJson(this);
                 runOnUiThread(() -> {
-                    LayoutUtils.toast(success ? R.string.toast_json_import_successful : R.string.toast_json_import_err, this);
+                    LayoutUtils.toast(success
+                            ? R.string.toast_json_import_successful
+                            : R.string.toast_json_import_err,
+                        this);
                 });
             }).start();
         }

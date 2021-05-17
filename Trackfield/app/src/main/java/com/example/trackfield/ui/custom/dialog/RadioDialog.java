@@ -16,17 +16,18 @@ import java.util.ArrayList;
 
 public class RadioDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    public static final String BUNDLE_RADIO_TEXTS = "radioTexts";
+    public static final String BUNDLE_SELECTED_INDEX = "selectedIndex";
+
+    // dialog tags
+    public static final String TAG_DEFAULT = "radioDialog";
+
+    private DialogListener listener;
 
     // arguments
     private ArrayList<String> radioTexts;
     private int selectedIndex;
-
-    // bundle
-    public static final String BUNDLE_RADIO_TEXTS = "radioTexts";
-    public static final String BUNDLE_SELECTED_INDEX = "selectedIndex";
-
-    public static final String TAG_DEFAULT = "radioDialog";
 
     //
 

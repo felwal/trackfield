@@ -14,8 +14,8 @@ import com.example.trackfield.R;
 import com.example.trackfield.ui.base.BaseAdapter;
 import com.example.trackfield.ui.base.BaseAdapterDelegate;
 import com.example.trackfield.ui.base.DelegateClickListener;
-import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Exerlite;
+import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.model.SortMode;
 
@@ -25,13 +25,14 @@ import java.util.List;
 public class RouteExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, RouteExerciseAdapterDelegate.ExerciseSmallViewHolder> {
 
-    private BaseAdapter adapter;
-    private int originId;
+    private final BaseAdapter adapter;
+    private final int originId;
 
     //
 
     public RouteExerciseAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
         int originId) {
+
         super(activity, listener);
         this.adapter = adapter;
         this.originId = originId;
@@ -60,11 +61,11 @@ public class RouteExerciseAdapterDelegate extends
             adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
                 AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
-        vh.primary.setText(date);
-        vh.secondary.setText(values);
-        vh.originMarker.setVisibility(item.has_id(originId) ? View.VISIBLE : View.GONE);
+        vh.primaryTv.setText(date);
+        vh.secondaryTv.setText(values);
+        vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
-        vh.recordMarker.getBackground().setColorFilter(context.getColor(
+        vh.recordMarker.getBackground().setColorFilter(c.getColor(
             item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
             PorterDuff.Mode.MULTIPLY);
     }
@@ -73,15 +74,15 @@ public class RouteExerciseAdapterDelegate extends
 
     class ExerciseSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
         public View originMarker;
         public View recordMarker;
 
         public ExerciseSmallViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             originMarker = itemView.findViewById(R.id.view_orignMarker);
             recordMarker = itemView.findViewById(R.id.view_recordMarker);
             itemView.setOnClickListener(this);

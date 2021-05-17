@@ -9,7 +9,9 @@ import androidx.core.util.Pair;
 import com.example.trackfield.R;
 
 import com.example.trackfield.utils.AppConsts;
+import com.example.trackfield.utils.model.Debug;
 import com.example.trackfield.utils.model.PairList;
+import com.example.trackfield.utils.model.Unfinished;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,6 +25,38 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Prefs {
 
+    public static final int COLOR_MONO = 0;
+    public static final int COLOR_GREEN = 1;
+
+    private static final String NAME_SHARED_PREFERENCES = "sharedPreferences";
+
+    private static final String KEY_APP_VERSION = "appVersion";
+    private static final String KEY_DEVELOPER = "developer";
+    private static final String KEY_FIRST_LOGIN = "firstLogin";
+    private static final String KEY_WEEK_HEADERS = "weekHeaders";
+    private static final String KEY_DAILY_CHART = "dailyChart";
+    private static final String KEY_COLOR = "color";
+    private static final String KEY_THEME = "theme";
+    private static final String KEY_MASS = "mass";
+    private static final String KEY_BIRTHDAY = "birthday";
+    private static final String KEY_SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
+    private static final String KEY_HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
+    private static final String KEY_INCLCUDE_LONGER = "includeLonger";
+    @Unfinished private static final String KEY_INCLCUDE_PACELESS = "includePaceless";
+    private static final String KEY_LIMIT_LOWER = "lowerLimit";
+    private static final String KEY_LIMIT_UPPER = "upperLimit";
+    private static final String KEY_TYPES_EXERCISE = "typesExercise";
+    private static final String KEY_TYPES_ROUTE = "typesRoute";
+    private static final String KEY_TYPES_DISTANCE = "typesDistance";
+    private static final String KEY_SORT_SELECTED_INDICES = "sorterSelectedIndices";
+    private static final String KEY_SORT_SELECTED_INVERSIONS = "sorterSelectedInversions";
+    private static final String KEY_STRAVA_AUTH = "stravaAuthCode";
+    private static final String KEY_STRAVA_REFRESH = "stravaRefreshToken";
+    private static final String KEY_STRAVA_ACCESS = "stravaAccessToken";
+    private static final String KEY_STRAVA_ACCESS_EXP_DATE = "stravaAccessExpiration";
+    private static final String KEY_STRAVA_METHOD = "stravaRecordingMethod";
+    private static final String KEY_STRAVA_PULL_SETTINGS = "stravaPullSettings";
+
     // file
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;
@@ -35,8 +69,8 @@ public class Prefs {
 
     // display options
     private static boolean showWeekHeaders = true;
-    private static boolean weekDistance = true;
     private static boolean showDailyChart = true;
+    private static boolean hideSingletonRoutes = false;
 
     // look
     private static int color = 1;
@@ -48,9 +82,8 @@ public class Prefs {
 
     // filtering
     private static boolean showHiddenRoutes = true;
-    private static boolean hideSingletonRoutes = false;
     private static boolean includeLonger = false;
-    private static boolean includePaceless = true; // TODO
+    @Unfinished private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
     @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>();
@@ -78,40 +111,6 @@ public class Prefs {
         new Pair<>("Trail", true)
     );
 
-    // consts
-    public static final int COLOR_MONO = 0;
-    public static final int COLOR_GREEN = 1;
-
-    // tags
-    private static final String SHARED_PREFERENCES = "shared preferences";
-    private static final String APP_VERSION = "appVersion";
-    private static final String DEVELOPER = "developer";
-    private static final String FIRST_LOGIN = "firstLogin";
-    private static final String WEEK_HEADERS = "weekHeaders";
-    private static final String WEEK_DISTANCE = "weekDistance";
-    private static final String DAILY_CHART = "dailyChart";
-    private static final String COLOR = "color";
-    private static final String THEME = "theme";
-    private static final String MASS = "mass";
-    private static final String BIRTHDAY = "birthday";
-    private static final String SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
-    private static final String HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
-    private static final String INCLCUDE_LONGER = "includeLonger";
-    private static final String INCLCUDE_PACELESS = "includePaceless"; // TODO
-    private static final String LIMIT_LOWER = "lowerLimit";
-    private static final String LIMIT_UPPER = "upperLimit";
-    private static final String TYPES_EXERCISE = "typesExercise";
-    private static final String TYPES_ROUTE = "typesRoute";
-    private static final String TYPES_DISTANCE = "typesDistance";
-    private static final String SORT_SELECTED_INDICES = "sorterSelectedIndices";
-    private static final String SORT_SELECTED_INVERSIONS = "sorterSelectedInversions";
-    private static final String STRAVA_AUTH = "stravaAuthCode";
-    private static final String STRAVA_REFRESH = "stravaRefreshToken";
-    private static final String STRAVA_ACCESS = "stravaAccessToken";
-    private static final String STRAVA_ACCESS_EXP = "stravaAccessExpiration";
-    private static final String STRAVA_METHOD = "stravaRecordingMethod";
-    private static final String STRAVA_PULL_SETTINGS = "stravaPullSettings";
-
     //
 
     /**
@@ -123,7 +122,7 @@ public class Prefs {
      * @param c Context
      */
     public static void setUpAndLoad(Context c) {
-        sp = c.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        sp = c.getSharedPreferences(NAME_SHARED_PREFERENCES, MODE_PRIVATE);
         editor = sp.edit();
         appVersion = c.getString(R.string.app_version);
         load(c);
@@ -131,44 +130,43 @@ public class Prefs {
 
     private static void save() {
         // app
-        savePref(appVersion, APP_VERSION);
-        savePref(developer, DEVELOPER);
-        savePref(firstLogin, FIRST_LOGIN);
+        savePref(appVersion, KEY_APP_VERSION);
+        savePref(developer, KEY_DEVELOPER);
+        savePref(firstLogin, KEY_FIRST_LOGIN);
 
         // display
-        savePref(showWeekHeaders, WEEK_HEADERS);
-        savePref(weekDistance, WEEK_DISTANCE);
-        savePref(showDailyChart, DAILY_CHART);
+        savePref(showWeekHeaders, KEY_WEEK_HEADERS);
+        savePref(showDailyChart, KEY_DAILY_CHART);
 
         // look
-        savePref(color, COLOR);
-        savePref(theme, THEME);
+        savePref(color, KEY_COLOR);
+        savePref(theme, KEY_THEME);
 
         // profile
-        savePref(mass, MASS);
-        savePref(birthday, BIRTHDAY);
+        savePref(mass, KEY_MASS);
+        savePref(birthday, KEY_BIRTHDAY);
 
         // filtering
-        savePref(showHiddenRoutes, SHOW_HIDDEN_ROUTES);
-        savePref(hideSingletonRoutes, HIDE_SINGLETON_ROUTES);
-        savePref(includeLonger, INCLCUDE_LONGER);
-        savePref(distanceLowerLimit, LIMIT_LOWER);
-        savePref(distanceUpperLimit, LIMIT_UPPER);
-        savePref(exerciseVisibleTypes, TYPES_EXERCISE);
-        savePref(routeVisibleTypes, TYPES_ROUTE);
-        savePref(distanceVisibleTypes, TYPES_DISTANCE);
+        savePref(showHiddenRoutes, KEY_SHOW_HIDDEN_ROUTES);
+        savePref(hideSingletonRoutes, KEY_HIDE_SINGLETON_ROUTES);
+        savePref(includeLonger, KEY_INCLCUDE_LONGER);
+        savePref(distanceLowerLimit, KEY_LIMIT_LOWER);
+        savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
+        savePref(exerciseVisibleTypes, KEY_TYPES_EXERCISE);
+        savePref(routeVisibleTypes, KEY_TYPES_ROUTE);
+        savePref(distanceVisibleTypes, KEY_TYPES_DISTANCE);
 
         // sorting
-        savePref(sorterSelectedIndices, SORT_SELECTED_INDICES);
-        savePref(sorterSelectedInversions, SORT_SELECTED_INVERSIONS);
+        savePref(sorterSelectedIndices, KEY_SORT_SELECTED_INDICES);
+        savePref(sorterSelectedInversions, KEY_SORT_SELECTED_INVERSIONS);
 
         // strava
-        savePref(authCode, STRAVA_AUTH);
-        savePref(refreshToken, STRAVA_REFRESH);
-        savePref(accessToken, STRAVA_ACCESS);
-        savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
-        savePref(recordingMethod, STRAVA_METHOD);
-        savePref(pullSettings, STRAVA_PULL_SETTINGS);
+        savePref(authCode, KEY_STRAVA_AUTH);
+        savePref(refreshToken, KEY_STRAVA_REFRESH);
+        savePref(accessToken, KEY_STRAVA_ACCESS);
+        savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
+        savePref(recordingMethod, KEY_STRAVA_METHOD);
+        savePref(pullSettings, KEY_STRAVA_PULL_SETTINGS);
     }
 
     private static void load(Context c) {
@@ -179,52 +177,51 @@ public class Prefs {
         TypeToken<ArrayList<Integer>> intList = new TypeToken<ArrayList<Integer>>(){};
 
         // version
-        appVersion = loadPref(str, APP_VERSION);
+        appVersion = loadPref(str, KEY_APP_VERSION);
         String targetVersion = c.getString(R.string.app_version);
         if (!appVersion.equals(targetVersion)) {
             // do upgrades here; resolve conflicts or save new default values
             appVersion = targetVersion;
-            savePref(appVersion, APP_VERSION);
+            savePref(appVersion, KEY_APP_VERSION);
         }
 
         // app
-        developer = loadPref(bool, DEVELOPER);
-        firstLogin = loadPref(bool, FIRST_LOGIN);
+        developer = loadPref(bool, KEY_DEVELOPER);
+        firstLogin = loadPref(bool, KEY_FIRST_LOGIN);
 
         // display
-        showWeekHeaders = loadPref(bool, WEEK_HEADERS);
-        weekDistance = loadPref(bool, WEEK_DISTANCE);
-        showDailyChart = loadPref(bool, DAILY_CHART);
+        showWeekHeaders = loadPref(bool, KEY_WEEK_HEADERS);
+        showDailyChart = loadPref(bool, KEY_DAILY_CHART);
 
         // look
-        color = loadPref(new TypeToken<Integer>(){}, COLOR);
-        theme = loadPref(bool, THEME);
+        color = loadPref(new TypeToken<Integer>(){}, KEY_COLOR);
+        theme = loadPref(bool, KEY_THEME);
 
         // profile
-        mass = loadPref(new TypeToken<Float>(){}, MASS);
-        birthday = loadPref(new TypeToken<LocalDate>(){}, BIRTHDAY);
+        mass = loadPref(new TypeToken<Float>(){}, KEY_MASS);
+        birthday = loadPref(new TypeToken<LocalDate>(){}, KEY_BIRTHDAY);
 
         // filtering
-        showHiddenRoutes = loadPref(bool, SHOW_HIDDEN_ROUTES);
-        hideSingletonRoutes = loadPref(bool, HIDE_SINGLETON_ROUTES);
-        includeLonger = loadPref(bool, INCLCUDE_LONGER);
-        distanceLowerLimit = loadPref(in, LIMIT_LOWER);
-        distanceUpperLimit = loadPref(in, LIMIT_UPPER);
-        exerciseVisibleTypes = loadPref(intList, TYPES_EXERCISE);
-        routeVisibleTypes = loadPref(intList, TYPES_ROUTE);
-        distanceVisibleTypes = loadPref(intList, TYPES_DISTANCE);
+        showHiddenRoutes = loadPref(bool, KEY_SHOW_HIDDEN_ROUTES);
+        hideSingletonRoutes = loadPref(bool, KEY_HIDE_SINGLETON_ROUTES);
+        includeLonger = loadPref(bool, KEY_INCLCUDE_LONGER);
+        distanceLowerLimit = loadPref(in, KEY_LIMIT_LOWER);
+        distanceUpperLimit = loadPref(in, KEY_LIMIT_UPPER);
+        exerciseVisibleTypes = loadPref(intList, KEY_TYPES_EXERCISE);
+        routeVisibleTypes = loadPref(intList, KEY_TYPES_ROUTE);
+        distanceVisibleTypes = loadPref(intList, KEY_TYPES_DISTANCE);
 
         // sorting
-        sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, SORT_SELECTED_INDICES);
-        sorterSelectedInversions = loadPref(new TypeToken<boolean[]>(){}, SORT_SELECTED_INVERSIONS);
+        sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, KEY_SORT_SELECTED_INDICES);
+        sorterSelectedInversions = loadPref(new TypeToken<boolean[]>(){}, KEY_SORT_SELECTED_INVERSIONS);
 
         // strava
-        authCode = loadPref(str, STRAVA_AUTH);
-        refreshToken = loadPref(str, STRAVA_REFRESH);
-        accessToken = loadPref(str, STRAVA_ACCESS);
-        accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, STRAVA_ACCESS_EXP);
-        recordingMethod = loadPref(str, STRAVA_METHOD);
-        pullSettings = loadPref(new TypeToken<PairList<String, Boolean>>(){}, STRAVA_PULL_SETTINGS);
+        authCode = loadPref(str, KEY_STRAVA_AUTH);
+        refreshToken = loadPref(str, KEY_STRAVA_REFRESH);
+        accessToken = loadPref(str, KEY_STRAVA_ACCESS);
+        accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, KEY_STRAVA_ACCESS_EXP_DATE);
+        recordingMethod = loadPref(str, KEY_STRAVA_METHOD);
+        pullSettings = loadPref(new TypeToken<PairList<String, Boolean>>(){}, KEY_STRAVA_PULL_SETTINGS);
     }
 
     // tools
@@ -245,158 +242,156 @@ public class Prefs {
 
     private static Object ofTag(String tag) {
         switch (tag) {
-            case APP_VERSION: return appVersion;
-            case DEVELOPER: return developer;
-            case FIRST_LOGIN: return firstLogin;
-            case WEEK_HEADERS: return showWeekHeaders;
-            case WEEK_DISTANCE: return weekDistance;
-            case DAILY_CHART: return showDailyChart;
-            case COLOR: return color;
-            case THEME: return theme;
-            case MASS: return mass;
-            case BIRTHDAY: return birthday;
-            case SHOW_HIDDEN_ROUTES: return showHiddenRoutes;
-            case HIDE_SINGLETON_ROUTES: return hideSingletonRoutes;
-            case INCLCUDE_LONGER: return includeLonger;
-            case LIMIT_LOWER: return distanceLowerLimit;
-            case LIMIT_UPPER: return distanceUpperLimit;
-            case TYPES_EXERCISE: return exerciseVisibleTypes;
-            case TYPES_ROUTE: return routeVisibleTypes;
-            case TYPES_DISTANCE: return distanceVisibleTypes;
-            case SORT_SELECTED_INDICES: return sorterSelectedIndices;
-            case SORT_SELECTED_INVERSIONS: return sorterSelectedInversions;
-            case STRAVA_AUTH: return authCode;
-            case STRAVA_REFRESH: return refreshToken;
-            case STRAVA_ACCESS: return accessToken;
-            case STRAVA_ACCESS_EXP: return accessTokenExpiration;
-            case STRAVA_METHOD: return recordingMethod;
-            case STRAVA_PULL_SETTINGS: return pullSettings;
+            case KEY_APP_VERSION: return appVersion;
+            case KEY_DEVELOPER: return developer;
+            case KEY_FIRST_LOGIN: return firstLogin;
+            case KEY_WEEK_HEADERS: return showWeekHeaders;
+            case KEY_DAILY_CHART: return showDailyChart;
+            case KEY_COLOR: return color;
+            case KEY_THEME: return theme;
+            case KEY_MASS: return mass;
+            case KEY_BIRTHDAY: return birthday;
+            case KEY_SHOW_HIDDEN_ROUTES: return showHiddenRoutes;
+            case KEY_HIDE_SINGLETON_ROUTES: return hideSingletonRoutes;
+            case KEY_INCLCUDE_LONGER: return includeLonger;
+            case KEY_LIMIT_LOWER: return distanceLowerLimit;
+            case KEY_LIMIT_UPPER: return distanceUpperLimit;
+            case KEY_TYPES_EXERCISE: return exerciseVisibleTypes;
+            case KEY_TYPES_ROUTE: return routeVisibleTypes;
+            case KEY_TYPES_DISTANCE: return distanceVisibleTypes;
+            case KEY_SORT_SELECTED_INDICES: return sorterSelectedIndices;
+            case KEY_SORT_SELECTED_INVERSIONS: return sorterSelectedInversions;
+            case KEY_STRAVA_AUTH: return authCode;
+            case KEY_STRAVA_REFRESH: return refreshToken;
+            case KEY_STRAVA_ACCESS: return accessToken;
+            case KEY_STRAVA_ACCESS_EXP_DATE: return accessTokenExpiration;
+            case KEY_STRAVA_METHOD: return recordingMethod;
+            case KEY_STRAVA_PULL_SETTINGS: return pullSettings;
             default: return new Object();
         }
     }
 
     // set
 
+    @Debug
     public static void setDeveloper(boolean developer) {
         Prefs.developer = developer;
-        savePref(developer, DEVELOPER);
+        savePref(developer, KEY_DEVELOPER);
     }
 
     public static void setFirstLogin(boolean firstLogin) {
         Prefs.firstLogin = firstLogin;
-        savePref(firstLogin, FIRST_LOGIN);
+        savePref(firstLogin, KEY_FIRST_LOGIN);
     }
 
     public static void showWeekHeaders(boolean show) {
         showWeekHeaders = show;
-        savePref(show, WEEK_HEADERS);
-    }
-
-    public static void showWeekDistance(boolean show) {
-        weekDistance = show;
-        savePref(show, WEEK_DISTANCE);
+        savePref(show, KEY_WEEK_HEADERS);
     }
 
     public static void showDailyChart(boolean show) {
         showDailyChart = show;
-        savePref(show, DAILY_CHART);
+        savePref(show, KEY_DAILY_CHART);
     }
 
     public static void setColor(int colorConst) {
         color = colorConst;
-        savePref(colorConst, COLOR);
+        savePref(colorConst, KEY_COLOR);
     }
 
     public static void setTheme(boolean light) {
         theme = light;
-        savePref(light, THEME);
+        savePref(light, KEY_THEME);
     }
 
     public static void setMass(float kilos) {
         mass = kilos;
-        savePref(kilos, MASS);
+        savePref(kilos, KEY_MASS);
     }
 
     public static void setBirthday(LocalDate date) {
         birthday = date;
-        savePref(date, BIRTHDAY);
+        savePref(date, KEY_BIRTHDAY);
     }
 
     public static void showHiddenRoutes(boolean show) {
         showHiddenRoutes = show;
-        savePref(show, SHOW_HIDDEN_ROUTES);
+        savePref(show, KEY_SHOW_HIDDEN_ROUTES);
     }
 
     public static void hideSingletonRoutes(boolean hide) {
         hideSingletonRoutes = hide;
-        savePref(hide, HIDE_SINGLETON_ROUTES);
+        savePref(hide, KEY_HIDE_SINGLETON_ROUTES);
     }
 
+    @Unfinished
     public static void includeLonger(boolean include) {
         includeLonger = include;
-        savePref(include, INCLCUDE_LONGER);
+        savePref(include, KEY_INCLCUDE_LONGER);
     }
 
+    @Unfinished
     public static void setDistanceLowerLimit(int distanceLowerLimit) {
         Prefs.distanceLowerLimit = distanceLowerLimit;
-        savePref(distanceLowerLimit, LIMIT_LOWER);
+        savePref(distanceLowerLimit, KEY_LIMIT_LOWER);
     }
 
+    @Unfinished
     public static void setDistanceUpperLimit(int distanceUpperLimit) {
         Prefs.distanceUpperLimit = distanceUpperLimit;
-        savePref(distanceUpperLimit, LIMIT_UPPER);
+        savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
     }
 
     public static void setExerciseVisibleTypes(@NonNull ArrayList<Integer> types) {
         exerciseVisibleTypes = types;
-        savePref(types, TYPES_EXERCISE);
+        savePref(types, KEY_TYPES_EXERCISE);
     }
 
     public static void setRouteVisibleTypes(@NonNull ArrayList<Integer> types) {
         routeVisibleTypes = types;
-        savePref(types, TYPES_ROUTE);
+        savePref(types, KEY_TYPES_ROUTE);
     }
 
     public static void setDistanceVisibleTypes(@NonNull ArrayList<Integer> types) {
         distanceVisibleTypes = types;
-        savePref(types, TYPES_DISTANCE);
+        savePref(types, KEY_TYPES_DISTANCE);
     }
 
     public static void setSorter(AppConsts.Layout layout, int selectedIndex, boolean orderInverted) {
         sorterSelectedIndices[layout.ordinal()] = selectedIndex;
         sorterSelectedInversions[layout.ordinal()] = orderInverted;
-        savePref(sorterSelectedIndices, SORT_SELECTED_INDICES);
-        savePref(sorterSelectedInversions, SORT_SELECTED_INVERSIONS);
+        savePref(sorterSelectedIndices, KEY_SORT_SELECTED_INDICES);
+        savePref(sorterSelectedInversions, KEY_SORT_SELECTED_INVERSIONS);
     }
 
     public static void setAuthCode(String authCode) {
         Prefs.authCode = authCode;
-        savePref(authCode, STRAVA_AUTH);
+        savePref(authCode, KEY_STRAVA_AUTH);
     }
 
     public static void setRefreshToken(String refreshToken) {
         Prefs.refreshToken = refreshToken;
-        savePref(refreshToken, STRAVA_REFRESH);
+        savePref(refreshToken, KEY_STRAVA_REFRESH);
     }
 
     public static void setAccessToken(String accessToken) {
         Prefs.accessToken = accessToken;
-        savePref(accessToken, STRAVA_ACCESS);
+        savePref(accessToken, KEY_STRAVA_ACCESS);
     }
 
     public static void setAccessTokenExpiration(LocalDateTime accessTokenExpiration) {
         Prefs.accessTokenExpiration = accessTokenExpiration;
-        savePref(accessTokenExpiration, STRAVA_ACCESS_EXP);
+        savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
     }
 
     public static void setRecordingMethod(String recordingMethod) {
         Prefs.recordingMethod = recordingMethod;
-        savePref(recordingMethod, STRAVA_METHOD);
+        savePref(recordingMethod, KEY_STRAVA_METHOD);
     }
 
     public static void setPullSettings(PairList<String, Boolean> pullSettings) {
         Prefs.pullSettings = pullSettings;
-        savePref(pullSettings, STRAVA_PULL_SETTINGS);
+        savePref(pullSettings, KEY_STRAVA_PULL_SETTINGS);
     }
 
     public static void setColorGreen() {
@@ -419,10 +414,6 @@ public class Prefs {
 
     public static boolean isWeekHeadersShown() {
         return showWeekHeaders;
-    }
-
-    public static boolean isWeekDistanceShown() {
-        return weekDistance;
     }
 
     public static boolean isDailyChartShown() {
@@ -453,6 +444,7 @@ public class Prefs {
         return hideSingletonRoutes;
     }
 
+    @Unfinished
     public static boolean includeLonger() {
         return includeLonger;
     }

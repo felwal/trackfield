@@ -22,8 +22,8 @@ import java.util.List;
 public class GraphRecAdapterDelegate extends
     BaseAdapterDelegate<Graph, RecyclerItem, GraphRecAdapterDelegate.GraphRecViewHolder> {
 
-    public GraphRecAdapterDelegate(Activity activity) {
-        super(activity, null);
+    public GraphRecAdapterDelegate(Activity a) {
+        super(a, null);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -41,25 +41,25 @@ public class GraphRecAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(@NonNull Graph item, GraphRecViewHolder vh, @Nullable List<Object> payloads) {
-        vh.surface.restoreDefaultFocus();
-        vh.surface.setGraph(item);
-        vh.low.setText(MathUtils.stringTime(item.getMax(), true));
-        vh.high.setText(MathUtils.stringTime(item.getMin(), true));
+        vh.graphView.restoreDefaultFocus();
+        vh.graphView.setGraph(item);
+        vh.lowTv.setText(MathUtils.stringTime(item.getMax(), true));
+        vh.highTv.setText(MathUtils.stringTime(item.getMin(), true));
     }
 
     // vh
 
     static class GraphRecViewHolder extends RecyclerView.ViewHolder {
 
-        public GraphView surface;
-        public TextView low;
-        public TextView high;
+        public GraphView graphView;
+        public TextView lowTv;
+        public TextView highTv;
 
         public GraphRecViewHolder(View itemView) {
             super(itemView);
-            surface = itemView.findViewById(R.id.graphSurface_rec);
-            low = itemView.findViewById(R.id.textView_low);
-            high = itemView.findViewById(R.id.textView_high);
+            graphView = itemView.findViewById(R.id.graphSurface_rec);
+            lowTv = itemView.findViewById(R.id.textView_low);
+            highTv = itemView.findViewById(R.id.textView_high);
 
             // scroll to start
             final HorizontalScrollView sv = itemView.findViewById(R.id.scrollView_graphSurface);

@@ -1,7 +1,6 @@
 package com.example.trackfield.ui.main.stats;
 
 import android.os.Bundle;
-
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,12 +14,9 @@ import androidx.annotation.NonNull;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainFragment;
-import com.example.trackfield.utils.model.SortMode;
 
 public class StatsFragment extends MainFragment {
 
-    private View view;
-    private FrameLayout frame;
     private StatsRecyclerFragment recyclerFragment;
 
     // extends Fragment
@@ -28,6 +24,8 @@ public class StatsFragment extends MainFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set transition
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         //setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
@@ -35,11 +33,11 @@ public class StatsFragment extends MainFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_stats, container, false);
+        View view = inflater.inflate(R.layout.fragment_stats, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        frame = view.findViewById(R.id.frameLayout_scrollerFrameDev);
+        FrameLayout frame = view.findViewById(R.id.frameLayout_scrollerFrameDev);
         recyclerFragment = new StatsRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
@@ -47,7 +45,7 @@ public class StatsFragment extends MainFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater)  {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_toolbar_main_stats, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -61,7 +59,7 @@ public class StatsFragment extends MainFragment {
 
     @Override
     protected void scrollToTop() {
-
+        recyclerFragment.scrollToTop();
     }
 
     @Override
@@ -70,7 +68,7 @@ public class StatsFragment extends MainFragment {
     }
 
     @Override
-    protected void onSortSheetDismiss(int selectedIndex) {
+    protected void onSortSheetClick(int selectedIndex) {
         recyclerFragment.onSortSheetDismiss(selectedIndex);
     }
 

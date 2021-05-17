@@ -23,6 +23,7 @@ import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.model.PairList;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -34,22 +35,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class StravaApi {
-
-    private static StravaApi instance;
-
-    private Activity a;
-    private static RequestQueue queue;
-
-    private final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-    // secrets
-    private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
-    private static final String CLIENT_SECRET = BuildConfig.STRAVA_CLIENT_SECRET;
-
-    private static final String REDIRECT_URI = "https://felwal.github.io/callback";
-    private static final int PER_PAGE = 200; // max = 200
-    public static final int REQUEST_CODE_PERMISSIONS_STRAVA = 2;
-    private static final String LOG_TAG = "StravaAPI";
 
     // token response json keys
     private static final String JSON_ACCESS_TOKEN = "access_token";
@@ -69,6 +54,19 @@ public class StravaApi {
     private static final String JSON_START = "start_latlng";
     private static final String JSON_END = "end_latlng";
     private static final String JSON_DEVICE = "device_name";
+
+    // api values
+    private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
+    private static final String CLIENT_SECRET = BuildConfig.STRAVA_CLIENT_SECRET;
+    private static final String REDIRECT_URI = "https://felwal.github.io/callback";
+    private static final int PER_PAGE = 200; // max = 200
+
+    private static final String LOG_TAG = "StravaAPI";
+    private static final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    private static StravaApi instance;
+    private static RequestQueue queue;
+    private final Activity a;
 
     //
 
@@ -104,7 +102,6 @@ public class StravaApi {
      * @param appLinkIntent The intent possibly containing appLinkData
      */
     public void handleIntent(Intent appLinkIntent) {
-        //String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
         if (appLinkData != null) finishAuthorization(appLinkData);
     }
@@ -154,10 +151,8 @@ public class StravaApi {
                         Log.i(LOG_TAG, "response: " + response.toString());
                         LayoutUtils.toast(success, R.string.toast_strava_pull_activity_successful,
                             R.string.toast_strava_pull_activity_err, a);
-                    },
-                    e -> LayoutUtils.handleError(a.getString(R.string.toast_strava_pull_activity_err) + " "
-                            + stravaId, e,
-                        a));
+                    }, e -> LayoutUtils.handleError(
+                        a.getString(R.string.toast_strava_pull_activity_err) + " " + stravaId, e, a));
 
                 queue.add(request);
             }
@@ -278,15 +273,14 @@ public class StravaApi {
             }
 
             // convert
-            int type = Exercise.typeFromStravaType(stravaType);
+            int type = convertType(stravaType);
             int routeId = DbReader.get(a).getRouteIdOrCreate(name, a);
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
 
-            return new Exercise(Exercise.NO_ID, stravaId, type, dateTime, routeId, name,
-                "", "", description,
-                device, method, distance, time, null, trail);
+            return new Exercise(Exercise.NO_ID, stravaId, type, dateTime, routeId, name, "", "", description, device,
+                method, distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -310,7 +304,34 @@ public class StravaApi {
 
         // merge
         else {
-            success &= existing.mergeStravaPull(strava, a);
+            PairList<String, Boolean> settings = Prefs.getPullSettings();
+
+            if (settings.getSecond("Route")) {
+                existing.setRoute(strava.getRoute());
+                existing.setRouteId(strava.getRouteId());
+            }
+            if (settings.getSecond("Type")) {
+                existing.setType(strava.getType());
+            }
+            if (settings.getSecond("Date and time")) {
+                existing.setDateTime(strava.getDateTime());
+            }
+            if (settings.getSecond("Data source")) {
+                existing.setDataSource(strava.getDataSource());
+            }
+            if (settings.getSecond("Distance")) {
+                existing.setDistance(strava.getDistance());
+            }
+            if (settings.getSecond("Time")) {
+                existing.setTime(strava.getTime());
+            }
+            if (settings.getSecond("Note") && !strava.getNote().equals("")) {
+                existing.setNote(strava.getNote());
+            }
+            if (settings.getSecond("Trail")) {
+                existing.setTrail(strava.getTrail());
+            }
+
             success &= DbWriter.get(a).updateExercise(existing, a);
         }
 
@@ -333,9 +354,9 @@ public class StravaApi {
         // merge
         if (matching.size() == 1) {
             Exercise x = matching.get(0);
-            Exercise merged = new Exercise(x.get_id(), strava.getExternalId(), x.getType(), strava.getDateTime(),
+            Exercise merged = new Exercise(x.getId(), strava.getExternalId(), x.getType(), strava.getDateTime(),
                 x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(), x.getDataSource(),
-                x.getRecordingMethod(), strava.getDistance(), strava.getTimePrimary(), x.getSubs(),
+                x.getRecordingMethod(), strava.getDistance(), strava.getTime(), x.getSubs(),
                 strava.getTrail());
 
             success &= DbWriter.get(a).updateExercise(merged, a);
@@ -392,6 +413,44 @@ public class StravaApi {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         a.startActivity(intent);
+    }
+
+    // tools
+
+    private static int convertType(String stravaType) {
+        switch (stravaType) {
+            case "Run": return Exercise.TYPE_RUN;
+            case "Walk":
+            case "Hike": return Exercise.TYPE_WALK;
+            case "Ride": return Exercise.TYPE_RIDE;
+            case "Swim":
+            case "Apline Ski":
+            case "Backcountry Ski":
+            case "Canoe":
+            case "Crossfit": return Exercise.TYPE_STRENGTH;
+            case "E-Bike Ride":
+            case "Elliptical":
+            case "Handcycle":
+            case "Ice Skate":
+            case "Inline Skate":
+            case "Kayak":
+            case "Kitesurf Session":
+            case "Nordic Ski":
+            case "Row":
+            case "Snowboard":
+            case "Snowshoe":
+            case "Stair Stepper":
+            case "Stand Up Paddle":
+            case "Surf":
+            case "Virtual Ride":
+            case "Virtual Run":
+            case "Weight Training":
+            case "Windsurf Session":
+            case "Wheelchair":
+            case "Workout":
+            case "Yoga": return Exercise.TYPE_YOGA;
+            default: return Exercise.TYPE_OTHER;
+        }
     }
 
     // interface

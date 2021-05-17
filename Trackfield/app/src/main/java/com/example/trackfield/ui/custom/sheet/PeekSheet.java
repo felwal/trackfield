@@ -20,27 +20,25 @@ import com.example.trackfield.utils.LayoutUtils;
 
 public class PeekSheet extends BaseSheet {
 
-    private DismissListener listener;
+    // bundle keys
+    private static final String BUNDLE_ID = "id";
+
+    private static final String TAG = "peekSheet";
+
+    private SheetListener listener;
 
     // arguments
     private Exercise exercise;
 
-    private static final String TAG = "peekSheet";
-
-    // bundle
-    public static final String BUNDLE_ID = "id";
-
     //
 
-    public static PeekSheet newInstance(int id) {
-
+    public static PeekSheet newInstance(int exerciseId) {
         PeekSheet instance = new PeekSheet();
         Bundle bundle = new Bundle();
 
-        bundle.putInt(BUNDLE_ID, id);
+        bundle.putInt(BUNDLE_ID, exerciseId);
 
         instance.setArguments(bundle);
-
         return instance;
     }
 
@@ -52,9 +50,7 @@ public class PeekSheet extends BaseSheet {
         @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.sheet_peek, container, false);
-
         buildSheet();
-
         return view;
     }
 
@@ -63,7 +59,7 @@ public class PeekSheet extends BaseSheet {
         super.onAttach(context);
 
         try {
-            listener = (DismissListener) context;
+            listener = (SheetListener) context;
         }
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
@@ -73,14 +69,13 @@ public class PeekSheet extends BaseSheet {
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
-        listener.onPeekSheetDismiss(exercise.get_id());
+        listener.onPeekSheetClick(exercise.getId());
     }
 
     // extends BaseSheet
 
     @Override
     protected void unpackBundle() {
-
         Bundle bundle = getArguments();
 
         if (bundle != null) {
@@ -106,9 +101,9 @@ public class PeekSheet extends BaseSheet {
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
         dateTv.setText(exercise.getDateTime().format(AppConsts.FORMATTER_CAPTION));
-        distanceTv.setText(exercise.printDistance(true));
+        distanceTv.setText(exercise.printDistance(true, a));
         timeTv.setText(exercise.printTime(false));
-        paceTv.setText(exercise.printPace(false));
+        paceTv.setText(exercise.printPace(false, a));
 
         // set text color - TODO: xml attribute does not work - why?
         int textColor = LayoutUtils.getColorInt(android.R.attr.textColorPrimary, a);
@@ -120,14 +115,14 @@ public class PeekSheet extends BaseSheet {
         paceTv.setTextColor(textColor);
 
         // open full view
-        view.setOnClickListener(view -> ViewActivity.startActivity(a, exercise.get_id()));
+        view.setOnClickListener(view -> ViewActivity.startActivity(a, exercise.getId()));
     }
 
     // interface
 
-    public interface DismissListener {
+    public interface SheetListener {
 
-        void onPeekSheetDismiss(int id);
+        void onPeekSheetClick(int exerciseId);
 
     }
 

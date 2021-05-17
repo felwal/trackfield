@@ -25,16 +25,16 @@ import java.util.List;
 class DistanceExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, DistanceExerciseAdapterDelegate.ExerciseMediumViewHolder> {
 
-    private BaseAdapter adapter;
-    private int originId;
-    private int distance;
+    private final BaseAdapter adapter;
+    private final int originId;
+    private final int distance;
 
     //
 
-    DistanceExerciseAdapterDelegate(Activity activity, DelegateClickListener listener,
-        BaseAdapter adapter,
-        int originId, int distance) {
-        super(activity, listener);
+    DistanceExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseAdapter adapter, int originId,
+        int distance) {
+
+        super(a, listener);
         this.adapter = adapter;
         this.originId = originId;
         this.distance = distance;
@@ -60,15 +60,15 @@ class DistanceExerciseAdapterDelegate extends
             + AppConsts.TAB + item.printPace();
 
         String date = item.getDate().format(
-            adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
-                AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
+            adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear())
+                ? AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
-        vh.primary.setText(date);
-        vh.secondary.setText(values);
-        vh.caption.setText(item.getRoute());
-        vh.originMarker.setVisibility(item.has_id(originId) ? View.VISIBLE : View.GONE);
+        vh.primaryTv.setText(date);
+        vh.secondaryTv.setText(values);
+        vh.captionTv.setText(item.getRoute());
+        vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
-        vh.recordMarker.getBackground().setColorFilter(context.getColor(
+        vh.recordMarker.getBackground().setColorFilter(c.getColor(
             item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
             PorterDuff.Mode.MULTIPLY);
     }
@@ -77,17 +77,17 @@ class DistanceExerciseAdapterDelegate extends
 
     class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
-        public TextView caption;
+        public TextView primaryTv;
+        public TextView secondaryTv;
+        public TextView captionTv;
         public View originMarker;
         public View recordMarker;
 
         public ExerciseMediumViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
-            caption = itemView.findViewById(R.id.textView_caption);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            captionTv = itemView.findViewById(R.id.textView_caption);
             originMarker = itemView.findViewById(R.id.view_orignMarker);
             recordMarker = itemView.findViewById(R.id.view_recordMarker);
             itemView.setOnClickListener(this);

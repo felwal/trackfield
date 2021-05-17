@@ -6,20 +6,20 @@ import java.util.ArrayList;
 
 public class PairList<F, S> {
 
-    private Pair<F, S>[] pairs;
+    private final Pair<F, S>[] pairs;
 
     //
 
     public PairList(Pair<F, S>... pairs) {
         this.pairs = pairs;
     }
-    
+
     // get
-    
+
     public Pair<F, S>[] getPairs() {
         return pairs;
     }
-    
+
     public Pair<F, S> getPair(int index) {
         return index < pairs.length ? pairs[index] : null;
     }
@@ -37,7 +37,7 @@ public class PairList<F, S> {
         }
         return null;
     }
-    
+
     public ArrayList<F> getFirsts() {
         ArrayList<F> firsts = new ArrayList<>();
         for (Pair<F, S> pair : pairs) {

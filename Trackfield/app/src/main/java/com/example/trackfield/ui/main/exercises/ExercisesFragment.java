@@ -17,12 +17,9 @@ import androidx.appcompat.widget.SearchView;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.ui.main.MainFragment;
-import com.example.trackfield.utils.model.SortMode;
 
 public class ExercisesFragment extends MainFragment {
 
-    private View view;
-    private FrameLayout frame;
     private ExercisesRecyclerFragment recyclerFragment;
 
     // extends Fragment
@@ -30,18 +27,23 @@ public class ExercisesFragment extends MainFragment {
     @Override
     public void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);
+
+        // set transiton
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         //setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
     }
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_exercises, container, false);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_exercises, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        frame = view.findViewById(R.id.frameLayout_scrollerFrameMain);
+        FrameLayout frame = view.findViewById(R.id.frameLayout_scrollerFrameMain);
         recyclerFragment = new ExercisesRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
@@ -59,13 +61,18 @@ public class ExercisesFragment extends MainFragment {
         searchView.setQueryHint("Search");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String query) { return false; }
-            @Override public boolean onQueryTextChange(String newText) {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
                 recyclerFragment.updateSearch(newText);
                 return false;
             }
-        });
 
+        });
     }
 
     // extends MainFragment
@@ -86,7 +93,7 @@ public class ExercisesFragment extends MainFragment {
     }
 
     @Override
-    protected void onSortSheetDismiss(int selectedIndex) {
+    protected void onSortSheetClick(int selectedIndex) {
         recyclerFragment.onSortSheetDismiss(selectedIndex);
     }
 

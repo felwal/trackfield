@@ -15,14 +15,14 @@ import java.util.List;
 
 class ExercisesAdapter extends BaseAdapter {
 
-    public ExercisesAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+    public ExercisesAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new ExerciseAdapterDelegate(activity, listener))
-            .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphWeekAdapterDelegate(activity))
-            .addDelegate(new HeaderBigAdapterDelegate(activity, listener))
-            .addDelegate(new HeaderMediumAdapterDelegate(activity, listener))
-            .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+            .addDelegate(new ExerciseAdapterDelegate(a, listener))
+            .addDelegate(new SorterAdapterDelegate(a, listener, this))
+            .addDelegate(new GraphWeekAdapterDelegate(a))
+            .addDelegate(new HeaderBigAdapterDelegate(a, listener))
+            .addDelegate(new HeaderMediumAdapterDelegate(a, listener))
+            .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 
         setItems(items);
     }

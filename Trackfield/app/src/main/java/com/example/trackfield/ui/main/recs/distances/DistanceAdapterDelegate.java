@@ -21,8 +21,8 @@ import java.util.List;
 public class DistanceAdapterDelegate extends
     BaseAdapterDelegate<DistanceItem, RecyclerItem, DistanceAdapterDelegate.DistanceViewHolder> {
 
-    public DistanceAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public DistanceAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -40,21 +40,21 @@ public class DistanceAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(DistanceItem item, DistanceViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(MathUtils.prefix(item.getDistance(), 2, "m"));
-        vh.secondary.setText(item.printValues());
+        vh.primaryTv.setText(MathUtils.prefix(item.getDistance(), 2, "m"));
+        vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
     class DistanceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public DistanceViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             itemView.setOnClickListener(this);
         }
 

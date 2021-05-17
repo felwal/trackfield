@@ -78,7 +78,6 @@ public final class MathUtils {
     // strings
 
     public static String prefix(float value, int decimals, String unit) {
-
         String prefix = "";
         boolean integer = false;
 
@@ -105,7 +104,6 @@ public final class MathUtils {
     }
 
     public static String bigPrefix(float value, int E, String unit) {
-
         String str = Float.toString(value);
         int decimalIndex = 0;
         for (int i = 0; i < str.length(); i++) {
@@ -173,7 +171,6 @@ public final class MathUtils {
     }
 
     public static String stringTime(float timeToString, boolean round) {
-
         if (timeToString == 0) {
             return AppConsts.NO_VALUE_TIME;
         }
@@ -233,29 +230,9 @@ public final class MathUtils {
         return hours * 3600 + minutes * 60 + seconds;
     }
 
-    public static String notateDriven(String s) {
-        return "( " + s + " )";
-    }
-
-    public static String truncateString(String s, int maxLength) {
-        return s.length() < maxLength ? s : s.substring(0, maxLength);
-    }
-
     // convert / compute
 
-    public static boolean intToBool(int i) {
-        return i != 0;
-    }
-
-    public static int shortenInt(int i, int length) {
-        if (Integer.toString(i).length() > length) {
-            i = Integer.valueOf(Integer.toString(i).substring(0, length - 1));
-        }
-        return i;
-    }
-
     public static double arrayAvg(double[] arr, double ignoreIfEqualTo) {
-
         int length = arr.length;
 
         double total = 0;
@@ -266,18 +243,7 @@ public final class MathUtils {
         return length == 0 ? 0 : total / length;
     }
 
-    public static double sortValue(String s) {
-
-        double value = 0;
-        for (int c = 0; c < s.length(); c++) {
-            value += (int) s.toLowerCase().charAt(c) / Math.pow(1000, c);
-        }
-
-        return value;
-    }
-
     public static float[] getTimeParts(float timeToSplit) {
-
         float seconds;
         int minutes;
         int hours;
@@ -288,42 +254,6 @@ public final class MathUtils {
         minutes = minutes % 60;
 
         return new float[] { seconds, minutes, hours };
-    }
-
-    // lists
-
-    public static boolean treeMapsEquals(TreeMap<Float, Float> map1, TreeMap<Float, Float> map2) {
-        if (map1.size() != map2.size()) return false;
-
-        for (TreeMap.Entry<Float, Float> entry : map1.entrySet()) {
-            float key = entry.getKey();
-            if (!map2.containsKey(key) || map2.get(key).floatValue() != entry.getValue().floatValue())
-                return false;
-        }
-        return true;
-    }
-
-    @NonNull
-    public static ArrayList<Integer> createList(int valueToAdd) {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(valueToAdd);
-        return list;
-    }
-
-    public static boolean[] castToPrimitive(Boolean[] genericArray) {
-        boolean[] primitiveArray = new boolean[genericArray.length];
-        for (int i = 0; i < genericArray.length; i++) {
-            primitiveArray[i] = genericArray[i];
-        }
-        return primitiveArray;
-    }
-
-    public static Boolean[] castToGeneric(boolean[] primitiveArray) {
-        Boolean[] genericArray = new Boolean[primitiveArray.length];
-        for (int i = 0; i < primitiveArray.length; i++) {
-            genericArray[i] = primitiveArray[i];
-        }
-        return genericArray;
     }
 
     // distance
@@ -341,15 +271,8 @@ public final class MathUtils {
     }
 
     public static boolean insideLimits(int distance, int fitsInside, boolean includeLonger) {
-        return distance > MathUtils.minDistance(fitsInside) && (includeLonger || distance < MathUtils.maxDistance(fitsInside));
-    }
-
-    // dates
-
-    // map
-
-    public static LatLng toLatLng(Location location) {
-        return new LatLng(location.getLatitude(), location.getLongitude());
+        return distance > MathUtils.minDistance(fitsInside) && (includeLonger || distance < MathUtils.maxDistance(
+            fitsInside));
     }
 
 }

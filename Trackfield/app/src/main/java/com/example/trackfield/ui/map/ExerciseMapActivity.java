@@ -1,16 +1,13 @@
 package com.example.trackfield.ui.map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.trackfield.data.db.DbReader;
-import com.example.trackfield.data.db.model.Exercise;
-import com.example.trackfield.ui.map.model.Trail;
-import com.example.trackfield.ui.map.model.Trails;
-import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.map.model.Trail;
+import com.example.trackfield.utils.LayoutUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -22,13 +19,12 @@ import java.util.HashMap;
 public class ExerciseMapActivity extends MapActivity {
 
     private Trail trail;
-    private Trails routeTrails;
 
     //
 
-    public static void startActivity(int _id, Context c) {
+    public static void startActivity(int exerciseId, Context c) {
         Intent intent = new Intent(c, ExerciseMapActivity.class);
-        intent.putExtra(EXTRA_ID, _id);
+        intent.putExtra(EXTRA_ID, exerciseId);
         c.startActivity(intent);
     }
 
@@ -37,23 +33,23 @@ public class ExerciseMapActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        trail = DbReader.get(this).getTrail(_id); //getExercise(_id).getTrail();
-        Exercise e = DbReader.get(this).getExercise(_id);
-        //routeTrails = new Trails(Reader.get().getPolylinesByRoute(e.getRouteId(), e.getRouteVar()));
+        trail = DbReader.get(this).getTrail(id);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        seletedPolylines = setReadyMap(googleMap, trail, routeTrails, MAP_PADDING, this);
+        seletedPolylines = setReadyMap(googleMap, trail, MAP_PADDING, this);
         googleMap.setOnPolylineClickListener(this);
 
-        // markers
+        // start marker
         MarkerOptions startMarker = new MarkerOptions();
-        MarkerOptions endMarker = new MarkerOptions();//.icon(BitmapDescriptorFactory.fromResource((R.drawable.ic_map_marker_24dp)));
         startMarker.position(trail.getStart());
-        endMarker.position(trail.getEnd());
         //googleMap.addMarker(startMarker);
+
+        // end marker
+        MarkerOptions endMarker = new MarkerOptions();
+        endMarker.position(trail.getEnd());
         //googleMap.addMarker(endMarker);
 
         //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -61,39 +57,31 @@ public class ExerciseMapActivity extends MapActivity {
 
     @Override
     protected void recentre() {
-        moveCamera(googleMap, trail.getBounds(), MAP_PADDING, true);
+        moveCamera(map, trail.getBounds(), MAP_PADDING, true);
     }
 
     // set
 
-    public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trail trail, Trails trails, int padding, Activity a) {
+    public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trail trail, int padding,
+        Context c) {
 
         // style
-        if (!Prefs.isThemeLight()) LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(a)), a);
+        if (!Prefs.isThemeLight()) LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
 
         // polyline
         PolylineOptions options = new PolylineOptions();
-        options.color(getColorSelected(a));
+        options.color(getColorSelected(c));
         options.addAll(trail.getLatLngs());
         Polyline polyline = googleMap.addPolyline(options);
-
         ArrayList<Polyline> polylines = new ArrayList<>();
         polylines.add(polyline);
-
-        // avg poly
-        /*if (trails != null) {
-            PolylineOptions routePoly = new PolylineOptions();
-            routePoly.color(c.getResources().getColor(R.color.colorWhite));
-            routePoly.addAll(trails.toAvgTrail().getLatLngs());
-            googleMap.addPolyline(routePoly);
-        }*/
 
         moveCamera(googleMap, trail.getBounds(), padding, false);
 
         return polylines;
     }
 
-    // extends
+    // extends MapActivity
 
     @Override
     protected HashMap<Integer, String> getRestOfPolylines(int exceptId) {

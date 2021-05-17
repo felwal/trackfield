@@ -14,14 +14,13 @@ import java.util.List;
 
 class DistanceAdapter extends BaseAdapter {
 
-    DistanceAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items, int originId,
-        int distance) {
+    DistanceAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId, int distance) {
         delegatesManager
-            .addDelegate(new DistanceExerciseAdapterDelegate(activity, listener, this, originId, distance))
-            .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphRecAdapterDelegate(activity))
-            .addDelegate(new GoalAdapterDelegate(activity))
-            .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+            .addDelegate(new DistanceExerciseAdapterDelegate(a, listener, this, originId, distance))
+            .addDelegate(new SorterAdapterDelegate(a, listener, this))
+            .addDelegate(new GraphRecAdapterDelegate(a))
+            .addDelegate(new GoalAdapterDelegate(a))
+            .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 
         setItems(items);
     }

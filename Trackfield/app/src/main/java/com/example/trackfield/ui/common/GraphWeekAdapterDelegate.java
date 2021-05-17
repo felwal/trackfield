@@ -19,8 +19,8 @@ import java.util.List;
 public class GraphWeekAdapterDelegate extends
     BaseAdapterDelegate<Graph, RecyclerItem, GraphWeekAdapterDelegate.GraphWeekViewHolder> {
 
-    public GraphWeekAdapterDelegate(Activity activity) {
-        super(activity, null);
+    public GraphWeekAdapterDelegate(Activity a) {
+        super(a, null);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -38,19 +38,19 @@ public class GraphWeekAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(@NonNull Graph item, GraphWeekViewHolder vh, @Nullable List<Object> payloads) {
-        vh.surface.restoreDefaultFocus();
-        vh.surface.setGraph(item);
+        vh.graphView.restoreDefaultFocus();
+        vh.graphView.setGraph(item);
     }
 
     // vh
 
     static class GraphWeekViewHolder extends RecyclerView.ViewHolder {
 
-        public GraphView surface;
+        public GraphView graphView;
 
         public GraphWeekViewHolder(View itemView) {
             super(itemView);
-            surface = itemView.findViewById(R.id.graphSurface_base);
+            graphView = itemView.findViewById(R.id.graphSurface_base);
         }
 
     }

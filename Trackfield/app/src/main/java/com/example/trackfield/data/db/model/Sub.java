@@ -2,27 +2,29 @@ package com.example.trackfield.data.db.model;
 
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.model.Unfinished;
 
+@Unfinished
 public class Sub {
 
-    private final int _id;
-    private int _superId;
+    private final int id;
+    private int superId;
     private int distance;
     private float time;
 
     //
 
-    public Sub(int _id, int _superId, int distance, float time) {
-        this._id = _id;
-        this._superId = _superId;
+    public Sub(int id, int superId, int distance, float time) {
+        this.id = id;
+        this.superId = superId;
         this.distance = distance;
         this.time = time;
     }
 
     // set
 
-    public void set_superId(int _superId) {
-        this._superId = _superId;
+    public void setSuperId(int _superId) {
+        this.superId = _superId;
     }
 
     public void setDistance(int distance) {
@@ -35,12 +37,12 @@ public class Sub {
 
     // get
 
-    public int get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
-    public int get_superId() {
-        return _superId;
+    public int getSuperId() {
+        return superId;
     }
 
     public int getDistance() {
@@ -54,31 +56,29 @@ public class Sub {
     // get driven
 
     public float getPace() {
-        if (distance == 0) { return 0; }
+        if (distance == 0) return 0;
         return time / ((float) distance / 1000f);
     }
 
     // print
 
     public String printDistance() {
-        if (distance == 0) { return AppConsts.NO_VALUE; }
+        if (distance == 0) return AppConsts.NO_VALUE;
         return MathUtils.prefix(distance, 2, "m");
     }
 
-    public String printTime(boolean unit) {
+    public String printTime(boolean showUnit) {
         String timePrint = MathUtils.stringTime(time, false);
-        if (!unit || timePrint.equals(AppConsts.NO_VALUE_TIME)) { return timePrint; }
+
+        if (!showUnit || timePrint.equals(AppConsts.NO_VALUE_TIME)) return timePrint;
         return timePrint + " s";
     }
 
-    public String printPace(boolean unit) {
+    public String printPace(boolean showUnit) {
         String pacePrint = MathUtils.stringTime(getPace(), true);
-        if (!unit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) { return pacePrint; }
-        return pacePrint + " s/km";
-    }
 
-    public String extractToFile(char div, int superId, int index) {
-        return superId + "" + div + "" + index + "" + div + "" + distance + "" + div + "" + time + "";
+        if (!showUnit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) { return pacePrint; }
+        return pacePrint + " s/km";
     }
 
 }

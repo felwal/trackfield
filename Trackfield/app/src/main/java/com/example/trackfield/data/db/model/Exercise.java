@@ -5,13 +5,14 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 
 import com.example.trackfield.data.db.DbReader;
+import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.data.prefs.Prefs;
-import com.example.trackfield.utils.model.PairList;
+import com.example.trackfield.utils.TypeUtils;
+import com.example.trackfield.utils.model.Unfinished;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -24,29 +25,11 @@ import java.util.ArrayList;
 
 public class Exercise implements JSONObjectable {
 
-    private final int _id;
-    private long externalId;
-    private int type;
-    private LocalDateTime dateTime;
-    private int routeId;
-    private String route;
-    private String routeVar;
-    private String interval;
-    private String note;
-    private String dataSource;
-    private String recordingMethod;
-
-    private int distance;
-    private float time;
-    private ArrayList<Sub> subs;
-    private Trail trail;
-
-    public enum SortMode { DATE, DISTANCE, TIME, PACE, NAME }
-
-    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other", "Strength",
-        "Dance", "Yoga" };
+    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other",
+        "Strength", "Dance", "Yoga" };
     public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Other",
         "Strength", "Dances", "Yoga" };
+
     public static final int TYPE_RUN = 0;
     public static final int TYPE_INTERVALS = 1;
     public static final int TYPE_WALK = 2;
@@ -57,35 +40,52 @@ public class Exercise implements JSONObjectable {
     public static final int TYPE_DANCE = 7;
     public static final int TYPE_YOGA = 8;
 
-    private static final int DISTANCE_DECIMALS = 2;
     public static final int DISTANCE_DRIVEN = -1;
     public static final int NO_ID = -1;
 
     // json keys
     private static final String JSON_ID = "id";
-    private static final String JSON_EXTERNAL_ID = "external_id";
+    private static final String JSON_EXTERNAL_ID = "externalId";
     private static final String JSON_TYPE = "type";
     private static final String JSON_EPOCH = "epoch";
-    private static final String JSON_ROUTE_ID = "route_id";
-    private static final String JSON_ROUTE = "route";
-    private static final String JSON_ROUTEVAR = "route_var";
+    private static final String JSON_ROUTE_ID = "routeId";
+    private static final String JSON_ROUTEVAR = "routeVar";
     private static final String JSON_INTERVAL = "interval";
     private static final String JSON_DISTANCE = "distance";
-    private static final String JSON_EFFECTIVE_DISTANCE = "effective_distance";
+    private static final String JSON_EFFECTIVE_DISTANCE = "effectiveDistance";
     private static final String JSON_TIME = "time";
-    private static final String JSON_DATA_SOURCE = "data_source";
-    private static final String JSON_RECORDING_METHOD = "recording_method";
+    private static final String JSON_DATA_SOURCE = "dataSource";
+    private static final String JSON_RECORDING_METHOD = "recordingMethod";
     private static final String JSON_NOTE = "note";
-    private static final String JSON_START_LATLNG = "start_latlng";
-    private static final String JSON_END_LATLNG = "end_latlng";
+    private static final String JSON_START_LATLNG = "startLatlng";
+    private static final String JSON_END_LATLNG = "endLatlng";
     private static final String JSON_POLYLINE = "polyline";
+
+    private static final int DISTANCE_DECIMALS = 2;
+
+    private final int id;
+    private long externalId;
+    private int type;
+    private LocalDateTime dateTime;
+    private int routeId;
+    private String route;
+    private String routeVar;
+    private String interval;
+    private String note;
+    private String dataSource;
+    private String recordingMethod;
+    private int distance;
+    private float time;
+    private Trail trail;
+    @Unfinished private final ArrayList<Sub> subs;
 
     //
 
-    public Exercise(int _id, long externalId, int type, LocalDateTime dateTime, int routeId, String route,
+    public Exercise(int id, long externalId, int type, LocalDateTime dateTime, int routeId, String route,
         String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance,
         float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
-        this._id = _id;
+
+        this.id = id;
         this.externalId = externalId;
         this.type = type;
         this.dateTime = dateTime;
@@ -103,12 +103,12 @@ public class Exercise implements JSONObjectable {
     }
 
     public Exercise(JSONObject obj, Context c) throws JSONException {
-        _id = obj.getInt(JSON_ID);
+        id = obj.getInt(JSON_ID);
         externalId = obj.getLong(JSON_EXTERNAL_ID);
         type = obj.getInt(JSON_TYPE);
         dateTime = DateUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
-        routeId = obj.getInt(JSON_ROUTE_ID);//Reader.get(c).getRouteId(route);
-        route = DbReader.get(c).getRouteName(routeId);//obj.getString(JSON_ROUTE);
+        routeId = obj.getInt(JSON_ROUTE_ID);
+        route = DbReader.get(c).getRouteName(routeId);
         routeVar = obj.getString(JSON_ROUTEVAR);
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
@@ -138,7 +138,7 @@ public class Exercise implements JSONObjectable {
         }
 
         // TODO
-        subs = new ArrayList<>(); //
+        subs = new ArrayList<>();
     }
 
     // set
@@ -153,11 +153,10 @@ public class Exercise implements JSONObjectable {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
-        //Data.calcWeekStats();
     }
 
-    public void setRouteId(int _id) {
-        this.routeId = _id;
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
     }
 
     public void setRoute(String route) {
@@ -184,50 +183,29 @@ public class Exercise implements JSONObjectable {
         this.recordingMethod = recordingMethod;
     }
 
-    public void setSubs_superId(int _id) {
-        for (Sub sub : subs) {
-            sub.set_superId(_id);
-        }
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 
-    public boolean mergeStravaPull(Exercise strava, Context c) {
-        if (externalId != strava.externalId) return false;
+    public void setTime(float time) {
+        this.time = time;
+    }
 
-        PairList<String, Boolean> settings = Prefs.getPullSettings();
+    public void setTrail(Trail trail) {
+        this.trail = trail;
+    }
 
-        if (settings.getSecond("Route")) {
-            route = strava.route;
-            routeId = DbReader.get(c).getRouteIdOrCreate(route, c);
+    @Unfinished
+    public void setSubsSuperId(int id) {
+        for (Sub sub : subs) {
+            sub.setSuperId(id);
         }
-        if (settings.getSecond("Type")) {
-            type = strava.type;
-        }
-        if (settings.getSecond("Date and time")) {
-            dateTime = strava.dateTime;
-        }
-        if (settings.getSecond("Data source")) {
-            dataSource = strava.dataSource;
-        }
-        if (settings.getSecond("Distance")) {
-            distance = strava.distance;
-        }
-        if (settings.getSecond("Time")) {
-            time = strava.time;
-        }
-        if (settings.getSecond("Note") && !strava.note.equals("")) {
-            note = strava.note;
-        }
-        if (settings.getSecond("Trail")) {
-            trail = strava.trail;
-        }
-
-        return true;
     }
 
     // get
 
-    public int get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
     public long getExternalId() {
@@ -238,12 +216,12 @@ public class Exercise implements JSONObjectable {
         return type;
     }
 
-    public LocalDate getDate() {
-        return dateTime.toLocalDate();
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
     }
 
     public int getRouteId() {
@@ -278,144 +256,35 @@ public class Exercise implements JSONObjectable {
         return distance;
     }
 
-    public float getTimePrimary() {
+    public float getTime() {
         return time;
     }
 
+    @Unfinished
     public int getElevationGain() {
         // TODO
         return 0;
     }
 
+    @Unfinished
     public int getElevationLoss() {
         // TODO
         return 0;
-    }
-
-    public ArrayList<Sub> getSubs() {
-        return subs;
-    }
-
-    public Sub getSub(int index) {
-        if (index >= subCount()) {
-            return null;
-        }
-        return subs.get(index);
     }
 
     public Trail getTrail() {
         return trail;
     }
 
+    @Unfinished
+    public ArrayList<Sub> getSubs() {
+        return subs;
+    }
+
     // get driven
 
     public boolean hasExternalId() {
         return externalId != -1;
-    }
-
-    public int getEffectiveDistance() {
-        if (isDistanceDriven()) {
-            return DbReader.get().avgDistance(routeId, routeVar);//D.averageDistance(D.filterByRoute(route, routeVar));
-        }
-        //if (distance == 0 && time == 0) return getSubsDistance();
-        return distance;
-    }
-
-    public float getTime() {
-        if (time == 0 && distance == 0) return getSubsTime();
-        return time;
-    }
-
-    public float getPace() {
-        int distance = getEffectiveDistance();
-        if (distance == 0) {
-            return 0;
-        }
-        return getTime() / ((float) distance / 1000f);
-    }
-
-    public float getVelocity(AppConsts.UnitVelocity unit) {
-        int distance = getEffectiveDistance();
-        float time = getTime();
-        if (time == 0) {
-            return 0;
-        }
-        if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) {
-            return ((float) distance / time);
-        }
-        else if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) {
-            return ((float) distance) / 1000 / (time / 3600);
-        }
-        return -1;
-    }
-
-    public int getEnergy(AppConsts.UnitEnergy unit) {
-        // 0J, 1cal, 2Wh, 3eV
-
-        int calories = (int) (Prefs.getMass() * getEffectiveDistance());
-        if (unit == AppConsts.UnitEnergy.CALORIES) {
-            return calories;
-        }
-
-        int joules = (int) (calories * 4.184);
-        if (unit == AppConsts.UnitEnergy.JOULES) {
-            return joules;
-        }
-
-        // watthours
-        if (unit == AppConsts.UnitEnergy.WATTHOURS) {
-            return joules / 3600;
-        }
-
-        // electronvolts
-        if (unit == AppConsts.UnitEnergy.ELECTRONVOLTS) {
-            return (int) (joules / 1.602177);
-        } // / Math.pow(10, -19)); }
-
-        return -1;
-    }
-
-    public int getPower() {
-        float time = getTime();
-        if (time != 0) {
-            return (int) (getEnergy(AppConsts.UnitEnergy.JOULES) / time);
-        }
-        return 0;
-    }
-
-    public int getTimeByDistance(int d) {
-        if (getTime() == 0) {
-            return 0;
-        }
-        return (int) (d / getVelocity(AppConsts.UnitVelocity.METERS_PER_SECOND));
-    }
-
-    public boolean isDistanceDriven() {
-        return distance == DISTANCE_DRIVEN;
-    }
-
-    public int getSubsDistance() {
-        int distance = 0;
-        for (Sub s : subs) {
-            distance += s.getDistance();
-        }
-        return distance;
-    }
-
-    public float getSubsTime() {
-        float time = 0;
-        for (Sub s : subs) {
-            time += s.getTime();
-        }
-        return time;
-    }
-
-    public int subCount() {
-        return subs != null ? subs.size() : 0;
-    }
-
-    public boolean hasTrail() {
-        return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
     }
 
     public boolean isType(int type) {
@@ -430,10 +299,92 @@ public class Exercise implements JSONObjectable {
         return dateTime.get(AppConsts.WEEK_OF_YEAR);
     }
 
+    public int getEffectiveDistance(Context c) {
+        if (isDistanceDriven()) return DbReader.get(c).avgDistance(routeId, routeVar);
+        return distance;
+    }
+
+    public boolean isDistanceDriven() {
+        return distance == DISTANCE_DRIVEN;
+    }
+
+    public float getPace(Context c) {
+        int distance = getEffectiveDistance(c);
+
+        if (distance == 0) return 0;
+        return getTime() / ((float) distance / 1000f);
+    }
+
+    public float getVelocity(AppConsts.UnitVelocity unit, Context c) {
+        int distance = getEffectiveDistance(c);
+        float time = getTime();
+
+        if (time == 0) return 0;
+        if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) {
+            return ((float) distance / time);
+        }
+        else if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) {
+            return ((float) distance) / 1000 / (time / 3600);
+        }
+        return -1;
+    }
+
+    public int getEnergy(AppConsts.UnitEnergy unit, Context c) {
+        int calories = (int) (Prefs.getMass() * getEffectiveDistance(c));
+        if (unit == AppConsts.UnitEnergy.CALORIES) return calories;
+
+        int joules = (int) (calories * 4.184);
+        if (unit == AppConsts.UnitEnergy.JOULES) return joules;
+        if (unit == AppConsts.UnitEnergy.WATTHOURS) return joules / 3600;
+        if (unit == AppConsts.UnitEnergy.ELECTRONVOLTS) return (int) (joules / 1.602177);
+
+        return -1;
+    }
+
+    public int getPower(Context c) {
+        float time = getTime();
+
+        if (time == 0) return 0;
+        return (int) (getEnergy(AppConsts.UnitEnergy.JOULES, c) / time);
+    }
+
+    public boolean hasTrail() {
+        return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
+    }
+
+    @Unfinished
+    public Sub getSub(int index) {
+        if (index >= subCount()) return null;
+        return subs.get(index);
+    }
+
+    @Unfinished
+    public int getSubsDistance() {
+        int distance = 0;
+        for (Sub s : subs) {
+            distance += s.getDistance();
+        }
+        return distance;
+    }
+
+    @Unfinished
+    public float getSubsTime() {
+        float time = 0;
+        for (Sub s : subs) {
+            time += s.getTime();
+        }
+        return time;
+    }
+
+    @Unfinished
+    public int subCount() {
+        return subs != null ? subs.size() : 0;
+    }
+
     // print
 
     public String printId() {
-        return "#" + _id;
+        return "#" + id;
     }
 
     public String printExternalId() {
@@ -444,99 +395,78 @@ public class Exercise implements JSONObjectable {
         return TYPES[type];
     }
 
-    public String printDistance(boolean unitlessKm) {
-        int distance = getEffectiveDistance();
-        String print = distance == 0 ? AppConsts.NO_VALUE :
-            unitlessKm ? MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + "" : MathUtils.prefix(distance, DISTANCE_DECIMALS, "m");
-        //if (hasTrail()) print += " [map: " + M.round(trail.getDistance() / 1000f, DISTANCE_DECIMALS) + " km]";
-        return isDistanceDriven() ? MathUtils.notateDriven(print) : print;
+    public String printDistance(boolean unitlessKm, Context c) {
+        int distance = getEffectiveDistance(c);
+
+        String print = distance == 0 ? AppConsts.NO_VALUE : unitlessKm
+            ? MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + ""
+            : MathUtils.prefix(distance, DISTANCE_DECIMALS, "m");
+
+        return isDistanceDriven() ? TypeUtils.notateDriven(print) : print;
     }
 
-    public String printElevation() {
-        int gain = getElevationGain();
-        int loss = getElevationLoss();
-        return gain == 0 && loss == 0 ? AppConsts.NO_VALUE : "+" + gain + " m, " + loss + " m";
-    }
-
-    public String printTime(boolean unit) {
+    public String printTime(boolean showUnit) {
         String timePrint = MathUtils.stringTime(getTime(), false);
-        if (!unit || timePrint.equals(AppConsts.NO_VALUE_TIME)) {
-            return timePrint;
-        }
+
+        if (!showUnit || timePrint.equals(AppConsts.NO_VALUE_TIME)) return timePrint;
         return timePrint + " s";
     }
 
-    public String printPace(boolean unit) {
-        String pacePrint = MathUtils.stringTime(getPace(), true);
-        if (!unit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) {
-            return pacePrint;
-        }
+    public String printPace(boolean showUnit, Context c) {
+        String pacePrint = MathUtils.stringTime(getPace(c), true);
+
+        if (!showUnit || pacePrint.equals(AppConsts.NO_VALUE_TIME)) return pacePrint;
         return pacePrint + " s/km";
     }
 
-    public String printVelocity(AppConsts.UnitVelocity unit, boolean showUnit) {
+    public String printVelocity(AppConsts.UnitVelocity unit, boolean showUnit, Context c) {
+        String velocityPrint = MathUtils.round(getVelocity(unit, c), 1) + "";
 
-        String v = MathUtils.round(getVelocity(unit), 1) + "";
         if (showUnit) {
-            if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) {
-                return v + " m/s";
-            }
-            if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) {
-                return v + " km/h";
-            }
+            if (unit == AppConsts.UnitVelocity.METERS_PER_SECOND) return velocityPrint + " m/s";
+            if (unit == AppConsts.UnitVelocity.KILOMETERS_PER_HOUR) return velocityPrint + " km/h";
         }
-        return v;
+        return velocityPrint;
     }
 
-    public String printTimeByDistance(int d, boolean unit) {
-        String time = MathUtils.stringTime(getTimeByDistance(d), true);
-        if (unit) {
-            return time + " s";
-        }
-        return time;
-    }
+    public String printEnergy(Context c) {
+        int energy = getEnergy(AppConsts.UnitEnergy.JOULES, c);
 
-    public String printEnergy() {
-        int energy;
-        if ((energy = getEnergy(AppConsts.UnitEnergy.JOULES)) == 0) {
-            return AppConsts.NO_VALUE;
-        }
+        if (energy == 0) return AppConsts.NO_VALUE;
         return MathUtils.prefix(energy, 2, "J");
     }
 
-    public String printPower() {
-        int power;
-        if ((power = getPower()) == 0) {
-            return AppConsts.NO_VALUE;
-        }
+    public String printPower(Context c) {
+        int power = getPower(c);
+
+        if (power == 0) return AppConsts.NO_VALUE;
         return MathUtils.prefix(power, 2, "W");
     }
 
-    public String extractToFile(char div) {
-        return _id + "" + div + "" + type + "" + div + getEpoch() + div + route + div + routeVar + div + interval +
-            div + distance + div + time + div + dataSource + div + recordingMethod + div + note + div + (trail != null ?
-            (trail.getStartLat() + "" + div + "" + trail.getStartLng() + "" + div + "" + trail.getEndLat() + "" + div +
-                "" + trail.getEndLng() + "" + div + trail.getPolyline()) : (div + "" + div + "" + div + "" + div));
+    @Unfinished
+    public String printElevation() {
+        int gain = getElevationGain();
+        int loss = getElevationLoss();
+
+        return gain == 0 && loss == 0 ? AppConsts.NO_VALUE : "+" + gain + " m, " + loss + " m";
     }
 
-    // extends
+    // implements JSONObjectable
 
     @Override
     public JSONObject toJSONObject(Context c) {
-
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put(JSON_ID, _id);
+            obj.put(JSON_ID, id);
             obj.put(JSON_EXTERNAL_ID, externalId);
             obj.put(JSON_TYPE, type);
             obj.put(JSON_EPOCH, getEpoch());
             obj.put(JSON_ROUTE_ID, routeId);
-            //obj.put(JSON_ROUTE, route);
             obj.put(JSON_ROUTEVAR, routeVar);
             obj.put(JSON_INTERVAL, interval);
             obj.put(JSON_DISTANCE, distance);
-            obj.put(JSON_EFFECTIVE_DISTANCE, getEffectiveDistance());
+            obj.put(JSON_EFFECTIVE_DISTANCE, getEffectiveDistance(c));
             obj.put(JSON_TIME, time);
             obj.put(JSON_DATA_SOURCE, dataSource);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);
@@ -561,78 +491,6 @@ public class Exercise implements JSONObjectable {
         }
 
         return obj;
-    }
-
-    // static tools
-
-    public static float calcPace(int distance, float time) {
-        if (distance == 0) {
-            return 0;
-        }
-        return time / ((float) distance / 1000f);
-    }
-
-    public static String printDistance(int distance, boolean unitlessKm, boolean distanceDriven) {
-        String print;
-        if (distance == 0) {
-            print = AppConsts.NO_VALUE;
-        }
-        else {
-            if (unitlessKm) {
-                print = MathUtils.round(distance / 1000f, 1) + "";
-            }
-            else {
-                print = MathUtils.prefix(distance, 2, "m");
-            }
-        }
-        if (distanceDriven) {
-            print = "( " + print + " )";
-        }
-        return print;
-    }
-
-    public static String printTime(float time, String unit) {
-        String timePrint = MathUtils.stringTime(time, false);
-        if (unit.equals("") || timePrint.equals(AppConsts.NO_VALUE_TIME)) {
-            return timePrint;
-        }
-        return timePrint + " " + unit;
-    }
-
-    public static int typeFromStravaType(String stravaType) {
-        switch (stravaType) {
-            case "Run": return TYPE_RUN;
-            case "Walk":
-            case "Hike": return TYPE_WALK;
-            case "Ride": return TYPE_RIDE;
-            case "Swim":
-            case "Apline Ski":
-            case "Backcountry Ski":
-            case "Canoe":
-            case "Crossfit": return TYPE_STRENGTH;
-            case "E-Bike Ride":
-            case "Elliptical":
-            case "Handcycle":
-            case "Ice Skate":
-            case "Inline Skate":
-            case "Kayak":
-            case "Kitesurf Session":
-            case "Nordic Ski":
-            case "Row":
-            case "Snowboard":
-            case "Snowshoe":
-            case "Stair Stepper":
-            case "Stand Up Paddle":
-            case "Surf":
-            case "Virtual Ride":
-            case "Virtual Run":
-            case "Weight Training":
-            case "Windsurf Session":
-            case "Wheelchair":
-            case "Workout":
-            case "Yoga": return TYPE_YOGA;
-            default: return TYPE_OTHER;
-        }
     }
 
 }

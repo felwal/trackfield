@@ -7,23 +7,22 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trackfield.ui.base.DelegateClickListener;
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate;
 
 import java.util.List;
 
-public abstract class BaseAdapterDelegate<I extends T, T, VH extends RecyclerView.ViewHolder>
-    extends AbsListItemAdapterDelegate<I, T, VH> {
+public abstract class BaseAdapterDelegate<I extends T, T, VH extends RecyclerView.ViewHolder> extends
+    AbsListItemAdapterDelegate<I, T, VH> {
 
-    protected Context context;
+    protected Context c;
     protected LayoutInflater inflater;
     protected DelegateClickListener listener;
 
     //
 
-    public BaseAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        context = activity;
-        inflater = activity.getLayoutInflater();
+    public BaseAdapterDelegate(Activity a, DelegateClickListener listener) {
+        c = a;
+        inflater = a.getLayoutInflater();
         this.listener = listener;
     }
 

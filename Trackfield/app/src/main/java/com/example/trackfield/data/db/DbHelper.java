@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public abstract class DbHelper extends SQLiteOpenHelper {
 
-    protected SQLiteDatabase db;
-
     public static final int DATABASE_TARGET_VERSION = 1;
     public static final String DATABASE_NAME = "Trackfield.db";
+
+    protected SQLiteDatabase db;
 
     //
 

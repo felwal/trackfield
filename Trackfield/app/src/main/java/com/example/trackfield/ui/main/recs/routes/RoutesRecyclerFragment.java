@@ -52,8 +52,7 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
     }
 
     /**
-     * Inflates toolbar menu in place of {@link RecsFragment#onCreateOptionsMenu(Menu,
-     * MenuInflater)}
+     * Inflates toolbar menu in place of {@link RecsFragment#onCreateOptionsMenu(Menu, MenuInflater)}
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -114,7 +113,7 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
         RecyclerItem item = getItem(position);
 
         if (item instanceof RouteItem) {
-            RouteActivity.startActivity(a, ((RouteItem) items.get(position)).get_id());
+            RouteActivity.startActivity(a, ((RouteItem) items.get(position)).getId());
         }
 
         super.onDelegateClick(item);

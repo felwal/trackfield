@@ -11,26 +11,30 @@ import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
 import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.model.Unfinished;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 public class TimeDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    private static final String BUNDLE_TEXT1 = "text1";
+    private static final String BUNDLE_TEXT2 = "text2";
+    private static final String BUNDLE_HINT1 = "hint1";
+    private static final String BUNDLE_HINT2 = "hint2";
+    private static final String BUNDLE_NEUTRAL_BUTTON_RES = "neutralButtonTextId";
+
+    // dialog tags
+    private static final String TAG_DEFAULT = "timeDialog";
+
+    private DialogListener listener;
 
     // arguments
-    private int text1, text2;
-    private String hint1, hint2;
+    private int text1;
+    private int text2;
+    private String hint1;
+    private String hint2;
     @StringRes private int neuBtnTxtId;
-
-    // bundle
-    private final static String BUNDLE_TEXT1 = "text1";
-    private final static String BUNDLE_TEXT2 = "text2";
-    private final static String BUNDLE_HINT1 = "hint1";
-    private final static String BUNDLE_HINT2 = "hint2";
-    private final static String BUNDLE_NEUTRAL_BUTTON_RES = "neutralButtonTextId";
-
-    private final static String TAG_DEFAULT = "timeDialog";
 
     //
 
@@ -91,6 +95,7 @@ public class TimeDialog extends BaseDialog {
         if (!message.equals("")) builder.setMessage(message);
 
         // require selection
+        // TODO: chips - time/pace
         chipGroup.setVisibility(View.GONE);
         //setChipGroup(chipGroup);
         //chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
@@ -114,7 +119,7 @@ public class TimeDialog extends BaseDialog {
 
     // tools
 
-    // TODO time / pace
+    @Unfinished
     private void setChipGroup(ChipGroup chipGroup) {
         Chip checkedChip = (Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId());
 
@@ -133,7 +138,7 @@ public class TimeDialog extends BaseDialog {
         void onTimeDialogPositiveClick(int input1, int input2, String tag);
 
         void onTimeDialogNegativeClick(String tag);
-        //void onTimeDialogNeutralClick(String tag);
+
     }
 
 }

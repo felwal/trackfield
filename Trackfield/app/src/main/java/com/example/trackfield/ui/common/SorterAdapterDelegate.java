@@ -22,12 +22,12 @@ import java.util.List;
 public class SorterAdapterDelegate extends
     BaseAdapterDelegate<Sorter, RecyclerItem, SorterAdapterDelegate.SorterViewHolder> {
 
-    private BaseAdapter adapter;
+    private final BaseAdapter adapter;
 
     //
 
-    public SorterAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter) {
-        super(activity, listener);
+    public SorterAdapterDelegate(Activity a, DelegateClickListener listener, BaseAdapter adapter) {
+        super(a, listener);
         this.adapter = adapter;
     }
 
@@ -46,7 +46,7 @@ public class SorterAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Sorter item, SorterViewHolder vh, @Nullable List<Object> payloads) {
-        vh.title.setText(item.getTitle());
+        vh.titleTv.setText(item.getTitle());
         adapter.setSortMode(item.getMode());
     }
 
@@ -54,13 +54,11 @@ public class SorterAdapterDelegate extends
 
     public class SorterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ConstraintLayout button;
-        public TextView title;
+        public TextView titleTv;
 
         public SorterViewHolder(View itemView) {
             super(itemView);
-            button = itemView.findViewById(R.id.constraintLayout_sort);
-            title = itemView.findViewById(R.id.textView_sort);
+            titleTv = itemView.findViewById(R.id.textView_sort);
             itemView.setOnClickListener(this);
         }
 

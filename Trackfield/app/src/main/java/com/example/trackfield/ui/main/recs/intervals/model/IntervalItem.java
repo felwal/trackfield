@@ -4,8 +4,8 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 
 public class IntervalItem extends RecyclerItem {
 
-    private String interval;
-    private int count;
+    private final String interval;
+    private final int count;
 
     //
 
@@ -32,13 +32,15 @@ public class IntervalItem extends RecyclerItem {
 
     // extends RecyclerItem
 
-    @Override public boolean sameItemAs(RecyclerItem item) {
+    @Override
+    public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof IntervalItem)) return false;
-        IntervalItem i = (IntervalItem) item;
-        return interval.equals(i.getInterval());
+        IntervalItem other = (IntervalItem) item;
+        return interval.equals(other.getInterval());
     }
 
-    @Override public boolean sameContentAs(RecyclerItem item) {
+    @Override
+    public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof IntervalItem)) return false;
         IntervalItem i = (IntervalItem) item;
         return interval.equals(i.getInterval()) && count == i.getCount();

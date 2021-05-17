@@ -3,13 +3,10 @@ package com.example.trackfield.ui.custom.sheet;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,18 +14,17 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.common.model.Sorter;
-import com.example.trackfield.utils.AppConsts;
-import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.ScreenUtils;
 
 public class SortSheet extends BaseSheet {
 
-    public static final String BUNDLE_TITLES = "titles";
-    public static final String BUNDLE_SELECTED_INDEX = "selectedIndex";
+    // bundle keys
+    private static final String BUNDLE_TITLES = "titles";
+    private static final String BUNDLE_SELECTED_INDEX = "selectedIndex";
+
+    // dialog tags
     private static final String TAG_DEFAULT = "sortSheet";
 
-    private DismissListener listener;
+    private SheetListener listener;
 
     // arguments
     private String[] titles;
@@ -55,9 +51,7 @@ public class SortSheet extends BaseSheet {
         @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.sheet_sort, container, false);
-
         buildSheet();
-
         return view;
     }
 
@@ -66,7 +60,7 @@ public class SortSheet extends BaseSheet {
         super.onAttach(context);
 
         try {
-            listener = (DismissListener) context;
+            listener = (SheetListener) context;
         }
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");
@@ -108,7 +102,7 @@ public class SortSheet extends BaseSheet {
             // add listener
             int index = i;
             tv.setOnClickListener(v -> {
-                listener.onSortSheetDismiss(index);
+                listener.onSortSheetClick(index);
                 dismiss();
             });
         }
@@ -116,9 +110,9 @@ public class SortSheet extends BaseSheet {
 
     // interface
 
-    public interface DismissListener {
+    public interface SheetListener {
 
-        void onSortSheetDismiss(int selectedIndex);
+        void onSortSheetClick(int selectedIndex);
 
     }
 

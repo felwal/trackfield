@@ -18,7 +18,6 @@ import com.example.trackfield.ui.main.MainFragment;
 import com.example.trackfield.ui.main.recs.distances.DistancesRecyclerFragment;
 import com.example.trackfield.ui.main.recs.intervals.IntervalsRecyclerFragment;
 import com.example.trackfield.ui.main.recs.routes.RoutesRecyclerFragment;
-import com.example.trackfield.utils.model.SortMode;
 import com.google.android.material.tabs.TabLayout;
 
 public class RecsFragment extends MainFragment {
@@ -31,13 +30,18 @@ public class RecsFragment extends MainFragment {
     @Override
     public void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);
+
+        // set transition
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         setEnterTransition(transitionInflater.inflateTransition(R.transition.explode));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
     }
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_recs, container, false);
         setHasOptionsMenu(true);
 
@@ -93,8 +97,8 @@ public class RecsFragment extends MainFragment {
     // implements dialog
 
     @Override
-    protected void onSortSheetDismiss(int selectedIndex) {
-        pagerAdapter.onSortSheetDismiss(selectedIndex);
+    protected void onSortSheetClick(int selectedIndex) {
+        pagerAdapter.onSortSheetClick(selectedIndex);
     }
 
 }

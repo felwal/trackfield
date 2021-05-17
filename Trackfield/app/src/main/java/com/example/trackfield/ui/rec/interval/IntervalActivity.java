@@ -12,10 +12,13 @@ import com.example.trackfield.ui.rec.RecActivity;
 
 public class IntervalActivity extends RecActivity implements TextDialog.DialogListener {
 
-    private String interval;
+    // extras names
+    private static final String EXTRA_INTERVAL = "interval";
 
-    public static final String EXTRA_INTERVAL = "interval";
+    // dialog tags
     private static final String DIALOG_RENAME_INTERVAL = "renameIntervalDialog";
+
+    private String interval;
 
     //
 
@@ -34,12 +37,13 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
 
     // extends AppCompatActivity
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_renameInterval) {
             if (interval != null) {
                 TextDialog.newInstance(R.string.dialog_title_rename_interval, BaseDialog.NO_RES,
-                        interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
-                        .show(getSupportFragmentManager());
+                    interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
+                    .show(getSupportFragmentManager());
             }
             return true;
         }
@@ -71,7 +75,8 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
 
     // implements TextDialog
 
-    @Override public void onTextDialogPositiveClick(String input, String tag) {
+    @Override
+    public void onTextDialogPositiveClick(String input, String tag) {
         if (tag.equals(DIALOG_RENAME_INTERVAL)) {
             if (input.equals("")) return;
 

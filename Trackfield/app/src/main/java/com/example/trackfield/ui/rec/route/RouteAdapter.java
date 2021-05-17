@@ -14,13 +14,13 @@ import java.util.List;
 
 class RouteAdapter extends BaseAdapter {
 
-    public RouteAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
+    public RouteAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
         delegatesManager
-            .addDelegate(new RouteExerciseAdapterDelegate(activity, listener, this, originId))
-            .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphRecAdapterDelegate(activity))
-            .addDelegate(new GoalAdapterDelegate(activity))
-            .addDelegate(new HeaderSmallAdapterDelegate(activity, listener));
+            .addDelegate(new RouteExerciseAdapterDelegate(a, listener, this, originId))
+            .addDelegate(new SorterAdapterDelegate(a, listener, this))
+            .addDelegate(new GraphRecAdapterDelegate(a))
+            .addDelegate(new GoalAdapterDelegate(a))
+            .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 
         setItems(items);
     }

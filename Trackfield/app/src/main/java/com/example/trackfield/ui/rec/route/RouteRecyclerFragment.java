@@ -17,13 +17,14 @@ import com.example.trackfield.ui.custom.graph.Graph;
 import com.example.trackfield.ui.custom.graph.GraphData;
 import com.example.trackfield.ui.exercise.ViewActivity;
 import com.example.trackfield.utils.AppConsts;
-import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.TypeUtils;
 import com.example.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class RouteRecyclerFragment extends RecyclerFragment {
 
+    // bundle extras
     private final static String BUNDLE_ROUTE_ID = "routeId";
     private final static String BUNDLE_ORIGIN_ID = "originId";
 
@@ -63,7 +64,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
 
             // filtering depending on origin
             Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes()
-                : MathUtils.createList(DbReader.get(a).getExercise(originId).getType()));
+                : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }
 
@@ -72,12 +73,12 @@ public class RouteRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.get_id(), sorter.getMode(),
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.getId(), sorter.getMode(),
             sorter.isAscending(), Prefs.getRouteVisibleTypes());
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
-                DbReader.get(a).getPaceNodesByRoute(route.get_id(), Prefs.getRouteVisibleTypes()),
+                DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getRouteVisibleTypes()),
                 GraphData.GRAPH_BEZIER, false, false);
 
             Graph graph = new Graph(true, Borders.horizontal(), false, true, false);
@@ -89,7 +90,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
             }
 
             itemList.add(sorter.copy());
-            route = DbReader.get(a).getRoute(route.get_id());
+            route = DbReader.get(a).getRoute(route.getId());
             if (route.getGoalPace() != Route.NO_GOAL_PACE) {
                 Goal goal = new Goal(route.getGoalPace());
                 itemList.add(goal);
@@ -136,8 +137,8 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         RecyclerItem item = getItem(position);
 
         if (item instanceof Exerlite) {
-            int _id = ((Exerlite) items.get(position)).get_id();
-            if (originId != _id) ViewActivity.startActivity(a, _id, ViewActivity.FROM_ROUTE);
+            int id = ((Exerlite) items.get(position)).getId();
+            if (originId != id) ViewActivity.startActivity(a, id, ViewActivity.FROM_ROUTE);
         }
 
         super.onDelegateClick(item);

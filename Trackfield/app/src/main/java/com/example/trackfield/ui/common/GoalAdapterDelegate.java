@@ -16,11 +16,10 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 
 import java.util.List;
 
-public class GoalAdapterDelegate extends
-    BaseAdapterDelegate<Goal, RecyclerItem, GoalAdapterDelegate.GoalViewHolder> {
+public class GoalAdapterDelegate extends BaseAdapterDelegate<Goal, RecyclerItem, GoalAdapterDelegate.GoalViewHolder> {
 
-    public GoalAdapterDelegate(Activity activity) {
-        super(activity, null);
+    public GoalAdapterDelegate(Activity a) {
+        super(a, null);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -38,20 +37,20 @@ public class GoalAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Goal item, GoalViewHolder vh, @Nullable List<Object> payloads) {
-        vh.secondary.setText(item.printValues());
+        vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
     public static class GoalViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public GoalViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
         }
 
     }

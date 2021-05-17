@@ -8,29 +8,32 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
+import com.example.trackfield.data.db.model.Distance;
+import com.example.trackfield.data.prefs.Prefs;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.dialog.TimeDialog;
 import com.example.trackfield.ui.rec.RecActivity;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.data.prefs.Prefs;
 
 import java.util.ArrayList;
 
 public class DistanceActivity extends RecActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener,
     FilterDialog.DialogListener {
 
-    private Distance distance;
-    private int length;
+    // extras names
+    private static final String EXTRA_DISTANCE = "distance";
 
-    public static final String EXTRA_DISTANCE = "distance";
+    // dialog tags
     private static final String DIALOG_DELETE_DISTANCE = "deleteDistanceDialog";
     private static final String DIALOG_FILTER_DISTANCE = "filterDistanceDialog";
     private static final String DIALOG_GOAL_DISTANCE = "goalDistanceDialog";
+
+    private int length;
+    private Distance distance;
 
     //
 
@@ -55,7 +58,6 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         // goal
         MenuItem goalItem = menu.findItem(R.id.action_setGoal);
         goalItem.setChecked(distance.hasGoalPace());

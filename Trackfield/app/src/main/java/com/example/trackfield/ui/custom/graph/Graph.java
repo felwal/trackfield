@@ -12,31 +12,15 @@ import java.util.Arrays;
 
 public class Graph extends RecyclerItem {
 
-    private ArrayList<GraphData> data = new ArrayList<>();
+    private final ArrayList<GraphData> data = new ArrayList<>();
     private float start, end, min, max;
 
-    private boolean[] grids = new boolean[2];
-    private Borders borders;
+    private final Borders borders;
+    private final boolean[] grids = new boolean[2];
 
-    private boolean widthFixed;
-    private boolean yInverted;
-    private boolean zeroAsMin;
-
-    private boolean xGrid = true;
-    private boolean yBorders = true;
-
-    private Paint borderPaint = new Paint() {{
-        setColor(Color.parseColor("#FF3E3F43"));
-        setAntiAlias(true);
-        setStrokeWidth(ScreenUtils.px(1));
-        setStyle(Paint.Style.STROKE);
-    }};
-    private Paint gridPaint = new Paint() {{
-        setColor(Color.parseColor("#FF2F3033"));
-        setAntiAlias(true);
-        setStrokeWidth(ScreenUtils.px(1));
-        setStyle(Paint.Style.STROKE);
-    }};
+    private final boolean widthFixed;
+    private final boolean yInverted;
+    private final boolean zeroAsMin;
 
     //
 
@@ -125,11 +109,11 @@ public class Graph extends RecyclerItem {
         return widthFixed;
     }
 
-    public boolean isxGridShown() {
+    public boolean isXGridShown() {
         return grids[0];
     }
 
-    public boolean isyGridShown() {
+    public boolean isYGridShown() {
         return grids[1];
     }
 

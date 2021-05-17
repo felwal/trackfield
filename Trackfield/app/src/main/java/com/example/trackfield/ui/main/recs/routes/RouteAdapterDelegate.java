@@ -20,8 +20,8 @@ import java.util.List;
 public class RouteAdapterDelegate extends
     BaseAdapterDelegate<RouteItem, RecyclerItem, RouteAdapterDelegate.RouteViewHolder> {
 
-    public RouteAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public RouteAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -39,21 +39,21 @@ public class RouteAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(RouteItem item, RouteViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(item.getName());
-        vh.secondary.setText(item.printValues());
+        vh.primaryTv.setText(item.getName());
+        vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
     class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public RouteViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             itemView.setOnClickListener(this);
         }
 

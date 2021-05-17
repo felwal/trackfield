@@ -6,17 +6,11 @@ import com.example.trackfield.utils.MathUtils;
 
 public class DistanceItem extends RecyclerItem {
 
-    private int distance;
-    private float bestTime;
-    private float bestPace;
+    private final int distance;
+    private final float bestTime;
+    private final float bestPace;
 
     //
-
-    public DistanceItem(int distance, float bestTime, float bestPace) {
-        this.distance = distance;
-        this.bestTime = bestTime;
-        this.bestPace = bestPace;
-    }
 
     public DistanceItem(int distance, float bestPace) {
         this.distance = distance;
@@ -57,15 +51,15 @@ public class DistanceItem extends RecyclerItem {
     @Override
     public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof DistanceItem)) return false;
-        DistanceItem d = (DistanceItem) item;
-        return distance == d.getDistance();
+        DistanceItem other = (DistanceItem) item;
+        return distance == other.getDistance();
     }
 
     @Override
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof DistanceItem)) return false;
-        DistanceItem d = (DistanceItem) item;
-        return distance == d.getDistance() && bestTime == d.getBestTime() && bestPace == d.getBestPace();
+        DistanceItem other = (DistanceItem) item;
+        return distance == other.getDistance() && bestTime == other.getBestTime() && bestPace == other.getBestPace();
     }
 
 }

@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trackfield.R;
 import com.example.trackfield.ui.base.BaseAdapterDelegate;
 import com.example.trackfield.ui.base.DelegateClickListener;
-import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.ui.common.model.Exerlite;
+import com.example.trackfield.ui.common.model.RecyclerItem;
 
 import java.util.List;
 
 public class ExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, ExerciseAdapterDelegate.ExerciseViewHolder> {
 
-    public ExerciseAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public ExerciseAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -39,24 +39,24 @@ public class ExerciseAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Exerlite item, ExerciseViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(item.printPrimary());
-        vh.secondary.setText(item.printDistanceTimePace());
-        vh.caption.setText(item.printCaption());
+        vh.primaryTv.setText(item.printTitle());
+        vh.secondaryTv.setText(item.printValues());
+        vh.captionTv.setText(item.printCaption());
     }
 
     // vh
 
     class ExerciseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primary;
-        public TextView secondary;
-        public TextView caption;
+        public TextView primaryTv;
+        public TextView secondaryTv;
+        public TextView captionTv;
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
-            caption = itemView.findViewById(R.id.textView_caption);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            captionTv = itemView.findViewById(R.id.textView_caption);
             itemView.setOnClickListener(this);
         }
 

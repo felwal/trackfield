@@ -21,8 +21,8 @@ import java.util.List;
 public class HeaderMediumAdapterDelegate extends
     BaseAdapterDelegate<Header, RecyclerItem, HeaderMediumAdapterDelegate.HeaderMediumViewHolder> {
 
-    public HeaderMediumAdapterDelegate(Activity activity, DelegateClickListener listener) {
-        super(activity, listener);
+    public HeaderMediumAdapterDelegate(Activity a, DelegateClickListener listener) {
+        super(a, listener);
     }
 
     // extends AbsListItemAdapterDelegate
@@ -40,11 +40,11 @@ public class HeaderMediumAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Header item, @NonNull HeaderMediumViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primary.setText(item.getTitle());
-        vh.secondary.setText(item.printValues());
+        vh.primaryTv.setText(item.getTitle());
+        vh.secondaryTv.setText(item.printValues());
 
         // set height depending on if children are expanded
-        int height = (int) context.getResources().getDimension(
+        int height = (int) c.getResources().getDimension(
             item.areChildrenExpanded() ? R.dimen.layout_header_month : R.dimen.layout_header_month_collapsed);
         vh.itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
     }
@@ -54,13 +54,13 @@ public class HeaderMediumAdapterDelegate extends
     class HeaderMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
-        public TextView primary;
-        public TextView secondary;
+        public TextView primaryTv;
+        public TextView secondaryTv;
 
         public HeaderMediumViewHolder(View itemView) {
             super(itemView);
-            primary = itemView.findViewById(R.id.textView_primary);
-            secondary = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.textView_primary);
+            secondaryTv = itemView.findViewById(R.id.textView_secondary);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

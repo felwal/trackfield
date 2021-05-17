@@ -12,11 +12,11 @@ import java.util.List;
 
 public class DistancesAdapter extends BaseAdapter {
 
-    public DistancesAdapter(Activity activity, DelegateClickListener listener, List<RecyclerItem> items) {
+    public DistancesAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new DistanceAdapterDelegate(activity, listener))
-            .addDelegate(new SorterAdapterDelegate(activity, listener, this))
-            .addDelegate(new GraphWeekAdapterDelegate(activity));
+            .addDelegate(new DistanceAdapterDelegate(a, listener))
+            .addDelegate(new SorterAdapterDelegate(a, listener, this))
+            .addDelegate(new GraphWeekAdapterDelegate(a));
 
         setItems(items);
     }

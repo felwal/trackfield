@@ -37,16 +37,12 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
-        //DbReader.get(a); // TODO: varför är den här?
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.isAscending());
 
         // sorter & charts
         if (exerliteList.size() != 0) {
             if (Prefs.isDailyChartShown()) {
-                //TreeMap<Float, Float> nodes = Reader.get(a).aggregateDistance(Prefs.getExerciseVisibleTypes(),
-                //    M.atStartOfWeek(LocalDate.now()).toLocalDate(), 7, ChronoUnit.DAYS);
-
                 GraphData weekData = new GraphData(
                     DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
@@ -69,57 +65,73 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         else fadeInEmpty();
 
         // headers
-        Header yearHeader = new Header("", Header.Type.YEAR, itemList.size());
-        Header monthHeader = new Header("", Header.Type.MONTH, itemList.size());
-        Header weekHeader = new Header("", Header.Type.WEEK, itemList.size());
+
+        Header yearHeader = new Header("", Header.Type.YEAR, itemList.size() + 1);
+        Header monthHeader = new Header("", Header.Type.MONTH, itemList.size() + 1);
+        Header weekHeader = new Header("", Header.Type.WEEK, itemList.size() + 1);
         int year = -1;
         int month = -1;
         int week = -1;
         int newYear, newMonth, newWeek;
-        int yearOfLast = -1;
         boolean notCurrentYear = false;
         LocalDate lastDate = LocalDate.MIN;
 
         for (Exerlite e : exerliteList) {
             // add new year header
             if ((newYear = e.getDate().getYear()) != year) {
-                monthHeader.setLastIndex(itemList.size());
-                yearHeader.setLastIndex(itemList.size());
-                yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size(),
+                // conclude last headers
+                // concluding month header here makes sure it doesnt collapse the year header that comes before
+                // the next month header -- "January 2021" header should not collapse "2021" header
+                monthHeader.setLastIndex(itemList.size() - 1);
+                yearHeader.setLastIndex(itemList.size() - 1);
+
+                // create and add new header
+                yearHeader = new Header(newYear + "", Header.Type.YEAR, itemList.size() + 1,
                     new HeaderValue("km", 0),
                     new HeaderValue("h", 1),
                     new HeaderValue("", 0));
                 itemList.add(yearHeader);
-                yearOfLast = year;
+
                 year = newYear;
                 notCurrentYear = year != LocalDate.now().getYear();
             }
+
             // add new month header
-            if ((newMonth = e.getMonthValue()) != month || e.getDate().getYear() != yearOfLast) {
+            if ((newMonth = e.getMonthValue()) != month || e.getDate().getYear() != lastDate.getYear()) {
+                // conclude last header
                 String title = e.getMonth();
                 if (notCurrentYear) {
+                    // "August 2020" if the year is not 2020, otherwise "August"
                     title += " " + year;
                 }
-                monthHeader.setLastIndex(itemList.size());
-                monthHeader = new Header(title, Header.Type.MONTH, itemList.size(),
+                monthHeader.setLastIndex(itemList.size() - 1);
+
+                // create and add new header
+                monthHeader = new Header(title, Header.Type.MONTH, itemList.size() + 1,
                     new HeaderValue("km", 0),
                     new HeaderValue("h", 1),
                     new HeaderValue("", 0));
                 itemList.add(monthHeader);
+
                 month = newMonth;
             }
+
             // add new week header
             if (Prefs.isWeekHeadersShown() &&
                 (((newWeek = e.getWeek()) != week) || Math.abs(e.getDate().toEpochDay() - lastDate.toEpochDay()) > 7)) {
-                weekHeader.setLastIndex(itemList.size());
-                weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size(),
+                // conclude last header
+                weekHeader.setLastIndex(itemList.size() - 1);
+
+                // create and add new header
+                weekHeader = new Header("" + newWeek, Header.Type.WEEK, itemList.size() + 1,
                     new HeaderValue("km", 0),
                     new HeaderValue("h", 1),
                     new HeaderValue("", 0));
                 itemList.add(weekHeader);
+
                 week = newWeek;
             }
-            yearOfLast = year;
+
             lastDate = e.getDate();
 
             // add values
@@ -130,9 +142,9 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         }
 
         // set last index for last headers
-        monthHeader.setLastIndex(itemList.size());
-        yearHeader.setLastIndex(itemList.size());
-        weekHeader.setLastIndex(itemList.size());
+        monthHeader.setLastIndex(itemList.size() - 1);
+        yearHeader.setLastIndex(itemList.size() - 1);
+        weekHeader.setLastIndex(itemList.size() - 1);
 
         return itemList;
     }
@@ -189,7 +201,7 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         RecyclerItem item = getItem(position);
 
         if (item instanceof Exerlite) {
-            ViewActivity.startActivity(a, ((Exerlite) item).get_id());
+            ViewActivity.startActivity(a, ((Exerlite) item).getId());
         }
         else if (item instanceof Header) {
             Header header = (Header) item;
@@ -200,24 +212,18 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
             for (int childPos = header.getFirstIndex(); childPos <= header.getLastIndex(); childPos++) {
                 RecyclerItem childItem = getItemOfAll(childPos);
                 childItem.changeVisibility(header.areChildrenExpanded());
-                //L.expandOrCollapseHeight(manager.findViewByPosition(childPos), M.px(62), childItem.isVisible());
-
-                //adapter.notifyItemChanged(childPos);
             }
             updateRecycler(getVisibleItems());
-            //adapter.notifyItemRangeChanged(header.getFirstIndex(), header.getChildItemCount());
-            //adapter.notifyDataSetChanged();
 
             // animate header
-            int collapsedHeight = header.isType(Header.Type.MONTH) ?
-                (int) getResources().getDimension(R.dimen.layout_header_month_collapsed) :
-                (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
-            int expandedHeight =
-                header.isType(Header.Type.MONTH) ? (int) getResources().getDimension(R.dimen.layout_header_month) :
-                    (int) getResources().getDimension(R.dimen.layout_header_year);
+            int collapsedHeight = header.isType(Header.Type.MONTH)
+                ? (int) getResources().getDimension(R.dimen.layout_header_month_collapsed)
+                : (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
+            int expandedHeight = header.isType(Header.Type.MONTH)
+                ? (int) getResources().getDimension(R.dimen.layout_header_month)
+                : (int) getResources().getDimension(R.dimen.layout_header_year);
             View itemView = manager.findViewByPosition(position);
             LayoutUtils.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
-            //L.animateColor(itemView, 000000, a.getResources().getColor(R.color.colorGrey2), !header.isExpanded());
         }
 
         super.onDelegateClick(item);

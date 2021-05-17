@@ -4,20 +4,11 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.model.Unfinished;
 
 import java.util.Arrays;
 
 public class Header extends RecyclerItem {
-
-    private final String title;
-    private final HeaderValue[] values;
-    private final Type type;
-
-    // as recycler item
-    private boolean childrenExpanded = true;
-    private boolean chartExpanded = false;
-    private int firstIndex = 0;
-    private int lastIndex = 0;
 
     public enum Type {
         YEAR,
@@ -26,37 +17,49 @@ public class Header extends RecyclerItem {
         REC
     }
 
+    private final String title;
+    private final HeaderValue[] headerValues;
+    private final Type type;
+
+    private boolean childrenExpanded = true;
+    @Unfinished private boolean chartExpanded = false;
+    private int firstIndex = 0;
+    private int lastIndex = 0;
+
     //
 
-    public Header(String title, Type type, int itemListSize, @Nullable HeaderValue... values) {
+    public Header(String title, Type type, int firstIndex, @Nullable HeaderValue... headerValues) {
         this.title = title;
         this.type = type;
-        this.firstIndex = itemListSize + 1;
+        this.firstIndex = firstIndex;
 
-        if (values == null) this.values = new HeaderValue[0];
-        else this.values = values;
+        if (headerValues == null) this.headerValues = new HeaderValue[0];
+        else this.headerValues = headerValues;
     }
 
-    public Header(String title, Type type, @Nullable HeaderValue... values) {
+    public Header(String title, Type type, @Nullable HeaderValue... headerValues) {
         this.title = title;
         this.type = type;
 
-        if (values == null) this.values = new HeaderValue[0];
-        else this.values = values;
+        if (headerValues == null) this.headerValues = new HeaderValue[0];
+        else this.headerValues = headerValues;
     }
 
     // set
 
     public void addValues(float... values) {
-        for (int i = 0; i < this.values.length; i++) {
+        for (int i = 0; i < this.headerValues.length; i++) {
             if (i < values.length) {
-                this.values[i].addValue(values[i]);
+                this.headerValues[i].addValue(values[i]);
             }
         }
     }
 
-    public void setLastIndex(int itemListSize) {
-        if (lastIndex == 0) lastIndex = itemListSize - 1;
+    public void setLastIndex(int lastIndex) {
+        // dont override if already set. this allows setting last index of month header when new year, making sure
+        // it doesnt collapse the year header that comes before the next month header -- "January 2021" header should
+        // not collapse "2021" header
+        if (this.lastIndex == 0) this.lastIndex = lastIndex;
     }
 
     public void invertExpanded() {
@@ -92,9 +95,9 @@ public class Header extends RecyclerItem {
 
     public String printValues() {
         String print = "";
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < headerValues.length; i++) {
             if (i != 0) print += AppConsts.TAB;
-            HeaderValue value = values[i];
+            HeaderValue value = headerValues[i];
             print += MathUtils.roundToString(value.getValue(), value.getDecimals()) + " " + value.getUnit();
         }
         return print;
@@ -105,16 +108,16 @@ public class Header extends RecyclerItem {
     @Override
     public boolean sameItemAs(RecyclerItem item) {
         if (!(item instanceof Header)) return false;
-        Header h = (Header) item;
-        return title.equals(h.getTitle());
+        Header other = (Header) item;
+        return title.equals(other.getTitle());
     }
 
     @Override
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Header)) return false;
-        Header h = (Header) item;
-        return type == h.type && title.equals(h.getTitle()) && Arrays.equals(values, h.values)
-                && childrenExpanded == h.childrenExpanded;
+        Header other = (Header) item;
+        return type == other.type && title.equals(other.getTitle()) && Arrays.equals(headerValues, other.headerValues)
+            && childrenExpanded == other.childrenExpanded;
     }
 
 }

@@ -32,6 +32,7 @@ public class StatsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setSorter() {
+        // Stats currently has no need for sorting
     }
 
     @Override
@@ -96,12 +97,14 @@ public class StatsRecyclerFragment extends RecyclerFragment {
 
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
+        // Stats currently has no need for sorting
     }
 
     // implements RecyclerAdapter
 
     @Override
     public void onDelegateClick(View view, int position) {
+        // Stats currently has no delegates supporting clicks
     }
 
 }

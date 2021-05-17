@@ -28,21 +28,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-    GoogleMap.OnPolylineClickListener, PeekSheet.DismissListener {
+    GoogleMap.OnPolylineClickListener, PeekSheet.SheetListener {
 
-    protected int _id;
+    // extras names
+    protected static final String EXTRA_ID = "id";
 
-    protected GoogleMap googleMap;
-    protected ArrayList<Polyline> seletedPolylines = new ArrayList<>();
-    protected ArrayList<Polyline> tempPolylines = new ArrayList<>();
-    protected ArrayList<PolylineOptions> tempOptions = new ArrayList<>();
-    protected boolean tempShown = false;
-
-    protected static String EXTRA_ID = "_id";
     protected static final int MAP_PADDING = 100;
     protected static final int MAP_MAX_ZOOM = 18;
 
-    //
+    protected ArrayList<Polyline> seletedPolylines = new ArrayList<>();
+    protected ArrayList<Polyline> tempPolylines = new ArrayList<>();
+
+    protected int id;
+    protected GoogleMap map;
+    protected boolean tempShown = false;
 
     // extends AppCompatActivity
 
@@ -54,10 +53,10 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         setToolbar();
         ScreenUtils.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.toolbar_map));
 
-        // intent
+        // extras
         Intent intent = getIntent();
         if (intent == null) finish();
-        _id = intent.getIntExtra(EXTRA_ID, -1);
+        id = intent.getIntExtra(EXTRA_ID, -1);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -66,7 +65,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+        this.map = googleMap;
         googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
         googleMap.getUiSettings().setCompassEnabled(false);
 
@@ -91,7 +90,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         else if (itemId == R.id.action_maptype) {
             //googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
             //    (googleMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID ? GoogleMap.MAP_TYPE_TERRAIN : GoogleMap.MAP_TYPE_NORMAL));
-            googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
+            map.setMapType(map.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
                 GoogleMap.MAP_TYPE_NORMAL);
             return true;
         }
@@ -99,10 +98,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             togglePolylines();
             return true;
         }
-        /*else if (itemId == R.id.action_filter) {
-            // TODO
-            return true;
-        }*/
         else if (itemId == R.id.action_recentre) {
             recentre();
             return true;
@@ -118,7 +113,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         final Toolbar tb = findViewById(R.id.toolbar_map);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle("");//getResources().getString(R.string.activity_maps));
+        ab.setTitle("");
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -135,31 +130,23 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     // tools
 
     private void togglePolylines() {
+        // show
         if (!tempShown) {
-            if (tempOptions.size() != 0) {
-                tempOptions.clear(); // temp
-                for (PolylineOptions options : tempOptions) {
-                    tempPolylines.add(googleMap.addPolyline(options));
-                }
-            }
-            if (tempOptions.size() == 0) {
-                for (HashMap.Entry<Integer, String> entry : getRestOfPolylines(_id).entrySet()) {
+            for (HashMap.Entry<Integer, String> entry : getRestOfPolylines(id).entrySet()) {
+                // options
+                PolylineOptions options = new PolylineOptions();
+                options.color(getColorDeselected(this));
+                options.width(ScreenUtils.px(3));
+                options.addAll(PolyUtil.decode(entry.getValue()));
 
-                    // options
-                    PolylineOptions options = new PolylineOptions();
-                    options.color(getColorDeselected(this));
-                    options.width(ScreenUtils.px(3));
-                    options.addAll(PolyUtil.decode(entry.getValue()));
-                    tempOptions.add(options);
-
-                    // poly
-                    Polyline polyline = googleMap.addPolyline(options);
-                    polyline.setTag(entry.getKey());
-                    polyline.setClickable(true);
-                    tempPolylines.add(polyline);
-                }
+                // poly
+                Polyline polyline = map.addPolyline(options);
+                polyline.setTag(entry.getKey());
+                polyline.setClickable(true);
+                tempPolylines.add(polyline);
             }
         }
+        // hide
         else {
             for (Polyline p : tempPolylines) p.remove();
             tempPolylines.clear();
@@ -171,21 +158,13 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected static void moveCamera(GoogleMap googleMap, LatLngBounds bounds, int padding, boolean animate) {
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         try {
-            if (animate) {
-                googleMap.animateCamera(cu);
-            }
-            else {
-                googleMap.moveCamera(cu);
-            }
+            if (animate) googleMap.animateCamera(cu);
+            else googleMap.moveCamera(cu);
         }
         catch (Exception e) {
             googleMap.setOnMapLoadedCallback(() -> {
-                if (animate) {
-                    googleMap.animateCamera(cu);
-                }
-                else {
-                    googleMap.moveCamera(cu);
-                }
+                if (animate) googleMap.animateCamera(cu);
+                else googleMap.moveCamera(cu);
             });
         }
     }
@@ -196,7 +175,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     public void onPolylineClick(Polyline polyline) {
         if (polyline.getTag() == null) return;
 
-        // sheet
+        // show sheet
         int id = (int) polyline.getTag();
         PeekSheet.newInstance(id).show(getSupportFragmentManager());
 
@@ -204,18 +183,18 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         //LatLngBounds bounds = Trail.bounds(polyline.getPoints());
         //moveCamera(googleMap, bounds, MAP_PADDING, true);
 
-        // appearence
+        // appearance
         polyline.setColor(getColorSelected(this));
         for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorHidden(this));
         for (Polyline line : seletedPolylines) line.setColor(getColorHidden(this));
     }
 
     @Override
-    public void onPeekSheetDismiss(int id) {
-        // get poly
+    public void onPeekSheetClick(int exerciseId) {
+        // get polyline
         Polyline polyline = null;
         for (Polyline line : tempPolylines) {
-            if ((int) line.getTag() == id) {
+            if ((int) line.getTag() == exerciseId) {
                 polyline = line;
                 break;
             }
@@ -232,20 +211,17 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return c.getResources()
-            .getColor(R.color.colorGreenLight);
+        return c.getResources().getColor(R.color.colorGreenLight);
     }
 
     @ColorInt
     protected static int getColorDeselected(Context c) {
-        return c.getResources()
-            .getColor(R.color.colorGreenLightTrans);
+        return c.getResources().getColor(R.color.colorGreenLightTrans);
     }
 
     @ColorInt
     protected static int getColorHidden(Context c) {
-        return c.getResources()
-            .getColor(R.color.colorTrans);
+        return c.getResources().getColor(R.color.colorTrans);
     }
 
 }

@@ -6,15 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
-import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.TypeUtils;
 import com.example.trackfield.utils.model.PairList;
 
 import java.util.ArrayList;
@@ -22,17 +20,18 @@ import java.util.Arrays;
 
 public class SwitchDialog extends BaseDialog {
 
-    protected DialogListener listener;
+    // bundle keys
+    public static final String BUNDLE_SWITCH_TEXTS = "switchTexts";
+    public static final String BUNDLE_SWITCH_STATES = "switchStates";
+
+    // dialog tags
+    public static final String TAG_DEFAULT = "switchDialog";
+
+    private DialogListener listener;
 
     // arguments
     private ArrayList<String> switchTexts;
     private ArrayList<Boolean> switchStates;
-
-    // bundle
-    public static final String BUNDLE_SWITCH_TEXTS = "switchTexts";
-    public static final String BUNDLE_SWITCH_STATES = "switchStates";
-
-    public static final String TAG_DEFAULT = "switchDialog";
 
     //
 
@@ -44,7 +43,7 @@ public class SwitchDialog extends BaseDialog {
 
         bundle.putStringArrayList(BUNDLE_SWITCH_TEXTS, switchValues.getFirsts());
         bundle.putBooleanArray(BUNDLE_SWITCH_STATES,
-            MathUtils.castToPrimitive(switchValues.getSeconds().toArray(new Boolean[0])));
+            TypeUtils.castToPrimitive(switchValues.getSeconds().toArray(new Boolean[0])));
 
         instance.setArguments(bundle);
         return instance;
@@ -73,7 +72,7 @@ public class SwitchDialog extends BaseDialog {
         if (bundle != null) {
             switchTexts = bundle.getStringArrayList(BUNDLE_SWITCH_TEXTS);
             switchStates = new ArrayList<>(Arrays.asList(
-                MathUtils.castToGeneric(bundle.getBooleanArray(BUNDLE_SWITCH_STATES))));
+                TypeUtils.castToGeneric(bundle.getBooleanArray(BUNDLE_SWITCH_STATES))));
         }
     }
 

@@ -2,7 +2,6 @@ package com.example.trackfield.ui.custom.graph;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.trackfield.R;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.ScreenUtils;
+import com.example.trackfield.utils.model.Unfinished;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -22,32 +22,31 @@ public class GraphView extends View implements View.OnTouchListener {
 
     private Graph graph;
 
-    // paint
-    private Paint areaPaint = new Paint() {{
-        setColor(Color.parseColor("#255BB974"));
-        setAntiAlias(true);
-        setStyle(Style.FILL);
-    }};
-    private Paint borderPaint = new Paint() {{
-        setColor(getResources().getColor(LayoutUtils.getAttr(R.attr.colorOnBackground, getContext()))); // colorGray5 / colorOnBackground
-        setAntiAlias(true);
-        setStrokeWidth(ScreenUtils.px(1));
-        setStyle(Paint.Style.STROKE);
-    }};
-    private Paint gridPaint = new Paint() {{
-        setColor(getResources().getColor(LayoutUtils.getAttr(R.attr.strokeColor, getContext()))); // colorGrey3 / strokeColor
-        setAntiAlias(true);
-        setStrokeWidth(ScreenUtils.px(1));
-        setStyle(Paint.Style.STROKE);
-    }};
-
     // states
     private boolean updateData = true;
 
     // dimens
-    private float start, end, width, top, bottom, height;
-    private float barRadius = ScreenUtils.px(6);
+    private float start, end;
+    private float bottom, top;
+    private float width, height;
+
     private float unitWidth = ScreenUtils.px(30);
+    private final float barRadius = ScreenUtils.px(6);
+
+    private final Paint borderPaint = new Paint() {{
+        // colorGray5 / colorOnBackground
+        setColor(getResources().getColor(LayoutUtils.getAttr(R.attr.colorOnBackground, getContext())));
+        setAntiAlias(true);
+        setStrokeWidth(ScreenUtils.px(1));
+        setStyle(Paint.Style.STROKE);
+    }};
+    private final Paint gridPaint = new Paint() {{
+        // colorGrey3 / strokeColor
+        setColor(getResources().getColor(LayoutUtils.getAttr(R.attr.strokeColor, getContext())));
+        setAntiAlias(true);
+        setStrokeWidth(ScreenUtils.px(1));
+        setStyle(Paint.Style.STROKE);
+    }};
 
     //
 
@@ -97,6 +96,7 @@ public class GraphView extends View implements View.OnTouchListener {
         }
     }
 
+    @Unfinished
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         // handle touch events
@@ -134,11 +134,8 @@ public class GraphView extends View implements View.OnTouchListener {
             ArrayList<PointF> surPoints = new ArrayList<>();
 
             for (TreeMap.Entry<Float, Float> entry : datum.getNodes().entrySet()) {
-                //float y = height - (entry.getValue() / data.getMax() * height) + MARGIN_Y;
-                //float bias = (data.isInvertY() ? 1 : 0) + (entry.getValue() - data.getMin()) / (data.getMax() - data.getMin()) * (data.isInvertY() ? -1 : 1);
                 float y = height + getPaddingTop() - graph.bias(entry.getValue()) * height;
-                float x = /*(data.isGraphType(GraphData.GRAPH_BAR) ? barRadius : 0) +*/
-                    (entry.getKey() - graph.getStart()) * unitWidth + (hasBars ? barRadius : 0);
+                float x = (entry.getKey() - graph.getStart()) * unitWidth + (hasBars ? barRadius : 0);
                 surPoints.add(new PointF(x, y));
             }
             datum.setSurfacePoints(surPoints);
@@ -154,7 +151,6 @@ public class GraphView extends View implements View.OnTouchListener {
         Path path = new Path();
         path.reset();
 
-        // left, right, top, bottom
         if (borders.isLeft()) {
             path.moveTo(start, bottom);
             path.lineTo(start, top);
@@ -179,7 +175,7 @@ public class GraphView extends View implements View.OnTouchListener {
         Path path = new Path();
         path.reset();
 
-        if (graph.isxGridShown()) {
+        if (graph.isXGridShown()) {
             for (int xNum = 1; xNum < width / unitWidth; xNum++) {
                 float x = xNum * unitWidth;
                 path.moveTo(x, bottom);
@@ -236,6 +232,7 @@ public class GraphView extends View implements View.OnTouchListener {
         drawAreaIfEnabled(canvas, path, data);
     }
 
+    @Unfinished
     private void drawSplineCurve(Canvas canvas, GraphData data) {
         // TODO: implement drawing spline curve
         drawLineCurve(canvas, data);
@@ -253,8 +250,6 @@ public class GraphView extends View implements View.OnTouchListener {
                 cornerRadius, cornerRadius, data.getPaint());
             drawPointIfEnabled(canvas, p, data);
         }
-
-        //canvas.drawPath(path, pointPaint);
     }
 
     private void drawPoints(Canvas canvas, GraphData data) {
@@ -278,12 +273,12 @@ public class GraphView extends View implements View.OnTouchListener {
     }
 
     private void drawPointIfEnabled(Canvas canvas, PointF p, GraphData data) {
-        if (data.isShowPoints()) drawPoint(canvas, p, data.getPaint());
+        if (data.arePointsShown()) drawPoint(canvas, p, data.getPaint());
     }
 
     private void drawAreaIfEnabled(Canvas canvas, Path path, GraphData data) {
         ArrayList<PointF> points = data.getSurPoints();
-        if (!data.isShowArea()) return;
+        if (!data.isAreaShown()) return;
 
         path.lineTo(points.get(points.size() - 1).x, getHeight() - getPaddingBottom());
         path.lineTo(points.get(0).x, getHeight() - getPaddingBottom());

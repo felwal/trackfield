@@ -16,6 +16,16 @@ import com.example.trackfield.R;
 
 public abstract class BaseDialog extends DialogFragment {
 
+    public static final int NO_RES = -1;
+    public static final int NO_FLOAT_TEXT = -1;
+
+    // bundle keys
+    protected static final String BUNDLE_TITLE_RES = "title";
+    protected static final String BUNDLE_MESSAGE_RES = "message";
+    protected static final String BUNDLE_POSITIVE_BUTTON_RES = "positiveButtonText";
+    protected static final String BUNDLE_NEGATIVE_BUTTON_RES = "negativeButtonText";
+    protected static final String BUNDLE_TAG = "tag";
+
     protected Activity a;
     protected AlertDialog.Builder builder;
     protected LayoutInflater inflater;
@@ -26,16 +36,6 @@ public abstract class BaseDialog extends DialogFragment {
     protected String tag;
     @StringRes protected int posBtnTxtRes = R.string.dialog_btn_ok;
     @StringRes protected int negBtnTxtRes = R.string.dialog_btn_cancel;
-
-    public final static int NO_RES = -1;
-    public final static int NO_FLOAT_TEXT = -1;
-
-    // bundle
-    protected static final String BUNDLE_TITLE_RES = "title";
-    protected static final String BUNDLE_MESSAGE_RES = "message";
-    protected static final String BUNDLE_POSITIVE_BUTTON_RES = "positiveButtonText";
-    protected static final String BUNDLE_NEGATIVE_BUTTON_RES = "negativeButtonText";
-    protected final static String BUNDLE_TAG = "tag";
 
     // extends DialogFragment
 
@@ -62,6 +62,7 @@ public abstract class BaseDialog extends DialogFragment {
         bundle.putInt(BUNDLE_MESSAGE_RES, messageRes);
         bundle.putInt(BUNDLE_POSITIVE_BUTTON_RES, posBtnTxtRes);
         bundle.putString(BUNDLE_TAG, tag);
+
         return bundle;
     }
 

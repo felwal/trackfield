@@ -34,6 +34,22 @@ public class Borders {
         return new Borders(false, false, true, true);
     }
 
+    public static Borders left() {
+        return new Borders(true, false, false, false);
+    }
+
+    public static Borders right() {
+        return new Borders(false, true, false, false);
+    }
+
+    public static Borders top() {
+        return new Borders(false, false, true, false);
+    }
+
+    public static Borders bottom() {
+        return new Borders(false, false, false, true);
+    }
+
     // get
 
     public boolean isLeft() {

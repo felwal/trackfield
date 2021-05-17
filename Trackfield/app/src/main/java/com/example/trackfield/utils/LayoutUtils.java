@@ -6,32 +6,25 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
-import com.example.trackfield.data.prefs.Prefs;
+import com.example.trackfield.ui.custom.graph.Borders;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // Layout
@@ -43,6 +36,10 @@ public final class LayoutUtils {
         RIGHT,
         BOTTOM
     }
+
+    private static final int ANIM_DURATION = 100;
+    private static final int ANIM_DURATION_LONG = 250;
+    private static final int ANIM_DURATION_RECYCLER = 175;
 
     //
 
@@ -67,22 +64,13 @@ public final class LayoutUtils {
         str.setSpan(new ForegroundColorSpan(color), i, i + subtext.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    public static void setMargin(View view, int margin, Direction dir) {
+    public static void setMargin(View view, int margin, Borders dir) {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        switch (dir) {
-            case LEFT:
-                params.setMargins(margin, 0, 0, 0);
-                break;
-            case TOP:
-                params.setMargins(0, margin, 0, 0);
-                break;
-            case RIGHT:
-                params.setMargins(0, 0, margin, 0);
-                break;
-            case BOTTOM:
-                params.setMargins(0, 0, 0, margin);
-                break;
-        }
+
+        if (dir.isLeft()) params.setMargins(margin, 0, 0, 0);
+        if (dir.isTop()) params.setMargins(0, margin, 0, 0);
+        if (dir.isRight()) params.setMargins(0, 0, margin, 0);
+        if (dir.isBottom()) params.setMargins(0, 0, 0, margin);
 
         view.setLayoutParams(params);
     }
@@ -120,8 +108,7 @@ public final class LayoutUtils {
     }
 
     public static boolean isEmpty(EditText et) {
-        if (et.getText().toString().trim().length() > 0) return false;
-        return true;
+        return et.getText().toString().trim().length() <= 0;
     }
 
     // toast
@@ -132,6 +119,7 @@ public final class LayoutUtils {
 
     public static void toast(boolean success, @StringRes int trueStringResId, @StringRes int falseStringResId,
         Context c) {
+
         Toast.makeText(c, c.getString(success ? trueStringResId : falseStringResId), Toast.LENGTH_SHORT).show();
     }
 
@@ -160,10 +148,6 @@ public final class LayoutUtils {
     }
 
     // animate
-
-    private static final int ANIM_DURATION = 100;
-    private static final int ANIM_DURATION_LONG = 250;
-    private static final int ANIM_DURATION_RECYCLER = 175;
 
     public static void crossfade(View view, float toAlpha) {
         view.animate().alpha(toAlpha).setDuration(ANIM_DURATION).setListener(null);
@@ -198,16 +182,12 @@ public final class LayoutUtils {
     }
 
     public static void animateHeight(final View view, int toHeight) {
-
         ValueAnimator anim = ValueAnimator.ofInt(view.getMeasuredHeight(), toHeight);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int value = (Integer) valueAnimator.getAnimatedValue();
-                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                layoutParams.height = value;
-                view.setLayoutParams(layoutParams);
-            }
+        anim.addUpdateListener(valueAnimator -> {
+            int value = (Integer) valueAnimator.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.height = value;
+            view.setLayoutParams(layoutParams);
         });
         anim.setDuration(ANIM_DURATION_LONG);
         anim.start();
@@ -222,35 +202,35 @@ public final class LayoutUtils {
     }
 
     public static void animateColor(final View view, @ColorInt int fromColor, @ColorInt int toColor) {
+        @SuppressLint("ObjectAnimatorBinding")
+        ObjectAnimator colorFade = ObjectAnimator.ofInt(view, "background", fromColor, toColor);
 
-        @SuppressLint("ObjectAnimatorBinding") final ObjectAnimator colorFade = ObjectAnimator.ofInt(view, "background", fromColor, toColor);
         colorFade.setDuration(ANIM_DURATION);
         colorFade.setEvaluator(new ArgbEvaluator());
-        colorFade.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int animatedValue = (int) animation.getAnimatedValue();
-                view.setBackgroundColor(animatedValue);
-            }
+        colorFade.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            view.setBackgroundColor(animatedValue);
         });
         colorFade.start();
     }
 
-    public static void animateColor(final View view, @ColorInt int disabledColor, @ColorInt int enabledColor, boolean enabled) {
+    public static void animateColor(final View view, @ColorInt int disabledColor, @ColorInt int enabledColor,
+        boolean enabled) {
+
         animateColor(view, enabled ? disabledColor : enabledColor, enabled ? enabledColor : disabledColor);
     }
 
-    public static void animateFab(final FloatingActionButton target, @ColorInt int fromColor, @ColorInt int toColor, Drawable toIcon) {
+    public static void animateFab(final FloatingActionButton target, @ColorInt int fromColor, @ColorInt int toColor,
+        Drawable toIcon) {
 
-        @SuppressLint("ObjectAnimatorBinding") final ObjectAnimator colorFade = ObjectAnimator.ofInt(target, "backgroundTint", fromColor, toColor);
+        @SuppressLint("ObjectAnimatorBinding")
+        ObjectAnimator colorFade = ObjectAnimator.ofInt(target, "backgroundTint", fromColor, toColor);
+
         colorFade.setDuration(ANIM_DURATION);
         colorFade.setEvaluator(new ArgbEvaluator());
-        colorFade.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int animatedValue = (int) animation.getAnimatedValue();
-                target.setBackgroundTintList(ColorStateList.valueOf(animatedValue));
-            }
+        colorFade.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            target.setBackgroundTintList(ColorStateList.valueOf(animatedValue));
         });
         colorFade.start();
         target.setImageDrawable(toIcon);

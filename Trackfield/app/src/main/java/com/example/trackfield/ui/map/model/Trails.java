@@ -8,67 +8,24 @@ import java.util.List;
 
 public class Trails {
 
-    private List<Trail> trails = new ArrayList<>();
-    private List<String> polylines;
-    private List<List<LatLng>> latLngs;
-    private LatLngBounds bounds;
+    private final List<Trail> trails = new ArrayList<>();
 
     //
 
     public Trails(ArrayList<String> polylines) {
-        //this.polylines = polylines;
-        //latLngs = new ArrayList<>();
         for (String s : polylines) {
-            //latLngs.add(PolyUtil.decode(s));
             trails.add(new Trail(s));
         }
-        //setBounds();
+
     }
 
     public Trails(List<List<LatLng>> latLngs) {
-        //polylines = new ArrayList<>();
         for (List<LatLng> ll : latLngs) {
-            //polylines.add(PolyUtil.encode(ll));
             trails.add(new Trail(ll));
         }
-        //this.latLngs = latLngs;
-        //setBounds();
-    }
-
-    // set
-
-    private void setBounds() {
-
-        if (latLngs.size() == 0 || latLngs.get(0).size() == 0) return;
-        LatLng ll0 = latLngs.get(0).get(0);
-
-        double north = ll0.latitude;
-        double south = ll0.latitude;
-        double east = ll0.longitude;
-        double west = ll0.longitude;
-
-        for (int i = 0; i < latLngs.size(); i++) {
-            for (int j = 1; j < latLngs.get(i).size(); j++) {
-                LatLng llj = latLngs.get(i).get(j);
-
-                if (llj.latitude > north) north = llj.latitude;
-                else if (llj.latitude < south) south = llj.latitude;
-
-                if (llj.longitude > east) east = llj.longitude;
-                else if (llj.longitude < west) west = llj.longitude;
-            }
-        }
-
-        LatLng northEast = new LatLng(north, east);
-        LatLng southWest = new LatLng(south, west);
-        bounds = new LatLngBounds(southWest, northEast);
     }
 
     // get
-
-    public List<String> getPolylines() {
-        return polylines;
-    }
 
     public List<List<LatLng>> getLatLngs() {
 
@@ -79,7 +36,6 @@ public class Trails {
     }
 
     public LatLngBounds getBounds() {
-
         double north = trails.get(0).getBounds().northeast.latitude;
         double south = trails.get(0).getBounds().southwest.latitude;
         double east = trails.get(0).getBounds().northeast.longitude;
@@ -99,15 +55,13 @@ public class Trails {
 
         LatLng northEast = new LatLng(north, east);
         LatLng southWest = new LatLng(south, west);
-        LatLngBounds bounds = new LatLngBounds(southWest, northEast);
 
-        return bounds;
+        return new LatLngBounds(southWest, northEast);
     }
 
     // get driven
 
     public Trail toAvgTrail() {
-
         List<LatLng> latLngs = new ArrayList<>();
 
         float pointCount = trails.get(0).getDistance() / 15;
