@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         Prefs.setDeveloper(true);
         DbWriter.get(this).useUpdateToolIfEnabled(this);
 
-        strava = StravaApi.getInstance(this);
+        strava = new StravaApi(this);
 
         // layout
         setBottomNavbar();
@@ -206,7 +206,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 
         stravaFab.setOnClickListener(view -> {
-            strava.requestLastActivity();
+            strava.requestLastActivity(success -> {
+                if (success) {
+                    LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this);
+                }
+                else {
+                    LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
+                }
+            });
             closeFabMenu();
         });
 

@@ -117,12 +117,6 @@ public final class LayoutUtils {
         Toast.makeText(c, s, Toast.LENGTH_SHORT).show();
     }
 
-    public static void toast(boolean success, @StringRes int trueStringResId, @StringRes int falseStringResId,
-        Context c) {
-
-        Toast.makeText(c, c.getString(success ? trueStringResId : falseStringResId), Toast.LENGTH_SHORT).show();
-    }
-
     public static void toast(@StringRes int stringResId, Context c) {
         Toast.makeText(c, c.getString(stringResId), Toast.LENGTH_SHORT).show();
     }

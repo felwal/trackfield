@@ -108,6 +108,11 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
 
@@ -138,7 +143,16 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         }
         else if (itemId == R.id.action_pull) {
             if (exercise.hasExternalId()) {
-                StravaApi.getInstance(this).pullActivity(exercise.getExternalId());
+                StravaApi strava = new StravaApi(this);
+                strava.pullActivity(exercise.getExternalId(), success -> {
+                    if (success) {
+                        LayoutUtils.toast(R.string.toast_strava_pull_activity_successful, this);
+                        recreate();
+                    }
+                    else {
+                        LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this);
+                    }
+                });
             }
             else {
                 LayoutUtils.toast(R.string.toast_strava_pull_activity_gone, this);

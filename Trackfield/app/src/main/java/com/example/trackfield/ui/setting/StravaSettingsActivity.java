@@ -15,6 +15,7 @@ import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.SwitchDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
+import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.model.PairList;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        strava = StravaApi.getInstance(this);
+        strava = new StravaApi(this);
         strava.handleIntent(getIntent());
     }
 
@@ -73,7 +74,14 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         // requests
         inflateHeader("Request activities");
         //inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
-        inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5));
+        inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5, success -> {
+            if (success) {
+                LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this);
+            }
+            else {
+                LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
+            }
+        }));
         inflateDialogItem("Request all", "", false, BinaryDialog.generic(DIALOG_REQUEST_ALL));
         inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
 
@@ -111,10 +119,20 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_REQUEST_ALL)) {
-            strava.requestAllActivities();
+            strava.requestAllActivities(success -> {
+                // we dont want to toast for every successfully requested activity
+                if (!success) {
+                    LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
+                }
+            });
         }
         else if (tag.equals(DIALOG_PULL_ALL)) {
-            strava.pullAllActivities();
+            strava.pullAllActivities(success -> {
+                // we dont want to toast for every successfully requested activity
+                if (!success) {
+                    LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this);
+                }
+            });
         }
     }
 

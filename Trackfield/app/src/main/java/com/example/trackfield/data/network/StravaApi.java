@@ -64,19 +64,15 @@ public class StravaApi {
     private static final String LOG_TAG = "StravaAPI";
     private static final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-    private static StravaApi instance;
     private static RequestQueue queue;
+
     private final Activity a;
 
     //
 
-    private StravaApi(Activity a) {
+    public StravaApi(Activity a) {
         this.a = a;
         queue = Volley.newRequestQueue(a);
-    }
-
-    public static StravaApi getInstance(Activity a) {
-        return instance != null ? instance : (instance = new StravaApi(a));
     }
 
     // authorize
@@ -119,24 +115,24 @@ public class StravaApi {
 
     // pull activities
 
-    public void pullActivity(final long stravaId) {
+    public void pullActivity(final long stravaId, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast("Pulling activity...", a);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
+                    Log.i(LOG_TAG, "response: " + response.toString());
+
                     boolean success = handlePull(convertToExercise(response));
 
-                    Log.i(LOG_TAG, "response: " + response.toString());
-                    LayoutUtils.toast(success, R.string.toast_strava_pull_activity_successful,
-                        R.string.toast_strava_pull_activity_err, a);
-                }, e -> LayoutUtils.handleError(R.string.toast_strava_pull_activity_err, e, a));
+                    listener.onStravaResponse(success);
+                }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
     }
 
-    public void pullAllActivities() {
+    public void pullAllActivities(ResponseListener listener) {
         ArrayList<Long> stravaIds = DbReader.get(a).getExternalIds();
         if (stravaIds.size() == 0) return;
 
@@ -146,51 +142,54 @@ public class StravaApi {
             for (long stravaId : stravaIds) {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                     response -> {
+                        Log.i(LOG_TAG, "response: " + response.toString());
+
                         boolean success = handlePull(convertToExercise(response));
 
-                        Log.i(LOG_TAG, "response: " + response.toString());
-                        LayoutUtils.toast(success, R.string.toast_strava_pull_activity_successful,
-                            R.string.toast_strava_pull_activity_err, a);
-                    }, e -> LayoutUtils.handleError(
-                        a.getString(R.string.toast_strava_pull_activity_err) + " " + stravaId, e, a));
+                        listener.onStravaResponse(success);
+                    }, e -> listener.onStravaResponseError(e, a));
 
                 queue.add(request);
             }
         }).requestAccessToken(a);
     }
 
-    // request activities: primary
+    // request activities
 
-    private void requestActivity(final int index) {
+    private void requestActivity(final int index, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast("Requesting activity...", a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
+                Log.i(LOG_TAG, "response: " + response);
+
                 try {
                     JSONObject obj = response.getJSONObject(index);
                     Exercise requested = convertToExercise(obj);
                     boolean success = handleRequest(requested);
 
-                    Log.i(LOG_TAG, "response: " + obj.toString());
-                    LayoutUtils.toast(success, R.string.toast_strava_req_activity_successful,
-                        R.string.toast_strava_req_activity_err, a);
+                    Log.i(LOG_TAG, "response obj: " + obj.toString());
+
+                    listener.onStravaResponse(success);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
                     LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                 }
-            }, e -> LayoutUtils.handleError(R.string.toast_strava_req_activity_err, e, a));
+            }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
     }
 
-    private void requestActivities(final int page) {
+    private void requestActivities(final int page, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast("Requesting activities...", a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
+                    Log.i(LOG_TAG, "response: " + response);
+
                     int errorCount = 0;
                     for (int index = 0; index < response.length(); index++) {
                         boolean success = true;
@@ -209,31 +208,30 @@ public class StravaApi {
 
                     // request next page
                     if (response.length() == PER_PAGE) {
-                        requestActivities(page + 1);
+                        requestActivities(page + 1, listener);
                     }
 
-                    LayoutUtils.toast(errorCount < 1, R.string.toast_strava_req_activity_successful,
-                        R.string.toast_strava_req_activity_err, a);
-                }, e -> LayoutUtils.handleError(R.string.toast_strava_req_activity_err, e, a));
+                    listener.onStravaResponse(errorCount == 0);
+                }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
     }
 
-    // request activities: secondary
+    // request activities: helper methods
 
-    public void requestLastActivity() {
-        requestActivity(0);
+    public void requestLastActivity(ResponseListener listener) {
+        requestActivity(0, listener);
     }
 
-    public void requestLastActivities(int count) {
+    public void requestLastActivities(int count, ResponseListener listener) {
         for (int i = 0; i < count; i++) {
-            requestActivity(i);
+            requestActivity(i, listener);
         }
     }
 
-    public void requestAllActivities() {
-        requestActivities(1);
+    public void requestAllActivities(ResponseListener listener) {
+        requestActivities(1, listener);
     }
 
     // convert
@@ -379,7 +377,7 @@ public class StravaApi {
         if (a instanceof MainActivity) ((MainActivity) a).updateFragment();
 
         // also pull to get data not available to request
-        pullActivity(strava.getExternalId());
+        pullActivity(strava.getExternalId(), responseSuccess -> {});
 
         return success;
     }
@@ -402,7 +400,7 @@ public class StravaApi {
     }
 
     private static String getActivityURL(long id) {
-        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=true" + "&access_token=" +
+        return "https://www.strava.com/api/v3/activities/" + id + "?include_all_efforts=false" + "&access_token=" +
             Prefs.getAccessToken();
     }
 
@@ -455,7 +453,17 @@ public class StravaApi {
 
     // interface
 
-    interface TokenRequester {
+    public interface ResponseListener {
+
+        void onStravaResponse(boolean success);
+
+        default void onStravaResponseError(Exception e, Context c) {
+            LayoutUtils.handleError(R.string.toast_strava_response_err, e, c);
+        };
+
+    }
+
+    private interface TokenRequester {
 
         void onTokenReady(String token);
 
