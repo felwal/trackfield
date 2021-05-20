@@ -3,6 +3,7 @@ package com.example.trackfield.data.db;
 import android.provider.BaseColumns;
 
 import com.example.trackfield.utils.model.SortMode;
+import com.example.trackfield.utils.model.Unimplemented;
 
 public final class DbContract {
 
@@ -15,7 +16,8 @@ public final class DbContract {
     public static class ExerciseEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "exercises";
-        public static final String COLUMN_EXTERNAL_ID = "external_id";
+        public static final String COLUMN_STRAVA_ID = "strava_id";
+        public static final String COLUMN_GARMIN_ID = "garmin_id";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_ROUTE_ID = "route_id";
@@ -47,7 +49,8 @@ public final class DbContract {
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_EXTERNAL_ID + " INTEGER," +
+            COLUMN_STRAVA_ID + " INTEGER," +
+            COLUMN_GARMIN_ID + " INTEGER," +
             COLUMN_TYPE + " INTEGER," +
             COLUMN_DATE + " INTEGER," +
             COLUMN_ROUTE_ID + " INTEGER," +
@@ -67,7 +70,7 @@ public final class DbContract {
             COLUMN_POLYLINE + " TEXT)";
 
         public static final String ALTER_TO_VER_2 = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN (" +
-            COLUMN_EXTERNAL_ID + " INTEGER," +
+            COLUMN_STRAVA_ID + " INTEGER," +
             COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
         public static String toString(String[] strings) {
@@ -107,6 +110,7 @@ public final class DbContract {
 
     }
 
+    @Unimplemented
     public static class SubEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "subs";

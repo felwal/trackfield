@@ -13,6 +13,7 @@ import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.TypeUtils;
 import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.model.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -42,10 +43,12 @@ public class Exercise implements JSONObjectable {
 
     public static final int DISTANCE_DRIVEN = -1;
     public static final int NO_ID = -1;
+    public static final int UNRELEVANT_ID = -2;
 
     // json keys
     private static final String JSON_ID = "id";
-    private static final String JSON_EXTERNAL_ID = "externalId";
+    private static final String JSON_STRAVA_ID = "stravaId";
+    private static final String JSON_GARMIN_ID = "garminId";
     private static final String JSON_TYPE = "type";
     private static final String JSON_EPOCH = "epoch";
     private static final String JSON_ROUTE_ID = "routeId";
@@ -64,7 +67,8 @@ public class Exercise implements JSONObjectable {
     private static final int DISTANCE_DECIMALS = 2;
 
     private final int id;
-    private long externalId;
+    private long stravaId;
+    private long garminId;
     private int type;
     private LocalDateTime dateTime;
     private int routeId;
@@ -77,16 +81,17 @@ public class Exercise implements JSONObjectable {
     private int distance;
     private float time;
     private Trail trail;
-    @Unfinished private final ArrayList<Sub> subs;
+    @Unimplemented private final ArrayList<Sub> subs;
 
     //
 
-    public Exercise(int id, long externalId, int type, LocalDateTime dateTime, int routeId, String route,
+    public Exercise(int id, long stravaId, long garminId, int type, LocalDateTime dateTime, int routeId, String route,
         String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance,
         float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
 
         this.id = id;
-        this.externalId = externalId;
+        this.stravaId = stravaId;
+        this.garminId = garminId == 0 ? NO_ID : garminId;
         this.type = type;
         this.dateTime = dateTime;
         this.routeId = routeId;
@@ -104,7 +109,8 @@ public class Exercise implements JSONObjectable {
 
     public Exercise(JSONObject obj, Context c) throws JSONException {
         id = obj.getInt(JSON_ID);
-        externalId = obj.getLong(JSON_EXTERNAL_ID);
+        stravaId = obj.getLong(JSON_STRAVA_ID);
+        garminId = obj.getLong(JSON_GARMIN_ID);
         type = obj.getInt(JSON_TYPE);
         dateTime = DateUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
@@ -143,8 +149,12 @@ public class Exercise implements JSONObjectable {
 
     // set
 
-    public void setExternalId(long externalId) {
-        this.externalId = externalId;
+    public void setStravaId(long stravaId) {
+        this.stravaId = stravaId;
+    }
+
+    public void setGarminId(long garminId) {
+        this.garminId = garminId;
     }
 
     public void setType(int type) {
@@ -195,7 +205,7 @@ public class Exercise implements JSONObjectable {
         this.trail = trail;
     }
 
-    @Unfinished
+    @Unimplemented
     public void setSubsSuperId(int id) {
         for (Sub sub : subs) {
             sub.setSuperId(id);
@@ -208,8 +218,12 @@ public class Exercise implements JSONObjectable {
         return id;
     }
 
-    public long getExternalId() {
-        return externalId;
+    public long getStravaId() {
+        return stravaId;
+    }
+
+    public long getGarminId() {
+        return garminId;
     }
 
     public int getType() {
@@ -276,15 +290,19 @@ public class Exercise implements JSONObjectable {
         return trail;
     }
 
-    @Unfinished
+    @Unimplemented
     public ArrayList<Sub> getSubs() {
         return subs;
     }
 
     // get driven
 
-    public boolean hasExternalId() {
-        return externalId != -1;
+    public boolean hasStravaId() {
+        return stravaId != NO_ID && stravaId != UNRELEVANT_ID;
+    }
+
+    public boolean hasGarminId() {
+        return garminId != NO_ID && garminId != UNRELEVANT_ID;
     }
 
     public boolean isType(int type) {
@@ -352,13 +370,13 @@ public class Exercise implements JSONObjectable {
         return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
     }
 
-    @Unfinished
+    @Unimplemented
     public Sub getSub(int index) {
         if (index >= subCount()) return null;
         return subs.get(index);
     }
 
-    @Unfinished
+    @Unimplemented
     public int getSubsDistance() {
         int distance = 0;
         for (Sub s : subs) {
@@ -367,7 +385,7 @@ public class Exercise implements JSONObjectable {
         return distance;
     }
 
-    @Unfinished
+    @Unimplemented
     public float getSubsTime() {
         float time = 0;
         for (Sub s : subs) {
@@ -376,7 +394,7 @@ public class Exercise implements JSONObjectable {
         return time;
     }
 
-    @Unfinished
+    @Unimplemented
     public int subCount() {
         return subs != null ? subs.size() : 0;
     }
@@ -388,7 +406,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public String printExternalId() {
-        return externalId == -1 ? "" : "@" + externalId;
+        return stravaId == -1 ? "" : "@" + stravaId;
     }
 
     public String printType() {
@@ -459,7 +477,8 @@ public class Exercise implements JSONObjectable {
 
         try {
             obj.put(JSON_ID, id);
-            obj.put(JSON_EXTERNAL_ID, externalId);
+            obj.put(JSON_STRAVA_ID, stravaId);
+            obj.put(JSON_GARMIN_ID, garminId);
             obj.put(JSON_TYPE, type);
             obj.put(JSON_EPOCH, getEpoch());
             obj.put(JSON_ROUTE_ID, routeId);

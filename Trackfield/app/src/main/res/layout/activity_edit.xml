@@ -101,6 +101,7 @@
                     android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_interval"
                     android:textSize="@dimen/type_heading1"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText_route"
                     tools:visibility="visible" />
@@ -248,10 +249,10 @@
                     android:layout_marginEnd="24dp"
                     android:text="+"
                     android:textSize="20sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editText_seconds"
-                    tools:visibility="gone" />
+                    app:layout_constraintTop_toTopOf="@+id/editText_seconds" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

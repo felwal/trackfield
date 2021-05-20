@@ -117,7 +117,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
 
         // remove pull action if no externalId
-        if (!exercise.hasExternalId()) {
+        if (!exercise.hasStravaId()) {
             menu.findItem(R.id.action_pull).setVisible(false);
         }
 
@@ -142,9 +142,9 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             return true;
         }
         else if (itemId == R.id.action_pull) {
-            if (exercise.hasExternalId()) {
+            if (exercise.hasStravaId()) {
                 StravaApi strava = new StravaApi(this);
-                strava.pullActivity(exercise.getExternalId(), success -> {
+                strava.pullActivity(exercise.getStravaId(), success -> {
                     if (success) {
                         LayoutUtils.toast(R.string.toast_strava_pull_activity_successful, this);
                         recreate();
@@ -217,7 +217,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         TextView dataSourceTv = findViewById(R.id.textView_dataSource);
         TextView recordingMethodTv = findViewById(R.id.textView_recordingMethod);
         TextView extIdTv = findViewById(R.id.textView_external);
-        ImageView stravaIv = findViewById(R.id.imageView_strava);
 
         // set
 
@@ -241,6 +240,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.textView_h));
 
         // set listeners
+
+        // open activity
         if (fromRecycler != FROM_ROUTE) {
             routeTv.setOnClickListener(v ->
                 RouteActivity.startActivity(ViewActivity.this, exercise.getRouteId(), exercise.getId()));
@@ -256,6 +257,8 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 DistanceActivity.startActivity(ViewActivity.this, longestDistance, exercise.getId());
             });
         }
+
+        // toggle units
         paceTv.setOnClickListener(v -> {
             String text = paceTv.getText().toString();
             String perKm = exercise.printPace(true, this);
@@ -293,11 +296,23 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
                 energyTv.setText(joules);
             }
         });
-        if (exercise.getExternalId() == -1) {
-            stravaIv.setVisibility(View.GONE);
+
+        // open strava
+        ImageView stravaIv = findViewById(R.id.imageView_strava);
+        if (exercise.hasStravaId()) {
+            stravaIv.setOnClickListener(v -> StravaApi.launchStravaActivity(exercise.getStravaId(), this));
         }
         else {
-            stravaIv.setOnClickListener(v -> StravaApi.launchStravaActivity(exercise.getExternalId(), this));
+            stravaIv.setVisibility(View.GONE);
+        }
+
+        // open garmin
+        ImageView garminIv = findViewById(R.id.imageView_garmin);
+        if (exercise.hasGarminId()) {
+            garminIv.setOnClickListener(v -> StravaApi.launchGarminActivity(exercise.getGarminId(), this));
+        }
+        else {
+            garminIv.setVisibility(View.GONE);
         }
     }
 

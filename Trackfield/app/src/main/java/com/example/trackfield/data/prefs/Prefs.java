@@ -128,6 +128,7 @@ public class Prefs {
         load(c);
     }
 
+    @Deprecated
     private static void save() {
         // app
         savePref(appVersion, KEY_APP_VERSION);

@@ -23,7 +23,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.Sub;
-import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.utils.ScreenUtils;
@@ -32,7 +31,7 @@ import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.model.Unimplemented;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,7 +61,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     private EditText timeEt;
     private Switch drivenSw;
     private Spinner typeSpinner;
-    @Unfinished private final ArrayList<View> subViews = new ArrayList<>();
+    @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
 
     private String creationDate;
     private String creationTime;
@@ -100,7 +99,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
         findEditTexts();
         setTexts();
-        //addSubViewBtnListener();
+        //setAddSubBtnListener();
     }
 
     @Override
@@ -190,7 +189,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
-            removeSubViewBtnListener(ll, subView);
+            setRemoveSubBtnListener(ll, subView);
 
             EditText sDistanceEt = subViews.get(i).findViewById(R.id.editText_distance_sub);
             EditText sHoursEt = subViews.get(i).findViewById(R.id.editText_hours_sub);
@@ -233,9 +232,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             polylineEt.setFocusable(false);
         }*/
 
-        // show or hide interval
+        // set or hide interval
         if (exercise.isType(Exercise.TYPE_INTERVALS)) {
-            intervalEt.setVisibility(View.VISIBLE);
             intervalEt.setText(exercise.getInterval());
         }
         else intervalEt.setVisibility(View.GONE);
@@ -356,15 +354,20 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(-1, -1, type, dateTime, routeId, route, routeVar, interval, note, dataSource,
-                    recordingMethod, distance, time, subs, (Trail) null);
-                LayoutUtils.toast(DbWriter.get(this).addExercise(exercise, this), this);
+                exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, dateTime, routeId,
+                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, null);
+
+                boolean success = DbWriter.get(this).addExercise(exercise, this);
+                LayoutUtils.toast(success, this);
             }
             // save edit
             else {
-                exercise = new Exercise(exercise.getId(), exercise.getExternalId(), type, dateTime, routeId, route,
-                    routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, exercise.getTrail());
-                LayoutUtils.toast(DbWriter.get(this).updateExercise(exercise, this), this);
+                exercise = new Exercise(exercise.getId(), exercise.getStravaId(), exercise.getGarminId(), type,
+                    dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time,
+                    subs, exercise.getTrail());
+
+                boolean success = DbWriter.get(this).updateExercise(exercise, this);
+                LayoutUtils.toast(success, this);
             }
 
             finish();
@@ -380,6 +383,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @Unimplemented
     private ArrayList<Sub> parseSubs() {
         ArrayList<Sub> subs = new ArrayList<>();
 
@@ -414,20 +418,21 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // sub listeners
 
-    private void addSubViewBtnListener() {
+    @Unimplemented
+    private void setAddSubBtnListener() {
         final Button addSubBtn = findViewById(R.id.button_addSub);
-        addSubBtn.setVisibility(View.GONE);
         addSubBtn.setOnClickListener(v -> {
             final LinearLayout ll = findViewById(R.id.linearLayout_edit);
             final View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
 
-            removeSubViewBtnListener(ll, subView);
+            setRemoveSubBtnListener(ll, subView);
         });
     }
 
-    private void removeSubViewBtnListener(final LinearLayout ll, final View subView) {
+    @Unimplemented
+    private void setRemoveSubBtnListener(final LinearLayout ll, final View subView) {
         final Button removeBtn = subView.findViewById(R.id.button_removeSub);
         removeBtn.setOnClickListener(v -> {
             ll.removeView(subView);

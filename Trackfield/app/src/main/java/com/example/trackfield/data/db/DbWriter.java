@@ -13,13 +13,14 @@ import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.model.Debug;
 import com.example.trackfield.utils.model.SortMode;
+import com.example.trackfield.utils.model.Unimplemented;
 
 import java.util.ArrayList;
 
 public class DbWriter extends DbHelper {
 
     private static DbWriter instance;
-    private static boolean useUpdateTool = false;
+    @Debug private static boolean useUpdateTool = false;
 
     //
 
@@ -55,6 +56,7 @@ public class DbWriter extends DbHelper {
 
     // database tools
 
+    @Debug
     public void useUpdateToolIfEnabled(Context c) {
         if (!useUpdateTool) return;
         recreate();
@@ -224,6 +226,7 @@ public class DbWriter extends DbHelper {
 
     // subs
 
+    @Unimplemented
     private boolean addSubs(@NonNull ArrayList<Sub> subs) {
         boolean success = true;
         for (Sub sub : subs) {
@@ -232,12 +235,14 @@ public class DbWriter extends DbHelper {
         return success;
     }
 
+    @Unimplemented
     private boolean addSub(Sub sub) {
         ContentValues cvSub = fillSubContentValues(sub);
         long result = db.insert(SubEntry.TABLE_NAME, null, cvSub);
         return success(result);
     }
 
+    @Unimplemented
     private boolean updateSubs(@NonNull ArrayList<Sub> subs) {
         boolean success = true;
         for (Sub sub : subs) {
@@ -258,6 +263,7 @@ public class DbWriter extends DbHelper {
         return success;
     }
 
+    @Unimplemented
     public boolean deleteSub(@NonNull Sub sub) {
         String selection = SubEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(sub.getId()) };
@@ -418,7 +424,8 @@ public class DbWriter extends DbHelper {
     private ContentValues fillExerciseContentValues(@NonNull Exercise e, Context c) {
         ContentValues cv = new ContentValues();
 
-        cv.put(ExerciseEntry.COLUMN_EXTERNAL_ID, e.getExternalId());
+        cv.put(ExerciseEntry.COLUMN_STRAVA_ID, e.getStravaId());
+        cv.put(ExerciseEntry.COLUMN_GARMIN_ID, e.getGarminId());
         cv.put(ExerciseEntry.COLUMN_TYPE, e.getType());
         cv.put(ExerciseEntry.COLUMN_DATE, e.getEpoch());
         cv.put(ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
@@ -432,6 +439,7 @@ public class DbWriter extends DbHelper {
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance(c));
         cv.put(ExerciseEntry.COLUMN_TIME, e.getTime());
 
+        // put trail
         Trail trail = e.getTrail();
         if (trail != null) {
             cv.put(ExerciseEntry.COLUMN_POLYLINE, trail.getPolyline());

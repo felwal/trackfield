@@ -83,7 +83,9 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
             }
         }));
         inflateDialogItem("Request all", "", false, BinaryDialog.generic(DIALOG_REQUEST_ALL));
-        inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
+        if (Prefs.isDeveloper()) {
+            inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
+        }
 
         // request options
         inflateHeader("Request options");

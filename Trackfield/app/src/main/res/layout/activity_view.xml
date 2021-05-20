@@ -330,7 +330,17 @@
                     android:layout_marginEnd="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_fab_strava_24dp" />
+                    app:srcCompat="@drawable/ic_logo_strava_24dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_garmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView_strava"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_logo_garmin_connect_24dp" />
 
                 <TextView
                     android:id="@+id/textView_id"

@@ -25,6 +25,7 @@ import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.model.SortMode;
 import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.model.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
@@ -80,9 +81,9 @@ public class DbReader extends DbHelper {
     }
 
     @Nullable
-    public Exercise getExercise(long externalId) {
-        String selection = ExerciseEntry.COLUMN_EXTERNAL_ID + " = ?";
-        String[] selectionArgs = { Long.toString(externalId) };
+    public Exercise getExercise(long stravaId) {
+        String selection = ExerciseEntry.COLUMN_STRAVA_ID + " = ?";
+        String[] selectionArgs = { Long.toString(stravaId) };
 
         Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, null, selection, selectionArgs, null, null,
             null, null);
@@ -90,7 +91,7 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         if (exercises.size() > 1) {
-            Log.w(LOG_TAG + " getExercise", "more than one exercise with externalId " + externalId);
+            Log.w(LOG_TAG + " getExercise", "more than one exercise with stravaId " + stravaId);
         }
 
         return getFirst(exercises);
@@ -297,6 +298,7 @@ public class DbReader extends DbHelper {
 
     // get subs
 
+    @Unimplemented
     @NonNull
     private ArrayList<Sub> getSubs(int superId) {
         String selection = SubEntry.COLUMN_SUPERID + " = ?";
@@ -346,9 +348,9 @@ public class DbReader extends DbHelper {
      * @param routeId Id of route
      * @return The route of the existing routeId, or {@link Route#Route()} if not existing
      */
-    // TODO: nullable?
     @NonNull
     public Route getRoute(int routeId) {
+        // TODO: nullable?
         String selection = RouteEntry._ID + " = ?";
         String[] selectionArgs = { Integer.toString(routeId) };
 
@@ -602,7 +604,7 @@ public class DbReader extends DbHelper {
         orderBy += sortOrder(ascending);
 
         String query =
-            "SELECT " + con(col(ali_e, col_e_rid), col(tab_r, col_r_name), "count(1) AS " + ali_amount,
+            "SELECT " + concat(col(ali_e, col_e_rid), col(tab_r, col_r_name), "count(1) AS " + ali_amount,
                 fun("avg", col(ali_e, col_e_dist)) + " AS " + ali_avg_dist, col(ali_a, ali_best_pace)) +
                 " FROM " + tab_e + " AS " + ali_e +
                 " INNER JOIN " + tab_r + " ON " + col(ali_e, col_e_rid) + " = " + col(tab_r, col_r_id) +
@@ -751,14 +753,15 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Long> getExternalIds() {
-        String[] columns = { ExerciseEntry.COLUMN_EXTERNAL_ID };
-        String selection = ExerciseEntry.COLUMN_EXTERNAL_ID + " != ''";
+    public ArrayList<Long> getStravaIds() {
+        String[] columns = { ExerciseEntry.COLUMN_STRAVA_ID };
+        String selection = ExerciseEntry.COLUMN_STRAVA_ID + " != ''"
+            + " AND " + ExerciseEntry.COLUMN_STRAVA_ID + " != " + Exercise.NO_ID;
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         ArrayList<Long> externalIds = new ArrayList<>();
         while (cursor.moveToNext()) {
-            long externalId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry.COLUMN_EXTERNAL_ID));
+            long externalId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry.COLUMN_STRAVA_ID));
             externalIds.add(externalId);
         }
         cursor.close();
@@ -1013,11 +1016,11 @@ public class DbReader extends DbHelper {
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
-            long externalId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EXTERNAL_ID));
+            long stravaId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_STRAVA_ID));
+            long garminId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_GARMIN_ID));
             int type = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
-            //String route = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE));
             String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_NOTE));
@@ -1043,8 +1046,8 @@ public class DbReader extends DbHelper {
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
 
-            Exercise exercise = new Exercise(id, externalId, type, dateTime, routeId, routeName, routeVar, interval,
-                note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
+            Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
+                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
             exercises.add(exercise);
         }
 
@@ -1192,7 +1195,7 @@ public class DbReader extends DbHelper {
         return table + "." + column;
     }
 
-    private String con(String... s) {
+    private String concat(String... s) {
         String expression = s[0];
         for (int i = 1; i < s.length; i++) {
             expression += ", " + s[i];

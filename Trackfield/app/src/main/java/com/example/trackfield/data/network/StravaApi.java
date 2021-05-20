@@ -23,6 +23,7 @@ import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
+import com.example.trackfield.utils.model.Debug;
 import com.example.trackfield.utils.model.PairList;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -43,6 +44,7 @@ public class StravaApi {
 
     // activity response json keys
     private static final String JSON_ID = "id";
+    private static final String JSON_EXTERNAL_ID = "external_id";
     private static final String JSON_NAME = "name";
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_DISTANCE = "distance";
@@ -132,8 +134,13 @@ public class StravaApi {
         }).requestAccessToken(a);
     }
 
+    /**
+     * Pulls every exercise with a stravaId, one at a time. As we have a limitation to request amounts, the user
+     * should not be able to invoke this method. TODO: find a better way of mass-pulling
+     */
+    @Debug
     public void pullAllActivities(ResponseListener listener) {
-        ArrayList<Long> stravaIds = DbReader.get(a).getExternalIds();
+        ArrayList<Long> stravaIds = DbReader.get(a).getStravaIds();
         if (stravaIds.size() == 0) return;
 
         ((TokenRequester) accessToken -> {
@@ -165,8 +172,7 @@ public class StravaApi {
 
                 try {
                     JSONObject obj = response.getJSONObject(index);
-                    Exercise requested = convertToExercise(obj);
-                    boolean success = handleRequest(requested);
+                    boolean success = handleRequest(convertToExercise(obj));
 
                     Log.i(LOG_TAG, "response obj: " + obj.toString());
 
@@ -195,8 +201,7 @@ public class StravaApi {
                         boolean success = true;
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            Exercise requested = convertToExercise(obj);
-                            success &= handleRequest(requested);
+                            success &= handleRequest(convertToExercise(obj));
                         }
                         catch (JSONException e) {
                             success = false;
@@ -250,7 +255,19 @@ public class StravaApi {
             String date = obj.getString(JSON_DATE);
             String method = Prefs.getRecordingMethod();
 
-            // pull keys
+            // external id
+            String externalId;
+            long garminId = Exercise.NO_ID;
+            if (obj.has(JSON_EXTERNAL_ID) && !(externalId = obj.getString(JSON_EXTERNAL_ID)).equals("")) {
+                if (externalId.length() > 12 && externalId.contains("garmin_push_")) {
+                    garminId = Long.parseLong(externalId.substring(12));
+                }
+                else {
+                    garminId = Exercise.UNRELEVANT_ID;
+                }
+            }
+
+            // only available in pull
             String description = obj.has(JSON_DESCRIPTION) ? obj.getString(JSON_DESCRIPTION) : "";
             String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : "";
 
@@ -277,8 +294,8 @@ public class StravaApi {
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
 
-            return new Exercise(Exercise.NO_ID, stravaId, type, dateTime, routeId, name, "", "", description, device,
-                method, distance, time, null, trail);
+            return new Exercise(Exercise.NO_ID, stravaId, garminId, type, dateTime, routeId, name, "", "", description,
+                device, method, distance, time, null, trail);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -291,7 +308,7 @@ public class StravaApi {
         if (strava == null) return false;
         boolean success = true;
 
-        Exercise existing = DbReader.get(a).getExercise(strava.getExternalId());
+        Exercise existing = DbReader.get(a).getExercise(strava.getStravaId());
 
         // import
         if (existing == null) {
@@ -304,6 +321,10 @@ public class StravaApi {
         else {
             PairList<String, Boolean> settings = Prefs.getPullSettings();
 
+            // always set
+            existing.setGarminId(strava.getGarminId());
+
+            // set depending on pull policy
             if (settings.getSecond("Route")) {
                 existing.setRoute(strava.getRoute());
                 existing.setRouteId(strava.getRouteId());
@@ -343,7 +364,7 @@ public class StravaApi {
         boolean success = true;
 
         // dont override already existing (use pull for that)
-        Exercise existing = DbReader.get(a).getExercise(strava.getExternalId());
+        Exercise existing = DbReader.get(a).getExercise(strava.getStravaId());
         if (existing != null) return true;
 
         // merge with matching, ie not already linked to strava activity
@@ -352,9 +373,10 @@ public class StravaApi {
         // merge
         if (matching.size() == 1) {
             Exercise x = matching.get(0);
-            Exercise merged = new Exercise(x.getId(), strava.getExternalId(), x.getType(), strava.getDateTime(),
-                x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(), x.getDataSource(),
-                x.getRecordingMethod(), strava.getDistance(), strava.getTime(), x.getSubs(),
+            // TODO: request policy
+            Exercise merged = new Exercise(x.getId(), strava.getStravaId(), strava.getGarminId(), x.getType(),
+                strava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(),
+                x.getDataSource(), x.getRecordingMethod(), strava.getDistance(), strava.getTime(), x.getSubs(),
                 strava.getTrail());
 
             success &= DbWriter.get(a).updateExercise(merged, a);
@@ -377,7 +399,7 @@ public class StravaApi {
         if (a instanceof MainActivity) ((MainActivity) a).updateFragment();
 
         // also pull to get data not available to request
-        pullActivity(strava.getExternalId(), responseSuccess -> {});
+        pullActivity(strava.getStravaId(), responseSuccess -> {});
 
         return success;
     }
@@ -407,7 +429,18 @@ public class StravaApi {
     // launch
 
     public static void launchStravaActivity(long stravaId, Activity a) {
-        Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId).buildUpon().build();
+        Uri uri = Uri.parse("https://www.strava.com/activities/" + stravaId)
+            .buildUpon()
+            .build();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        a.startActivity(intent);
+    }
+
+    public static void launchGarminActivity(long garminId, Activity a) {
+        Uri uri = Uri.parse("https://connect.garmin.com/modern/activity/" + garminId)
+            .buildUpon()
+            .build();
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         a.startActivity(intent);
@@ -459,7 +492,7 @@ public class StravaApi {
 
         default void onStravaResponseError(Exception e, Context c) {
             LayoutUtils.handleError(R.string.toast_strava_response_err, e, c);
-        };
+        }
 
     }
 

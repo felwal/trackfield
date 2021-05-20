@@ -89,7 +89,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_fab_strava_24dp"
+                app:srcCompat="@drawable/ic_logo_strava_24dp"
                 tools:visibility="visible" />
 
             <TextView
