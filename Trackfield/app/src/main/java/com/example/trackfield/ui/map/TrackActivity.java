@@ -26,7 +26,7 @@ import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.ScreenUtils;
 import com.example.trackfield.utils.TypeUtils;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Unfinished;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

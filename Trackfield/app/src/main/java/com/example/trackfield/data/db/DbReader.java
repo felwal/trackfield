@@ -24,8 +24,8 @@ import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.model.SortMode;
-import com.example.trackfield.utils.model.Unfinished;
-import com.example.trackfield.utils.model.Unimplemented;
+import com.example.trackfield.utils.annotations.Unfinished;
+import com.example.trackfield.utils.annotations.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;

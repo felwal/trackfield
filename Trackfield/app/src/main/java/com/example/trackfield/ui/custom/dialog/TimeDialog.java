@@ -11,7 +11,7 @@ import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Unfinished;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 

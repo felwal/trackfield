@@ -25,7 +25,7 @@ import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.main.MainActivity;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.model.SortMode;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Unfinished;
 
 import java.util.ArrayList;
 

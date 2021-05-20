@@ -31,7 +31,7 @@ import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.model.Unimplemented;
+import com.example.trackfield.utils.annotations.Unimplemented;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

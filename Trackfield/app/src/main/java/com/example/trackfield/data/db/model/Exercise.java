@@ -12,8 +12,8 @@ import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
 import com.example.trackfield.utils.TypeUtils;
-import com.example.trackfield.utils.model.Unfinished;
-import com.example.trackfield.utils.model.Unimplemented;
+import com.example.trackfield.utils.annotations.Unfinished;
+import com.example.trackfield.utils.annotations.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

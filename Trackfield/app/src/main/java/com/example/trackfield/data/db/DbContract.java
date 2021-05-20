@@ -3,7 +3,7 @@ package com.example.trackfield.data.db;
 import android.provider.BaseColumns;
 
 import com.example.trackfield.utils.model.SortMode;
-import com.example.trackfield.utils.model.Unimplemented;
+import com.example.trackfield.utils.annotations.Unimplemented;
 
 public final class DbContract {
 

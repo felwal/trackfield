@@ -12,17 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
-import com.example.trackfield.utils.TypeUtils;
-import com.example.trackfield.utils.model.PairList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.example.trackfield.utils.model.SwitchChain;
 
 public class SwitchDialog extends BaseDialog {
 
     // bundle keys
-    public static final String BUNDLE_SWITCH_TEXTS = "switchTexts";
-    public static final String BUNDLE_SWITCH_STATES = "switchStates";
+    public static final String BUNDLE_SWITCH_TEXTS = "texts";
+    public static final String BUNDLE_SWITCH_CHECKED = "checked";
 
     // dialog tags
     public static final String TAG_DEFAULT = "switchDialog";
@@ -30,20 +26,19 @@ public class SwitchDialog extends BaseDialog {
     private DialogListener listener;
 
     // arguments
-    private ArrayList<String> switchTexts;
-    private ArrayList<Boolean> switchStates;
+    private String[] texts;
+    private boolean[] checked;
 
     //
 
     public static SwitchDialog newInstance(@StringRes int titleRes, @StringRes int messageRes,
-        @StringRes int posBtnTxtRes, PairList<String, Boolean> switchValues, String tag) {
+        @StringRes int posBtnTxtRes, SwitchChain chain, String tag) {
 
         SwitchDialog instance = new SwitchDialog();
         Bundle bundle = putBundleBase(titleRes, messageRes, posBtnTxtRes, tag);
 
-        bundle.putStringArrayList(BUNDLE_SWITCH_TEXTS, switchValues.getFirsts());
-        bundle.putBooleanArray(BUNDLE_SWITCH_STATES,
-            TypeUtils.castToPrimitive(switchValues.getSeconds().toArray(new Boolean[0])));
+        bundle.putStringArray(BUNDLE_SWITCH_TEXTS, chain.getTexts());
+        bundle.putBooleanArray(BUNDLE_SWITCH_CHECKED, chain.getChecked());
 
         instance.setArguments(bundle);
         return instance;
@@ -70,9 +65,8 @@ public class SwitchDialog extends BaseDialog {
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         if (bundle != null) {
-            switchTexts = bundle.getStringArrayList(BUNDLE_SWITCH_TEXTS);
-            switchStates = new ArrayList<>(Arrays.asList(
-                TypeUtils.castToGeneric(bundle.getBooleanArray(BUNDLE_SWITCH_STATES))));
+            texts = bundle.getStringArray(BUNDLE_SWITCH_TEXTS);
+            checked = bundle.getBooleanArray(BUNDLE_SWITCH_CHECKED);
         }
     }
 
@@ -82,20 +76,19 @@ public class SwitchDialog extends BaseDialog {
         LinearLayout ll = view.findViewById(R.id.linearLayout_switchDialog);
 
         builder.setView(view).setTitle(title)
-            .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onSwitchDialogPositiveClick(switchStates, tag))
+            .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onSwitchDialogPositiveClick(checked, tag))
             .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         // inflate switches
-        for (int i = 0; i < switchTexts.size(); i++) {
+        for (int i = 0; i < texts.length; i++) {
             Switch sw = (Switch) inflater.inflate(R.layout.dialog_switch_item, ll, false);
-            sw.setText(switchTexts.get(i));
-            sw.setChecked(switchStates.get(i));
+            sw.setText(texts[i]);
+            sw.setChecked(checked[i]);
             ll.addView(sw);
 
             int iFinal = i;
-            sw.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
-                switchStates.set(iFinal, isChecked);
-            });
+            sw.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) ->
+                checked[iFinal] = isChecked);
         }
 
         return builder.show();
@@ -105,7 +98,7 @@ public class SwitchDialog extends BaseDialog {
 
     public interface DialogListener {
 
-        void onSwitchDialogPositiveClick(ArrayList<Boolean> switchStates, String tag);
+        void onSwitchDialogPositiveClick(boolean[] checked, String tag);
 
     }
 

@@ -23,8 +23,8 @@ import com.example.trackfield.ui.map.model.Trail;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.DateUtils;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.model.Debug;
-import com.example.trackfield.utils.model.PairList;
+import com.example.trackfield.utils.annotations.Debug;
+import com.example.trackfield.utils.model.SwitchChain;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -43,19 +43,19 @@ public class StravaApi {
     private static final String JSON_EXPIRES_AT = "expires_at";
 
     // activity response json keys
-    private static final String JSON_ID = "id";
-    private static final String JSON_EXTERNAL_ID = "external_id";
-    private static final String JSON_NAME = "name";
-    private static final String JSON_DESCRIPTION = "description";
-    private static final String JSON_DISTANCE = "distance";
-    private static final String JSON_TIME = "elapsed_time";
-    private static final String JSON_TYPE = "type";
-    private static final String JSON_DATE = "start_date_local";
-    private static final String JSON_MAP = "map";
-    private static final String JSON_POLYLINE = "summary_polyline";
-    private static final String JSON_START = "start_latlng";
-    private static final String JSON_END = "end_latlng";
-    private static final String JSON_DEVICE = "device_name";
+    public static final String JSON_ID = "id";
+    public static final String JSON_EXTERNAL_ID = "external_id";
+    public static final String JSON_NAME = "name";
+    public static final String JSON_DESCRIPTION = "description";
+    public static final String JSON_DISTANCE = "distance";
+    public static final String JSON_TIME = "elapsed_time";
+    public static final String JSON_TYPE = "type";
+    public static final String JSON_DATE = "start_date_local";
+    public static final String JSON_MAP = "map";
+    public static final String JSON_POLYLINE = "summary_polyline";
+    public static final String JSON_START = "start_latlng";
+    public static final String JSON_END = "end_latlng";
+    public static final String JSON_DEVICE = "device_name";
 
     // api values
     private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
@@ -319,35 +319,35 @@ public class StravaApi {
 
         // merge
         else {
-            PairList<String, Boolean> settings = Prefs.getPullSettings();
-
-            // always set
-            existing.setGarminId(strava.getGarminId());
+            SwitchChain policy = Prefs.getPullPolicy();
 
             // set depending on pull policy
-            if (settings.getSecond("Route")) {
+            if (policy.isChecked(JSON_EXTERNAL_ID)) {
+                existing.setGarminId(strava.getGarminId());
+            }
+            if (policy.isChecked(JSON_NAME)) {
                 existing.setRoute(strava.getRoute());
                 existing.setRouteId(strava.getRouteId());
             }
-            if (settings.getSecond("Type")) {
+            if (policy.isChecked(JSON_TYPE)) {
                 existing.setType(strava.getType());
             }
-            if (settings.getSecond("Date and time")) {
+            if (policy.isChecked(JSON_DATE)) {
                 existing.setDateTime(strava.getDateTime());
             }
-            if (settings.getSecond("Data source")) {
+            if (policy.isChecked(JSON_DEVICE)) {
                 existing.setDataSource(strava.getDataSource());
             }
-            if (settings.getSecond("Distance")) {
+            if (policy.isChecked(JSON_DISTANCE)) {
                 existing.setDistance(strava.getDistance());
             }
-            if (settings.getSecond("Time")) {
+            if (policy.isChecked(JSON_TIME)) {
                 existing.setTime(strava.getTime());
             }
-            if (settings.getSecond("Note") && !strava.getNote().equals("")) {
+            if (policy.isChecked(JSON_DESCRIPTION) && !strava.getNote().equals("")) {
                 existing.setNote(strava.getNote());
             }
-            if (settings.getSecond("Trail")) {
+            if (policy.isChecked(JSON_MAP)) {
                 existing.setTrail(strava.getTrail());
             }
 
@@ -373,7 +373,6 @@ public class StravaApi {
         // merge
         if (matching.size() == 1) {
             Exercise x = matching.get(0);
-            // TODO: request policy
             Exercise merged = new Exercise(x.getId(), strava.getStravaId(), strava.getGarminId(), x.getType(),
                 strava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(),
                 x.getDataSource(), x.getRecordingMethod(), strava.getDistance(), strava.getTime(), x.getSubs(),

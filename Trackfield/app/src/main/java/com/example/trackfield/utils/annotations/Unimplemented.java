@@ -1,4 +1,4 @@
-package com.example.trackfield.utils.model;
+package com.example.trackfield.utils.annotations;
 
 /**
  * Currently not present in production

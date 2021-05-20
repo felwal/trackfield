@@ -16,9 +16,6 @@ import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.ui.custom.dialog.SwitchDialog;
 import com.example.trackfield.ui.custom.dialog.TextDialog;
 import com.example.trackfield.utils.LayoutUtils;
-import com.example.trackfield.utils.model.PairList;
-
-import java.util.ArrayList;
 
 public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener,
     SwitchDialog.DialogListener {
@@ -82,7 +79,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
                 LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
             }
         }));
-        inflateDialogItem("Request all", "", false, BinaryDialog.generic(DIALOG_REQUEST_ALL));
+        inflateDialogItem("Request all", "", !Prefs.isDeveloper(), BinaryDialog.generic(DIALOG_REQUEST_ALL));
         if (Prefs.isDeveloper()) {
             inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
         }
@@ -94,8 +91,8 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
                 R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
                 "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
         inflateDialogItem("Pull policy", "", true,
-            SwitchDialog.newInstance(R.string.dialog_title_pull, BaseDialog.NO_RES, R.string.dialog_btn_set,
-                Prefs.getPullSettings(), DIALOG_PULL_POLICY));
+            SwitchDialog.newInstance(R.string.dialog_title_pull_policy, BaseDialog.NO_RES, R.string.dialog_btn_set,
+                Prefs.getPullPolicy(), DIALOG_PULL_POLICY));
     }
 
     // implements dialogs
@@ -109,11 +106,9 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     }
 
     @Override
-    public void onSwitchDialogPositiveClick(ArrayList<Boolean> switchStates, String tag) {
+    public void onSwitchDialogPositiveClick(boolean[] checked, String tag) {
         if (tag.equals(DIALOG_PULL_POLICY)) {
-            PairList<String, Boolean> pullSettings = Prefs.getPullSettings();
-            pullSettings.setSeconds(switchStates);
-            Prefs.setPullSettings(pullSettings);
+            Prefs.setPullSettings(checked);
             reflateViews();
         }
     }

@@ -2,8 +2,7 @@ package com.example.trackfield.data.db.model;
 
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.model.Unfinished;
-import com.example.trackfield.utils.model.Unimplemented;
+import com.example.trackfield.utils.annotations.Unimplemented;
 
 @Unimplemented
 public class Sub {

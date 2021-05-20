@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 
 import com.example.trackfield.R;
 
+import com.example.trackfield.data.network.StravaApi;
+import com.example.trackfield.utils.model.SwitchChain;
+import com.example.trackfield.utils.model.SwitchItem;
 import com.example.trackfield.utils.AppConsts;
-import com.example.trackfield.utils.model.Debug;
-import com.example.trackfield.utils.model.PairList;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Debug;
+import com.example.trackfield.utils.annotations.Unfinished;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -55,7 +56,7 @@ public class Prefs {
     private static final String KEY_STRAVA_ACCESS = "stravaAccessToken";
     private static final String KEY_STRAVA_ACCESS_EXP_DATE = "stravaAccessExpiration";
     private static final String KEY_STRAVA_METHOD = "stravaRecordingMethod";
-    private static final String KEY_STRAVA_PULL_SETTINGS = "stravaPullSettings";
+    private static final String KEY_STRAVA_PULL_POLICY = "stravaPullPolicy";
 
     // file
     private static SharedPreferences sp;
@@ -90,7 +91,7 @@ public class Prefs {
     @NonNull private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>();
     @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
 
-    // sorting
+    // sorting (using AppConsts.Layout.ordinal() as index)
     private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0 };
     private static boolean[] sorterSelectedInversions = { false, false, false, false, false, false, false, };
 
@@ -100,15 +101,16 @@ public class Prefs {
     private static String accessToken = "";
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
     private static String recordingMethod = "GPS";
-    private static PairList<String, Boolean> pullSettings = new PairList<>(
-        new Pair<>("Route", true),
-        new Pair<>("Type", true),
-        new Pair<>("Date and time", true),
-        new Pair<>("Data source", true),
-        new Pair<>("Distance", true),
-        new Pair<>("Time", true),
-        new Pair<>("Note", true),
-        new Pair<>("Trail", true)
+    private static SwitchChain pullPolicy = new SwitchChain(
+        new SwitchItem(StravaApi.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
+        new SwitchItem(StravaApi.JSON_NAME, "Name (as route)", true),
+        new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
+        new SwitchItem(StravaApi.JSON_DISTANCE, "Distance", true),
+        new SwitchItem(StravaApi.JSON_TIME, "Elapsed time", true),
+        new SwitchItem(StravaApi.JSON_TYPE, "Type", true),
+        new SwitchItem(StravaApi.JSON_DATE, "Datetime", true),
+        new SwitchItem(StravaApi.JSON_MAP, "Map", true),
+        new SwitchItem(StravaApi.JSON_DEVICE, "Device (as data source)", true)
     );
 
     //
@@ -167,7 +169,7 @@ public class Prefs {
         savePref(accessToken, KEY_STRAVA_ACCESS);
         savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
         savePref(recordingMethod, KEY_STRAVA_METHOD);
-        savePref(pullSettings, KEY_STRAVA_PULL_SETTINGS);
+        savePref(pullPolicy.getChecked(), KEY_STRAVA_PULL_POLICY);
     }
 
     private static void load(Context c) {
@@ -176,6 +178,7 @@ public class Prefs {
         TypeToken<String> str = new TypeToken<String>(){};
         TypeToken<Integer> in = new TypeToken<Integer>(){};
         TypeToken<ArrayList<Integer>> intList = new TypeToken<ArrayList<Integer>>(){};
+        TypeToken<boolean[]> boolArr = new TypeToken<boolean[]>(){};
 
         // version
         appVersion = loadPref(str, KEY_APP_VERSION);
@@ -214,7 +217,7 @@ public class Prefs {
 
         // sorting
         sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, KEY_SORT_SELECTED_INDICES);
-        sorterSelectedInversions = loadPref(new TypeToken<boolean[]>(){}, KEY_SORT_SELECTED_INVERSIONS);
+        sorterSelectedInversions = loadPref(boolArr, KEY_SORT_SELECTED_INVERSIONS);
 
         // strava
         authCode = loadPref(str, KEY_STRAVA_AUTH);
@@ -222,7 +225,7 @@ public class Prefs {
         accessToken = loadPref(str, KEY_STRAVA_ACCESS);
         accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, KEY_STRAVA_ACCESS_EXP_DATE);
         recordingMethod = loadPref(str, KEY_STRAVA_METHOD);
-        pullSettings = loadPref(new TypeToken<PairList<String, Boolean>>(){}, KEY_STRAVA_PULL_SETTINGS);
+        pullPolicy.setChecked(loadPref(boolArr, KEY_STRAVA_PULL_POLICY));
     }
 
     // tools
@@ -267,7 +270,7 @@ public class Prefs {
             case KEY_STRAVA_ACCESS: return accessToken;
             case KEY_STRAVA_ACCESS_EXP_DATE: return accessTokenExpiration;
             case KEY_STRAVA_METHOD: return recordingMethod;
-            case KEY_STRAVA_PULL_SETTINGS: return pullSettings;
+            case KEY_STRAVA_PULL_POLICY: return pullPolicy.getChecked();
             default: return new Object();
         }
     }
@@ -390,9 +393,9 @@ public class Prefs {
         savePref(recordingMethod, KEY_STRAVA_METHOD);
     }
 
-    public static void setPullSettings(PairList<String, Boolean> pullSettings) {
-        Prefs.pullSettings = pullSettings;
-        savePref(pullSettings, KEY_STRAVA_PULL_SETTINGS);
+    public static void setPullSettings(boolean[] checked) {
+        Prefs.pullPolicy.setChecked(checked);
+        savePref(pullPolicy.getChecked(), KEY_STRAVA_PULL_POLICY);
     }
 
     public static void setColorGreen() {
@@ -501,8 +504,8 @@ public class Prefs {
         return recordingMethod;
     }
 
-    public static PairList<String, Boolean> getPullSettings() {
-        return pullSettings;
+    public static SwitchChain getPullPolicy() {
+        return pullPolicy;
     }
 
     // get driven

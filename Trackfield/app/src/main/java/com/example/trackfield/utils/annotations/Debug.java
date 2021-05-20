@@ -1,4 +1,4 @@
-package com.example.trackfield.utils.model;
+package com.example.trackfield.utils.annotations;
 
 import com.example.trackfield.data.prefs.Prefs;
 

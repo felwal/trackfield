@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.example.trackfield.R;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.ScreenUtils;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Unfinished;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

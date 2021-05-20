@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.model.Unfinished;
+import com.example.trackfield.utils.annotations.Unfinished;
 
 import java.util.Arrays;
 
