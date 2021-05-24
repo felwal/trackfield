@@ -71,7 +71,7 @@ public class DecimalDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         final View dialogView = inflater.inflate(R.layout.dialog_decimal, null);
-        final EditText et = dialogView.findViewById(R.id.editText_numberDecimalField);
+        final EditText et = dialogView.findViewById(R.id.et_dialog_decimal);
 
         et.setHint(hint);
         if (text != NO_FLOAT_TEXT) et.setText(Float.toString(text));

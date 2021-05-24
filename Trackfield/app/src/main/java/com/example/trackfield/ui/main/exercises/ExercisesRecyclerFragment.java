@@ -164,14 +164,14 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
     @Override
     protected void setEmptyPage() {
         if (search.equals("")) {
-            emptyTitle.setText(R.string.empty_title_exercises);
-            emptyMessage.setText(R.string.empty_message_exercises);
-            emptyImage.setImageResource(R.drawable.ic_empty_exercise_24dp);
+            emptyTitle.setText(R.string.tv_text_empty_exercises_title);
+            emptyMessage.setText(R.string.tv_text_empty_exercises_message);
+            emptyImage.setImageResource(R.drawable.ic_empty_exercise);
         }
         else {
-            emptyTitle.setText(R.string.empty_title_search);
-            emptyMessage.setText(R.string.empty_message_search);
-            emptyImage.setImageResource(R.drawable.ic_empty_search_24dp);
+            emptyTitle.setText(R.string.tv_text_empty_search_title);
+            emptyMessage.setText(R.string.tv_text_empty_search_msg);
+            emptyImage.setImageResource(R.drawable.ic_empty_search);
         }
     }
 
@@ -217,11 +217,11 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
 
             // animate header
             int collapsedHeight = header.isType(Header.Type.MONTH)
-                ? (int) getResources().getDimension(R.dimen.layout_header_month_collapsed)
-                : (int) getResources().getDimension(R.dimen.layout_header_year_collapsed);
+                ? (int) getResources().getDimension(R.dimen.layout_recycler_header_month_collapsed)
+                : (int) getResources().getDimension(R.dimen.layout_recycler_header_year_collapsed);
             int expandedHeight = header.isType(Header.Type.MONTH)
-                ? (int) getResources().getDimension(R.dimen.layout_header_month)
-                : (int) getResources().getDimension(R.dimen.layout_header_year);
+                ? (int) getResources().getDimension(R.dimen.layout_recycler_header_month)
+                : (int) getResources().getDimension(R.dimen.layout_recycler_header_year);
             View itemView = manager.findViewByPosition(position);
             LayoutUtils.animateHeight(itemView, collapsedHeight, expandedHeight, !header.areChildrenExpanded());
         }

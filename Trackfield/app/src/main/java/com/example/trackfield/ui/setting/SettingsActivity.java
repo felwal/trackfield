@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         setContentView(R.layout.activity_settings);
 
         inflater = getLayoutInflater();
-        ll = findViewById(R.id.linearLayout_settings);
+        ll = findViewById(R.id.ll_settings);
 
         setToolbar();
         inflateViews();
@@ -78,20 +78,22 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == android.R.id.home) {
             finish();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     // set
 
     protected void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_settings);
+        final Toolbar tb = findViewById(R.id.tb_settings);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.fragment_settings));
+        ab.setTitle(getResources().getString(R.string.fragment_title_settings));
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -117,10 +119,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // file
         inflateHeader("File");
         inflateDialogItem("Export json", "", false,
-            BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_message_export,
+            BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_msg_export,
                 R.string.dialog_btn_export, DIALOG_EXPORT));
         inflateDialogItem("Import json", "", true,
-            BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_message_import,
+            BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_msg_import,
                 R.string.dialog_btn_import, DIALOG_IMPORT));
 
         // profile
@@ -172,8 +174,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     // inflate items
 
     protected void inflateHeader(String title) {
-        View v = inflater.inflate(R.layout.layout_settings_header, ll, false);
-        ((TextView) v.findViewById(R.id.textView_sectionHeader)).setText(title);
+        View v = inflater.inflate(R.layout.item_settings_header, ll, false);
+        ((TextView) v.findViewById(R.id.tv_settings_item_header_title)).setText(title);
         ll.addView(v);
     }
 
@@ -184,7 +186,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     protected void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
-        final Switch sw = v.findViewById(R.id.switch_setting);
+        final Switch sw = v.findViewById(R.id.sw_settings_item);
         sw.setChecked(checked);
         v.setOnClickListener(view -> {
             sw.setChecked(!sw.isChecked());
@@ -200,20 +202,20 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     // inflate views
 
     private View inflateTextView(String title, String value, boolean hideDivider) {
-        View v = inflater.inflate(R.layout.layout_settings_text, ll, false);
+        View v = inflater.inflate(R.layout.item_settings_text, ll, false);
         LayoutUtils.setRipple(v, this);
-        ((TextView) v.findViewById(R.id.textView_route)).setText(title);
-        ((TextView) v.findViewById(R.id.textView_value)).setText(value);
-        if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
+        ((TextView) v.findViewById(R.id.tv_settings_item_text_title)).setText(title);
+        ((TextView) v.findViewById(R.id.tv_settings_item_text_value)).setText(value);
+        if (hideDivider) v.findViewById(R.id.v_settings_item_divider).setVisibility(View.INVISIBLE);
         ll.addView(v);
         return v;
     }
 
     private View inflateSwitchView(String title, boolean hideDivider) {
-        View v = inflater.inflate(R.layout.layout_settings_switch, ll, false);
+        View v = inflater.inflate(R.layout.item_settings_switch, ll, false);
         LayoutUtils.setRipple(v, this);
-        ((TextView) v.findViewById(R.id.switch_setting)).setText(title);
-        if (hideDivider) v.findViewById(R.id.divider_setting).setVisibility(View.INVISIBLE);
+        ((TextView) v.findViewById(R.id.sw_settings_item)).setText(title);
+        if (hideDivider) v.findViewById(R.id.v_settings_item_divider).setVisibility(View.INVISIBLE);
         ll.addView(v);
         return v;
     }

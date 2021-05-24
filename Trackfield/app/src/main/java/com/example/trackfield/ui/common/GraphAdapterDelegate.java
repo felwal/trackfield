@@ -33,7 +33,7 @@ public class GraphAdapterDelegate extends
     @NonNull
     @Override
     public GraphViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GraphViewHolder(inflater.inflate(R.layout.item_graph_base, parent, false));
+        return new GraphViewHolder(inflater.inflate(R.layout.item_recycler_graph, parent, false));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class GraphAdapterDelegate extends
 
         public GraphViewHolder(View itemView) {
             super(itemView);
-            graphView = itemView.findViewById(R.id.graphSurface_base);
+            graphView = itemView.findViewById(R.id.cv_recycler_item_graph_surface);
         }
 
     }

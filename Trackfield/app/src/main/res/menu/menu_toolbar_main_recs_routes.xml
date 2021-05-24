@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_showHidden"
+        android:id="@+id/action_show_hidden_routes"
         android:title="@string/action_add"
-        android:icon="@drawable/ic_hide_24dp"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_hide"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_filter"
+        android:id="@+id/action_filter_exercises"
         android:title="@string/action_filter"
-        android:icon="@drawable/ic_filter_24dp"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_filter"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:icon="@drawable/ic_settings_24dp"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_settings"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom" />
 
 </menu>

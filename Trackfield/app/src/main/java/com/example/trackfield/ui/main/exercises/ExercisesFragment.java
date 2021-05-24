@@ -43,7 +43,7 @@ public class ExercisesFragment extends MainFragment {
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        FrameLayout frame = view.findViewById(R.id.frameLayout_scrollerFrameMain);
+        FrameLayout frame = view.findViewById(R.id.fl_exercises);
         recyclerFragment = new ExercisesRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
@@ -56,7 +56,7 @@ public class ExercisesFragment extends MainFragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         // search
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search_exercises);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Search");
 
@@ -79,7 +79,7 @@ public class ExercisesFragment extends MainFragment {
 
     @Override
     protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_exercises));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_exercises));
     }
 
     @Override

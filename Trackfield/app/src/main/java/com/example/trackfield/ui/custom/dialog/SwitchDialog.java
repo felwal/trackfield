@@ -73,7 +73,7 @@ public class SwitchDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         final View view = inflater.inflate(R.layout.dialog_switch, null);
-        LinearLayout ll = view.findViewById(R.id.linearLayout_switchDialog);
+        LinearLayout ll = view.findViewById(R.id.ll_dialog_switch);
 
         builder.setView(view).setTitle(title)
             .setPositiveButton(posBtnTxtRes, (dialog, id) -> listener.onSwitchDialogPositiveClick(checked, tag))
@@ -81,7 +81,7 @@ public class SwitchDialog extends BaseDialog {
 
         // inflate switches
         for (int i = 0; i < texts.length; i++) {
-            Switch sw = (Switch) inflater.inflate(R.layout.dialog_switch_item, ll, false);
+            Switch sw = (Switch) inflater.inflate(R.layout.item_dialog_switch, ll, false);
             sw.setText(texts[i]);
             sw.setChecked(checked[i]);
             ll.addView(sw);

@@ -1,69 +1,79 @@
 <resources>
 
-    <dimen name="corner_radius">8dp</dimen>
-
-    <!-- margin -->
-
-    <dimen name="margin_24dp">24dp</dimen>
-    <dimen name="margin_16dp">16dp</dimen>
-    <dimen name="margin_8dp">8dp</dimen>
-
     <!-- spacing -->
 
-    <dimen name="spacing_small">5dp</dimen>
-    <dimen name="spacing_medium">10dp</dimen>
+    <!-- general -->
+    <dimen name="spacing_colossal">128dp</dimen>
+    <dimen name="spacing_gargantuan">64dp</dimen>
+    <dimen name="spacing_huge">48dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+    <dimen name="spacing_medium">24dp</dimen>
+    <dimen name="spacing_small">16dp</dimen>
+    <dimen name="spacing_tiny">8dp</dimen>
+    <dimen name="spacing_diminutive">4dp</dimen>
 
-    <!-- padding -->
+    <!-- dialog -->
+    <dimen name="spacing_dialog_top">8dp</dimen>
+    <dimen name="spacing_dialog_side">24dp</dimen>
+    <dimen name="spacing_dialog_side_20dp">20dp</dimen>
 
-    <dimen name="padding_dialog_top">8dp</dimen>
-    <dimen name="padding_dialog_side">24dp</dimen>
-    <dimen name="padding_dialog_side_20dp">20dp</dimen>
-    <dimen name="padding_recycler">8dp</dimen>
+    <!-- icon -->
+
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="icon_viewport_size">24.0</dimen>
+    <dimen name="icon_launcher_size">108dp</dimen>
+    <dimen name="icon_launcher_viewport_size">108</dimen>
 
     <!-- layout -->
 
-    <dimen name="layout_big_62dp">62dp</dimen>
-    <dimen name="layout_meduim_50dp">50dp</dimen>
-    <dimen name="layout_meduim_40dp">40dp</dimen>
-    <dimen name="layout_small_35dp">35dp</dimen>
-    <dimen name="layout_divider">1dp</dimen>
+    <!-- marker & indicator -->
+    <dimen name="layout_marker_record_diameter">20dp</dimen>
+    <dimen name="layout_marker_record_radius">10dp</dimen>
+    <dimen name="layout_marker_origin_width">4dp</dimen>
+    <dimen name="layout_indicator_tab_height">3dp</dimen>
+    <dimen name="layout_indicator_tab_radius">3dp</dimen>
 
+    <!-- settings item -->
+    <dimen name="layout_settings_item">50dp</dimen>
+    <dimen name="layout_settings_header">30dp</dimen>
+
+    <!-- recycler item -->
+    <dimen name="layout_recycler_medium">62dp</dimen>
+    <dimen name="layout_recycler_small_50dp">50dp</dimen>
+    <dimen name="layout_recycler_tiny_40dp">40dp</dimen>
+
+    <!-- recycler header -->
+    <dimen name="layout_recycler_header_year">40dp</dimen>
+    <dimen name="layout_recycler_header_year_collapsed">50dp</dimen>
+    <dimen name="layout_recycler_header_month">35dp</dimen>
+    <dimen name="layout_recycler_header_month_collapsed">45dp</dimen>
+    <dimen name="layout_recycler_header_week">25dp</dimen>
+
+    <!-- graph -->
     <dimen name="layout_graph_small">64dp</dimen>
     <dimen name="layout_graph_medium">175dp</dimen>
     <dimen name="layout_graph_large">200dp</dimen>
 
-    <dimen name="layout_recordmarker_diameter">20dp</dimen>
-    <dimen name="layout_recordmarker_radius">10dp</dimen>
-    <dimen name="layout_originmarker_width">4dp</dimen>
-    <dimen name="layout_tabindicator_height">3dp</dimen>
-
-    <dimen name="layout_settings_item_height">50dp</dimen>
-    <dimen name="layout_settings_header_height">30dp</dimen>
-
-    <dimen name="layout_item_exercise">62dp</dimen>
-
-    <dimen name="layout_header_year">40dp</dimen>
-    <dimen name="layout_header_year_collapsed">50dp</dimen>
-    <dimen name="layout_header_month">35dp</dimen>
-    <dimen name="layout_header_month_collapsed">45dp</dimen>
-    <dimen name="layout_header_week">25dp</dimen>
-
-    <dimen name="layout_setting">50dp</dimen>
-    <dimen name="layout_settingSection">30dp</dimen>
-
-    <dimen name="type_heading_setting">16dp</dimen>
+    <!-- misc -->
+    <dimen name="layout_divider">1dp</dimen>
+    <dimen name="layout_dialog_corner_radius">8dp</dimen>
+    <dimen name="layout_rounded_corner_radius">10dp</dimen>
 
     <!-- type -->
 
-    <dimen name="type_headline">28sp</dimen>
+    <!-- general -->
+    <dimen name="type_headline1">36sp</dimen>
+    <dimen name="type_headline2">28sp</dimen>
     <dimen name="type_title_toolbar">18sp</dimen>
     <dimen name="type_title_tab">16sp</dimen>
     <dimen name="type_heading1">18sp</dimen>
+    <dimen name="type_heading_setting">16dp</dimen>
     <dimen name="type_heading2">14sp</dimen>
     <dimen name="type_body">14sp</dimen>
     <dimen name="type_caption">12sp</dimen>
     <dimen name="type_overline">12sp</dimen>
 
+    <!-- dialog -->
     <dimen name="type_dialog_title">17sp</dimen>
     <dimen name="type_dialog_message">16sp</dimen>
 
@@ -73,17 +83,5 @@
     <dimen name="elev_navbar">8dp</dimen>
     <dimen name="elev_fab">6dp</dimen>
     <dimen name="elev_bg_overlay">9dp</dimen>
-    <dimen name="elev_chart_value">1dp</dimen>
-
-    <!-- other -->
-
-    <dimen name="map_padding">50dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="appbar_padding">16dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
 
 </resources>

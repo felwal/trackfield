@@ -57,16 +57,16 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         a = getActivity();
         reader = DbReader.get(a);
 
-        recycler = view.findViewById(R.id.recyclerView);
+        recycler = view.findViewById(R.id.rv_recycler);
         manager = new LinearLayoutManager(a);
         recycler.setLayoutManager(manager);
         recycler.setHasFixedSize(true);
 
         // empty page
-        emptyCl = view.findViewById(R.id.constraintLayout_empty);
-        emptyTitle = emptyCl.findViewById(R.id.textView_emptyTitle);
-        emptyMessage = emptyCl.findViewById(R.id.textView_emptyMessage);
-        emptyImage = emptyCl.findViewById(R.id.imageView_emptyImage);
+        emptyCl = view.findViewById(R.id.cl_recycler_empty);
+        emptyTitle = emptyCl.findViewById(R.id.tv_recycler_empty);
+        emptyMessage = emptyCl.findViewById(R.id.tv_recycler_message);
+        emptyImage = emptyCl.findViewById(R.id.iv_recycler_empty);
         emptyCl.setVisibility(View.GONE);
         setEmptyPage();
 

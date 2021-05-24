@@ -1,6 +1,8 @@
 package com.example.trackfield.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -27,7 +30,7 @@ import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.exercise.EditActivity;
 import com.example.trackfield.ui.main.exercises.ExercisesFragment;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
-import com.example.trackfield.ui.main.recs.RecsFragment;
+import com.example.trackfield.ui.main.records.RecsFragment;
 import com.example.trackfield.ui.main.stats.StatsFragment;
 import com.example.trackfield.ui.map.TrackActivity;
 import com.example.trackfield.ui.onboarding.OnboardingActivity;
@@ -108,28 +111,30 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == R.id.action_settings) {
             SettingsActivity.startActivity(this);
             return true;
         }
-        else if (itemId == R.id.action_filter) {
-            FilterDialog.newInstance(R.string.dialog_title_filter, Prefs.getExerciseVisibleTypes(),
+        else if (itemId == R.id.action_filter_exercises) {
+            FilterDialog.newInstance(R.string.dialog_title_title_filter, Prefs.getExerciseVisibleTypes(),
                 R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
                 .show(getSupportFragmentManager());
             return true;
         }
-        else if (itemId == R.id.action_addDistance) {
+        else if (itemId == R.id.action_add_distance) {
             DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT,
                 "", R.string.dialog_btn_add, DIALOG_ADD_DISTANCE)
                 .show(getSupportFragmentManager());
             return true;
         }
-        else if (itemId == R.id.action_showHidden) {
+        else if (itemId == R.id.action_show_hidden_routes) {
             Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
             mainFragment.updateFragment();
             invalidateOptionsMenu();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_main);
+        final Toolbar tb = findViewById(R.id.tb_main);
         setSupportActionBar(tb);
         ab = getSupportActionBar();
     }
@@ -158,19 +163,19 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
             int itemId = item.getItemId();
 
-            if (itemId == R.id.navigation_exercises) {
+            if (itemId == R.id.navigation_main_exercises) {
                 if ((mainFragment instanceof ExercisesFragment)) mainFragment.scrollToTop();
                 else selectFragment(new ExercisesFragment());
                 if (fab.isOrWillBeHidden()) fab.show();
                 return true;
             }
-            else if (itemId == R.id.navigation_recs) {
+            else if (itemId == R.id.navigation_main_records) {
                 if ((mainFragment instanceof RecsFragment)) mainFragment.scrollToTop();
                 else selectFragment(new RecsFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
                 return true;
             }
-            else if (itemId == R.id.navigation_dev) {
+            else if (itemId == R.id.navigation_main_stats) {
                 if ((mainFragment instanceof StatsFragment)) mainFragment.scrollToTop();
                 else selectFragment(new StatsFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
@@ -179,20 +184,20 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             return false;
         };
 
-        final BottomNavigationView navView = findViewById(R.id.navbar);
+        final BottomNavigationView navView = findViewById(R.id.nb_main);
         navView.setOnNavigationItemSelectedListener(navItemListener);
     }
 
     private void setFabs() {
-        fab = findViewById(R.id.fab_menu);
-        addFab = findViewById(R.id.fab_add);
-        trackFab = findViewById(R.id.fab_track);
-        stravaFab = findViewById(R.id.fab_strava);
+        fab = findViewById(R.id.fab_main_menu);
+        addFab = findViewById(R.id.fab_main_add);
+        trackFab = findViewById(R.id.fab_main_track);
+        stravaFab = findViewById(R.id.fab_main_strava);
 
-        addCl = findViewById(R.id.constraintLayout_addFab);
-        trackCl = findViewById(R.id.constraintLayout_trackFab);
-        stravaCl = findViewById(R.id.constraintLayout_stravaFab);
-        overlayView = findViewById(R.id.view_overlay);
+        addCl = findViewById(R.id.cl_main_fabs_add);
+        trackCl = findViewById(R.id.cl_main_fabs_track);
+        stravaCl = findViewById(R.id.cl_main_fabs_strava);
+        overlayView = findViewById(R.id.v_main_overlay);
 
         // clicks
 
@@ -237,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     private void selectFragment(MainFragment fragment) {
         this.mainFragment = fragment;
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_fragmentContainer, this.mainFragment)
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, this.mainFragment)
             .commit();
     }
 
@@ -246,11 +251,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void openFabMenu() {
         animateFab();
         addFab.show();
-        //trackFab.show();
+        if (Prefs.isDeveloper()) trackFab.show();
         stravaFab.show();
 
         LayoutUtils.crossfadeIn(addCl, 1);
-        //LayoutUtils.crossfadeIn(trackCl, 1);
+        if (Prefs.isDeveloper()) LayoutUtils.crossfadeIn(trackCl, 1);
         LayoutUtils.crossfadeIn(stravaCl, 1);
         LayoutUtils.crossfadeIn(overlayView, OVERLAY_ALPHA);
 
@@ -260,27 +265,42 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void closeFabMenu() {
         animateFab();
         stravaFab.hide();
-        //trackFab.hide();
+        if (Prefs.isDeveloper()) trackFab.hide();
         addFab.hide();
 
         LayoutUtils.crossfadeOut(stravaCl);
-        //LayoutUtils.crossfadeOut(trackCl);
+        if (Prefs.isDeveloper()) LayoutUtils.crossfadeOut(trackCl);
         LayoutUtils.crossfadeOut(addCl);
         LayoutUtils.crossfadeOut(overlayView);
 
         isFabMenuOpen = false;
     }
 
+    @SuppressLint("ResourceType")
     private void animateFab() {
         Context fabContext = fab.getContext();
-
         @ColorInt int primaryVariant = LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, fabContext);
         @ColorInt int surface = LayoutUtils.getColorInt(R.attr.colorSurface, fabContext);
 
-        @ColorInt int fromColor = isFabMenuOpen ? surface : primaryVariant;
-        @ColorInt int toColor = !isFabMenuOpen ? surface : primaryVariant;
-        Drawable toIcon = isFabMenuOpen ? getDrawable(R.drawable.ic_fab_base_24dp)
-            : getDrawable(R.drawable.ic_cancel_fab_24dp);
+        @ColorInt int fromColor, toColor;
+        Drawable toIcon;
+
+        // animate to closed menu
+        if (isFabMenuOpen) {
+            fromColor = surface;
+            toColor = primaryVariant;
+            toIcon = getDrawable(R.drawable.ic_add).mutate();
+            toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorPrimaryInverse, this),
+                PorterDuff.Mode.SRC_IN);
+        }
+        // animate to open menu
+        else {
+            fromColor = primaryVariant;
+            toColor = surface;
+            toIcon = getDrawable(R.drawable.ic_cancel).mutate();
+            toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorSecondary, this),
+                PorterDuff.Mode.SRC_IN);
+        }
 
         LayoutUtils.animateFab(fab, fromColor, toColor, toIcon);
     }

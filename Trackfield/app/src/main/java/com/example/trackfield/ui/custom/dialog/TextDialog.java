@@ -70,7 +70,7 @@ public class TextDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         final View dialogView = inflater.inflate(R.layout.dialog_text, null);
-        final EditText et = dialogView.findViewById(R.id.editText_textField);
+        final EditText et = dialogView.findViewById(R.id.et_dialog_text);
 
         et.setText(text);
         et.setHint(hint);

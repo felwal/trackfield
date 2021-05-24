@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +8,7 @@
     tools:context=".ui.map.TrackActivity">
 
     <FrameLayout
-        android:id="@+id/frameLayout_mapFragment"
+        android:id="@+id/fl_track_map"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/shape_rounded"
@@ -19,104 +20,98 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/textView_time"
-        style="@style/Headline"
+        android:id="@+id/tv_track_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="0:00 s"
+        android:layout_marginTop="@dimen/spacing_huge"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/fab_pause"
-        app:layout_constraintEnd_toStartOf="@+id/textView_distance"
+        android:text="0:00 s"
+        app:layout_constraintBottom_toTopOf="@+id/fab_track_pause"
+        app:layout_constraintEnd_toStartOf="@+id/tv_track_distance"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout_mapFragment"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintTop_toBottomOf="@+id/fl_track_map"
+        app:layout_constraintVertical_bias="0.15"
+        style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/textView_coords"
-        style="@style/Caption"
+        android:id="@+id/tv_track_coords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginTop="@dimen/spacing_tiny"
+        android:layout_marginEnd="@dimen/spacing_tiny"
         android:text="lat, lon, alt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout_mapFragment" />
+        app:layout_constraintTop_toBottomOf="@+id/fl_track_map"
+        style="@style/TextView.Caption" />
 
     <TextView
-        android:id="@+id/textView_coordsDiff"
-        style="@style/Caption"
+        android:id="@+id/tv_track_coords_diff"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="lat, lon, alt"
+        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginTop="@dimen/spacing_tiny"
+        android:layout_marginEnd="@dimen/spacing_tiny"
         android:textColor="#F44336"
+        android:text="lat, lon, alt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_coords" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_track_coords"
+        style="@style/TextView.Caption" />
 
     <TextView
-        android:id="@+id/textView_pace"
-        style="@style/Headline"
+        android:id="@+id/tv_track_pace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="0:00 s/km"
+        android:layout_marginTop="@dimen/spacing_large"
         android:textSize="22sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView_avgPace"
+        android:text="0:00 s/km"
+        app:layout_constraintEnd_toStartOf="@+id/tv_track_pace_avg"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_time" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_track_time"
+        style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/textView_avgPace"
-        style="@style/Headline"
+        android:id="@+id/tv_track_pace_avg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0:00 s/km"
         android:textSize="22sp"
+        android:text="0:00 s/km"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_pace"
-        app:layout_constraintTop_toTopOf="@+id/textView_pace" />
+        app:layout_constraintStart_toEndOf="@+id/tv_track_pace"
+        app:layout_constraintTop_toTopOf="@+id/tv_track_pace"
+        style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/textView_distance"
-        style="@style/Headline"
+        android:id="@+id/tv_track_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0 km"
         android:textSize="32sp"
+        android:text="0 km"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_time"
-        app:layout_constraintTop_toTopOf="@+id/textView_time" />
+        app:layout_constraintStart_toEndOf="@+id/tv_track_time"
+        app:layout_constraintTop_toTopOf="@+id/tv_track_time"
+        style="@style/TextView.Headline" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_pause"
-        style="@style/Fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:clickable="true"
-        android:theme="@style/Fab"
+        android:id="@+id/fab_track_pause"
+        android:layout_marginBottom="@dimen/spacing_large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_fab_play_24dp" />
+        app:srcCompat="@drawable/ic_play"
+        style="@style/Fab" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_finish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:clickable="true"
-        android:theme="@style/Fab"
+        android:id="@+id/fab_track_finish"
+        android:layout_marginEnd="@dimen/spacing_small"
         app:backgroundTint="@color/colorAccRedDark"
-        app:layout_constraintBottom_toBottomOf="@+id/fab_pause"
-        app:layout_constraintEnd_toStartOf="@+id/fab_pause"
-        app:srcCompat="@drawable/ic_fab_finish_24dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/fab_track_pause"
+        app:layout_constraintEnd_toStartOf="@+id/fab_track_pause"
+        app:srcCompat="@drawable/ic_finish"
+        app:tint="@color/colorAccRed"
+        style="@style/Fab" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

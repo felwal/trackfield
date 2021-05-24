@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -41,7 +40,7 @@ public class SorterAdapterDelegate extends
     @NonNull
     @Override
     public SorterViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new SorterViewHolder(inflater.inflate(R.layout.item_sorter, parent, false));
+        return new SorterViewHolder(inflater.inflate(R.layout.item_recycler_sorter, parent, false));
     }
 
     @Override
@@ -58,7 +57,7 @@ public class SorterAdapterDelegate extends
 
         public SorterViewHolder(View itemView) {
             super(itemView);
-            titleTv = itemView.findViewById(R.id.textView_sort);
+            titleTv = itemView.findViewById(R.id.tv_recycler_item_sorter);
             itemView.setOnClickListener(this);
         }
 

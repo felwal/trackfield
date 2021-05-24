@@ -1,15 +1,14 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
+    android:width="@dimen/icon_launcher_size"
+    android:height="@dimen/icon_launcher_size"
+    android:viewportWidth="@dimen/icon_launcher_viewport_size"
+    android:viewportHeight="@dimen/icon_launcher_viewport_size">
 
     <path
         android:fillType="evenOdd"
-        android:pathData="M35.207 71.5962C33.2281 69.6703 33.2281 66.5478 35.207 64.6219L66.5934 34.0774L111.694 77.9684L76.7246 112L35.207 71.5962Z
-
-"
+        android:pathData="M35.207 71.5962C33.2281 69.6703 33.2281 66.5478 35.207 64.6219L66.5934 34.0774L111.694 77.9684L76.7246 112L35.207 71.5962Z"
         android:strokeWidth="1"
         android:strokeColor="#00000000">
         <aapt:attr name="android:fillColor">

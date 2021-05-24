@@ -18,7 +18,7 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 import java.util.List;
 
 public class HeaderSmallAdapterDelegate extends
-    BaseAdapterDelegate<Header, RecyclerItem, HeaderSmallAdapterDelegate.HeaderSmallViewHolder> {
+    BaseAdapterDelegate<Header, RecyclerItem, HeaderSmallAdapterDelegate.HeaderTinyViewHolder> {
 
     public HeaderSmallAdapterDelegate(Activity a, DelegateClickListener listener) {
         super(a, listener);
@@ -33,28 +33,28 @@ public class HeaderSmallAdapterDelegate extends
 
     @NonNull
     @Override
-    public HeaderSmallViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new HeaderSmallViewHolder(inflater.inflate(R.layout.item_header_small, parent, false));
+    public HeaderTinyViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+        return new HeaderTinyViewHolder(inflater.inflate(R.layout.item_recycler_header_tiny, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Header item, @NonNull HeaderSmallViewHolder vh, @Nullable List<Object> payloads) {
+    public void onBindViewHolder(Header item, @NonNull HeaderTinyViewHolder vh, @Nullable List<Object> payloads) {
         vh.primaryTv.setText(item.getTitle());
         vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
-    class HeaderSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+    class HeaderTinyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
         public TextView primaryTv;
         public TextView secondaryTv;
 
-        public HeaderSmallViewHolder(View itemView) {
+        public HeaderTinyViewHolder(View itemView) {
             super(itemView);
-            primaryTv = itemView.findViewById(R.id.textView_primary);
-            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.tv_recycler_item_header_primary);
+            secondaryTv = itemView.findViewById(R.id.tv_recycler_item_header_secondary);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

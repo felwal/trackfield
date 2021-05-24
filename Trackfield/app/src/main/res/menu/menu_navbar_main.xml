@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_main_exercises"
+        android:icon="@drawable/selector_nav_ic_exercise"
+        android:title="@string/fragment_title_exercises" />
+
+    <item
+        android:id="@+id/navigation_main_records"
+        android:icon="@drawable/selector_nav_ic_records"
+        android:title="@string/fragment_title_records" />
+
+    <item
+        android:id="@+id/navigation_main_stats"
+        android:icon="@drawable/selector_nav_ic_stats"
+        android:title="@string/fragment_title_stats" />
+
+</menu>

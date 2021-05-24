@@ -29,7 +29,7 @@ public class OnboardingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_onboarding);
 
         ScreenUtils.makeStatusBarTransparent(getWindow(), !ScreenUtils.isThemeLight(),
-            findViewById(R.id.textView_onboardingSubtitle));
+            findViewById(R.id.tv_onboarding_subtitle));
 
         setViews();
     }
@@ -37,7 +37,7 @@ public class OnboardingActivity extends AppCompatActivity {
     // set
 
     private void setViews() {
-        final Button nextBtn = findViewById(R.id.button_start);
+        final Button nextBtn = findViewById(R.id.btn_onboarding_start);
         nextBtn.setOnClickListener(view -> {
             Prefs.setFirstLogin(false);
             finish();

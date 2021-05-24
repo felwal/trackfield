@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_filter"
+        android:id="@+id/action_filter_exercises"
         android:title="@string/action_filter"
-        android:icon="@drawable/ic_filter_24dp"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_filter"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_setGoal"
+        android:id="@+id/action_set_distance_goal"
         android:title="@string/action_set_goal"
-        android:icon="@drawable/ic_goal_24dp"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_goal"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_deleteDistance"
+        android:id="@+id/action_delete_distance"
         android:title="@string/action_delete"
-        android:icon="@drawable/ic_delete_24dp"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_delete"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom" />
 
 </menu>

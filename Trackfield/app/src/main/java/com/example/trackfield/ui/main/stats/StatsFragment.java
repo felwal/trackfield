@@ -37,7 +37,7 @@ public class StatsFragment extends MainFragment {
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        FrameLayout frame = view.findViewById(R.id.frameLayout_scrollerFrameDev);
+        FrameLayout frame = view.findViewById(R.id.fl_stats);
         recyclerFragment = new StatsRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
@@ -54,7 +54,7 @@ public class StatsFragment extends MainFragment {
 
     @Override
     protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_stats));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_stats));
     }
 
     @Override

@@ -32,7 +32,7 @@ public class GoalAdapterDelegate extends BaseAdapterDelegate<Goal, RecyclerItem,
     @NonNull
     @Override
     public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GoalViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
+        return new GoalViewHolder(inflater.inflate(R.layout.item_recycler_goal, parent, false));
     }
 
     @Override
@@ -49,8 +49,8 @@ public class GoalAdapterDelegate extends BaseAdapterDelegate<Goal, RecyclerItem,
 
         public GoalViewHolder(View itemView) {
             super(itemView);
-            primaryTv = itemView.findViewById(R.id.textView_primary);
-            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.tv_recycler_item_goal_primary);
+            secondaryTv = itemView.findViewById(R.id.tv_recycler_item_goal_secondary);
         }
 
     }

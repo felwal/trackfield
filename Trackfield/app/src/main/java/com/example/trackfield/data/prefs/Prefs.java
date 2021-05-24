@@ -540,10 +540,6 @@ public class Prefs {
         return refreshToken != null && !refreshToken.equals("");
     }
 
-    public static String getMapId(Context c) {
-        return c.getResources().getString(theme ? R.string.map_id_light : R.string.map_id_dark);
-    }
-
     public static MapStyleOptions getMapStyle(Context c) {
         return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_retro_json : R.string.mapstyle_mono_json));// C.MAP_STYLES[M.heaviside(theme)]));
     }

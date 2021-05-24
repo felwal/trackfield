@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_renameInterval"
+        android:id="@+id/action_rename_interval"
         android:title="@string/action_rename"
-        android:icon="@drawable/ic_edit_24dp"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_edit"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom" />
 
 </menu>

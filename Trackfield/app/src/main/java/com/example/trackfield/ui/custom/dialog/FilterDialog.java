@@ -71,7 +71,7 @@ public class FilterDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         View dialogView = inflater.inflate(R.layout.dialog_filter_main, null);
-        final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_types);
+        final ChipGroup chipGroup = dialogView.findViewById(R.id.cg_dialog_filter_types);
 
         if (!message.equals("")) builder.setMessage(message);
         setChips(chipGroup);
@@ -99,7 +99,7 @@ public class FilterDialog extends BaseDialog {
                 chip = (Chip) chipGroup.getChildAt(type);
             }
             else {
-                chip = (Chip) inflater.inflate(R.layout.layout_chip, chipGroup, false);
+                chip = (Chip) inflater.inflate(R.layout.component_chip, chipGroup, false);
                 chipGroup.addView(chip);
             }
             chip.setText(Exercise.TYPES_PLURAL[type]);

@@ -84,9 +84,9 @@ public class TimeDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         final View dialogView = inflater.inflate(R.layout.dialog_time, null);
-        final EditText et1 = dialogView.findViewById(R.id.editText_numberField1);
-        final EditText et2 = dialogView.findViewById(R.id.editText_numberField2);
-        final ChipGroup chipGroup = dialogView.findViewById(R.id.chipGroup_goal);
+        final EditText et1 = dialogView.findViewById(R.id.et_dialog_time_minutes);
+        final EditText et2 = dialogView.findViewById(R.id.et_dialog_time_seconds);
+        //final ChipGroup chipGroup = dialogView.findViewById(R.id.cg_timedialog_type);
 
         et1.setHint(hint1);
         et2.setHint(hint2);
@@ -96,7 +96,6 @@ public class TimeDialog extends BaseDialog {
 
         // require selection
         // TODO: chips - time/pace
-        chipGroup.setVisibility(View.GONE);
         //setChipGroup(chipGroup);
         //chipGroup.setOnCheckedChangeListener((group, checkedId) -> setChipGroup(group));
 

@@ -55,10 +55,10 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
 
     @Override
     protected void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_settings);
+        final Toolbar tb = findViewById(R.id.tb_settings);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.fragment_settings_strava));
+        ab.setTitle(getResources().getString(R.string.fragment_title_settings_strava));
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -88,7 +88,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         inflateHeader("Request options");
         inflateDialogItem("Recording method", Prefs.getRecordingMethod(), false,
             TextDialog.newInstance(R.string.dialog_title_recording_method,
-                R.string.dialog_message_recording_method, Prefs.getRecordingMethod(),
+                R.string.dialog_msg_recording_method, Prefs.getRecordingMethod(),
                 "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
         inflateDialogItem("Pull policy", "", true,
             SwitchDialog.newInstance(R.string.dialog_title_pull_policy, BaseDialog.NO_RES, R.string.dialog_btn_set,

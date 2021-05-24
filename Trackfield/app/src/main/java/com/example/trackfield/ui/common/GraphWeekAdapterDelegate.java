@@ -33,7 +33,7 @@ public class GraphWeekAdapterDelegate extends
     @NonNull
     @Override
     public GraphWeekViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GraphWeekViewHolder(inflater.inflate(R.layout.item_graph_week, parent, false));
+        return new GraphWeekViewHolder(inflater.inflate(R.layout.item_recycler_graph_week, parent, false));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class GraphWeekAdapterDelegate extends
 
         public GraphWeekViewHolder(View itemView) {
             super(itemView);
-            graphView = itemView.findViewById(R.id.graphSurface_base);
+            graphView = itemView.findViewById(R.id.cv_recycler_item_graph_surface);
         }
 
     }

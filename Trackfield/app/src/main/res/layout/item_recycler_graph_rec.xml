@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <HorizontalScrollView
+        android:id="@+id/sv_recycler_item_graph"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/spacing_tiny"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_recycler_item_graph_low"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.example.trackfield.ui.custom.graph.GraphView
+                android:id="@+id/cv_recycler_item_graph_surface"
+                android:layout_width="@dimen/layout_graph_medium"
+                android:layout_height="@dimen/layout_graph_medium"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_small"
+                android:requiresFadingEdge="horizontal" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tv_recycler_item_graph_high"
+        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="high"
+        style="@style/TextView.Caption" />
+
+    <TextView
+        android:id="@+id/tv_recycler_item_graph_low"
+        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginBottom="@dimen/spacing_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="low"
+        style="@style/TextView.Caption" />
+
+    <View
+        android:id="@+id/v_recycler_item_graph_divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/sv_recycler_item_graph"
+        app:layout_constraintEnd_toStartOf="@+id/sv_recycler_item_graph"
+        app:layout_constraintTop_toTopOf="@+id/tv_recycler_item_graph_high" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

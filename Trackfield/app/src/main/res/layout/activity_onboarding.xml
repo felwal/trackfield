@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,76 +8,57 @@
     android:background="@color/colorGreen"
     tools:context=".ui.onboarding.OnboardingActivity">
 
-    <!--<androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </androidx.viewpager.widget.ViewPager>-->
-
     <TextView
-        android:id="@+id/textView_onboardingSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:id="@+id/tv_onboarding_subtitle"
+        android:layout_marginTop="@dimen/spacing_colossal"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/tv_text_onboarding_subtitle"
-        android:textAppearance="@style/Headline"
         android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="24sp"
-        android:typeface="normal"
+        android:textSize="@dimen/type_heading1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/textView_onboardingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/tv_onboarding_title"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/tv_text_onboarding_title"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textAppearance="@style/Headline"
         android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="36sp"
+        android:textSize="@dimen/type_headline1"
         android:textStyle="bold"
-        android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_onboardingSubtitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_subtitle"
+        style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/textView_onboardingCaption"
+        android:id="@+id/tv_onboarding_caption"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_tiny"
+        android:layout_marginEnd="@dimen/spacing_large"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/tv_text_onboarding_caption"
         android:textAlignment="center"
-        android:textAppearance="@style/Body"
         android:textColor="?android:textColorPrimaryInverse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_onboardingTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_title"
+        style="@style/TextView.Body" />
 
     <Button
-        android:id="@+id/button_start"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/btn_onboarding_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="@dimen/spacing_gargantuan"
         android:text="@string/btn_text_boarding_start"
         android:textColor="?android:textColorPrimaryInverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Widget.AppCompat.Button.Borderless" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ public class GraphRecAdapterDelegate extends
     @NonNull
     @Override
     public GraphRecViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GraphRecViewHolder(inflater.inflate(R.layout.item_graph_rec, parent, false));
+        return new GraphRecViewHolder(inflater.inflate(R.layout.item_recycler_graph_rec, parent, false));
     }
 
     @Override
@@ -57,12 +57,12 @@ public class GraphRecAdapterDelegate extends
 
         public GraphRecViewHolder(View itemView) {
             super(itemView);
-            graphView = itemView.findViewById(R.id.graphSurface_rec);
-            lowTv = itemView.findViewById(R.id.textView_low);
-            highTv = itemView.findViewById(R.id.textView_high);
+            graphView = itemView.findViewById(R.id.cv_recycler_item_graph_surface);
+            lowTv = itemView.findViewById(R.id.tv_recycler_item_graph_low);
+            highTv = itemView.findViewById(R.id.tv_recycler_item_graph_high);
 
             // scroll to start
-            final HorizontalScrollView sv = itemView.findViewById(R.id.scrollView_graphSurface);
+            final HorizontalScrollView sv = itemView.findViewById(R.id.sv_recycler_item_graph);
             sv.post(() -> {
                 sv.fullScroll(View.FOCUS_RIGHT);
                 sv.scrollTo(sv.getWidth(), 0);

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <solid android:color="#FFF" />
+
     <corners
         android:topRightRadius="0dp"
-        android:topLeftRadius="@dimen/layout_recordmarker_radius"
-        android:bottomLeftRadius="@dimen/layout_recordmarker_radius"
+        android:topLeftRadius="@dimen/layout_marker_record_radius"
+        android:bottomLeftRadius="@dimen/layout_marker_record_radius"
         android:bottomRightRadius="0dp" />
+
     <padding
         android:left="0dp"
         android:top="0dp"

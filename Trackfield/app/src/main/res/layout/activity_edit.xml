@@ -3,17 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.exercise.EditActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_edit"
-        style="@style/Toolbar"
+        android:id="@+id/tb_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,10 +21,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit">
+        app:layout_constraintTop_toBottomOf="@+id/tb_edit">
 
         <LinearLayout
-            android:id="@+id/linearLayout_edit"
+            android:id="@+id/ll_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -35,224 +34,189 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/editText_route"
+                    android:id="@+id/et_route"
                     android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:ems="10"
-                    android:focusedByDefault="false"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_route"
                     android:inputType="textPersonName|textCapSentences"
                     android:text="@string/et_text_edit_route"
-                    android:textSize="@dimen/type_heading1"
                     android:windowSoftInputMode="stateHidden"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_routeVar"
+                    android:id="@+id/et_routeVar"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:ems="10"
-                    android:focusedByDefault="false"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_routevar"
                     android:inputType="textPersonName"
-                    android:textSize="@dimen/type_heading2"
-                    app:layout_constraintBottom_toBottomOf="@+id/editText_route"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_route"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editText_route" />
+                    app:layout_constraintStart_toEndOf="@+id/et_route"
+                    style="@style/EditText.Small" />
 
                 <EditText
-                    android:id="@+id/editText_date"
+                    android:id="@+id/et_date"
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="false"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_date"
-                    android:textSize="@dimen/type_heading1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_interval" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_interval"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_time"
+                    android:id="@+id/et_time"
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
                     android:editable="false"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_time"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintStart_toEndOf="@+id/editText_date"
-                    app:layout_constraintTop_toTopOf="@+id/editText_date" />
+                    app:layout_constraintStart_toEndOf="@+id/et_date"
+                    app:layout_constraintTop_toTopOf="@+id/et_date"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_interval"
+                    android:id="@+id/et_interval"
                     android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="true"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_interval"
-                    android:textSize="@dimen/type_heading1"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_route"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_route"
+                    tools:visibility="visible"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_note"
+                    android:id="@+id/et_note"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    android:ems="10"
-                    android:focusedByDefault="false"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_note"
                     android:inputType="textMultiLine|textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
-                    android:textSize="@dimen/type_body"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_date" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_date"
+                    style="@style/EditText.Small" />
 
                 <View
-                    android:id="@+id/divider13"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    android:background="?android:attr/listDivider"
+                    android:id="@+id/v_edit_divider1"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_note" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_note"
+                    style="@style/Divider" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout_subDefault"
+                android:id="@+id/cl_edit_default_sub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView_s"
+                    android:id="@+id/tv_edit_s"
                     android:layout_width="20dp"
                     android:layout_height="25dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
                     android:text="s"
                     android:textColor="@color/colorAccBlue"
-                    android:textSize="@dimen/type_heading1"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/TextView.ValueLetter" />
 
                 <EditText
-                    android:id="@+id/editText_distance"
+                    android:id="@+id/et_edit_distance"
                     android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_distance"
                     android:inputType="numberDecimal"
-                    android:text="0"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
-                    app:layout_constraintStart_toEndOf="@+id/textView_s"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
+                    android:text="@string/et_text_edit_distance"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_s"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_s"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_s"
+                    style="@style/EditText" />
 
                 <Switch
-                    android:id="@+id/switch_driven"
+                    android:id="@+id/sw_edit_drive_distance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginStart="@dimen/spacing_tiny"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:gravity="right|center_vertical"
                     android:switchPadding="10dp"
-                    android:text="@string/switch_text_driven"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_s"
+                    android:text="@string/sw_text_driven"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_s"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editText_distance"
-                    app:layout_constraintTop_toTopOf="@+id/textView_s" />
+                    app:layout_constraintStart_toEndOf="@+id/et_edit_distance"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_s" />
 
                 <TextView
-                    android:id="@+id/textView_t"
+                    android:id="@+id/tv_edit_t"
                     android:layout_width="20dp"
                     android:layout_height="25dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     android:text="t"
                     android:textColor="@color/colorAccTurqoise"
-                    android:textSize="@dimen/type_heading1"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_s" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_s"
+                    style="@style/TextView.ValueLetter" />
 
                 <EditText
-                    android:id="@+id/editText_hours"
+                    android:id="@+id/et_edit_hours"
                     android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_hours"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:text="0"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView_t"
-                    app:layout_constraintStart_toEndOf="@+id/textView_t"
-                    app:layout_constraintTop_toTopOf="@+id/textView_t" />
+                    android:text="@string/et_text_edit_time"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_t"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_t"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_t"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_minutes"
+                    android:id="@+id/et_edit_minutes"
                     android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_minutes"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:text="0"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/editText_hours"
-                    app:layout_constraintStart_toEndOf="@+id/editText_hours"
-                    app:layout_constraintTop_toTopOf="@+id/editText_hours" />
+                    android:text="@string/et_text_edit_time"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_edit_hours"
+                    app:layout_constraintStart_toEndOf="@+id/et_edit_hours"
+                    app:layout_constraintTop_toTopOf="@+id/et_edit_hours"
+                    style="@style/EditText" />
 
                 <EditText
-                    android:id="@+id/editText_seconds"
+                    android:id="@+id/et_edit_seconds"
                     android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:focusedByDefault="false"
                     android:hint="@string/et_hint_edit_seconds"
                     android:inputType="number|numberDecimal"
                     android:maxLength="5"
-                    android:text="0"
-                    android:textSize="@dimen/type_heading1"
-                    app:layout_constraintBottom_toBottomOf="@+id/editText_minutes"
-                    app:layout_constraintStart_toEndOf="@+id/editText_minutes"
-                    app:layout_constraintTop_toTopOf="@+id/editText_minutes" />
+                    android:text="@string/et_text_edit_time"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_edit_minutes"
+                    app:layout_constraintStart_toEndOf="@+id/et_edit_minutes"
+                    app:layout_constraintTop_toTopOf="@+id/et_edit_minutes"
+                    style="@style/EditText" />
 
                 <Button
-                    android:id="@+id/button_addSub"
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:id="@+id/btn_edit_add_sub"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:text="+"
                     android:textSize="20sp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editText_seconds" />
+                    app:layout_constraintTop_toTopOf="@+id/et_edit_seconds"
+                    style="@style/Widget.AppCompat.Button.Colored" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -261,61 +225,56 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/divider10"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    android:background="?android:attr/listDivider"
+                    android:id="@+id/v_edit_divider2"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="invisible" />
+                    tools:visibility="invisible"
+                    style="@style/Divider" />
 
                 <EditText
-                    android:id="@+id/editText_dataSource"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_24dp"
-                    android:layout_marginTop="24dp"
-                    android:ems="10"
-                    android:focusedByDefault="false"
+                    android:id="@+id/et_edit_data_source"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_datasource"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
-                    android:textSize="@dimen/type_body"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider10" />
+                    app:layout_constraintEnd_toStartOf="@+id/et_edit_recording_method"
+                    app:layout_constraintTop_toBottomOf="@+id/v_edit_divider2"
+                    style="@style/EditText.Small" />
 
                 <EditText
-                    android:id="@+id/editText_recordingMethod"
+                    android:id="@+id/et_edit_recording_method"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:ems="10"
-                    android:focusedByDefault="false"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_recordingmethod"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
-                    android:textSize="@dimen/type_body"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editText_dataSource"
-                    app:layout_constraintTop_toTopOf="@+id/editText_dataSource" />
+                    app:layout_constraintStart_toEndOf="@+id/et_edit_data_source"
+                    app:layout_constraintTop_toTopOf="@+id/et_edit_data_source"
+                    style="@style/EditText.Small" />
 
                 <Spinner
-                    android:id="@+id/spinner_type"
+                    android:id="@+id/spn_edit_type"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginBottom="@dimen/spacing_tiny"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_dataSource" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_edit_data_source" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@ import com.example.trackfield.ui.common.model.RecyclerItem;
 import java.util.List;
 
 public class HeaderMediumAdapterDelegate extends
-    BaseAdapterDelegate<Header, RecyclerItem, HeaderMediumAdapterDelegate.HeaderMediumViewHolder> {
+    BaseAdapterDelegate<Header, RecyclerItem, HeaderMediumAdapterDelegate.HeaderSmallViewHolder> {
 
     public HeaderMediumAdapterDelegate(Activity a, DelegateClickListener listener) {
         super(a, listener);
@@ -34,33 +34,33 @@ public class HeaderMediumAdapterDelegate extends
 
     @NonNull
     @Override
-    public HeaderMediumViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new HeaderMediumViewHolder(inflater.inflate(R.layout.item_header_medium, parent, false));
+    public HeaderSmallViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+        return new HeaderSmallViewHolder(inflater.inflate(R.layout.item_recycler_header_small, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Header item, @NonNull HeaderMediumViewHolder vh, @Nullable List<Object> payloads) {
+    public void onBindViewHolder(Header item, @NonNull HeaderSmallViewHolder vh, @Nullable List<Object> payloads) {
         vh.primaryTv.setText(item.getTitle());
         vh.secondaryTv.setText(item.printValues());
 
         // set height depending on if children are expanded
         int height = (int) c.getResources().getDimension(
-            item.areChildrenExpanded() ? R.dimen.layout_header_month : R.dimen.layout_header_month_collapsed);
+            item.areChildrenExpanded() ? R.dimen.layout_recycler_header_month : R.dimen.layout_recycler_header_month_collapsed);
         vh.itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
     }
 
     // vh
 
-    class HeaderMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+    class HeaderSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
         public TextView primaryTv;
         public TextView secondaryTv;
 
-        public HeaderMediumViewHolder(View itemView) {
+        public HeaderSmallViewHolder(View itemView) {
             super(itemView);
-            primaryTv = itemView.findViewById(R.id.textView_primary);
-            secondaryTv = itemView.findViewById(R.id.textView_secondary);
+            primaryTv = itemView.findViewById(R.id.tv_recycler_item_header_primary);
+            secondaryTv = itemView.findViewById(R.id.tv_recycler_item_header_secondary);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

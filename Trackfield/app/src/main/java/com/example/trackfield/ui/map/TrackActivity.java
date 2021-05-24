@@ -3,6 +3,8 @@ package com.example.trackfield.ui.map;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -96,12 +98,12 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         if (!FileUtils.permissionToLocation(this)) return;
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
-        timeTv = findViewById(R.id.textView_time);
-        distanceTv = findViewById(R.id.textView_distance);
-        paceTv = findViewById(R.id.textView_pace);
-        avgPaceTv = findViewById(R.id.textView_avgPace);
-        coordsTv = findViewById(R.id.textView_coords);
-        coordsDiffTv = findViewById(R.id.textView_coordsDiff);
+        timeTv = findViewById(R.id.tv_track_time);
+        distanceTv = findViewById(R.id.tv_track_distance);
+        paceTv = findViewById(R.id.tv_track_pace);
+        avgPaceTv = findViewById(R.id.tv_track_pace_avg);
+        coordsTv = findViewById(R.id.tv_track_coords);
+        coordsDiffTv = findViewById(R.id.tv_track_coords_diff);
 
         setFabs();
         setMap();
@@ -145,37 +147,45 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
     private void setFabs() {
         // finish
-        FloatingActionButton finishFab = findViewById(R.id.fab_finish);
+        FloatingActionButton finishFab = findViewById(R.id.fab_track_finish);
         finishFab.hide();
         finishFab.setOnClickListener(v -> finishDialog());
 
         // play / pause
-        playPauseFab = findViewById(R.id.fab_pause);
+        playPauseFab = findViewById(R.id.fab_track_pause);
         playPauseFab.setVisibility(View.INVISIBLE);
         playPauseFab.setOnClickListener(v -> {
             if (recording) {
                 recording = false;
                 finishFab.show();
 
+                Drawable toIcon = getDrawable(R.drawable.ic_play).mutate();
+                toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorPrimaryInverse, this),
+                    PorterDuff.Mode.SRC_IN);
+
                 LayoutUtils.animateFab(playPauseFab,
-                    LayoutUtils.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
-                    getResources().getColor(R.color.colorPrimaryAccent),
-                    getDrawable(R.drawable.ic_fab_play_24dp));
+                    LayoutUtils.getColorInt(R.attr.colorSurface, this),
+                    LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, this),
+                    toIcon);
             }
             else {
                 recording = true;
                 finishFab.hide();
 
+                Drawable toIcon = getDrawable(R.drawable.ic_pause).mutate();
+                toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorHighlight, this),
+                    PorterDuff.Mode.SRC_IN);
+
                 LayoutUtils.animateFab(playPauseFab,
-                    getResources().getColor(R.color.colorPrimaryAccent),
-                    LayoutUtils.getColorInt(R.attr.colorSurface, playPauseFab.getContext()),
-                    getDrawable(R.drawable.ic_fab_pause_24dp));
+                    LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, this),
+                    LayoutUtils.getColorInt(R.attr.colorSurface, this),
+                    toIcon);
             }
         });
     }
 
     private void setMap() {
-        mapFrame = findViewById(R.id.frameLayout_mapFragment);
+        mapFrame = findViewById(R.id.fl_track_map);
         mapFrame.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             MathUtils.goldenRatioSmall(ScreenUtils.getScreenHeight(this))));
         mapFrame.setClipToOutline(true);
@@ -185,7 +195,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
 
         // fragment
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_mapFragment, mapFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_track_map, mapFragment).commit();
         mapFragment.getMapAsync(this);
     }
 

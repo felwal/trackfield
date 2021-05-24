@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="55dp">
+
+    <TextView
+        android:id="@+id/tv_edit_item_sub_s"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:text="s"
+        android:textColor="@color/colorAccBlue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TextView.ValueLetter" />
+
+    <EditText
+        android:id="@+id/et_edit_item_sub_distance"
+        android:layout_width="45dp"
+        android:hint="km"
+        android:inputType="numberDecimal"
+        android:text="@string/et_text_edit_distance"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_edit_item_sub_s"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/EditText" />
+
+    <TextView
+        android:id="@+id/tv_edit_item_sub_t"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:text="t"
+        android:textColor="@color/colorAccTurqoise"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_distance"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TextView.ValueLetter" />
+
+    <EditText
+        android:id="@+id/et_edit_item_sub_hours"
+        android:layout_width="45dp"
+        android:hint="hh"
+        android:inputType="number"
+        android:maxLength="2"
+        android:text="@string/et_text_edit_time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_edit_item_sub_t"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/EditText" />
+
+    <EditText
+        android:id="@+id/et_edit_item_sub_minutes"
+        android:layout_width="45dp"
+        android:hint="mm"
+        android:inputType="number"
+        android:maxLength="2"
+        android:text="@string/et_text_edit_time"
+        app:layout_constraintBottom_toBottomOf="@+id/et_edit_item_sub_hours"
+        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_hours"
+        app:layout_constraintTop_toTopOf="@+id/et_edit_item_sub_hours"
+        style="@style/EditText" />
+
+    <EditText
+        android:id="@+id/et_edit_item_sub_seconds"
+        android:layout_width="45dp"
+        android:hint="ss"
+        android:inputType="number|numberDecimal"
+        android:maxLength="5"
+        android:text="@string/et_text_edit_time"
+        app:layout_constraintBottom_toBottomOf="@+id/et_edit_item_sub_minutes"
+        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_minutes"
+        app:layout_constraintTop_toTopOf="@+id/et_edit_item_sub_minutes"
+        style="@style/EditText" />
+
+    <Button
+        android:id="@+id/btn_edit_item_sub_remove"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:text="x"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

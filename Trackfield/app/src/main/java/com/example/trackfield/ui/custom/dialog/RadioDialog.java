@@ -77,14 +77,14 @@ public class RadioDialog extends BaseDialog {
     @Override
     protected AlertDialog buildDialog() {
         final View view = inflater.inflate(R.layout.dialog_radio, null);
-        final RadioGroup group = view.findViewById(R.id.radioGroup_dialog);
+        final RadioGroup group = view.findViewById(R.id.rg_dialog_radio);
 
         builder.setView(view).setTitle(title)
             .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
 
         // inflate radio buttons
         for (int i = 0; i < radioTexts.size(); i++) {
-            RadioButton btn = (RadioButton) inflater.inflate(R.layout.dialog_radio_item, group, false);
+            RadioButton btn = (RadioButton) inflater.inflate(R.layout.item_dialog_radio, group, false);
             btn.setText(radioTexts.get(i));
             group.addView(btn);
 

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.trackfield.R;
 import com.example.trackfield.ui.common.model.Sorter;
+import com.example.trackfield.utils.LayoutUtils;
 
 public class SortSheet extends BaseSheet {
 
@@ -84,16 +85,16 @@ public class SortSheet extends BaseSheet {
     // set
 
     private void buildSheet() {
-        LinearLayout ll = view.findViewById(R.id.linearLayout_sortSheet);
+        LinearLayout ll = view.findViewById(R.id.ll_sheet_sort);
 
         for (int i = 0; i < titles.length; i++) {
-            View item = inflater.inflate(R.layout.sheet_sort_item, ll, false);
-            TextView tv = item.findViewById(R.id.textView_sheet_sort_item);
+            View item = inflater.inflate(R.layout.item_sheet_sort, ll, false);
+            TextView tv = item.findViewById(R.id.tv_sheet_sort_item_sortmode);
 
             // set title and styling
             tv.setText(titles[i]);
             if (i == selectedIndex) {
-                tv.setTextColor(getResources().getColor(R.color.colorTextHighlight));
+                tv.setTextColor(LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, a));
                 tv.setTypeface(null, Typeface.BOLD);
             }
 

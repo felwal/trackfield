@@ -51,7 +51,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setToolbar();
-        ScreenUtils.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.toolbar_map));
+        ScreenUtils.makeStatusBarTransparent(getWindow(), false, findViewById(R.id.tb_map));
 
         // extras
         Intent intent = getIntent();
@@ -59,7 +59,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         id = intent.getIntExtra(EXTRA_ID, -1);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fr_map);
         mapFragment.getMapAsync(this);
     }
 
@@ -83,25 +83,27 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == android.R.id.home) {
             finish();
             return true;
         }
-        else if (itemId == R.id.action_maptype) {
+        else if (itemId == R.id.action_toggle_map_type) {
             //googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
             //    (googleMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID ? GoogleMap.MAP_TYPE_TERRAIN : GoogleMap.MAP_TYPE_NORMAL));
-            map.setMapType(map.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
-                GoogleMap.MAP_TYPE_NORMAL);
+            map.setMapType(map.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID
+                : GoogleMap.MAP_TYPE_NORMAL);
             return true;
         }
-        else if (itemId == R.id.action_heatmap) {
+        else if (itemId == R.id.action_toggle_map_history) {
             togglePolylines();
             return true;
         }
-        else if (itemId == R.id.action_recentre) {
+        else if (itemId == R.id.action_recentre_map) {
             recentre();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,7 +112,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     // set
 
     private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_map);
+        final Toolbar tb = findViewById(R.id.tb_map);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setTitle("");

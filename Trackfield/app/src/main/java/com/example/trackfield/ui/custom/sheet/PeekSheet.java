@@ -90,12 +90,12 @@ public class PeekSheet extends BaseSheet {
 
     private void buildSheet() {
         // find
-        TextView routeTv = view.findViewById(R.id.textView_route);
-        TextView routeVarTv = view.findViewById(R.id.textView_routeVar);
-        TextView dateTv = view.findViewById(R.id.textView_date);
-        TextView distanceTv = view.findViewById(R.id.textView_distance);
-        TextView timeTv = view.findViewById(R.id.textView_time);
-        TextView paceTv = view.findViewById(R.id.textView_velocity);
+        TextView routeTv = view.findViewById(R.id.tv_peeksheet_route);
+        TextView routeVarTv = view.findViewById(R.id.tv_peeksheet_routevar);
+        TextView dateTv = view.findViewById(R.id.tv_peeksheet_date);
+        TextView distanceTv = view.findViewById(R.id.tv_peeksheet_distance);
+        TextView timeTv = view.findViewById(R.id.tv_peeksheet_time);
+        TextView paceTv = view.findViewById(R.id.tv_peeksheet_velocity);
 
         // set
         routeTv.setText(exercise.getRoute());
@@ -105,7 +105,8 @@ public class PeekSheet extends BaseSheet {
         timeTv.setText(exercise.printTime(false));
         paceTv.setText(exercise.printPace(false, a));
 
-        // set text color - TODO: xml attribute does not work - why?
+        // set text color
+        // TODO: xml attribute does not work - why?
         int textColor = LayoutUtils.getColorInt(android.R.attr.textColorPrimary, a);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);

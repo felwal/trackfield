@@ -5,7 +5,6 @@
         android:state_checked="true"
         android:color="?android:attr/textColorHighlight" />
 
-    <item
-        android:color="?android:attr/textColorSecondary"  />
+    <item android:color="?android:attr/textColorSecondary" />
 
 </selector>

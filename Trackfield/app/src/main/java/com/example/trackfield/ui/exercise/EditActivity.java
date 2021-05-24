@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,15 +113,17 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == android.R.id.home) {
             if (haveEditsBeenMade()) showDiscardDialog();
             else finish();
             return true;
         }
-        else if (itemId == R.id.action_save) {
+        else if (itemId == R.id.action_save_exercise) {
             parseAndSave();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -132,31 +136,35 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     // set
 
     private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.toolbar_edit);
+        final Toolbar tb = findViewById(R.id.tb_edit);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_edit));
+        ab.setTitle(getResources().getString(R.string.activity_title_edit));
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setHomeAsUpIndicator(R.drawable.ic_cancel_24dp);
+
+        // set cancel icon as home
+        Drawable homeIcon = getDrawable(R.drawable.ic_cancel).mutate();
+        homeIcon.setColorFilter(LayoutUtils.getColorInt(R.attr.colorOnPrimary, this), PorterDuff.Mode.SRC_IN);
+        ab.setHomeAsUpIndicator(homeIcon);
     }
 
     private void findEditTexts() {
         // edittexts
-        routeEt = findViewById(R.id.editText_route);
-        routeVarEt = findViewById(R.id.editText_routeVar);
-        intervalEt = findViewById(R.id.editText_interval);
-        dateEt = findViewById(R.id.editText_date);
-        timeEt = findViewById(R.id.editText_time);
-        noteEt = findViewById(R.id.editText_note);
-        distanceEt = findViewById(R.id.editText_distance);
-        hoursEt = findViewById(R.id.editText_hours);
-        minutesEt = findViewById(R.id.editText_minutes);
-        secondsEt = findViewById(R.id.editText_seconds);
+        routeEt = findViewById(R.id.et_route);
+        routeVarEt = findViewById(R.id.et_routeVar);
+        intervalEt = findViewById(R.id.et_interval);
+        dateEt = findViewById(R.id.et_date);
+        timeEt = findViewById(R.id.et_time);
+        noteEt = findViewById(R.id.et_note);
+        distanceEt = findViewById(R.id.et_edit_distance);
+        hoursEt = findViewById(R.id.et_edit_hours);
+        minutesEt = findViewById(R.id.et_edit_minutes);
+        secondsEt = findViewById(R.id.et_edit_seconds);
         //polylineEt = findViewById(R.id.editText_polyline);
-        dataSourceEt = findViewById(R.id.editText_dataSource);
-        recordingMethodEt = findViewById(R.id.editText_recordingMethod);
-        drivenSw = findViewById(R.id.switch_driven);
-        typeSpinner = findViewById(R.id.spinner_type);
+        dataSourceEt = findViewById(R.id.et_edit_data_source);
+        recordingMethodEt = findViewById(R.id.et_edit_recording_method);
+        drivenSw = findViewById(R.id.sw_edit_drive_distance);
+        typeSpinner = findViewById(R.id.spn_edit_type);
 
         // spinner
         ArrayAdapter<String> spinnerAdapter =
@@ -185,16 +193,16 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             Sub sub = exercise.getSub(i);
 
             // add views
-            LinearLayout ll = findViewById(R.id.linearLayout_edit);
-            View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, ll, false);
+            LinearLayout ll = findViewById(R.id.ll_edit);
+            View subView = getLayoutInflater().inflate(R.layout.item_edit_sub, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
             setRemoveSubBtnListener(ll, subView);
 
-            EditText sDistanceEt = subViews.get(i).findViewById(R.id.editText_distance_sub);
-            EditText sHoursEt = subViews.get(i).findViewById(R.id.editText_hours_sub);
-            EditText sMinutesEt = subViews.get(i).findViewById(R.id.editText_minutes_sub);
-            EditText sSecondsEt = subViews.get(i).findViewById(R.id.editText_seconds_sub);
+            EditText sDistanceEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_distance);
+            EditText sHoursEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_hours);
+            EditText sMinutesEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_minutes);
+            EditText sSecondsEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_seconds);
 
             float[] time = MathUtils.getTimeParts(sub.getTime());
 
@@ -391,10 +399,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         for (int i = 0; i < subViews.size(); i++) {
             View v = subViews.get(i);
 
-            EditText sDistanceEt = v.findViewById(R.id.editText_distance_sub);
-            EditText sHoursEt = v.findViewById(R.id.editText_hours_sub);
-            EditText sMinutesEt = v.findViewById(R.id.editText_minutes_sub);
-            EditText sSecondsEt = v.findViewById(R.id.editText_seconds_sub);
+            EditText sDistanceEt = v.findViewById(R.id.et_edit_item_sub_distance);
+            EditText sHoursEt = v.findViewById(R.id.et_edit_item_sub_hours);
+            EditText sMinutesEt = v.findViewById(R.id.et_edit_item_sub_minutes);
+            EditText sSecondsEt = v.findViewById(R.id.et_edit_item_sub_seconds);
 
             int distance = (int) (Float.parseFloat(sDistanceEt.getText().toString()) * 1000);
             int hours = Integer.parseInt(sHoursEt.getText().toString());
@@ -420,10 +428,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Unimplemented
     private void setAddSubBtnListener() {
-        final Button addSubBtn = findViewById(R.id.button_addSub);
+        final Button addSubBtn = findViewById(R.id.btn_edit_add_sub);
         addSubBtn.setOnClickListener(v -> {
-            final LinearLayout ll = findViewById(R.id.linearLayout_edit);
-            final View subView = getLayoutInflater().inflate(R.layout.layout_sub_edit, ll, false);
+            final LinearLayout ll = findViewById(R.id.ll_edit);
+            final View subView = getLayoutInflater().inflate(R.layout.item_edit_sub, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
 
@@ -433,7 +441,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Unimplemented
     private void setRemoveSubBtnListener(final LinearLayout ll, final View subView) {
-        final Button removeBtn = subView.findViewById(R.id.button_removeSub);
+        final Button removeBtn = subView.findViewById(R.id.btn_edit_item_sub_remove);
         removeBtn.setOnClickListener(v -> {
             ll.removeView(subView);
             subViews.remove(subView);

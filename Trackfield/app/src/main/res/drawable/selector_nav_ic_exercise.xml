@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_exercises_selected_24dp" />
+        android:drawable="@drawable/ic_exercises_selected" />
 
-    <item
-        android:drawable="@drawable/ic_exercises_24dp"  />
+    <item android:drawable="@drawable/ic_exercises" />
 
 </selector>

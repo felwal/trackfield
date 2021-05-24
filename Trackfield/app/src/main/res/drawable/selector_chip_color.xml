@@ -5,7 +5,6 @@
         android:state_checked="true"
         android:color="?attr/chipBackgroundColor" />
 
-    <item
-        android:color="?attr/chipSurfaceColor" />
+    <item android:color="?attr/chipSurfaceColor" />
 
 </selector>

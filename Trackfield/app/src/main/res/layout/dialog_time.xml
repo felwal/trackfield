@@ -1,82 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/padding_dialog_side_20dp"
-    android:paddingTop="@dimen/padding_dialog_top"
-    android:paddingRight="@dimen/padding_dialog_side_20dp">
+    android:paddingLeft="@dimen/spacing_dialog_side_20dp"
+    android:paddingTop="@dimen/spacing_dialog_top"
+    android:paddingRight="@dimen/spacing_dialog_side_20dp">
 
     <EditText
-        android:id="@+id/editText_numberField1"
+        android:id="@+id/et_dialog_time_minutes"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@id/textView_colon"
+        app:layout_constraintEnd_toStartOf="@id/tv_dialog_time_colon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/EditText" />
 
     <TextView
-        android:id="@+id/textView_colon"
+        android:id="@+id/tv_dialog_time_colon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="@dimen/spacing_diminutive"
+        android:layout_marginEnd="@dimen/spacing_diminutive"
         android:text=":"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_numberField1"
-        app:layout_constraintEnd_toStartOf="@+id/editText_numberField2"
-        app:layout_constraintStart_toEndOf="@+id/editText_numberField1"
-        app:layout_constraintTop_toTopOf="@+id/editText_numberField1" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_dialog_time_minutes"
+        app:layout_constraintEnd_toStartOf="@+id/et_dialog_time_seconds"
+        app:layout_constraintStart_toEndOf="@+id/et_dialog_time_minutes"
+        app:layout_constraintTop_toTopOf="@+id/et_dialog_time_minutes" />
 
     <EditText
-        android:id="@+id/editText_numberField2"
+        android:id="@+id/et_dialog_time_seconds"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textView_colon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/tv_dialog_time_colon"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/EditText" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup_goal"
+        android:id="@+id/cg_dialog_time_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:checkedChip="@id/chip_pace"
+        android:visibility="gone"
+        app:checkedChip="@id/cp_dialog_time_pace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_numberField1"
+        app:layout_constraintTop_toBottomOf="@+id/et_dialog_time_minutes"
         app:singleLine="true"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_pace"
-            style="@style/Chip"
+            android:id="@+id/cp_dialog_time_pace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-
             android:checked="true"
             android:clickable="true"
-            android:text="@string/dialog_chip_pace"
-            app:checkedIcon="@drawable/ic_pace_24dp"
+            android:text="@string/cp_dialog_pace"
             app:checkedIconVisible="false"
             app:chipIconEnabled="true"
-            app:chipIconVisible="true" />
+            app:chipIconVisible="true"
+            style="@style/Chip" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_time"
-            style="@style/Chip"
+            android:id="@+id/cp_dialog_time_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
             android:clickable="true"
-            android:text="@string/dialog_chip_time"
-            app:checkedIcon="@drawable/ic_time_24dp"
-            app:checkedIconVisible="false" />
+            android:text="@string/cp_dialog_time"
+            app:checkedIconVisible="false"
+            style="@style/Chip" />
+
     </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,7 +34,7 @@ public class ExerciseAdapterDelegate extends
     @NonNull
     @Override
     public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new ExerciseViewHolder(inflater.inflate(R.layout.item_exercise, parent, false));
+        return new ExerciseViewHolder(inflater.inflate(R.layout.item_recycler_exercise, parent, false));
     }
 
     @Override
@@ -54,9 +54,9 @@ public class ExerciseAdapterDelegate extends
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);
-            primaryTv = itemView.findViewById(R.id.textView_primary);
-            secondaryTv = itemView.findViewById(R.id.textView_secondary);
-            captionTv = itemView.findViewById(R.id.textView_caption);
+            primaryTv = itemView.findViewById(R.id.tv_recycler_item_exercise_primary);
+            secondaryTv = itemView.findViewById(R.id.tv_recycler_item_exercise_secondary);
+            captionTv = itemView.findViewById(R.id.tv_recycler_item_exercise_caption);
             itemView.setOnClickListener(this);
         }
 
