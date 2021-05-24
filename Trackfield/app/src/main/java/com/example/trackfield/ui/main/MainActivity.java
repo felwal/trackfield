@@ -27,6 +27,7 @@ import com.example.trackfield.ui.custom.dialog.BaseDialog;
 import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
+import com.example.trackfield.ui.exercise.AddActivity;
 import com.example.trackfield.ui.exercise.EditActivity;
 import com.example.trackfield.ui.main.exercises.ExercisesFragment;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             else openFabMenu();
         });
 
-        addFab.setOnClickListener(view -> EditActivity.startActivity(MainActivity.this));
+        addFab.setOnClickListener(view -> AddActivity.startActivity(MainActivity.this));
 
         trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 

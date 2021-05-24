@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -49,36 +50,27 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     // dialog tags
     private static final String DIALOG_DISCARD = "discardDialog";
 
-    private EditText routeEt;
-    private EditText routeVarEt;
-    private EditText intervalEt;
-    private EditText noteEt;
-    private EditText distanceEt;
-    private EditText hoursEt;
-    private EditText minutesEt;
-    private EditText secondsEt;
-    private EditText dataSourceEt;
-    private EditText recordingMethodEt;
-    private EditText dateEt;
-    private EditText timeEt;
-    private Switch drivenSw;
-    private Spinner typeSpinner;
+    protected EditText routeEt;
+    protected EditText routeVarEt;
+    protected EditText intervalEt;
+    protected EditText noteEt;
+    protected EditText distanceEt;
+    protected EditText hoursEt;
+    protected EditText minutesEt;
+    protected EditText secondsEt;
+    protected EditText dataSourceEt;
+    protected EditText recordingMethodEt;
+    protected EditText dateEt;
+    protected EditText timeEt;
+    protected Switch drivenSw;
+    protected Spinner typeSpinner;
     @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
-
-    private String creationDate;
-    private String creationTime;
 
     // arguments
     private int exerciseId;
     private Exercise exercise;
-    private boolean edit;
 
     //
-
-    public static void startActivity(Context c) {
-        Intent startIntent = new Intent(c.getApplicationContext(), EditActivity.class);
-        c.startActivity(startIntent);
-    }
 
     public static void startActivity(Context c, int exerciseId) {
         Intent startIntent = new Intent(c.getApplicationContext(), EditActivity.class);
@@ -97,10 +89,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // extras
         exerciseId = getIntent().getIntExtra(EXTRA_ID, -1);
-        edit = exerciseId != -1;
 
         findEditTexts();
-        setTexts();
+        setEditTexts();
+        setListeners();
         //setAddSubBtnListener();
     }
 
@@ -139,7 +131,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         final Toolbar tb = findViewById(R.id.tb_edit);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_title_edit));
+        ab.setTitle(getToolbarTitleRes());
         ab.setDisplayHomeAsUpEnabled(true);
 
         // set cancel icon as home
@@ -174,18 +166,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         typeSpinner.setOnItemSelectedListener(this);
     }
 
-    private void setTexts() {
-        if (edit) setTextsEdit();
-        else setTextsCreate();
-        setListeners();
-    }
-
-    private void setTextsCreate() {
-        dateEt.setText(creationDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
-        timeEt.setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
-    }
-
-    private void setTextsEdit() {
+    protected void setEditTexts() {
         exercise = DbReader.get(this).getExercise(exerciseId);
 
         // subs
@@ -251,8 +232,10 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         // distance driven listener
         drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             distanceEt.setEnabled(!isChecked);
-            distanceEt.setTextColor(LayoutUtils.getColorInt(isChecked ? android.R.attr.textColorSecondary
-                : android.R.attr.textColorPrimary, this));
+            distanceEt.setTextColor(LayoutUtils.getColorInt(isChecked
+                ? android.R.attr.textColorSecondary
+                : android.R.attr.textColorPrimary,
+                this));
         });
 
         // date listener
@@ -286,41 +269,30 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // get
 
-    private boolean haveEditsBeenMade() {
-        if (edit) {
-            float[] time = MathUtils.getTimeParts(exercise.getTime());
-
-            return !routeEt.getText().toString().equals(exercise.getRoute())
-                || !routeVarEt.getText().toString().equals(exercise.getRouteVar())
-                || !dateEt.getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))
-                || !timeEt.getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))
-                || !noteEt.getText().toString().equals(exercise.getNote())
-                || !distanceEt.getText().toString().equals((float) exercise.getEffectiveDistance(this) / 1000 + "")
-                || !hoursEt.getText().toString().equals((int) time[2] + "")
-                || !minutesEt.getText().toString().equals((int) time[1] + "")
-                || !secondsEt.getText().toString().equals(time[0] + "")
-                || !dataSourceEt.getText().toString().equals(exercise.getDataSource())
-                || !recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())
-                || typeSpinner.getSelectedItemPosition() != exercise.getType()
-                || drivenSw.isChecked() != exercise.isDistanceDriven();
-        }
-        else {
-            return !routeEt.getText().toString().equals("Route")
-                || !routeVarEt.getText().toString().equals("")
-                || !dateEt.getText().toString().equals(creationDate)
-                || !timeEt.getText().toString().equals(creationTime)
-                || !noteEt.getText().toString().equals("")
-                || !distanceEt.getText().toString().equals("0")
-                || !hoursEt.getText().toString().equals("0")
-                || !minutesEt.getText().toString().equals("0")
-                || !secondsEt.getText().toString().equals("0")
-                || !dataSourceEt.getText().toString().equals("")
-                || !recordingMethodEt.getText().toString().equals("")
-                || typeSpinner.getSelectedItemPosition() != 0
-                || drivenSw.isChecked();
-
-        }
+    @StringRes
+    protected int getToolbarTitleRes() {
+        return R.string.activity_title_edit;
     }
+
+    protected boolean haveEditsBeenMade() {
+        float[] time = MathUtils.getTimeParts(exercise.getTime());
+
+        return !routeEt.getText().toString().equals(exercise.getRoute())
+            || !routeVarEt.getText().toString().equals(exercise.getRouteVar())
+            || !dateEt.getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))
+            || !timeEt.getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))
+            || !noteEt.getText().toString().equals(exercise.getNote())
+            || !distanceEt.getText().toString().equals((float) exercise.getEffectiveDistance(this) / 1000 + "")
+            || !hoursEt.getText().toString().equals((int) time[2] + "")
+            || !minutesEt.getText().toString().equals((int) time[1] + "")
+            || !secondsEt.getText().toString().equals(time[0] + "")
+            || !dataSourceEt.getText().toString().equals(exercise.getDataSource())
+            || !recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())
+            || typeSpinner.getSelectedItemPosition() != exercise.getType()
+            || drivenSw.isChecked() != exercise.isDistanceDriven();
+    }
+
+    // tools
 
     private void showDiscardDialog() {
         BinaryDialog.newInstance(R.string.dialog_title_discard, BaseDialog.NO_RES, R.string.dialog_btn_discard,
@@ -353,7 +325,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
 
-            // save create
+            // save add
             if (exercise == null) {
                 // trail
                 /*Trail trail = null;

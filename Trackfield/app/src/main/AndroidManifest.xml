@@ -50,16 +50,24 @@
 
         <activity
             android:name=".ui.exercise.ViewActivity"
+            android:label="@string/activity_title_view"
             android:parentActivityName=".ui.main.MainActivity" />
 
         <activity
             android:name=".ui.exercise.EditActivity"
+            android:label="@string/activity_title_edit"
+            android:parentActivityName=".ui.main.MainActivity" />
+
+        <activity
+            android:name=".ui.exercise.AddActivity"
+            android:label="@string/activity_title_add"
             android:parentActivityName=".ui.main.MainActivity" />
 
         <!-- map -->
 
         <activity
             android:name=".ui.map.TrackActivity"
+            android:label="@string/activity_title_track"
             android:parentActivityName=".ui.main.MainActivity" />
 
         <activity
@@ -72,7 +80,7 @@
             android:label="@string/activity_title_maps"
             android:parentActivityName=".ui.exercise.ViewActivity" />
 
-        <!-- rec -->
+        <!-- record -->
 
         <activity
             android:name=".ui.record.distance.DistanceActivity"

@@ -8,11 +8,12 @@
 
     <!-- activities -->
 
-    <string name="activity_title_edit">Edit</string>
+    <string name="activity_title_onboarding">Onboarding</string>
     <string name="activity_title_view">Exercise</string>
+    <string name="activity_title_add">Add</string>
+    <string name="activity_title_edit">Edit</string>
     <string name="activity_title_maps">Map</string>
     <string name="activity_title_track">Track</string>
-    <string name="activity_title_onboarding">Onboarding</string>
 
     <!-- fragments -->
 
