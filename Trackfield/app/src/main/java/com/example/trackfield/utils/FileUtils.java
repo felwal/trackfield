@@ -46,7 +46,7 @@ public final class FileUtils {
     private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/" + FOLDER + "/";
 
     // json keys
-    private static final String JSON_DB_VERSION = "databaseVersion";
+    private static final String JSON_DB_VERSION = "db_version";
 
     //
 

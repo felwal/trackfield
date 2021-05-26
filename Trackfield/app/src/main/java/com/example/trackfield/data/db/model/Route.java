@@ -9,9 +9,9 @@ import org.json.JSONObject;
 
 public class Route implements JSONObjectable {
 
-    private static final String JSON_ID = "id";
+    private static final String JSON_ID = "_id";
     private static final String JSON_NAME = "name";
-    private static final String JSON_GOAL_PACE = "goalPace";
+    private static final String JSON_GOAL_PACE = "goal_pace";
     private static final String JSON_HIDDEN = "hidden";
 
     public static final String NO_NAME = "[Route not found]";

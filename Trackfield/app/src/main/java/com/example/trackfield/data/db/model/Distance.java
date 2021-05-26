@@ -13,9 +13,9 @@ public class Distance implements JSONObjectable {
     public static final int NO_GOAL_PACE = -1;
 
     // json keys
-    private static final String JSON_ID = "id";
+    private static final String JSON_ID = "_id";
     private static final String JSON_DISTANCE = "distance";
-    private static final String JSON_GOAL_PACE = "goalPace";
+    private static final String JSON_GOAL_PACE = "goal_pace";
 
     private final int id;
     private final int distance;
