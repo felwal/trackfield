@@ -102,6 +102,7 @@
     <string name="action_include_longer">Include longer</string>
     <string name="action_pull_strava">Pull from Strava</string>
     <string name="action_push_strava">Push to Strava</string>
+    <string name="action_hide_trail">Hide trail</string>
     <string name="action_map_history">Toggle history</string>
     <string name="action_map_recentre">Recentre map</string>
     <string name="action_map_type">Toggle satellite</string>

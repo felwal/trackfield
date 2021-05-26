@@ -121,7 +121,21 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             menu.findItem(R.id.action_pull_exercise).setVisible(false);
         }
 
+        // remove hide trail action if no trail
+        if (!exercise.hasTrail()) {
+            menu.findItem(R.id.action_hide_trail).setVisible(false);
+        }
+
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // hide trail
+        MenuItem hideItem = menu.findItem(R.id.action_hide_trail);
+        hideItem.setChecked(exercise.isTrailHidden());
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -159,6 +173,16 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             else {
                 LayoutUtils.toast(R.string.toast_strava_pull_activity_gone, this);
             }
+            return true;
+        }
+        else if (itemId == R.id.action_hide_trail) {
+            if (exercise.hasTrail()) {
+                exercise.invertTrailHidden();
+                DbWriter.get(this).updateExercise(exercise, this);
+                invalidateOptionsMenu();
+                return true;
+            }
+
             return true;
         }
 

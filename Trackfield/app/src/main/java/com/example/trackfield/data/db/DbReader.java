@@ -468,7 +468,8 @@ public class DbReader extends DbHelper {
     public HashMap<Integer, String> getPolylines(int exceptId) {
         String[] columns = { ExerciseEntry._ID, ExerciseEntry.COLUMN_POLYLINE };
         String selection = ExerciseEntry._ID + " != " + exceptId +
-            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL" +
+            " AND " + ExerciseEntry.COLUMN_HIDE_TRAIL + " = 0";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         HashMap<Integer, String> polylines = new HashMap<>();
@@ -521,7 +522,8 @@ public class DbReader extends DbHelper {
     public HashMap<Integer, String> getPolylinesByRouteExcept(int exceptRouteId) {
         String[] columns = { ExerciseEntry._ID, ExerciseEntry.COLUMN_POLYLINE };
         String selection = ExerciseEntry.COLUMN_ROUTE_ID + " != " + exceptRouteId +
-            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL" +
+            " AND " + ExerciseEntry.COLUMN_HIDE_TRAIL + " = 0";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         HashMap<Integer, String> polylines = new HashMap<>();
@@ -1042,6 +1044,7 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
+            boolean hideTrail = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_HIDE_TRAIL)) != 0;
 
             // convert trail
             Trail trail = null;
@@ -1061,6 +1064,7 @@ public class DbReader extends DbHelper {
 
             Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
                 interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
+            exercise.setTrailHidden(hideTrail);
             exercises.add(exercise);
         }
 

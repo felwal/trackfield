@@ -29,4 +29,11 @@
         android:title="@string/action_push_strava"
         app:showAsAction="never"/>-->
 
+    <item
+        android:id="@+id/action_hide_trail"
+        android:iconTint="?attr/colorOnPrimary"
+        android:title="@string/action_hide_trail"
+        android:checkable="true"
+        app:showAsAction="never" />
+
 </menu>

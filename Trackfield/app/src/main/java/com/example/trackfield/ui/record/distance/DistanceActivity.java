@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
@@ -118,6 +119,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     }
 
     @Override
+    @MenuRes
     protected int getToolbarMenuRes() {
         return R.menu.menu_toolbar_rec_distance;
     }

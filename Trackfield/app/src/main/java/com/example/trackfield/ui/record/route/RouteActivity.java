@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
 import com.example.trackfield.R;
@@ -133,6 +134,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     }
 
     @Override
+    @MenuRes
     protected int getToolbarMenuRes() {
         return R.menu.menu_toolbar_rec_route;
     }

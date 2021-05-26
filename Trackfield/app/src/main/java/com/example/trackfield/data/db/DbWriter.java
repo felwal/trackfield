@@ -438,6 +438,7 @@ public class DbWriter extends DbHelper {
         cv.put(ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance(c));
         cv.put(ExerciseEntry.COLUMN_TIME, e.getTime());
+        cv.put(ExerciseEntry.COLUMN_HIDE_TRAIL, e.isTrailHidden());
 
         // put trail
         Trail trail = e.getTrail();

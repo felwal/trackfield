@@ -63,6 +63,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_START_LATLNG = "startLatlng";
     private static final String JSON_END_LATLNG = "endLatlng";
     private static final String JSON_POLYLINE = "polyline";
+    private static final String JSON_HIDE_TRAIL = "hideTrail";
 
     private static final int DISTANCE_DECIMALS = 2;
 
@@ -81,6 +82,7 @@ public class Exercise implements JSONObjectable {
     private int distance;
     private float time;
     private Trail trail;
+    private boolean hideTrail = false;
     @Unimplemented private final ArrayList<Sub> subs;
 
     //
@@ -122,6 +124,7 @@ public class Exercise implements JSONObjectable {
         dataSource = obj.getString(JSON_DATA_SOURCE);
         recordingMethod = obj.getString(JSON_RECORDING_METHOD);
         note = obj.getString(JSON_NOTE);
+        hideTrail = obj.getBoolean(JSON_HIDE_TRAIL);
 
         // trail
         trail = null;
@@ -210,6 +213,14 @@ public class Exercise implements JSONObjectable {
         for (Sub sub : subs) {
             sub.setSuperId(id);
         }
+    }
+
+    public void setTrailHidden(boolean hidden) {
+        hideTrail = hidden;
+    }
+
+    public void invertTrailHidden() {
+        hideTrail = !hideTrail;
     }
 
     // get
@@ -370,6 +381,10 @@ public class Exercise implements JSONObjectable {
         return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
     }
 
+    public boolean isTrailHidden() {
+        return hideTrail;
+    }
+
     @Unimplemented
     public Sub getSub(int index) {
         if (index >= subCount()) return null;
@@ -490,6 +505,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_DATA_SOURCE, dataSource);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);
             obj.put(JSON_NOTE, note);
+            obj.put(JSON_HIDE_TRAIL, hideTrail);
 
             if (hasTrail()) {
                 JSONArray start_latlng = new JSONArray();

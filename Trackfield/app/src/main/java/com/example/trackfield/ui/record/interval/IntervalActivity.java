@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 
+import androidx.annotation.MenuRes;
+
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.DbWriter;
 import com.example.trackfield.ui.custom.dialog.BaseDialog;
@@ -72,6 +74,7 @@ public class IntervalActivity extends RecActivity implements TextDialog.DialogLi
     }
 
     @Override
+    @MenuRes
     protected int getToolbarMenuRes() {
         return R.menu.menu_toolbar_rec_interval;
     }

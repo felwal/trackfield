@@ -35,6 +35,7 @@ public final class DbContract {
         public static final String COLUMN_END_LAT = "end_lat";
         public static final String COLUMN_END_LNG = "end_lng";
         public static final String COLUMN_POLYLINE = "polyline";
+        public static final String COLUMN_HIDE_TRAIL = "hide_trail";
 
         public static final String SELECTION_PACE = "1000*(" + COLUMN_TIME + "/" + COLUMN_EFFECTIVE_DISTANCE + ")";
 
@@ -67,7 +68,8 @@ public final class DbContract {
             COLUMN_START_LNG + " REAL," +
             COLUMN_END_LAT + " REAL," +
             COLUMN_END_LNG + " REAL," +
-            COLUMN_POLYLINE + " TEXT)";
+            COLUMN_POLYLINE + " TEXT," +
+            COLUMN_HIDE_TRAIL + " INTEGER)";
 
         public static final String ALTER_TO_VER_2 = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN (" +
             COLUMN_STRAVA_ID + " INTEGER," +

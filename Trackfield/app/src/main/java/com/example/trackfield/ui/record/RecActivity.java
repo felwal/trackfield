@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import androidx.annotation.MenuRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -82,6 +83,7 @@ public abstract class RecActivity extends AppCompatActivity implements SortSheet
 
     protected abstract void getExtras(Intent intent);
 
+    @MenuRes
     protected abstract int getToolbarMenuRes();
 
     // implements SortSheet
