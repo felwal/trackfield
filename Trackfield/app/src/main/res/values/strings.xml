@@ -72,7 +72,7 @@
     <string name="tv_text_empty_route_msg">Check filters</string>
 
     <string name="tv_text_fab_add">Add exercise</string>
-    <string name="tv_text_fab_request_last">Request last</string>
+    <string name="tv_text_fab_request_strava">Request new</string>
     <string name="tv_text_fab_track">Track exercise</string>
 
     <string name="tv_text_dialog_filter_subtitle">Types</string>
@@ -176,7 +176,16 @@
     <string name="toast_strava_auth_err">Authorization failed</string>
     <string name="toast_strava_response_err">Strava response error</string>
     <string name="toast_strava_req_activity_successful">Request successful</string>
-    <string name="toast_strava_req_activity_err">Failed to request activities</string>
+    <string name="toast_strava_req_activity_err">Failed to request activitiy</string>
+    <plurals name="toast_strava_req_activities_successful">
+        <item quantity="one">%d request successful</item>
+        <item quantity="other">%d requests successful</item>
+    </plurals>
+    <plurals name="toast_strava_req_activities_err">
+        <item quantity="one">%d request failed</item>
+        <item quantity="other">%d requests failed</item>
+    </plurals>
+    <string name="toast_strava_req_activities_none">Activities already requested</string>
     <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
     <string name="toast_strava_req_refresh_err">Failed to request refreshToken, authorize yourself!</string>
     <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>

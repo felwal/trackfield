@@ -98,9 +98,7 @@
 
         <activity
             android:name=".ui.setting.SettingsActivity"
-            android:parentActivityName=".ui.main.MainActivity">
-            <tools:validation testUrl="https://felwal.github.io/callback" />
-        </activity>
+            android:parentActivityName=".ui.main.MainActivity" />
 
         <activity
             android:name=".ui.setting.StravaSettingsActivity"

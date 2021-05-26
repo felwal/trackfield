@@ -65,31 +65,33 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     @Override
     protected void inflateViews() {
         // connection
+
         inflateHeader("Connection");
+
         inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
 
         // requests
+
         inflateHeader("Request activities");
-        //inflateClickItem("Request last", "", false, v -> strava.requestLastActivity());
-        inflateClickItem("Request last 5", "", false, v -> strava.requestLastActivities(5, success -> {
-            if (success) {
-                LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this);
-            }
-            else {
-                LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
-            }
-        }));
+
+        inflateClickItem("Request new", "", false, v -> strava.requestNewActivities((successCount, errorCount) ->
+            StravaApi.toastResponse(successCount, errorCount, this)));
+
         inflateDialogItem("Request all", "", !Prefs.isDeveloper(), BinaryDialog.generic(DIALOG_REQUEST_ALL));
+
         if (Prefs.isDeveloper()) {
             inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
         }
 
         // request options
+
         inflateHeader("Request options");
+
         inflateDialogItem("Recording method", Prefs.getRecordingMethod(), false,
             TextDialog.newInstance(R.string.dialog_title_recording_method,
                 R.string.dialog_msg_recording_method, Prefs.getRecordingMethod(),
                 "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+
         inflateDialogItem("Pull policy", "", true,
             SwitchDialog.newInstance(R.string.dialog_title_pull_policy, BaseDialog.NO_RES, R.string.dialog_btn_set,
                 Prefs.getPullPolicy(), DIALOG_PULL_POLICY));
@@ -116,12 +118,8 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     @Override
     public void onBinaryDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_REQUEST_ALL)) {
-            strava.requestAllActivities(success -> {
-                // we dont want to toast for every successfully requested activity
-                if (!success) {
-                    LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
-                }
-            });
+            strava.requestAllActivities((successCount, errorCount) ->
+                StravaApi.toastResponse(successCount, errorCount, this));
         }
         else if (tag.equals(DIALOG_PULL_ALL)) {
             strava.pullAllActivities(success -> {

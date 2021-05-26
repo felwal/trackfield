@@ -99,39 +99,51 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     protected void inflateViews() {
         // display options
+
         inflateHeader("Display options");
+
         inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
+
         inflateSwitchItem("Hide singleton routes", Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
 
         // look
+
         inflateHeader("Look");
+
         inflateDialogItem("Theme", Prefs.printTheme(), false,
             RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
                 AppConsts.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
+
         inflateDialogItem("Color", Prefs.printColor(), true,
             RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
                 AppConsts.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
         // third party services
+
         inflateHeader("Third party services");
+
         inflateClickItem("Strava", ". . .", true, v -> StravaSettingsActivity.startActivity(this));
 
         // file
+
         inflateHeader("File");
+
         inflateDialogItem("Export json", "", false,
             BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_msg_export,
                 R.string.dialog_btn_export, DIALOG_EXPORT));
+
         inflateDialogItem("Import json", "", true,
             BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_msg_import,
                 R.string.dialog_btn_import, DIALOG_IMPORT));
 
         // profile
+
         inflateHeader("Profile");
+
         inflateDialogItem("Mass", Prefs.getMass() + " kg", false,
             DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
                 Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
 
-        // birthday
         final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(AppConsts.FORMATTER_CAPTION), true);
         birth.setOnClickListener(v -> {
@@ -156,12 +168,15 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         });
 
         // developer options
+
         if (Prefs.isDeveloper()) {
             inflateHeader("Developer options");
+
             inflateClickItem("Reboard", "", false, v -> {
                 Prefs.setFirstLogin(true);
                 OnboardingActivity.startActivity(this);
             });
+
             inflateDialogItem("Recreate database", "", true, BinaryDialog.generic(DIALOG_RECREATE_DB));
         }
     }

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
@@ -122,6 +123,11 @@ public final class LayoutUtils {
 
     public static void toast(@StringRes int stringResId, Context c) {
         Toast.makeText(c, c.getString(stringResId), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void toast(@PluralsRes int pluralResId, int quantity, Context c) {
+        Toast.makeText(c, c.getResources().getQuantityString(pluralResId, quantity, quantity), Toast.LENGTH_SHORT)
+            .show();
     }
 
     public static void toast(boolean b, Context c) {

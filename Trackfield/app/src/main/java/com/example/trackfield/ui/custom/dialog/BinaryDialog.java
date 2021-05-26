@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
+import com.example.trackfield.utils.annotations.Debug;
 
 public class BinaryDialog extends BaseDialog {
 
@@ -47,6 +48,7 @@ public class BinaryDialog extends BaseDialog {
         return instance;
     }
 
+    @Debug
     public static BinaryDialog generic(String tag) {
         return newInstance(R.string.dialog_title_continue, NO_RES, R.string.dialog_btn_continue, tag);
     }

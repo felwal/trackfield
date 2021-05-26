@@ -14,7 +14,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -28,7 +27,6 @@ import com.example.trackfield.ui.custom.dialog.DecimalDialog;
 import com.example.trackfield.ui.custom.dialog.FilterDialog;
 import com.example.trackfield.ui.custom.sheet.SortSheet;
 import com.example.trackfield.ui.exercise.AddActivity;
-import com.example.trackfield.ui.exercise.EditActivity;
 import com.example.trackfield.ui.main.exercises.ExercisesFragment;
 import com.example.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
 import com.example.trackfield.ui.main.records.RecsFragment;
@@ -212,14 +210,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 
         stravaFab.setOnClickListener(view -> {
-            strava.requestLastActivity(success -> {
-                if (success) {
-                    LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this);
-                }
-                else {
-                    LayoutUtils.toast(R.string.toast_strava_req_activity_err, this);
-                }
-            });
+            strava.requestNewActivities((successCount, errorCount) ->
+                StravaApi.toastResponse(successCount, errorCount, this));
             closeFabMenu();
         });
 

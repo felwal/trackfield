@@ -752,6 +752,19 @@ public class DbReader extends DbHelper {
         return longestDistance;
     }
 
+    public boolean existsStravaId(long stravaId) {
+        String[] columns = {};
+        String selection = ExerciseEntry.COLUMN_STRAVA_ID + " = ?";
+        String[] selectionArgs = { Long.toString(stravaId) };
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null,
+            null);
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+
+        return exists;
+    }
+
     @NonNull
     public ArrayList<Long> getStravaIds() {
         String[] columns = { ExerciseEntry.COLUMN_STRAVA_ID };

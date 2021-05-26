@@ -119,7 +119,6 @@ public class StravaApi {
 
     public void pullActivity(final long stravaId, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast("Pulling activity...", a);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
@@ -188,7 +187,7 @@ public class StravaApi {
         }).requestAccessToken(a);
     }
 
-    private void requestActivities(final int page, ResponseListener listener) {
+    private void requestActivities(final int page, MultiResponseListener listener) {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast("Requesting activities...", a);
 
@@ -196,18 +195,26 @@ public class StravaApi {
                 response -> {
                     Log.i(LOG_TAG, "response: " + response);
 
+                    int successCount = 0;
                     int errorCount = 0;
+
                     for (int index = 0; index < response.length(); index++) {
-                        boolean success = true;
+                        boolean success;
                         try {
                             JSONObject obj = response.getJSONObject(index);
-                            success &= handleRequest(convertToExercise(obj));
+                            Exercise strava = convertToExercise(obj);
+
+                            // if stravaId already exists, continue to next; dont override
+                            if (DbReader.get(a).existsStravaId(strava.getStravaId())) continue;
+
+                            success = handleRequest(strava);
                         }
                         catch (JSONException e) {
                             success = false;
                             e.printStackTrace();
-                            LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
+                            //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                         }
+                        successCount += success ? 1 : 0;
                         errorCount += success ? 0 : 1;
                     }
 
@@ -216,7 +223,54 @@ public class StravaApi {
                         requestActivities(page + 1, listener);
                     }
 
-                    listener.onStravaResponse(errorCount == 0);
+                    listener.onStravaResponse(successCount, errorCount);
+                }, e -> listener.onStravaResponseError(e, a));
+
+            queue.add(request);
+        }).requestAccessToken(a);
+    }
+
+    private void requestNewActivities(final int page, MultiResponseListener listener) {
+        ((TokenRequester) accessToken -> {
+            LayoutUtils.toast("Requesting activities...", a);
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
+                response -> {
+                    Log.i(LOG_TAG, "response: " + response);
+
+                    int successCount = 0;
+                    int errorCount = 0;
+                    boolean loopBroken = false;
+
+                    for (int index = 0; index < response.length(); index++) {
+                        boolean success;
+                        try {
+                            JSONObject obj = response.getJSONObject(index);
+                            Exercise strava = convertToExercise(obj);
+
+                            // if stravaId already exists, we are done; all new have been requested
+                            if (DbReader.get(a).existsStravaId(strava.getStravaId())) {
+                                loopBroken = true;
+                                break;
+                            }
+
+                            success = handleRequest(strava);
+                        }
+                        catch (JSONException e) {
+                            success = false;
+                            e.printStackTrace();
+                            //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
+                        }
+                        successCount += success ? 1 : 0;
+                        errorCount += success ? 0 : 1;
+                    }
+
+                    // request next page
+                    if (!loopBroken && response.length() == PER_PAGE) {
+                        requestNewActivities(page + 1, listener);
+                    }
+
+                    listener.onStravaResponse(successCount, errorCount);
                 }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
@@ -229,14 +283,19 @@ public class StravaApi {
         requestActivity(0, listener);
     }
 
+    @Deprecated
     public void requestLastActivities(int count, ResponseListener listener) {
         for (int i = 0; i < count; i++) {
             requestActivity(i, listener);
         }
     }
 
-    public void requestAllActivities(ResponseListener listener) {
+    public void requestAllActivities(MultiResponseListener listener) {
         requestActivities(1, listener);
+    }
+
+    public void requestNewActivities(MultiResponseListener listener) {
+        requestNewActivities(1, listener);
     }
 
     // convert
@@ -306,13 +365,13 @@ public class StravaApi {
 
     private boolean handlePull(Exercise strava) {
         if (strava == null) return false;
-        boolean success = true;
+        boolean success;
 
         Exercise existing = DbReader.get(a).getExercise(strava.getStravaId());
 
         // import
         if (existing == null) {
-            success &= DbWriter.get(a).addExercise(strava, a);
+            success = DbWriter.get(a).addExercise(strava, a);
             LayoutUtils.toast("Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE), a);
             Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
         }
@@ -345,13 +404,14 @@ public class StravaApi {
                 existing.setTime(strava.getTime());
             }
             if (policy.isChecked(JSON_DESCRIPTION) && !strava.getNote().equals("")) {
+                // dont override note with nothing
                 existing.setNote(strava.getNote());
             }
             if (policy.isChecked(JSON_MAP)) {
                 existing.setTrail(strava.getTrail());
             }
 
-            success &= DbWriter.get(a).updateExercise(existing, a);
+            success = DbWriter.get(a).updateExercise(existing, a);
         }
 
         if (a instanceof ViewActivity) a.recreate();
@@ -359,6 +419,10 @@ public class StravaApi {
         return success;
     }
 
+    /**
+     * Imports requested exercise to db or potentially merges with a mathing one (same datetime).
+     * If the stravaId already exists, the exercise is ignored and does NOT override the existing one.
+     */
     private boolean handleRequest(Exercise strava) {
         if (strava == null) return false;
         boolean success = true;
@@ -398,7 +462,10 @@ public class StravaApi {
         if (a instanceof MainActivity) ((MainActivity) a).updateFragment();
 
         // also pull to get data not available to request
-        pullActivity(strava.getStravaId(), responseSuccess -> {});
+        // but only if the user wants data not available to request
+        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE)) {
+            pullActivity(strava.getStravaId(), responseSuccess -> {});
+        }
 
         return success;
     }
@@ -483,11 +550,31 @@ public class StravaApi {
         }
     }
 
+    public static void toastResponse(int successCount, int errorCount, Context c) {
+        if (successCount == 0 && errorCount == 0) {
+            LayoutUtils.toast(R.string.toast_strava_req_activities_none, c);
+        }
+        else {
+            LayoutUtils.toast(R.plurals.toast_strava_req_activities_successful, successCount, c);
+            LayoutUtils.toast(R.plurals.toast_strava_req_activities_err, errorCount, c);
+        }
+    }
+
     // interface
 
     public interface ResponseListener {
 
         void onStravaResponse(boolean success);
+
+        default void onStravaResponseError(Exception e, Context c) {
+            LayoutUtils.handleError(R.string.toast_strava_response_err, e, c);
+        }
+
+    }
+
+    public interface MultiResponseListener {
+
+        void onStravaResponse(int successCount, int errorCount);
 
         default void onStravaResponseError(Exception e, Context c) {
             LayoutUtils.handleError(R.string.toast_strava_response_err, e, c);

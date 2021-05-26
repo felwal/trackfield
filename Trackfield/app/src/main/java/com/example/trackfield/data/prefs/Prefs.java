@@ -110,7 +110,7 @@ public class Prefs {
         new SwitchItem(StravaApi.JSON_TYPE, "Type", true),
         new SwitchItem(StravaApi.JSON_DATE, "Datetime", true),
         new SwitchItem(StravaApi.JSON_MAP, "Map", true),
-        new SwitchItem(StravaApi.JSON_DEVICE, "Device (as data source)", true)
+        new SwitchItem(StravaApi.JSON_DEVICE, "Device (as data source)", false)
     );
 
     //

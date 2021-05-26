@@ -145,6 +145,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         else if (itemId == R.id.action_pull_exercise) {
             if (exercise.hasStravaId()) {
                 StravaApi strava = new StravaApi(this);
+                LayoutUtils.toast("Pulling activity...", this);
                 strava.pullActivity(exercise.getStravaId(), success -> {
                     if (success) {
                         LayoutUtils.toast(R.string.toast_strava_pull_activity_successful, this);
