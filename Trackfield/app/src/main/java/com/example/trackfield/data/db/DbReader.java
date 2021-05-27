@@ -142,7 +142,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlites(SortMode.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<Integer> types, int startIndex, int endIndex) {
+        @NonNull ArrayList<String> types, int startIndex, int endIndex) {
 
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = typeFilter("", types);
@@ -158,7 +158,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlites(SortMode.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<Integer> types) {
+        @NonNull ArrayList<String> types) {
 
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = typeFilter("", types);
@@ -201,7 +201,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlitesByRoute(int routeId, SortMode.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<Integer> types) {
+        @NonNull ArrayList<String> types) {
 
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + typeFilter(" AND", types);
@@ -230,7 +230,7 @@ public class DbReader extends DbHelper {
      */
     @NonNull
     public ArrayList<Exerlite> getExerlitesByDistance(int distance, SortMode.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<Integer> types) {
+        @NonNull ArrayList<String> types) {
 
         int minDist = MathUtils.minDistance(distance);
         int maxDist = MathUtils.maxDistance(distance);
@@ -281,7 +281,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, SortMode.Mode sortMode,
-        boolean ascending, @NonNull ArrayList<Integer> types) {
+        boolean ascending, @NonNull ArrayList<String> types) {
 
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry.COLUMN_DATE + " >= " + DateUtils.toEpochSecond(DateUtils.first(min, max)) +
@@ -562,7 +562,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<RouteItem> getRouteItems(SortMode.Mode sortMode, boolean ascending, boolean includeHidden,
-        @NonNull ArrayList<Integer> types) {
+        @NonNull ArrayList<String> types) {
 
         final String tab_e = ExerciseEntry.TABLE_NAME;
         final String tab_r = RouteEntry.TABLE_NAME;
@@ -642,7 +642,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<DistanceItem> getDistanceItems(SortMode.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<Integer> types) {
+        @NonNull ArrayList<String> types) {
 
         String tab_e = ExerciseEntry.TABLE_NAME;
         String tab_d = DistanceEntry.TABLE_NAME;
@@ -784,10 +784,27 @@ public class DbReader extends DbHelper {
         return externalIds;
     }
 
+    @NonNull
+    public ArrayList<String> getTypes() {
+        String[] columns = { ExerciseEntry.COLUMN_TYPE };
+        String groupBy = ExerciseEntry.COLUMN_TYPE;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, null, null, groupBy, null, orderBy, null);
+        ArrayList<String> types = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String type = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_TYPE));
+            types.add(type);
+        }
+        cursor.close();
+
+        return types;
+    }
+
     // streamlined graph data
 
     @Unfinished
-    public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<Integer> types, LocalDate startDate,
+    public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<String> types, LocalDate startDate,
         int nodeCount, ChronoUnit groupUnit) {
         // TODO
 
@@ -839,7 +856,7 @@ public class DbReader extends DbHelper {
         return nodes;
     }
 
-    public TreeMap<Float, Float> getPaceNodesByDistance(int distance, @NonNull ArrayList<Integer> types) {
+    public TreeMap<Float, Float> getPaceNodesByDistance(int distance, @NonNull ArrayList<String> types) {
         int minDist = MathUtils.minDistance(distance);
         int maxDist = MathUtils.maxDistance(distance);
 
@@ -877,7 +894,7 @@ public class DbReader extends DbHelper {
         return nodes;
     }
 
-    public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, @NonNull ArrayList<Integer> types) {
+    public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, @NonNull ArrayList<String> types) {
         String colPace = "pace";
 
         String[] select = { ExerciseEntry.SELECTION_PACE + " AS " + colPace };
@@ -900,7 +917,7 @@ public class DbReader extends DbHelper {
 
     // graph data
 
-    public TreeMap<Float, Float> weekDailyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> weekDailyDistance(@NonNull ArrayList<String> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfWeek(includingDate),
@@ -919,7 +936,7 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> yearMonthlyDistance(@NonNull ArrayList<Integer> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> yearMonthlyDistance(@NonNull ArrayList<String> types, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
@@ -951,7 +968,7 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> monthDailyIntegralDistance(@NonNull ArrayList<Integer> types,
+    public TreeMap<Float, Float> monthDailyIntegralDistance(@NonNull ArrayList<String> types,
         LocalDate includingDate) {
 
         TreeMap<Float, Float> points = new TreeMap<>();
@@ -981,7 +998,7 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> yearWeeklyIntegralDistance(@NonNull ArrayList<Integer> types,
+    public TreeMap<Float, Float> yearWeeklyIntegralDistance(@NonNull ArrayList<String> types,
         LocalDate includingDate) {
 
         TreeMap<Float, Float> points = new TreeMap<>();
@@ -1033,7 +1050,7 @@ public class DbReader extends DbHelper {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
             long stravaId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_STRAVA_ID));
             long garminId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_GARMIN_ID));
-            int type = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
             String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
@@ -1294,17 +1311,16 @@ public class DbReader extends DbHelper {
      * @return The SQL query selection string
      */
     @NonNull
-    private String typeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<Integer> visibleTypes) {
+    private String typeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<String> visibleTypes) {
         String filter = "";
+
         for (int i = 0; i < visibleTypes.size(); i++) {
             if (i == 0) filter += precedingKeyword + " (";
-            filter += ExerciseEntry.COLUMN_TYPE + " = " + visibleTypes.get(i);
-            if (i == visibleTypes.size() - 1) {
-                filter += ")";
-            }
-            else {
-                filter += " OR ";
-            }
+
+            filter += ExerciseEntry.COLUMN_TYPE + " = '" + visibleTypes.get(i) + "'";
+
+            if (i == visibleTypes.size() - 1) filter += ")";
+            else filter += " OR ";
         }
         return filter;
     }

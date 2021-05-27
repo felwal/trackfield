@@ -310,7 +310,7 @@ public class StravaApi {
             String name = obj.getString(JSON_NAME);
             int distance = (int) obj.getDouble(JSON_DISTANCE);
             int time = obj.getInt(JSON_TIME);
-            String stravaType = obj.getString(JSON_TYPE);
+            String type = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
             String method = Prefs.getRecordingMethod();
 
@@ -347,7 +347,6 @@ public class StravaApi {
             }
 
             // convert
-            int type = convertType(stravaType);
             int routeId = DbReader.get(a).getRouteIdOrCreate(name, a);
             LocalDateTime dateTime = LocalDateTime.parse(date, FORMATTER_STRAVA);
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
@@ -436,10 +435,10 @@ public class StravaApi {
 
         // merge
         if (matching.size() == 1) {
-            Exercise x = matching.get(0);
-            Exercise merged = new Exercise(x.getId(), strava.getStravaId(), strava.getGarminId(), x.getType(),
-                strava.getDateTime(), x.getRouteId(), x.getRoute(), x.getRouteVar(), x.getInterval(), x.getNote(),
-                x.getDataSource(), x.getRecordingMethod(), strava.getDistance(), strava.getTime(), x.getSubs(),
+            Exercise m = matching.get(0);
+            Exercise merged = new Exercise(m.getId(), strava.getStravaId(), strava.getGarminId(), m.getType(),
+                strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(), m.getNote(),
+                m.getDataSource(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(), m.getSubs(),
                 strava.getTrail());
 
             success &= DbWriter.get(a).updateExercise(merged, a);
@@ -513,42 +512,6 @@ public class StravaApi {
     }
 
     // tools
-
-    private static int convertType(String stravaType) {
-        switch (stravaType) {
-            case "Run": return Exercise.TYPE_RUN;
-            case "Walk":
-            case "Hike": return Exercise.TYPE_WALK;
-            case "Ride": return Exercise.TYPE_RIDE;
-            case "Swim":
-            case "Apline Ski":
-            case "Backcountry Ski":
-            case "Canoe":
-            case "Crossfit": return Exercise.TYPE_STRENGTH;
-            case "E-Bike Ride":
-            case "Elliptical":
-            case "Handcycle":
-            case "Ice Skate":
-            case "Inline Skate":
-            case "Kayak":
-            case "Kitesurf Session":
-            case "Nordic Ski":
-            case "Row":
-            case "Snowboard":
-            case "Snowshoe":
-            case "Stair Stepper":
-            case "Stand Up Paddle":
-            case "Surf":
-            case "Virtual Ride":
-            case "Virtual Run":
-            case "Weight Training":
-            case "Windsurf Session":
-            case "Wheelchair":
-            case "Workout":
-            case "Yoga": return Exercise.TYPE_YOGA;
-            default: return Exercise.TYPE_OTHER;
-        }
-    }
 
     public static void toastResponse(int successCount, int errorCount, Context c) {
         if (successCount == 0 && errorCount == 0) {

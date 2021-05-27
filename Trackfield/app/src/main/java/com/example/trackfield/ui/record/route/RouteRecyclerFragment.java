@@ -63,7 +63,8 @@ public class RouteRecyclerFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setRouteVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes()
+            Prefs.setRouteVisibleTypes(originId == -1
+                ? Prefs.getExerciseVisibleTypes()
                 : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }

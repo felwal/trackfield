@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
+import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.utils.LayoutUtils;
 import com.google.android.material.chip.Chip;
@@ -27,17 +28,17 @@ public class FilterDialog extends BaseDialog {
     private DialogListener listener;
 
     // arguments
-    private ArrayList<Integer> checkedTypes;
+    private ArrayList<String> checkedTypes;
 
     //
 
-    public static FilterDialog newInstance(@StringRes int titleRes, ArrayList<Integer> checkedTypes,
+    public static FilterDialog newInstance(@StringRes int titleRes, ArrayList<String> checkedTypes,
         @StringRes int posBtnTxtRes, String tag) {
 
         FilterDialog instance = new FilterDialog();
         Bundle bundle = putBundleBase(titleRes, NO_RES, posBtnTxtRes, tag);
 
-        bundle.putIntegerArrayList(BUNDLE_CHECKED_TYPES, checkedTypes);
+        bundle.putStringArrayList(BUNDLE_CHECKED_TYPES, checkedTypes);
 
         instance.setArguments(bundle);
         return instance;
@@ -64,7 +65,7 @@ public class FilterDialog extends BaseDialog {
         Bundle bundle = unpackBundleBase(TAG_DEFAULT);
 
         if (bundle != null) {
-            checkedTypes = bundle.getIntegerArrayList(BUNDLE_CHECKED_TYPES);
+            checkedTypes = bundle.getStringArrayList(BUNDLE_CHECKED_TYPES);
         }
     }
 
@@ -93,27 +94,27 @@ public class FilterDialog extends BaseDialog {
     // tools
 
     protected void setChips(ChipGroup chipGroup) {
-        for (int type = 0; type < Exercise.TYPES_PLURAL.length; type++) {
+        ArrayList<String> types = DbReader.get(a).getTypes();
+
+        for (int i = 0; i < types.size(); i++) {
             Chip chip;
-            if (type < chipGroup.getChildCount()) {
-                chip = (Chip) chipGroup.getChildAt(type);
-            }
-            else {
-                chip = (Chip) inflater.inflate(R.layout.component_chip, chipGroup, false);
-                chipGroup.addView(chip);
-            }
-            chip.setText(Exercise.TYPES_PLURAL[type]);
+            String type = types.get(i);
+
+            chip = (Chip) inflater.inflate(R.layout.component_chip, chipGroup, false);
+            chipGroup.addView(chip);
+            chip.setText(type);
+
             if (checkedTypes.contains(type)) chip.setChecked(true);
         }
     }
 
     @NonNull
-    protected ArrayList<Integer> getCheckedTypes(ChipGroup chipGroup) {
-        ArrayList<Integer> checkedTypes = new ArrayList<>();
+    protected ArrayList<String> getCheckedTypes(ChipGroup chipGroup) {
+        ArrayList<String> checkedTypes = new ArrayList<>();
 
-        for (int type = 0; type < chipGroup.getChildCount(); type++) {
-            Chip chip = (Chip) chipGroup.getChildAt(type);
-            if (chip.isChecked()) checkedTypes.add(type);
+        for (int i = 0; i < chipGroup.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            if (chip.isChecked()) checkedTypes.add(chip.getText().toString());
         }
 
         return checkedTypes;
@@ -123,7 +124,7 @@ public class FilterDialog extends BaseDialog {
 
     public interface DialogListener {
 
-        void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag);
+        void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag);
 
     }
 

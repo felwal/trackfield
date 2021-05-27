@@ -252,7 +252,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         setTvHideIfEmpty(exercise.getNote(), noteTv);
 
         idTv.setText(exercise.printId());
-        typeTv.setText(exercise.printType());
+        typeTv.setText(exercise.getType());
         setTvHideIfEmpty(exercise.getDataSource(), dataSourceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
 

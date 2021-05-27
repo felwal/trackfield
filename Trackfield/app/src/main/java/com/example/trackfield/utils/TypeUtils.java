@@ -21,6 +21,28 @@ public class TypeUtils {
         return s.length() < maxLength ? s : s.substring(0, maxLength);
     }
 
+    public static String toSentenceCase(String s) {
+        if (s == null || s.length() == 0) return "";
+
+        String first = s.substring(0, 1).toUpperCase();
+        String rest = s.substring(1);
+        return first + rest;
+    }
+
+    public static String toWordCase(String s) {
+        if (s == null || s.length() == 0) return "";
+
+        String[] words = s.split(" ");
+        String cased = "";
+
+        for (String word : words) {
+            cased += toSentenceCase(word) + " ";
+        }
+        cased.trim();
+
+        return cased;
+    }
+
     //
 
     public static boolean intToBool(int i) {
@@ -49,8 +71,8 @@ public class TypeUtils {
     }
 
     @NonNull
-    public static ArrayList<Integer> createList(int valueToAdd) {
-        ArrayList<Integer> list = new ArrayList<>();
+    public static <T> ArrayList<T> createList(T valueToAdd) {
+        ArrayList<T> list = new ArrayList<>();
         list.add(valueToAdd);
         return list;
     }

@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
         if (tag.equals(DIALOG_FILTER_EXERCISES)) {
             Prefs.setExerciseVisibleTypes(checkedTypes);
             mainFragment.updateFragment();

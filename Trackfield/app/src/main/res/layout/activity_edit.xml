@@ -84,10 +84,8 @@
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="true"
                     android:hint="@string/et_hint_edit_interval"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_route"
-                    tools:visibility="visible"
                     style="@style/EditText" />
 
                 <EditText
@@ -258,18 +256,20 @@
                     app:layout_constraintTop_toTopOf="@+id/et_edit_data_source"
                     style="@style/EditText.Small" />
 
-                <Spinner
-                    android:id="@+id/spn_edit_type"
+                <AutoCompleteTextView
+                    android:id="@+id/actv_edit_type"
                     android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:hint="@string/et_hint_edit_type"
+                    android:completionThreshold="0"
                     android:layout_marginBottom="@dimen/spacing_tiny"
+                    android:inputType="textCapWords"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/et_edit_data_source"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_edit_data_source" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_edit_data_source"
+                    style="@style/EditText.Small" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

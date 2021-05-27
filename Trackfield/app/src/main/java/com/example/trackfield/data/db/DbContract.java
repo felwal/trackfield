@@ -52,7 +52,7 @@ public final class DbContract {
             _ID + " INTEGER PRIMARY KEY," +
             COLUMN_STRAVA_ID + " INTEGER," +
             COLUMN_GARMIN_ID + " INTEGER," +
-            COLUMN_TYPE + " INTEGER," +
+            COLUMN_TYPE + " TEXT," +
             COLUMN_DATE + " INTEGER," +
             COLUMN_ROUTE_ID + " INTEGER," +
             COLUMN_ROUTE + " TEXT," +

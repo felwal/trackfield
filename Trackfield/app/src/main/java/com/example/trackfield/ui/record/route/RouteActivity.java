@@ -198,7 +198,7 @@ public class RouteActivity extends RecActivity implements TextDialog.DialogListe
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
         if (tag.equals(DIALOG_FILTER_ROUTE)) {
             Prefs.setRouteVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();

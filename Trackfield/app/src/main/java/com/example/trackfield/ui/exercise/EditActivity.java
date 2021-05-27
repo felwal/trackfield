@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ import com.example.trackfield.ui.custom.dialog.BinaryDialog;
 import com.example.trackfield.utils.AppConsts;
 import com.example.trackfield.utils.LayoutUtils;
 import com.example.trackfield.utils.MathUtils;
+import com.example.trackfield.utils.TypeUtils;
 import com.example.trackfield.utils.annotations.Unimplemented;
 
 import java.time.LocalDate;
@@ -41,8 +43,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-    BinaryDialog.DialogListener {
+public class EditActivity extends AppCompatActivity implements BinaryDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_ID = "id";
@@ -63,7 +64,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
     protected EditText dateEt;
     protected EditText timeEt;
     protected Switch drivenSw;
-    protected Spinner typeSpinner;
+    protected AutoCompleteTextView typeActv;
     @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
 
     // arguments
@@ -156,14 +157,14 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         dataSourceEt = findViewById(R.id.et_edit_data_source);
         recordingMethodEt = findViewById(R.id.et_edit_recording_method);
         drivenSw = findViewById(R.id.sw_edit_drive_distance);
-        typeSpinner = findViewById(R.id.spn_edit_type);
+        typeActv = findViewById(R.id.actv_edit_type);
 
-        // spinner
-        ArrayAdapter<String> spinnerAdapter =
-            new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Exercise.TYPES);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(spinnerAdapter);
-        typeSpinner.setOnItemSelectedListener(this);
+
+        // type adapter
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+            DbReader.get(this).getTypes());
+
+        typeActv.setAdapter(typeAdapter);
     }
 
     protected void setEditTexts() {
@@ -208,7 +209,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
         dataSourceEt.setText(exercise.getDataSource());
         recordingMethodEt.setText(exercise.getRecordingMethod());
         drivenSw.setChecked(exercise.isDistanceDriven());
-        typeSpinner.setSelection(exercise.getType());
+        typeActv.setText(exercise.getType());
 
         if (exercise.isDistanceDriven()) {
             distanceEt.setEnabled(false);
@@ -221,11 +222,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             polylineEt.setFocusable(false);
         }*/
 
-        // set or hide interval
-        if (exercise.isType(Exercise.TYPE_INTERVALS)) {
-            intervalEt.setText(exercise.getInterval());
-        }
-        else intervalEt.setVisibility(View.GONE);
     }
 
     private void setListeners() {
@@ -265,6 +261,11 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             timeEt.clearFocus();
         });
 
+        // type listener
+        typeActv.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) typeActv.showDropDown();
+        });
+        typeActv.setOnClickListener(v -> typeActv.showDropDown());
     }
 
     // get
@@ -288,7 +289,7 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             || !secondsEt.getText().toString().equals(time[0] + "")
             || !dataSourceEt.getText().toString().equals(exercise.getDataSource())
             || !recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())
-            || typeSpinner.getSelectedItemPosition() != exercise.getType()
+            || !typeActv.getText().toString().equals(exercise.getType())
             || drivenSw.isChecked() != exercise.isDistanceDriven();
     }
 
@@ -318,9 +319,9 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             float time = hours * 3600 + minutes * 60 + seconds;
             String dataSource = dataSourceEt.getText().toString();
             String recordingMethod = recordingMethodEt.getText().toString();
-            int type = typeSpinner.getSelectedItemPosition();
+            String type = TypeUtils.toWordCase(typeActv.getText().toString()).trim();
             ArrayList<Sub> subs = parseSubs();
-            String interval = type == Exercise.TYPE_INTERVALS ? intervalEt.getText().toString() : "";
+            String interval = intervalEt.getText().toString();
 
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
@@ -356,7 +357,8 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             LayoutUtils.toast(R.string.toast_err_save_empty, this);
         }
         catch (StringIndexOutOfBoundsException e) {
-            LayoutUtils.toast(R.string.toast_err_decode_polyline, this);
+            //LayoutUtils.toast(R.string.toast_err_decode_polyline, this);
+            LayoutUtils.toast(R.string.toast_err_save_empty, this);
         }
         catch (Exception e) {
             LayoutUtils.handleError(e, this);
@@ -418,20 +420,6 @@ public class EditActivity extends AppCompatActivity implements AdapterView.OnIte
             ll.removeView(subView);
             subViews.remove(subView);
         });
-    }
-
-    // implements AdapterView
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-        // type spinner adapter
-        LayoutUtils.setVisibleOrGone(intervalEt, pos == Exercise.TYPE_INTERVALS);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        // type spinner adapter
-        LayoutUtils.setVisibleOrGone(intervalEt, false);
     }
 
     // implements BinaryDialog

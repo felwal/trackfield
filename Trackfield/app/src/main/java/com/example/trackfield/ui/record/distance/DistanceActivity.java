@@ -157,7 +157,7 @@ public class DistanceActivity extends RecActivity implements BinaryDialog.Dialog
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<Integer> checkedTypes, String tag) {
+    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
         if (tag.equals(DIALOG_FILTER_DISTANCE)) {
             Prefs.setDistanceVisibleTypes(checkedTypes);
             recyclerFragment.updateRecycler();

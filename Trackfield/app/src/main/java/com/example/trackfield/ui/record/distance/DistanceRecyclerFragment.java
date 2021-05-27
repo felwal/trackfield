@@ -62,7 +62,8 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setDistanceVisibleTypes(originId == -1 ? Prefs.getExerciseVisibleTypes()
+            Prefs.setDistanceVisibleTypes(originId == -1
+                ? Prefs.getExerciseVisibleTypes()
                 : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }

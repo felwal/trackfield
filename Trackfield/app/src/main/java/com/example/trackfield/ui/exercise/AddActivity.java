@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 
-import androidx.appcompat.app.ActionBar;
-
 import com.example.trackfield.R;
 import com.example.trackfield.utils.AppConsts;
 
@@ -54,7 +52,7 @@ public class AddActivity extends EditActivity {
             || !secondsEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
             || !dataSourceEt.getText().toString().equals("")
             || !recordingMethodEt.getText().toString().equals("")
-            || typeSpinner.getSelectedItemPosition() != 0
+            || !typeActv.getText().toString().equals("")
             || drivenSw.isChecked();
     }
 

@@ -26,21 +26,6 @@ import java.util.ArrayList;
 
 public class Exercise implements JSONObjectable {
 
-    public static final String[] TYPES = { "Run", "Intervals", "Walk", "Track and field", "Ride", "Other",
-        "Strength", "Dance", "Yoga" };
-    public static final String[] TYPES_PLURAL = { "Runs", "Intervals", "Walks", "Track and field", "Rides", "Other",
-        "Strength", "Dances", "Yoga" };
-
-    public static final int TYPE_RUN = 0;
-    public static final int TYPE_INTERVALS = 1;
-    public static final int TYPE_WALK = 2;
-    public static final int TYPE_TRACK = 3;
-    public static final int TYPE_RIDE = 4;
-    public static final int TYPE_OTHER = 5;
-    public static final int TYPE_STRENGTH = 6;
-    public static final int TYPE_DANCE = 7;
-    public static final int TYPE_YOGA = 8;
-
     public static final int DISTANCE_DRIVEN = -1;
     public static final int NO_ID = -1;
     public static final int UNRELEVANT_ID = -2;
@@ -70,7 +55,7 @@ public class Exercise implements JSONObjectable {
     private final int id;
     private long stravaId;
     private long garminId;
-    private int type;
+    private String type;
     private LocalDateTime dateTime;
     private int routeId;
     private String route;
@@ -87,9 +72,9 @@ public class Exercise implements JSONObjectable {
 
     //
 
-    public Exercise(int id, long stravaId, long garminId, int type, LocalDateTime dateTime, int routeId, String route,
-        String routeVar, String interval, String note, String dataSource, String recordingMethod, int distance,
-        float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
+    public Exercise(int id, long stravaId, long garminId, String type, LocalDateTime dateTime, int routeId,
+        String route, String routeVar, String interval, String note, String dataSource, String recordingMethod,
+        int distance, float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
 
         this.id = id;
         this.stravaId = stravaId;
@@ -113,7 +98,7 @@ public class Exercise implements JSONObjectable {
         id = obj.getInt(JSON_ID);
         stravaId = obj.getLong(JSON_STRAVA_ID);
         garminId = obj.getLong(JSON_GARMIN_ID);
-        type = obj.getInt(JSON_TYPE);
+        type = obj.getString(JSON_TYPE);
         dateTime = DateUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
         route = DbReader.get(c).getRouteName(routeId);
@@ -160,7 +145,7 @@ public class Exercise implements JSONObjectable {
         this.garminId = garminId;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -237,7 +222,7 @@ public class Exercise implements JSONObjectable {
         return garminId;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
@@ -316,8 +301,8 @@ public class Exercise implements JSONObjectable {
         return garminId != NO_ID && garminId != UNRELEVANT_ID;
     }
 
-    public boolean isType(int type) {
-        return this.type == type;
+    public boolean isType(String type) {
+        return this.type.equals(type);
     }
 
     public long getEpoch() {
@@ -424,10 +409,6 @@ public class Exercise implements JSONObjectable {
         return stravaId == -1 ? "" : "@" + stravaId;
     }
 
-    public String printType() {
-        return TYPES[type];
-    }
-
     public String printDistance(boolean unitlessKm, Context c) {
         int distance = getEffectiveDistance(c);
 
@@ -494,7 +475,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_ID, id);
             obj.put(JSON_STRAVA_ID, stravaId);
             obj.put(JSON_GARMIN_ID, garminId);
-            obj.put(JSON_TYPE, type);
+            obj.put(JSON_TYPE, getType());
             obj.put(JSON_EPOCH, getEpoch());
             obj.put(JSON_ROUTE_ID, routeId);
             obj.put(JSON_ROUTEVAR, routeVar);

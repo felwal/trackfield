@@ -47,6 +47,7 @@
     <string name="et_hint_edit_seconds">ss</string>
     <string name="et_hint_edit_datasource">Data source</string>
     <string name="et_hint_edit_recordingmethod">Recording method</string>
+    <string name="et_hint_edit_type">Type</string>
 
     <!-- text views -->
 

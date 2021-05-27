@@ -35,7 +35,7 @@
         <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
         <item name="panelBackground">@color/colorGrey2</item>
 
-        <!-- ta bort -->
+        <!-- TODO: remove (?) -->
         <item name="colorOnSurface">@color/colorGrey7</item>
         <item name="colorOnBackground">@color/colorGrey5</item>
         <item name="strokeColor">@color/colorGrey4</item>
@@ -48,7 +48,8 @@
         <!-- other items -->
         <item name="textAllCaps">false</item>
         <item name="android:windowLightStatusBar">false</item>
-        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
+        <!-- make actv window appear above keyboard -->
+        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
         <!-- styles -->
         <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme.Dark</item>
@@ -82,7 +83,8 @@
         <item name="strokeColor">@color/colorGrey8</item>
         <item name="panelBackground">@color/colorGrey9</item>
 
-        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
+        <!-- make actv window appear above keyboard -->
+        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
         <!-- styles -->
         <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme.Light</item>

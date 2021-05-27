@@ -87,9 +87,9 @@ public class Prefs {
     @Unfinished private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
-    @NonNull private static ArrayList<Integer> exerciseVisibleTypes = new ArrayList<>();
-    @NonNull private static ArrayList<Integer> routeVisibleTypes = new ArrayList<>();
-    @NonNull private static ArrayList<Integer> distanceVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> exerciseVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> routeVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> distanceVisibleTypes = new ArrayList<>();
 
     // sorting (using AppConsts.Layout.ordinal() as index)
     private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0 };
@@ -177,7 +177,7 @@ public class Prefs {
         TypeToken<Boolean> bool = new TypeToken<Boolean>(){};
         TypeToken<String> str = new TypeToken<String>(){};
         TypeToken<Integer> in = new TypeToken<Integer>(){};
-        TypeToken<ArrayList<Integer>> intList = new TypeToken<ArrayList<Integer>>(){};
+        TypeToken<ArrayList<String>> strList = new TypeToken<ArrayList<String>>(){};
         TypeToken<boolean[]> boolArr = new TypeToken<boolean[]>(){};
 
         // version
@@ -211,9 +211,9 @@ public class Prefs {
         includeLonger = loadPref(bool, KEY_INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, KEY_LIMIT_LOWER);
         distanceUpperLimit = loadPref(in, KEY_LIMIT_UPPER);
-        exerciseVisibleTypes = loadPref(intList, KEY_TYPES_EXERCISE);
-        routeVisibleTypes = loadPref(intList, KEY_TYPES_ROUTE);
-        distanceVisibleTypes = loadPref(intList, KEY_TYPES_DISTANCE);
+        exerciseVisibleTypes = loadPref(strList, KEY_TYPES_EXERCISE);
+        routeVisibleTypes = loadPref(strList, KEY_TYPES_ROUTE);
+        distanceVisibleTypes = loadPref(strList, KEY_TYPES_DISTANCE);
 
         // sorting
         sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, KEY_SORT_SELECTED_INDICES);
@@ -346,17 +346,17 @@ public class Prefs {
         savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
     }
 
-    public static void setExerciseVisibleTypes(@NonNull ArrayList<Integer> types) {
+    public static void setExerciseVisibleTypes(@NonNull ArrayList<String> types) {
         exerciseVisibleTypes = types;
         savePref(types, KEY_TYPES_EXERCISE);
     }
 
-    public static void setRouteVisibleTypes(@NonNull ArrayList<Integer> types) {
+    public static void setRouteVisibleTypes(@NonNull ArrayList<String> types) {
         routeVisibleTypes = types;
         savePref(types, KEY_TYPES_ROUTE);
     }
 
-    public static void setDistanceVisibleTypes(@NonNull ArrayList<Integer> types) {
+    public static void setDistanceVisibleTypes(@NonNull ArrayList<String> types) {
         distanceVisibleTypes = types;
         savePref(types, KEY_TYPES_DISTANCE);
     }
@@ -462,17 +462,17 @@ public class Prefs {
     }
 
     @NonNull
-    public static ArrayList<Integer> getExerciseVisibleTypes() {
+    public static ArrayList<String> getExerciseVisibleTypes() {
         return exerciseVisibleTypes;
     }
 
     @NonNull
-    public static ArrayList<Integer> getRouteVisibleTypes() {
+    public static ArrayList<String> getRouteVisibleTypes() {
         return routeVisibleTypes;
     }
 
     @NonNull
-    public static ArrayList<Integer> getDistanceVisibleTypes() {
+    public static ArrayList<String> getDistanceVisibleTypes() {
         return distanceVisibleTypes;
     }
 

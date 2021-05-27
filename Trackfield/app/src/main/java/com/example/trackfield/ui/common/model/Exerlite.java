@@ -156,8 +156,9 @@ public class Exerlite extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Exerlite)) return false;
         Exerlite other = (Exerlite) item;
-        return other.hasId(id) && date.isEqual(other.getDate()) && route.equals(other.getRoute()) && distance == other.getDistance()
-            && time == other.getTime() && other.isTop(top);
+        return other.hasId(id) && date.isEqual(other.getDate()) && interval.equals(other.interval)
+            && route.equals(other.getRoute()) && distance == other.getDistance() && time == other.getTime()
+            && other.isTop(top);
     }
 
 }
