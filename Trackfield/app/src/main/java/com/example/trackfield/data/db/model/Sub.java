@@ -23,8 +23,8 @@ public class Sub {
 
     // set
 
-    public void setSuperId(int _superId) {
-        this.superId = _superId;
+    public void setSuperId(int superId) {
+        this.superId = superId;
     }
 
     public void setDistance(int distance) {

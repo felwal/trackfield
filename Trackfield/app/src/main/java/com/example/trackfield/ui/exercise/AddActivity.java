@@ -41,8 +41,8 @@ public class AddActivity extends EditActivity {
     protected boolean haveEditsBeenMade() {
         Resources res = getResources();
 
-        return !routeEt.getText().toString().equals(res.getString(R.string.et_text_edit_route))
-            || !routeVarEt.getText().toString().equals("")
+        return !routeActv.getText().toString().equals(res.getString(R.string.et_text_edit_route))
+            || !routeVarActv.getText().toString().equals("")
             || !dateEt.getText().toString().equals(creationDate)
             || !timeEt.getText().toString().equals(creationTime)
             || !noteEt.getText().toString().equals("")
@@ -50,8 +50,8 @@ public class AddActivity extends EditActivity {
             || !hoursEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
             || !minutesEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
             || !secondsEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
-            || !deviceEt.getText().toString().equals("")
-            || !recordingMethodEt.getText().toString().equals("")
+            || !deviceActv.getText().toString().equals("")
+            || !recordingMethodActv.getText().toString().equals("")
             || !typeActv.getText().toString().equals("")
             || drivenSw.isChecked();
     }

@@ -78,7 +78,7 @@ public class TextDialog extends BaseDialog {
 
         builder.setView(dialogView).setTitle(title)
             .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
-                String input = et.getText().toString();
+                String input = et.getText().toString().trim();
                 listener.onTextDialogPositiveClick(input, tag);
             })
             .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());

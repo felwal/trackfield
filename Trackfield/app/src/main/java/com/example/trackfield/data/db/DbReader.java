@@ -771,6 +771,8 @@ public class DbReader extends DbHelper {
         return exists;
     }
 
+    // get single
+
     @NonNull
     public ArrayList<Long> getStravaIds() {
         String[] columns = { ExerciseEntry.COLUMN_STRAVA_ID };
@@ -791,10 +793,12 @@ public class DbReader extends DbHelper {
     @NonNull
     public ArrayList<String> getTypes() {
         String[] columns = { ExerciseEntry.COLUMN_TYPE };
+        String selection = ExerciseEntry.COLUMN_TYPE + " != ''";
         String groupBy = ExerciseEntry.COLUMN_TYPE;
         String orderBy = "count() DESC";
 
-        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, null, null, groupBy, null, orderBy, null);
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy,
+            null);
         ArrayList<String> types = new ArrayList<>();
         while (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_TYPE));
@@ -803,6 +807,99 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return types;
+    }
+
+    @NonNull
+    public ArrayList<String> getRouteNames() {
+        String[] columns = { ExerciseEntry.COLUMN_ROUTE };
+        String groupBy = ExerciseEntry.COLUMN_ROUTE;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, null, null, groupBy, null, orderBy, null);
+        ArrayList<String> routes = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String route = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_ROUTE));
+            routes.add(route);
+        }
+        cursor.close();
+
+        return routes;
+    }
+
+    @NonNull
+    public ArrayList<String> getRouteVariations(int routeId) {
+        String[] columns = { ExerciseEntry.COLUMN_ROUTE_VAR };
+        String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId
+            + " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " != ''";
+        String groupBy = ExerciseEntry.COLUMN_ROUTE_VAR;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy, null);
+        ArrayList<String> routeVars = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String routeVar = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_ROUTE_VAR));
+            routeVars.add(routeVar);
+        }
+        cursor.close();
+
+        return routeVars;
+    }
+
+    @NonNull
+    public ArrayList<String> getIntervals() {
+        String[] columns = { ExerciseEntry.COLUMN_INTERVAL };
+        String selection = ExerciseEntry.COLUMN_INTERVAL + " != ''";
+        String groupBy = ExerciseEntry.COLUMN_INTERVAL;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy,
+            null);
+        ArrayList<String> intervals = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String interval = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_INTERVAL));
+            intervals.add(interval);
+        }
+        cursor.close();
+
+        return intervals;
+    }
+
+    @NonNull
+    public ArrayList<String> getDevices() {
+        String[] columns = { ExerciseEntry.COLUMN_DEVICE };
+        String groupBy = ExerciseEntry.COLUMN_DEVICE;
+        String selection = ExerciseEntry.COLUMN_DEVICE + " != ''";
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy,
+            null);
+        ArrayList<String> devices = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String device = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DEVICE));
+            devices.add(device);
+        }
+        cursor.close();
+
+        return devices;
+    }
+
+    @NonNull
+    public ArrayList<String> getMethods() {
+        String[] columns = { ExerciseEntry.COLUMN_RECORDING_METHOD };
+        String selection = ExerciseEntry.COLUMN_RECORDING_METHOD + " != ''";
+        String groupBy = ExerciseEntry.COLUMN_RECORDING_METHOD;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy,
+            null);
+        ArrayList<String> methods = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String method = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_RECORDING_METHOD));
+            methods.add(method);
+        }
+        cursor.close();
+
+        return methods;
     }
 
     // streamlined graph data

@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.Exercise;
+import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
@@ -40,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EditActivity extends AppCompatActivity implements BinaryDialog.DialogListener {
 
@@ -49,16 +51,16 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
     // dialog tags
     private static final String DIALOG_DISCARD = "discardDialog";
 
-    protected EditText routeEt;
-    protected EditText routeVarEt;
-    protected EditText intervalEt;
+    protected AutoCompleteTextView routeActv;
+    protected AutoCompleteTextView routeVarActv;
+    protected AutoCompleteTextView intervalActv;
     protected EditText noteEt;
     protected EditText distanceEt;
     protected EditText hoursEt;
     protected EditText minutesEt;
     protected EditText secondsEt;
-    protected EditText deviceEt;
-    protected EditText recordingMethodEt;
+    protected AutoCompleteTextView deviceActv;
+    protected AutoCompleteTextView recordingMethodActv;
     protected EditText dateEt;
     protected EditText timeEt;
     protected Switch drivenSw;
@@ -141,9 +143,9 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
 
     private void findEditTexts() {
         // edittexts
-        routeEt = findViewById(R.id.et_route);
-        routeVarEt = findViewById(R.id.et_routeVar);
-        intervalEt = findViewById(R.id.et_interval);
+        routeActv = findViewById(R.id.et_route);
+        routeVarActv = findViewById(R.id.et_routeVar);
+        intervalActv = findViewById(R.id.et_interval);
         dateEt = findViewById(R.id.et_date);
         timeEt = findViewById(R.id.et_time);
         noteEt = findViewById(R.id.et_note);
@@ -152,17 +154,17 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         minutesEt = findViewById(R.id.et_edit_minutes);
         secondsEt = findViewById(R.id.et_edit_seconds);
         //polylineEt = findViewById(R.id.editText_polyline);
-        deviceEt = findViewById(R.id.et_edit_device);
-        recordingMethodEt = findViewById(R.id.et_edit_recording_method);
+        deviceActv = findViewById(R.id.et_edit_device);
+        recordingMethodActv = findViewById(R.id.et_edit_recording_method);
         drivenSw = findViewById(R.id.sw_edit_drive_distance);
         typeActv = findViewById(R.id.actv_edit_type);
 
-
-        // type adapter
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-            DbReader.get(this).getTypes());
-
-        typeActv.setAdapter(typeAdapter);
+        // actv adapters
+        setAdapter(typeActv, DbReader.get(this).getTypes());
+        setAdapter(routeActv, DbReader.get(this).getRouteNames());
+        setAdapter(intervalActv, DbReader.get(this).getIntervals());
+        setAdapter(deviceActv, DbReader.get(this).getDevices());
+        setAdapter(recordingMethodActv, DbReader.get(this).getMethods());
     }
 
     protected void setEditTexts() {
@@ -195,8 +197,8 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         float[] time = MathUtils.getTimeParts(exercise.getTime());
 
         // set texts
-        routeEt.setText(exercise.getRoute());
-        routeVarEt.setText(exercise.getRouteVar());
+        routeActv.setText(exercise.getRoute());
+        routeVarActv.setText(exercise.getRouteVar());
         dateEt.setText(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE));
         timeEt.setText(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME));
         noteEt.setText(exercise.getNote());
@@ -204,8 +206,8 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         hoursEt.setText((int) time[2] + "");
         minutesEt.setText((int) time[1] + "");
         secondsEt.setText(time[0] + "");
-        deviceEt.setText(exercise.getDevice());
-        recordingMethodEt.setText(exercise.getRecordingMethod());
+        deviceActv.setText(exercise.getDevice());
+        recordingMethodActv.setText(exercise.getRecordingMethod());
         drivenSw.setChecked(exercise.isDistanceDriven());
         typeActv.setText(exercise.getType());
 
@@ -223,7 +225,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     private void setListeners() {
-        // distance driven listener
+        // distance checked driven listener
         drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             distanceEt.setEnabled(!isChecked);
             distanceEt.setTextColor(LayoutUtils.getColorInt(isChecked
@@ -232,7 +234,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
                 this));
         });
 
-        // date listener
+        // date focus listener
         dateEt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) return;
             LocalDate dateSelect = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
@@ -246,7 +248,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             dateEt.clearFocus();
         });
 
-        // time listener
+        // time focus listener
         timeEt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) return;
             LocalTime timeSelect = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
@@ -259,11 +261,22 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             timeEt.clearFocus();
         });
 
-        // type listener
-        typeActv.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) typeActv.showDropDown();
+        // route focus listener
+        routeActv.setOnFocusChangeListener((v, hasFocus) -> {
+            // update dropdown depending on typed route
+            if (!hasFocus) {
+                String route = routeActv.getText().toString();
+                int routeId = DbReader.get(this).getRouteId(route);
+
+                setAdapter(routeVarActv, DbReader.get(this).getRouteVariations(routeId));
+            }
         });
-        typeActv.setOnClickListener(v -> typeActv.showDropDown());
+
+        // focus & click listeners
+        addDropDownListener(typeActv);
+        addDropDownListener(routeVarActv);;
+        addDropDownListener(deviceActv);
+        addDropDownListener(recordingMethodActv);
     }
 
     // get
@@ -276,8 +289,8 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
     protected boolean haveEditsBeenMade() {
         float[] time = MathUtils.getTimeParts(exercise.getTime());
 
-        return !routeEt.getText().toString().equals(exercise.getRoute())
-            || !routeVarEt.getText().toString().equals(exercise.getRouteVar())
+        return !routeActv.getText().toString().equals(exercise.getRoute())
+            || !routeVarActv.getText().toString().equals(exercise.getRouteVar())
             || !dateEt.getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))
             || !timeEt.getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))
             || !noteEt.getText().toString().equals(exercise.getNote())
@@ -285,8 +298,8 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             || !hoursEt.getText().toString().equals((int) time[2] + "")
             || !minutesEt.getText().toString().equals((int) time[1] + "")
             || !secondsEt.getText().toString().equals(time[0] + "")
-            || !deviceEt.getText().toString().equals(exercise.getDevice())
-            || !recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())
+            || !deviceActv.getText().toString().equals(exercise.getDevice())
+            || !recordingMethodActv.getText().toString().equals(exercise.getRecordingMethod())
             || !typeActv.getText().toString().equals(exercise.getType())
             || drivenSw.isChecked() != exercise.isDistanceDriven();
     }
@@ -299,27 +312,42 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             .show(getSupportFragmentManager());
     }
 
+    private void setAdapter(AutoCompleteTextView actv, List<String> dropDownList) {
+        ArrayAdapter<String> actvAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dropDownList);
+        actv.setAdapter(actvAdapter);
+    }
+
+    /**
+     * Make an {@link AutoCompleteTextView} show its dropdown on focus and click
+     */
+    private void addDropDownListener(AutoCompleteTextView actv) {
+        actv.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) actv.showDropDown();
+        });
+        actv.setOnClickListener(v -> actv.showDropDown());
+    }
+
     // parse
 
     private void parseAndSave() {
         try {
             // parse
-            String route = routeEt.getText().toString();
-            String routeVar = routeVarEt.getText().toString();
+            String route = routeActv.getText().toString().trim();
+            String routeVar = routeVarActv.getText().toString().trim();
             LocalDate date = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
             LocalTime localTime = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
-            String note = noteEt.getText().toString();
+            String note = noteEt.getText().toString().trim();
             int distance = !drivenSw.isChecked() ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000)
                 : Exercise.DISTANCE_DRIVEN;
             int hours = Integer.parseInt(hoursEt.getText().toString());
             int minutes = Integer.parseInt(minutesEt.getText().toString());
             float seconds = Float.parseFloat(secondsEt.getText().toString());
             float time = hours * 3600 + minutes * 60 + seconds;
-            String dataSource = deviceEt.getText().toString();
-            String recordingMethod = recordingMethodEt.getText().toString();
+            String dataSource = deviceActv.getText().toString().trim();
+            String recordingMethod = recordingMethodActv.getText().toString().trim();
             String type = TypeUtils.toWordCase(typeActv.getText().toString()).trim();
             ArrayList<Sub> subs = parseSubs();
-            String interval = intervalEt.getText().toString();
+            String interval = intervalActv.getText().toString().trim();
 
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
@@ -381,9 +409,9 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             int minutes = Integer.parseInt(sMinutesEt.getText().toString());
             float seconds = Float.parseFloat(sSecondsEt.getText().toString());
             float time = hours * 3600 + minutes * 60 + seconds;
-            int _subId = (exercise != null && i < exercise.subCount()) ? exercise.getSub(i).getId() : -1;
+            int subId = (exercise != null && i < exercise.subCount()) ? exercise.getSub(i).getId() : -1;
 
-            subs.add(new Sub(_subId, exerciseId, distance, time));
+            subs.add(new Sub(subId, exerciseId, distance, time));
         }
 
         // delete

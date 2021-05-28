@@ -33,24 +33,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_route"
                     android:layout_width="180dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_route"
+                    android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
-                    android:text="@string/et_text_edit_route"
                     android:windowSoftInputMode="stateHidden"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/et_text_edit_route"
                     style="@style/EditText" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_routeVar"
                     android:layout_width="0dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_routevar"
+                    android:completionThreshold="0"
                     android:inputType="textPersonName"
                     app:layout_constraintBottom_toBottomOf="@+id/et_route"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,13 +79,14 @@
                     app:layout_constraintTop_toTopOf="@+id/et_date"
                     style="@style/EditText" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_interval"
                     android:layout_width="180dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="true"
                     android:hint="@string/et_hint_edit_interval"
+                    android:completionThreshold="0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_route"
                     style="@style/EditText" />
@@ -231,24 +234,26 @@
                     tools:visibility="invisible"
                     style="@style/Divider" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_edit_device"
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_device"
+                    android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/et_edit_recording_method"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/v_edit_divider2"
                     style="@style/EditText.Small" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_edit_recording_method"
                     android:layout_width="0dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_edit_recordingmethod"
+                    android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
                     app:layout_constraintEnd_toEndOf="parent"

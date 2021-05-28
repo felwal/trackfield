@@ -21,7 +21,7 @@ public final class DbContract {
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_ROUTE_ID = "route_id";
-        public static final String COLUMN_ROUTE = "route";
+        @Deprecated public static final String COLUMN_ROUTE = "route";
         public static final String COLUMN_ROUTE_VAR = "route_var";
         public static final String COLUMN_INTERVAL = "interval";
         public static final String COLUMN_NOTE = "note";
