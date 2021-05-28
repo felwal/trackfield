@@ -42,7 +42,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_EFFECTIVE_DISTANCE = "effective_distance";
     private static final String JSON_TIME = "time";
-    private static final String JSON_DATA_SOURCE = "data_source";
+    private static final String JSON_DEVICE = "device";
     private static final String JSON_RECORDING_METHOD = "recording_method";
     private static final String JSON_NOTE = "note";
     private static final String JSON_START_LATLNG = "start_latlng";
@@ -62,7 +62,7 @@ public class Exercise implements JSONObjectable {
     private String routeVar;
     private String interval;
     private String note;
-    private String dataSource;
+    private String device;
     private String recordingMethod;
     private int distance;
     private float time;
@@ -73,7 +73,7 @@ public class Exercise implements JSONObjectable {
     //
 
     public Exercise(int id, long stravaId, long garminId, String type, LocalDateTime dateTime, int routeId,
-        String route, String routeVar, String interval, String note, String dataSource, String recordingMethod,
+        String route, String routeVar, String interval, String note, String device, String recordingMethod,
         int distance, float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
 
         this.id = id;
@@ -86,7 +86,7 @@ public class Exercise implements JSONObjectable {
         this.routeVar = routeVar;
         this.interval = interval;
         this.note = note;
-        this.dataSource = dataSource;
+        this.device = device;
         this.recordingMethod = recordingMethod;
         this.distance = distance;
         this.time = time;
@@ -106,7 +106,7 @@ public class Exercise implements JSONObjectable {
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
         time = (float) obj.getDouble(JSON_TIME);
-        dataSource = obj.getString(JSON_DATA_SOURCE);
+        device = obj.getString(JSON_DEVICE);
         recordingMethod = obj.getString(JSON_RECORDING_METHOD);
         note = obj.getString(JSON_NOTE);
         trailHidden = obj.getBoolean(JSON_HIDE_TRAIL);
@@ -118,11 +118,11 @@ public class Exercise implements JSONObjectable {
 
             // start & end
             if (obj.has(JSON_START_LATLNG) && obj.has(JSON_END_LATLNG)) {
-                JSONArray start_latlng = obj.getJSONArray(JSON_START_LATLNG);
-                JSONArray end_latlng = obj.getJSONArray(JSON_END_LATLNG);
+                JSONArray startLatlng = obj.getJSONArray(JSON_START_LATLNG);
+                JSONArray endLatlng = obj.getJSONArray(JSON_END_LATLNG);
 
-                LatLng start = new LatLng(start_latlng.getDouble(0), start_latlng.getDouble(1));
-                LatLng end = new LatLng(end_latlng.getDouble(0), end_latlng.getDouble(1));
+                LatLng start = new LatLng(startLatlng.getDouble(0), startLatlng.getDouble(1));
+                LatLng end = new LatLng(endLatlng.getDouble(0), endLatlng.getDouble(1));
 
                 trail = new Trail(polyline, start, end);
             }
@@ -131,7 +131,7 @@ public class Exercise implements JSONObjectable {
             }
         }
 
-        // TODO
+        // TODO: subs
         subs = new ArrayList<>();
     }
 
@@ -173,8 +173,8 @@ public class Exercise implements JSONObjectable {
         this.note = note;
     }
 
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
+    public void setDevice(String device) {
+        this.device = device;
     }
 
     public void setRecordingMethod(String recordingMethod) {
@@ -254,8 +254,8 @@ public class Exercise implements JSONObjectable {
         return note;
     }
 
-    public String getDataSource() {
-        return dataSource;
+    public String getDevice() {
+        return device;
     }
 
     public String getRecordingMethod() {
@@ -483,7 +483,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_DISTANCE, distance);
             obj.put(JSON_EFFECTIVE_DISTANCE, getEffectiveDistance(c));
             obj.put(JSON_TIME, time);
-            obj.put(JSON_DATA_SOURCE, dataSource);
+            obj.put(JSON_DEVICE, device);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);
             obj.put(JSON_NOTE, note);
             obj.put(JSON_HIDE_TRAIL, trailHidden);

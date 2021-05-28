@@ -21,6 +21,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     SwitchDialog.DialogListener {
 
     // dialog tags
+    private static final String DIALOG_DEVICE = "deviceDialog";
     private static final String DIALOG_RECORDING_METHOD = "methodDialog";
     private static final String DIALOG_REQUEST_ALL = "requestAllDialog";
     private static final String DIALOG_PULL_ALL = "pullAllDialog";
@@ -87,9 +88,14 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
 
         inflateHeader("Request options");
 
-        inflateDialogItem("Recording method", Prefs.getRecordingMethod(), false,
+        inflateDialogItem("Device", Prefs.getDefaultDevice(), false,
+            TextDialog.newInstance(R.string.dialog_title_device,
+                R.string.dialog_msg_device, Prefs.getDefaultDevice(),
+                "Samsung Galaxy S2, S3 etc...", R.string.dialog_btn_set, DIALOG_DEVICE));
+
+        inflateDialogItem("Recording method", Prefs.getDefaultRecordingMethod(), false,
             TextDialog.newInstance(R.string.dialog_title_recording_method,
-                R.string.dialog_msg_recording_method, Prefs.getRecordingMethod(),
+                R.string.dialog_msg_recording_method, Prefs.getDefaultRecordingMethod(),
                 "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
 
         inflateDialogItem("Pull policy", "", true,
@@ -101,8 +107,12 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
 
     @Override
     public void onTextDialogPositiveClick(String input, String tag) {
+        if (tag.equals(DIALOG_DEVICE)) {
+            Prefs.setDefaultDevice(input);
+            reflateViews();
+        }
         if (tag.equals(DIALOG_RECORDING_METHOD)) {
-            Prefs.setRecordingMethod(input);
+            Prefs.setDefaultRecordingMethod(input);
             reflateViews();
         }
     }

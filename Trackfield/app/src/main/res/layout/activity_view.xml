@@ -321,12 +321,12 @@
                     style="@style/TextView.Caption" />
 
                 <TextView
-                    android:id="@+id/tv_view_data_source"
+                    android:id="@+id/tv_view_device"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_type"
-                    tools:text="Data source"
+                    tools:text="Device"
                     style="@style/TextView.Caption" />
 
                 <TextView
@@ -334,7 +334,7 @@
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_view_data_source"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_view_device"
                     tools:text="Recording method"
                     style="@style/TextView.Caption" />
 

@@ -171,6 +171,9 @@ public class DbReader extends DbHelper {
         return exerlites;
     }
 
+    /**
+     * Note: when updating this, also update {@link com.example.trackfield.R.string#tv_text_empty_search_msg}
+     */
     @NonNull
     public ArrayList<Exerlite> getExerlitesBySearch(String search, SortMode.Mode sortMode, boolean ascending) {
         if (search.equals("")) {
@@ -179,17 +182,18 @@ public class DbReader extends DbHelper {
 
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
         String selection =
-            "(" + ExerciseEntry._ID + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_DATE + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_ROUTE + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_DATA_SOURCE + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_NOTE + " LIKE" + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_TYPE + " LIKE" + "'%" + search + "%')" +
+            "('#' || " + ExerciseEntry._ID + " = '" + search + "' OR " +
+                ExerciseEntry.COLUMN_DATE + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_ROUTE + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_DEVICE + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_NOTE + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_TYPE + " LIKE " + "'%" + search + "%')" +
                 typeFilter(" AND", Prefs.getExerciseVisibleTypes());
-
         String orderBy = orderBy(sortMode, ascending);
+
+        Log.i(LOG_TAG, "search selection: " + selection);
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, orderBy,
             null);
@@ -1056,7 +1060,7 @@ public class DbReader extends DbHelper {
             String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_NOTE));
-            String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATA_SOURCE));
+            String dataSource = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DEVICE));
             String recordingMethod = cursor.getString(cursor.getColumnIndexOrThrow(
                 ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));

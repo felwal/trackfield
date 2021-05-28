@@ -433,7 +433,7 @@ public class DbWriter extends DbHelper {
         cv.put(ExerciseEntry.COLUMN_ROUTE_VAR, e.getRouteVar());
         cv.put(ExerciseEntry.COLUMN_INTERVAL, e.getInterval());
         cv.put(ExerciseEntry.COLUMN_NOTE, e.getNote());
-        cv.put(ExerciseEntry.COLUMN_DATA_SOURCE, e.getDataSource());
+        cv.put(ExerciseEntry.COLUMN_DEVICE, e.getDevice());
         cv.put(ExerciseEntry.COLUMN_RECORDING_METHOD, e.getRecordingMethod());
         cv.put(ExerciseEntry.COLUMN_DISTANCE, e.getDistance());
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, e.getEffectiveDistance(c));

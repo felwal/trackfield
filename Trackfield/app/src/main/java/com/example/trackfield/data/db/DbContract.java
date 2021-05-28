@@ -25,7 +25,7 @@ public final class DbContract {
         public static final String COLUMN_ROUTE_VAR = "route_var";
         public static final String COLUMN_INTERVAL = "interval";
         public static final String COLUMN_NOTE = "note";
-        public static final String COLUMN_DATA_SOURCE = "data_source";
+        public static final String COLUMN_DEVICE = "device";
         public static final String COLUMN_RECORDING_METHOD = "recording_method";
         public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_EFFECTIVE_DISTANCE = "effective_distance";
@@ -59,7 +59,7 @@ public final class DbContract {
             COLUMN_ROUTE_VAR + " TEXT," +
             COLUMN_INTERVAL + " TEXT," +
             COLUMN_NOTE + " TEXT," +
-            COLUMN_DATA_SOURCE + " TEXT," +
+            COLUMN_DEVICE + " TEXT," +
             COLUMN_RECORDING_METHOD + " TEXT," +
             COLUMN_DISTANCE + " INTEGER," +
             COLUMN_EFFECTIVE_DISTANCE + " INTEGER," +

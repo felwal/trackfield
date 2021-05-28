@@ -46,6 +46,7 @@ public final class DateUtils {
     }
 
     public static long toEpochSecond(LocalDateTime dateTime) {
+        // = Unix
         return dateTime.atZone(ZoneId.of("UTC")).toEpochSecond();
     }
 

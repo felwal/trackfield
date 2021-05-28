@@ -312,7 +312,6 @@ public class StravaApi {
             int time = obj.getInt(JSON_TIME);
             String type = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
-            String method = Prefs.getRecordingMethod();
 
             // external id
             String externalId;
@@ -328,7 +327,10 @@ public class StravaApi {
 
             // only available in pull
             String description = obj.has(JSON_DESCRIPTION) ? obj.getString(JSON_DESCRIPTION) : "";
-            String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : "";
+            String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : Prefs.getDefaultDevice();
+
+            // never available; use default
+            String method = Prefs.getDefaultRecordingMethod();
 
             // trail
             String polyline = null;
@@ -394,7 +396,7 @@ public class StravaApi {
                 existing.setDateTime(strava.getDateTime());
             }
             if (policy.isChecked(JSON_DEVICE)) {
-                existing.setDataSource(strava.getDataSource());
+                existing.setDevice(strava.getDevice());
             }
             if (policy.isChecked(JSON_DISTANCE)) {
                 existing.setDistance(strava.getDistance());
@@ -438,7 +440,7 @@ public class StravaApi {
             Exercise m = matching.get(0);
             Exercise merged = new Exercise(m.getId(), strava.getStravaId(), strava.getGarminId(), m.getType(),
                 strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(), m.getNote(),
-                m.getDataSource(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(), m.getSubs(),
+                m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(), m.getSubs(),
                 strava.getTrail());
 
             success &= DbWriter.get(a).updateExercise(merged, a);

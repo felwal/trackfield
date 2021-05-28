@@ -232,11 +232,11 @@
                     style="@style/Divider" />
 
                 <EditText
-                    android:id="@+id/et_edit_data_source"
+                    android:id="@+id/et_edit_device"
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
-                    android:hint="@string/et_hint_edit_datasource"
+                    android:hint="@string/et_hint_edit_device"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
                     app:layout_constraintStart_toStartOf="parent"
@@ -252,8 +252,8 @@
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_edit_data_source"
-                    app:layout_constraintTop_toTopOf="@+id/et_edit_data_source"
+                    app:layout_constraintStart_toEndOf="@+id/et_edit_device"
+                    app:layout_constraintTop_toTopOf="@+id/et_edit_device"
                     style="@style/EditText.Small" />
 
                 <AutoCompleteTextView
@@ -266,9 +266,9 @@
                     android:layout_marginBottom="@dimen/spacing_tiny"
                     android:inputType="textCapWords"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/et_edit_data_source"
+                    app:layout_constraintEnd_toEndOf="@+id/et_edit_device"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_edit_data_source"
+                    app:layout_constraintTop_toBottomOf="@+id/et_edit_device"
                     style="@style/EditText.Small" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

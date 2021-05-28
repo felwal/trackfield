@@ -241,7 +241,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
         TextView noteTv = findViewById(R.id.tv_view_note);
         TextView idTv = findViewById(R.id.tv_view_id);
         TextView typeTv = findViewById(R.id.tv_view_type);
-        TextView dataSourceTv = findViewById(R.id.tv_view_data_source);
+        TextView deviceTv = findViewById(R.id.tv_view_device);
         TextView recordingMethodTv = findViewById(R.id.tv_view_recording_method);
 
         // set
@@ -253,7 +253,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         idTv.setText(exercise.printId());
         typeTv.setText(exercise.getType());
-        setTvHideIfEmpty(exercise.getDataSource(), dataSourceTv);
+        setTvHideIfEmpty(exercise.getDevice(), deviceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
 
         setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.tv_view_i));

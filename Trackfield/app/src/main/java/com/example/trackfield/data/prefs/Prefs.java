@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.trackfield.R;
 
 import com.example.trackfield.data.network.StravaApi;
+import com.example.trackfield.utils.annotations.Unimplemented;
 import com.example.trackfield.utils.model.SwitchChain;
 import com.example.trackfield.utils.model.SwitchItem;
 import com.example.trackfield.utils.AppConsts;
@@ -42,7 +43,7 @@ public class Prefs {
     private static final String KEY_BIRTHDAY = "birthday";
     private static final String KEY_SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
     private static final String KEY_HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
-    private static final String KEY_INCLCUDE_LONGER = "includeLonger";
+    @Unimplemented private static final String KEY_INCLCUDE_LONGER = "includeLonger";
     @Unfinished private static final String KEY_INCLCUDE_PACELESS = "includePaceless";
     private static final String KEY_LIMIT_LOWER = "lowerLimit";
     private static final String KEY_LIMIT_UPPER = "upperLimit";
@@ -55,6 +56,7 @@ public class Prefs {
     private static final String KEY_STRAVA_REFRESH = "stravaRefreshToken";
     private static final String KEY_STRAVA_ACCESS = "stravaAccessToken";
     private static final String KEY_STRAVA_ACCESS_EXP_DATE = "stravaAccessExpiration";
+    private static final String KEY_STRAVA_DEVICE = "stravaDevice";
     private static final String KEY_STRAVA_METHOD = "stravaRecordingMethod";
     private static final String KEY_STRAVA_PULL_POLICY = "stravaPullPolicy";
 
@@ -100,7 +102,8 @@ public class Prefs {
     private static String refreshToken = "";
     private static String accessToken = "";
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
-    private static String recordingMethod = "GPS";
+    private static String defaultRecordingMethod = "GPS";
+    private static String defaultDevice = "";
     private static SwitchChain pullPolicy = new SwitchChain(
         new SwitchItem(StravaApi.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
         new SwitchItem(StravaApi.JSON_NAME, "Name (as route)", true),
@@ -110,7 +113,7 @@ public class Prefs {
         new SwitchItem(StravaApi.JSON_TYPE, "Type", true),
         new SwitchItem(StravaApi.JSON_DATE, "Datetime", true),
         new SwitchItem(StravaApi.JSON_MAP, "Map", true),
-        new SwitchItem(StravaApi.JSON_DEVICE, "Device (as data source)", false)
+        new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
     );
 
     //
@@ -168,7 +171,8 @@ public class Prefs {
         savePref(refreshToken, KEY_STRAVA_REFRESH);
         savePref(accessToken, KEY_STRAVA_ACCESS);
         savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
-        savePref(recordingMethod, KEY_STRAVA_METHOD);
+        savePref(defaultDevice, KEY_STRAVA_DEVICE);
+        savePref(defaultRecordingMethod, KEY_STRAVA_METHOD);
         savePref(pullPolicy.getChecked(), KEY_STRAVA_PULL_POLICY);
     }
 
@@ -224,7 +228,8 @@ public class Prefs {
         refreshToken = loadPref(str, KEY_STRAVA_REFRESH);
         accessToken = loadPref(str, KEY_STRAVA_ACCESS);
         accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, KEY_STRAVA_ACCESS_EXP_DATE);
-        recordingMethod = loadPref(str, KEY_STRAVA_METHOD);
+        defaultDevice = loadPref(str, KEY_STRAVA_DEVICE);
+        defaultRecordingMethod = loadPref(str, KEY_STRAVA_METHOD);
         pullPolicy.setChecked(loadPref(boolArr, KEY_STRAVA_PULL_POLICY));
     }
 
@@ -269,7 +274,8 @@ public class Prefs {
             case KEY_STRAVA_REFRESH: return refreshToken;
             case KEY_STRAVA_ACCESS: return accessToken;
             case KEY_STRAVA_ACCESS_EXP_DATE: return accessTokenExpiration;
-            case KEY_STRAVA_METHOD: return recordingMethod;
+            case KEY_STRAVA_DEVICE: return defaultDevice;
+            case KEY_STRAVA_METHOD: return defaultRecordingMethod;
             case KEY_STRAVA_PULL_POLICY: return pullPolicy.getChecked();
             default: return new Object();
         }
@@ -388,9 +394,14 @@ public class Prefs {
         savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
     }
 
-    public static void setRecordingMethod(String recordingMethod) {
-        Prefs.recordingMethod = recordingMethod;
-        savePref(recordingMethod, KEY_STRAVA_METHOD);
+    public static void setDefaultDevice(String defaultDevice) {
+        Prefs.defaultDevice = defaultDevice;
+        savePref(defaultDevice, KEY_STRAVA_DEVICE);
+    }
+
+    public static void setDefaultRecordingMethod(String defaultRecordingMethod) {
+        Prefs.defaultRecordingMethod = defaultRecordingMethod;
+        savePref(defaultRecordingMethod, KEY_STRAVA_METHOD);
     }
 
     public static void setPullSettings(boolean[] checked) {
@@ -500,8 +511,12 @@ public class Prefs {
         return accessTokenExpiration;
     }
 
-    public static String getRecordingMethod() {
-        return recordingMethod;
+    public static String getDefaultDevice() {
+        return defaultDevice;
+    }
+
+    public static String getDefaultRecordingMethod() {
+        return defaultRecordingMethod;
     }
 
     public static SwitchChain getPullPolicy() {

@@ -45,7 +45,7 @@
     <string name="et_hint_edit_hours">HH</string>
     <string name="et_hint_edit_minutes">mm</string>
     <string name="et_hint_edit_seconds">ss</string>
-    <string name="et_hint_edit_datasource">Data source</string>
+    <string name="et_hint_edit_device">Device</string>
     <string name="et_hint_edit_recordingmethod">Recording method</string>
     <string name="et_hint_edit_type">Type</string>
 
@@ -60,7 +60,7 @@
     <string name="tv_text_empty_exercises_title">Welcome to Trackfield!</string>
     <string name="tv_text_empty_exercises_message">Add exercises manually with + or connect to Strava in Settings to get started</string>
     <string name="tv_text_empty_search_title">No results</string>
-    <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: id, route, rotue variation, source, method, note and type</string>
+    <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue variation, device, method, note and type</string>
     <string name="tv_text_empty_distances_title">No distances</string>
     <string name="tv_text_empty_distances_msg">Press + to add a distance</string>
     <string name="tv_text_empty_routes_title">No routes</string>
@@ -142,6 +142,7 @@
     <string name="dialog_title_color">Color</string>
     <string name="dialog_title_mass">Mass (kg)</string>
     <string name="dialog_title_merge_routes">Merge routes?</string>
+    <string name="dialog_title_device">Default device</string>
     <string name="dialog_title_recording_method">Default recording method</string>
     <string name="dialog_title_export">Export json?</string>
     <string name="dialog_title_import">Import json?</string>
@@ -152,7 +153,8 @@
     <string name="dialog_msg_delete_exercise">This action cannot be undone</string>
     <string name="dialog_msg_delete_distance">Your exercises won\'t be affected</string>
     <string name="dialog_msg_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
-    <string name="dialog_msg_recording_method">Select default recording method when requesting from Strava</string>
+    <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile phone</string>
+    <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
     <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder</string>
     <string name="dialog_msg_import">Exercises, routes and distances will be imported from Trackfield folder</string>
 

@@ -10,13 +10,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.StringRes;
@@ -59,7 +57,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
     protected EditText hoursEt;
     protected EditText minutesEt;
     protected EditText secondsEt;
-    protected EditText dataSourceEt;
+    protected EditText deviceEt;
     protected EditText recordingMethodEt;
     protected EditText dateEt;
     protected EditText timeEt;
@@ -154,7 +152,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         minutesEt = findViewById(R.id.et_edit_minutes);
         secondsEt = findViewById(R.id.et_edit_seconds);
         //polylineEt = findViewById(R.id.editText_polyline);
-        dataSourceEt = findViewById(R.id.et_edit_data_source);
+        deviceEt = findViewById(R.id.et_edit_device);
         recordingMethodEt = findViewById(R.id.et_edit_recording_method);
         drivenSw = findViewById(R.id.sw_edit_drive_distance);
         typeActv = findViewById(R.id.actv_edit_type);
@@ -206,7 +204,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         hoursEt.setText((int) time[2] + "");
         minutesEt.setText((int) time[1] + "");
         secondsEt.setText(time[0] + "");
-        dataSourceEt.setText(exercise.getDataSource());
+        deviceEt.setText(exercise.getDevice());
         recordingMethodEt.setText(exercise.getRecordingMethod());
         drivenSw.setChecked(exercise.isDistanceDriven());
         typeActv.setText(exercise.getType());
@@ -287,7 +285,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             || !hoursEt.getText().toString().equals((int) time[2] + "")
             || !minutesEt.getText().toString().equals((int) time[1] + "")
             || !secondsEt.getText().toString().equals(time[0] + "")
-            || !dataSourceEt.getText().toString().equals(exercise.getDataSource())
+            || !deviceEt.getText().toString().equals(exercise.getDevice())
             || !recordingMethodEt.getText().toString().equals(exercise.getRecordingMethod())
             || !typeActv.getText().toString().equals(exercise.getType())
             || drivenSw.isChecked() != exercise.isDistanceDriven();
@@ -317,7 +315,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
             int minutes = Integer.parseInt(minutesEt.getText().toString());
             float seconds = Float.parseFloat(secondsEt.getText().toString());
             float time = hours * 3600 + minutes * 60 + seconds;
-            String dataSource = dataSourceEt.getText().toString();
+            String dataSource = deviceEt.getText().toString();
             String recordingMethod = recordingMethodEt.getText().toString();
             String type = TypeUtils.toWordCase(typeActv.getText().toString()).trim();
             ArrayList<Sub> subs = parseSubs();

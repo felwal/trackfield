@@ -50,7 +50,7 @@ public class AddActivity extends EditActivity {
             || !hoursEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
             || !minutesEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
             || !secondsEt.getText().toString().equals(res.getString(R.string.et_text_edit_time))
-            || !dataSourceEt.getText().toString().equals("")
+            || !deviceEt.getText().toString().equals("")
             || !recordingMethodEt.getText().toString().equals("")
             || !typeActv.getText().toString().equals("")
             || drivenSw.isChecked();
