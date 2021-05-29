@@ -4,13 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.DbReader;
-import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.utils.LayoutUtils;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -71,11 +71,30 @@ public class FilterDialog extends BaseDialog {
 
     @Override
     protected AlertDialog buildDialog() {
+        ArrayList<String> types = DbReader.get(a).getTypes();
+
+        // set empty message if no types to filter by
+        if (types.size() == 0) {
+            builder.setMessage(R.string.dialgo_msg_filter_empty);
+            builder.setTitle(title)
+                .setNegativeButton(negBtnTxtRes, (dialog, id) -> getDialog().cancel());
+            return builder.show();
+        }
+
         View dialogView = inflater.inflate(R.layout.dialog_filter_main, null);
         final ChipGroup chipGroup = dialogView.findViewById(R.id.cg_dialog_filter_types);
 
-        if (!message.equals("")) builder.setMessage(message);
-        setChips(chipGroup);
+        // set chips
+        for (int i = 0; i < types.size(); i++) {
+            Chip chip;
+            String type = types.get(i);
+
+            chip = (Chip) inflater.inflate(R.layout.component_chip, chipGroup, false);
+            chipGroup.addView(chip);
+            chip.setText(type);
+
+            if (checkedTypes.contains(type)) chip.setChecked(true);
+        }
 
         builder.setView(dialogView).setTitle(title)
             .setPositiveButton(posBtnTxtRes, (dialog, id) -> {
@@ -94,18 +113,7 @@ public class FilterDialog extends BaseDialog {
     // tools
 
     protected void setChips(ChipGroup chipGroup) {
-        ArrayList<String> types = DbReader.get(a).getTypes();
 
-        for (int i = 0; i < types.size(); i++) {
-            Chip chip;
-            String type = types.get(i);
-
-            chip = (Chip) inflater.inflate(R.layout.component_chip, chipGroup, false);
-            chipGroup.addView(chip);
-            chip.setText(type);
-
-            if (checkedTypes.contains(type)) chip.setChecked(true);
-        }
     }
 
     @NonNull

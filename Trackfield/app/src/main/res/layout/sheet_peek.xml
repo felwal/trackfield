@@ -13,14 +13,14 @@
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <TextView
-        android:id="@+id/tv_peeksheet_route"
+        android:id="@+id/tv_sheet_peek_route"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Route"
         style="@style/TextView.Headline" />
 
     <TextView
-        android:id="@+id/tv_peeksheet_routevar"
+        android:id="@+id/tv_sheet_peek_routevar"
         android:layout_width="0dp"
         android:layout_marginStart="@dimen/spacing_tiny"
         android:layout_marginTop="10dp"
@@ -28,21 +28,21 @@
         android:fontFamily="sans-serif-condensed"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_route"
-        app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_route"
+        app:layout_constraintStart_toEndOf="@+id/tv_sheet_peek_route"
+        app:layout_constraintTop_toTopOf="@+id/tv_sheet_peek_route"
         tools:text="var"
         style="@style/TextView.Heading1" />
 
     <TextView
-        android:id="@+id/tv_peeksheet_date"
+        android:id="@+id/tv_sheet_peek_date"
         android:layout_marginTop="@dimen/spacing_tiny"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_peeksheet_route"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_route"
         tools:text="Date"
         style="@style/TextView.Heading2.ViewDate" />
 
     <TextView
-        android:id="@+id/tv_peeksheet_s"
+        android:id="@+id/tv_sheet_peek_s"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginTop="@dimen/spacing_small"
@@ -50,16 +50,16 @@
         android:text="s"
         android:textColor="@color/colorAccBlue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_peeksheet_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_date"
         style="@style/TextView.ValueLetter" />
 
     <TextView
         android:id="@+id/tv_peeksheet_distance"
         android:layout_height="25dp"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_peeksheet_s"
-        app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_s"
-        app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_s"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_sheet_peek_s"
+        app:layout_constraintStart_toEndOf="@+id/tv_sheet_peek_s"
+        app:layout_constraintTop_toTopOf="@+id/tv_sheet_peek_s"
         tools:text="distance"
         style="@style/TextView.Heading1" />
 

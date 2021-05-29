@@ -76,7 +76,7 @@
     <string name="tv_text_fab_request_strava">Request new</string>
     <string name="tv_text_fab_track">Track exercise</string>
 
-    <string name="tv_text_dialog_filter_subtitle">Types</string>
+    <string name="tv_text_dialog_filter_msg">Types</string>
 
     <!-- other components -->
 
@@ -157,6 +157,7 @@
     <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
     <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder</string>
     <string name="dialog_msg_import">Exercises, routes and distances will be imported from Trackfield folder</string>
+    <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified</string>
 
     <!-- toasts -->
 

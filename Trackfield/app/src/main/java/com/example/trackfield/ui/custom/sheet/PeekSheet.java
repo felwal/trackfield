@@ -90,9 +90,9 @@ public class PeekSheet extends BaseSheet {
 
     private void buildSheet() {
         // find
-        TextView routeTv = view.findViewById(R.id.tv_peeksheet_route);
-        TextView routeVarTv = view.findViewById(R.id.tv_peeksheet_routevar);
-        TextView dateTv = view.findViewById(R.id.tv_peeksheet_date);
+        TextView routeTv = view.findViewById(R.id.tv_sheet_peek_route);
+        TextView routeVarTv = view.findViewById(R.id.tv_sheet_peek_routevar);
+        TextView dateTv = view.findViewById(R.id.tv_sheet_peek_date);
         TextView distanceTv = view.findViewById(R.id.tv_peeksheet_distance);
         TextView timeTv = view.findViewById(R.id.tv_peeksheet_time);
         TextView paceTv = view.findViewById(R.id.tv_peeksheet_velocity);
