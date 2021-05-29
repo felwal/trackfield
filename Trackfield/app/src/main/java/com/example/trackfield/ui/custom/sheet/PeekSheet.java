@@ -110,7 +110,7 @@ public class PeekSheet extends BaseSheet {
         int textColor = LayoutUtils.getColorInt(android.R.attr.textColorPrimary, a);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);
-        dateTv.setTextColor(textColor);
+        dateTv.setTextColor(LayoutUtils.getColorInt(android.R.attr.textColorSecondary, a));
         distanceTv.setTextColor(textColor);
         timeTv.setTextColor(textColor);
         paceTv.setTextColor(textColor);

@@ -40,7 +40,7 @@ public final class DbContract {
         public static final String SELECTION_PACE = "1000*(" + COLUMN_TIME + "/" + COLUMN_EFFECTIVE_DISTANCE + ")";
 
         public static final String[] COLUMNS_EXERLITE = {
-            _ID, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR, COLUMN_INTERVAL, COLUMN_DISTANCE,
+            _ID, COLUMN_TYPE, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR, COLUMN_INTERVAL, COLUMN_DISTANCE,
             COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
         };
         public static final String[] COLUMNS_TRAIL = {

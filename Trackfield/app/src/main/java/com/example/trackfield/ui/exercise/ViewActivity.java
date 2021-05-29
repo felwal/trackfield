@@ -246,6 +246,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         // set
 
+        //setTvHideIfEmpty(exercise.getRoute(), routeTv);
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
         dateTv.setText(exercise.getDateTime().format(AppConsts.FORMATTER_VIEW));

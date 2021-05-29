@@ -52,16 +52,12 @@ public class IntervalExerciseAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
-        String values = item.printDistance()
-            + AppConsts.TAB + item.printTime()
-            + AppConsts.TAB + item.printPace();
-
         String date = item.getDate().format(
             adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
                 AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
         vh.primaryTv.setText(date);
-        vh.secondaryTv.setText(values);
+        vh.secondaryTv.setText(item.printValues());
         vh.captionTv.setText(item.getRoute());
         vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(View.GONE);

@@ -244,10 +244,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Heading2.ViewDate">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
     <style name="TextView.Caption.RecYear">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>

@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_route"
         tools:text="Date"
-        style="@style/TextView.Heading2.ViewDate" />
+        style="@style/TextView.Body" />
 
     <TextView
         android:id="@+id/tv_sheet_peek_s"

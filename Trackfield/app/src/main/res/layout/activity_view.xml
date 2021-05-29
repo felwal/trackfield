@@ -37,7 +37,7 @@
                 <TextView
                     android:id="@+id/tv_view_route"
                     android:layout_marginStart="@dimen/spacing_medium"
-                    android:layout_marginTop="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Route"
@@ -59,11 +59,11 @@
                 <TextView
                     android:id="@+id/tv_view_date"
                     android:layout_marginStart="@dimen/spacing_medium"
-                    android:layout_marginTop="@dimen/spacing_tiny"
+                    android:layout_marginTop="@dimen/spacing_diminutive"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_route"
                     tools:text="Date"
-                    style="@style/TextView.Heading2.ViewDate" />
+                    style="@style/TextView.Body" />
 
                 <TextView
                     android:id="@+id/tv_view_note"

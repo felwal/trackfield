@@ -13,6 +13,7 @@ public class Exerlite extends RecyclerItem {
     private static final int DISTANCE_DECIMALS = 1;
 
     private final int id;
+    private final String type;
     private final LocalDate date;
     private final String route;
     private final String interval;
@@ -23,10 +24,11 @@ public class Exerlite extends RecyclerItem {
 
     //
 
-    public Exerlite(int id, LocalDate date, String route, String interval, int distance, float time,
+    public Exerlite(int id, String type, LocalDate date, String route, String interval, int distance, float time,
         boolean distanceDriven) {
 
         this.id = id;
+        this.type = type;
         this.date = date;
         this.route = route;
         this.interval = interval;
@@ -89,7 +91,7 @@ public class Exerlite extends RecyclerItem {
         return date.getYear() == year;
     }
 
-    public float getTimeByDistance(int distance) {
+    private float getTimeByDistance(int distance) {
         return getPace() * distance / 1000;
     }
 
@@ -107,36 +109,40 @@ public class Exerlite extends RecyclerItem {
 
     // print
 
-    public String printDate() {
+    private String printDate() {
         return LocalDate.now().getYear() == date.getYear()
             ? date.format(AppConsts.FORMATTER_CAPTION_NOYEAR)
             : date.format(AppConsts.FORMATTER_CAPTION);
     }
 
-    public String printDistance() {
+    private String printDistance() {
         String print = distance == 0 ? AppConsts.NO_VALUE : MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + "";
         return distanceDriven ? TypeUtils.notateDriven(print) : print;
     }
 
-    public String printTime() {
+    private String printTime() {
         return MathUtils.stringTime(time, true);
     }
 
-    public String printTimeByDistance(int distance) {
+    private String printTimeByDistance(int distance) {
         String print = MathUtils.stringTime(getTimeByDistance(distance), true);
         return distance <= this.distance ? print : TypeUtils.notateDriven(print);
     }
 
-    public String printPace() {
+    private String printPace() {
         return MathUtils.stringTime(getPace(), true);
     }
 
     public String printTitle() {
-        return interval.equals("") ? route : interval;
+        return !interval.equals("") ? interval : !route.equals("") ? route : type;
     }
 
     public String printValues() {
         return printDistance() + AppConsts.TAB + printTime() + AppConsts.TAB + printPace();
+    }
+
+    public String printValues(int timeByDistance) {
+        return printDistance() + AppConsts.TAB + printTimeByDistance(timeByDistance) + AppConsts.TAB + printPace();
     }
 
     public String printCaption() {
@@ -156,9 +162,9 @@ public class Exerlite extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Exerlite)) return false;
         Exerlite other = (Exerlite) item;
-        return other.hasId(id) && date.isEqual(other.getDate()) && interval.equals(other.interval)
-            && route.equals(other.getRoute()) && distance == other.getDistance() && time == other.getTime()
-            && other.isTop(top);
+        return other.hasId(id) && type.equals(other.type) && date.isEqual(other.getDate())
+            && interval.equals(other.interval) && route.equals(other.getRoute()) && distance == other.getDistance()
+            && time == other.getTime() && other.isTop(top);
     }
 
 }

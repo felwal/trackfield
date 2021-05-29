@@ -1195,6 +1195,7 @@ public class DbReader extends DbHelper {
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry._ID));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
@@ -1225,7 +1226,8 @@ public class DbReader extends DbHelper {
                 subCursor.close();
             }*/
 
-            Exerlite exerlite = new Exerlite(id, date, routeName, interval, effectiveDistance, time, distanceDriven);
+            Exerlite exerlite = new Exerlite(id, type, date, routeName, interval, effectiveDistance, time,
+                distanceDriven);
             exerlites.add(exerlite);
 
             // check pace ranking against previous
