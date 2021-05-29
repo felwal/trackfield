@@ -18,12 +18,11 @@ public final class DateUtils {
 
     public static ChronoField toChronoField(ChronoUnit unit) {
         switch (unit) {
-            case DAYS:
-                return ChronoField.DAY_OF_MONTH;
             case WEEKS:
                 return ChronoField.ALIGNED_WEEK_OF_YEAR;
             case YEARS:
                 return ChronoField.YEAR;
+            case DAYS:
             default:
                 return ChronoField.DAY_OF_MONTH;
         }

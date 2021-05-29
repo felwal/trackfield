@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.prefs.Prefs;
@@ -95,7 +96,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         ScreenUtils.makeStatusBarTransparent(getWindow(), false, null);
 
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!FileUtils.permissionToLocation(this)) return;
+        if (!FileUtils.hasPermissionToLocation(this)) return;
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
         timeTv = findViewById(R.id.tv_track_time);
@@ -159,7 +160,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 recording = false;
                 finishFab.show();
 
-                Drawable toIcon = getDrawable(R.drawable.ic_play).mutate();
+                Drawable toIcon = ContextCompat.getDrawable(this, R.drawable.ic_play).mutate();
                 toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorPrimaryInverse, this),
                     PorterDuff.Mode.SRC_IN);
 
@@ -172,7 +173,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 recording = true;
                 finishFab.hide();
 
-                Drawable toIcon = getDrawable(R.drawable.ic_pause).mutate();
+                Drawable toIcon = ContextCompat.getDrawable(this, R.drawable.ic_pause).mutate();
                 toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorHighlight, this),
                     PorterDuff.Mode.SRC_IN);
 

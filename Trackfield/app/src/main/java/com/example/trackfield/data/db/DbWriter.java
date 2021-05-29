@@ -78,7 +78,6 @@ public class DbWriter extends DbHelper {
      * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
      *
      * @param e The exercise to add
-     * @param c Context
      * @return True if the exercise was added successfully
      */
     public boolean addExercise(@NonNull Exercise e, Context c) {
@@ -103,7 +102,6 @@ public class DbWriter extends DbHelper {
      * distance</p>
      *
      * @param e The exercise to update
-     * @param c Context
      * @return True if the exercise was added successfully
      */
     public boolean updateExercise(@NonNull Exercise e, Context c) {
@@ -138,7 +136,6 @@ public class DbWriter extends DbHelper {
      * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
      *
      * @param e The exercise to delete
-     * @param c Context
      * @return True if the exercise was added successfully
      */
     public boolean deleteExercise(@NonNull Exercise e, Context c) {
@@ -172,7 +169,6 @@ public class DbWriter extends DbHelper {
      *
      * @param routeId The routeId to edit effective distance of
      * @param routeVar The routeVar to edit effective distance of
-     * @param c Context
      * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
@@ -199,7 +195,6 @@ public class DbWriter extends DbHelper {
      * </ul></p>
      *
      * @param routeId RouteId of the route to check
-     * @param c Context
      * @return True if the route was empty and successfully deleted
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
@@ -212,7 +207,6 @@ public class DbWriter extends DbHelper {
     /**
      * Cleans database routes table from unused routes. **Should not be called**, unless as a one-time operation.
      *
-     * @param c Context
      * @return True if operation successful
      */
     @Debug
@@ -320,7 +314,6 @@ public class DbWriter extends DbHelper {
      * existing rows.
      *
      * @param route The route to add.
-     * @param c Context
      * @return The routeId of the added or already existing route
      */
     public long addRoute(@NonNull Route route, Context c) {
@@ -336,7 +329,6 @@ public class DbWriter extends DbHelper {
      * Updates a route. Merges with existing route if new name already exists.
      *
      * @param route Route to update
-     * @param c
      * @return The routeId of the updated route; of mergee if merged, same as parameter otherwise
      */
     public int updateRoute(Route route, Context c) {

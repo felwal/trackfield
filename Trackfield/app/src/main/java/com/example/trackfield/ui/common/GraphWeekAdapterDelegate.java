@@ -46,7 +46,7 @@ public class GraphWeekAdapterDelegate extends
 
     static class GraphWeekViewHolder extends RecyclerView.ViewHolder {
 
-        public GraphView graphView;
+        public final GraphView graphView;
 
         public GraphWeekViewHolder(View itemView) {
             super(itemView);

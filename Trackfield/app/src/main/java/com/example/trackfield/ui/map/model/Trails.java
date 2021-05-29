@@ -64,7 +64,7 @@ public class Trails {
     public Trail toAvgTrail() {
         List<LatLng> latLngs = new ArrayList<>();
 
-        float pointCount = trails.get(0).getDistance() / 15;
+        float pointCount = trails.get(0).getDistance() / 15f;
         float step = 1 / pointCount;
 
         for (float percent = 0; percent < 1 + step; percent += step) {

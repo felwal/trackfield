@@ -47,8 +47,8 @@ public class RouteAdapterDelegate extends
 
     class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public RouteViewHolder(View itemView) {
             super(itemView);

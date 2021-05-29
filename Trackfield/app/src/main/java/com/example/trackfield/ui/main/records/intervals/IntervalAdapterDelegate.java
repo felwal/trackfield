@@ -47,8 +47,8 @@ public class IntervalAdapterDelegate extends
 
     class IntervalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public IntervalViewHolder(View itemView) {
             super(itemView);

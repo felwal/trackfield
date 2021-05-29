@@ -53,7 +53,7 @@ public class SorterAdapterDelegate extends
 
     public class SorterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView titleTv;
+        public final TextView titleTv;
 
         public SorterViewHolder(View itemView) {
             super(itemView);

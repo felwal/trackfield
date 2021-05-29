@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Environment;
 
 import androidx.core.app.ActivityCompat;
@@ -18,7 +17,6 @@ import com.example.trackfield.data.db.model.Distance;
 import com.example.trackfield.data.db.model.Exercise;
 import com.example.trackfield.data.db.model.JSONObjectable;
 import com.example.trackfield.data.db.model.Route;
-import com.example.trackfield.data.db.model.Sub;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -306,7 +304,7 @@ public final class FileUtils {
     // permissions
 
     public static boolean shouldAskPermissions(Context c) {
-        return !permissionToStorage(c) || !permissionToLocation(c);
+        return !hasPermissionToStorage(c) || !hasPermissionToLocation(c);
     }
 
     @TargetApi(23)
@@ -320,15 +318,14 @@ public final class FileUtils {
         ActivityCompat.requestPermissions(a, permissions, requestCode);
     }
 
-    public static boolean permissionToStorage(Context c) {
-        return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-            PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-            PackageManager.PERMISSION_GRANTED
-            && Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
+    public static boolean hasPermissionToStorage(Context c) {
+        return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static boolean permissionToLocation(Context c) {
+    public static boolean hasPermissionToLocation(Context c) {
         return ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) ==

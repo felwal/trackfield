@@ -48,8 +48,8 @@ public class DistanceAdapterDelegate extends
 
     class DistanceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public DistanceViewHolder(View itemView) {
             super(itemView);

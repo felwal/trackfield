@@ -94,13 +94,15 @@ public class Header extends RecyclerItem {
     }
 
     public String printValues() {
-        String print = "";
+        StringBuilder print = new StringBuilder();
         for (int i = 0; i < headerValues.length; i++) {
-            if (i != 0) print += AppConsts.TAB;
+            if (i != 0) print.append(AppConsts.TAB);
+
             HeaderValue value = headerValues[i];
-            print += MathUtils.roundToString(value.getValue(), value.getDecimals()) + " " + value.getUnit();
+            print.append(MathUtils.roundToString(value.getValue(), value.getDecimals()))
+                .append(" ").append(value.getUnit());
         }
-        return print;
+        return print.toString();
     }
 
     // extends RecyclerItem

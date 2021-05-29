@@ -81,7 +81,9 @@
     <!-- other components -->
 
     <string name="btn_text_boarding_start">Get started</string>
-    <string name="sw_text_driven">Drive distance</string>
+    <string name="sw_text_drive">Drive distance</string>
+    <string name="sw_text_dialog_filter_paceless">Include paceless</string>
+    <string name="sw_text_dialog_filter_longer">Include longer</string>
     <string name="cp_dialog_time">Time</string>
     <string name="cp_dialog_pace">Pace</string>
 

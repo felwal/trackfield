@@ -3,6 +3,7 @@ package com.example.trackfield.utils;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,6 @@ public final class ScreenUtils {
 
     /**
      * Updates activity theme to chosen theme. Should be called first thing in every activities onCreate.
-     *
-     * @param a Activity
      */
     public static void updateTheme(Activity a) {
         int newTheme = AppConsts.LOOKS[MathUtils.heaviside(Prefs.isThemeLight())][Prefs.getColor()];

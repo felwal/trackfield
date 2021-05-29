@@ -41,7 +41,7 @@ public class AddActivity extends EditActivity {
     protected boolean haveEditsBeenMade() {
         Resources res = getResources();
 
-        return !routeActv.getText().toString().equals(res.getString(R.string.et_text_edit_route))
+        return !routeActv.getText().toString().equals("")
             || !routeVarActv.getText().toString().equals("")
             || !dateEt.getText().toString().equals(creationDate)
             || !timeEt.getText().toString().equals(creationTime)

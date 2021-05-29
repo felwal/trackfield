@@ -46,7 +46,7 @@ public class GraphAdapterDelegate extends
 
     static class GraphViewHolder extends RecyclerView.ViewHolder {
 
-        public GraphView graphView;
+        public final GraphView graphView;
 
         public GraphViewHolder(View itemView) {
             super(itemView);

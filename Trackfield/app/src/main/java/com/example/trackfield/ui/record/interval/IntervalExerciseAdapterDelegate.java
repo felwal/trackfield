@@ -67,11 +67,11 @@ public class IntervalExerciseAdapterDelegate extends
 
     class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
-        public TextView captionTv;
-        public View originMarker;
-        public View recordMarker;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
+        public final TextView captionTv;
+        public final View originMarker;
+        public final View recordMarker;
 
         public ExerciseMediumViewHolder(View itemView) {
             super(itemView);

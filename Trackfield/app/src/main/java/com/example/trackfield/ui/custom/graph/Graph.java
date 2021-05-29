@@ -1,11 +1,7 @@
 package com.example.trackfield.ui.custom.graph;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 import com.example.trackfield.ui.common.model.RecyclerItem;
 import com.example.trackfield.utils.MathUtils;
-import com.example.trackfield.utils.ScreenUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

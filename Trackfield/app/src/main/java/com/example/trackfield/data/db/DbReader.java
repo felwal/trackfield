@@ -548,14 +548,13 @@ public class DbReader extends DbHelper {
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         Trail trail = null;
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
             double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
             double endLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_END_LAT));
             double endLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_END_LNG));
             String polyline = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_POLYLINE));
             trail = new Trail(polyline, new LatLng(startLat, startLng), new LatLng(endLat, endLng));
-            break;
         }
         cursor.close();
 
@@ -749,9 +748,8 @@ public class DbReader extends DbHelper {
 
         Cursor cursor = db.query(DistanceEntry.TABLE_NAME, columns, selection, null, null, null, orderBy, limit);
         int longestDistance = Distance.NO_DISTANCE;
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             longestDistance = cursor.getInt(cursor.getColumnIndex(DistanceEntry.COLUMN_DISTANCE));
-            break;
         }
         cursor.close();
 
@@ -1319,13 +1317,13 @@ public class DbReader extends DbHelper {
 
     @NonNull
     private String fun(@NonNull String fun, @NonNull String... params) {
-        String expression = fun + "(";
+        StringBuilder expression = new StringBuilder(fun + "(");
         for (int i = 0; i < params.length; i++) {
-            expression += params[i];
-            if (i != params.length - 1) expression += ", ";
+            expression.append(params[i]);
+            if (i != params.length - 1) expression.append(", ");
         }
-        expression += ")";
-        return expression;
+        expression.append(")");
+        return expression.toString();
     }
 
     private String col(String table, String column) {
@@ -1333,11 +1331,11 @@ public class DbReader extends DbHelper {
     }
 
     private String concat(String... s) {
-        String expression = s[0];
+        StringBuilder expression = new StringBuilder(s[0]);
         for (int i = 1; i < s.length; i++) {
-            expression += ", " + s[i];
+            expression.append(", ").append(s[i]);
         }
-        return expression;
+        return expression.toString();
     }
 
     // sql clauses
@@ -1376,9 +1374,6 @@ public class DbReader extends DbHelper {
     private String strftime(ChronoUnit unit, String column) {
         String format;
         switch (unit) {
-            case DAYS:
-                format = "'%d'";
-                break;
             case WEEKS:
                 format = "'%W'";
                 break;
@@ -1388,6 +1383,7 @@ public class DbReader extends DbHelper {
             case YEARS:
                 format = "'%Y'";
                 break;
+            case DAYS:
             default:
                 format = "'%d'";
                 break;
@@ -1415,34 +1411,34 @@ public class DbReader extends DbHelper {
      */
     @NonNull
     private String typeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<String> visibleTypes) {
-        String filter = "";
+        StringBuilder filter = new StringBuilder();
 
         for (int i = 0; i < visibleTypes.size(); i++) {
-            if (i == 0) filter += precedingKeyword + " (";
+            if (i == 0) filter.append(precedingKeyword).append(" (");
 
-            filter += ExerciseEntry.COLUMN_TYPE + " = '" + visibleTypes.get(i) + "'";
+            filter.append(ExerciseEntry.COLUMN_TYPE + " = '").append(visibleTypes.get(i)).append("'");
 
-            if (i == visibleTypes.size() - 1) filter += ")";
-            else filter += " OR ";
+            if (i == visibleTypes.size() - 1) filter.append(")");
+            else filter.append(" OR ");
         }
-        return filter;
+        return filter.toString();
     }
 
     private String typeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<Integer> visibleTypes,
         String tableAsName) {
 
-        String filter = "";
+        StringBuilder filter = new StringBuilder();
         for (int i = 0; i < visibleTypes.size(); i++) {
-            if (i == 0) filter += precedingKeyword + " (";
-            filter += col(tableAsName, ExerciseEntry.COLUMN_TYPE) + " = " + visibleTypes.get(i);
+            if (i == 0) filter.append(precedingKeyword).append(" (");
+            filter.append(col(tableAsName, ExerciseEntry.COLUMN_TYPE)).append(" = ").append(visibleTypes.get(i));
             if (i == visibleTypes.size() - 1) {
-                filter += ")";
+                filter.append(")");
             }
             else {
-                filter += " OR ";
+                filter.append(" OR ");
             }
         }
-        return filter;
+        return filter.toString();
     }
 
 }

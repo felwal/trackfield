@@ -76,12 +76,12 @@ public final class DbContract {
             COLUMN_EFFECTIVE_DISTANCE + " INTEGER);";
 
         public static String toString(String[] strings) {
-            String string = "";
+            StringBuilder builder = new StringBuilder();
             for (int i = 0; i < strings.length; i++) {
-                string += strings[i];
-                if (i != strings.length - 1) string += ", ";
+                builder.append(strings[i]);
+                if (i != strings.length - 1) builder.append(", ");
             }
-            return string;
+            return builder.toString();
         }
 
         /**

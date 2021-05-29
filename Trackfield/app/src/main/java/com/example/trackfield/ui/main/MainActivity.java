@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackfield.R;
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     private void setBottomNavbar() {
         selectFragment(new ExercisesFragment());
+
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
             int itemId = item.getItemId();
 
@@ -282,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (isFabMenuOpen) {
             fromColor = surface;
             toColor = primaryVariant;
-            toIcon = getDrawable(R.drawable.ic_add).mutate();
+            toIcon = ContextCompat.getDrawable(this, R.drawable.ic_add).mutate();
             toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorPrimaryInverse, this),
                 PorterDuff.Mode.SRC_IN);
         }
@@ -290,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         else {
             fromColor = primaryVariant;
             toColor = surface;
-            toIcon = getDrawable(R.drawable.ic_cancel).mutate();
+            toIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
             toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorSecondary, this),
                 PorterDuff.Mode.SRC_IN);
         }

@@ -104,7 +104,7 @@ public class Prefs {
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
     private static String defaultRecordingMethod = "GPS";
     private static String defaultDevice = "";
-    private static SwitchChain pullPolicy = new SwitchChain(
+    private static final SwitchChain pullPolicy = new SwitchChain(
         new SwitchItem(StravaApi.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
         new SwitchItem(StravaApi.JSON_NAME, "Name (as route)", true),
         new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
@@ -123,8 +123,6 @@ public class Prefs {
      * If first time loading, this also saves default values to Shared Preferences.
      *
      * <p>Must be called when initializing application.</p>
-     *
-     * @param c Context
      */
     public static void setUpAndLoad(Context c) {
         sp = c.getSharedPreferences(NAME_SHARED_PREFERENCES, MODE_PRIVATE);
@@ -241,7 +239,7 @@ public class Prefs {
         editor.apply();
     }
 
-    private static <T> T loadPref(TypeToken token, String tag) {
+    private static <T> T loadPref(TypeToken<T> token, String tag) {
         if (!sp.contains(tag)) savePref(ofTag(tag), tag);
 
         String json = sp.getString(tag, null);

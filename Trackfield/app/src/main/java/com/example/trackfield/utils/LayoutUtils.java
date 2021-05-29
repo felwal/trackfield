@@ -101,13 +101,13 @@ public final class LayoutUtils {
      * Gets resource id from attribute id.
      *
      * @param attrResId Attribute id to get
-     * @param c Context
      * @return The resource id pointed to by the attribute id
      */
     public static int getAttr(int attrResId, Context c) {
         int[] attrs = new int[] { attrResId };
         TypedArray typedArray = c.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
+        typedArray.recycle();
         return backgroundResource;
     }
 

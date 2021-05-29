@@ -37,7 +37,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected static final int MAP_MAX_ZOOM = 18;
 
     protected ArrayList<Polyline> seletedPolylines = new ArrayList<>();
-    protected ArrayList<Polyline> tempPolylines = new ArrayList<>();
+    protected final ArrayList<Polyline> tempPolylines = new ArrayList<>();
 
     protected int id;
     protected GoogleMap map;

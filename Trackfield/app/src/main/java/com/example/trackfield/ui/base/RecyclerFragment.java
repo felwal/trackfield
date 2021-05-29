@@ -47,7 +47,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // items
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
-    protected ArrayList<RecyclerItem> items = new ArrayList<>();
+    protected final ArrayList<RecyclerItem> items = new ArrayList<>();
 
     // extends Fragment
 

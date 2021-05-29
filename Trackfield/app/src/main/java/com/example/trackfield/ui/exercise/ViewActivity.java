@@ -108,11 +108,6 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_view, menu);
 
@@ -207,7 +202,7 @@ public class ViewActivity extends AppCompatActivity implements BinaryDialog.Dial
             for (int i = 0; i < exercise.subCount(); i++) {
 
                 Sub sub = exercise.getSub(i);
-                final View subView = getLayoutInflater().inflate(R.layout.item_view_sub, null);
+                final View subView = getLayoutInflater().inflate(R.layout.item_view_sub, ll, false);
                 ll.addView(subView, ll.getChildCount() - 1);
 
                 final TextView sDistanceTv = subView.findViewById(R.id.tv_view_item_sub_distance);

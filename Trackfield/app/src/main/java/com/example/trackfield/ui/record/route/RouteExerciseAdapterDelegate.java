@@ -70,10 +70,10 @@ public class RouteExerciseAdapterDelegate extends
 
     class ExerciseSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
-        public View originMarker;
-        public View recordMarker;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
+        public final View originMarker;
+        public final View recordMarker;
 
         public ExerciseSmallViewHolder(View itemView) {
             super(itemView);

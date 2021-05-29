@@ -44,8 +44,8 @@ public class GoalAdapterDelegate extends BaseAdapterDelegate<Goal, RecyclerItem,
 
     public static class GoalViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public GoalViewHolder(View itemView) {
             super(itemView);

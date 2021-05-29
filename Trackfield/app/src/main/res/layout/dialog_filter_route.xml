@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_dialog_side"
         android:layout_marginEnd="@dimen/spacing_dialog_side"
-        android:text="Include paceless" />
+        android:text="@string/sw_text_dialog_filter_paceless" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingStart="@dimen/spacing_dialog_side"

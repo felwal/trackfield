@@ -14,9 +14,9 @@ import java.util.List;
 public abstract class BaseAdapterDelegate<I extends T, T, VH extends RecyclerView.ViewHolder> extends
     AbsListItemAdapterDelegate<I, T, VH> {
 
-    protected Context c;
-    protected LayoutInflater inflater;
-    protected DelegateClickListener listener;
+    protected final Context c;
+    protected final LayoutInflater inflater;
+    protected final DelegateClickListener listener;
 
     //
 

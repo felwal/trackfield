@@ -48,9 +48,9 @@ public class ExerciseAdapterDelegate extends
 
     class ExerciseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
-        public TextView captionTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
+        public final TextView captionTv;
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);

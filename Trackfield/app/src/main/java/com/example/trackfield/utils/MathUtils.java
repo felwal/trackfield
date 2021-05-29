@@ -1,15 +1,8 @@
 package com.example.trackfield.utils;
 
-import android.location.Location;
-
-import androidx.annotation.NonNull;
-
 import com.example.trackfield.data.prefs.Prefs;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.TreeMap;
 
 // Math
 public final class MathUtils {
@@ -181,42 +174,42 @@ public final class MathUtils {
         int hours = (int) parts[2];
 
         String hh = Integer.toString(hours);
-        String mm = Integer.toString(minutes);
+        StringBuilder mm = new StringBuilder(Integer.toString(minutes));
         String ssInt = Integer.toString((int) seconds);
-        String ss;
+        StringBuilder ss;
 
         if (round || seconds == (int) seconds) {
-            ss = Integer.toString((int) seconds);
+            ss = new StringBuilder(Integer.toString((int) seconds));
         }
         else {
-            ss = Float.toString(round(seconds, 2));
+            ss = new StringBuilder(Float.toString(round(seconds, 2)));
         }
 
         if (hours == 0) {
             hh = "";
             if (minutes == 0) {
-                mm = "";
+                mm = new StringBuilder();
                 if (seconds == 0) {
-                    ss = "0";
+                    ss = new StringBuilder("0");
                 }
                 //else { ss = ss + " s"; }
             }
             else {
                 if (ssInt.length() < 2) {
-                    ss = "0" + ss;
+                    ss.insert(0, "0");
                 }
-                mm += ":";
+                mm.append(":");
             }
         }
         else {
             while (mm.length() < 2) {
-                mm = "0" + mm;
+                mm.insert(0, "0");
             }
             while (ss.length() < 2) {
-                ss = "0" + ss;
+                ss.insert(0, "0");
             }
             hh += ":";
-            mm += ":";
+            mm.append(":");
         }
 
         return hh + mm + ss;

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -111,10 +110,6 @@ public class FilterDialog extends BaseDialog {
     }
 
     // tools
-
-    protected void setChips(ChipGroup chipGroup) {
-
-    }
 
     @NonNull
     protected ArrayList<String> getCheckedTypes(ChipGroup chipGroup) {

@@ -54,8 +54,8 @@ public class HeaderMediumAdapterDelegate extends
     class HeaderSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public HeaderSmallViewHolder(View itemView) {
             super(itemView);

@@ -21,10 +21,10 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.trackfield.R;
 import com.example.trackfield.data.db.model.Exercise;
-import com.example.trackfield.data.db.model.Route;
 import com.example.trackfield.data.db.model.Sub;
 import com.example.trackfield.data.db.DbReader;
 import com.example.trackfield.data.db.DbWriter;
@@ -136,7 +136,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
         ab.setDisplayHomeAsUpEnabled(true);
 
         // set cancel icon as home
-        Drawable homeIcon = getDrawable(R.drawable.ic_cancel).mutate();
+        Drawable homeIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
         homeIcon.setColorFilter(LayoutUtils.getColorInt(R.attr.colorOnPrimary, this), PorterDuff.Mode.SRC_IN);
         ab.setHomeAsUpIndicator(homeIcon);
     }
@@ -274,7 +274,7 @@ public class EditActivity extends AppCompatActivity implements BinaryDialog.Dial
 
         // focus & click listeners
         addDropDownListener(typeActv);
-        addDropDownListener(routeVarActv);;
+        addDropDownListener(routeVarActv);
         addDropDownListener(deviceActv);
         addDropDownListener(recordingMethodActv);
     }

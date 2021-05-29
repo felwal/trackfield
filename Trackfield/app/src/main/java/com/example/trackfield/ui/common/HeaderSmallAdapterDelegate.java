@@ -48,8 +48,8 @@ public class HeaderSmallAdapterDelegate extends
     class HeaderTinyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
-        public TextView primaryTv;
-        public TextView secondaryTv;
+        public final TextView primaryTv;
+        public final TextView secondaryTv;
 
         public HeaderTinyViewHolder(View itemView) {
             super(itemView);

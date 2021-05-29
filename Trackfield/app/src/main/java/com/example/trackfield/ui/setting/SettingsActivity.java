@@ -280,24 +280,20 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             LayoutUtils.toast(R.string.toast_json_exporting, this);
             new Thread(() -> {
                 boolean success = FileUtils.exportJson(this);
-                runOnUiThread(() -> {
-                    LayoutUtils.toast(success
-                            ? R.string.toast_json_export_successful
-                            : R.string.toast_json_export_err,
-                        this);
-                });
+                runOnUiThread(() -> LayoutUtils.toast(success
+                        ? R.string.toast_json_export_successful
+                        : R.string.toast_json_export_err,
+                    this));
             }).start();
         }
         else if (tag.equals(DIALOG_IMPORT)) {
             LayoutUtils.toast(R.string.toast_json_importing, this);
             new Thread(() -> {
                 boolean success = FileUtils.importJson(this);
-                runOnUiThread(() -> {
-                    LayoutUtils.toast(success
-                            ? R.string.toast_json_import_successful
-                            : R.string.toast_json_import_err,
-                        this);
-                });
+                runOnUiThread(() -> LayoutUtils.toast(success
+                        ? R.string.toast_json_import_successful
+                        : R.string.toast_json_import_err,
+                    this));
             }).start();
         }
         else if (tag.equals(DIALOG_RECREATE_DB)) {

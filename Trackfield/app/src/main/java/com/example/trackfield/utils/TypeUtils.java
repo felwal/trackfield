@@ -33,14 +33,13 @@ public class TypeUtils {
         if (s == null || s.length() == 0) return "";
 
         String[] words = s.split(" ");
-        String cased = "";
+        StringBuilder cased = new StringBuilder();
 
         for (String word : words) {
-            cased += toSentenceCase(word) + " ";
+            cased.append(toSentenceCase(word)).append(" ");
         }
-        cased.trim();
 
-        return cased;
+        return cased.toString().trim();
     }
 
     //

@@ -22,13 +22,13 @@ public class GraphData {
     public static final int GRAPH_POINTS = 4;
 
     // value nodes
-    private TreeMap<Float, Float> nodes;
+    private final TreeMap<Float, Float> nodes;
     private float min, max;
 
     // surface points
     private ArrayList<PointF> surPoints = new ArrayList<>();
-    private ArrayList<PointF> surFirstConPoints = new ArrayList<>();
-    private ArrayList<PointF> surSecondConPoints = new ArrayList<>();
+    private final ArrayList<PointF> surFirstConPoints = new ArrayList<>();
+    private final ArrayList<PointF> surSecondConPoints = new ArrayList<>();
 
     private final int graphType;
     private final boolean showPoints;
