@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.example.trackfield.ui.custom.graph.GraphView
+            <com.felwal.trackfield.ui.custom.graph.GraphView
                 android:id="@+id/cv_recycler_item_graph_surface"
                 android:layout_width="@dimen/layout_graph_medium"
                 android:layout_height="@dimen/layout_graph_medium"
