@@ -95,8 +95,13 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_track);
         ScreenUtils.makeStatusBarTransparent(getWindow(), false, null);
 
+        if (FileUtils.hasNotPermissionToLocation(this)) {
+            LayoutUtils.toast(R.string.toast_err_location, this);
+            finish();
+            return;
+        }
+
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!FileUtils.hasPermissionToLocation(this)) return;
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
 
         timeTv = findViewById(R.id.tv_track_time);

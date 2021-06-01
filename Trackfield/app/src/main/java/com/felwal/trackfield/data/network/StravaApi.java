@@ -464,7 +464,7 @@ public class StravaApi {
 
         // also pull to get data not available to request
         // but only if the user wants data not available to request
-        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE)) {
+        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE) && Prefs.getPullPolicy().isChecked(JSON_DESCRIPTION)) {
             pullActivity(strava.getStravaId(), responseSuccess -> {});
         }
 
@@ -561,9 +561,8 @@ public class StravaApi {
                 response -> {
                     try {
                         Prefs.setAccessToken(response.getString(JSON_ACCESS_TOKEN));
-                        Prefs
-                            .setAccessTokenExpiration(
-                                DateUtils.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
+                        Prefs.setAccessTokenExpiration(
+                            DateUtils.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
 
                         //L.toast("accessToken: " + Prefs.getAccessToken(), c);
                         Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());
@@ -574,7 +573,8 @@ public class StravaApi {
                         LayoutUtils.handleError("Failed to parse accessToken from Strava", e, c);
                     }
                 }, e -> {
-                LayoutUtils.handleError(R.string.toast_strava_req_access_err, e, c);
+                Log.i(LOG_TAG, c.getString(R.string.toast_strava_req_access_err) + ": " + e.getMessage());
+                //LayoutUtils.handleError(R.string.toast_strava_req_access_err, e, c);
 
                 // request refreshToken
                 ((TokenRequester) refreshToken -> ((TokenRequester) this).requestAccessToken(c))
@@ -602,7 +602,7 @@ public class StravaApi {
                         //e.printStackTrace();
                         LayoutUtils.handleError("Failed to parse refreshToken", e, c);
                     }
-                }, e -> LayoutUtils.handleError(R.string.toast_strava_req_refresh_err, e, c)); // TODO: auto-prompt
+                }, e -> LayoutUtils.handleError(R.string.toast_strava_req_refresh_err, e, c));
 
             queue.add(request);
         }

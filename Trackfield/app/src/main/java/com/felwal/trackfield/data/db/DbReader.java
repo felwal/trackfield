@@ -54,13 +54,7 @@ public class DbReader extends DbHelper {
         return instance;
     }
 
-    @Deprecated
-    @Nullable
-    public static DbReader get() {
-        return instance;
-    }
-
-    // version
+    // get version
 
     public int getVersion() {
         return db.getVersion();

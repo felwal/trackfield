@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbHelper;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -54,8 +56,12 @@ public final class FileUtils {
 
     // general file tools
 
+    /**
+     * @return Success
+     */
     private static boolean writeFile(String pathname, String content, Context c) {
-        // export
+        if (hasNotPermissionToStorage(c)) return false;
+
         try {
             // open
             java.io.File file = new java.io.File(pathname);
@@ -79,7 +85,10 @@ public final class FileUtils {
         }
     }
 
+    @Nullable
     private static List<String> readFile(String pathname, Context c) {
+        if (hasNotPermissionToStorage(c)) return null;
+
         List<String> lines = new ArrayList<>();
 
         try {
@@ -108,6 +117,9 @@ public final class FileUtils {
 
     // general json tools
 
+    /**
+     * @return Success
+     */
     private static boolean writeJSONObjectList(String pathname, ArrayList<? extends JSONObjectable> objs, Context c) {
         JSONArray array = new JSONArray();
 
@@ -120,8 +132,6 @@ public final class FileUtils {
         try {
             String jsonStr = array.toString(2);
             return writeFile(pathname, jsonStr, c);
-
-            //L.toast(c.getString(R.string.toast_file_exported), c);
         }
         catch (JSONException e) {
             //L.handleError(e, c);
@@ -129,8 +139,12 @@ public final class FileUtils {
         }
     }
 
+    @Nullable
     private static String readJson(String pathname, Context c) {
+        if (hasNotPermissionToStorage(c)) return null;
+
         String response = "";
+
         try {
             // open
             java.io.File file = new java.io.File(pathname);
@@ -172,23 +186,25 @@ public final class FileUtils {
                     LayoutUtils.handleError(e, c);
                 }
             }
-
-            //L.toast("Imported", c);
         }
-        catch (JSONException e) {
-            LayoutUtils.handleError(e, c);
+        catch (JSONException | NullPointerException e) {
+            return new ArrayList<>();
         }
 
         return objs;
     }
 
-    // json
+    // project json
 
+    /**
+     * @return Success
+     */
     public static boolean exportJson(Context c) {
         boolean success = true;
 
         // version.json
         JSONObject obj = new JSONObject();
+
         try {
             obj.put(JSON_DB_VERSION, DbReader.get(c).getVersion());
             String jsonStr = obj.toString(2);
@@ -207,6 +223,9 @@ public final class FileUtils {
         return success;
     }
 
+    /**
+     * @return Success
+     */
     public static boolean importJson(Context c) {
         int dbVersion = importVersionJson(c);
         if (dbVersion == -1) dbVersion = DbHelper.DATABASE_TARGET_VERSION;
@@ -223,6 +242,9 @@ public final class FileUtils {
         return success;
     }
 
+    /**
+     * @return Database version
+     */
     private static int importVersionJson(Context c) {
         int dbVersion;
         String pathname = PATH + FILENAME_VER;
@@ -232,18 +254,21 @@ public final class FileUtils {
             JSONObject obj = new JSONObject(response);
             dbVersion = obj.getInt(JSON_DB_VERSION);
         }
-        catch (JSONException e) {
-            //L.handleError("Failed to find database version in json file", e, c);
+        catch (JSONException | NullPointerException e) {
             dbVersion = -1;
         }
 
         return dbVersion;
     }
 
+    /**
+     * @return Success
+     */
     private static boolean importExercisesJson(Context c) {
         boolean success = true;
 
         ArrayList<Exercise> exercises = new ArrayList<>();
+
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_E, c)) {
             try {
                 DbReader.get(c);
@@ -251,60 +276,65 @@ public final class FileUtils {
                 exercises.add(e);
             }
             catch (JSONException e) {
-                //L.handleError(c.getString(R.string.toast_err_parse_jsonobj), e, c);
                 success = false;
             }
         }
 
+        if (exercises.size() == 0) return false;
         DbWriter.get(c).addExercises(exercises, c);
-        //L.toast(c.getString(R.string.toast_file_imported), c);
         return success;
     }
 
+    /**
+     * @return Success
+     */
     private static boolean importRoutesJson(Context c) {
         boolean success = true;
 
         ArrayList<Route> routes = new ArrayList<>();
+
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_R, c)) {
             try {
                 Route r = new Route(obj);
                 routes.add(r);
             }
             catch (JSONException e) {
-                //L.handleError(e, c);
                 success = false;
             }
         }
 
+        if (routes.size() == 0) return false;
         DbWriter.get(c).addRoutes(routes, c);
-        //L.toast(c.getString(R.string.toast_file_imported), c);
         return success;
     }
 
+    /**
+     * @return Success
+     */
     private static boolean importDistancesJson(Context c) {
         boolean success = true;
 
         ArrayList<Distance> distances = new ArrayList<>();
+
         for (JSONObject obj : readJSONObjectList(PATH + FILENAME_D, c)) {
             try {
                 Distance d = new Distance(obj);
                 distances.add(d);
             }
             catch (JSONException e) {
-                //L.handleError(e, c);
                 success = false;
             }
         }
 
+        if (distances.size() == 0) return false;
         DbWriter.get(c).addDistances(distances);
-        //L.toast(c.getString(R.string.toast_file_imported), c);
         return success;
     }
 
     // permissions
 
     public static boolean shouldAskPermissions(Context c) {
-        return !hasPermissionToStorage(c) || !hasPermissionToLocation(c);
+        return hasNotPermissionToStorage(c) || hasNotPermissionToLocation(c);
     }
 
     @TargetApi(23)
@@ -318,18 +348,18 @@ public final class FileUtils {
         ActivityCompat.requestPermissions(a, permissions, requestCode);
     }
 
-    public static boolean hasPermissionToStorage(Context c) {
-        return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public static boolean hasNotPermissionToStorage(Context c) {
+        return !(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_GRANTED;
+            == PackageManager.PERMISSION_GRANTED);
     }
 
-    public static boolean hasPermissionToLocation(Context c) {
-        return ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) ==
+    public static boolean hasNotPermissionToLocation(Context c) {
+        return !(ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED;
+            PackageManager.PERMISSION_GRANTED);
     }
 
 }

@@ -157,8 +157,8 @@
     <string name="dialog_msg_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
     <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile phone</string>
     <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
-    <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder</string>
-    <string name="dialog_msg_import">Exercises, routes and distances will be imported from Trackfield folder</string>
+    <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder. Any existing files will be overridden.</string>
+    <string name="dialog_msg_import">Exercises, routes and distances will be imported from Trackfield folder. Any existing data will be overridden.</string>
     <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified</string>
 
     <!-- toasts -->
@@ -169,6 +169,7 @@
     <string name="toast_err_decode_polyline">Problem decoding polyline</string>
     <string name="toast_err_display_density">Couldn\'t fetch display density</string>
     <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
+    <string name="toast_err_location">Please grant permission to location</string>
 
     <!-- json -->
     <string name="toast_json_exporting">Exporting json…</string>
@@ -194,7 +195,7 @@
     </plurals>
     <string name="toast_strava_req_activities_none">Activities already requested</string>
     <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
-    <string name="toast_strava_req_refresh_err">Failed to request refreshToken, authorize yourself!</string>
+    <string name="toast_strava_req_refresh_err">Please authorize to Strava and try again</string>
     <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>
     <string name="toast_strava_pull_activity_successful">Pull successful</string>
     <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>

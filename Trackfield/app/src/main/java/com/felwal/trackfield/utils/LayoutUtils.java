@@ -13,6 +13,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,16 +138,19 @@ public final class LayoutUtils {
 
     public static void handleError(Exception e, Context c) {
         e.printStackTrace();
+        Log.e("LayoutUtils#handleError", "", e);
         Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     public static void handleError(String desc, Exception e, Context c) {
         e.printStackTrace();
+        Log.e("LayoutUtils#handleError", desc, e);
         Toast.makeText(c, desc + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     public static void handleError(@StringRes int stringResId, Exception e, Context c) {
         e.printStackTrace();
+        Log.e("LayoutUtils#handleError", "", e);
         Toast.makeText(c, c.getString(stringResId) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
