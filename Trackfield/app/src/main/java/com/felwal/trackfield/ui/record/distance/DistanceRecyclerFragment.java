@@ -95,7 +95,7 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
                 Goal goal = new Goal(goalPace, distance);
                 itemList.add(goal);
             }
-            addHeadersAndItems(itemList, exerliteList, sorter.getMode());
+            addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
 
             fadeOutEmpty();
         }

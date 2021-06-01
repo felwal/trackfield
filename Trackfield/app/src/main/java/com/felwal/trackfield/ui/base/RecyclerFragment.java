@@ -31,8 +31,6 @@ import java.util.ArrayList;
 
 public abstract class RecyclerFragment extends Fragment implements DelegateClickListener {
 
-    protected static Thread bgThread;
-
     protected Activity a;
     protected DbReader reader;
     protected RecyclerView recycler;
@@ -74,7 +72,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
         // set adapter
         if (adapter == null) {
-            ((Threader) () -> {
+            new Thread(() -> {
                 // add items
                 if (items.size() == 0) {
                     items.addAll(getRecyclerItems());
@@ -85,23 +83,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
                     recycler.setAdapter(adapter);
                     LayoutUtils.crossfadeRecycler(recycler);
                 });
-            }).interruptAndStart();
-
-            /*bgThread = new Thread(() -> {
-                items.addAll(getRecyclerItems());
-                allItems.addAll(items);
-                a.runOnUiThread(() -> {
-                    getAdapter();
-                    adapter.setClickListener(Base.this);
-                    recycler.setAdapter(adapter);
-                    L.crossfadeRecycler(recycler);
-                });
-            });
-            bgThread.start();*/
+            }).start();
         }
-        else {
-            recycler.setAdapter(adapter);
-        }
+        else recycler.setAdapter(adapter);
 
         // set scroll listener
         if (a instanceof MainActivity) {
@@ -175,17 +159,11 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     }
 
     public void updateRecycler() {
-        ((Threader) () -> {
+        new Thread(() -> {
             allItems = getRecyclerItems();
-            final ArrayList<RecyclerItem> newItems = getVisibleItems();//getRecyclerItems();
+            final ArrayList<RecyclerItem> newItems = getVisibleItems();
             a.runOnUiThread(() -> updateRecycler(newItems));
-        }).interruptAndStart();
-
-        /*bgThread = new Thread(() -> {
-            final ArrayList<RecyclerItem> newItems = getRecyclerItems();
-            a.runOnUiThread(() -> updateRecycler(newItems));
-        });
-        bgThread.start();*/
+        }).start();
     }
 
     public void scrollToTop() {
@@ -210,26 +188,26 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // add items
 
-    protected void addHeadersAndItems(ArrayList<RecyclerItem> itemList, ArrayList<Exerlite> exerliteList,
+    protected void addItemsWithHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList,
         SortMode.Mode sortMode) {
 
         if (sortMode == SortMode.Mode.DATE) {
             int year = -1;
             int newYear;
-            for (Exerlite e : exerliteList) {
+            for (Exerlite e : fromExerliteList) {
                 if ((newYear = e.getDate().getYear()) != year) {
-                    itemList.add(new Header(newYear + "", Header.Type.REC));
+                    toItemList.add(new Header(newYear + "", Header.Type.REC));
                     year = newYear;
                 }
-                itemList.add(e);
+                toItemList.add(e);
             }
         }
         else {
-            for (int i = 0; i < exerliteList.size(); i++) {
-                if (i == 0) itemList.add(new Header("Top " + 3, Header.Type.REC));
-                else if (i == 3) itemList.add(new Header("Top " + 10, Header.Type.REC));
-                else if (i % 10 == 0) itemList.add(new Header("Top " + (i + 10), Header.Type.REC));
-                itemList.add(exerliteList.get(i));
+            for (int i = 0; i < fromExerliteList.size(); i++) {
+                if (i == 0) toItemList.add(new Header("Top " + 3, Header.Type.REC));
+                else if (i == 3) toItemList.add(new Header("Top " + 10, Header.Type.REC));
+                else if (i % 10 == 0) toItemList.add(new Header("Top " + (i + 10), Header.Type.REC));
+                toItemList.add(fromExerliteList.get(i));
             }
         }
     }
@@ -257,20 +235,5 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected abstract void setAdapter();
 
     public abstract void onSortSheetDismiss(int selectedIndex);
-
-    // interface
-
-    @Unfinished
-    interface Threader {
-
-        void run();
-
-        default void interruptAndStart() {
-            if (bgThread != null) bgThread.interrupt();
-            bgThread = new Thread(Threader.this::run);
-            bgThread.start();
-        }
-
-    }
 
 }

@@ -65,7 +65,7 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
             sorter.isAscending());
 
         itemList.add(sorter.copy());
-        addHeadersAndItems(itemList, exerliteList, sorter.getMode());
+        addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
 
         return itemList;
     }

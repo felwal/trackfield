@@ -96,7 +96,7 @@ public class RouteRecyclerFragment extends RecyclerFragment {
                 Goal goal = new Goal(route.getGoalPace());
                 itemList.add(goal);
             }
-            addHeadersAndItems(itemList, exerliteList, sorter.getMode());
+            addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
 
             fadeOutEmpty();
         }
