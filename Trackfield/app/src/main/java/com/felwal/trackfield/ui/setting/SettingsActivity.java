@@ -100,52 +100,57 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     protected void inflateViews() {
         // display options
 
-        inflateHeader("Display options");
+        inflateHeader(getString(R.string.tv_text_settings_header_display));
 
-        inflateSwitchItem("Week headers", Prefs.isWeekHeadersShown(), false, Prefs::showWeekHeaders);
+        inflateSwitchItem(getString(R.string.tv_text_settings_title_week_headers), Prefs.isWeekHeadersShown(), false,
+            Prefs::showWeekHeaders);
 
-        inflateSwitchItem("Hide singleton routes", Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
+        inflateSwitchItem(getString(R.string.tv_text_settings_title_singletion_routes),
+            Prefs.areSingletonRoutesHidden(), true, Prefs::hideSingletonRoutes);
 
         // look
 
-        inflateHeader("Look");
+        inflateHeader(getString(R.string.tv_text_settings_header_look));
 
-        inflateDialogItem("Theme", Prefs.printTheme(), false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_theme), Prefs.printTheme(), false,
             RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
                 AppConsts.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
 
-        inflateDialogItem("Color", Prefs.printColor(), true,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_color), Prefs.printColor(), true,
             RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
                 AppConsts.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
         // third party services
 
-        inflateHeader("Third party services");
+        inflateHeader(getString(R.string.tv_text_settings_header_services));
 
-        inflateClickItem("Strava", ". . .", true, v -> StravaSettingsActivity.startActivity(this));
+        inflateClickItem(getString(R.string.tv_text_settings_title_strava), ". . .", true,
+            v -> StravaSettingsActivity.startActivity(this));
 
         // file
 
-        inflateHeader("File");
+        inflateHeader(getString(R.string.tv_text_settings_header_file));
 
-        inflateDialogItem("Export json", "", false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_export), "", false,
             BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_msg_export,
                 R.string.dialog_btn_export, DIALOG_EXPORT));
 
-        inflateDialogItem("Import json", "", true,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_import), "", true,
             BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_msg_import,
                 R.string.dialog_btn_import, DIALOG_IMPORT));
 
         // profile
 
-        inflateHeader("Profile");
+        inflateHeader(getString(R.string.tv_text_settings_header_profile));
 
-        inflateDialogItem("Mass", Prefs.getMass() + " kg", false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_mass), Prefs.getMass() + " kg", false,
             DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
-                Prefs.getMass(), "Kg", R.string.dialog_btn_set, DIALOG_MASS));
+                Prefs.getMass(), getString(R.string.tv_text_settings_hint_mass), R.string.dialog_btn_set, DIALOG_MASS));
 
         final LocalDate bd = Prefs.getBirthday();
-        final View birth = inflateTextView("Birthday", bd == null ? "" : bd.format(AppConsts.FORMATTER_CAPTION), true);
+        final View birth = inflateTextView(getString(R.string.tv_text_settings_title_birthday), bd == null
+            ? ""
+            : bd.format(AppConsts.FORMATTER_CAPTION), true);
         birth.setOnClickListener(v -> {
             int yearSelect, monthSelect, daySelect;
             if (bd == null) {
@@ -170,14 +175,15 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         // developer options
 
         if (Prefs.isDeveloper()) {
-            inflateHeader("Developer options");
+            inflateHeader(getString(R.string.tv_text_settings_header_developer));
 
-            inflateClickItem("Reboard", "", false, v -> {
+            inflateClickItem(getString(R.string.tv_text_settings_title_reboard), "", false, v -> {
                 Prefs.setFirstLogin(true);
                 OnboardingActivity.startActivity(this);
             });
 
-            inflateDialogItem("Recreate database", "", true, BinaryDialog.generic(DIALOG_RECREATE_DB));
+            inflateDialogItem(getString(R.string.tv_text_settings_title_recreate), "", true,
+                BinaryDialog.generic(DIALOG_RECREATE_DB));
         }
     }
 

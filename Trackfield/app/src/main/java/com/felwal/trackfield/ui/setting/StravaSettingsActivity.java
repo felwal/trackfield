@@ -67,38 +67,41 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     protected void inflateViews() {
         // connection
 
-        inflateHeader("Connection");
+        inflateHeader(getString(R.string.tv_text_settings_header_connection));
 
-        inflateClickItem("Authorize", "", true, v -> strava.authorizeStrava());
+        inflateClickItem(getString(R.string.tv_text_settings_title_auth), "", true, v -> strava.authorizeStrava());
 
         // requests
 
-        inflateHeader("Request activities");
+        inflateHeader(getString(R.string.tv_text_settings_header_requests));
 
-        inflateClickItem("Request new", "", false, v -> strava.requestNewActivities((successCount, errorCount) ->
-            StravaApi.toastResponse(successCount, errorCount, this)));
+        inflateClickItem(getString(R.string.tv_text_settings_title_request_new), "", false,
+            v -> strava.requestNewActivities((successCount, errorCount) ->
+                StravaApi.toastResponse(successCount, errorCount, this)));
 
-        inflateDialogItem("Request all", "", !Prefs.isDeveloper(), BinaryDialog.generic(DIALOG_REQUEST_ALL));
+        inflateDialogItem(getString(R.string.tv_text_settings_title_request_all), "", !Prefs.isDeveloper(),
+            BinaryDialog.generic(DIALOG_REQUEST_ALL));
 
         if (Prefs.isDeveloper()) {
-            inflateDialogItem("Pull all", "", true, BinaryDialog.generic(DIALOG_PULL_ALL));
+            inflateDialogItem(getString(R.string.tv_text_settings_title_pull_all), "", true,
+                BinaryDialog.generic(DIALOG_PULL_ALL));
         }
 
         // request options
 
-        inflateHeader("Request options");
+        inflateHeader(getString(R.string.tv_text_settings_header_request_options));
 
-        inflateDialogItem("Device", Prefs.getDefaultDevice(), false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_device), Prefs.getDefaultDevice(), false,
             TextDialog.newInstance(R.string.dialog_title_device,
                 R.string.dialog_msg_device, Prefs.getDefaultDevice(),
-                "Samsung Galaxy S2, S3 etc...", R.string.dialog_btn_set, DIALOG_DEVICE));
+                getString(R.string.tv_text_settings_hint_device), R.string.dialog_btn_set, DIALOG_DEVICE));
 
-        inflateDialogItem("Recording method", Prefs.getDefaultRecordingMethod(), false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_method), Prefs.getDefaultRecordingMethod(), false,
             TextDialog.newInstance(R.string.dialog_title_recording_method,
                 R.string.dialog_msg_recording_method, Prefs.getDefaultRecordingMethod(),
-                "GPS, Galileo, Glonass etc...", R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+                getString(R.string.tv_text_settings_hint_method), R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
 
-        inflateDialogItem("Pull policy", "", true,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_policy), "", true,
             SwitchDialog.newInstance(R.string.dialog_title_pull_policy, BaseDialog.NO_RES, R.string.dialog_btn_set,
                 Prefs.getPullPolicy(), DIALOG_PULL_POLICY));
     }

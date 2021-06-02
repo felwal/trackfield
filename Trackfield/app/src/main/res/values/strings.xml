@@ -56,6 +56,40 @@
     <string name="tv_text_onboarding_title">Trackfield!</string>
     <string name="tv_text_onboarding_caption">@string/app_version</string>
 
+    <!-- settings -->
+    <string name="tv_text_settings_header_display">Display options</string>
+    <string name="tv_text_settings_title_week_headers">Week headers</string>
+    <string name="tv_text_settings_title_singletion_routes">Hide singleton routes</string>
+    <string name="tv_text_settings_header_look">Look</string>
+    <string name="tv_text_settings_title_theme">Theme</string>
+    <string name="tv_text_settings_title_color">Color</string>
+    <string name="tv_text_settings_header_services">Third party services</string>
+    <string name="tv_text_settings_title_strava">Strava</string>
+    <string name="tv_text_settings_header_file">File</string>
+    <string name="tv_text_settings_title_export">Export json</string>
+    <string name="tv_text_settings_title_import">Import json</string>
+    <string name="tv_text_settings_header_profile">Profile</string>
+    <string name="tv_text_settings_title_mass">Mass</string>
+    <string name="tv_text_settings_hint_mass">Kg</string>
+    <string name="tv_text_settings_title_birthday">Birthday</string>
+    <string name="tv_text_settings_header_developer">Developer options</string>
+    <string name="tv_text_settings_title_reboard">Reboard</string>
+    <string name="tv_text_settings_title_recreate">Recreate database</string>
+
+    <!-- strava settings -->
+    <string name="tv_text_settings_header_connection">Connection</string>
+    <string name="tv_text_settings_title_auth">Authorize</string>
+    <string name="tv_text_settings_header_requests">Request activities</string>
+    <string name="tv_text_settings_title_request_new">Request new</string>
+    <string name="tv_text_settings_title_request_all">Request all</string>
+    <string name="tv_text_settings_title_pull_all">Pull all</string>
+    <string name="tv_text_settings_header_request_options">Request options</string>
+    <string name="tv_text_settings_title_device">Device</string>
+    <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc…</string>
+    <string name="tv_text_settings_title_method">Recording method</string>
+    <string name="tv_text_settings_hint_method">GPS, Galileo, Glonass etc…</string>
+    <string name="tv_text_settings_title_policy">Pull policy</string>
+
     <!-- recycler empty states -->
     <string name="tv_text_empty_exercises_title">Welcome to Trackfield!</string>
     <string name="tv_text_empty_exercises_message">Add exercises manually with + or connect to Strava in Settings to get started</string>
