@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.Sorter;
@@ -62,6 +63,25 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
     // extends RecyclerFragment
 
     @Override
+    protected void setEmptyPage() {
+        emptyTitle.setText(getString(R.string.tv_text_empty_intervals_title));
+        emptyMessage.setText(getString(R.string.tv_text_empty_intervals_msg));
+        emptyImage.setImageResource(R.drawable.ic_empty_interval);
+    }
+
+    @Override
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.INTERVALS),
+            Prefs.getSorterInversion(AppConsts.Layout.INTERVALS));
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new IntervalsAdapter(a, this, items);
+    }
+
+    @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.isAscending(),
@@ -76,25 +96,6 @@ public class IntervalsRecyclerFragment extends RecyclerFragment {
         else fadeOutEmpty();
 
         return itemList;
-    }
-
-    @Override
-    protected void setSorter() {
-        sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.INTERVALS),
-            Prefs.getSorterInversion(AppConsts.Layout.INTERVALS));
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new IntervalsAdapter(a, this, items);
-    }
-
-    @Override
-    protected void setEmptyPage() {
-        emptyTitle.setText(getString(R.string.tv_text_empty_intervals_title));
-        emptyMessage.setText(getString(R.string.tv_text_empty_intervals_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_interval);
     }
 
     @Override

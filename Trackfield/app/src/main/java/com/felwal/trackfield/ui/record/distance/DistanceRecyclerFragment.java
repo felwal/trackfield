@@ -7,6 +7,7 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Goal;
@@ -71,6 +72,25 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
     // extends RecyclerFragment
 
     @Override
+    protected void setEmptyPage() {
+        emptyTitle.setText(getString(R.string.tv_text_empty_distance_title));
+        emptyMessage.setText(getString(R.string.tv_text_empty_distance_msg));
+        emptyImage.setImageResource(R.drawable.ic_empty_distance);
+    }
+
+    @Override
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.DISTANCE),
+            Prefs.getSorterInversion(AppConsts.Layout.DISTANCE));
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new DistanceAdapter(a, this, items, originId, distance);
+    }
+
+    @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sorter.getMode(),
@@ -102,25 +122,6 @@ public class DistanceRecyclerFragment extends RecyclerFragment {
         else fadeInEmpty();
 
         return itemList;
-    }
-
-    @Override
-    protected void setSorter() {
-        sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.DISTANCE),
-            Prefs.getSorterInversion(AppConsts.Layout.DISTANCE));
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new DistanceAdapter(a, this, items, originId, distance);
-    }
-
-    @Override
-    protected void setEmptyPage() {
-        emptyTitle.setText(getString(R.string.tv_text_empty_distance_title));
-        emptyMessage.setText(getString(R.string.tv_text_empty_distance_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_distance);
     }
 
     @Override

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.custom.graph.Borders;
@@ -31,8 +32,18 @@ public class StatsRecyclerFragment extends RecyclerFragment {
     // extends DelegateClickListener
 
     @Override
+    protected void setEmptyPage() {
+        // Stats currently never displays an empty page
+    }
+
+    @Override
     protected void setSorter() {
         // Stats currently has no need for sorting
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new StatsAdapter(a, this, items);
     }
 
     @Override
@@ -88,11 +99,6 @@ public class StatsRecyclerFragment extends RecyclerFragment {
         itemList.add(yearBar);
 
         return itemList;
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new StatsAdapter(a, this, items);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
@@ -59,15 +60,8 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
     // extends RecyclerFragment
 
     @Override
-    protected ArrayList<RecyclerItem> getRecyclerItems() {
-        ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sorter.getMode(),
-            sorter.isAscending());
-
-        itemList.add(sorter.copy());
-        addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
-
-        return itemList;
+    protected void setEmptyPage() {
+        // Interval currently never displays an empty page
     }
 
     @Override
@@ -78,8 +72,20 @@ public class IntervalRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected void setAdapter() {
-        adapter = new IntervalAdapter(a, this, items, originId);
+    protected BaseAdapter getAdapter() {
+        return new IntervalAdapter(a, this, items, originId);
+    }
+
+    @Override
+    protected ArrayList<RecyclerItem> getRecyclerItems() {
+        ArrayList<RecyclerItem> itemList = new ArrayList<>();
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sorter.getMode(),
+            sorter.isAscending());
+
+        itemList.add(sorter.copy());
+        addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
+
+        return itemList;
     }
 
     @Override

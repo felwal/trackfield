@@ -7,6 +7,7 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Goal;
@@ -72,6 +73,25 @@ public class RouteRecyclerFragment extends RecyclerFragment {
     // extends RecyclerFragment
 
     @Override
+    protected void setEmptyPage() {
+        emptyTitle.setText(getString(R.string.tv_text_empty_route_title));
+        emptyMessage.setText(getString(R.string.tv_text_empty_route_msg));
+        emptyImage.setImageResource(R.drawable.ic_empty_route);
+    }
+
+    @Override
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.ROUTE),
+            Prefs.getSorterInversion(AppConsts.Layout.ROUTE));
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new RouteAdapter(a, this, items, originId);
+    }
+
+    @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.getId(), sorter.getMode(),
@@ -103,25 +123,6 @@ public class RouteRecyclerFragment extends RecyclerFragment {
         else fadeInEmpty();
 
         return itemList;
-    }
-
-    @Override
-    protected void setSorter() {
-        sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.ROUTE),
-            Prefs.getSorterInversion(AppConsts.Layout.ROUTE));
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new RouteAdapter(a, this, items, originId);
-    }
-
-    @Override
-    protected void setEmptyPage() {
-        emptyTitle.setText(getString(R.string.tv_text_empty_route_title));
-        emptyMessage.setText(getString(R.string.tv_text_empty_route_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_route);
     }
 
     @Override

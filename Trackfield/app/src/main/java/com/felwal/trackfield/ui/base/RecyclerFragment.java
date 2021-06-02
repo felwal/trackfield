@@ -25,7 +25,6 @@ import com.felwal.trackfield.ui.custom.sheet.SortSheet;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.model.SortMode;
-import com.felwal.trackfield.utils.annotations.Unfinished;
 
 import java.util.ArrayList;
 
@@ -33,12 +32,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     protected Activity a;
     protected DbReader reader;
-    protected RecyclerView recycler;
     protected RecyclerView.LayoutManager manager;
-    protected BaseAdapter adapter;
 
-    // empty page
-    protected ConstraintLayout emptyCl;
+    // empty page contents
     protected TextView emptyTitle;
     protected TextView emptyMessage;
     protected ImageView emptyImage;
@@ -46,6 +42,10 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     // items
     protected ArrayList<RecyclerItem> allItems = new ArrayList<>();
     protected final ArrayList<RecyclerItem> items = new ArrayList<>();
+
+    private RecyclerView recycler;
+    private BaseAdapter adapter;
+    private ConstraintLayout emptyCl;
 
     // extends Fragment
 
@@ -66,26 +66,10 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         emptyMessage = emptyCl.findViewById(R.id.tv_recycler_message);
         emptyImage = emptyCl.findViewById(R.id.iv_recycler_empty);
         emptyCl.setVisibility(View.GONE);
+
         setEmptyPage();
-
         setSorter();
-
-        // set adapter
-        if (adapter == null) {
-            new Thread(() -> {
-                // add items
-                if (items.size() == 0) {
-                    items.addAll(getRecyclerItems());
-                    allItems.addAll(items);
-                }
-                a.runOnUiThread(() -> {
-                    setAdapter();
-                    recycler.setAdapter(adapter);
-                    LayoutUtils.crossfadeRecycler(recycler);
-                });
-            }).start();
-        }
-        else recycler.setAdapter(adapter);
+        setAdapter();
 
         // set scroll listener
         if (a instanceof MainActivity) {
@@ -95,7 +79,35 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         return view;
     }
 
+    // set
+
+    protected abstract void setEmptyPage();
+
+    protected abstract void setSorter();
+
+    private void setAdapter() {
+        if (adapter == null) {
+            new Thread(() -> {
+                // add items
+                if (items.size() == 0) {
+                    items.addAll(getRecyclerItems());
+                    allItems.addAll(items);
+                }
+                a.runOnUiThread(() -> {
+                    // set adapter
+                    recycler.setAdapter(adapter = getAdapter());
+                    LayoutUtils.crossfadeRecycler(recycler);
+                });
+            }).start();
+        }
+        else recycler.setAdapter(adapter);
+    }
+
     // get
+
+    protected abstract BaseAdapter getAdapter();
+
+    protected abstract ArrayList<RecyclerItem> getRecyclerItems();
 
     protected RecyclerItem getItem(int position) {
         if (position < 0 || position >= adapter.getItems().size()) return null;
@@ -111,7 +123,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         return visibleItems;
     }
 
-    // calls
+    // update
 
     public void updateRecycler(final ArrayList<RecyclerItem> newItems) {
         class RecyclerItemCallback extends DiffUtil.Callback {
@@ -186,7 +198,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         }
     }
 
-    // add items
+    public abstract void onSortSheetDismiss(int selectedIndex);
+
+    // tools
 
     protected void addItemsWithHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList,
         SortMode.Mode sortMode) {
@@ -212,12 +226,6 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         }
     }
 
-    // empty page
-
-    protected void setEmptyPage() {
-        // use the default empty page if not overridden
-    }
-
     protected void fadeInEmpty() {
         a.runOnUiThread(() -> LayoutUtils.crossfadeIn(emptyCl, 1));
     }
@@ -225,15 +233,5 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected void fadeOutEmpty() {
         a.runOnUiThread(() -> LayoutUtils.crossfadeOut(emptyCl));
     }
-
-    // abstract
-
-    protected abstract ArrayList<RecyclerItem> getRecyclerItems();
-
-    protected abstract void setSorter();
-
-    protected abstract void setAdapter();
-
-    public abstract void onSortSheetDismiss(int selectedIndex);
 
 }

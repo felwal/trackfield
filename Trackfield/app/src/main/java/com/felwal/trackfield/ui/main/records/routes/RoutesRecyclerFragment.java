@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.Sorter;
@@ -64,6 +65,25 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
     // extends RecyclerFragment
 
     @Override
+    protected void setEmptyPage() {
+        emptyTitle.setText(getString(R.string.tv_text_empty_routes_title));
+        emptyMessage.setText(getString(R.string.tv_text_empty_routes_msg));
+        emptyImage.setImageResource(R.drawable.ic_empty_routes);
+    }
+
+    @Override
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.ROUTES),
+            Prefs.getSorterInversion(AppConsts.Layout.ROUTES));
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new RoutesAdapter(a, this, items);
+    }
+
+    @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.isAscending(),
@@ -78,25 +98,6 @@ public class RoutesRecyclerFragment extends RecyclerFragment {
         else fadeOutEmpty();
 
         return itemList;
-    }
-
-    @Override
-    protected void setSorter() {
-        sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.ROUTES),
-            Prefs.getSorterInversion(AppConsts.Layout.ROUTES));
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new RoutesAdapter(a, this, items);
-    }
-
-    @Override
-    protected void setEmptyPage() {
-        emptyTitle.setText(getString(R.string.tv_text_empty_routes_title));
-        emptyMessage.setText(getString(R.string.tv_text_empty_routes_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_routes);
     }
 
     @Override

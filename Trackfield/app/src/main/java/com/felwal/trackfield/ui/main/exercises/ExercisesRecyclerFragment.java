@@ -5,6 +5,7 @@ import android.view.View;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Header;
@@ -34,6 +35,32 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
     private String search = "";
 
     // extends RecyclerFragment
+
+    @Override
+    protected void setEmptyPage() {
+        if (search.equals("")) {
+            emptyTitle.setText(R.string.tv_text_empty_exercises_title);
+            emptyMessage.setText(R.string.tv_text_empty_exercises_message);
+            emptyImage.setImageResource(R.drawable.ic_empty_exercise);
+        }
+        else {
+            emptyTitle.setText(R.string.tv_text_empty_search_title);
+            emptyMessage.setText(R.string.tv_text_empty_search_msg);
+            emptyImage.setImageResource(R.drawable.ic_empty_search);
+        }
+    }
+
+    @Override
+    protected void setSorter() {
+        sorter.setSelection(
+            Prefs.getSorterIndex(AppConsts.Layout.EXERCISES),
+            Prefs.getSorterInversion(AppConsts.Layout.EXERCISES));
+    }
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return new ExercisesAdapter(a, this, items);
+    }
 
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
@@ -147,32 +174,6 @@ public class ExercisesRecyclerFragment extends RecyclerFragment {
         weekHeader.setLastIndex(itemList.size() - 1);
 
         return itemList;
-    }
-
-    @Override
-    protected void setSorter() {
-        sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.EXERCISES),
-            Prefs.getSorterInversion(AppConsts.Layout.EXERCISES));
-    }
-
-    @Override
-    protected void setAdapter() {
-        adapter = new ExercisesAdapter(a, this, items);
-    }
-
-    @Override
-    protected void setEmptyPage() {
-        if (search.equals("")) {
-            emptyTitle.setText(R.string.tv_text_empty_exercises_title);
-            emptyMessage.setText(R.string.tv_text_empty_exercises_message);
-            emptyImage.setImageResource(R.drawable.ic_empty_exercise);
-        }
-        else {
-            emptyTitle.setText(R.string.tv_text_empty_search_title);
-            emptyMessage.setText(R.string.tv_text_empty_search_msg);
-            emptyImage.setImageResource(R.drawable.ic_empty_search);
-        }
     }
 
     @Override
