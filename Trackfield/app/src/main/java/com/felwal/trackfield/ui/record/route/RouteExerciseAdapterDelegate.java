@@ -30,10 +30,10 @@ public class RouteExerciseAdapterDelegate extends
 
     //
 
-    public RouteExerciseAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
+    public RouteExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseAdapter adapter,
         int originId) {
 
-        super(activity, listener);
+        super(a, listener);
         this.adapter = adapter;
         this.originId = originId;
     }

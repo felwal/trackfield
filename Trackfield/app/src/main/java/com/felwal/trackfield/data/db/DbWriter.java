@@ -24,8 +24,6 @@ public class DbWriter extends DbHelper {
 
     //
 
-    private DbWriter(Context context) {
-        super(context);
         db = getWritableDatabase();
     }
 

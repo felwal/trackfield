@@ -47,11 +47,11 @@ public class RadioDialog extends BaseDialog {
     // on
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onAttach(@NonNull Context c) {
+        super.onAttach(c);
 
         try {
-            listener = (DialogListener) context;
+            listener = (DialogListener) c;
         }
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");

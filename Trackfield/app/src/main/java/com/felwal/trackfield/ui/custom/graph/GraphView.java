@@ -50,8 +50,8 @@ public class GraphView extends View implements View.OnTouchListener {
 
     //
 
-    public GraphView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public GraphView(Context c, AttributeSet attrs) {
+        super(c, attrs);
         setOnTouchListener(this);
     }
 

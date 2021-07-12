@@ -13,9 +13,9 @@ public abstract class DbHelper extends SQLiteOpenHelper {
 
     //
 
-    protected DbHelper(Context context) {
+    protected DbHelper(Context c) {
         // version: the target version. calls onUpgrade or onDowngrade if database is of different version
-        super(context, DATABASE_NAME, null, DATABASE_TARGET_VERSION);
+        super(c, DATABASE_NAME, null, DATABASE_TARGET_VERSION);
     }
 
     // extends SQLiteOpenHelper

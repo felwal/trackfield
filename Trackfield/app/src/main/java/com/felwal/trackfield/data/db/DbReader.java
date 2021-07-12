@@ -43,8 +43,6 @@ public class DbReader extends DbHelper {
 
     //
 
-    private DbReader(Context context) {
-        super(context);
         db = getReadableDatabase();
     }
 

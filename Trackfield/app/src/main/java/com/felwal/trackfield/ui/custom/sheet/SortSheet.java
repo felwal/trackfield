@@ -57,11 +57,11 @@ public class SortSheet extends BaseSheet {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onAttach(@NonNull Context c) {
+        super.onAttach(c);
 
         try {
-            listener = (SheetListener) context;
+            listener = (SheetListener) c;
         }
         catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DialogListener");

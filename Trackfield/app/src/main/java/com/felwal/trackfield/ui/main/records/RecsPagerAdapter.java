@@ -35,9 +35,9 @@ public class RecsPagerAdapter extends FragmentPagerAdapter {
 
     //
 
-    public RecsPagerAdapter(ViewPager viewPager, TabLayout tabLayout, Context context, FragmentManager fm) {
+    public RecsPagerAdapter(ViewPager viewPager, TabLayout tabLayout, Context c, FragmentManager fm) {
         super(fm);
-        c = context;
+        this.c = c;
         this.viewPager = viewPager;
 
         // add tab listener

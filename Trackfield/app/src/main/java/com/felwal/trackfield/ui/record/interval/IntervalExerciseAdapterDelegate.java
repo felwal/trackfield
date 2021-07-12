@@ -29,10 +29,10 @@ public class IntervalExerciseAdapterDelegate extends
 
     //
 
-    public IntervalExerciseAdapterDelegate(Activity activity, DelegateClickListener listener, BaseAdapter adapter,
+    public IntervalExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseAdapter adapter,
         int originId) {
 
-        super(activity, listener);
+        super(a, listener);
         this.adapter = adapter;
         this.originId = originId;
     }
