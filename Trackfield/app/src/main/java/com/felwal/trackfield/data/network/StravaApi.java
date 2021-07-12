@@ -464,7 +464,7 @@ public class StravaApi {
 
         // also pull to get data not available to request
         // but only if the user wants data not available to request
-        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE) && Prefs.getPullPolicy().isChecked(JSON_DESCRIPTION)) {
+        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE) || Prefs.getPullPolicy().isChecked(JSON_DESCRIPTION)) {
             pullActivity(strava.getStravaId(), responseSuccess -> {});
         }
 
