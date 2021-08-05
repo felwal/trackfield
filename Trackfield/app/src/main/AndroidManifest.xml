@@ -8,13 +8,12 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.felwal.trackfield.permission.MAPS_RECIEVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="com.felwal.trackfield.permission.MAPS_RECIEVE" />
 
-    <permission android:name="com.felwal.trackfield.permission.MAPS_RECIEVE"
+    <permission
+        android:name="com.felwal.trackfield.permission.MAPS_RECIEVE"
         android:protectionLevel="signature" />
 
     <!-- app -->
@@ -66,11 +65,6 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- map -->
-
-        <activity
-            android:name="com.felwal.trackfield.ui.map.TrackActivity"
-            android:label="@string/activity_title_track"
-            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
             android:name="com.felwal.trackfield.ui.map.ExerciseMapActivity"

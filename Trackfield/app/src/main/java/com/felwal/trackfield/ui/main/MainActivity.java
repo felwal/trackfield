@@ -32,7 +32,6 @@ import com.felwal.trackfield.ui.main.exercises.ExercisesFragment;
 import com.felwal.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
 import com.felwal.trackfield.ui.main.records.RecsFragment;
 import com.felwal.trackfield.ui.main.stats.StatsFragment;
-import com.felwal.trackfield.ui.map.TrackActivity;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
 import com.felwal.trackfield.utils.FileUtils;
@@ -60,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private StravaApi strava;
 
     // fabs
-    private FloatingActionButton fab, addFab, trackFab, stravaFab;
-    private ConstraintLayout addCl, trackCl, stravaCl;
+    private FloatingActionButton fab, addFab, stravaFab;
+    private ConstraintLayout addCl, stravaCl;
     private View overlayView;
     private boolean isFabMenuOpen = false;
 
@@ -192,11 +191,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void setFabs() {
         fab = findViewById(R.id.fab_main_menu);
         addFab = findViewById(R.id.fab_main_add);
-        trackFab = findViewById(R.id.fab_main_track);
         stravaFab = findViewById(R.id.fab_main_strava);
 
         addCl = findViewById(R.id.cl_main_fabs_add);
-        trackCl = findViewById(R.id.cl_main_fabs_track);
         stravaCl = findViewById(R.id.cl_main_fabs_strava);
         overlayView = findViewById(R.id.v_main_overlay);
 
@@ -208,8 +205,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         });
 
         addFab.setOnClickListener(view -> AddActivity.startActivity(MainActivity.this));
-
-        trackFab.setOnClickListener(view -> TrackActivity.startActivity(MainActivity.this));
 
         stravaFab.setOnClickListener(view -> {
             strava.requestNewActivities((successCount, errorCount) ->
@@ -246,11 +241,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void openFabMenu() {
         animateFab();
         addFab.show();
-        if (Prefs.isDeveloper()) trackFab.show();
         stravaFab.show();
 
         LayoutUtils.crossfadeIn(addCl, 1);
-        if (Prefs.isDeveloper()) LayoutUtils.crossfadeIn(trackCl, 1);
         LayoutUtils.crossfadeIn(stravaCl, 1);
         LayoutUtils.crossfadeIn(overlayView, OVERLAY_ALPHA);
 
@@ -260,11 +253,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private void closeFabMenu() {
         animateFab();
         stravaFab.hide();
-        if (Prefs.isDeveloper()) trackFab.hide();
         addFab.hide();
 
         LayoutUtils.crossfadeOut(stravaCl);
-        if (Prefs.isDeveloper()) LayoutUtils.crossfadeOut(trackCl);
         LayoutUtils.crossfadeOut(addCl);
         LayoutUtils.crossfadeOut(overlayView);
 
