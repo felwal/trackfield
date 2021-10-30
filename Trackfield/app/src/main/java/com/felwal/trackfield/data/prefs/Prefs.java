@@ -554,7 +554,7 @@ public class Prefs {
     }
 
     public static MapStyleOptions getMapStyle(Context c) {
-        return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_retro_json : R.string.mapstyle_mono_json));// C.MAP_STYLES[M.heaviside(theme)]));
+        return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_light_json : R.string.mapstyle_dark_json));// C.MAP_STYLES[M.heaviside(theme)]));
     }
 
 }
