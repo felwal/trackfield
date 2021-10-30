@@ -12,12 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.trackfield.R;
+import com.felwal.trackfield.ui.custom.sheet.PeekSheet;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
-import com.felwal.trackfield.ui.custom.sheet.PeekSheet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -58,6 +60,9 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         Intent intent = getIntent();
         if (intent == null) finish();
         id = intent.getIntExtra(EXTRA_ID, -1);
+
+        // initialize maps with the latest renderer (currently neccessary for 18.0.0
+        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, null);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fr_map);
