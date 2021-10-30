@@ -48,5 +48,6 @@
     <color name="colorTrans">#00000000</color>
     <color name="colorHalfTrans">#66000000</color>
     <color name="colorGreenLightTrans">#605BB974</color>
+    <color name="colorGreenDarkTrans">#600C7E46</color>
 
 </resources>
