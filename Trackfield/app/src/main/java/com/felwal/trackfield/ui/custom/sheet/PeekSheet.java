@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Exercise;
-import com.felwal.trackfield.ui.exercise.ViewActivity;
+import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 
@@ -116,7 +116,7 @@ public class PeekSheet extends BaseSheet {
         paceTv.setTextColor(textColor);
 
         // open full view
-        view.setOnClickListener(view -> ViewActivity.startActivity(a, exercise.getId()));
+        view.setOnClickListener(view -> ExerciseDetailActivity.startActivity(a, exercise.getId()));
     }
 
     // interface

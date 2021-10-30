@@ -27,10 +27,10 @@ import com.felwal.trackfield.ui.custom.dialog.BaseDialog;
 import com.felwal.trackfield.ui.custom.dialog.DecimalDialog;
 import com.felwal.trackfield.ui.custom.dialog.FilterDialog;
 import com.felwal.trackfield.ui.custom.sheet.SortSheet;
-import com.felwal.trackfield.ui.exercise.AddActivity;
-import com.felwal.trackfield.ui.main.exercises.ExercisesFragment;
-import com.felwal.trackfield.ui.main.exercises.ExercisesRecyclerFragment;
-import com.felwal.trackfield.ui.main.records.RecsFragment;
+import com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
+import com.felwal.trackfield.ui.main.exerciselist.ExerciseListFragment;
+import com.felwal.trackfield.ui.main.exerciselist.ExerciseListRecyclerFragment;
+import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
@@ -158,20 +158,20 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     private void setBottomNavbar() {
-        selectFragment(new ExercisesFragment());
+        selectFragment(new ExerciseListFragment());
 
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.navigation_main_exercises) {
-                if ((mainFragment instanceof ExercisesFragment)) mainFragment.scrollToTop();
-                else selectFragment(new ExercisesFragment());
+                if ((mainFragment instanceof ExerciseListFragment)) mainFragment.scrollToTop();
+                else selectFragment(new ExerciseListFragment());
                 if (fab.isOrWillBeHidden()) fab.show();
                 return true;
             }
             else if (itemId == R.id.navigation_main_records) {
-                if ((mainFragment instanceof RecsFragment)) mainFragment.scrollToTop();
-                else selectFragment(new RecsFragment());
+                if ((mainFragment instanceof RecordListFragment)) mainFragment.scrollToTop();
+                else selectFragment(new RecordListFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
                 return true;
             }
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             else openFabMenu();
         });
 
-        addFab.setOnClickListener(view -> AddActivity.startActivity(MainActivity.this));
+        addFab.setOnClickListener(view -> ExerciseAddActivity.startActivity(MainActivity.this));
 
         stravaFab.setOnClickListener(view -> {
             strava.requestNewActivities((successCount, errorCount) ->
@@ -222,9 +222,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 super.onScrolled(recyclerView, dx, dy);
 
                 // show/hide fab on scroll
-                if (recyclerFragment instanceof ExercisesRecyclerFragment) {
+                if (recyclerFragment instanceof ExerciseListRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExercisesFragment) fab.show();
+                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExerciseListFragment) fab.show();
                 }
             }
         });

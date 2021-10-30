@@ -48,18 +48,18 @@
         <!-- exercise -->
 
         <activity
-            android:name="com.felwal.trackfield.ui.exercise.ViewActivity"
+            android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity"
             android:label="@string/activity_title_view"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.exercise.EditActivity"
+            android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseEditActivity"
             android:label="@string/activity_title_edit"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.exercise.AddActivity"
+            android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity"
             android:label="@string/activity_title_add"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -69,25 +69,25 @@
         <activity
             android:name="com.felwal.trackfield.ui.map.ExerciseMapActivity"
             android:label="@string/activity_title_maps"
-            android:parentActivityName="com.felwal.trackfield.ui.exercise.ViewActivity" />
+            android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity" />
 
         <activity
             android:name="com.felwal.trackfield.ui.map.RouteMapActivity"
             android:label="@string/activity_title_maps"
-            android:parentActivityName="com.felwal.trackfield.ui.exercise.ViewActivity" />
+            android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity" />
 
         <!-- record -->
 
         <activity
-            android:name="com.felwal.trackfield.ui.record.distance.DistanceActivity"
+            android:name="com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.record.route.RouteActivity"
+            android:name="com.felwal.trackfield.ui.recorddetail.routedetail.RouteDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.record.interval.IntervalActivity"
+            android:name="com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <!-- settings -->

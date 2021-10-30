@@ -32,22 +32,22 @@
     <!-- edit texts -->
 
     <!-- edit -->
-    <string name="et_text_edit_route">Route</string>
-    <string name="et_hint_edit_route">Route</string>
-    <string name="et_hint_edit_routevar">variation</string>
-    <string name="et_hint_edit_date">yyyy/MM/dd</string>
-    <string name="et_text_edit_time">0</string>
-    <string name="et_hint_edit_time">HH:mm:ss</string>
-    <string name="et_hint_edit_interval">Interval</string>
-    <string name="et_hint_edit_note">Note</string>
-    <string name="et_text_edit_distance">0</string>
-    <string name="et_hint_edit_distance">km</string>
-    <string name="et_hint_edit_hours">HH</string>
-    <string name="et_hint_edit_minutes">mm</string>
-    <string name="et_hint_edit_seconds">ss</string>
-    <string name="et_hint_edit_device">Device</string>
-    <string name="et_hint_edit_recordingmethod">Recording method</string>
-    <string name="et_hint_edit_type">Type</string>
+    <string name="et_text_exerciseedit_route">Route</string>
+    <string name="et_hint_exerciseedit_route">Route</string>
+    <string name="et_hint_exerciseedit_routevar">variation</string>
+    <string name="et_hint_exerciseedit_date">yyyy/MM/dd</string>
+    <string name="et_text_exerciseedit_time">0</string>
+    <string name="et_hint_exerciseedit_time">HH:mm:ss</string>
+    <string name="et_hint_exerciseedit_interval">Interval</string>
+    <string name="et_hint_exerciseedit_note">Note</string>
+    <string name="et_text_exerciseedit_distance">0</string>
+    <string name="et_hint_exerciseedit_distance">km</string>
+    <string name="et_hint_exerciseedit_hours">HH</string>
+    <string name="et_hint_exerciseedit_minutes">mm</string>
+    <string name="et_hint_exerciseedit_seconds">ss</string>
+    <string name="et_hint_exerciseedit_device">Device</string>
+    <string name="et_hint_exerciseedit_recordingmethod">Recording method</string>
+    <string name="et_hint_exerciseedit_type">Type</string>
 
     <!-- text views -->
 
@@ -91,20 +91,20 @@
     <string name="tv_text_settings_title_policy">Pull policy</string>
 
     <!-- recycler empty states -->
-    <string name="tv_text_empty_exercises_title">Welcome to Trackfield!</string>
-    <string name="tv_text_empty_exercises_message">Add exercises manually with + or connect to Strava in Settings to get started</string>
+    <string name="tv_text_empty_exerciselist_title">Welcome to Trackfield!</string>
+    <string name="tv_text_empty_exerciselist_message">Add exercises manually with + or connect to Strava in Settings to get started</string>
     <string name="tv_text_empty_search_title">No results</string>
     <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue variation, device, method, note and type</string>
-    <string name="tv_text_empty_distances_title">No distances</string>
-    <string name="tv_text_empty_distances_msg">Press + to add a distance</string>
-    <string name="tv_text_empty_routes_title">No routes</string>
-    <string name="tv_text_empty_routes_msg">Your routes will show up here</string>
-    <string name="tv_text_empty_intervals_title">No intervals</string>
-    <string name="tv_text_empty_intervals_msg">Your intervals will show up here</string>
-    <string name="tv_text_empty_distance_title">No exercises</string>
-    <string name="tv_text_empty_distance_msg">Check filters, or set a goal</string>
-    <string name="tv_text_empty_route_title">No exercises</string>
-    <string name="tv_text_empty_route_msg">Check filters</string>
+    <string name="tv_text_empty_distancelist_title">No distances</string>
+    <string name="tv_text_empty_distancelist_msg">Press + to add a distance</string>
+    <string name="tv_text_empty_routelist_title">No routes</string>
+    <string name="tv_text_empty_routelist_msg">Your routes will show up here</string>
+    <string name="tv_text_empty_intervallist_title">No intervals</string>
+    <string name="tv_text_empty_intervallist_msg">Your intervals will show up here</string>
+    <string name="tv_text_empty_distancedetail_title">No exercises</string>
+    <string name="tv_text_empty_distancedetail_msg">Check filters, or set a goal</string>
+    <string name="tv_text_empty_routedetail_title">No exercises</string>
+    <string name="tv_text_empty_routedetail_msg">Check filters</string>
 
     <string name="tv_text_fab_add">Add exercise</string>
     <string name="tv_text_fab_request_strava">Request new</string>
@@ -114,7 +114,7 @@
 
     <!-- other components -->
 
-    <string name="btn_text_boarding_start">Get started</string>
+    <string name="btn_text_onboarding_start">Get started</string>
     <string name="sw_text_drive">Drive distance</string>
     <string name="sw_text_dialog_filter_paceless">Include paceless</string>
     <string name="sw_text_dialog_filter_longer">Include longer</string>

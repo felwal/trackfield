@@ -42,7 +42,7 @@ public final class FileUtils {
     private static final String FILENAME_R = "routes.json";
     private static final String FILENAME_D = "distances.json";
     private static final String FILENAME_VER = "version.json";
-    private static final String FOLDER = "Trackfield";
+    private static final String FOLDER = "Documents/Trackfield";
     private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/" + FOLDER + "/";
 
     // json keys

@@ -17,7 +17,7 @@ import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.exercise.ViewActivity;
+import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.AppConsts;
@@ -415,7 +415,7 @@ public class StravaApi {
             success = DbWriter.get(a).updateExercise(existing, a);
         }
 
-        if (a instanceof ViewActivity) a.recreate();
+        if (a instanceof ExerciseDetailActivity) a.recreate();
 
         return success;
     }
