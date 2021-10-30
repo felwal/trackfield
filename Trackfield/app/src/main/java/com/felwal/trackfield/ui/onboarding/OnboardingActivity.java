@@ -28,8 +28,7 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
-        ScreenUtils.makeStatusBarTransparent(getWindow(), !ScreenUtils.isThemeLight(this),
-            findViewById(R.id.tv_onboarding_subtitle));
+        ScreenUtils.makeStatusBarTransparent(getWindow(), !ScreenUtils.isThemeLight(this), null);
 
         setViews();
     }

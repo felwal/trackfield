@@ -39,24 +39,13 @@ public class IntervalListRecyclerFragment extends RecyclerFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        // show hidden
-        MenuItem hiddenItem = menu.findItem(R.id.action_show_hidden_routes);
-        hiddenItem.setChecked(Prefs.areHiddenRoutesShown());
-        if (Prefs.areHiddenRoutesShown()) {
-            hiddenItem.setIcon(R.drawable.ic_hidden).setTitle(R.string.action_hide_hidden);
-        }
-        else hiddenItem.setIcon(R.drawable.ic_hide).setTitle(R.string.action_show_hidden);
-    }
-
     /**
      * Inflates toolbar menu in place of {@link RecordListFragment#onCreateOptionsMenu(Menu, MenuInflater)}
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         menu.clear(); // remove R.menu.menu_toolbar_main_recs
-        inflater.inflate(R.menu.menu_toolbar_main_routelist, menu);
+        inflater.inflate(R.menu.menu_toolbar_main_intervallist, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

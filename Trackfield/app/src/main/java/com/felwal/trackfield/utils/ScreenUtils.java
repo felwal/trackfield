@@ -82,14 +82,14 @@ public final class ScreenUtils {
         window.setStatusBarColor(Color.TRANSPARENT);
 
         // set optional margins
-        window.getDecorView().setOnApplyWindowInsetsListener((v, insets) -> {
-            if (top != null) {
+        if (top != null) {
+            window.getDecorView().setOnApplyWindowInsetsListener((v, insets) -> {
                 //ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) top.getLayoutParams();
                 int margin = /*params.topMargin +*/ insets.getSystemWindowInsetTop();
                 LayoutUtils.setMargin(top, margin, Borders.top());
-            }
-            return insets;
-        });
+                return insets;
+            });
+        }
     }
 
     public static void setWindowFlag(Window window, final int bits, boolean on) {

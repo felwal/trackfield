@@ -520,8 +520,12 @@ public class StravaApi {
             LayoutUtils.toast(R.string.toast_strava_req_activities_none, c);
         }
         else {
-            LayoutUtils.toast(R.plurals.toast_strava_req_activities_successful, successCount, c);
-            LayoutUtils.toast(R.plurals.toast_strava_req_activities_err, errorCount, c);
+            if (successCount != 0) {
+                LayoutUtils.toast(R.plurals.toast_strava_req_activities_successful, successCount, c);
+            }
+            if (errorCount != 0) {
+                LayoutUtils.toast(R.plurals.toast_strava_req_activities_err, errorCount, c);
+            }
         }
     }
 

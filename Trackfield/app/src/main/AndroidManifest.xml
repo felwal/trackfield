@@ -32,12 +32,12 @@
         <activity
             android:name="com.felwal.trackfield.ui.onboarding.OnboardingActivity"
             android:label="@string/activity_title_onboarding"
-            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
-            android:theme="@style/Theme.Trackfield.Splash" />
+            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
             android:name="com.felwal.trackfield.ui.main.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Trackfield.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
 
-        <!-- exercise -->
+        <!-- exercise detail -->
 
         <activity
             android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity"
@@ -76,7 +76,7 @@
             android:label="@string/activity_title_maps"
             android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity" />
 
-        <!-- record -->
+        <!-- record detail -->
 
         <activity
             android:name="com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity"

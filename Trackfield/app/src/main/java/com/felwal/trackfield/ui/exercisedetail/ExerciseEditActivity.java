@@ -199,6 +199,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
         // set texts
         routeActv.setText(exercise.getRoute());
         routeVarActv.setText(exercise.getRouteVar());
+        intervalActv.setText(exercise.getInterval());
         dateEt.setText(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE));
         timeEt.setText(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME));
         noteEt.setText(exercise.getNote());
@@ -221,7 +222,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
             polylineEt.setText(exercise.getTrail().getPolyline());
             polylineEt.setFocusable(false);
         }*/
-
     }
 
     private void setListeners() {
