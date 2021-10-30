@@ -33,7 +33,7 @@
         <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
     </style>
 
-    <!-- fab -->
+    <!-- widget -->
 
     <style name="Widget.Trackfield.Fab" parent="">
         <item name="android:layout_width">wrap_content</item>
@@ -53,8 +53,6 @@
         <item name="fabSize">mini</item>
     </style>
 
-    <!-- widget -->
-
     <style name="Widget.Trackfield.TextView" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -67,7 +65,7 @@
     </style>
 
     <style name="Widget.Trackfield.EditText.Small">
-        <item name="android:textSize">@dimen/type_heading2</item>
+        <item name="android:textSize">@dimen/type_subtitle3</item>
     </style>
 
     <style name="Widget.Trackfield.Navbar" parent="">
@@ -87,7 +85,7 @@
         <item name="tabIndicator">@drawable/shape_indicator_tab</item>
         <item name="tabIndicatorHeight">@dimen/layout_indicator_tab_height</item>
         <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabTextAppearance">@style/TextAppearance.Trackfield.TabTitle</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Trackfield.Subtitle2.TabLayoutTitle</item>
         <item name="tabSelectedTextColor">?android:attr/textColorHighlight</item>
     </style>
 
@@ -104,19 +102,11 @@
         <item name="checkedIconEnabled">false</item>
         <item name="checkedIcon">@null</item>
     </style>
-
-    <!-- composite -->
-
+    
     <style name="Widget.Trackfield.Divider" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/layout_divider</item>
         <item name="android:background">?android:attr/listDivider</item>
-    </style>
-
-    <style name="Widget.Trackfield.SettingsItem" parent="">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/layout_settings_item</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
     <!-- date picker -->
@@ -166,34 +156,45 @@
         <item name="android:headerBackground">@color/colorGreen</item>
     </style>
 
-    <!-- textappearance -->
+    <!-- textappearance: base -->
 
     <style name="TextAppearance.Trackfield" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.Headline">
+    <style name="TextAppearance.Trackfield.Headline1">
+        <item name="android:textSize">@dimen/type_headline1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Trackfield.Headline2">
         <item name="android:textSize">@dimen/type_headline2</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.Heading1">
-        <item name="android:textSize">@dimen/type_heading1</item>
+    <style name="TextAppearance.Trackfield.Subtitle1">
+        <item name="android:textSize">@dimen/type_subtitle1</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.HeadingSetting">
-        <item name="android:textSize">@dimen/type_heading_setting</item>
+    <style name="TextAppearance.Trackfield.Subtitle2">
+        <item name="android:textSize">@dimen/type_subtitle2</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.Heading2">
-        <item name="android:textSize">@dimen/type_heading2</item>
+    <style name="TextAppearance.Trackfield.Subtitle3">
+        <item name="android:textSize">@dimen/type_subtitle3</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.TabTitle">
-        <item name="android:textSize">@dimen/type_title_tab</item>
+    <style name="TextAppearance.Trackfield.Body">
+        <item name="android:textSize">@dimen/type_body</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="TextAppearance.Trackfield.Caption">
+        <item name="android:textSize">@dimen/type_caption</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <!-- textappearance: special -->
 
     <style name="TextAppearance.Trackfield.DialogTitle">
         <item name="android:textSize">@dimen/type_dialog_title</item>
@@ -209,14 +210,36 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.Body">
-        <item name="android:textSize">@dimen/type_body</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    <!-- textappearance: specific -->
+
+    <style name="TextAppearance.Trackfield.Subtitle1.Quantity">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.ValueLetter">
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:textSize">@dimen/type_heading1</item>
+    <style name="TextAppearance.Trackfield.Subtitle1.Year">
+        <item name="android:textColor">?android:attr/textColorHighlight</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Trackfield.Subtitle2.TabLayoutTitle">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Trackfield.Subtitle3.Month">
+        <item name="android:textColor">?android:attr/textColorHighlight</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Trackfield.Subtitle3.HeaderValues">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textStyle">normal</item>
+        <!--<item name="android:textSize">12sp</item>-->
+    </style>
+
+    <style name="TextAppearance.Trackfield.Subtitle3.Sorter">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -224,49 +247,14 @@
         <!--<item name="android:textStyle">bold</item>-->
     </style>
 
-    <style name="TextAppearance.Trackfield.Caption">
-        <item name="android:textSize">@dimen/type_caption</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.Overline">
-        <item name="android:textSize">@dimen/type_overline</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-
-        <item name="textAllCaps">true</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.Heading1.Year">
+    <style name="TextAppearance.Trackfield.Caption.Week">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Trackfield.Heading2.Month">
+    <style name="TextAppearance.Trackfield.Caption.SettingHeader">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.Heading2.HeaderValues">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textStyle">normal</item>
-        <!--<item name="android:textSize">12sp</item>-->
-    </style>
-
-    <style name="TextAppearance.Trackfield.Heading2.Sorter">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.Caption.RecYear">
-        <item name="android:textColor">?android:attr/textColorHighlight</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.Overline.SettingHeader">
-        <item name="android:textColor">?android:attr/textColorHighlight</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:paddingStart">@dimen/spacing_small</item>
-        <item name="android:gravity">bottom</item>
 
         <item name="textAllCaps">false</item>
     </style>

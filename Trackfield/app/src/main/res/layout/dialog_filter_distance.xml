@@ -38,7 +38,7 @@
                 android:paddingEnd="6dp"
                 android:paddingBottom="@dimen/spacing_diminutive"
                 android:text="@string/tv_text_dialog_filter_msg"
-                android:textAppearance="@style/TextAppearance.Trackfield.Headline"
+                android:textAppearance="@style/TextAppearance.Trackfield.Headline2"
                 style="@style/Widget.Trackfield.TextView" />
 
             <com.google.android.material.chip.ChipGroup

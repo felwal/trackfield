@@ -128,7 +128,7 @@
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:text="s"
                     android:textColor="@color/colorAccBlue"
-                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1.Quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     style="@style/Widget.Trackfield.TextView" />
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_tiny"
                     android:layout_marginEnd="@dimen/spacing_medium"
-                    android:gravity="right|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:switchPadding="10dp"
                     android:text="@string/sw_text_drive"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_edit_s"
@@ -166,7 +166,7 @@
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:text="t"
                     android:textColor="@color/colorAccTurqoise"
-                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1.Quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_edit_s"
                     style="@style/Widget.Trackfield.TextView" />

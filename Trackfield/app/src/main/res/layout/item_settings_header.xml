@@ -3,14 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+     android:layout_width="match_parent"
     android:layout_height="@dimen/layout_settings_header"
     style="SettingCl">
 
     <TextView
         android:id="@+id/tv_settings_item_header_title"
         android:layout_height="0dp"
-        android:textAppearance="@style/TextAppearance.Trackfield.Overline.SettingHeader"
+        android:textAppearance="@style/TextAppearance.Trackfield.Caption.SettingHeader"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

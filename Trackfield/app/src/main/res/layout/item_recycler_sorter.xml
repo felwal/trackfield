@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginEnd="@dimen/spacing_small"
         android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.Trackfield.Heading2.Sorter"
+        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3.Sorter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

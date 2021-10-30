@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tv_settings_item_text_title"
         android:layout_marginStart="@dimen/spacing_small"
-        android:textAppearance="@style/TextAppearance.Trackfield.HeadingSetting"
+        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/tv_settings_item_text_value"
         android:layout_marginEnd="@dimen/spacing_small"
-        android:textAppearance="@style/TextAppearance.Trackfield.HeadingSetting"
+        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

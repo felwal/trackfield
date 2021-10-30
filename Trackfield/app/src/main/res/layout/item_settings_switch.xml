@@ -15,7 +15,7 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:clickable="false"
         android:textColorLink="#00FF0000"
-        android:textAppearance="@style/TextAppearance.Trackfield.HeadingSetting"
+        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

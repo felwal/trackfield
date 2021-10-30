@@ -9,7 +9,7 @@
     android:paddingEnd="@dimen/spacing_medium"
     android:gravity="center_vertical"
     android:background="?attr/selectableItemBackground"
-    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
+    android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
     tools:text="SortMode"
     style="@style/Widget.Trackfield.TextView">
 
