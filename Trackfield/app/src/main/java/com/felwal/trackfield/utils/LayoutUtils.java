@@ -91,11 +91,15 @@ public final class LayoutUtils {
      * @param resId Resource id of the color, e.g. android.R.attr.textColorPrimary or R.attr.colorSurface
      */
     @ColorInt
-    public static int getColorInt(int resId, Context c) {
+    public static int getColorAttr(int resId, Context c) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = c.getTheme();
         theme.resolveAttribute(resId, typedValue, true);
         return typedValue.data;
+    }
+
+    public static String getStringAttr(int resId, Context c) {
+        return c.getString(getIdAttr(resId, c));
     }
 
     /**
@@ -104,7 +108,7 @@ public final class LayoutUtils {
      * @param attrResId Attribute id to get
      * @return The resource id pointed to by the attribute id
      */
-    public static int getAttr(int attrResId, Context c) {
+    public static int getIdAttr(int attrResId, Context c) {
         int[] attrs = new int[] { attrResId };
         TypedArray typedArray = c.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);

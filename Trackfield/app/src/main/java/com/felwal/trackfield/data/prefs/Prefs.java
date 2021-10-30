@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.felwal.trackfield.R;
 
 import com.felwal.trackfield.data.network.StravaApi;
+import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.annotations.Unimplemented;
 import com.felwal.trackfield.utils.model.SwitchChain;
 import com.felwal.trackfield.utils.model.SwitchItem;
@@ -549,11 +550,6 @@ public class Prefs {
 
     public static boolean isRefreshTokenCurrent() {
         return refreshToken != null && !refreshToken.equals("");
-    }
-
-    public static MapStyleOptions getMapStyle(Context c) {
-        return new MapStyleOptions(c.getResources().getString(theme == 1 ? R.string.mapstyle_light_json :
-            R.string.mapstyle_dark_json));
     }
 
 }

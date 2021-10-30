@@ -3,16 +3,15 @@
     <!-- appbar -->
 
     <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
-        <!-- built-in action buttons, e.g. home/up -->
-        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <!-- built-in action buttons, e.g. home/up, overflow -->
+        <item name="colorControlNormal">?colorOnPrimary</item>
         <!-- custom action buttons -->
-        <item name="iconTint">?attr/colorOnPrimary</item>
+        <item name="iconTint">?colorOnPrimary</item>
 
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
     </style>
 
     <style name="ThemeOverlay.Trackfield.ActionBarPopup" parent="ThemeOverlay.AppCompat.DayNight">
-        <item name="colorSurface">?android:colorBackground</item>
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView</item>
     </style>
 
@@ -26,10 +25,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:elevation">@dimen/elev_toolbar</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">?colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar</item>
 
-        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="titleTextColor">?colorOnPrimary</item>
         <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
     </style>
 
@@ -44,7 +43,7 @@
         <item name="android:textColorPrimary">?android:textColorPrimaryInverse</item>
 
         <item name="fabSize">normal</item>
-        <item name="backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="backgroundTint">?colorPrimaryVariant</item>
         <item name="tint">?android:textColorPrimaryInverse</item>
         <!--<item name="rippleColor">@color/colorGreenDarker</item>-->
     </style>
@@ -68,15 +67,16 @@
         <item name="android:textSize">@dimen/type_subtitle3</item>
     </style>
 
-    <style name="Widget.Trackfield.Navbar" parent="">
+    <style name="Widget.Trackfield.BottomNavigationView" parent="">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_height">?actionBarSize</item>
         <item name="android:elevation">@dimen/elev_navbar</item>
-        <item name="android:background">?attr/colorSurface</item>
+        <item name="android:background">?colorSurface</item>
 
         <item name="labelVisibilityMode">selected</item>
         <item name="itemTextColor">@drawable/selector_nav_color</item>
         <item name="itemIconTint">@drawable/selector_nav_color</item>
+        <item name="itemHorizontalTranslationEnabled">true</item>
         <item name="menu">@menu/menu_navbar_main</item>
     </style>
 
@@ -102,7 +102,7 @@
         <item name="checkedIconEnabled">false</item>
         <item name="checkedIcon">@null</item>
     </style>
-    
+
     <style name="Widget.Trackfield.Divider" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/layout_divider</item>

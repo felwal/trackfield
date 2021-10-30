@@ -137,7 +137,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
 
         // set cancel icon as home
         Drawable homeIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
-        homeIcon.setColorFilter(LayoutUtils.getColorInt(R.attr.colorOnPrimary, this), PorterDuff.Mode.SRC_IN);
+        homeIcon.setColorFilter(LayoutUtils.getColorAttr(R.attr.colorOnPrimary, this), PorterDuff.Mode.SRC_IN);
         ab.setHomeAsUpIndicator(homeIcon);
     }
 
@@ -213,7 +213,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
 
         if (exercise.isDistanceDriven()) {
             distanceEt.setEnabled(false);
-            distanceEt.setTextColor(LayoutUtils.getColorInt(android.R.attr.textColorSecondary, this));
+            distanceEt.setTextColor(LayoutUtils.getColorAttr(android.R.attr.textColorSecondary, this));
         }
 
         // polyline
@@ -228,7 +228,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
         // distance checked driven listener
         drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             distanceEt.setEnabled(!isChecked);
-            distanceEt.setTextColor(LayoutUtils.getColorInt(isChecked
+            distanceEt.setTextColor(LayoutUtils.getColorAttr(isChecked
                 ? android.R.attr.textColorSecondary
                 : android.R.attr.textColorPrimary,
                 this));

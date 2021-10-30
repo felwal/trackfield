@@ -66,7 +66,7 @@ public class ExerciseMapActivity extends MapActivity {
         Context c) {
 
         // style
-        LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
+        setMapStyle(googleMap, c);
 
         // polyline
         PolylineOptions options = new PolylineOptions();

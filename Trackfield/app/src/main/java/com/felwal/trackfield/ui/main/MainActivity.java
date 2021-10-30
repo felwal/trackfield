@@ -265,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @SuppressLint("ResourceType")
     private void animateFab() {
         Context fabContext = fab.getContext();
-        @ColorInt int primaryVariant = LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, fabContext);
-        @ColorInt int surface = LayoutUtils.getColorInt(R.attr.colorSurface, fabContext);
+        @ColorInt int primaryVariant = LayoutUtils.getColorAttr(R.attr.colorPrimaryVariant, fabContext);
+        @ColorInt int surface = LayoutUtils.getColorAttr(R.attr.colorSurface, fabContext);
 
         @ColorInt int fromColor, toColor;
         Drawable toIcon;
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             fromColor = surface;
             toColor = primaryVariant;
             toIcon = ContextCompat.getDrawable(this, R.drawable.ic_add).mutate();
-            toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorPrimaryInverse, this),
+            toIcon.setColorFilter(LayoutUtils.getColorAttr(android.R.attr.textColorPrimaryInverse, this),
                 PorterDuff.Mode.SRC_IN);
         }
         // animate to open menu
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             fromColor = primaryVariant;
             toColor = surface;
             toIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
-            toIcon.setColorFilter(LayoutUtils.getColorInt(android.R.attr.textColorSecondary, this),
+            toIcon.setColorFilter(LayoutUtils.getColorAttr(android.R.attr.textColorSecondary, this),
                 PorterDuff.Mode.SRC_IN);
         }
 

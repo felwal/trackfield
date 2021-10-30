@@ -64,7 +64,7 @@ public class GraphData {
     }
 
     public void setPaint(int colorAttrResId, Context c) {
-        paint.setColor(c.getColor(LayoutUtils.getAttr(colorAttrResId, c)));
+        paint.setColor(c.getColor(LayoutUtils.getIdAttr(colorAttrResId, c)));
     }
 
     // calc

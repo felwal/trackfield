@@ -94,7 +94,7 @@ public class SortSheet extends BaseSheet {
             // set title and styling
             tv.setText(titles[i]);
             if (i == selectedIndex) {
-                tv.setTextColor(LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, a));
+                tv.setTextColor(LayoutUtils.getColorAttr(R.attr.colorPrimaryVariant, a));
                 tv.setTypeface(null, Typeface.BOLD);
             }
 

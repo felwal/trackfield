@@ -56,7 +56,7 @@ public class RouteMapActivity extends MapActivity {
         Context c) {
 
         //style
-        LayoutUtils.toast(googleMap.setMapStyle(Prefs.getMapStyle(c)), c);
+        setMapStyle(googleMap, c);
 
         if (trails.trailCount() == 0) return new ArrayList<>();
 

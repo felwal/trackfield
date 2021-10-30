@@ -23,6 +23,7 @@ import com.google.android.gms.maps.MapsInitializer.Renderer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
@@ -177,6 +178,11 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
+    protected static void setMapStyle(GoogleMap googleMap, Context c) {
+        MapStyleOptions style = new MapStyleOptions(LayoutUtils.getStringAttr(R.attr.mapStyle, c));
+        googleMap.setMapStyle(style);
+    }
+
     // implements GoogleMap, PeekSheet
 
     @Override
@@ -219,7 +225,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return LayoutUtils.getColorInt(R.attr.colorPrimaryVariant, c);
+        return LayoutUtils.getColorAttr(R.attr.colorPrimaryVariant, c);
     }
 
     @ColorInt

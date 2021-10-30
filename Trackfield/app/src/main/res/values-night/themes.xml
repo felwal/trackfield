@@ -4,6 +4,8 @@
     <!-- dark theme -->
 
     <style name="Theme.Trackfield" parent="Theme.Default">
+        <item name="android:windowLightStatusBar">false</item>
+
         <!-- text -->
         <item name="android:textColorPrimary">@color/colorWhite</item>
         <item name="android:textColorSecondary">@color/colorGrey7</item>
@@ -36,17 +38,16 @@
         <item name="color">@color/colorGreenDarker</item>
 
         <!-- action overflow menu -->
-        <!--item name="android:itemBackground">@color/colorGrey3</item>-->
         <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
 
-        <!-- other items -->
-        <item name="android:windowLightStatusBar">false</item>
         <!-- make actv window appear above keyboard -->
         <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
         <!-- styles -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
         <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Dark</item>
+
+        <item name="mapStyle">@string/mapstyle_dark_json</item>
     </style>
 
     <!-- color combinations -->

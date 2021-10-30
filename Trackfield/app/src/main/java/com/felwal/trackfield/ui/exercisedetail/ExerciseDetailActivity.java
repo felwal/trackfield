@@ -215,7 +215,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
 
                 if (i % 2 == 0) {
                     subView.setBackgroundColor(
-                        getResources().getColor(LayoutUtils.getAttr(R.attr.panelBackground, this)));
+                        getResources().getColor(LayoutUtils.getIdAttr(R.attr.panelBackground, this)));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
