@@ -21,7 +21,6 @@ import com.felwal.trackfield.ui.custom.graph.Borders;
 public final class ScreenUtils {
 
     public static float scale;
-    public static int statusBarHeight;
 
     //
 
@@ -46,8 +45,8 @@ public final class ScreenUtils {
         AppCompatDelegate.setDefaultNightMode(nightMode);
 
         // color
-        int newTheme = AppConsts.COLORS[Prefs.getColor()];
         try {
+            int newTheme = AppConsts.COLORS[Prefs.getColor()];
             int currentTheme = a.getPackageManager().getActivityInfo(a.getComponentName(), 0).getThemeResource();
             if (currentTheme != newTheme) {
                 a.setTheme(newTheme);
@@ -85,9 +84,8 @@ public final class ScreenUtils {
         // set optional margins
         window.getDecorView().setOnApplyWindowInsetsListener((v, insets) -> {
             if (top != null) {
-                // TODO: params margin finns inte?
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) top.getLayoutParams();
-                int margin = params.topMargin + insets.getSystemWindowInsetTop();
+                //ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) top.getLayoutParams();
+                int margin = /*params.topMargin +*/ insets.getSystemWindowInsetTop();
                 LayoutUtils.setMargin(top, margin, Borders.top());
             }
             return insets;

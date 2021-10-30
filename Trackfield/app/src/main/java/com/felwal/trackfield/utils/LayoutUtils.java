@@ -66,13 +66,13 @@ public final class LayoutUtils {
         str.setSpan(new ForegroundColorSpan(color), i, i + subtext.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    public static void setMargin(View view, int margin, Borders dir) {
+    public static void setMargin(View view, int marginPx, Borders dir) {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
-        if (dir.isLeft()) params.setMargins(margin, 0, 0, 0);
-        if (dir.isTop()) params.setMargins(0, margin, 0, 0);
-        if (dir.isRight()) params.setMargins(0, 0, margin, 0);
-        if (dir.isBottom()) params.setMargins(0, 0, 0, margin);
+        if (dir.isLeft()) params.setMargins(marginPx, 0, 0, 0);
+        if (dir.isTop()) params.setMargins(0, marginPx, 0, 0);
+        if (dir.isRight()) params.setMargins(0, 0, marginPx, 0);
+        if (dir.isBottom()) params.setMargins(0, 0, 0, marginPx);
 
         view.setLayoutParams(params);
     }
