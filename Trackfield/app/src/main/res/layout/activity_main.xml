@@ -48,7 +48,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    style="@style/Toolbar" />
+                    style="@style/Widget.Trackfield.Toolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -85,17 +85,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_logo_strava"
-                style="@style/Fab.Mini" />
+                style="@style/Widget.Trackfield.Fab.Mini" />
 
             <TextView
                 android:id="@+id/tv_main_fabs_strava"
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:text="@string/tv_text_fab_request_strava"
+                android:textAppearance="@style/TextAppearance.Trackfield.Body.FabTitle"
                 app:layout_constraintBottom_toBottomOf="@+id/fab_main_strava"
                 app:layout_constraintEnd_toStartOf="@+id/fab_main_strava"
                 app:layout_constraintTop_toTopOf="@+id/fab_main_strava"
                 app:layout_constraintVertical_bias="0.4"
-                style="@style/TextView.Body.FabTitle" />
+                style="@style/Widget.Trackfield.TextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,17 +118,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_edit"
-                style="@style/Fab.Mini" />
+                style="@style/Widget.Trackfield.Fab.Mini" />
 
             <TextView
                 android:id="@+id/tv_main_fabs_add"
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:text="@string/tv_text_fab_add"
+                android:textAppearance="@style/TextAppearance.Trackfield.Body.FabTitle"
                 app:layout_constraintBottom_toBottomOf="@+id/fab_main_add"
                 app:layout_constraintEnd_toStartOf="@+id/fab_main_add"
                 app:layout_constraintTop_toTopOf="@+id/fab_main_add"
                 app:layout_constraintVertical_bias="0.4"
-                style="@style/TextView.Body.FabTitle" />
+                style="@style/Widget.Trackfield.TextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -137,7 +139,7 @@
             android:layout_marginEnd="@dimen/spacing_small"
             android:layout_marginBottom="@dimen/spacing_small"
             android:src="@drawable/ic_add"
-            style="@style/Fab" />
+            style="@style/Widget.Trackfield.Fab" />
 
     </LinearLayout>
 
@@ -146,7 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/Navbar" />
+        style="@style/Widget.Trackfield.Navbar" />
 
     <View
         android:id="@+id/v_main_overlay"

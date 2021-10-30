@@ -10,7 +10,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/tl_cs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/Divider" />
+        style="@style/Widget.Trackfield.Divider" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_cs"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/TabLayout" />
+        style="@style/Widget.Trackfield.TabLayout" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_recs"

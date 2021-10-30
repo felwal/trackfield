@@ -10,10 +10,11 @@
     <TextView
         android:id="@+id/tv_settings_item_header_title"
         android:layout_height="0dp"
+        android:textAppearance="@style/TextAppearance.Trackfield.Overline.SettingHeader"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title"
-        style="@style/TextView.Overline.SettingHeader" />
+        style="@style/Widget.Trackfield.TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

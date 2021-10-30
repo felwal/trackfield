@@ -17,20 +17,22 @@
         android:text="s"
         android:textColor="@color/colorAccBlue"
         android:textSize="@dimen/type_heading2"
+        android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/TextView.ValueLetter" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_view_item_sub_distance"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_s"
         app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_s"
         app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_s"
         tools:text="distance"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_view_item_sub_t"
@@ -47,17 +49,18 @@
         app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_distance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        style="@style/EditText" />
+        style="@style/Widget.Trackfield.EditText" />
 
     <TextView
         android:id="@+id/tv_view_item_sub_time"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_t"
         app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_t"
         app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_t"
         tools:text="time"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_view_item_sub_v"
@@ -73,16 +76,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_time"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/EditText" />
+        style="@style/Widget.Trackfield.EditText" />
 
     <TextView
         android:id="@+id/tv_view_item_sub_velocity"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_v"
         app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_v"
         app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_v"
         tools:text="pace"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

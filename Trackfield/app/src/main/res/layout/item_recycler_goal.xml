@@ -17,10 +17,11 @@
         android:layout_marginStart="@dimen/spacing_medium"
         android:gravity="center"
         android:textColor="?android:textColorSecondary"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_recycler_item_goal_secondary"
@@ -30,10 +31,11 @@
         android:layout_marginEnd="@dimen/spacing_medium"
         android:gravity="center"
         android:textColor="?android:textColorSecondary"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Secondary"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

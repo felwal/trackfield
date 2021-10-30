@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_dialog_time_colon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/EditText" />
+        style="@style/Widget.Trackfield.EditText" />
 
     <TextView
         android:id="@+id/tv_dialog_time_colon"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_dialog_time_colon"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/EditText" />
+        style="@style/Widget.Trackfield.EditText" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cg_dialog_time_type"
@@ -63,7 +63,7 @@
             app:checkedIconVisible="false"
             app:chipIconEnabled="true"
             app:chipIconVisible="true"
-            style="@style/Chip" />
+            style="@style/Widget.Trackfield.Chip" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cp_dialog_time_time"
@@ -73,7 +73,7 @@
             android:clickable="true"
             android:text="@string/cp_dialog_time"
             app:checkedIconVisible="false"
-            style="@style/Chip" />
+            style="@style/Widget.Trackfield.Chip" />
 
     </com.google.android.material.chip.ChipGroup>
 

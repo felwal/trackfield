@@ -10,26 +10,28 @@
     <TextView
         android:id="@+id/tv_settings_item_text_title"
         android:layout_marginStart="@dimen/spacing_small"
+        android:textAppearance="@style/TextAppearance.Trackfield.HeadingSetting"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title"
-        style="@style/TextView.HeadingSetting" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_settings_item_text_value"
         android:layout_marginEnd="@dimen/spacing_small"
+        android:textAppearance="@style/TextAppearance.Trackfield.HeadingSetting"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Value"
-        style="@style/TextView.HeadingSetting" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <View
         android:id="@+id/v_settings_item_divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/Divider" />
+        style="@style/Widget.Trackfield.Divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

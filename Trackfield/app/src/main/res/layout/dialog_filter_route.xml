@@ -8,12 +8,13 @@
 
     <Switch
         android:id="@+id/sw_dialog_filter_include_paceless"
-        style="@style/TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_dialog_side"
         android:layout_marginEnd="@dimen/spacing_dialog_side"
-        android:text="@string/sw_text_dialog_filter_paceless" />
+        android:text="@string/sw_text_dialog_filter_paceless"
+        android:textAppearance="@style/TextAppearance.Trackfield.Body"
+        style="@style/Widget.Trackfield.TextView" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -29,14 +30,15 @@
 
             <TextView
                 android:id="@+id/tv_dialog_filter_message"
-                style="@style/TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="6dp"
                 android:gravity="center_vertical"
                 android:paddingEnd="6dp"
                 android:paddingBottom="@dimen/spacing_diminutive"
-                android:text="@string/tv_text_dialog_filter_msg" />
+                android:text="@string/tv_text_dialog_filter_msg"
+                android:textAppearance="@style/TextAppearance.Trackfield.Body"
+                style="@style/Widget.Trackfield.TextView" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_dialog_filter_types"

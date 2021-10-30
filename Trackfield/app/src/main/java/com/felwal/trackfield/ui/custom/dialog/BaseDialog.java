@@ -89,14 +89,14 @@ public abstract class BaseDialog extends DialogFragment {
         int titleId = getResources().getIdentifier("alertTitle", "id", "android");
         if (titleId > 0) {
             TextView titleTv = dialog.findViewById(titleId);
-            titleTv.setTextAppearance(R.style.TextView_DialogTitle);
+            titleTv.setTextAppearance(R.style.TextAppearance_Trackfield_DialogTitle);
         }
 
         // message
         TextView messageTv = dialog.findViewById(android.R.id.message);
         messageTv.setTextAppearance(title.equals("")
-            ? R.style.TextView_DialogMessageLone
-            : R.style.TextView_DialogMessage);
+            ? R.style.TextAppearance_Trackfield_DialogMessageLone
+            : R.style.TextAppearance_Trackfield_DialogMessage);
 
         // bg
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog_bg);

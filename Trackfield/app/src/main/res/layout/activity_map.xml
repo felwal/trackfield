@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Toolbar" />
+        style="@style/Widget.Trackfield.Toolbar" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fr_map"

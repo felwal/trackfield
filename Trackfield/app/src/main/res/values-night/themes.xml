@@ -45,8 +45,8 @@
         <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
         <!-- styles -->
-        <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme.Dark</item>
-        <item name="android:timePickerDialogTheme">@style/TimePickerDialogTheme.Dark</item>
+        <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
+        <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Dark</item>
     </style>
 
     <!-- color combinations -->

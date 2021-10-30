@@ -1,28 +1,41 @@
 <resources>
 
-    <!-- toolbar -->
+    <!-- appbar -->
 
-    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation">@dimen/elev_toolbar</item>
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:theme">@style/ToolbarTheme</item>
-
-        <item name="titleTextColor">?attr/colorOnPrimary</item>
-        <!--<item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>-->
-    </style>
-
-    <style name="ToolbarTheme">
+    <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
         <!-- built-in action buttons, e.g. home/up -->
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
         <!-- custom action buttons -->
         <item name="iconTint">?attr/colorOnPrimary</item>
+
+        <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
+    </style>
+
+    <style name="ThemeOverlay.Trackfield.ActionBarPopup" parent="ThemeOverlay.AppCompat.DayNight">
+        <item name="colorSurface">?android:colorBackground</item>
+        <item name="searchViewStyle">@style/Widget.Trackfield.SearchView</item>
+    </style>
+
+    <style name="Widget.Trackfield.SearchView.ActionBar" parent="Widget.AppCompat.SearchView.ActionBar">
+    </style>
+
+    <style name="Widget.Trackfield.SearchView" parent="Widget.AppCompat.SearchView">
+    </style>
+
+    <style name="Widget.Trackfield.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">@dimen/elev_toolbar</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar</item>
+
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
     </style>
 
     <!-- fab -->
 
-    <style name="Fab">
+    <style name="Widget.Trackfield.Fab" parent="">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:elevation">@dimen/elev_fab</item>
@@ -36,26 +49,28 @@
         <!--<item name="rippleColor">@color/colorGreenDarker</item>-->
     </style>
 
-    <style name="Fab.Mini">
+    <style name="Widget.Trackfield.Fab.Mini">
         <item name="fabSize">mini</item>
     </style>
 
-    <!-- edit text -->
+    <!-- widget -->
 
-    <style name="EditText">
+    <style name="Widget.Trackfield.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/type_heading1</item>
+    </style>
+
+    <style name="Widget.Trackfield.EditText" parent="">
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:focusedByDefault">false</item>
         <item name="android:textColorHint">?android:textColorSecondary</item>
     </style>
 
-    <style name="EditText.Small">
+    <style name="Widget.Trackfield.EditText.Small">
         <item name="android:textSize">@dimen/type_heading2</item>
     </style>
 
-    <!-- other components -->
-
-    <style name="Navbar">
+    <style name="Widget.Trackfield.Navbar" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:elevation">@dimen/elev_navbar</item>
@@ -67,20 +82,20 @@
         <item name="menu">@menu/menu_navbar_main</item>
     </style>
 
-    <style name="TabLayout" parent="Widget.Design.TabLayout">
+    <style name="Widget.Trackfield.TabLayout" parent="Widget.Design.TabLayout">
         <item name="elevation">0dp</item>
         <item name="tabIndicator">@drawable/shape_indicator_tab</item>
         <item name="tabIndicatorHeight">@dimen/layout_indicator_tab_height</item>
         <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabTextAppearance">@style/TextView.TabTitle</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Trackfield.TabTitle</item>
         <item name="tabSelectedTextColor">?android:attr/textColorHighlight</item>
     </style>
 
-    <style name="Chip" parent="Theme.MaterialComponents.DayNight">
+    <style name="Widget.Trackfield.Chip" parent="Theme.MaterialComponents.DayNight">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@drawable/selector_chip_text_color</item>
-        <item name="android:textAppearance">@style/TextView.Body</item>
+        <item name="android:textAppearance">@style/TextAppearance.Trackfield.Body</item>
         <item name="android:enabled">true</item>
         <item name="android:checkable">true</item>
 
@@ -92,13 +107,13 @@
 
     <!-- composite -->
 
-    <style name="Divider">
+    <style name="Widget.Trackfield.Divider" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/layout_divider</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="SettingsItem">
+    <style name="Widget.Trackfield.SettingsItem" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/layout_settings_item</item>
         <item name="android:background">?attr/selectableItemBackground</item>
@@ -106,150 +121,148 @@
 
     <!-- date picker -->
 
-    <style name="DatePickerDialogTheme.Dark" parent="android:Theme.Material.Dialog">
-        <item name="android:datePickerStyle">@style/DatePickerStyle.Dark</item>
+    <style name="ThemeOverlay.Trackfield.DatePicker.Dark" parent="android:Theme.Material.Dialog">
+        <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Dark</item>
         <item name="android:colorAccent">@color/colorGreenLight</item>
         <item name="android:colorBackground">@color/colorGrey3</item>
         <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
     </style>
 
-    <style name="DatePickerDialogTheme.Light" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:datePickerStyle">@style/DatePickerStyle.Light</item>
+    <style name="ThemeOverlay.Trackfield.DatePicker.Light" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Light</item>
         <item name="android:colorAccent">@color/colorGreen</item>
         <item name="android:textColorSecondary">@color/colorGrey6</item>
     </style>
 
-    <style name="DatePickerStyle.Dark" parent="@android:style/Widget.Material.DatePicker">
+    <style name="Widget.Trackfield.DatePicker.Dark" parent="@android:style/Widget.Material.DatePicker">
         <item name="android:headerBackground">@color/colorGreen</item>
     </style>
 
-    <style name="DatePickerStyle.Light" parent="@android:style/Widget.Material.Light.DatePicker">
+    <style name="Widget.Trackfield.DatePicker.Light" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:headerBackground">@color/colorGreen</item>
     </style>
 
     <!-- time picker -->
 
-    <style name="TimePickerDialogTheme.Dark" parent="android:Theme.Material.Dialog">
-        <item name="android:timePickerStyle">@style/TimePickerStyle.Dark</item>
+    <style name="ThemeOverlay.Trackfield.TimePicker.Dark" parent="android:Theme.Material.Dialog">
+        <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Dark</item>
         <item name="android:colorAccent">@color/colorGreenLight</item>
         <item name="android:colorBackground">@color/colorGrey3</item>
         <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
     </style>
 
-    <style name="TimePickerDialogTheme.Light" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:timePickerStyle">@style/TimePickerStyle.Light</item>
+    <style name="ThemeOverlay.Trackfield.TimePicker.Light" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Light</item>
         <item name="android:colorAccent">@color/colorGreen</item>
         <item name="android:textColorSecondary">@color/colorGrey6</item>
     </style>
 
-    <style name="TimePickerStyle.Dark" parent="@android:style/Widget.Material.TimePicker">
+    <style name="Widget.Trackfield.TimePicker.Dark" parent="@android:style/Widget.Material.TimePicker">
         <item name="android:headerBackground">@color/colorGreen</item>
         <item name="android:numbersBackgroundColor">@color/colorGrey4</item>
     </style>
 
-    <style name="TimePickerStyle.Light" parent="@android:style/Widget.Material.Light.TimePicker">
+    <style name="Widget.Trackfield.TimePicker.Light" parent="@android:style/Widget.Material.Light.TimePicker">
         <item name="android:headerBackground">@color/colorGreen</item>
     </style>
 
-    <!-- text view -->
+    <!-- textappearance -->
 
-    <style name="TextView" parent="TextAppearance.AppCompat">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="TextAppearance.Trackfield" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
-    <style name="TextView.Headline">
+    <style name="TextAppearance.Trackfield.Headline">
         <item name="android:textSize">@dimen/type_headline2</item>
     </style>
 
-    <style name="TextView.Heading1">
+    <style name="TextAppearance.Trackfield.Heading1">
         <item name="android:textSize">@dimen/type_heading1</item>
     </style>
 
-    <style name="TextView.HeadingSetting">
+    <style name="TextAppearance.Trackfield.HeadingSetting">
         <item name="android:textSize">@dimen/type_heading_setting</item>
     </style>
 
-    <style name="TextView.Heading2">
+    <style name="TextAppearance.Trackfield.Heading2">
         <item name="android:textSize">@dimen/type_heading2</item>
     </style>
 
-    <style name="TextView.TabTitle">
+    <style name="TextAppearance.Trackfield.TabTitle">
         <item name="android:textSize">@dimen/type_title_tab</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="TextView.DialogTitle">
+    <style name="TextAppearance.Trackfield.DialogTitle">
         <item name="android:textSize">@dimen/type_dialog_title</item>
         <!--<item name="android:textStyle">bold</item>-->
     </style>
 
-    <style name="TextView.DialogMessageLone">
+    <style name="TextAppearance.Trackfield.DialogMessageLone">
         <item name="android:textSize">@dimen/type_dialog_title</item>
     </style>
 
-    <style name="TextView.DialogMessage">
+    <style name="TextAppearance.Trackfield.DialogMessage">
         <item name="android:textSize">@dimen/type_dialog_message</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="TextView.Body">
+    <style name="TextAppearance.Trackfield.Body">
         <item name="android:textSize">@dimen/type_body</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="TextView.ValueLetter">
+    <style name="TextAppearance.Trackfield.ValueLetter">
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textSize">@dimen/type_heading1</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Body.FabTitle">
+    <style name="TextAppearance.Trackfield.Body.FabTitle">
         <!--<item name="android:textStyle">bold</item>-->
     </style>
 
-    <style name="TextView.Caption">
+    <style name="TextAppearance.Trackfield.Caption">
         <item name="android:textSize">@dimen/type_caption</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="TextView.Overline">
+    <style name="TextAppearance.Trackfield.Overline">
         <item name="android:textSize">@dimen/type_overline</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
 
         <item name="textAllCaps">true</item>
     </style>
 
-    <style name="TextView.Heading1.Year">
+    <style name="TextAppearance.Trackfield.Heading1.Year">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Heading2.Month">
+    <style name="TextAppearance.Trackfield.Heading2.Month">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Heading2.HeaderValues">
+    <style name="TextAppearance.Trackfield.Heading2.HeaderValues">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">normal</item>
         <!--<item name="android:textSize">12sp</item>-->
     </style>
 
-    <style name="TextView.Heading2.Sorter">
+    <style name="TextAppearance.Trackfield.Heading2.Sorter">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Caption.RecYear">
+    <style name="TextAppearance.Trackfield.Caption.RecYear">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView.Overline.SettingHeader">
+    <style name="TextAppearance.Trackfield.Overline.SettingHeader">
         <item name="android:textColor">?android:attr/textColorHighlight</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingStart">@dimen/spacing_small</item>
@@ -257,20 +270,5 @@
 
         <item name="textAllCaps">false</item>
     </style>
-
-    <!-- app themes (?) -->
-
-    <style name="AppTheme.Dark.Green.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.Dark.Green.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="Theme.Default.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.model.SwitchChain;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SwitchDialog extends BaseDialog {
 
@@ -81,7 +81,7 @@ public class SwitchDialog extends BaseDialog {
 
         // inflate switches
         for (int i = 0; i < texts.length; i++) {
-            Switch sw = (Switch) inflater.inflate(R.layout.item_dialog_switch, ll, false);
+            SwitchMaterial sw = (SwitchMaterial) inflater.inflate(R.layout.item_dialog_switch, ll, false);
             sw.setText(texts[i]);
             sw.setChecked(checked[i]);
             ll.addView(sw);

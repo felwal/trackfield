@@ -12,6 +12,6 @@
         android:id="@+id/et_dialog_text"
         android:layout_width="match_parent"
         android:inputType="text"
-        style="@style/EditText" />
+        style="@style/Widget.Trackfield.EditText" />
 
 </LinearLayout>

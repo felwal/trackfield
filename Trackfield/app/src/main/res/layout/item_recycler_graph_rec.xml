@@ -41,19 +41,21 @@
         android:id="@+id/tv_recycler_item_graph_high"
         android:layout_marginStart="@dimen/spacing_tiny"
         android:layout_marginTop="@dimen/spacing_small"
+        android:textAppearance="@style/TextAppearance.Trackfield.Caption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="high"
-        style="@style/TextView.Caption" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_recycler_item_graph_low"
         android:layout_marginStart="@dimen/spacing_tiny"
         android:layout_marginBottom="@dimen/spacing_small"
+        android:textAppearance="@style/TextAppearance.Trackfield.Caption"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="low"
-        style="@style/TextView.Caption" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <View
         android:id="@+id/v_recycler_item_graph_divider"

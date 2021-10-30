@@ -20,14 +20,15 @@
 
             <TextView
                 android:id="@+id/tv_dialog_filter_message"
-                style="@style/TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:gravity="center_vertical"
                 android:paddingEnd="6dp"
                 android:paddingBottom="@dimen/spacing_diminutive"
-                android:text="@string/tv_text_dialog_filter_msg" />
+                android:text="@string/tv_text_dialog_filter_msg"
+                android:textAppearance="@style/TextAppearance.Trackfield.Body"
+                style="@style/Widget.Trackfield.TextView" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_dialog_filter_types"

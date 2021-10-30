@@ -30,13 +30,14 @@
             android:id="@+id/tv_recycler_empty"
             android:layout_marginStart="@dimen/spacing_medium"
             android:layout_marginEnd="@dimen/spacing_medium"
+            android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.35"
             tools:text="Empty title"
-            style="@style/TextView.Heading1" />
+            style="@style/Widget.Trackfield.TextView" />
 
         <TextView
             android:id="@+id/tv_recycler_message"
@@ -45,11 +46,12 @@
             android:layout_marginTop="@dimen/spacing_tiny"
             android:layout_marginEnd="@dimen/spacing_medium"
             android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Trackfield.Body"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_recycler_empty"
             tools:text="Empty message"
-            style="@style/TextView.Body" />
+            style="@style/Widget.Trackfield.TextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

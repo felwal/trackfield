@@ -14,10 +14,11 @@
 
     <TextView
         android:id="@+id/tv_sheet_peek_route"
+        android:textAppearance="@style/TextAppearance.Trackfield.Headline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Route"
-        style="@style/TextView.Headline" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_sheet_peek_routevar"
@@ -27,19 +28,21 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-condensed"
         android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_sheet_peek_route"
         app:layout_constraintTop_toTopOf="@+id/tv_sheet_peek_route"
         tools:text="var"
-        style="@style/TextView.Heading1" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_sheet_peek_date"
         android:layout_marginTop="@dimen/spacing_tiny"
+        android:textAppearance="@style/TextAppearance.Trackfield.Body"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_route"
         tools:text="Date"
-        style="@style/TextView.Body" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_sheet_peek_s"
@@ -49,19 +52,21 @@
         android:gravity="center_vertical"
         android:text="s"
         android:textColor="@color/colorAccBlue"
+        android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_date"
-        style="@style/TextView.ValueLetter" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_peeksheet_distance"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_sheet_peek_s"
         app:layout_constraintStart_toEndOf="@+id/tv_sheet_peek_s"
         app:layout_constraintTop_toTopOf="@+id/tv_sheet_peek_s"
         tools:text="distance"
-        style="@style/TextView.Heading1" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_peeksheet_t"
@@ -72,21 +77,23 @@
         android:gravity="center_vertical"
         android:text="t"
         android:textColor="@color/colorAccTurqoise"
+        android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
         app:layout_constraintBottom_toBottomOf="@+id/tv_peeksheet_distance"
         app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_distance"
         app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_distance"
         app:layout_constraintVertical_bias="0.0"
-        style="@style/TextView.ValueLetter" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_peeksheet_time"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_peeksheet_t"
         app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_t"
         app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_t"
         tools:text="time"
-        style="@style/TextView.Heading1" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_peeksheet_v"
@@ -96,19 +103,21 @@
         android:gravity="center_vertical"
         android:text="v"
         android:textColor="@color/colorAccGreen"
+        android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
         app:layout_constraintBottom_toBottomOf="@+id/tv_peeksheet_t"
         app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_time"
         app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_t"
-        style="@style/TextView.ValueLetter" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_peeksheet_velocity"
         android:layout_height="25dp"
         android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_peeksheet_v"
         app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_v"
         app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_v"
         tools:text="pace"
-        style="@style/TextView.Heading1" />
+        style="@style/Widget.Trackfield.TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

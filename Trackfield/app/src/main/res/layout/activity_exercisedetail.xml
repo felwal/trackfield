@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Toolbar" />
+        style="@style/Widget.Trackfield.Toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,10 +38,11 @@
                     android:id="@+id/tv_view_route"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Headline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Route"
-                    style="@style/TextView.Headline" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_routevar"
@@ -50,20 +51,22 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:fontFamily="sans-serif-condensed"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_route"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_route"
                     tools:text="var"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_date"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_diminutive"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Body"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_route"
                     tools:text="Date"
-                    style="@style/TextView.Body" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_note"
@@ -71,13 +74,14 @@
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:layout_marginEnd="@dimen/spacing_medium"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Body"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_date"
                     tools:text="Note"
                     tools:visibility="visible"
-                    style="@style/TextView.Body" />
+                    style="@style/Widget.Trackfield.TextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -92,19 +96,21 @@
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="I"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     android:textColor="@color/colorAccViolet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_interval"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_i"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_i"
                     tools:text="interval"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_s"
@@ -114,18 +120,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="s"
                     android:textColor="@color/colorAccBlue"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_i"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_distance"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_s"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_s"
                     tools:text="distance"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_t"
@@ -135,18 +143,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="t"
                     android:textColor="@color/colorAccTurqoise"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_s"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_time"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_t"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_t"
                     tools:text="time"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_v"
@@ -156,18 +166,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="v"
                     android:textColor="@color/colorAccGreen"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_t"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_velocity"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_v"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_v"
                     tools:text="pace"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_e"
@@ -177,18 +189,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="E"
                     android:textColor="@color/colorAccYellow"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_v"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_energy"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_e"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_e"
                     tools:text="energy"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_p"
@@ -198,18 +212,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="P"
                     android:textColor="@color/colorAccOrange"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_e"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_power"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_p"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_p"
                     tools:text="power"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_h"
@@ -219,18 +235,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:text="h"
                     android:textColor="@color/colorAccRed"
+                    android:textAppearance="@style/TextAppearance.Trackfield.ValueLetter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_p"
-                    style="@style/TextView.ValueLetter" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_elevation"
                     android:layout_height="25dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_p"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_h"
                     tools:text="elevation"
-                    style="@style/TextView.Heading1" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <View
                     android:id="@+id/v_view_divider1"
@@ -241,7 +259,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_elevation"
                     tools:visibility="invisible"
-                    style="@style/Divider" />
+                    style="@style/Widget.Trackfield.Divider" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -279,7 +297,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    style="@style/Divider" />
+                    style="@style/Widget.Trackfield.Divider" />
 
                 <ImageView
                     android:id="@+id/iv_view_strava_link"
@@ -307,36 +325,40 @@
                     android:id="@+id/tv_view_id"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_small"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/v_view_divider2"
                     tools:text="#"
-                    style="@style/TextView.Caption" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_type"
                     android:layout_marginStart="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toEndOf="@+id/tv_view_id"
                     app:layout_constraintTop_toTopOf="@+id/tv_view_id"
                     tools:text="Type"
-                    style="@style/TextView.Caption" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_device"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_type"
                     tools:text="Device"
-                    style="@style/TextView.Caption" />
+                    style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
                     android:id="@+id/tv_view_recording_method"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view_device"
                     tools:text="Recording method"
-                    style="@style/TextView.Caption" />
+                    style="@style/Widget.Trackfield.TextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

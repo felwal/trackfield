@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Switch
+<com.google.android.material.switchmaterial.SwitchMaterial
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sw_dialog_switch_item"
@@ -8,6 +8,7 @@
     android:layout_marginStart="@dimen/spacing_dialog_side"
     android:layout_marginEnd="@dimen/spacing_dialog_side"
     tools:text="Text"
-    style="@style/TextView.Body">
+    android:textAppearance="@style/TextAppearance.Trackfield.Body"
+    style="@style/Widget.Trackfield.TextView">
 
-</Switch>
+</com.google.android.material.switchmaterial.SwitchMaterial>

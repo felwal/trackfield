@@ -14,7 +14,8 @@
         android:layout_marginStart="@dimen/spacing_dialog_side"
         android:layout_marginEnd="@dimen/spacing_dialog_side"
         android:text="@string/sw_text_dialog_filter_longer"
-        style="@style/TextView.Body" />
+        android:textAppearance="@style/TextAppearance.Trackfield.Body"
+        style="@style/Widget.Trackfield.TextView" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -37,7 +38,8 @@
                 android:paddingEnd="6dp"
                 android:paddingBottom="@dimen/spacing_diminutive"
                 android:text="@string/tv_text_dialog_filter_msg"
-                style="@style/TextView.Body" />
+                android:textAppearance="@style/TextAppearance.Trackfield.Headline"
+                style="@style/Widget.Trackfield.TextView" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_dialog_filter_types"

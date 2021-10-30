@@ -7,6 +7,6 @@
     android:clickable="true"
     android:enabled="true"
     tools:text="Chip"
-    style="@style/Chip">
+    style="@style/Widget.Trackfield.Chip">
 
 </com.google.android.material.chip.Chip>

@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,7 @@ import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.FileUtils;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.time.LocalDate;
 
@@ -209,7 +209,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
     protected void inflateSwitchItem(String title, boolean checked, boolean hideDivider, OnSwitchListener listener) {
         View v = inflateSwitchView(title, hideDivider);
-        final Switch sw = v.findViewById(R.id.sw_settings_item);
+        final SwitchMaterial sw = v.findViewById(R.id.sw_settings_item);
         sw.setChecked(checked);
         v.setOnClickListener(view -> {
             sw.setChecked(!sw.isChecked());

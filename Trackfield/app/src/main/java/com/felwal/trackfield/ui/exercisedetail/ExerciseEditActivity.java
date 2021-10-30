@@ -15,7 +15,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -36,6 +35,7 @@ import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,7 +63,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
     protected AutoCompleteTextView recordingMethodActv;
     protected EditText dateEt;
     protected EditText timeEt;
-    protected Switch drivenSw;
+    protected SwitchMaterial drivenSw;
     protected AutoCompleteTextView typeActv;
     @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
 

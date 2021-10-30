@@ -14,10 +14,11 @@
         android:layout_marginStart="@dimen/spacing_medium"
         android:layout_marginTop="@dimen/spacing_tiny"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Primary"
-        style="@style/TextView.Heading1" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_recycler_item_exercise_secondary"
@@ -26,11 +27,12 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Trackfield.Heading2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Secondary"
-        style="@style/TextView.Heading2" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_recycler_item_exercise_caption"
@@ -40,9 +42,10 @@
         android:layout_marginStart="@dimen/spacing_medium"
         android:layout_marginTop="2dp"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Trackfield.Caption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_recycler_item_exercise_primary"
         tools:text="Caption"
-        style="@style/TextView.Caption" />
+        style="@style/Widget.Trackfield.TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,10 +15,11 @@
         android:text="@string/tv_text_onboarding_subtitle"
         android:textColor="?android:textColorPrimaryInverse"
         android:textSize="@dimen/type_heading1"
+        android:textAppearance="@style/TextAppearance.Trackfield.Headline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/TextView.Headline" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_onboarding_title"
@@ -29,10 +30,11 @@
         android:textColor="?android:textColorPrimaryInverse"
         android:textSize="@dimen/type_headline1"
         android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Trackfield.Headline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_subtitle"
-        style="@style/TextView.Headline" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <TextView
         android:id="@+id/tv_onboarding_caption"
@@ -44,10 +46,11 @@
         android:text="@string/tv_text_onboarding_caption"
         android:textAlignment="center"
         android:textColor="?android:textColorPrimaryInverse"
+        android:textAppearance="@style/TextAppearance.Trackfield.Body"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_title"
-        style="@style/TextView.Body" />
+        style="@style/Widget.Trackfield.TextView" />
 
     <Button
         android:id="@+id/btn_onboarding_start"
