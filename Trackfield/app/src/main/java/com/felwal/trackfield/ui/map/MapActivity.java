@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.trackfield.R;
-import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.ui.custom.sheet.PeekSheet;
@@ -220,8 +219,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorDeselected(Context c) {
-        return c.getResources().getColor(Prefs.isThemeLight() ? R.color.colorGreenDarkTrans
-            : R.color.colorGreenLightTrans);
+        return c.getResources().getColor(
+            ScreenUtils.isThemeLight(c) ? R.color.colorGreenDarkTrans : R.color.colorGreenLightTrans);
     }
 
     @ColorInt

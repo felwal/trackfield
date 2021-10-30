@@ -25,19 +25,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Dark.Green">
+        android:theme="@style/Theme.Trackfield.Green">
 
         <!-- main -->
 
         <activity
             android:name="com.felwal.trackfield.ui.onboarding.OnboardingActivity"
             android:label="@string/activity_title_onboarding"
-            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
+            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
+            android:theme="@style/Theme.Trackfield.Splash" />
 
         <activity
             android:name="com.felwal.trackfield.ui.main.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.Splash">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

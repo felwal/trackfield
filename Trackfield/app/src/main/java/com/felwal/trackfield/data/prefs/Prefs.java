@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.felwal.trackfield.R;
 
@@ -77,7 +78,7 @@ public class Prefs {
 
     // look
     private static int color = 1;
-    private static boolean theme = false;
+    private static int theme = 0;
 
     // profile
     private static float mass = 60;
@@ -201,7 +202,7 @@ public class Prefs {
 
         // look
         color = loadPref(new TypeToken<Integer>(){}, KEY_COLOR);
-        theme = loadPref(bool, KEY_THEME);
+        theme = loadPref(in, KEY_THEME);
 
         // profile
         mass = loadPref(new TypeToken<Float>(){}, KEY_MASS);
@@ -242,9 +243,18 @@ public class Prefs {
     private static <T> T loadPref(TypeToken<T> token, String tag) {
         if (!sp.contains(tag)) savePref(ofTag(tag), tag);
 
-        String json = sp.getString(tag, null);
-        Type type = token.getType();
-        return gson.fromJson(json, type);
+        try {
+            String json = sp.getString(tag, null);
+            Type type = token.getType();
+            return gson.fromJson(json, type);
+        }
+        catch (RuntimeException e) {
+            savePref(ofTag(tag), tag);
+
+            String json = sp.getString(tag, null);
+            Type type = token.getType();
+            return gson.fromJson(json, type);
+        }
     }
 
     private static Object ofTag(String tag) {
@@ -307,9 +317,9 @@ public class Prefs {
         savePref(colorConst, KEY_COLOR);
     }
 
-    public static void setTheme(boolean light) {
-        theme = light;
-        savePref(light, KEY_THEME);
+    public static void setTheme(int theme) {
+        Prefs.theme = theme;
+        savePref(Prefs.theme, KEY_THEME);
     }
 
     public static void setMass(float kilos) {
@@ -437,7 +447,7 @@ public class Prefs {
         return color;
     }
 
-    public static boolean isThemeLight() {
+    public static int getTheme() {
         return theme;
     }
 
@@ -523,24 +533,12 @@ public class Prefs {
 
     // get driven
 
-    public static String printTheme() {
-        return isThemeLight() ? "Light" : "Dark";
-    }
-
-    public static String printColor() {
-        return getColor() == 0 ? "Mono" : "Green";
-    }
-
     public static boolean isColorGreen() {
         return color == COLOR_GREEN;
     }
 
     public static boolean isColorMono() {
         return color == COLOR_MONO;
-    }
-
-    public static int getThemeInt() {
-        return theme ? 1 : 0;
     }
 
     public static boolean isAccessTokenCurrent() {
@@ -554,7 +552,8 @@ public class Prefs {
     }
 
     public static MapStyleOptions getMapStyle(Context c) {
-        return new MapStyleOptions(c.getResources().getString(theme ? R.string.mapstyle_light_json : R.string.mapstyle_dark_json));// C.MAP_STYLES[M.heaviside(theme)]));
+        return new MapStyleOptions(c.getResources().getString(theme == 1 ? R.string.mapstyle_light_json :
+            R.string.mapstyle_dark_json));
     }
 
 }

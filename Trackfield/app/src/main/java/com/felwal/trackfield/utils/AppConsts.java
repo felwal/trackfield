@@ -55,12 +55,10 @@ public final class AppConsts {
     public static final TemporalField WEEK_OF_YEAR = WeekFields.ISO.weekOfWeekBasedYear();
 
     // theme
-    public static final ArrayList<String> themeNames = new ArrayList<>(Arrays.asList("Dark", "Light"));
+    public static final ArrayList<String> themeNames = new ArrayList<>(
+        Arrays.asList("Follow system", "Light", "Dark", "Set by Battery Saver"));
     public static final ArrayList<String> colorNames = new ArrayList<>(Arrays.asList("Mono", "Green"));
-    public static final int[][] LOOKS = {
-        { R.style.AppTheme_Dark_Mono, R.style.AppTheme_Dark_Green, R.style.AppTheme_Splash },
-        { R.style.AppTheme_Light_Mono, R.style.AppTheme_Light_Green } };
-
+    public static final int[] COLORS = { R.style.Theme_Trackfield_Mono, R.style.Theme_Trackfield_Green };
     //
 
     private AppConsts() {

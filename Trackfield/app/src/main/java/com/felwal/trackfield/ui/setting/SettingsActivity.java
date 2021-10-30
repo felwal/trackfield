@@ -112,11 +112,13 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         inflateHeader(getString(R.string.tv_text_settings_header_look));
 
-        inflateDialogItem(getString(R.string.tv_text_settings_title_theme), Prefs.printTheme(), false,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_theme),
+            AppConsts.themeNames.get(Prefs.getTheme()), false,
             RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
-                AppConsts.themeNames, Prefs.getThemeInt(), DIALOG_THEME));
+                AppConsts.themeNames, Prefs.getTheme(), DIALOG_THEME));
 
-        inflateDialogItem(getString(R.string.tv_text_settings_title_color), Prefs.printColor(), true,
+        inflateDialogItem(getString(R.string.tv_text_settings_title_color),
+            AppConsts.colorNames.get(Prefs.getColor()), true,
             RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
                 AppConsts.colorNames, Prefs.getColor(), DIALOG_COLOR));
 
@@ -246,26 +248,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     @Override
     public void onRadioDialogClick(int index, String tag) {
         if (tag.equals(DIALOG_THEME)) {
-            switch (index) {
-                case 0:
-                    if (Prefs.isThemeLight()) Prefs.setTheme(false);
-                    break;
-                case 1:
-                    if (!Prefs.isThemeLight()) Prefs.setTheme(true);
-                    break;
-                default:
-                    break;
-            }
+            Prefs.setTheme(index);
         }
         else if (tag.equals(DIALOG_COLOR)) {
-            switch (index) {
-                case 0:
-                    if (!Prefs.isColorMono()) Prefs.setColorMono();
-                    break;
-                case 1:
-                    if (!Prefs.isColorGreen()) Prefs.setColorGreen();
-                    break;
-            }
+            Prefs.setColor(index);
         }
 
         MainActivity.recreateOnRestart = true;

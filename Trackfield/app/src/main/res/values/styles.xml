@@ -10,7 +10,7 @@
         <item name="android:theme">@style/ToolbarTheme</item>
 
         <item name="titleTextColor">?attr/colorOnPrimary</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <!--<item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>-->
     </style>
 
     <style name="ToolbarTheme">
@@ -260,16 +260,11 @@
 
     <!-- app themes (?) -->
 
-    <style name="AppTheme.Dark.Green.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="AppTheme.Dark.Green.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.Dark.Green.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.NoActionBar">
+    <style name="Theme.Default.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- dark theme -->
+
+    <style name="Theme.Trackfield" parent="Theme.Default">
+        <!-- text -->
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorGrey7</item>
+        <item name="android:textColorHighlight">@color/colorGreenLight</item>
+        <item name="android:textColorPrimaryInverse">@color/colorBlack</item>
+
+        <!-- primary -->
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorPrimaryVariant">@color/colorGreenLight</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
+        <item name="chipSurfaceColor">@color/colorGrey1</item>
+
+        <!-- elements -->
+        <item name="android:colorBackground">@color/colorGrey1</item>
+        <item name="colorSurface">@color/colorGrey3</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+
+        <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
+        <item name="android:colorButtonNormal">@color/colorGrey3</item>
+        <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
+        <item name="panelBackground">@color/colorGrey2</item>
+
+        <!-- TODO: remove (?) -->
+        <item name="colorOnSurface">@color/colorGrey7</item>
+        <item name="colorOnBackground">@color/colorGrey5</item>
+        <item name="strokeColor">@color/colorGrey4</item>
+        <item name="color">@color/colorGreenDarker</item>
+
+        <!-- action overflow menu -->
+        <!--item name="android:itemBackground">@color/colorGrey3</item>-->
+        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
+
+        <!-- other items -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- make actv window appear above keyboard -->
+        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
+
+        <!-- styles -->
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme.Dark</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerDialogTheme.Dark</item>
+    </style>
+
+    <!-- color combinations -->
+
+    <style name="Theme.Trackfield.Green">
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+    </style>
+
+    <style name="Theme.Trackfield.Mono">
+        <item name="colorPrimary">@color/colorGrey3</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorGrey1</item>
+        <item name="colorAccent">@color/colorGreenLight</item>
+    </style>
+
+</resources>
