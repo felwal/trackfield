@@ -148,21 +148,21 @@
     <!-- dialogs -->
 
     <!-- buttons -->
-    <string name="dialog_btn_ok"><b>OK</b></string>
-    <string name="dialog_btn_cancel"><b>Cancel</b></string>
-    <string name="dialog_btn_delete"><b>Delete</b></string>
-    <string name="dialog_btn_rename"><b>Rename</b></string>
-    <string name="dialog_btn_add"><b>Add</b></string>
-    <string name="dialog_btn_set"><b>Set</b></string>
-    <string name="dialog_btn_finish"><b>Finish</b></string>
-    <string name="dialog_btn_filter"><b>Filter</b></string>
-    <string name="dialog_btn_reset"><b>Reset</b></string>
-    <string name="dialog_btn_discard"><b>Discard</b></string>
-    <string name="dialog_btn_merge"><b>Merge</b></string>
-    <string name="dialog_btn_export"><b>Export</b></string>
-    <string name="dialog_btn_import"><b>Import</b></string>
-    <string name="dialog_btn_pull"><b>Pull</b></string>
-    <string name="dialog_btn_continue"><b>Continue</b></string>
+    <string name="dialog_btn_ok">OK</string>
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="dialog_btn_delete">Delete</string>
+    <string name="dialog_btn_rename">Rename</string>
+    <string name="dialog_btn_add">Add</string>
+    <string name="dialog_btn_set">Set</string>
+    <string name="dialog_btn_finish">Finish</string>
+    <string name="dialog_btn_filter">Filter</string>
+    <string name="dialog_btn_reset">Reset</string>
+    <string name="dialog_btn_discard">Discard</string>
+    <string name="dialog_btn_merge">Merge</string>
+    <string name="dialog_btn_export">Export</string>
+    <string name="dialog_btn_import">Import</string>
+    <string name="dialog_btn_pull">Pull</string>
+    <string name="dialog_btn_continue">Continue</string>
 
     <!-- titles -->
     <string name="dialog_title_delete_exercise">Delete exercise?</string>

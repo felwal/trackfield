@@ -208,7 +208,7 @@
     </style>
 
     <style name="TextView.Body.FabTitle">
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
     </style>
 
     <style name="TextView.Caption">
