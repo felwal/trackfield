@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -16,7 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.custom.graph.Borders;
+import com.felwal.trackfield.ui.widget.graph.Borders;
 
 public final class ScreenUtils {
 

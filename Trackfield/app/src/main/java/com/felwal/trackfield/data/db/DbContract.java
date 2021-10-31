@@ -3,7 +3,7 @@ package com.felwal.trackfield.data.db;
 import android.provider.BaseColumns;
 
 import com.felwal.trackfield.utils.model.SortMode;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 public final class DbContract {
 

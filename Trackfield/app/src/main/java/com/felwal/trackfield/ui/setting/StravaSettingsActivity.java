@@ -11,10 +11,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.custom.dialog.BaseDialog;
-import com.felwal.trackfield.ui.custom.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.custom.dialog.SwitchDialog;
-import com.felwal.trackfield.ui.custom.dialog.TextDialog;
+import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
+import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
+import com.felwal.trackfield.ui.widget.dialog.SwitchDialog;
+import com.felwal.trackfield.ui.widget.dialog.TextDialog;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener,

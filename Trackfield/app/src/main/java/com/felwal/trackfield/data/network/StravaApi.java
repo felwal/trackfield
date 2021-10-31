@@ -23,7 +23,7 @@ import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.DateUtils;
 import com.felwal.trackfield.utils.LayoutUtils;
-import com.felwal.trackfield.utils.annotations.Debug;
+import com.felwal.trackfield.utils.annotation.Debug;
 import com.felwal.trackfield.utils.model.SwitchChain;
 import com.google.android.gms.maps.model.LatLng;
 

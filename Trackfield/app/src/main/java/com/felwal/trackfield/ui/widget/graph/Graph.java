@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.graph;
+package com.felwal.trackfield.ui.widget.graph;
 
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.utils.MathUtils;

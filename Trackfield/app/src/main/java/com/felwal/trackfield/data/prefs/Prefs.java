@@ -4,19 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.felwal.trackfield.R;
 
 import com.felwal.trackfield.data.network.StravaApi;
-import com.felwal.trackfield.utils.ScreenUtils;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.felwal.trackfield.utils.model.SwitchChain;
 import com.felwal.trackfield.utils.model.SwitchItem;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.annotations.Debug;
-import com.felwal.trackfield.utils.annotations.Unfinished;
-import com.google.android.gms.maps.model.MapStyleOptions;
+import com.felwal.trackfield.utils.annotation.Debug;
+import com.felwal.trackfield.utils.annotation.Unfinished;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

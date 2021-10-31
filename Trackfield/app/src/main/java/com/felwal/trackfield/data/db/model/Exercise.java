@@ -12,8 +12,8 @@ import com.felwal.trackfield.utils.DateUtils;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
-import com.felwal.trackfield.utils.annotations.Unfinished;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unfinished;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

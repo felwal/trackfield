@@ -1,4 +1,4 @@
-package com.felwal.trackfield.utils.annotations;
+package com.felwal.trackfield.utils.annotation;
 
 /**
  * Currently not present in production

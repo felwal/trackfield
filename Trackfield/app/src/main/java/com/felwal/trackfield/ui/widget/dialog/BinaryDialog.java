@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.dialog;
+package com.felwal.trackfield.ui.widget.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.felwal.trackfield.R;
-import com.felwal.trackfield.utils.annotations.Debug;
+import com.felwal.trackfield.utils.annotation.Debug;
 
 public class BinaryDialog extends BaseDialog {
 

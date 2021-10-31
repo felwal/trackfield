@@ -8,8 +8,8 @@ import androidx.annotation.MenuRes;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
-import com.felwal.trackfield.ui.custom.dialog.BaseDialog;
-import com.felwal.trackfield.ui.custom.dialog.TextDialog;
+import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
+import com.felwal.trackfield.ui.widget.dialog.TextDialog;
 import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
 
 public class IntervalDetailActivity extends RecordDetailActivity implements TextDialog.DialogListener {

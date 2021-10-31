@@ -12,9 +12,9 @@ import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.custom.graph.Borders;
-import com.felwal.trackfield.ui.custom.graph.Graph;
-import com.felwal.trackfield.ui.custom.graph.GraphData;
+import com.felwal.trackfield.ui.widget.graph.Borders;
+import com.felwal.trackfield.ui.widget.graph.Graph;
+import com.felwal.trackfield.ui.widget.graph.GraphData;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

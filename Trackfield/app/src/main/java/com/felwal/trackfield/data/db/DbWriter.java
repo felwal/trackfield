@@ -11,9 +11,9 @@ import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.ui.map.model.Trail;
-import com.felwal.trackfield.utils.annotations.Debug;
+import com.felwal.trackfield.utils.annotation.Debug;
 import com.felwal.trackfield.utils.model.SortMode;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 import java.util.ArrayList;
 

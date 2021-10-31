@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.dialog;
+package com.felwal.trackfield.ui.widget.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,7 +11,7 @@ import androidx.annotation.StringRes;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.LayoutUtils;
-import com.felwal.trackfield.utils.annotations.Unfinished;
+import com.felwal.trackfield.utils.annotation.Unfinished;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 

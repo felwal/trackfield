@@ -22,7 +22,7 @@ import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
-import com.felwal.trackfield.ui.custom.dialog.BinaryDialog;
+import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity;

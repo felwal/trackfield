@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.trackfield.R;
-import com.felwal.trackfield.ui.custom.sheet.PeekSheet;
+import com.felwal.trackfield.ui.widget.sheet.PeekSheet;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.gms.maps.CameraUpdate;

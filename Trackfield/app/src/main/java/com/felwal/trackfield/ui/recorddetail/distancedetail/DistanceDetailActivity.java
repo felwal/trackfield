@@ -13,10 +13,10 @@ import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.custom.dialog.BaseDialog;
-import com.felwal.trackfield.ui.custom.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.custom.dialog.FilterDialog;
-import com.felwal.trackfield.ui.custom.dialog.TimeDialog;
+import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
+import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
+import com.felwal.trackfield.ui.widget.dialog.FilterDialog;
+import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
 import com.felwal.trackfield.utils.MathUtils;
 

@@ -28,13 +28,13 @@ import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.utils.ScreenUtils;
-import com.felwal.trackfield.ui.custom.dialog.BaseDialog;
-import com.felwal.trackfield.ui.custom.dialog.BinaryDialog;
+import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
+import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.time.LocalDate;

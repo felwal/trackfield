@@ -2,7 +2,7 @@ package com.felwal.trackfield.data.db.model;
 
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.MathUtils;
-import com.felwal.trackfield.utils.annotations.Unimplemented;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 @Unimplemented
 public class Sub {

@@ -40,7 +40,7 @@ public class Sorter extends RecyclerItem {
 
     /**
      * Sets selected index, and inverts order if already selected.
-     * Should be called in {@link com.felwal.trackfield.ui.custom.sheet.SortSheet#onDismiss(DialogInterface)}
+     * Should be called in {@link com.felwal.trackfield.ui.widget.sheet.SortSheet#onDismiss(DialogInterface)}
      */
     public void select(int index) {
         if (index >= sortModes.length) return;

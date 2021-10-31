@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.graph;
+package com.felwal.trackfield.ui.widget.graph;
 
 import androidx.annotation.Nullable;
 

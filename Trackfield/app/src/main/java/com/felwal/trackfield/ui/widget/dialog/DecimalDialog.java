@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.dialog;
+package com.felwal.trackfield.ui.widget.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

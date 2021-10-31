@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.custom.graph;
+package com.felwal.trackfield.ui.widget.graph;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
-import com.felwal.trackfield.utils.annotations.Unfinished;
+import com.felwal.trackfield.utils.annotation.Unfinished;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

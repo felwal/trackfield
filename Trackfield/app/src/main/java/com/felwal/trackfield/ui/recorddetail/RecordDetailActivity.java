@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
-import com.felwal.trackfield.ui.custom.sheet.SortSheet;
+import com.felwal.trackfield.ui.widget.sheet.SortSheet;
 import com.felwal.trackfield.utils.ScreenUtils;
 
 public abstract class RecordDetailActivity extends AppCompatActivity implements SortSheet.SheetListener {

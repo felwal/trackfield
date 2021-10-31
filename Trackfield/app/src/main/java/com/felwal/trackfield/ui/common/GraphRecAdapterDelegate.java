@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.custom.graph.Graph;
-import com.felwal.trackfield.ui.custom.graph.GraphView;
+import com.felwal.trackfield.ui.widget.graph.Graph;
+import com.felwal.trackfield.ui.widget.graph.GraphView;
 import com.felwal.trackfield.utils.MathUtils;
 
 import java.util.List;
