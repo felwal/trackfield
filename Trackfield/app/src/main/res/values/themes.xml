@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- default theme -->
 
@@ -15,6 +15,14 @@
 
         <!-- remove the MaterialComponents automatic brightening of surface color in dark mode -->
         <item name="elevationOverlayEnabled">false</item>
+
+        <!-- theme/style -->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Felwal.Dialog</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
+        <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>-->
+        <item name="android:textViewStyle">@style/Widget.Trackfield.TextView</item>
+        <item name="android:editTextStyle">@style/Widget.Trackfield.EditText</item>
+        <item name="chipStandaloneStyle">@style/Widget.Trackfield.Chip</item>
     </style>
 
     <!-- light theme -->

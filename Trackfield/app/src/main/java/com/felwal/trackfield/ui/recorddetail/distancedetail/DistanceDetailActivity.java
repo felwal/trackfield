@@ -8,22 +8,23 @@ import android.view.MenuItem;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
+import com.felwal.android.util.CollectionUtilsKt;
+import com.felwal.android.widget.dialog.BaseDialogKt;
+import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.widget.dialog.FilterDialog;
-import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
+import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
 import java.util.ArrayList;
 
-public class DistanceDetailActivity extends RecordDetailActivity implements BinaryDialog.DialogListener, TimeDialog.DialogListener,
-    FilterDialog.DialogListener {
+public class DistanceDetailActivity extends RecordDetailActivity implements BinaryDialog.DialogListener,
+    TimeDialog.DialogListener, ChipDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_DISTANCE = "distance";
@@ -72,14 +73,23 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            FilterDialog.newInstance(R.string.dialog_title_title_filter, Prefs.getDistanceVisibleTypes(),
-                R.string.dialog_btn_filter, DIALOG_FILTER_DISTANCE)
+            ArrayList<String> types = DbReader.get(this).getTypes();
+            String[] items = new String[types.size()];
+            types.toArray(items);
+
+            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
+
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
+                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_DISTANCE)
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_delete_distance) {
-            BinaryDialog.newInstance(R.string.dialog_title_delete_distance, R.string.dialog_msg_delete_distance,
-                R.string.dialog_btn_delete, DIALOG_DELETE_DISTANCE)
+            BinaryDialog.newInstance(getString(R.string.dialog_title_delete_distance),
+                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete,
+                R.string.dialog_btn_cancel, DIALOG_DELETE_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -87,17 +97,17 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
             float goalPace = DbReader.get(this).getDistanceGoal(length);
             int minutes, seconds;
             if (goalPace == Distance.NO_GOAL_PACE) {
-                minutes = BaseDialog.NO_FLOAT_TEXT;
-                seconds = BaseDialog.NO_FLOAT_TEXT;
+                minutes = BaseDialogKt.NULL_INT;
+                seconds = BaseDialogKt.NULL_INT;
             }
             else {
                 float[] timeParts = MathUtils.getTimeParts(goalPace);
                 minutes = (int) timeParts[1];
                 seconds = (int) timeParts[0];
             }
-            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES,
-                minutes, seconds, "min", "sec",
-                R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_DISTANCE)
+            TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
+                minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
+                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_GOAL_DISTANCE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -146,7 +156,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
     }
 
     @Override
-    public void onTimeDialogNegativeClick(String tag) {
+    public void onTimeDialogNeutralClick(String tag) {
         if (tag.equals(DIALOG_GOAL_DISTANCE)) {
             distance.removeGoalPace();
             DbWriter.get(this).updateDistance(distance);
@@ -157,9 +167,12 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
+    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_DISTANCE)) {
-            Prefs.setDistanceVisibleTypes(checkedTypes);
+            ArrayList<String> visibleTypes = (ArrayList<String>)
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+
+            Prefs.setDistanceVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();
         }
     }

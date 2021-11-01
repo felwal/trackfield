@@ -17,16 +17,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.felwal.android.util.CollectionUtilsKt;
+import com.felwal.android.widget.dialog.ChipDialog;
+import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.trackfield.R;
+import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.DecimalDialog;
-import com.felwal.trackfield.ui.widget.dialog.FilterDialog;
-import com.felwal.trackfield.ui.widget.sheet.SortSheet;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListFragment;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListRecyclerFragment;
@@ -34,6 +34,7 @@ import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
+import com.felwal.trackfield.ui.widget.sheet.SortSheet;
 import com.felwal.trackfield.utils.FileUtils;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
@@ -42,8 +43,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
+
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
-    FilterDialog.DialogListener, SortSheet.SheetListener {
+    ChipDialog.DialogListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
 
@@ -116,14 +119,22 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             return true;
         }
         else if (itemId == R.id.action_filter_exercises) {
-            FilterDialog.newInstance(R.string.dialog_title_title_filter, Prefs.getExerciseVisibleTypes(),
-                R.string.dialog_btn_filter, DIALOG_FILTER_EXERCISES)
+            ArrayList<String> types = DbReader.get(this).getTypes();
+            String[] items = new String[types.size()];
+            types.toArray(items);
+
+            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
+
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
+                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_EXERCISES)
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
-            DecimalDialog.newInstance(R.string.dialog_title_add_distance, BaseDialog.NO_RES, BaseDialog.NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, DIALOG_ADD_DISTANCE)
+            DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, R.string.dialog_btn_cancel, DIALOG_ADD_DISTANCE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -224,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 // show/hide fab on scroll
                 if (recyclerFragment instanceof ExerciseListRecyclerFragment) {
                     if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExerciseListFragment) fab.show();
+                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExerciseListFragment)
+                        fab.show();
                 }
             }
         });
@@ -307,9 +319,12 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
+    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_EXERCISES)) {
-            Prefs.setExerciseVisibleTypes(checkedTypes);
+            ArrayList<String> visibleTypes = (ArrayList<String>)
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+
+            Prefs.setExerciseVisibleTypes(visibleTypes);
             mainFragment.updateFragment();
         }
     }

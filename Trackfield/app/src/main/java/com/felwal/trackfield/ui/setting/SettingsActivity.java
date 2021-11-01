@@ -16,13 +16,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.widget.dialog.BaseDialog;
+import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.DecimalDialog;
+import com.felwal.android.widget.dialog.RadioDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.widget.dialog.DecimalDialog;
-import com.felwal.trackfield.ui.widget.dialog.RadioDialog;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.utils.AppConsts;
@@ -114,13 +114,13 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_theme),
             AppConsts.themeNames.get(Prefs.getTheme()), false,
-            RadioDialog.newInstance(R.string.dialog_title_theme, BaseDialog.NO_RES,
-                AppConsts.themeNames, Prefs.getTheme(), DIALOG_THEME));
+            RadioDialog.newInstance(getString(R.string.dialog_title_theme), "", AppConsts.themeNames,
+                Prefs.getTheme(), R.string.dialog_btn_cancel, DIALOG_THEME));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_color),
             AppConsts.colorNames.get(Prefs.getColor()), true,
-            RadioDialog.newInstance(R.string.dialog_title_color, BaseDialog.NO_RES,
-                AppConsts.colorNames, Prefs.getColor(), DIALOG_COLOR));
+            RadioDialog.newInstance(getString(R.string.dialog_title_color), "", AppConsts.colorNames,
+                Prefs.getColor(), R.string.dialog_btn_cancel, DIALOG_COLOR));
 
         // third party services
 
@@ -134,20 +134,21 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateHeader(getString(R.string.tv_text_settings_header_file));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_export), "", false,
-            BinaryDialog.newInstance(R.string.dialog_title_export, R.string.dialog_msg_export,
-                R.string.dialog_btn_export, DIALOG_EXPORT));
+            BinaryDialog.newInstance(getString(R.string.dialog_title_export), getString(R.string.dialog_msg_export),
+                R.string.dialog_btn_export, R.string.dialog_btn_cancel, DIALOG_EXPORT, null));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_import), "", true,
-            BinaryDialog.newInstance(R.string.dialog_title_import, R.string.dialog_msg_import,
-                R.string.dialog_btn_import, DIALOG_IMPORT));
+            BinaryDialog.newInstance(getString(R.string.dialog_title_import), getString(R.string.dialog_msg_import),
+                R.string.dialog_btn_import, R.string.dialog_btn_cancel, DIALOG_IMPORT, null));
 
         // profile
 
         inflateHeader(getString(R.string.tv_text_settings_header_profile));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_mass), Prefs.getMass() + " kg", false,
-            DecimalDialog.newInstance(R.string.dialog_title_mass, BaseDialog.NO_RES,
-                Prefs.getMass(), getString(R.string.tv_text_settings_hint_mass), R.string.dialog_btn_set, DIALOG_MASS));
+            DecimalDialog.newInstance(getString(R.string.dialog_title_mass), "", Prefs.getMass(),
+                getString(R.string.tv_text_settings_hint_mass), R.string.dialog_btn_set, R.string.dialog_btn_cancel,
+                DIALOG_MASS));
 
         final LocalDate bd = Prefs.getBirthday();
         final View birth = inflateTextView(getString(R.string.tv_text_settings_title_birthday), bd == null
@@ -185,7 +186,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             });
 
             inflateDialogItem(getString(R.string.tv_text_settings_title_recreate), "", true,
-                BinaryDialog.generic(DIALOG_RECREATE_DB));
+                BinaryDialog.newInstance("Recreate database?", "", R.string.dialog_btn_ok,
+                    R.string.dialog_btn_cancel, DIALOG_RECREATE_DB, null));
         }
     }
 
@@ -246,12 +248,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     // implements dialogs
 
     @Override
-    public void onRadioDialogClick(int index, String tag) {
+    public void onRadioDialogItemClick(int checkedItem, @NonNull String tag) {
         if (tag.equals(DIALOG_THEME)) {
-            Prefs.setTheme(index);
+            Prefs.setTheme(checkedItem);
         }
         else if (tag.equals(DIALOG_COLOR)) {
-            Prefs.setColor(index);
+            Prefs.setColor(checkedItem);
         }
 
         MainActivity.recreateOnRestart = true;

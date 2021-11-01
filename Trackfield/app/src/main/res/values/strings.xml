@@ -148,8 +148,6 @@
     <!-- dialogs -->
 
     <!-- buttons -->
-    <string name="dialog_btn_ok">OK</string>
-    <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_delete">Delete</string>
     <string name="dialog_btn_rename">Rename</string>
     <string name="dialog_btn_add">Add</string>

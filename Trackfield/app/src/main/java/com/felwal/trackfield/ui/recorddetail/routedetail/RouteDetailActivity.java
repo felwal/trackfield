@@ -8,24 +8,25 @@ import android.view.MenuItem;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
+import com.felwal.android.util.CollectionUtilsKt;
+import com.felwal.android.widget.dialog.BaseDialogKt;
+import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.ChipDialog;
+import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.widget.dialog.FilterDialog;
-import com.felwal.trackfield.ui.widget.dialog.TextDialog;
-import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.ui.map.RouteMapActivity;
 import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
+import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
 import java.util.ArrayList;
 
 public class RouteDetailActivity extends RecordDetailActivity implements TextDialog.DialogListener,
-    TimeDialog.DialogListener, FilterDialog.DialogListener, BinaryDialog.DialogListener {
+    TimeDialog.DialogListener, ChipDialog.DialogListener, BinaryDialog.DialogListener {
 
     // extras names
     public static final String EXTRA_ROUTE_ID = "routeId";
@@ -76,15 +77,23 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            FilterDialog.newInstance(R.string.dialog_title_title_filter, Prefs.getRouteVisibleTypes(),
-                R.string.dialog_btn_filter, DIALOG_FILTER_ROUTE)
+            ArrayList<String> types = DbReader.get(this).getTypes();
+            String[] items = new String[types.size()];
+            types.toArray(items);
+
+            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
+
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
+                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_ROUTE)
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_rename_route) {
             if (route != null) {
-                TextDialog.newInstance(R.string.dialog_title_rename_route, BaseDialog.NO_RES,
-                    route.getName(), "", R.string.dialog_btn_rename, DIALOG_RENAME_ROUTE)
+                TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(),
+                    "", R.string.dialog_btn_rename, R.string.dialog_btn_cancel, DIALOG_RENAME_ROUTE)
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -92,8 +101,8 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
         else if (itemId == R.id.action_set_rec_goal) {
             int minutes, seconds;
             if (route.getGoalPace() == Route.NO_GOAL_PACE) {
-                minutes = BaseDialog.NO_FLOAT_TEXT;
-                seconds = BaseDialog.NO_FLOAT_TEXT;
+                minutes = BaseDialogKt.NULL_INT;
+                seconds = BaseDialogKt.NULL_INT;
             }
             else {
                 float[] timeParts = MathUtils.getTimeParts(route.getGoalPace());
@@ -101,9 +110,9 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
                 seconds = (int) timeParts[0];
             }
 
-            TimeDialog.newInstance(R.string.dialog_title_set_goal, BaseDialog.NO_RES,
-                minutes, seconds, "min", "sec",
-                R.string.dialog_btn_set, R.string.dialog_btn_delete, DIALOG_GOAL_ROUTE)
+            TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
+                minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
+                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_GOAL_ROUTE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -150,8 +159,9 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
 
             // update route
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
-                BinaryDialog.newInstance(R.string.dialog_title_merge_routes, R.string.dialog_msg_merge_routes,
-                    R.string.dialog_btn_merge, input, DIALOG_MERGE_ROUTES)
+                BinaryDialog.newInstance(getString(R.string.dialog_title_merge_routes),
+                    getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge, R.string.dialog_btn_cancel,
+                    input, DIALOG_MERGE_ROUTES)
                     .show(getSupportFragmentManager());
             }
             else {
@@ -187,7 +197,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onTimeDialogNegativeClick(String tag) {
+    public void onTimeDialogNeutralClick(String tag) {
         if (tag.equals(DIALOG_GOAL_ROUTE)) {
             route.removeGoalPace();
             DbWriter.get(this).updateRoute(route, this);
@@ -198,9 +208,12 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onFilterDialogPositiveClick(@NonNull ArrayList<String> checkedTypes, String tag) {
+    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_ROUTE)) {
-            Prefs.setRouteVisibleTypes(checkedTypes);
+            ArrayList<String> visibleTypes = (ArrayList<String>)
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+
+            Prefs.setRouteVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();
         }
     }

@@ -16,13 +16,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity;
@@ -146,8 +146,9 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
             return true;
         }
         else if (itemId == R.id.action_delete_exercise) {
-            BinaryDialog.newInstance(R.string.dialog_title_delete_exercise, R.string.dialog_msg_delete_exercise,
-                R.string.dialog_btn_delete, DIALOG_DELETE_EXERCISE)
+            BinaryDialog.newInstance(getString(R.string.dialog_title_delete_exercise),
+                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete,
+                R.string.dialog_btn_cancel, DIALOG_DELETE_EXERCISE, null)
                 .show(getSupportFragmentManager());
             return true;
         }

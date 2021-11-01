@@ -10,8 +10,8 @@
         android:id="@+id/sw_dialog_filter_include_paceless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_dialog_side"
-        android:layout_marginEnd="@dimen/spacing_dialog_side"
+        android:layout_marginStart="@dimen/spacing_dialog_horizontal"
+        android:layout_marginEnd="@dimen/spacing_dialog_horizontal"
         android:text="@string/sw_text_dialog_filter_paceless"
         android:textAppearance="@style/TextAppearance.Trackfield.Body"
         style="@style/Widget.Trackfield.TextView" />
@@ -25,11 +25,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/spacing_dialog_side"
-            android:paddingEnd="@dimen/spacing_dialog_side">
+            android:paddingStart="@dimen/spacing_dialog_horizontal"
+            android:paddingEnd="@dimen/spacing_dialog_horizontal">
 
             <TextView
-                android:id="@+id/tv_dialog_filter_message"
+                android:id="@+id/tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="6dp"
@@ -41,7 +41,7 @@
                 style="@style/Widget.Trackfield.TextView" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_dialog_filter_types"
+                android:id="@+id/cg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:singleLine="true"

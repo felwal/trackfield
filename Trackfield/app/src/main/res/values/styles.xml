@@ -15,11 +15,9 @@
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView</item>
     </style>
 
-    <style name="Widget.Trackfield.SearchView.ActionBar" parent="Widget.AppCompat.SearchView.ActionBar">
-    </style>
+    <style name="Widget.Trackfield.SearchView.ActionBar" parent="Widget.AppCompat.SearchView.ActionBar" />
 
-    <style name="Widget.Trackfield.SearchView" parent="Widget.AppCompat.SearchView">
-    </style>
+    <style name="Widget.Trackfield.SearchView" parent="Widget.AppCompat.SearchView" />
 
     <style name="Widget.Trackfield.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
@@ -101,12 +99,6 @@
         <item name="closeIconEnabled">false</item>
         <item name="checkedIconEnabled">false</item>
         <item name="checkedIcon">@null</item>
-    </style>
-
-    <style name="Widget.Trackfield.Divider" parent="">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/layout_divider</item>
-        <item name="android:background">?android:attr/listDivider</item>
     </style>
 
     <!-- date picker -->
@@ -191,22 +183,6 @@
 
     <style name="TextAppearance.Trackfield.Caption">
         <item name="android:textSize">@dimen/type_caption</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <!-- textappearance: special -->
-
-    <style name="TextAppearance.Trackfield.DialogTitle">
-        <item name="android:textSize">@dimen/type_dialog_title</item>
-        <!--<item name="android:textStyle">bold</item>-->
-    </style>
-
-    <style name="TextAppearance.Trackfield.DialogMessageLone">
-        <item name="android:textSize">@dimen/type_dialog_title</item>
-    </style>
-
-    <style name="TextAppearance.Trackfield.DialogMessage">
-        <item name="android:textSize">@dimen/type_dialog_message</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 

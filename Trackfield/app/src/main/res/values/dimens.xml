@@ -12,11 +12,6 @@
     <dimen name="spacing_tiny">8dp</dimen>
     <dimen name="spacing_diminutive">4dp</dimen>
 
-    <!-- dialog -->
-    <dimen name="spacing_dialog_top">8dp</dimen>
-    <dimen name="spacing_dialog_side">24dp</dimen>
-    <dimen name="spacing_dialog_side_20dp">20dp</dimen>
-
     <!-- icon -->
 
     <dimen name="icon_size">24dp</dimen>
@@ -54,9 +49,6 @@
     <dimen name="layout_graph_medium">175dp</dimen>
     <dimen name="layout_graph_large">200dp</dimen>
 
-    <!-- misc -->
-    <dimen name="layout_divider">1dp</dimen>
-    <dimen name="layout_dialog_corner_radius">8dp</dimen>
     <dimen name="layout_rounded_corner_radius">10dp</dimen>
 
     <!-- type -->
@@ -69,10 +61,6 @@
     <dimen name="type_subtitle3">14sp</dimen>
     <dimen name="type_body">14sp</dimen>
     <dimen name="type_caption">12sp</dimen>
-
-    <!-- dialog -->
-    <dimen name="type_dialog_title">17sp</dimen>
-    <dimen name="type_dialog_message">16sp</dimen>
 
     <!-- elevations -->
 

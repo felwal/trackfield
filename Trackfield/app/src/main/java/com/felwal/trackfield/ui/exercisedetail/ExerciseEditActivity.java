@@ -22,14 +22,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.felwal.android.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.utils.ScreenUtils;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
@@ -307,8 +306,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
     // tools
 
     private void showDiscardDialog() {
-        BinaryDialog.newInstance(R.string.dialog_title_discard, BaseDialog.NO_RES, R.string.dialog_btn_discard,
-            DIALOG_DISCARD)
+        BinaryDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
+            R.string.dialog_btn_cancel, DIALOG_DISCARD, null)
             .show(getSupportFragmentManager());
     }
 

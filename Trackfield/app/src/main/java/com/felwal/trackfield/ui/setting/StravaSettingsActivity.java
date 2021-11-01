@@ -8,17 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.CheckDialog;
+import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.BinaryDialog;
-import com.felwal.trackfield.ui.widget.dialog.SwitchDialog;
-import com.felwal.trackfield.ui.widget.dialog.TextDialog;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener,
-    SwitchDialog.DialogListener {
+    CheckDialog.DialogListener {
 
     // dialog tags
     private static final String DIALOG_DEVICE = "deviceDialog";
@@ -80,11 +79,13 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
                 StravaApi.toastResponse(successCount, errorCount, this)));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_request_all), "", !Prefs.isDeveloper(),
-            BinaryDialog.generic(DIALOG_REQUEST_ALL));
+            BinaryDialog.newInstance("Request all exercises?", "", R.string.dialog_btn_ok, R.string.dialog_btn_cancel,
+                DIALOG_REQUEST_ALL, null));
 
         if (Prefs.isDeveloper()) {
             inflateDialogItem(getString(R.string.tv_text_settings_title_pull_all), "", true,
-                BinaryDialog.generic(DIALOG_PULL_ALL));
+                BinaryDialog.newInstance("Pull all exercises?", "", R.string.dialog_btn_ok, R.string.dialog_btn_cancel,
+                    DIALOG_PULL_ALL, null));
         }
 
         // request options
@@ -92,24 +93,26 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         inflateHeader(getString(R.string.tv_text_settings_header_request_options));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_device), Prefs.getDefaultDevice(), false,
-            TextDialog.newInstance(R.string.dialog_title_device,
-                R.string.dialog_msg_device, Prefs.getDefaultDevice(),
-                getString(R.string.tv_text_settings_hint_device), R.string.dialog_btn_set, DIALOG_DEVICE));
+            TextDialog.newInstance(getString(R.string.dialog_title_device), getString(R.string.dialog_msg_device),
+                Prefs.getDefaultDevice(), getString(R.string.tv_text_settings_hint_device), R.string.dialog_btn_set,
+                R.string.dialog_btn_cancel, DIALOG_DEVICE));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_method), Prefs.getDefaultRecordingMethod(), false,
-            TextDialog.newInstance(R.string.dialog_title_recording_method,
-                R.string.dialog_msg_recording_method, Prefs.getDefaultRecordingMethod(),
-                getString(R.string.tv_text_settings_hint_method), R.string.dialog_btn_set, DIALOG_RECORDING_METHOD));
+            TextDialog.newInstance(getString(R.string.dialog_title_recording_method),
+                getString(R.string.dialog_msg_recording_method), Prefs.getDefaultRecordingMethod(),
+                getString(R.string.tv_text_settings_hint_method), R.string.dialog_btn_set,
+                R.string.dialog_btn_cancel, DIALOG_RECORDING_METHOD));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_policy), "", true,
-            SwitchDialog.newInstance(R.string.dialog_title_pull_policy, BaseDialog.NO_RES, R.string.dialog_btn_set,
-                Prefs.getPullPolicy(), DIALOG_PULL_POLICY));
+            CheckDialog.newInstance(getString(R.string.dialog_title_pull_policy), "",
+                Prefs.getPullPolicy().getTexts(), Prefs.getPullPolicy().getChecked(),
+                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_PULL_POLICY));
     }
 
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(String input, String tag) {
+    public void onTextDialogPositiveClick(@NonNull String input, String tag) {
         if (tag.equals(DIALOG_DEVICE)) {
             Prefs.setDefaultDevice(input);
             reflateViews();
@@ -121,9 +124,9 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     }
 
     @Override
-    public void onSwitchDialogPositiveClick(boolean[] checked, String tag) {
+    public void onCheckDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_PULL_POLICY)) {
-            Prefs.setPullSettings(checked);
+            Prefs.setPullSettings(checkedItems);
             reflateViews();
         }
     }

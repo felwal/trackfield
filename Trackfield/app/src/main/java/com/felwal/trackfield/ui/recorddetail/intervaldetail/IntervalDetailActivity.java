@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
 
+import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
-import com.felwal.trackfield.ui.widget.dialog.BaseDialog;
-import com.felwal.trackfield.ui.widget.dialog.TextDialog;
 import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
 
 public class IntervalDetailActivity extends RecordDetailActivity implements TextDialog.DialogListener {
@@ -45,8 +45,8 @@ public class IntervalDetailActivity extends RecordDetailActivity implements Text
 
         if (itemId == R.id.action_rename_interval) {
             if (interval != null) {
-                TextDialog.newInstance(R.string.dialog_title_rename_interval, BaseDialog.NO_RES,
-                    interval, "", R.string.dialog_btn_rename, DIALOG_RENAME_INTERVAL)
+                TextDialog.newInstance(getString(R.string.dialog_title_rename_interval), "", interval,
+                    "", R.string.dialog_btn_rename, R.string.dialog_btn_cancel, DIALOG_RENAME_INTERVAL)
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -82,7 +82,7 @@ public class IntervalDetailActivity extends RecordDetailActivity implements Text
     // implements TextDialog
 
     @Override
-    public void onTextDialogPositiveClick(String input, String tag) {
+    public void onTextDialogPositiveClick(@NonNull String input, String tag) {
         if (tag.equals(DIALOG_RENAME_INTERVAL)) {
             if (input.equals("")) return;
 

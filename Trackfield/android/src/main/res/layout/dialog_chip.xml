@@ -15,23 +15,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/spacing_dialog_side"
-            android:paddingEnd="@dimen/spacing_dialog_side">
+            android:paddingStart="@dimen/spacing_dialog_horizontal"
+            android:paddingEnd="@dimen/spacing_dialog_horizontal">
 
             <TextView
-                android:id="@+id/tv_dialog_filter_message"
+                android:id="@+id/tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:gravity="center_vertical"
                 android:paddingEnd="6dp"
-                android:paddingBottom="@dimen/spacing_diminutive"
-                android:text="@string/tv_text_dialog_filter_msg"
-                android:textAppearance="@style/TextAppearance.Trackfield.Body"
-                style="@style/Widget.Trackfield.TextView" />
+                android:paddingBottom="@dimen/spacing_diminutive" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_dialog_filter_types"
+                android:id="@+id/cg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
