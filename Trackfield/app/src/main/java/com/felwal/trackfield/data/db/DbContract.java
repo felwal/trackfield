@@ -2,7 +2,7 @@ package com.felwal.trackfield.data.db;
 
 import android.provider.BaseColumns;
 
-import com.felwal.trackfield.utils.model.SortMode;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 public final class DbContract {
@@ -85,15 +85,15 @@ public final class DbContract {
         }
 
         /**
-         * Converts a {@link SortMode.Mode}  to the first parameter of a SQL ORDER BY clause string.
+         * Converts a {@link SorterItem.Mode}  to the first parameter of a SQL ORDER BY clause string.
          *
          * @param sortMode Mode to sort by
          * @return The column/columns with neccessary function calls, e.g. "time" or "(time / effective_distance)"
          *
          * @see DbReader#sortOrder(boolean)
-         * @see DbReader#orderBy(SortMode.Mode, boolean)
+         * @see DbReader#orderBy(SorterItem.Mode, boolean)
          */
-        public static String sortColumn(SortMode.Mode sortMode) {
+        public static String sortColumn(SorterItem.Mode sortMode) {
             // column=0, column: sorts all with column = 0 last
             switch (sortMode) {
                 case DISTANCE:

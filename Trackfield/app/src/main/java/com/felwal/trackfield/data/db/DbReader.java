@@ -17,13 +17,13 @@ import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.common.model.Exerlite;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.recordlist.distancelist.model.DistanceItem;
 import com.felwal.trackfield.ui.main.recordlist.intervallist.model.IntervalItem;
 import com.felwal.trackfield.ui.main.recordlist.routelist.model.RouteItem;
 import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.DateUtils;
 import com.felwal.trackfield.utils.MathUtils;
-import com.felwal.trackfield.utils.model.SortMode;
 import com.felwal.trackfield.utils.annotation.Unfinished;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
@@ -135,7 +135,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlites(SortMode.Mode sortMode, boolean ascending,
+    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending,
         @NonNull ArrayList<String> types, int startIndex, int endIndex) {
 
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
@@ -151,7 +151,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlites(SortMode.Mode sortMode, boolean ascending,
+    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending,
         @NonNull ArrayList<String> types) {
 
         String[] columns = ExerciseEntry.COLUMNS_EXERLITE;
@@ -169,7 +169,7 @@ public class DbReader extends DbHelper {
      * Note: when updating this, also update {@link com.felwal.trackfield.R.string#tv_text_empty_search_msg}
      */
     @NonNull
-    public ArrayList<Exerlite> getExerlitesBySearch(String search, SortMode.Mode sortMode, boolean ascending) {
+    public ArrayList<Exerlite> getExerlitesBySearch(String search, SorterItem.Mode sortMode, boolean ascending) {
         if (search.equals("")) {
             return getExerlites(sortMode, ascending, Prefs.getExerciseVisibleTypes());
         }
@@ -198,7 +198,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlitesByRoute(int routeId, SortMode.Mode sortMode, boolean ascending,
+    public ArrayList<Exerlite> getExerlitesByRoute(int routeId, SorterItem.Mode sortMode, boolean ascending,
         @NonNull ArrayList<String> types) {
 
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
@@ -227,14 +227,14 @@ public class DbReader extends DbHelper {
      * @see Exerlite#setTop(int)
      */
     @NonNull
-    public ArrayList<Exerlite> getExerlitesByDistance(int distance, SortMode.Mode sortMode, boolean ascending,
+    public ArrayList<Exerlite> getExerlitesByDistance(int distance, SorterItem.Mode sortMode, boolean ascending,
         @NonNull ArrayList<String> types) {
 
         int minDist = MathUtils.minDistance(distance);
         int maxDist = MathUtils.maxDistance(distance);
 
         String exerliteColumns = ExerciseEntry.toString(ExerciseEntry.COLUMNS_EXERLITE);
-        String orderByPace = orderBy(SortMode.Mode.PACE, true);
+        String orderByPace = orderBy(SorterItem.Mode.PACE, true);
         String table = ExerciseEntry.TABLE_NAME;
         String id = ExerciseEntry._ID;
         String dist = ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
@@ -264,7 +264,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlitesByInterval(String interval, SortMode.Mode sortMode, boolean ascending) {
+    public ArrayList<Exerlite> getExerlitesByInterval(String interval, SorterItem.Mode sortMode, boolean ascending) {
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry.COLUMN_INTERVAL + " = ?";
         String[] selectionArgs = { interval };
@@ -278,7 +278,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, SortMode.Mode sortMode,
+    public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, SorterItem.Mode sortMode,
         boolean ascending, @NonNull ArrayList<String> types) {
 
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
@@ -558,7 +558,7 @@ public class DbReader extends DbHelper {
     // get items
 
     @NonNull
-    public ArrayList<RouteItem> getRouteItems(SortMode.Mode sortMode, boolean ascending, boolean includeHidden,
+    public ArrayList<RouteItem> getRouteItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden,
         @NonNull ArrayList<String> types) {
 
         final String tab_e = ExerciseEntry.TABLE_NAME;
@@ -638,7 +638,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<DistanceItem> getDistanceItems(SortMode.Mode sortMode, boolean ascending,
+    public ArrayList<DistanceItem> getDistanceItems(SorterItem.Mode sortMode, boolean ascending,
         @NonNull ArrayList<String> types) {
 
         String tab_e = ExerciseEntry.TABLE_NAME;
@@ -686,7 +686,7 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<IntervalItem> getIntervalItems(SortMode.Mode sortMode, boolean ascending, boolean includeHidden) {
+    public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
         String colAmount = "amount";
 
         String table = ExerciseEntry.TABLE_NAME;
@@ -917,7 +917,7 @@ public class DbReader extends DbHelper {
                 " WHERE " + col_date + " >= " + startEpoch +
                 " AND " + col_date + " < " + endEpoch + typeFilter(" AND", types) +
                 " GROUP BY " + col_date_group +
-                " ORDER BY " + orderBy(SortMode.Mode.DATE, true);
+                " ORDER BY " + orderBy(SorterItem.Mode.DATE, true);
 
         Cursor cursor = db.rawQuery(queryString, null);
         TreeMap<Float, Float> nodes = new TreeMap<>();
@@ -961,8 +961,8 @@ public class DbReader extends DbHelper {
 
         String columns = ExerciseEntry.SELECTION_PACE + " AS " + sel_pace;
         String andTypeFilter = typeFilter(" AND", types);
-        String orderByPace = orderBy(SortMode.Mode.PACE, true);
-        String orderByDate = orderBy(SortMode.Mode.DATE, true);
+        String orderByPace = orderBy(SorterItem.Mode.PACE, true);
+        String orderByDate = orderBy(SorterItem.Mode.DATE, true);
 
         String query =
             "SELECT " + columns +
@@ -994,7 +994,7 @@ public class DbReader extends DbHelper {
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + colPace + " > 0" +
             typeFilter(" AND", types);
-        String orderBy = orderBy(SortMode.Mode.DATE, true);
+        String orderBy = orderBy(SorterItem.Mode.DATE, true);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
         TreeMap<Float, Float> nodes = new TreeMap<>();
@@ -1014,7 +1014,7 @@ public class DbReader extends DbHelper {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfWeek(includingDate),
-            DateUtils.atEndOfWeek(includingDate), SortMode.Mode.DATE, false, types);
+            DateUtils.atEndOfWeek(includingDate), SorterItem.Mode.DATE, false, types);
 
         for (Exerlite e : exerlites) {
             int key = e.getDate().getDayOfWeek().getValue();
@@ -1034,7 +1034,7 @@ public class DbReader extends DbHelper {
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
             DateUtils.atEndOfYear(includingDate),
-            SortMode.Mode.DATE, false, types);
+            SorterItem.Mode.DATE, false, types);
 
         for (Exerlite e : exerlites) {
             int key = e.getDate()
@@ -1067,7 +1067,7 @@ public class DbReader extends DbHelper {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfMonth(includingDate),
-            DateUtils.atEndOfMonth(includingDate), SortMode.Mode.DATE, false, types);
+            DateUtils.atEndOfMonth(includingDate), SorterItem.Mode.DATE, false, types);
 
         float totalDistance = 0;
 
@@ -1096,7 +1096,7 @@ public class DbReader extends DbHelper {
 
         TreeMap<Float, Float> points = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
-            DateUtils.atEndOfYear(includingDate), SortMode.Mode.DATE, true, types);
+            DateUtils.atEndOfYear(includingDate), SorterItem.Mode.DATE, true, types);
 
         float totalDistance = 0;
         float lastWeek = 0;
@@ -1335,17 +1335,17 @@ public class DbReader extends DbHelper {
     // sql clauses
 
     /**
-     * Converts a {@link SortMode.Mode} and a boolean to a ORDER BY SQL clause string
+     * Converts a {@link SorterItem.Mode} and a boolean to a ORDER BY SQL clause string
      *
      * @param sortMode Mode to sort by
      * @param ascending Ordering by value
      * @return The column and order combined, e.g. "_ID ASC"
      *
-     * @see com.felwal.trackfield.data.db.ExerciseEntry#sortColumn(SortMode.Mode)
+     * @see com.felwal.trackfield.data.db.ExerciseEntry#sortColumn(SorterItem.Mode)
      * @see #sortOrder(boolean)
      */
     @NonNull
-    private String orderBy(SortMode.Mode sortMode, boolean ascending) {
+    private String orderBy(SorterItem.Mode sortMode, boolean ascending) {
         return ExerciseEntry.sortColumn(sortMode) + sortOrder(ascending);
     }
 
@@ -1355,8 +1355,8 @@ public class DbReader extends DbHelper {
      * @param ascending Ordering by value
      * @return " ASC" if ascending is true, " DESC" if false
      *
-     * @see com.felwal.trackfield.data.db.ExerciseEntry#sortColumn(SortMode.Mode)
-     * @see #orderBy(SortMode.Mode, boolean)
+     * @see com.felwal.trackfield.data.db.ExerciseEntry#sortColumn(SorterItem.Mode)
+     * @see #orderBy(SorterItem.Mode, boolean)
      */
     @NonNull
     private String sortOrder(boolean ascending) {

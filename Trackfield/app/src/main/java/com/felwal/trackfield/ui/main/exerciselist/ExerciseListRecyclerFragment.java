@@ -2,6 +2,7 @@ package com.felwal.trackfield.ui.main.exerciselist;
 
 import android.view.View;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
@@ -11,25 +12,24 @@ import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Header;
 import com.felwal.trackfield.ui.common.model.HeaderValue;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.widget.graph.Borders;
 import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.ui.widget.graph.GraphData;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ExerciseListRecyclerFragment extends RecyclerFragment {
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Date", SortMode.Mode.DATE, false),
-        new SortMode("Distance", SortMode.Mode.DISTANCE, false),
-        new SortMode("Time", SortMode.Mode.TIME, false),
-        new SortMode("Pace", SortMode.Mode.PACE, true)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Date", SorterItem.Mode.DATE, false),
+        new SortMode("Distance", SorterItem.Mode.DISTANCE, false),
+        new SortMode("Time", SorterItem.Mode.TIME, false),
+        new SortMode("Pace", SorterItem.Mode.PACE, true)
     );
 
     private String search = "";
@@ -65,7 +65,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.isAscending());
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.getAscending());
 
         // sorter & charts
         if (exerliteList.size() != 0) {
@@ -83,7 +83,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                 itemList.add(sorter.copy());
             }
 
-            if (sorter.getMode() != SortMode.Mode.DATE) {
+            if (sorter.getMode() != SorterItem.Mode.DATE) {
                 itemList.addAll(exerliteList);
                 return itemList;
             }
@@ -179,7 +179,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.EXERCISES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.EXERCISES, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

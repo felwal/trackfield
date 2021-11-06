@@ -15,16 +15,15 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Header;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
-import com.felwal.trackfield.ui.widget.sheet.SortSheet;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.utils.LayoutUtils;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
@@ -189,10 +188,10 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
      * Delegation of delegate click to handle common item {@link Sorter}
      */
     protected void onDelegateClick(RecyclerItem item) {
-        if (item instanceof Sorter) {
-            Sorter sorter = (Sorter) item;
+        if (item instanceof SorterItem) {
+            SorterItem sorterItem = (SorterItem) item;
 
-            SortSheet sheet = SortSheet.newInstance(sorter);
+            SortSheet sheet = SortSheet.newInstance("Sort by", sorterItem.getSorter(), "sorter");
             sheet.show(getChildFragmentManager());
             getChildFragmentManager().executePendingTransactions();
         }
@@ -203,9 +202,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     // tools
 
     protected void addItemsWithHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList,
-        SortMode.Mode sortMode) {
+        SorterItem.Mode sortMode) {
 
-        if (sortMode == SortMode.Mode.DATE) {
+        if (sortMode == SorterItem.Mode.DATE) {
             int year = -1;
             int newYear;
             for (Exerlite e : fromExerliteList) {

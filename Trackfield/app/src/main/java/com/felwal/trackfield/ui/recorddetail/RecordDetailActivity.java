@@ -11,9 +11,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
-import com.felwal.trackfield.ui.widget.sheet.SortSheet;
 import com.felwal.trackfield.utils.ScreenUtils;
 
 public abstract class RecordDetailActivity extends AppCompatActivity implements SortSheet.SheetListener {
@@ -89,7 +89,7 @@ public abstract class RecordDetailActivity extends AppCompatActivity implements 
     // implements SortSheet
 
     @Override
-    public void onSortSheetClick(int selectedIndex) {
+    public void onSortSheetItemClick(int selectedIndex) {
         recyclerFragment.onSortSheetDismiss(selectedIndex);
     }
 

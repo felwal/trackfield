@@ -214,11 +214,6 @@
         <!--<item name="android:textSize">12sp</item>-->
     </style>
 
-    <style name="TextAppearance.Trackfield.Subtitle3.Sorter">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="TextAppearance.Trackfield.Body.FabTitle">
         <!--<item name="android:textStyle">bold</item>-->
     </style>

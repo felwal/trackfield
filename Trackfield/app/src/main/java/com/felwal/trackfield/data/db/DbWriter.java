@@ -10,9 +10,9 @@ import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.db.model.Sub;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.annotation.Debug;
-import com.felwal.trackfield.utils.model.SortMode;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 import java.util.ArrayList;
@@ -199,7 +199,7 @@ public class DbWriter extends DbHelper {
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
         int remainingOfRoute = DbReader.get(c)
-            .getExerlitesByRoute(routeId, SortMode.Mode.DATE, false, new ArrayList<>()).size();
+            .getExerlitesByRoute(routeId, SorterItem.Mode.DATE, false, new ArrayList<>()).size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
         return false;
     }

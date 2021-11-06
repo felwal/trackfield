@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
+import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -34,7 +35,6 @@ import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
-import com.felwal.trackfield.ui.widget.sheet.SortSheet;
 import com.felwal.trackfield.utils.FileUtils;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // implements SortSheet
 
     @Override
-    public void onSortSheetClick(int selectedIndex) {
+    public void onSortSheetItemClick(int selectedIndex) {
         mainFragment.onSortSheetClick(selectedIndex);
     }
 

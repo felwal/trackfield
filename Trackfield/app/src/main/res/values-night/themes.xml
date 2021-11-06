@@ -21,20 +21,13 @@
         <item name="chipBackgroundColor">@color/colorGreenDarker</item>
         <item name="chipSurfaceColor">@color/colorGrey1</item>
 
-        <!-- elements -->
-        <item name="android:colorBackground">@color/colorGrey1</item>
-        <item name="colorSurface">@color/colorGrey3</item>
-        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
-
         <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
         <item name="android:colorButtonNormal">@color/colorGrey3</item>
         <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
-        <item name="panelBackground">@color/colorGrey2</item>
 
-        <!-- TODO: remove (?) -->
-        <item name="colorOnSurface">@color/colorGrey7</item>
-        <item name="colorOnBackground">@color/colorGrey5</item>
-        <item name="strokeColor">@color/colorGrey4</item>
+        <item name="strokeColor">@color/felwal_divider_dk</item>
+        <item name="android:listDivider">@color/felwal_divider_dk</item>
+        <item name="panelBackground">@color/colorGrey2</item>
         <item name="color">@color/colorGreenDarker</item>
 
         <!-- action overflow menu -->

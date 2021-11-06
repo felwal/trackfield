@@ -4,31 +4,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.recordlist.intervallist.model.IntervalItem;
 import com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class IntervalListRecyclerFragment extends RecyclerFragment {
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Recent", SortMode.Mode.DATE, false),
-        new SortMode("Amount", SortMode.Mode.AMOUNT, false)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Recent", SorterItem.Mode.DATE, false),
+        new SortMode("Amount", SorterItem.Mode.AMOUNT, false)
     );
 
     // extends Fragment
@@ -73,7 +72,7 @@ public class IntervalListRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.isAscending(),
+        ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.getAscending(),
             Prefs.areHiddenRoutesShown());
 
         itemList.add(sorter.copy());
@@ -90,7 +89,7 @@ public class IntervalListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.INTERVALS, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.INTERVALS, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

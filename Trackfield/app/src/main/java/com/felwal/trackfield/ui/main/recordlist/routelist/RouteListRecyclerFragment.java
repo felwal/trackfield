@@ -10,28 +10,28 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.recordlist.routelist.model.RouteItem;
 import com.felwal.trackfield.ui.recorddetail.routedetail.RouteDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class RouteListRecyclerFragment extends RecyclerFragment {
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Recent", SortMode.Mode.DATE, false),
-        new SortMode("Name", SortMode.Mode.NAME, true),
-        new SortMode("Amount", SortMode.Mode.AMOUNT, false),
-        new SortMode("Avg distance", SortMode.Mode.DISTANCE, false),
-        new SortMode("Best pace", SortMode.Mode.PACE, true)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Recent", SorterItem.Mode.DATE, false),
+        new SortMode("Name", SorterItem.Mode.NAME, true),
+        new SortMode("Amount", SorterItem.Mode.AMOUNT, false),
+        new SortMode("Avg distance", SorterItem.Mode.DISTANCE, false),
+        new SortMode("Best pace", SorterItem.Mode.PACE, true)
     );
 
     // extends Fragment
@@ -86,7 +86,7 @@ public class RouteListRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.isAscending(),
+        ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.getAscending(),
             Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes());
 
         itemList.add(sorter.copy());
@@ -103,7 +103,7 @@ public class RouteListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.ROUTES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.ROUTES, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

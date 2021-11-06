@@ -9,25 +9,25 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
 import com.felwal.trackfield.ui.main.recordlist.distancelist.model.DistanceItem;
 import com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
 public class DistanceListRecyclerFragment extends RecyclerFragment {
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Distance", SortMode.Mode.DISTANCE, true)
-        //new SortMode("Amount", SortMode.Mode.DISTANCE, false)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Distance", SorterItem.Mode.DISTANCE, true)
+        //new SortMode("Amount", SorterItem.Mode.DISTANCE, false)
     );
 
     // extends Fragment
@@ -73,7 +73,7 @@ public class DistanceListRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sorter.getMode(), sorter.isAscending(),
+        ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sorter.getMode(), sorter.getAscending(),
             Prefs.getExerciseVisibleTypes());
 
         itemList.add(sorter.copy());
@@ -90,7 +90,7 @@ public class DistanceListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.DISTANCES, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.DISTANCES, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

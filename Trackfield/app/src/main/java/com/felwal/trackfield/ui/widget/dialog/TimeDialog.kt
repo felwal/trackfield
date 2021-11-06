@@ -1,6 +1,5 @@
 package com.felwal.trackfield.ui.widget.dialog
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.EditText
 import androidx.annotation.StringRes
@@ -17,9 +16,7 @@ private const val ARG_HINT1 = "hint1"
 private const val ARG_HINT2 = "hint2"
 private const val ARG_NEUTRAL_BUTTON_RES = "neutralButtonTextId"
 
-class TimeDialog : BaseDialog() {
-
-    private lateinit var listener: DialogListener
+class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
 
     // args
     private var text1 = 0
@@ -27,19 +24,6 @@ class TimeDialog : BaseDialog() {
     private lateinit var hint1: String
     private lateinit var hint2: String
     private var neuBtnTxtRes: Int? = null
-
-    // DialogFragment
-
-    override fun onAttach(c: Context) {
-        super.onAttach(c)
-
-        listener = try {
-            c as DialogListener
-        }
-        catch (e: ClassCastException) {
-            throw ClassCastException("Activity must implement DialogListener")
-        }
-    }
 
     // BaseDialog
 
@@ -69,17 +53,18 @@ class TimeDialog : BaseDialog() {
             if (message != "") setMessage(message)
 
             setPositiveButton(posBtnTxtRes) { _, _ ->
+                listener ?: return@setPositiveButton
                 try {
                     val input1 = et1.text.toString().toInt()
                     val input2 = et2.text.toString().toInt()
-                    listener.onTimeDialogPositiveClick(input1, input2, dialogTag)
+                    listener?.onTimeDialogPositiveClick(input1, input2, dialogTag)
                 }
                 catch (e: NumberFormatException) {
                     activity?.toast(R.string.toast_e_input)
                 }
             }
             setNeutralButton(neuBtnTxtRes!!) { _, _ ->
-                listener.onTimeDialogNeutralClick(dialogTag)
+                listener?.onTimeDialogNeutralClick(dialogTag)
             }
             setCancelButton(negBtnTxtRes)
 
@@ -89,7 +74,7 @@ class TimeDialog : BaseDialog() {
 
     //
 
-    interface DialogListener {
+    interface DialogListener : BaseDialog.DialogListener {
         fun onTimeDialogPositiveClick(input1: Int, input2: Int, tag: String)
 
         fun onTimeDialogNeutralClick(tag: String)

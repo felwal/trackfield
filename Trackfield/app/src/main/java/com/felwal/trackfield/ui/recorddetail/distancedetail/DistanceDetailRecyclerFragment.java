@@ -3,6 +3,7 @@ package com.felwal.trackfield.ui.recorddetail.distancedetail;
 import android.os.Bundle;
 import android.view.View;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Distance;
@@ -12,14 +13,13 @@ import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Goal;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.widget.graph.Borders;
 import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.ui.widget.graph.GraphData;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.TypeUtils;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
@@ -29,10 +29,10 @@ public class DistanceDetailRecyclerFragment extends RecyclerFragment {
     private final static String BUNDLE_DISTANCE = "distance";
     private final static String BUNDLE_ORIGIN_ID = "originId";
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Date", SortMode.Mode.DATE, false),
-        new SortMode("Pace & Avg time", SortMode.Mode.PACE, true),
-        new SortMode("Full distance", SortMode.Mode.DISTANCE, true)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Date", SorterItem.Mode.DATE, false),
+        new SortMode("Pace & Avg time", SorterItem.Mode.PACE, true),
+        new SortMode("Full distance", SorterItem.Mode.DISTANCE, true)
     );
 
     private int originId;
@@ -94,7 +94,7 @@ public class DistanceDetailRecyclerFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sorter.getMode(),
-            sorter.isAscending(), Prefs.getDistanceVisibleTypes());
+            sorter.getAscending(), Prefs.getDistanceVisibleTypes());
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
@@ -127,7 +127,7 @@ public class DistanceDetailRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.DISTANCE, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.DISTANCE, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

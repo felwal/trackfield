@@ -3,21 +3,10 @@
 
     <!-- default theme -->
 
-    <style name="Theme.Default" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Default" parent="Theme.Felwal">
         <!--<item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
 
-        <!-- no action bar -->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-
-        <!-- type -->
-        <item name="textAllCaps">false</item>
-
-        <!-- remove the MaterialComponents automatic brightening of surface color in dark mode -->
-        <item name="elevationOverlayEnabled">false</item>
-
         <!-- theme/style -->
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Felwal.Dialog</item>
         <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
         <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>-->
         <item name="android:textViewStyle">@style/Widget.Trackfield.TextView</item>
@@ -37,19 +26,15 @@
         <item name="chipBackgroundColor">@color/colorGreenLighter</item>
         <item name="chipSurfaceColor">@color/colorGrey9</item>
 
-        <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:colorBackgroundFloating">@color/colorWhite</item>
         <item name="android:colorButtonNormal">@color/colorWhite</item>
         <item name="android:colorActivatedHighlight">@color/colorGreen</item>
 
-        <item name="colorSurface">@color/colorWhite</item>
-        <item name="colorOnSurface">@color/colorGrey6</item>
-        <item name="colorOnBackground">@color/colorGrey8</item>
-
         <!-- action overflow menu (text color funkar inte) -->
         <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
 
-        <item name="strokeColor">@color/colorGrey8</item>
+        <item name="strokeColor">@color/felwal_divider_lt</item>
+        <item name="android:listDivider">@color/felwal_divider_lt</item>
         <item name="panelBackground">@color/colorGrey9</item>
 
         <!-- make actv window appear above keyboard -->

@@ -16,8 +16,8 @@ import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.DelegateClickListener;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -54,7 +54,7 @@ public class RouteDetailExerciseAdapterDelegate extends
     @Override
     public void onBindViewHolder(Exerlite item, ExerciseSmallViewHolder vh, @Nullable List<Object> payloads) {
         String date = item.getDate().format(
-            adapter.getSortMode() == SortMode.Mode.DATE || item.isYear(LocalDate.now().getYear())
+            adapter.getSortMode() == SorterItem.Mode.DATE || item.isYear(LocalDate.now().getYear())
                 ? AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
 
         vh.primaryTv.setText(date);

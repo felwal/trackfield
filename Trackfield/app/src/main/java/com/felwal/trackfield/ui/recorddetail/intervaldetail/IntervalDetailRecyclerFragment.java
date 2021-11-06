@@ -3,15 +3,15 @@ package com.felwal.trackfield.ui.recorddetail.intervaldetail;
 import android.os.Bundle;
 import android.view.View;
 
+import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.model.SortMode;
 
 import java.util.ArrayList;
 
@@ -21,11 +21,11 @@ public class IntervalDetailRecyclerFragment extends RecyclerFragment {
     private final static String BUNDLE_INTERVAL = "interval";
     private final static String BUNDLE_ORIGINID = "originId";
 
-    private final Sorter sorter = new Sorter(
-        new SortMode("Date", SortMode.Mode.DATE, false),
-        new SortMode("Distance", SortMode.Mode.DISTANCE, false),
-        new SortMode("Time", SortMode.Mode.TIME, true),
-        new SortMode("Pace", SortMode.Mode.PACE, true)
+    private final SorterItem sorter = new SorterItem(
+        new SortMode("Date", SorterItem.Mode.DATE, false),
+        new SortMode("Distance", SorterItem.Mode.DISTANCE, false),
+        new SortMode("Time", SorterItem.Mode.TIME, true),
+        new SortMode("Pace", SorterItem.Mode.PACE, true)
     );
 
     private String interval;
@@ -80,7 +80,7 @@ public class IntervalDetailRecyclerFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sorter.getMode(),
-            sorter.isAscending());
+            sorter.getAscending());
 
         itemList.add(sorter.copy());
         addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
@@ -91,7 +91,7 @@ public class IntervalDetailRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.INTERVAL, sorter.getSelectedIndex(), sorter.isOrderInverted());
+        Prefs.setSorter(AppConsts.Layout.INTERVAL, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

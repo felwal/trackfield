@@ -14,12 +14,12 @@ import com.felwal.trackfield.ui.base.BaseAdapter;
 import com.felwal.trackfield.ui.base.DelegateClickListener;
 import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.common.model.Sorter;
+import com.felwal.trackfield.ui.common.model.SorterItem;
 
 import java.util.List;
 
 public class SorterAdapterDelegate extends
-    BaseAdapterDelegate<Sorter, RecyclerItem, SorterAdapterDelegate.SorterViewHolder> {
+    BaseAdapterDelegate<SorterItem, RecyclerItem, SorterAdapterDelegate.SorterViewHolder> {
 
     private final BaseAdapter adapter;
 
@@ -34,17 +34,17 @@ public class SorterAdapterDelegate extends
 
     @Override
     public boolean isForViewType(@NonNull RecyclerItem item) {
-        return item instanceof Sorter;
+        return item instanceof SorterItem;
     }
 
     @NonNull
     @Override
     public SorterViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new SorterViewHolder(inflater.inflate(R.layout.item_recycler_sorter, parent, false));
+        return new SorterViewHolder(inflater.inflate(R.layout.item_sorter, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Sorter item, SorterViewHolder vh, @Nullable List<Object> payloads) {
+    public void onBindViewHolder(SorterItem item, SorterViewHolder vh, @Nullable List<Object> payloads) {
         vh.titleTv.setText(item.getTitle());
         adapter.setSortMode(item.getMode());
     }
@@ -57,7 +57,7 @@ public class SorterAdapterDelegate extends
 
         public SorterViewHolder(View itemView) {
             super(itemView);
-            titleTv = itemView.findViewById(R.id.tv_recycler_item_sorter);
+            titleTv = itemView.findViewById(R.id.tv);
             itemView.setOnClickListener(this);
         }
 
