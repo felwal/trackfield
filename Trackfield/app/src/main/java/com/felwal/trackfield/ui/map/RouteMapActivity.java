@@ -64,7 +64,7 @@ public class RouteMapActivity extends MapActivity {
         ArrayList<Polyline> polylines = new ArrayList<>();
         for (List<LatLng> latLngs : trails.getLatLngs()) {
             PolylineOptions options = new PolylineOptions();
-            options.color(c.getResources().getColor(R.color.colorGreenLight));
+            options.color(c.getColor(R.color.colorGreenLight));
             options.addAll(latLngs);
             polylines.add(googleMap.addPolyline(options));
         }

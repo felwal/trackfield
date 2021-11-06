@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import androidx.annotation.AttrRes;
+
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.TypeUtils;
@@ -63,8 +66,8 @@ public class GraphData {
         calcConPoints();
     }
 
-    public void setPaint(int colorAttrResId, Context c) {
-        paint.setColor(c.getColor(LayoutUtils.getIdAttr(colorAttrResId, c)));
+    public void setPaint(@AttrRes int colorAttrResId, Context c) {
+        paint.setColor(ResUtilsKt.getColorAttr(c, colorAttrResId));
     }
 
     // calc

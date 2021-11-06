@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Exercise;
@@ -107,10 +108,10 @@ public class PeekSheet extends BaseSheet {
 
         // set text color
         // TODO: xml attribute does not work - why?
-        int textColor = LayoutUtils.getColorAttr(android.R.attr.textColorPrimary, a);
+        int textColor = ResUtilsKt.getColorAttr(a, android.R.attr.textColorPrimary);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);
-        dateTv.setTextColor(LayoutUtils.getColorAttr(android.R.attr.textColorSecondary, a));
+        dateTv.setTextColor(ResUtilsKt.getColorAttr(a, android.R.attr.textColorSecondary));
         distanceTv.setTextColor(textColor);
         timeTv.setTextColor(textColor);
         paceTv.setTextColor(textColor);

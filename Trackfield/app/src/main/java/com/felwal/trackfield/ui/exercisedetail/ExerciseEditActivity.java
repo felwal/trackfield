@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.model.Exercise;
@@ -135,8 +136,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
         ab.setDisplayHomeAsUpEnabled(true);
 
         // set cancel icon as home
-        Drawable homeIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
-        homeIcon.setColorFilter(LayoutUtils.getColorAttr(R.attr.colorOnPrimary, this), PorterDuff.Mode.SRC_IN);
+        Drawable homeIcon = ResUtilsKt.getDrawableCompatFilter(this, R.drawable.ic_cancel, R.attr.colorOnPrimary);
         ab.setHomeAsUpIndicator(homeIcon);
     }
 
@@ -213,7 +213,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
 
         if (exercise.isDistanceDriven()) {
             distanceEt.setEnabled(false);
-            distanceEt.setTextColor(LayoutUtils.getColorAttr(android.R.attr.textColorSecondary, this));
+            distanceEt.setTextColor(ResUtilsKt.getColorAttr(this, android.R.attr.textColorSecondary));
         }
 
         // polyline
@@ -227,10 +227,9 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
         // distance checked driven listener
         drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             distanceEt.setEnabled(!isChecked);
-            distanceEt.setTextColor(LayoutUtils.getColorAttr(isChecked
+            distanceEt.setTextColor(ResUtilsKt.getColorAttr(this, isChecked
                 ? android.R.attr.textColorSecondary
-                : android.R.attr.textColorPrimary,
-                this));
+                : android.R.attr.textColorPrimary));
         });
 
         // date focus listener

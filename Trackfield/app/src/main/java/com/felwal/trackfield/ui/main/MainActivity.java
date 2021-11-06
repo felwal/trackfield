@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.android.widget.sheet.SortSheet;
@@ -277,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @SuppressLint("ResourceType")
     private void animateFab() {
         Context fabContext = fab.getContext();
-        @ColorInt int primaryVariant = LayoutUtils.getColorAttr(R.attr.colorPrimaryVariant, fabContext);
-        @ColorInt int surface = LayoutUtils.getColorAttr(R.attr.colorSurface, fabContext);
+        @ColorInt int primaryVariant = ResUtilsKt.getColorAttr(fabContext, R.attr.colorPrimaryVariant);
+        @ColorInt int surface = ResUtilsKt.getColorAttr(fabContext, R.attr.colorSurface);
 
         @ColorInt int fromColor, toColor;
         Drawable toIcon;
@@ -287,17 +288,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (isFabMenuOpen) {
             fromColor = surface;
             toColor = primaryVariant;
-            toIcon = ContextCompat.getDrawable(this, R.drawable.ic_add).mutate();
-            toIcon.setColorFilter(LayoutUtils.getColorAttr(android.R.attr.textColorPrimaryInverse, this),
-                PorterDuff.Mode.SRC_IN);
+            toIcon = ResUtilsKt.getDrawableCompatFilter(this,
+                R.drawable.ic_add, android.R.attr.textColorPrimaryInverse);
         }
         // animate to open menu
         else {
             fromColor = primaryVariant;
             toColor = surface;
-            toIcon = ContextCompat.getDrawable(this, R.drawable.ic_cancel).mutate();
-            toIcon.setColorFilter(LayoutUtils.getColorAttr(android.R.attr.textColorSecondary, this),
-                PorterDuff.Mode.SRC_IN);
+            toIcon = ResUtilsKt.getDrawableCompatFilter(this,
+                R.drawable.ic_cancel, android.R.attr.textColorSecondary);
         }
 
         LayoutUtils.animateFab(fab, fromColor, toColor, toIcon);

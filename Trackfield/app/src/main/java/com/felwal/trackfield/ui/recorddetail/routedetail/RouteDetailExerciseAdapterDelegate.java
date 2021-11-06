@@ -62,7 +62,7 @@ public class RouteDetailExerciseAdapterDelegate extends
         vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
         vh.recordMarker.getBackground().setColorFilter(c.getColor(
-            item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
+            item.isTop(1)? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
             PorterDuff.Mode.MULTIPLY);
     }
 

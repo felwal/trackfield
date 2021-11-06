@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.BinaryDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -215,8 +216,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
                 setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_view_item_sub_v));
 
                 if (i % 2 == 0) {
-                    subView.setBackgroundColor(
-                        getResources().getColor(LayoutUtils.getIdAttr(R.attr.panelBackground, this)));
+                    subView.setBackgroundColor(ResUtilsKt.getColorAttr(this, R.attr.panelBackground));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
