@@ -14,27 +14,27 @@
 
         <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorPrimaryVariant">@color/colorGreenLight</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="colorPrimaryVariant">@color/colorGreenLight</item>
         <item name="colorOnPrimary">@color/colorWhite</item>
-        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
-        <item name="chipSurfaceColor">@color/colorGrey1</item>
 
+        <!-- accent -->
+        <item name="colorAccent">@color/colorGreenLight</item>
+
+        <!-- background -->
         <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
+
+        <!-- widget -->
         <item name="android:colorButtonNormal">@color/colorGrey3</item>
         <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
-
-        <item name="strokeColor">@color/felwal_divider_dk</item>
+        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
+        <item name="chipSurfaceColor">@color/colorGrey1</item>
         <item name="android:listDivider">@color/felwal_divider_dk</item>
+        <item name="strokeColor">@color/felwal_divider_dk</item>
+
+        <!-- TODO: whats this? -->
         <item name="panelBackground">@color/colorGrey2</item>
         <item name="color">@color/colorGreenDarker</item>
-
-        <!-- action overflow menu -->
-        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
-
-        <!-- make actv window appear above keyboard -->
-        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
         <!-- styles -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
@@ -46,16 +46,22 @@
     <!-- color combinations -->
 
     <style name="Theme.Trackfield.Green">
+        <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+
+        <!-- accent -->
         <item name="colorAccent">@color/colorGreenLight</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
+        <!-- primary -->
         <item name="colorPrimary">@color/colorGrey3</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorGrey1</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+
+        <!-- accent -->
         <item name="colorAccent">@color/colorGreenLight</item>
     </style>
 

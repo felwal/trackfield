@@ -99,7 +99,7 @@ public class RouteDetailRecyclerFragment extends RecyclerFragment {
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
-                DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getRouteVisibleTypes()),
+                a, DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getRouteVisibleTypes()),
                 GraphData.GRAPH_BEZIER, false, false);
 
             Graph graph = new Graph(true, Borders.horizontal(), false, true, false);

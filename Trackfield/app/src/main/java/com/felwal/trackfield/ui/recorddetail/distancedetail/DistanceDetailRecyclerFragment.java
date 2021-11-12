@@ -98,7 +98,7 @@ public class DistanceDetailRecyclerFragment extends RecyclerFragment {
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
-                DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getDistanceVisibleTypes()),
+                a, DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getDistanceVisibleTypes()),
                 GraphData.GRAPH_BEZIER, false, false);
 
             Graph graph = new Graph(true, Borders.horizontal(), false, true, false);

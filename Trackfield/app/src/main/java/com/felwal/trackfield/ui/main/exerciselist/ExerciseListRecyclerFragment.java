@@ -71,7 +71,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (exerliteList.size() != 0) {
             if (Prefs.isDailyChartShown()) {
                 GraphData weekData = new GraphData(
-                    DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph weekGraph = new Graph(false, Borders.none(), true, false, true);
@@ -242,7 +242,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                 ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
                 GraphData yearData = new GraphData(
-                    DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph yearGraph = new Graph(false, Borders.none(), true, false, true);

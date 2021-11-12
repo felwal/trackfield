@@ -6,6 +6,12 @@
     <style name="Theme.Default" parent="Theme.Felwal">
         <!--<item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
 
+        <!-- make actv window appear above keyboard -->
+        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
+
+        <!-- action overflow menu (text color funkar inte) -->
+        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
+
         <!-- theme/style -->
         <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
         <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>-->
@@ -17,28 +23,28 @@
     <!-- light theme -->
 
     <style name="Theme.Trackfield" parent="Theme.Default">
+        <!-- text -->
         <item name="android:textColorPrimary">@color/colorBlack</item>
         <item name="android:textColorSecondary">@color/colorGrey6</item>
         <item name="android:textColorHighlight">@color/colorGreen</item>
         <item name="android:textColorPrimaryInverse">@color/colorWhite</item>
 
+        <!-- primary -->
         <item name="colorPrimaryVariant">@color/colorGreen</item>
-        <item name="chipBackgroundColor">@color/colorGreenLighter</item>
-        <item name="chipSurfaceColor">@color/colorGrey9</item>
 
+        <!-- background -->
         <item name="android:colorBackgroundFloating">@color/colorWhite</item>
+
+        <!-- widget -->
         <item name="android:colorButtonNormal">@color/colorWhite</item>
         <item name="android:colorActivatedHighlight">@color/colorGreen</item>
-
-        <!-- action overflow menu (text color funkar inte) -->
-        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
-
-        <item name="strokeColor">@color/felwal_divider_lt</item>
+        <item name="chipBackgroundColor">@color/colorGreenLighter</item>
+        <item name="chipSurfaceColor">@color/colorGrey9</item>
         <item name="android:listDivider">@color/felwal_divider_lt</item>
-        <item name="panelBackground">@color/colorGrey9</item>
+        <item name="strokeColor">@color/felwal_divider_lt</item>
 
-        <!-- make actv window appear above keyboard -->
-        <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
+        <!-- TODO: whats this? -->
+        <item name="panelBackground">@color/colorGrey9</item>
 
         <!-- styles -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Light</item>
@@ -52,18 +58,24 @@
     <style name="Theme.Trackfield.Green">
         <item name="android:windowLightStatusBar">false</item>
 
+        <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+
+        <!-- accent -->
         <item name="colorAccent">@color/colorGreen</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
         <item name="android:windowLightStatusBar">true</item>
 
+        <!-- primary -->
         <item name="colorPrimary">@color/colorWhite</item>
-        <item name="colorOnPrimary">@color/colorBlack</item>
         <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/colorBlack</item>
+
+        <!-- accent -->
         <item name="colorAccent">@color/colorGreen</item>
     </style>
 

@@ -53,13 +53,13 @@ public class StatsRecyclerFragment extends RecyclerFragment {
         // month graph
 
         GraphData dataThisMonth = new GraphData(
-            DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            a, DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
 
         GraphData dataLastMonth = new GraphData(
-            DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
+            a, DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
             GraphData.GRAPH_LINE, false, false);
-        dataLastMonth.setPaint(R.attr.colorOnBackground, a);
+        dataLastMonth.setPaint(android.R.attr.listDivider, a);
 
         Graph monthGraph = new Graph(false, Borders.all(), true, false, true);
         monthGraph.addData(dataThisMonth, dataLastMonth);
@@ -69,13 +69,13 @@ public class StatsRecyclerFragment extends RecyclerFragment {
         // year graph
 
         GraphData dataThisYear = new GraphData(
-            DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            a, DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
 
         GraphData dataLastYear = new GraphData(
-            DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            a, DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
             GraphData.GRAPH_LINE, false, false);
-        dataLastYear.setPaint(R.attr.colorOnBackground, a);
+        dataLastYear.setPaint(android.R.attr.listDivider, a);
 
         Graph yearGraph = new Graph(false, Borders.all(), true, false, true);
         yearGraph.addData(dataThisYear, dataLastYear);
@@ -85,13 +85,13 @@ public class StatsRecyclerFragment extends RecyclerFragment {
         // year chart
 
         GraphData dataThisYearMonthly = new GraphData(
-            DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
+            a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
             false, false);
 
         GraphData dataLastYearMonthly = new GraphData(
-            DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
             GraphData.GRAPH_BAR, false, false);
-        dataLastYearMonthly.setPaint(R.attr.colorOnBackground, a);
+        dataLastYearMonthly.setPaint(android.R.attr.listDivider, a);
 
         Graph yearBar = new Graph(false, Borders.all(), true, false, true);
         yearBar.addData(dataThisYearMonthly, dataLastYearMonthly);

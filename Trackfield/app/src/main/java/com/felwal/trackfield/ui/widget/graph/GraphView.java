@@ -35,14 +35,12 @@ public class GraphView extends View implements View.OnTouchListener {
     private final float barRadius = ScreenUtils.px(6);
 
     private final Paint borderPaint = new Paint() {{
-        // colorGray5 / colorOnBackground
         setColor(ResUtilsKt.getColorAttr(getContext(), android.R.attr.listDivider));
         setAntiAlias(true);
         setStrokeWidth(ScreenUtils.px(1));
         setStyle(Paint.Style.STROKE);
     }};
     private final Paint gridPaint = new Paint() {{
-        // colorGrey3 / strokeColor
         setColor(ResUtilsKt.getColorAttr(getContext(), android.R.attr.listDivider));
         setAntiAlias(true);
         setStrokeWidth(ScreenUtils.px(1));

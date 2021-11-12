@@ -1,14 +1,13 @@
 package com.felwal.trackfield.ui.widget.graph;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
 import androidx.annotation.AttrRes;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.trackfield.utils.LayoutUtils;
+import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 
@@ -38,7 +37,6 @@ public class GraphData {
     private final boolean showArea;
 
     private final Paint paint = new Paint() {{
-        setColor(Color.parseColor("#FF5BB974"));
         setAntiAlias(true);
         setStrokeWidth(ScreenUtils.px(3));
         setStyle(Style.STROKE);
@@ -46,7 +44,7 @@ public class GraphData {
 
     //
 
-    public GraphData(TreeMap<Float, Float> nodes, int graphType, boolean showPoints, boolean showArea) {
+    public GraphData(Context c, TreeMap<Float, Float> nodes, int graphType, boolean showPoints, boolean showArea) {
         this.nodes = nodes;
         this.graphType = graphType;
         this.showPoints = showPoints;
@@ -55,6 +53,8 @@ public class GraphData {
         if (isGraphType(GRAPH_BAR) || isGraphType(GRAPH_POINTS)) {
             paint.setStyle(Paint.Style.FILL);
         }
+        // set default color
+        setPaint(R.attr.colorAccent, c);
 
         calcMinAndMax();
     }
