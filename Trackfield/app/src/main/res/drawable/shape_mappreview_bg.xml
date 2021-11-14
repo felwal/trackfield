@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <solid android:color="?attr/colorSurface" />
-    <corners android:radius="@dimen/layout_rounded_corner_radius" />
+    <corners android:radius="@dimen/layout_mappreview_corner_radius" />
 
     <padding
         android:left="0dp"
