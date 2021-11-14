@@ -21,6 +21,7 @@ import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
+import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
 
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
-    ChipDialog.DialogListener, SortSheet.SheetListener {
+    MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
 
@@ -126,16 +127,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
-                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_EXERCISES)
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES)
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
             DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.dialog_btn_cancel, DIALOG_ADD_DISTANCE)
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_EXERCISES)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

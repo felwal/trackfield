@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.ChipDialog;
+import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -23,10 +24,12 @@ import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
 import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class RouteDetailActivity extends RecordDetailActivity implements TextDialog.DialogListener,
-    TimeDialog.DialogListener, ChipDialog.DialogListener, BinaryDialog.DialogListener {
+    TimeDialog.DialogListener, MultiChoiceDialog.DialogListener, AlertDialog.DialogListener {
 
     // extras names
     public static final String EXTRA_ROUTE_ID = "routeId";
@@ -83,9 +86,8 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
-                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_ROUTE)
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_ROUTE)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -93,7 +95,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
         else if (itemId == R.id.action_rename_route) {
             if (route != null) {
                 TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(),
-                    "", R.string.dialog_btn_rename, R.string.dialog_btn_cancel, DIALOG_RENAME_ROUTE)
+                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE)
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -112,7 +114,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
 
             TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
                 minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_GOAL_ROUTE)
+                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_ROUTE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -159,8 +161,9 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
 
             // update route
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
-                BinaryDialog.newInstance(getString(R.string.dialog_title_merge_routes),
-                    getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge, R.string.dialog_btn_cancel,
+                AlertDialog.newInstance(getString(R.string.dialog_title_merge_routes),
+                    getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge,
+                    R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
                     input, DIALOG_MERGE_ROUTES)
                     .show(getSupportFragmentManager());
             }
@@ -175,7 +178,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_MERGE_ROUTES)) {
             DbWriter.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
@@ -183,6 +186,10 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
             finish();
             startActivity(this, newId, originId);
         }
+    }
+
+    @Override
+    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
     }
 
     @Override
@@ -208,7 +215,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_ROUTE)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

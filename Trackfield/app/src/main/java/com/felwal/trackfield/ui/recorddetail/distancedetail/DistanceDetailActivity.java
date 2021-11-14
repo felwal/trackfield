@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.ChipDialog;
+import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -21,10 +22,12 @@ import com.felwal.trackfield.ui.recorddetail.RecordDetailActivity;
 import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
-public class DistanceDetailActivity extends RecordDetailActivity implements BinaryDialog.DialogListener,
-    TimeDialog.DialogListener, ChipDialog.DialogListener {
+public class DistanceDetailActivity extends RecordDetailActivity implements AlertDialog.DialogListener,
+    TimeDialog.DialogListener, MultiChoiceDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_DISTANCE = "distance";
@@ -79,17 +82,16 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter),
-                getString(R.string.tv_text_dialog_filter_msg), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.dialog_btn_cancel, DIALOG_FILTER_DISTANCE)
+            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_DISTANCE)
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_delete_distance) {
-            BinaryDialog.newInstance(getString(R.string.dialog_title_delete_distance),
-                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete,
-                R.string.dialog_btn_cancel, DIALOG_DELETE_DISTANCE, null)
+            AlertDialog.newInstance(getString(R.string.dialog_title_delete_distance),
+                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete, BaseDialogKt.NO_RES,
+                R.string.fw_dialog_btn_cancel, DIALOG_DELETE_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -107,7 +109,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
             }
             TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
                 minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_GOAL_DISTANCE)
+                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_DISTANCE)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -137,11 +139,15 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
     // implements dialogs
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_DISTANCE)) {
             DbWriter.get(this).deleteDistance(distance);
             finish();
         }
+    }
+
+    @Override
+    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
     }
 
     @Override
@@ -167,7 +173,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Bina
     }
 
     @Override
-    public void onChipDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_FILTER_DISTANCE)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

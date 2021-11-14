@@ -17,9 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.android.widget.dialog.BaseDialog;
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
+import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.android.widget.dialog.RadioDialog;
+import com.felwal.android.widget.dialog.SingleChoiceDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.prefs.Prefs;
@@ -31,10 +33,12 @@ import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalDate;
 
-public class SettingsActivity extends AppCompatActivity implements RadioDialog.DialogListener,
-    DecimalDialog.DialogListener, BinaryDialog.DialogListener {
+public class SettingsActivity extends AppCompatActivity implements SingleChoiceDialog.DialogListener,
+    DecimalDialog.DialogListener, AlertDialog.DialogListener {
 
     // dialog tags
     private static final String DIALOG_THEME = "themeDialog";
@@ -114,13 +118,13 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_theme),
             AppConsts.themeNames.get(Prefs.getTheme()), false,
-            RadioDialog.newInstance(getString(R.string.dialog_title_theme), "", AppConsts.themeNames,
-                Prefs.getTheme(), R.string.dialog_btn_cancel, DIALOG_THEME));
+            RadioDialog.newInstance(getString(R.string.dialog_title_theme), AppConsts.themeNames, Prefs.getTheme(),
+                BaseDialogKt.NO_RES, R.string.fw_dialog_btn_cancel, DIALOG_THEME));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_color),
             AppConsts.colorNames.get(Prefs.getColor()), true,
-            RadioDialog.newInstance(getString(R.string.dialog_title_color), "", AppConsts.colorNames,
-                Prefs.getColor(), R.string.dialog_btn_cancel, DIALOG_COLOR));
+            RadioDialog.newInstance(getString(R.string.dialog_title_color), AppConsts.colorNames,
+                Prefs.getColor(), BaseDialogKt.NO_RES, R.string.fw_dialog_btn_cancel, DIALOG_COLOR));
 
         // third party services
 
@@ -134,12 +138,12 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         inflateHeader(getString(R.string.tv_text_settings_header_file));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_export), "", false,
-            BinaryDialog.newInstance(getString(R.string.dialog_title_export), getString(R.string.dialog_msg_export),
-                R.string.dialog_btn_export, R.string.dialog_btn_cancel, DIALOG_EXPORT, null));
+            AlertDialog.newInstance(getString(R.string.dialog_title_export), getString(R.string.dialog_msg_export),
+                R.string.dialog_btn_export, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_EXPORT, null));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_import), "", true,
-            BinaryDialog.newInstance(getString(R.string.dialog_title_import), getString(R.string.dialog_msg_import),
-                R.string.dialog_btn_import, R.string.dialog_btn_cancel, DIALOG_IMPORT, null));
+            AlertDialog.newInstance(getString(R.string.dialog_title_import), getString(R.string.dialog_msg_import),
+                R.string.dialog_btn_import, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_IMPORT, null));
 
         // profile
 
@@ -147,7 +151,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_mass), Prefs.getMass() + " kg", false,
             DecimalDialog.newInstance(getString(R.string.dialog_title_mass), "", Prefs.getMass(),
-                getString(R.string.tv_text_settings_hint_mass), R.string.dialog_btn_set, R.string.dialog_btn_cancel,
+                getString(R.string.tv_text_settings_hint_mass), R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel,
                 DIALOG_MASS));
 
         final LocalDate bd = Prefs.getBirthday();
@@ -186,8 +190,8 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
             });
 
             inflateDialogItem(getString(R.string.tv_text_settings_title_recreate), "", true,
-                BinaryDialog.newInstance("Recreate database?", "", R.string.dialog_btn_ok,
-                    R.string.dialog_btn_cancel, DIALOG_RECREATE_DB, null));
+                AlertDialog.newInstance("Recreate database?", "", R.string.fw_dialog_btn_ok,
+                    R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_RECREATE_DB, null));
         }
     }
 
@@ -248,7 +252,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     // implements dialogs
 
     @Override
-    public void onRadioDialogItemClick(int checkedItem, @NonNull String tag) {
+    public void onSingleChoiceDialogItemSelected(int checkedItem, @NonNull String tag) {
         if (tag.equals(DIALOG_THEME)) {
             Prefs.setTheme(checkedItem);
         }
@@ -269,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
     }
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_EXPORT)) {
             LayoutUtils.toast(R.string.toast_json_exporting, this);
             new Thread(() -> {
@@ -293,6 +297,10 @@ public class SettingsActivity extends AppCompatActivity implements RadioDialog.D
         else if (tag.equals(DIALOG_RECREATE_DB)) {
             DbWriter.get(this).recreate();
         }
+    }
+
+    @Override
+    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
     }
 
     // interface

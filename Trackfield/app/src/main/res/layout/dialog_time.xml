@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/spacing_dialog_horizontal_minus_4"
-    android:paddingTop="@dimen/spacing_dialog_top"
-    android:paddingRight="@dimen/spacing_dialog_horizontal_minus_4">
+    android:paddingLeft="@dimen/fw_spacing_dialog_horizontal_edittext"
+    android:paddingTop="@dimen/fw_spacing_dialog_top"
+    android:paddingRight="@dimen/fw_spacing_dialog_horizontal_edittext">
 
     <EditText
         android:id="@+id/et_dialog_time_minutes"

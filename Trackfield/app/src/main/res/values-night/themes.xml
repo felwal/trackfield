@@ -7,40 +7,37 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <!-- text -->
-        <item name="android:textColorPrimary">@color/colorWhite</item>
-        <item name="android:textColorSecondary">@color/colorGrey7</item>
+        <item name="android:textColorPrimary">@color/fw_white</item>
+        <item name="android:textColorSecondary">@color/text_secondary_dk</item>
         <item name="android:textColorHighlight">@color/colorGreenLight</item>
-        <item name="android:textColorPrimaryInverse">@color/colorBlack</item>
+        <item name="android:textColorPrimaryInverse">@color/fw_black</item>
 
         <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
         <item name="colorPrimaryVariant">@color/colorGreenLight</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/fw_white</item>
 
         <!-- accent -->
         <item name="colorAccent">@color/colorGreenLight</item>
 
         <!-- background -->
-        <item name="android:colorBackgroundFloating">@color/colorGrey3</item>
+        <item name="android:colorBackgroundFloating">@color/fw_felwal_surface_dk</item>
 
         <!-- widget -->
-        <item name="android:colorButtonNormal">@color/colorGrey3</item>
+        <item name="android:colorButtonNormal">@color/fw_grey19</item>
         <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
         <item name="chipBackgroundColor">@color/colorGreenDarker</item>
-        <item name="chipSurfaceColor">@color/colorGrey1</item>
-        <item name="android:listDivider">@color/felwal_divider_dk</item>
-        <item name="strokeColor">@color/felwal_divider_dk</item>
+        <item name="chipSurfaceColor">@color/fw_grey13</item>
 
         <!-- TODO: whats this? -->
-        <item name="panelBackground">@color/colorGrey2</item>
         <item name="color">@color/colorGreenDarker</item>
 
-        <!-- styles -->
+        <item name="mapStyle">@string/mapstyle_dark_json</item>
+
+        <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
         <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Dark</item>
-
-        <item name="mapStyle">@string/mapstyle_dark_json</item>
     </style>
 
     <!-- color combinations -->
@@ -49,7 +46,7 @@
         <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/fw_white</item>
 
         <!-- accent -->
         <item name="colorAccent">@color/colorGreenLight</item>
@@ -57,9 +54,9 @@
 
     <style name="Theme.Trackfield.Mono">
         <!-- primary -->
-        <item name="colorPrimary">@color/colorGrey3</item>
-        <item name="colorPrimaryDark">@color/colorGrey1</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorPrimary">@color/fw_grey19</item>
+        <item name="colorPrimaryDark">@color/fw_grey13</item>
+        <item name="colorOnPrimary">@color/fw_white</item>
 
         <!-- accent -->
         <item name="colorAccent">@color/colorGreenLight</item>

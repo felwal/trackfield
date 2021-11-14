@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +24,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
+import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
@@ -37,13 +39,15 @@ import com.felwal.trackfield.utils.TypeUtils;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExerciseEditActivity extends AppCompatActivity implements BinaryDialog.DialogListener {
+public class ExerciseEditActivity extends AppCompatActivity implements AlertDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_ID = "id";
@@ -305,8 +309,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
     // tools
 
     private void showDiscardDialog() {
-        BinaryDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
-            R.string.dialog_btn_cancel, DIALOG_DISCARD, null)
+        AlertDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
+            BaseDialogKt.NO_RES, R.string.fw_dialog_btn_cancel, DIALOG_DISCARD, null)
             .show(getSupportFragmentManager());
     }
 
@@ -449,8 +453,12 @@ public class ExerciseEditActivity extends AppCompatActivity implements BinaryDia
     // implements BinaryDialog
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DISCARD)) finish();
+    }
+
+    @Override
+    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
     }
 
 }

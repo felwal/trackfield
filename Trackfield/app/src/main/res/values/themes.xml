@@ -9,48 +9,43 @@
         <!-- make actv window appear above keyboard -->
         <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
-        <!-- action overflow menu (text color funkar inte) -->
-        <!--<item name="android:itemTextAppearance">@style/Heading2</item>-->
-
-        <!-- theme/style -->
-        <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
-        <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>-->
+        <!-- style -->
         <item name="android:textViewStyle">@style/Widget.Trackfield.TextView</item>
         <item name="android:editTextStyle">@style/Widget.Trackfield.EditText</item>
         <item name="chipStandaloneStyle">@style/Widget.Trackfield.Chip</item>
+
+        <!-- theme -->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Felwal.Dialog</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
     </style>
 
     <!-- light theme -->
 
     <style name="Theme.Trackfield" parent="Theme.Default">
         <!-- text -->
-        <item name="android:textColorPrimary">@color/colorBlack</item>
-        <item name="android:textColorSecondary">@color/colorGrey6</item>
+        <item name="android:textColorPrimary">@color/fw_black</item>
+        <item name="android:textColorSecondary">@color/text_secondary_lt</item>
         <item name="android:textColorHighlight">@color/colorGreen</item>
-        <item name="android:textColorPrimaryInverse">@color/colorWhite</item>
+        <item name="android:textColorPrimaryInverse">@color/fw_white</item>
 
         <!-- primary -->
         <item name="colorPrimaryVariant">@color/colorGreen</item>
 
         <!-- background -->
-        <item name="android:colorBackgroundFloating">@color/colorWhite</item>
+        <item name="android:colorBackgroundFloating">@color/fw_felwal_surface_lt</item>
 
         <!-- widget -->
-        <item name="android:colorButtonNormal">@color/colorWhite</item>
+        <item name="android:colorButtonNormal">@color/fw_white</item>
         <item name="android:colorActivatedHighlight">@color/colorGreen</item>
         <item name="chipBackgroundColor">@color/colorGreenLighter</item>
-        <item name="chipSurfaceColor">@color/colorGrey9</item>
-        <item name="android:listDivider">@color/felwal_divider_lt</item>
-        <item name="strokeColor">@color/felwal_divider_lt</item>
-
-        <!-- TODO: whats this? -->
-        <item name="panelBackground">@color/colorGrey9</item>
-
-        <!-- styles -->
-        <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Light</item>
-        <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Light</item>
+        <item name="chipSurfaceColor">@color/colorGrey96</item>
 
         <item name="mapStyle">@string/mapstyle_light_json</item>
+
+        <!-- theme -->
+        <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Light</item>
+        <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Light</item>
     </style>
 
     <!-- color combinations -->
@@ -61,7 +56,7 @@
         <!-- primary -->
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/fw_white</item>
 
         <!-- accent -->
         <item name="colorAccent">@color/colorGreen</item>
@@ -71,9 +66,9 @@
         <item name="android:windowLightStatusBar">true</item>
 
         <!-- primary -->
-        <item name="colorPrimary">@color/colorWhite</item>
-        <item name="colorPrimaryDark">@color/colorWhite</item>
-        <item name="colorOnPrimary">@color/colorBlack</item>
+        <item name="colorPrimary">@color/fw_white</item>
+        <item name="colorPrimaryDark">@color/fw_white</item>
+        <item name="colorOnPrimary">@color/fw_black</item>
 
         <!-- accent -->
         <item name="colorAccent">@color/colorGreen</item>

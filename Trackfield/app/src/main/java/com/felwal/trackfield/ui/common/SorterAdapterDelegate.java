@@ -40,7 +40,7 @@ public class SorterAdapterDelegate extends
     @NonNull
     @Override
     public SorterViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new SorterViewHolder(inflater.inflate(R.layout.item_sorter, parent, false));
+        return new SorterViewHolder(inflater.inflate(R.layout.fw_item_sorter, parent, false));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SorterAdapterDelegate extends
 
         public SorterViewHolder(View itemView) {
             super(itemView);
-            titleTv = itemView.findViewById(R.id.tv);
+            titleTv = itemView.findViewById(R.id.fw_tv);
             itemView.setOnClickListener(this);
         }
 

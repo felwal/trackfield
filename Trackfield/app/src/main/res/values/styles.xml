@@ -106,14 +106,14 @@
     <style name="ThemeOverlay.Trackfield.DatePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Dark</item>
         <item name="android:colorAccent">@color/colorGreenLight</item>
-        <item name="android:colorBackground">@color/colorGrey3</item>
-        <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
+        <item name="android:colorBackground">@color/fw_grey19</item>
+        <!--<item name="android:textColorSecondary">@color/text_secondary_dk</item>-->
     </style>
 
     <style name="ThemeOverlay.Trackfield.DatePicker.Light" parent="android:Theme.Material.Light.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Light</item>
         <item name="android:colorAccent">@color/colorGreen</item>
-        <item name="android:textColorSecondary">@color/colorGrey6</item>
+        <item name="android:textColorSecondary">@color/text_secondary_lt</item>
     </style>
 
     <style name="Widget.Trackfield.DatePicker.Dark" parent="@android:style/Widget.Material.DatePicker">
@@ -129,19 +129,19 @@
     <style name="ThemeOverlay.Trackfield.TimePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Dark</item>
         <item name="android:colorAccent">@color/colorGreenLight</item>
-        <item name="android:colorBackground">@color/colorGrey3</item>
-        <!--<item name="android:textColorSecondary">@color/colorGrey7</item>-->
+        <item name="android:colorBackground">@color/fw_grey19</item>
+        <!--<item name="android:textColorSecondary">@color/text_secondary_dk</item>-->
     </style>
 
     <style name="ThemeOverlay.Trackfield.TimePicker.Light" parent="android:Theme.Material.Light.Dialog">
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Light</item>
         <item name="android:colorAccent">@color/colorGreen</item>
-        <item name="android:textColorSecondary">@color/colorGrey6</item>
+        <item name="android:textColorSecondary">@color/text_secondary_lt</item>
     </style>
 
     <style name="Widget.Trackfield.TimePicker.Dark" parent="@android:style/Widget.Material.TimePicker">
         <item name="android:headerBackground">@color/colorGreen</item>
-        <item name="android:numbersBackgroundColor">@color/colorGrey4</item>
+        <item name="android:numbersBackgroundColor">@color/fw_grey25</item>
     </style>
 
     <style name="Widget.Trackfield.TimePicker.Light" parent="@android:style/Widget.Material.Light.TimePicker">

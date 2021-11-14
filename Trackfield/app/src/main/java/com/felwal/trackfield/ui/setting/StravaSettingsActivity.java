@@ -8,8 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
+import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.CheckDialog;
+import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.network.StravaApi;
@@ -17,7 +19,7 @@ import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 public class StravaSettingsActivity extends SettingsActivity implements TextDialog.DialogListener,
-    CheckDialog.DialogListener {
+    MultiChoiceDialog.DialogListener {
 
     // dialog tags
     private static final String DIALOG_DEVICE = "deviceDialog";
@@ -79,13 +81,13 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
                 StravaApi.toastResponse(successCount, errorCount, this)));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_request_all), "", !Prefs.isDeveloper(),
-            BinaryDialog.newInstance("Request all exercises?", "", R.string.dialog_btn_ok, R.string.dialog_btn_cancel,
-                DIALOG_REQUEST_ALL, null));
+            AlertDialog.newInstance("Request all exercises?", "", R.string.fw_dialog_btn_ok,
+                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_REQUEST_ALL, null));
 
         if (Prefs.isDeveloper()) {
             inflateDialogItem(getString(R.string.tv_text_settings_title_pull_all), "", true,
-                BinaryDialog.newInstance("Pull all exercises?", "", R.string.dialog_btn_ok, R.string.dialog_btn_cancel,
-                    DIALOG_PULL_ALL, null));
+                AlertDialog.newInstance("Pull all exercises?", "", R.string.fw_dialog_btn_ok,
+                    R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_PULL_ALL, null));
         }
 
         // request options
@@ -95,18 +97,18 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
         inflateDialogItem(getString(R.string.tv_text_settings_title_device), Prefs.getDefaultDevice(), false,
             TextDialog.newInstance(getString(R.string.dialog_title_device), getString(R.string.dialog_msg_device),
                 Prefs.getDefaultDevice(), getString(R.string.tv_text_settings_hint_device), R.string.dialog_btn_set,
-                R.string.dialog_btn_cancel, DIALOG_DEVICE));
+                R.string.fw_dialog_btn_cancel, DIALOG_DEVICE));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_method), Prefs.getDefaultRecordingMethod(), false,
             TextDialog.newInstance(getString(R.string.dialog_title_recording_method),
                 getString(R.string.dialog_msg_recording_method), Prefs.getDefaultRecordingMethod(),
                 getString(R.string.tv_text_settings_hint_method), R.string.dialog_btn_set,
-                R.string.dialog_btn_cancel, DIALOG_RECORDING_METHOD));
+                R.string.fw_dialog_btn_cancel, DIALOG_RECORDING_METHOD));
 
         inflateDialogItem(getString(R.string.tv_text_settings_title_policy), "", true,
-            CheckDialog.newInstance(getString(R.string.dialog_title_pull_policy), "",
+            CheckDialog.newInstance(getString(R.string.dialog_title_pull_policy),
                 Prefs.getPullPolicy().getTexts(), Prefs.getPullPolicy().getChecked(),
-                R.string.dialog_btn_set, R.string.dialog_btn_cancel, DIALOG_PULL_POLICY));
+                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_PULL_POLICY));
     }
 
     // implements dialogs
@@ -124,7 +126,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     }
 
     @Override
-    public void onCheckDialogPositiveClick(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
         if (tag.equals(DIALOG_PULL_POLICY)) {
             Prefs.setPullSettings(checkedItems);
             reflateViews();
@@ -132,7 +134,7 @@ public class StravaSettingsActivity extends SettingsActivity implements TextDial
     }
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_REQUEST_ALL)) {
             strava.requestAllActivities((successCount, errorCount) ->
                 StravaApi.toastResponse(successCount, errorCount, this));

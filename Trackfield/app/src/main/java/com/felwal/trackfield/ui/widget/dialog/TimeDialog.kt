@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import com.felwal.android.util.toast
 import com.felwal.android.widget.dialog.BaseDialog
 import com.felwal.android.widget.dialog.NO_INT_TEXT
-import com.felwal.android.widget.dialog.setCancelButton
 import com.felwal.trackfield.R
 
 private const val ARG_TEXT1 = "text1"
@@ -60,7 +59,7 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
                     listener?.onTimeDialogPositiveClick(input1, input2, dialogTag)
                 }
                 catch (e: NumberFormatException) {
-                    activity?.toast(R.string.toast_e_input)
+                    activity?.toast(R.string.fw_toast_e_input)
                 }
             }
             setNeutralButton(neuBtnTxtRes!!) { _, _ ->
@@ -92,8 +91,8 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
             hint1: String = "",
             hint2: String = "",
             @StringRes neuBtnTxtRes: Int,
-            @StringRes posBtnTxtRes: Int = R.string.dialog_btn_ok,
-            @StringRes negBtnTxtRes: Int = R.string.dialog_btn_cancel,
+            @StringRes posBtnTxtRes: Int = R.string.fw_dialog_btn_ok,
+            @StringRes negBtnTxtRes: Int = R.string.fw_dialog_btn_cancel,
             tag: String
         ): TimeDialog = TimeDialog().apply {
             arguments = putBaseBundle(title, message, posBtnTxtRes, negBtnTxtRes, tag).apply {

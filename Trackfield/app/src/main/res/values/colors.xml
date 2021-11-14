@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- palette -->
+
     <!-- main -->
     <color name="colorGreenLight">#5BB974</color>
     <color name="colorGreen">#0F9D58</color>
@@ -9,17 +11,9 @@
     <color name="colorGreenLighter">#D6EFDC</color>
 
     <!-- greyscale -->
-    <color name="colorBlack">#000000</color>
-    <color name="colorGrey1">#202124</color>
-    <color name="colorGrey2">#27292B</color>
-    <color name="colorGrey3">#2F3033</color>
-    <color name="colorGrey4">#3C4043</color>
-    <color name="colorGrey5">#3E3F43</color>
-    <color name="colorGrey6">#5F6368</color>
-    <color name="colorGrey7">#9DA3A9</color>
-    <color name="colorGrey8">#DCDFE2</color>
-    <color name="colorGrey9">#F5F5F5</color>
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGrey39">#5F6368</color>
+    <color name="colorGrey64">#9DA3A9</color>
+    <color name="colorGrey96">#F5F5F5</color>
 
     <!-- accent -->
     <color name="colorAccBlue">#2196F3</color>
@@ -49,5 +43,10 @@
     <color name="colorHalfTrans">#66000000</color>
     <color name="colorGreenLightTrans">#605BB974</color>
     <color name="colorGreenDarkTrans">#600C7E46</color>
+
+    <!-- application -->
+
+    <color name="text_secondary_lt">@color/colorGrey39</color>
+    <color name="text_secondary_dk">@color/colorGrey64</color>
 
 </resources>

@@ -17,7 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.dialog.BinaryDialog;
+import com.felwal.android.widget.dialog.AlertDialog;
+import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -36,7 +37,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
-public class ExerciseDetailActivity extends AppCompatActivity implements BinaryDialog.DialogListener, OnMapReadyCallback {
+import org.jetbrains.annotations.Nullable;
+
+public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener, OnMapReadyCallback {
 
     public static final int FROM_NONE = 0;
     public static final int FROM_DISTANCE = 1;
@@ -147,9 +150,9 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
             return true;
         }
         else if (itemId == R.id.action_delete_exercise) {
-            BinaryDialog.newInstance(getString(R.string.dialog_title_delete_exercise),
-                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete,
-                R.string.dialog_btn_cancel, DIALOG_DELETE_EXERCISE, null)
+            AlertDialog.newInstance(getString(R.string.dialog_title_delete_exercise),
+                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete, BaseDialogKt.NO_RES,
+                R.string.fw_dialog_btn_cancel, DIALOG_DELETE_EXERCISE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -216,7 +219,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
                 setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_view_item_sub_v));
 
                 if (i % 2 == 0) {
-                    subView.setBackgroundColor(ResUtilsKt.getColorAttr(this, R.attr.panelBackground));
+                    subView.setBackgroundColor(ResUtilsKt.getColorAttr(this, R.attr.colorSurface));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
@@ -373,7 +376,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
     // implements BinaryDialog, OnMapReadyCallback
 
     @Override
-    public void onBinaryDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String passValue, String tag) {
         if (tag.equals(DIALOG_DELETE_EXERCISE)) {
             try {
                 LayoutUtils.toast(DbWriter.get(this).deleteExercise(exercise, this), this);
@@ -384,6 +387,10 @@ public class ExerciseDetailActivity extends AppCompatActivity implements BinaryD
 
             finish();
         }
+    }
+
+    @Override
+    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
     }
 
     @Override
