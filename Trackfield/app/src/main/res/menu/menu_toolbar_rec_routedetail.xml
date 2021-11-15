@@ -30,6 +30,7 @@
         android:title="@string/action_hide_route"
         android:icon="@drawable/ic_hide"
         android:iconTint="?attr/colorOnPrimary"
+        android:checkable="true"
         app:showAsAction="never" />
 
     <item

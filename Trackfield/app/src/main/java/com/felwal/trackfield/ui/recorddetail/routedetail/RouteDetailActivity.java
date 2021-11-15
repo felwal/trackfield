@@ -64,8 +64,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hide_route);
         hideItem.setChecked(route.isHidden());
-        if (route.isHidden()) hideItem.setIcon(R.drawable.ic_hide).setTitle(R.string.action_unhide_route);
-        else hideItem.setIcon(R.drawable.ic_hidden).setTitle(R.string.action_hide_route);
+        hideItem.setIcon(route.isHidden() ? R.drawable.ic_hide : R.drawable.ic_hidden);
 
         // goal
         MenuItem goalItem = menu.findItem(R.id.action_set_rec_goal);
