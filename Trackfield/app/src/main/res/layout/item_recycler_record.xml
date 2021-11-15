@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/layout_recycler_tiny_40dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/tv_recycler_item_record_primary"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/layout_recycler_tiny_40dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?selectableItemBackground">
 
     <View
         android:id="@+id/v_recycler_item_originmarker"

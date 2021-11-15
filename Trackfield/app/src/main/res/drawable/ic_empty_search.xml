@@ -4,7 +4,7 @@
     android:height="@dimen/icon_size"
     android:viewportWidth="@dimen/icon_viewport_size"
     android:viewportHeight="@dimen/icon_viewport_size"
-    android:tint="?android:attr/textColorPrimary">
+    android:tint="?android:textColorPrimary">
 
     <path
         android:fillColor="@android:color/white"

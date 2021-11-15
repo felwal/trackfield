@@ -7,21 +7,21 @@
         android:id="@+id/action_recentre_map"
         android:title="@string/action_map_recentre"
         android:icon="@drawable/ic_map_recentre"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_toggle_map_history"
         android:title="@string/action_map_history"
         android:icon="@drawable/ic_history"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_toggle_map_type"
         android:title="@string/action_map_type"
         android:icon="@drawable/ic_map_type"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
 </menu>

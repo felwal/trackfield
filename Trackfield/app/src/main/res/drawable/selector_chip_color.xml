@@ -3,8 +3,8 @@
 
     <item
         android:state_checked="true"
-        android:color="?attr/chipBackgroundColor" />
+        android:color="?chipBackgroundColor" />
 
-    <item android:color="?attr/chipSurfaceColor" />
+    <item android:color="?chipSurfaceColor" />
 
 </selector>

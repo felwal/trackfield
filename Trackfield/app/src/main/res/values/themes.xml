@@ -80,7 +80,7 @@
         <item name="android:windowBackground">@drawable/layer_splash</item>
         <item name="android:navigationBarColor">@color/colorGreen</item>
 
-        <item name="colorPrimaryDark">?android:attr/colorPrimary</item>
+        <item name="colorPrimaryDark">?android:colorPrimary</item>
     </style>
 
 </resources>

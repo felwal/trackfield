@@ -7,19 +7,19 @@
         android:id="@+id/action_edit_exercise"
         android:icon="@drawable/ic_edit"
         android:title="@string/action_edit"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_delete_exercise"
         android:icon="@drawable/ic_delete"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         android:title="@string/action_delete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_pull_exercise"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         android:title="@string/action_pull_strava"
         app:showAsAction="never" />
 
@@ -31,7 +31,7 @@
 
     <item
         android:id="@+id/action_hide_trail"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         android:title="@string/action_hide_trail"
         android:checkable="true"
         app:showAsAction="never" />

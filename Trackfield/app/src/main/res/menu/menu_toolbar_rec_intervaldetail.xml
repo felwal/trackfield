@@ -7,7 +7,7 @@
         android:id="@+id/action_rename_interval"
         android:title="@string/action_rename"
         android:icon="@drawable/ic_edit"
-        android:iconTint="?attr/colorOnPrimary"
+        android:iconTint="?colorOnPrimary"
         app:showAsAction="ifRoom" />
 
 </menu>
