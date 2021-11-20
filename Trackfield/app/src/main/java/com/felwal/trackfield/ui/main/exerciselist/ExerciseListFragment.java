@@ -65,13 +65,15 @@ public class ExerciseListFragment extends MainFragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                // clear focus to not reopen keyboard when activity is resumed
+                searchView.clearFocus();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 recyclerFragment.updateSearch(newText);
-                return false;
+                return true;
             }
 
         });
