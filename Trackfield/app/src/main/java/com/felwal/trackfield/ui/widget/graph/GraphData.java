@@ -67,7 +67,7 @@ public class GraphData {
     }
 
     public void setPaint(@AttrRes int colorAttrResId, Context c) {
-        paint.setColor(ResUtilsKt.getColorAttr(c, colorAttrResId));
+        paint.setColor(ResUtilsKt.getColorByAttr(c, colorAttrResId));
     }
 
     // calc

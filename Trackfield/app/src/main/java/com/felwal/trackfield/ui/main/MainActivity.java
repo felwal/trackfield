@@ -278,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @SuppressLint("ResourceType")
     private void animateFab() {
         Context fabContext = fab.getContext();
-        @ColorInt int primaryVariant = ResUtilsKt.getColorAttr(fabContext, R.attr.colorPrimaryVariant);
-        @ColorInt int surface = ResUtilsKt.getColorAttr(fabContext, R.attr.colorSurface);
+        @ColorInt int primaryVariant = ResUtilsKt.getColorByAttr(fabContext, R.attr.colorPrimaryVariant);
+        @ColorInt int surface = ResUtilsKt.getColorByAttr(fabContext, R.attr.colorSurface);
 
         @ColorInt int fromColor, toColor;
         Drawable toIcon;
@@ -288,14 +288,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         if (isFabMenuOpen) {
             fromColor = surface;
             toColor = primaryVariant;
-            toIcon = ResUtilsKt.getDrawableCompatFilter(this,
+            toIcon = ResUtilsKt.getDrawableCompatWithFilter(this,
                 R.drawable.ic_add, android.R.attr.textColorPrimaryInverse);
         }
         // animate to open menu
         else {
             fromColor = primaryVariant;
             toColor = surface;
-            toIcon = ResUtilsKt.getDrawableCompatFilter(this,
+            toIcon = ResUtilsKt.getDrawableCompatWithFilter(this,
                 R.drawable.ic_cancel, android.R.attr.textColorSecondary);
         }
 

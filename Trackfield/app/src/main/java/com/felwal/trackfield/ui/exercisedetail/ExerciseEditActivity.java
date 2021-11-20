@@ -140,7 +140,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         ab.setDisplayHomeAsUpEnabled(true);
 
         // set cancel icon as home
-        Drawable homeIcon = ResUtilsKt.getDrawableCompatFilter(this, R.drawable.ic_cancel, R.attr.colorOnPrimary);
+        Drawable homeIcon = ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_cancel, R.attr.colorOnPrimary);
         ab.setHomeAsUpIndicator(homeIcon);
     }
 
@@ -217,7 +217,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
         if (exercise.isDistanceDriven()) {
             distanceEt.setEnabled(false);
-            distanceEt.setTextColor(ResUtilsKt.getColorAttr(this, android.R.attr.textColorSecondary));
+            distanceEt.setTextColor(ResUtilsKt.getColorByAttr(this, android.R.attr.textColorSecondary));
         }
 
         // polyline
@@ -231,7 +231,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         // distance checked driven listener
         drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             distanceEt.setEnabled(!isChecked);
-            distanceEt.setTextColor(ResUtilsKt.getColorAttr(this, isChecked
+            distanceEt.setTextColor(ResUtilsKt.getColorByAttr(this, isChecked
                 ? android.R.attr.textColorSecondary
                 : android.R.attr.textColorPrimary));
         });

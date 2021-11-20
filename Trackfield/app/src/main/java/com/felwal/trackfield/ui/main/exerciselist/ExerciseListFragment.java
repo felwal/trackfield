@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
+import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.main.MainFragment;
@@ -59,6 +60,7 @@ public class ExerciseListFragment extends MainFragment {
         final MenuItem searchItem = menu.findItem(R.id.action_search_exercises);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Search");
+        ViewUtilsKt.enableActionItemRipple(ViewUtilsKt.getCloseIcon(searchView));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

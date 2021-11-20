@@ -51,14 +51,6 @@ public final class LayoutUtils {
 
     // set
 
-    public static void setRipple(View v, Context c) {
-        int[] attrs = new int[] { R.attr.selectableItemBackground };
-        TypedArray typedArray = c.obtainStyledAttributes(attrs);
-        int backgroundResource = typedArray.getResourceId(0, 0);
-        v.setBackgroundResource(backgroundResource);
-        typedArray.recycle();
-    }
-
     public static void setColor(TextView view, String fulltext, String subtext, int color) {
         view.setText(fulltext, TextView.BufferType.SPANNABLE);
         Spannable str = (Spannable) view.getText();

@@ -76,10 +76,6 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         this.map = googleMap;
         googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
         googleMap.getUiSettings().setCompassEnabled(false);
-
-        // set padding (for compass)
-        //int mapPaddingTop = /*L.statusBarHeight +*/ L.getAttr(R.attr.actionBarSize, this);
-        //googleMap.setPadding(0, mapPaddingTop, 0, 0); // left top right bottom
     }
 
     @Override
@@ -180,7 +176,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     }
 
     protected static void setMapStyle(GoogleMap googleMap, Context c) {
-        MapStyleOptions style = new MapStyleOptions(ResUtilsKt.getStringAttr(c, R.attr.mapStyle));
+        MapStyleOptions style = new MapStyleOptions(ResUtilsKt.getStringByAttr(c, R.attr.mapStyle));
         googleMap.setMapStyle(style);
     }
 
@@ -226,7 +222,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return ResUtilsKt.getColorAttr(c, R.attr.colorPrimaryVariant);
+        return ResUtilsKt.getColorByAttr(c, R.attr.colorPrimaryVariant);
     }
 
     @ColorInt

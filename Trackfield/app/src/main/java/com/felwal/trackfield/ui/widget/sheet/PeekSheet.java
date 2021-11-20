@@ -108,10 +108,10 @@ public class PeekSheet extends BaseSheet {
 
         // set text color
         // TODO: xml attribute does not work - why?
-        int textColor = ResUtilsKt.getColorAttr(a, android.R.attr.textColorPrimary);
+        int textColor = ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);
-        dateTv.setTextColor(ResUtilsKt.getColorAttr(a, android.R.attr.textColorSecondary));
+        dateTv.setTextColor(ResUtilsKt.getColorByAttr(a, android.R.attr.textColorSecondary));
         distanceTv.setTextColor(textColor);
         timeTv.setTextColor(textColor);
         paceTv.setTextColor(textColor);

@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.android.widget.dialog.BaseDialog;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
@@ -232,7 +233,7 @@ public class SettingsActivity extends AppCompatActivity implements SingleChoiceD
 
     private View inflateTextView(String title, String value, boolean hideDivider) {
         View v = inflater.inflate(R.layout.item_settings_text, ll, false);
-        LayoutUtils.setRipple(v, this);
+        ViewUtilsKt.enableRipple(v);
         ((TextView) v.findViewById(R.id.tv_settings_item_text_title)).setText(title);
         ((TextView) v.findViewById(R.id.tv_settings_item_text_value)).setText(value);
         if (hideDivider) v.findViewById(R.id.v_settings_item_divider).setVisibility(View.INVISIBLE);
@@ -242,7 +243,7 @@ public class SettingsActivity extends AppCompatActivity implements SingleChoiceD
 
     private View inflateSwitchView(String title, boolean hideDivider) {
         View v = inflater.inflate(R.layout.item_settings_switch, ll, false);
-        LayoutUtils.setRipple(v, this);
+        ViewUtilsKt.enableRipple(v);
         ((TextView) v.findViewById(R.id.sw_settings_item)).setText(title);
         if (hideDivider) v.findViewById(R.id.v_settings_item_divider).setVisibility(View.INVISIBLE);
         ll.addView(v);

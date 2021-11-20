@@ -219,7 +219,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
                 setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_view_item_sub_v));
 
                 if (i % 2 == 0) {
-                    subView.setBackgroundColor(ResUtilsKt.getColorAttr(this, R.attr.colorSurface));
+                    subView.setBackgroundColor(ResUtilsKt.getColorByAttr(this, R.attr.colorSurface));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
