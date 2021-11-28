@@ -90,8 +90,8 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
         }
         else if (itemId == R.id.action_delete_distance) {
             AlertDialog.newInstance(getString(R.string.dialog_title_delete_distance),
-                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete, BaseDialogKt.NO_RES,
-                R.string.fw_dialog_btn_cancel, DIALOG_DELETE_DISTANCE, null)
+                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete,
+                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }

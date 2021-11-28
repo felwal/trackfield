@@ -26,6 +26,7 @@ import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
+import com.felwal.trackfield.ui.map.RouteMapActivity;
 import com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.ui.recorddetail.routedetail.RouteDetailActivity;
@@ -151,8 +152,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
         else if (itemId == R.id.action_delete_exercise) {
             AlertDialog.newInstance(getString(R.string.dialog_title_delete_exercise),
-                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete, BaseDialogKt.NO_RES,
-                R.string.fw_dialog_btn_cancel, DIALOG_DELETE_EXERCISE, null)
+                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete,
+                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_EXERCISE, null)
                 .show(getSupportFragmentManager());
             return true;
         }

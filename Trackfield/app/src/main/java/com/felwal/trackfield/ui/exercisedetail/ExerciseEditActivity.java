@@ -310,7 +310,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     private void showDiscardDialog() {
         AlertDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
-            BaseDialogKt.NO_RES, R.string.fw_dialog_btn_cancel, DIALOG_DISCARD, null)
+            R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DISCARD, null)
             .show(getSupportFragmentManager());
     }
 
