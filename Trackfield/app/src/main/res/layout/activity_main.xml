@@ -56,92 +56,14 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_main_fabs_menu"
+    <com.felwal.android.widget.FloatingActionMenu
+        android:id="@+id/fam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:gravity="end"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/spacing_tiny"
-        app:layout_constraintBottom_toBottomOf="@+id/cdl_main"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_main_fabs_strava"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/spacing_diminutive"
-            android:paddingBottom="@dimen/spacing_medium"
-            android:paddingStart="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_medium"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_main_strava"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_logo_strava"
-                style="@style/Widget.Trackfield.Fab.Mini" />
-
-            <TextView
-                android:id="@+id/tv_main_fabs_strava"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:text="@string/tv_text_fab_request_strava"
-                android:textAppearance="@style/TextAppearance.Trackfield.Body.FabTitle"
-                app:layout_constraintBottom_toBottomOf="@+id/fab_main_strava"
-                app:layout_constraintEnd_toStartOf="@+id/fab_main_strava"
-                app:layout_constraintTop_toTopOf="@+id/fab_main_strava"
-                app:layout_constraintVertical_bias="0.4"
-                style="@style/Widget.Trackfield.TextView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_main_fabs_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/spacing_diminutive"
-            android:paddingBottom="@dimen/spacing_medium"
-            android:paddingStart="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_medium"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_main_add"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_edit"
-                style="@style/Widget.Trackfield.Fab.Mini" />
-
-            <TextView
-                android:id="@+id/tv_main_fabs_add"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:text="@string/tv_text_fab_add"
-                android:textAppearance="@style/TextAppearance.Trackfield.Body.FabTitle"
-                app:layout_constraintBottom_toBottomOf="@+id/fab_main_add"
-                app:layout_constraintEnd_toStartOf="@+id/fab_main_add"
-                app:layout_constraintTop_toTopOf="@+id/fab_main_add"
-                app:layout_constraintVertical_bias="0.4"
-                style="@style/Widget.Trackfield.TextView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_main_menu"
-            android:layout_marginTop="@dimen/spacing_diminutive"
-            android:layout_marginEnd="@dimen/spacing_small"
-            android:layout_marginBottom="@dimen/spacing_small"
-            android:src="@drawable/ic_add"
-            style="@style/Widget.Trackfield.Fab" />
-
-    </LinearLayout>
+        android:layout_gravity="bottom|end"
+        android:theme="?fw_floatingActionMenuTheme"
+        app:layout_constraintBottom_toTopOf="@id/nb_main"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nb_main"
@@ -149,20 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         style="@style/Widget.Trackfield.BottomNavigationView" />
-
-    <View
-        android:id="@+id/v_main_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.96"
-        android:background="?android:colorBackground"
-        android:defaultFocusHighlightEnabled="false"
-        android:elevation="@dimen/elev_bg_overlay"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

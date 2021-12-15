@@ -32,12 +32,29 @@
 
     <!-- widget -->
 
-    <style name="Widget.Trackfield.Fab" parent="">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation">@dimen/elev_fab</item>
-        <item name="android:focusable">true</item>
-        <item name="android:clickable">true</item>
+    <style name="ThemeOverlay.Trackfield.Fam" parent="ThemeOverlay.Felwal.Fam">
+        <item name="fw_mainFabStyle">@style/Widget.Trackfield.Fab</item>
+        <item name="fw_miniFabStyle">@style/Widget.Trackfield.Fab.Mini</item>
+
+        <item name="fw_closedFabColor">?colorPrimaryVariant</item>
+        <item name="fw_openedFabColor">?colorSurface</item>
+        <item name="fw_miniFabColor">?colorPrimaryVariant</item>
+
+        <item name="fw_closedIconTint">?android:textColorPrimaryInverse</item>
+        <item name="fw_openedIconTint">?android:textColorSecondary</item>
+        <item name="fw_miniIconTint">?android:textColorPrimaryInverse</item>
+
+        <item name="fw_closedIconSrc">@drawable/ic_add</item>
+        <item name="fw_openedIconSrc">@drawable/ic_cancel</item>
+
+        <item name="fw_textAppearance">@style/TextAppearance.Trackfield.Body.FabTitle</item>
+
+        <item name="fw_overlayAlpha">0.96</item>
+        <item name="fw_animDuration">150</item>
+        <item name="fw_animRotation">135</item>
+    </style>
+
+    <style name="Widget.Trackfield.Fab" parent="Widget.Felwal.Fab">
         <item name="android:textColorPrimary">?android:textColorPrimaryInverse</item>
 
         <item name="fabSize">normal</item>
@@ -46,9 +63,7 @@
         <!--<item name="rippleColor">@color/colorGreenDarker</item>-->
     </style>
 
-    <style name="Widget.Trackfield.Fab.Mini">
-        <item name="fabSize">mini</item>
-    </style>
+    <style name="Widget.Trackfield.Fab.Mini" parent="Widget.Felwal.Fab.Mini" />
 
     <style name="Widget.Trackfield.TextView" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>

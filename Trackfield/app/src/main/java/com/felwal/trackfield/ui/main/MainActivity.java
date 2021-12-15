@@ -1,24 +1,17 @@
 package com.felwal.trackfield.ui.main;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.util.ResUtilsKt;
+import com.felwal.android.widget.FloatingActionMenu;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
@@ -38,12 +31,13 @@ import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
 import com.felwal.trackfield.utils.FileUtils;
-import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import kotlin.Unit;
 
 import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
 
@@ -56,18 +50,13 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     private static final String DIALOG_FILTER_EXERCISES = "filterExercisesDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
 
-    private static final float OVERLAY_ALPHA = 0.96f;
     private static boolean appInitialized = false;
 
     private MainFragment mainFragment;
     private ActionBar ab;
     private StravaApi strava;
 
-    // fabs
-    private FloatingActionButton fab, addFab, stravaFab;
-    private ConstraintLayout addCl, stravaCl;
-    private View overlayView;
-    private boolean isFabMenuOpen = false;
+    private FloatingActionMenu fam;
 
     // extends AppCompatActivity
 
@@ -90,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         // layout
         setBottomNavbar();
         setToolbar();
-        setFabs();
+        setFam();
     }
 
     @Override
@@ -102,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         }
         else {
             mainFragment.updateFragment();
-            if (isFabMenuOpen) closeFabMenu();
+            if (fam.isMenuOpen()) fam.closeMenu();
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (isFabMenuOpen) closeFabMenu();
+        if (fam.isMenuOpen()) fam.closeMenu();
         else super.onBackPressed();
     }
 
@@ -174,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         final BottomNavigationView.OnNavigationItemSelectedListener navItemListener = item -> {
             int itemId = item.getItemId();
+            FloatingActionButton fab = fam.getFab();
 
             if (itemId == R.id.navigation_main_exercises) {
                 if ((mainFragment instanceof ExerciseListFragment)) mainFragment.scrollToTop();
@@ -200,31 +190,29 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         navView.setOnNavigationItemSelectedListener(navItemListener);
     }
 
-    private void setFabs() {
-        fab = findViewById(R.id.fab_main_menu);
-        addFab = findViewById(R.id.fab_main_add);
-        stravaFab = findViewById(R.id.fab_main_strava);
+    private void setFam() {
+        fam = findViewById(R.id.fam);
+        fam.onSetContentView();
 
-        addCl = findViewById(R.id.cl_main_fabs_add);
-        stravaCl = findViewById(R.id.cl_main_fabs_strava);
-        overlayView = findViewById(R.id.v_main_overlay);
+        // add exercise manually
+        fam.addItem(getString(R.string.tv_text_fab_add),
+            ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_edit, android.R.attr.textColorPrimaryInverse),
+            View -> {
+                ExerciseAddActivity.startActivity(MainActivity.this);
+                return Unit.INSTANCE;
+            }
+        );
 
-        // clicks
-
-        fab.setOnClickListener(v -> {
-            if (isFabMenuOpen) closeFabMenu();
-            else openFabMenu();
-        });
-
-        addFab.setOnClickListener(view -> ExerciseAddActivity.startActivity(MainActivity.this));
-
-        stravaFab.setOnClickListener(view -> {
-            strava.requestNewActivities((successCount, errorCount) ->
-                StravaApi.toastResponse(successCount, errorCount, this));
-            closeFabMenu();
-        });
-
-        overlayView.setOnClickListener(view -> closeFabMenu());
+        // requst new from strava
+        fam.addItem(getString(R.string.tv_text_fab_request_strava),
+            ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_logo_strava, android.R.attr.textColorPrimaryInverse),
+            View -> {
+                strava.requestNewActivities((successCount, errorCount) ->
+                    StravaApi.toastResponse(successCount, errorCount, this));
+                fam.closeMenu();
+                return Unit.INSTANCE;
+            }
+        );
     }
 
     public void setRecyclerScrollListener(final RecyclerView rv, final RecyclerFragment recyclerFragment) {
@@ -235,9 +223,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
                 // show/hide fab on scroll
                 if (recyclerFragment instanceof ExerciseListRecyclerFragment) {
-                    if (fab.isOrWillBeShown() && dy > 0) fab.hide();
-                    else if (fab.isOrWillBeHidden() && dy < 0 && mainFragment instanceof ExerciseListFragment)
-                        fab.show();
+                    fam.updateVisibilityOnScroll(dy);
                 }
             }
         });
@@ -250,57 +236,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     // tools
-
-    private void openFabMenu() {
-        animateFab();
-        addFab.show();
-        stravaFab.show();
-
-        LayoutUtils.crossfadeIn(addCl, 1);
-        LayoutUtils.crossfadeIn(stravaCl, 1);
-        LayoutUtils.crossfadeIn(overlayView, OVERLAY_ALPHA);
-
-        isFabMenuOpen = true;
-    }
-
-    private void closeFabMenu() {
-        animateFab();
-        stravaFab.hide();
-        addFab.hide();
-
-        LayoutUtils.crossfadeOut(stravaCl);
-        LayoutUtils.crossfadeOut(addCl);
-        LayoutUtils.crossfadeOut(overlayView);
-
-        isFabMenuOpen = false;
-    }
-
-    @SuppressLint("ResourceType")
-    private void animateFab() {
-        Context fabContext = fab.getContext();
-        @ColorInt int primaryVariant = ResUtilsKt.getColorByAttr(fabContext, R.attr.colorPrimaryVariant);
-        @ColorInt int surface = ResUtilsKt.getColorByAttr(fabContext, R.attr.colorSurface);
-
-        @ColorInt int fromColor, toColor;
-        Drawable toIcon;
-
-        // animate to closed menu
-        if (isFabMenuOpen) {
-            fromColor = surface;
-            toColor = primaryVariant;
-            toIcon = ResUtilsKt.getDrawableCompatWithFilter(this,
-                R.drawable.ic_add, android.R.attr.textColorPrimaryInverse);
-        }
-        // animate to open menu
-        else {
-            fromColor = primaryVariant;
-            toColor = surface;
-            toIcon = ResUtilsKt.getDrawableCompatWithFilter(this,
-                R.drawable.ic_cancel, android.R.attr.textColorSecondary);
-        }
-
-        LayoutUtils.animateFab(fab, fromColor, toColor, toIcon);
-    }
 
     public void updateFragment() {
         mainFragment.updateFragment();
