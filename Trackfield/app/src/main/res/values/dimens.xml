@@ -12,6 +12,10 @@
     <dimen name="spacing_tiny">8dp</dimen>
     <dimen name="spacing_diminutive">4dp</dimen>
 
+    <!-- searchview -->
+    <dimen name="spacing_searchview_vertical">4dp</dimen>
+    <dimen name="spacing_searchview_right">8dp</dimen>
+
     <!-- icon -->
 
     <dimen name="icon_size">24dp</dimen>
@@ -50,6 +54,8 @@
     <dimen name="layout_graph_large">200dp</dimen>
 
     <dimen name="layout_mappreview_corner_radius">10dp</dimen>
+
+    <dimen name="layout_searchview_corner_radius">4dp</dimen>
 
     <!-- type -->
 
