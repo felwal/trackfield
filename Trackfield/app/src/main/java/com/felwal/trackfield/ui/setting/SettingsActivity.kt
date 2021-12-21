@@ -181,7 +181,7 @@ class SettingsActivity :
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_RECREATE_DB
                 )
-            )
+            ).takeIf { Prefs.isDeveloper() }
         )
     }
 

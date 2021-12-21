@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.felwal.android.ui.AbsSettingsActivity
+import com.felwal.android.util.toIndicesOfTruths
 import com.felwal.android.widget.dialog.AlertDialog
 import com.felwal.android.widget.dialog.MultiChoiceDialog
 import com.felwal.android.widget.dialog.TextDialog
@@ -109,8 +110,8 @@ class StravaSettingsActivity :
                     msg = "Pull all exercises?",
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_PULL_ALL,
-                    iconRes = R.drawable.ic_send
-                )
+                    iconRes = R.drawable.fw_ic_arrow_down_24
+                )//.takeIf { Prefs.isDeveloper() } TODO
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_request_options),
@@ -133,7 +134,7 @@ class StravaSettingsActivity :
                 MultiSelectionItem(
                     title = getString(R.string.tv_text_settings_title_policy),
                     values = Prefs.getPullPolicy().texts,
-                    selectedIndices = Prefs.getPullPolicy().checked!!.asIndices().toIntArray(),
+                    selectedIndices = Prefs.getPullPolicy().checked!!.toIndicesOfTruths(),
                     tag = DIALOG_PULL_POLICY,
                     iconRes = R.drawable.ic_tune
                 )
@@ -191,5 +192,3 @@ class StravaSettingsActivity :
         }
     }
 }
-
-private fun BooleanArray.asIndices(): List<Int> = mapIndexed { index, b -> if (b) index else null }.filterNotNull()
