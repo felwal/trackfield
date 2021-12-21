@@ -9,6 +9,12 @@
         <!-- make actv window appear above keyboard -->
         <!--<item name="android:windowSoftInputMode">stateHidden|adjustResize</item>-->
 
+        <!-- settings -->
+        <item name="fw_settingHeaderTextAppearance">@style/TextAppearance.Trackfield.Subtitle3.Month</item>
+        <item name="fw_settingItemTextAppearance">@style/TextAppearance.Trackfield.Subtitle2</item>
+        <item name="fw_settingDescTextAppearance">@style/TextAppearance.Trackfield.Body</item>
+        <item name="fw_settingItemIconTint">?colorControlNormal</item>
+
         <!-- style -->
         <item name="android:textViewStyle">@style/Widget.Trackfield.TextView</item>
         <item name="android:editTextStyle">@style/Widget.Trackfield.EditText</item>
