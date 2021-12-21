@@ -82,7 +82,8 @@ class StravaSettingsActivity :
                 title = getString(R.string.tv_text_settings_header_connection),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_auth),
-                    onClick = { strava.authorizeStrava() }
+                    onClick = { strava.authorizeStrava() },
+                    iconRes = R.drawable.ic_key
                 )
             ),
             ItemSection(
@@ -93,19 +94,22 @@ class StravaSettingsActivity :
                         strava.requestNewActivities { successCount, errorCount ->
                             StravaApi.toastResponse(successCount, errorCount, this)
                         }
-                    }
+                    },
+                    iconRes = R.drawable.ic_send
                 ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_request_all),
                     msg = "Request all exercises?",
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
-                    tag = DIALOG_REQUEST_ALL
+                    tag = DIALOG_REQUEST_ALL,
+                    iconRes = R.drawable.ic_send
                 ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_pull_all),
                     msg = "Pull all exercises?",
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
-                    tag = DIALOG_PULL_ALL
+                    tag = DIALOG_PULL_ALL,
+                    iconRes = R.drawable.ic_send
                 )
             ),
             ItemSection(
@@ -115,20 +119,23 @@ class StravaSettingsActivity :
                     value = Prefs.getDefaultDevice(),
                     msg = getString(R.string.dialog_msg_device),
                     hint =  getString(R.string.tv_text_settings_hint_device),
-                    tag = DIALOG_DEVICE
+                    tag = DIALOG_DEVICE,
+                    iconRes = R.drawable.ic_device
                 ),
                 StringItem(
                     title = getString(R.string.tv_text_settings_title_method),
                     value = Prefs.getDefaultRecordingMethod(),
                     msg = getString(R.string.dialog_msg_recording_method),
                     hint =  getString(R.string.tv_text_settings_hint_method),
-                    tag = DIALOG_RECORDING_METHOD
+                    tag = DIALOG_RECORDING_METHOD,
+                    iconRes = R.drawable.ic_gps
                 ),
                 MultiSelectionItem(
                     title = getString(R.string.tv_text_settings_title_policy),
                     values = Prefs.getPullPolicy().texts,
                     selectedIndices = Prefs.getPullPolicy().checked!!.asIndices().toIntArray(),
-                    tag = DIALOG_PULL_POLICY
+                    tag = DIALOG_PULL_POLICY,
+                    iconRes = R.drawable.ic_tune
                 )
             ),
         )

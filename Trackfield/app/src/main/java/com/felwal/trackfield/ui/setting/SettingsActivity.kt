@@ -82,12 +82,14 @@ class SettingsActivity :
                 BooleanItem(
                     title = getString(R.string.tv_text_settings_title_week_headers),
                     value = Prefs.isWeekHeadersShown(),
-                    onSwitch = { Prefs.showWeekHeaders(it) }
+                    onSwitch = { Prefs.showWeekHeaders(it) },
+                    iconRes = R.drawable.ic_title
                 ),
                 BooleanItem(
                     title = getString(R.string.tv_text_settings_title_singletion_routes),
                     value = Prefs.areSingletonRoutesHidden(),
-                    onSwitch = { Prefs.hideSingletonRoutes(it) }
+                    onSwitch = { Prefs.hideSingletonRoutes(it) },
+                    iconRes = R.drawable.ic_empty_routes
                 )
             ),
             ItemSection(
@@ -96,20 +98,23 @@ class SettingsActivity :
                     title = getString(R.string.tv_text_settings_title_theme),
                     values = AppConsts.themeNames,
                     selectedIndex = Prefs.getTheme(),
-                    tag = DIALOG_THEME
+                    tag = DIALOG_THEME,
+                    iconRes = R.drawable.ic_theme
                 ),
                 SingleSelectionItem(
                     title = getString(R.string.tv_text_settings_title_color),
                     values = AppConsts.colorNames,
                     selectedIndex = Prefs.getColor(),
-                    tag = DIALOG_COLOR
+                    tag = DIALOG_COLOR,
+                    iconRes = R.drawable.ic_color
                 )
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_services),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_strava),
-                    onClick = { StravaSettingsActivity.startActivity(this) }
+                    onClick = { StravaSettingsActivity.startActivity(this) },
+                    iconRes = R.drawable.ic_logo_strava
                 )
             ),
             ItemSection(
@@ -118,13 +123,15 @@ class SettingsActivity :
                     title = getString(R.string.tv_text_settings_title_export),
                     msg = getString(R.string.dialog_msg_export),
                     dialogPosBtnRes = R.string.dialog_btn_export,
-                    tag = DIALOG_EXPORT
+                    tag = DIALOG_EXPORT,
+                    iconRes = R.drawable.ic_export
                 ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_import),
                     msg = getString(R.string.dialog_msg_import),
                     dialogPosBtnRes = R.string.dialog_btn_import,
-                    tag = DIALOG_IMPORT
+                    tag = DIALOG_IMPORT,
+                    iconRes = R.drawable.ic_import
                 )
             ),
             ItemSection(
@@ -134,7 +141,8 @@ class SettingsActivity :
                     desc = Prefs.getMass().toString() + " kg",
                     value = Prefs.getMass(),
                     hint = getString(R.string.tv_text_settings_hint_mass),
-                    tag = DIALOG_MASS
+                    tag = DIALOG_MASS,
+                    iconRes = R.drawable.ic_weight
                 ),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_birthday),
@@ -154,7 +162,8 @@ class SettingsActivity :
 
                         picker.datePicker.maxDate = System.currentTimeMillis()
                         picker.show()
-                    }
+                    },
+                    iconRes = R.drawable.ic_date
                 )
             ),
             ItemSection(
