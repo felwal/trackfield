@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         // add exercise manually
         fam.addItem(getString(R.string.tv_text_fab_add),
-            ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_edit, android.R.attr.textColorPrimaryInverse),
+            R.drawable.ic_edit,
             View -> {
                 ExerciseAddActivity.startActivity(MainActivity.this);
                 return Unit.INSTANCE;
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         // requst new from strava
         fam.addItem(getString(R.string.tv_text_fab_request_strava),
-            ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_logo_strava, android.R.attr.textColorPrimaryInverse),
+            R.drawable.ic_logo_strava,
             View -> {
                 strava.requestNewActivities((successCount, errorCount) ->
                     StravaApi.toastResponse(successCount, errorCount, this));
