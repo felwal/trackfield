@@ -1,5 +1,7 @@
 package com.felwal.trackfield.ui.map.model;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -57,25 +59,6 @@ public class Trails {
         LatLng southWest = new LatLng(south, west);
 
         return new LatLngBounds(southWest, northEast);
-    }
-
-    // get driven
-
-    public Trail toAvgTrail() {
-        List<LatLng> latLngs = new ArrayList<>();
-
-        float pointCount = trails.get(0).getDistance() / 15f;
-        float step = 1 / pointCount;
-
-        for (float percent = 0; percent < 1 + step; percent += step) {
-            List<LatLng> coordsForAvg = new ArrayList<>();
-            for (Trail trail : trails) {
-                coordsForAvg.add(trail.at(percent));
-            }
-            latLngs.add(Trail.avg(coordsForAvg));
-        }
-
-        return new Trail(latLngs);
     }
 
     // get driven

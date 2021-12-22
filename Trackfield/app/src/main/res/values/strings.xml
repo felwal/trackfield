@@ -142,7 +142,8 @@
     <string name="action_map_history">Toggle history</string>
     <string name="action_map_recentre">Recentre map</string>
     <string name="action_map_type">Toggle satellite</string>
-    <string name="action_map">Map</string>
+    <string name="action_map_route">Open route map</string>
+    <string name="action_map_routevar">Open routevar map</string>
 
     <!-- dialogs -->
 

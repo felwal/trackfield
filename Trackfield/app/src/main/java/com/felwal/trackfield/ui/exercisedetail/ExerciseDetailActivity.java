@@ -186,6 +186,10 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
             return true;
         }
+        else if (itemId == R.id.action_map_routevar) {
+            RouteMapActivity.startActivity(exercise.getRouteId(), exercise.getRouteVar(), this);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

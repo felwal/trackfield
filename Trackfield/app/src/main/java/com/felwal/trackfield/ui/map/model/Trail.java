@@ -1,7 +1,6 @@
 package com.felwal.trackfield.ui.map.model;
 
-import android.location.Location;
-
+import com.felwal.trackfield.utils.LocationUtilsKt;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.PolyUtil;
@@ -118,81 +117,14 @@ public class Trail {
     }
 
     public int getDistance() {
-        int distance = 0;
-
-        for (int i = 0; i < latLngs.size() - 1; i++) {
-            LatLng P = latLngs.get(i);
-            LatLng Q = latLngs.get(i+1);
-            if (P == null || Q == null) continue;
-
-            float[] distBetween = new float[1];
-            Location.distanceBetween(P.latitude, P.longitude, Q.latitude, Q.longitude, distBetween);
-            distance += distBetween[0];
-        }
-
-        return distance;
+        return (int) LocationUtilsKt.distance(latLngs);
     }
 
     public int getLatLngCount() {
         return latLngs == null ? 0 : latLngs.size();
     }
 
-    public LatLng at(float percent) {
-        if (percent < 0) percent = 0;
-        if (percent > 1) percent = 1;
-
-        int trailLength = getDistance();
-        int distTo = (int) (trailLength * percent);
-
-        float dist = 0;
-        LatLng at = null;
-
-        for (int i = 0; i < latLngs.size() - 1; i++) {
-            LatLng P = latLngs.get(i);
-            LatLng Q = latLngs.get(i+1);
-            if (P == null || Q == null) continue;
-
-            float[] distBetweenArr = new float[1];
-            Location.distanceBetween(P.latitude, P.longitude, Q.latitude, Q.longitude, distBetweenArr);
-            float distBetween = distBetweenArr[0];
-
-            if (dist + distBetween < distTo) {
-                dist += distBetween;
-            }
-            else {
-                at = between(P, Q, (distTo - dist) / distBetween);
-                break;
-            }
-        }
-
-        return at;
-    }
-
     // static tools
-
-    public static LatLng between(LatLng P, LatLng Q, float percent) {
-        if (P == null || Q == null) return null;
-
-        double lat = P.latitude + (Q.latitude - P.latitude) * percent;
-        double lng = P.longitude + (Q.longitude - P.longitude) * percent;
-
-        return new LatLng(lat, lng);
-    }
-
-    public static LatLng avg(List<LatLng> latLngs) {
-        if (latLngs == null || latLngs.size() == 0) return null;
-
-        double latTot = 0;
-        double lngTot = 0;
-
-        for (LatLng pos : latLngs) {
-            if (pos == null) continue;
-            latTot += pos.latitude;
-            lngTot += pos.longitude;
-        }
-
-        return new LatLng(latTot / latLngs.size(), lngTot / latLngs.size());
-    }
 
     public static LatLngBounds bounds(List<LatLng> latLngs) {
         if (latLngs.size() == 0) return null;

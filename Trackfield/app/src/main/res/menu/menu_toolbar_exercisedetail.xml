@@ -36,4 +36,10 @@
         android:checkable="true"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_map_routevar"
+        android:title="@string/action_map_routevar"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="never" />
+
 </menu>

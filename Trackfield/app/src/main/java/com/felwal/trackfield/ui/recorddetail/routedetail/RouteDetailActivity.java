@@ -123,7 +123,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
             invalidateOptionsMenu();
             return true;
         }
-        else if (itemId == R.id.action_map) {
+        else if (itemId == R.id.action_map_route) {
             RouteMapActivity.startActivity(route.getId(), this);
             return true;
         }

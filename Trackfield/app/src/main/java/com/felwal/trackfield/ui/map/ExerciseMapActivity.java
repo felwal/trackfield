@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.felwal.trackfield.data.db.DbReader;
-import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.map.model.Trail;
-import com.felwal.trackfield.utils.LayoutUtils;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -43,14 +40,22 @@ public class ExerciseMapActivity extends MapActivity {
         googleMap.setOnPolylineClickListener(this);
 
         // start marker
-        MarkerOptions startMarker = new MarkerOptions();
-        startMarker.position(trail.getStart());
-        //googleMap.addMarker(startMarker);
+        /*Bitmap startBitmap = MiscUtilsKt.getBitmap(this, R.drawable.ic_play);
+        if (startBitmap != null) {
+            MarkerOptions startMarker = new MarkerOptions();
+            startMarker.position(trail.getStart());
+            startMarker.icon(BitmapDescriptorFactory.fromBitmap(startBitmap));
+            googleMap.addMarker(startMarker);
+        }
 
         // end marker
-        MarkerOptions endMarker = new MarkerOptions();
-        endMarker.position(trail.getEnd());
-        //googleMap.addMarker(endMarker);
+        Bitmap endBitmap = MiscUtilsKt.getBitmap(this, R.drawable.ic_goal);
+        if (endBitmap != null) {
+            MarkerOptions endMarker = new MarkerOptions();
+            endMarker.position(trail.getEnd());
+            endMarker.icon(BitmapDescriptorFactory.fromBitmap(endBitmap));
+            googleMap.addMarker(endMarker);
+        }*/
 
         //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
@@ -68,7 +73,7 @@ public class ExerciseMapActivity extends MapActivity {
         // style
         setMapStyle(googleMap, c);
 
-        // polyline
+        // draw polylines
         PolylineOptions options = new PolylineOptions();
         options.color(getColorSelected(c));
         options.addAll(trail.getLatLngs());

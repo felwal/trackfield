@@ -485,7 +485,8 @@ public class DbReader extends DbHelper {
     public ArrayList<String> getPolylinesByRoute(int routeId) {
         String[] columns = { ExerciseEntry.COLUMN_POLYLINE };
         String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
-            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL" +
+            " AND " + ExerciseEntry.COLUMN_TRAIL_HIDDEN + " = 0";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         ArrayList<String> polylines = new ArrayList<>();
@@ -503,7 +504,8 @@ public class DbReader extends DbHelper {
         String[] columns = { ExerciseEntry.COLUMN_POLYLINE };
         String selection = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
             " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" +
-            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL";
+            " AND " + ExerciseEntry.COLUMN_POLYLINE + " IS NOT NULL" +
+            " AND " + ExerciseEntry.COLUMN_TRAIL_HIDDEN + " = 0";
 
         Cursor cursor = db.query(ExerciseEntry.TABLE_NAME, columns, selection, null, null, null, null);
         ArrayList<String> polylines = new ArrayList<>();

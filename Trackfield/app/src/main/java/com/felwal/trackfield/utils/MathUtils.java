@@ -22,7 +22,7 @@ public final class MathUtils {
     }
 
     public static int heaviside(float x) {
-        return x < 0 ? 0 : 1;
+        return x <= 0 ? 0 : 1;
     }
 
     public static int heaviside(boolean one) {
