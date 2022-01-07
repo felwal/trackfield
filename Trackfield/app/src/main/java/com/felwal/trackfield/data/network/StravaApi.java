@@ -355,7 +355,7 @@ public class StravaApi {
                 new Trail(polyline, start, end);
 
             return new Exercise(Exercise.NO_ID, stravaId, garminId, type, dateTime, routeId, name, "", "", description,
-                device, method, distance, time, null, trail);
+                device, method, distance, time, null, trail, false);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -441,7 +441,7 @@ public class StravaApi {
             Exercise merged = new Exercise(m.getId(), strava.getStravaId(), strava.getGarminId(), m.getType(),
                 strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(), m.getNote(),
                 m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(), m.getSubs(),
-                strava.getTrail());
+                strava.getTrail(), m.isTrailHidden());
 
             success &= DbWriter.get(a).updateExercise(merged, a);
         }

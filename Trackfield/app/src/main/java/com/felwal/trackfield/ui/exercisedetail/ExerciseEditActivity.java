@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
@@ -364,7 +362,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                 }*/
 
                 exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, dateTime, routeId,
-                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, null);
+                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, null, false);
 
                 boolean success = DbWriter.get(this).addExercise(exercise, this);
                 LayoutUtils.toast(success, this);
@@ -373,7 +371,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             else {
                 exercise = new Exercise(exercise.getId(), exercise.getStravaId(), exercise.getGarminId(), type,
                     dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time,
-                    subs, exercise.getTrail());
+                    subs, exercise.getTrail(), exercise.isTrailHidden());
 
                 boolean success = DbWriter.get(this).updateExercise(exercise, this);
                 LayoutUtils.toast(success, this);

@@ -1173,8 +1173,7 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
 
             Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
-                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
-            exercise.setTrailHidden(hideTrail);
+                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail, hideTrail);
             exercises.add(exercise);
         }
 
