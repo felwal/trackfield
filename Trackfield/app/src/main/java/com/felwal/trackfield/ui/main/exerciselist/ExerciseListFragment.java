@@ -62,7 +62,7 @@ public class ExerciseListFragment extends MainFragment {
         final SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setQueryHint("Search");
-        ViewUtilsKt.enableActionItemRipple(ViewUtilsKt.getCloseIcon(searchView));
+        ViewUtilsKt.setActionItemRipple(ViewUtilsKt.getCloseIcon(searchView));
         searchView.setBackgroundResource(R.drawable.layer_searchview_bg);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
