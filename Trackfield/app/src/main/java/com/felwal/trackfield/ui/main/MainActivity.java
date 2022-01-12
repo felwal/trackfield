@@ -117,14 +117,14 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
             ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES)
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES, null)
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
             DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE)
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // implements dialogs
 
     @Override
-    public void onDecimalDialogPositiveClick(float input, String tag) {
+    public void onDecimalDialogPositiveClick(float input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
             int distance = (int) (input * 1000);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
         if (tag.equals(DIALOG_FILTER_EXERCISES)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

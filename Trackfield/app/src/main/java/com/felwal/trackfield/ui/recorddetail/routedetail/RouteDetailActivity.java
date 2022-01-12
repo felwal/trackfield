@@ -86,7 +86,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
 
             ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_ROUTE)
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_ROUTE, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -94,7 +94,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
         else if (itemId == R.id.action_rename_route) {
             if (route != null) {
                 TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(),
-                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE)
+                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE, null)
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -113,7 +113,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
 
             TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
                 minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_ROUTE)
+                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_ROUTE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -152,7 +152,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(String input, String tag) {
+    public void onTextDialogPositiveClick(String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_ROUTE)) {
             if (input.equals("") || input.equals(route.getName())) return;
 
@@ -177,7 +177,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onAlertDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_MERGE_ROUTES)) {
             DbWriter.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
@@ -188,7 +188,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
+    public void onAlertDialogNeutralClick(@Nullable String tag, String passValue) {
     }
 
     @Override
@@ -214,7 +214,7 @@ public class RouteDetailActivity extends RecordDetailActivity implements TextDia
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
         if (tag.equals(DIALOG_FILTER_ROUTE)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

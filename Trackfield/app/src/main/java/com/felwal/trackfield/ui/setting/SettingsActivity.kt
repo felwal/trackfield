@@ -96,14 +96,14 @@ class SettingsActivity :
                 title = getString(R.string.tv_text_settings_header_look),
                 SingleSelectionItem(
                     title = getString(R.string.tv_text_settings_title_theme),
-                    values = AppConsts.themeNames,
+                    values = AppConsts.themeNames.toTypedArray(),
                     selectedIndex = Prefs.getTheme(),
                     tag = DIALOG_THEME,
                     iconRes = R.drawable.ic_theme
                 ),
                 SingleSelectionItem(
                     title = getString(R.string.tv_text_settings_title_color),
-                    values = AppConsts.colorNames,
+                    values = AppConsts.colorNames.toTypedArray(),
                     selectedIndex = Prefs.getColor(),
                     tag = DIALOG_COLOR,
                     iconRes = R.drawable.ic_color
@@ -187,7 +187,7 @@ class SettingsActivity :
 
     // dialog
 
-    override fun onAlertDialogPositiveClick(passValue: String?, tag: String) {
+    override fun onAlertDialogPositiveClick(tag: String, passValue: String?) {
         when (tag) {
             DIALOG_EXPORT -> {
                 LayoutUtils.toast(R.string.toast_json_exporting, this)
@@ -221,7 +221,7 @@ class SettingsActivity :
         }
     }
 
-    override fun onDecimalDialogPositiveClick(input: Float, tag: String) {
+    override fun onDecimalDialogPositiveClick(input: Float, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_MASS -> {
                 Prefs.setMass(input)
@@ -230,7 +230,7 @@ class SettingsActivity :
         }
     }
 
-    override fun onSingleChoiceDialogItemSelected(selectedIndex: Int, tag: String) {
+    override fun onSingleChoiceDialogItemSelected(selectedIndex: Int, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_THEME -> {
                 Prefs.setTheme(selectedIndex)

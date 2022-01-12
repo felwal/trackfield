@@ -377,7 +377,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     // implements BinaryDialog, OnMapReadyCallback
 
     @Override
-    public void onAlertDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DELETE_EXERCISE)) {
             try {
                 LayoutUtils.toast(DbWriter.get(this).deleteExercise(exercise, this), this);
@@ -391,7 +391,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     }
 
     @Override
-    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
+    public void onAlertDialogNeutralClick(@NonNull String tag, @Nullable String passValue) {
     }
 
     @Override

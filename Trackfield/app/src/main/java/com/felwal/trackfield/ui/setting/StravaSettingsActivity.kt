@@ -144,7 +144,7 @@ class StravaSettingsActivity :
 
     // dialog
 
-    override fun onAlertDialogPositiveClick(passValue: String?, tag: String) {
+    override fun onAlertDialogPositiveClick(tag: String, passValue: String?) {
         when (tag) {
             DIALOG_REQUEST_ALL -> {
                 strava.requestAllActivities { successCount, errorCount ->
@@ -160,7 +160,7 @@ class StravaSettingsActivity :
         }
     }
 
-    override fun onTextDialogPositiveClick(input: String, tag: String) {
+    override fun onTextDialogPositiveClick(input: String, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_DEVICE -> {
                 Prefs.setDefaultDevice(input)
@@ -173,7 +173,7 @@ class StravaSettingsActivity :
         }
     }
 
-    override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String) {
+    override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_PULL_POLICY -> {
                 Prefs.setPullSettings(itemStates)

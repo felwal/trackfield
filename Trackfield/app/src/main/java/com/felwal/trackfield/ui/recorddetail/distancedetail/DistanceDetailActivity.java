@@ -83,7 +83,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
             ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_DISTANCE)
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_DISTANCE, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -109,7 +109,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
             }
             TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
                 minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_DISTANCE)
+                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -139,7 +139,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
     // implements dialogs
 
     @Override
-    public void onAlertDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DELETE_DISTANCE)) {
             DbWriter.get(this).deleteDistance(distance);
             finish();
@@ -147,7 +147,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
     }
 
     @Override
-    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
+    public void onAlertDialogNeutralClick(@NonNull String tag, String passValue) {
     }
 
     @Override
@@ -173,7 +173,7 @@ public class DistanceDetailActivity extends RecordDetailActivity implements Aler
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
         if (tag.equals(DIALOG_FILTER_DISTANCE)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

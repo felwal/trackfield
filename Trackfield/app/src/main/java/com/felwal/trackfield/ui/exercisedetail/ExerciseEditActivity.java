@@ -451,12 +451,12 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     // implements BinaryDialog
 
     @Override
-    public void onAlertDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DISCARD)) finish();
     }
 
     @Override
-    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
+    public void onAlertDialogNeutralClick(@NonNull String tag, String passValue) {
     }
 
 }

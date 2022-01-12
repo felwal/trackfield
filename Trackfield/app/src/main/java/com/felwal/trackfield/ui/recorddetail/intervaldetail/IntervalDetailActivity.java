@@ -46,7 +46,7 @@ public class IntervalDetailActivity extends RecordDetailActivity implements Text
         if (itemId == R.id.action_rename_interval) {
             if (interval != null) {
                 TextDialog.newInstance(getString(R.string.dialog_title_rename_interval), "", interval,
-                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_INTERVAL)
+                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_INTERVAL, null)
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -82,7 +82,7 @@ public class IntervalDetailActivity extends RecordDetailActivity implements Text
     // implements TextDialog
 
     @Override
-    public void onTextDialogPositiveClick(@NonNull String input, String tag) {
+    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_INTERVAL)) {
             if (input.equals("")) return;
 

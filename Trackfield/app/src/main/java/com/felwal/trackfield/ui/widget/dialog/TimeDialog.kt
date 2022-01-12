@@ -93,9 +93,10 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
             @StringRes neuBtnTxtRes: Int,
             @StringRes posBtnTxtRes: Int = R.string.fw_dialog_btn_ok,
             @StringRes negBtnTxtRes: Int = R.string.fw_dialog_btn_cancel,
-            tag: String
+            tag: String,
+            passValue: String? = null
         ): TimeDialog = TimeDialog().apply {
-            arguments = putBaseBundle(title, message, posBtnTxtRes, negBtnTxtRes, tag).apply {
+            arguments = putBaseBundle(title, message, posBtnTxtRes, negBtnTxtRes, tag, passValue).apply {
                 putInt(ARG_TEXT1, text1)
                 putInt(ARG_TEXT2, text2)
                 putString(ARG_HINT1, hint1)
