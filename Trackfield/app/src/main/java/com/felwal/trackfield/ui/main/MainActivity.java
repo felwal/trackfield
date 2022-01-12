@@ -10,7 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.FloatingActionMenu;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
@@ -26,7 +25,7 @@ import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListFragment;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListRecyclerFragment;
-import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
+import com.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
@@ -171,9 +170,9 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 if (fab.isOrWillBeHidden()) fab.show();
                 return true;
             }
-            else if (itemId == R.id.navigation_main_records) {
-                if ((mainFragment instanceof RecordListFragment)) mainFragment.scrollToTop();
-                else selectFragment(new RecordListFragment());
+            else if (itemId == R.id.navigation_main_groupings) {
+                if ((mainFragment instanceof GroupingPagerFragment)) mainFragment.scrollToTop();
+                else selectFragment(new GroupingPagerFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
                 return true;
             }

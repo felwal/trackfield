@@ -7,7 +7,7 @@ import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.base.BaseAdapter;
+import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Header;
@@ -61,8 +61,8 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected BaseAdapter getAdapter() {
-        return new ExerciseListAdapter(a, this, items);
+    protected BaseListAdapter getAdapter() {
+        return new ExerciseListDelegationAdapter(a, this, items);
     }
 
     @Override

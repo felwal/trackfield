@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.base.BaseAdapter;
+import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.widget.graph.Borders;
@@ -42,8 +42,8 @@ public class StatsRecyclerFragment extends RecyclerFragment {
     }
 
     @Override
-    protected BaseAdapter getAdapter() {
-        return new StatsAdapter(a, this, items);
+    protected BaseListAdapter getAdapter() {
+        return new StatsDelegationAdapter(a, this, items);
     }
 
     @Override

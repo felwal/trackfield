@@ -43,7 +43,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected final ArrayList<RecyclerItem> items = new ArrayList<>();
 
     private RecyclerView recycler;
-    private BaseAdapter adapter;
+    private BaseListAdapter adapter;
     private ConstraintLayout emptyCl;
 
     // extends Fragment
@@ -104,7 +104,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // get
 
-    protected abstract BaseAdapter getAdapter();
+    protected abstract BaseListAdapter getAdapter();
 
     protected abstract ArrayList<RecyclerItem> getRecyclerItems();
 
