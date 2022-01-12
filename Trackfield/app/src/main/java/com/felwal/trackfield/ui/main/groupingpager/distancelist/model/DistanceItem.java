@@ -46,6 +46,10 @@ public class DistanceItem extends RecyclerItem {
         return printBestTime() + AppConsts.TAB + printBestPace();
     }
 
+    public String printTitle() {
+        return MathUtils.prefix(getDistance(), 3, "m");
+    }
+
     // extends RecyclerItem
 
     @Override

@@ -124,7 +124,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
         originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
         distance = DbReader.get(this).getDistance(length);
 
-        setToolbar(MathUtils.prefix(length, 2, "m"));
+        setToolbar(distance.printTitle());
         selectFragment(DistanceDetailFragment.newInstance(length, originId));
     }
 

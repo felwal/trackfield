@@ -40,7 +40,7 @@ public class DistanceListAdapterDelegate extends
 
     @Override
     public void onBindViewHolder(DistanceItem item, DistanceViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primaryTv.setText(MathUtils.prefix(item.getDistance(), 2, "m"));
+        vh.primaryTv.setText(item.printTitle());
         vh.secondaryTv.setText(item.printValues());
     }
 

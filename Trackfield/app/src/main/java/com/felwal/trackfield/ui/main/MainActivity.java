@@ -30,6 +30,7 @@ import com.felwal.trackfield.ui.main.stats.StatsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
 import com.felwal.trackfield.utils.FileUtils;
+import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     @Override
     public void onDecimalDialogPositiveClick(float input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
-            int distance = (int) (input * 1000);
+            int distance = (int) MathUtils.round(input * 1000, 0);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }

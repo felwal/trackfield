@@ -93,6 +93,8 @@ public final class MathUtils {
         else integer = true;
 
         value = round(value, decimals);
+        integer |= value % 1f == 0;
+
         return (integer ? Integer.toString((int) value) : value) + " " + prefix + unit;
     }
 
