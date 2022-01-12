@@ -70,6 +70,8 @@ public class GroupingPagerFragment extends MainFragment {
         ViewPager viewPager = view.findViewById(R.id.vp_groupingpager);
         TabLayout tabLayout = view.findViewById(R.id.tl_groupingpager);
 
+        viewPager.setOffscreenPageLimit(2);
+
         pagerAdapter = new GroupingPagerStateAdapter(viewPager, tabLayout, getActivity(), getChildFragmentManager());
         // set up pager with adapter
         viewPager.setAdapter(pagerAdapter);
