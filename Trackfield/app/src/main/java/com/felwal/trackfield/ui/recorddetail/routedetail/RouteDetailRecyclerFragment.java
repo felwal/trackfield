@@ -3,6 +3,7 @@ package com.felwal.trackfield.ui.recorddetail.routedetail;
 import android.os.Bundle;
 import android.view.View;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -76,7 +77,8 @@ public class RouteDetailRecyclerFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routedetail_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_route);
+        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
+            a.getColor(R.color.colorAccRed)));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.felwal.trackfield.ui.main.exerciselist;
 
 import android.view.View;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -41,12 +42,14 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (search.equals("")) {
             emptyTitle.setText(R.string.tv_text_empty_exerciselist_title);
             emptyMessage.setText(R.string.tv_text_empty_exerciselist_message);
-            emptyImage.setImageResource(R.drawable.ic_empty_exercise);
+            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
+                ResUtilsKt.getColorByAttr(a, R.attr.colorAccent)));
         }
         else {
             emptyTitle.setText(R.string.tv_text_empty_search_title);
             emptyMessage.setText(R.string.tv_text_empty_search_msg);
-            emptyImage.setImageResource(R.drawable.ic_empty_search);
+            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_search),
+                ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary)));
         }
     }
 

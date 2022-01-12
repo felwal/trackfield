@@ -3,6 +3,7 @@ package com.felwal.trackfield.ui.recorddetail.distancedetail;
 import android.os.Bundle;
 import android.view.View;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -75,7 +76,8 @@ public class DistanceDetailRecyclerFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancedetail_msg));
-        emptyImage.setImageResource(R.drawable.ic_empty_distance);
+        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
+            a.getColor(R.color.colorAccBlue)));
     }
 
     @Override

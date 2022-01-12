@@ -89,7 +89,7 @@ class SettingsActivity :
                     title = getString(R.string.tv_text_settings_title_singletion_routes),
                     value = Prefs.areSingletonRoutesHidden(),
                     onSwitch = { Prefs.hideSingletonRoutes(it) },
-                    iconRes = R.drawable.ic_empty_routes
+                    iconRes = R.drawable.ic_route
                 )
             ),
             ItemSection(
