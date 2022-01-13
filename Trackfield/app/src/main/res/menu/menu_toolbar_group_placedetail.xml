@@ -13,7 +13,7 @@
     <item
         android:id="@+id/action_rename_place"
         android:title="@string/action_rename"
-        android:icon="@drawable/ic_edit"
+        android:icon="@drawable/ic_rename"
         android:iconTint="?colorOnPrimary"
         app:showAsAction="ifRoom" />
 
