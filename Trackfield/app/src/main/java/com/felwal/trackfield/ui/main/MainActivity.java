@@ -19,6 +19,7 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
+import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // dialog tags
     private static final String DIALOG_FILTER_EXERCISES = "filterExercisesDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
+    private static final String DIALOG_ADD_PLACE_LAT = "addPlaceLatDialog";
+    private static final String DIALOG_ADD_PLACE_LNG = "addPlaceLngDialog";
 
     private static boolean appInitialized = false;
 
@@ -133,6 +136,16 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             mainFragment.updateFragment();
             invalidateOptionsMenu();
             return true;
+        }
+        else if (itemId == R.id.action_add_place) {
+            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LAT, null)
+                .show(getSupportFragmentManager());
+            return true;
+        }
+        else if (itemId == R.id.action_regenerate_places) {
+            DbWriter.get(this).regeneratePlaces(this);
+            mainFragment.updateFragment();
         }
 
         return super.onOptionsItemSelected(item);
@@ -243,11 +256,24 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     // implements dialogs
 
+    private double lat = 0; // TODO: temp
+
     @Override
     public void onDecimalDialogPositiveClick(float input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
             int distance = (int) MathUtils.round(input * 1000, 0);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
+            mainFragment.updateFragment();
+        }
+        if (tag.equals(DIALOG_ADD_PLACE_LAT)) {
+            lat = input;
+            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LNG, null)
+                .show(getSupportFragmentManager());
+        }
+        if (tag.equals(DIALOG_ADD_PLACE_LNG)) {
+            Place place = new Place(lat, input);
+            DbWriter.get(this).addPlace(place);
             mainFragment.updateFragment();
         }
     }

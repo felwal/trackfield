@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.felwal.trackfield.data.db.DbContract.*;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
+import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.ui.common.model.SorterItem;
@@ -396,6 +397,46 @@ public class DbWriter extends DbHelper {
         return count > 0;
     }
 
+    // places
+
+    public boolean addPlaces(ArrayList<Place> places) {
+        boolean success = true;
+        for (Place p : places) {
+            success &= addPlace(p);
+        }
+        return success;
+    }
+
+    public boolean addPlace(Place place) {
+        ContentValues cv = fillPlaceContentValues(place);
+        long result = db.insert(PlaceEntry.TABLE_NAME, null, cv);
+        return success(result);
+    }
+
+    public boolean updatePlace(Place place) {
+        ContentValues newCv = fillPlaceContentValues(place);
+
+        String selection = DistanceEntry._ID + " = ?";
+        String[] selectionArgs = { Integer.toString((place.getId())) };
+
+        int count = db.update(PlaceEntry.TABLE_NAME, newCv, selection, selectionArgs);
+
+        return count > 0;
+    }
+
+    public boolean deletePlace(@NonNull Place place) {
+        String selection = PlaceEntry._ID + " = ?";
+        String[] selectionArgs = { Integer.toString(place.getId()) };
+
+        long result = db.delete(PlaceEntry.TABLE_NAME, selection, selectionArgs);
+
+        return success(result);
+    }
+
+    public boolean regeneratePlaces(Context c) {
+        return addPlaces(DbReader.get(c).generatePlaces());
+    }
+
     // intervals
 
     public boolean updateInterval(String oldInterval, String newInterval) {
@@ -477,6 +518,18 @@ public class DbWriter extends DbHelper {
 
         cv.put(DistanceEntry.COLUMN_DISTANCE, distance.getDistance());
         cv.put(DistanceEntry.COLUMN_GOAL_PACE, distance.getGoalPace());
+
+        return cv;
+    }
+
+    @NonNull
+    private ContentValues fillPlaceContentValues(@NonNull Place place) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(PlaceEntry.COLUMN_NAME, place.getName());
+        cv.put(PlaceEntry.COLUMN_LAT, place.getLat());
+        cv.put(PlaceEntry.COLUMN_LNG, place.getLng());
+        cv.put(PlaceEntry.COLUMN_RADIUS, place.getRadius());
 
         return cv;
     }

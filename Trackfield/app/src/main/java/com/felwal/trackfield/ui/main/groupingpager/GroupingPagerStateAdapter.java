@@ -14,23 +14,27 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.main.groupingpager.distancelist.DistanceListFragment;
 import com.felwal.trackfield.ui.main.groupingpager.intervallist.IntervalListFragment;
+import com.felwal.trackfield.ui.main.groupingpager.placelist.PlaceListFragment;
 import com.felwal.trackfield.ui.main.groupingpager.routelist.RouteListFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
 
     @StringRes private static final int[] TAB_TITLES = new int[] {
-        R.string.tab_title_groupings_distances, R.string.tab_title_groupings_routes, R.string.tab_title_groupings_intervals };
+        R.string.tab_title_groupings_distances, R.string.tab_title_groupings_routes,
+        R.string.tab_title_groupings_places, R.string.tab_title_groupings_intervals };
 
     private static final int POS_DISTANCES = 0;
     private static final int POS_ROUTES = 1;
-    private static final int POS_INTERVALS = 2;
+    private static final int POS_PLACES = 2;
+    private static final int POS_INTERVALS = 3;
 
     private final Context c;
     private final ViewPager viewPager;
 
     private RecyclerFragment distancesFragment;
     private RecyclerFragment routesFragment;
+    private RecyclerFragment placesFragment;
     private RecyclerFragment intervalsFragment;
 
     //
@@ -67,6 +71,7 @@ public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
         switch (position) {
             case POS_INTERVALS: return (intervalsFragment = new IntervalListFragment());
             case POS_ROUTES: return (routesFragment = new RouteListFragment());
+            case POS_PLACES: return (placesFragment = new PlaceListFragment());
             case POS_DISTANCES:
             default: return (distancesFragment = new DistanceListFragment());
         }
@@ -98,6 +103,7 @@ public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
     public void updateAdapter() {
         if (distancesFragment != null) distancesFragment.updateRecycler();
         if (routesFragment != null) routesFragment.updateRecycler();
+        if (placesFragment != null) placesFragment.updateRecycler();
         if (intervalsFragment != null) intervalsFragment.updateRecycler();
     }
 

@@ -76,7 +76,7 @@ public class IntervalDetailActivity extends GroupDetailActivity implements TextD
     @Override
     @MenuRes
     protected int getToolbarMenuRes() {
-        return R.menu.menu_toolbar_rec_intervaldetail;
+        return R.menu.menu_toolbar_group_intervaldetail;
     }
 
     // implements TextDialog

@@ -33,7 +33,8 @@ public class DistanceDetailFragment extends RecyclerFragment {
     private final SorterItem sorter = new SorterItem(
         new SortMode("Date", SorterItem.Mode.DATE, false),
         new SortMode("Pace & Avg time", SorterItem.Mode.PACE, true),
-        new SortMode("Full distance", SorterItem.Mode.DISTANCE, true)
+        new SortMode("Full distance", SorterItem.Mode.DISTANCE, true),
+        new SortMode("Location", SorterItem.Mode.START_LAT, false)
     );
 
     private int originId;

@@ -131,7 +131,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     @Override
     @MenuRes
     protected int getToolbarMenuRes() {
-        return R.menu.menu_toolbar_rec_distancedetail;
+        return R.menu.menu_toolbar_group_distancedetail;
     }
 
     // implements dialogs

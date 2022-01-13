@@ -27,6 +27,7 @@
 
     <string name="tab_title_groupings_distances">Distances</string>
     <string name="tab_title_groupings_routes">Routes</string>
+    <string name="tab_title_groupings_places">Places</string>
     <string name="tab_title_groupings_intervals">Intervals</string>
 
     <!-- edit texts -->
@@ -99,12 +100,16 @@
     <string name="tv_text_empty_distancelist_msg">Press + to add a distance</string>
     <string name="tv_text_empty_routelist_title">No routes</string>
     <string name="tv_text_empty_routelist_msg">Your routes will show up here</string>
+    <string name="tv_text_empty_placelist_title">No places</string>
+    <string name="tv_text_empty_placelist_msg">Press + to add a place</string>
     <string name="tv_text_empty_intervallist_title">No intervals</string>
     <string name="tv_text_empty_intervallist_msg">Your intervals will show up here</string>
     <string name="tv_text_empty_distancedetail_title">No exercises</string>
     <string name="tv_text_empty_distancedetail_msg">Check filters, or set a goal</string>
     <string name="tv_text_empty_routedetail_title">No exercises</string>
     <string name="tv_text_empty_routedetail_msg">Check filters</string>
+    <string name="tv_text_empty_placedetail_title">No exercises</string>
+    <string name="tv_text_empty_placedetail_msg">Check filters</string>
 
     <string name="tv_text_fab_add">Add exercise</string>
     <string name="tv_text_fab_request_strava">Request new</string>
@@ -142,6 +147,8 @@
     <string name="action_map_recentre">Recentre map</string>
     <string name="action_map_type">Toggle satellite</string>
     <string name="action_map">Map</string>
+    <string name="action_regenerate">Regenerate</string>
+    <string name="action_edit_radius">Edit radius</string>
 
     <!-- dialogs -->
 
@@ -163,16 +170,21 @@
     <!-- titles -->
     <string name="dialog_title_delete_exercise">Delete exercise?</string>
     <string name="dialog_title_rename_route">Rename route</string>
+    <string name="dialog_title_rename_place">Rename place</string>
+    <string name="dialog_title_edit_radius">Edit radius (m)</string>
     <string name="dialog_title_rename_interval">Rename interval</string>
     <string name="dialog_title_add_distance">Add distance (km)</string>
     <string name="dialog_title_delete_distance">Delete distance?</string>
     <string name="dialog_title_set_goal">Set pace goal</string>
+    <string name="dialog_title_add_place">Add place</string>
+    <string name="dialog_title_delete_place">Delete place?</string>
     <string name="dialog_title_title_filter">Filter exercises</string>
     <string name="dialog_title_discard">Discard edits?</string>
     <string name="dialog_title_theme">Theme</string>
     <string name="dialog_title_color">Color</string>
     <string name="dialog_title_mass">Mass (kg)</string>
     <string name="dialog_title_merge_routes">Merge routes?</string>
+    <string name="dialog_title_place_name_exists">Place name already exists</string>
     <string name="dialog_title_device">Default device</string>
     <string name="dialog_title_recording_method">Default recording method</string>
     <string name="dialog_title_export">Export json?</string>
@@ -183,7 +195,9 @@
     <!-- messages -->
     <string name="dialog_msg_delete_exercise">This action cannot be undone</string>
     <string name="dialog_msg_delete_distance">Your exercises won\'t be affected</string>
+    <string name="dialog_msg_delete_place">Your exercises won\'t be affected</string>
     <string name="dialog_msg_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
+    <string name="dialog_msg_place_name_exists">Please choose a different name.</string>
     <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile phone</string>
     <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
     <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder. Any existing files will be overridden.</string>

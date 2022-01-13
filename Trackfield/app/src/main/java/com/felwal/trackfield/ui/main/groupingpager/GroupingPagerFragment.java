@@ -17,6 +17,7 @@ import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.main.MainFragment;
 import com.felwal.trackfield.ui.main.groupingpager.distancelist.DistanceListFragment;
 import com.felwal.trackfield.ui.main.groupingpager.intervallist.IntervalListFragment;
+import com.felwal.trackfield.ui.main.groupingpager.placelist.PlaceListFragment;
 import com.felwal.trackfield.ui.main.groupingpager.routelist.RouteListFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -56,6 +57,7 @@ public class GroupingPagerFragment extends MainFragment {
      *
      * @see DistanceListFragment#onCreateOptionsMenu(Menu, MenuInflater)
      * @see RouteListFragment#onCreateOptionsMenu(Menu, MenuInflater)
+     * @see PlaceListFragment#onCreateOptionsMenu(Menu, MenuInflater)
      * @see IntervalListFragment#onCreateOptionsMenu(Menu, MenuInflater)
      */
     @Override
@@ -70,7 +72,7 @@ public class GroupingPagerFragment extends MainFragment {
         ViewPager viewPager = view.findViewById(R.id.vp_groupingpager);
         TabLayout tabLayout = view.findViewById(R.id.tl_groupingpager);
 
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
 
         pagerAdapter = new GroupingPagerStateAdapter(viewPager, tabLayout, getActivity(), getChildFragmentManager());
         // set up pager with adapter

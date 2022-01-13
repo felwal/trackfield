@@ -26,6 +26,7 @@ public abstract class DbHelper extends SQLiteOpenHelper {
         db.execSQL(DbContract.SubEntry.CREATE_TABLE);
         db.execSQL(DbContract.RouteEntry.CREATE_TABLE);
         db.execSQL(DbContract.DistanceEntry.CREATE_TABLE);
+        db.execSQL(DbContract.PlaceEntry.CREATE_TABLE);
     }
 
     @Override
@@ -36,6 +37,7 @@ public abstract class DbHelper extends SQLiteOpenHelper {
             db.execSQL(DbContract.SubEntry.DELETE_TABLE);
             db.execSQL(DbContract.RouteEntry.DELETE_TABLE);
             db.execSQL(DbContract.DistanceEntry.DELETE_TABLE);
+            db.execSQL(DbContract.PlaceEntry.DELETE_TABLE);
             onCreate(db);
         }
         //if (oldVersion < 2) {

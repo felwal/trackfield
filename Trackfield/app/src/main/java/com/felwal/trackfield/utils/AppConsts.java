@@ -17,9 +17,11 @@ public final class AppConsts {
         EXERCISES,
         DISTANCES,
         ROUTES,
+        PLACES,
         INTERVALS,
         DISTANCE,
         ROUTE,
+        PLACE,
         INTERVAL
     }
 

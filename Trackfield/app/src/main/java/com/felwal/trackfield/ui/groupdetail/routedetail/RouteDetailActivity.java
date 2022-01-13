@@ -146,7 +146,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
     @Override
     @MenuRes
     protected int getToolbarMenuRes() {
-        return R.menu.menu_toolbar_rec_routedetail;
+        return R.menu.menu_toolbar_group_routedetail;
     }
 
     // implements dialogs

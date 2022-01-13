@@ -89,12 +89,12 @@ public class Prefs {
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
     @NonNull private static ArrayList<String> exerciseVisibleTypes = new ArrayList<>();
-    @NonNull private static ArrayList<String> routeVisibleTypes = new ArrayList<>();
-    @NonNull private static ArrayList<String> distanceVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> routeVisibleTypes = new ArrayList<>(); // TODO: remove
+    @NonNull private static ArrayList<String> distanceVisibleTypes = new ArrayList<>(); // TODO: remove
 
     // sorting (using AppConsts.Layout.ordinal() as index)
-    private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0 };
-    private static boolean[] sorterSelectedInversions = { false, false, false, false, false, false, false, };
+    private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    private static boolean[] sorterSelectedInversions = { false, false, false, false, false, false, false, false };
 
     // Strava API
     private static String authCode = "";

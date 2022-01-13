@@ -10,7 +10,7 @@ class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
     }
 
     enum class Mode {
-        DATE, DISTANCE, TIME, PACE, NAME, AMOUNT
+        DATE, DISTANCE, TIME, PACE, NAME, AMOUNT, START_LAT, START_LNG
     }
 
     var sorter = Sorter(*sortModes)
