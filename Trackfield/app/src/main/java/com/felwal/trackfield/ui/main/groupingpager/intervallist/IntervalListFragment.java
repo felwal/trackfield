@@ -62,8 +62,8 @@ public class IntervalListFragment extends RecyclerFragment {
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.INTERVALS),
-            Prefs.getSorterInversion(AppConsts.Layout.INTERVALS));
+            Prefs.getSorterIndex(AppConsts.Layout.INTERVAL_LIST),
+            Prefs.getSorterInversion(AppConsts.Layout.INTERVAL_LIST));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class IntervalListFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.INTERVALS, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.INTERVAL_LIST, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

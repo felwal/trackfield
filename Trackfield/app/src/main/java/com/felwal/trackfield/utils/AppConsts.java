@@ -14,15 +14,15 @@ public final class AppConsts {
     // enums
 
     public enum Layout {
-        EXERCISES,
-        DISTANCES,
-        ROUTES,
-        PLACES,
-        INTERVALS,
-        DISTANCE,
-        ROUTE,
-        PLACE,
-        INTERVAL
+        EXERCISE_LIST,
+        DISTANCE_LIST,
+        ROUTE_LIST,
+        PLACE_LIST,
+        INTERVAL_LIST,
+        DISTANCE_DETAIL,
+        ROUTE_DETAIL,
+        PLACE_DETAIL,
+        INTERVAL_DETAIL
     }
 
     public enum UnitVelocity {

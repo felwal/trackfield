@@ -84,8 +84,8 @@ public class RouteDetailFragment extends RecyclerFragment {
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.ROUTE),
-            Prefs.getSorterInversion(AppConsts.Layout.ROUTE));
+            Prefs.getSorterIndex(AppConsts.Layout.ROUTE_DETAIL),
+            Prefs.getSorterInversion(AppConsts.Layout.ROUTE_DETAIL));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class RouteDetailFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.ROUTE, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.ROUTE_DETAIL, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

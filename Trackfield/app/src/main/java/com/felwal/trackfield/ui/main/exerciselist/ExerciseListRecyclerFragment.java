@@ -56,8 +56,8 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.EXERCISES),
-            Prefs.getSorterInversion(AppConsts.Layout.EXERCISES));
+            Prefs.getSorterIndex(AppConsts.Layout.EXERCISE_LIST),
+            Prefs.getSorterInversion(AppConsts.Layout.EXERCISE_LIST));
     }
 
     @Override
@@ -182,7 +182,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.EXERCISES, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.EXERCISE_LIST, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

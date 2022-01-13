@@ -84,8 +84,8 @@ public class DistanceDetailFragment extends RecyclerFragment {
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.DISTANCE),
-            Prefs.getSorterInversion(AppConsts.Layout.DISTANCE));
+            Prefs.getSorterIndex(AppConsts.Layout.DISTANCE_DETAIL),
+            Prefs.getSorterInversion(AppConsts.Layout.DISTANCE_DETAIL));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.DISTANCE, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.DISTANCE_DETAIL, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

@@ -65,8 +65,8 @@ public class PlaceListFragment extends RecyclerFragment {
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.PLACES),
-            Prefs.getSorterInversion(AppConsts.Layout.PLACES));
+            Prefs.getSorterIndex(AppConsts.Layout.PLACE_LIST),
+            Prefs.getSorterInversion(AppConsts.Layout.PLACE_LIST));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class PlaceListFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.PLACES, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.PLACE_LIST, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 
