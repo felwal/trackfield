@@ -857,8 +857,9 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<PlaceItem> getPlaceItems(SorterItem.Mode sortMode, boolean ascending) {
+    public ArrayList<PlaceItem> getPlaceItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
         String table = PlaceEntry.TABLE_NAME;
+        String selection = includeHidden ? null : PlaceEntry.COLUMN_HIDDEN + " != 1";
         String sortCol;
         switch (sortMode) {
             case START_LAT: sortCol = PlaceEntry.COLUMN_LAT; break;
@@ -868,7 +869,7 @@ public class DbReader extends DbHelper {
         }
         String orderBy = sortCol + sortOrder(ascending); // TODO
 
-        Cursor cursor = db.query(table, null, null, null, null, null, orderBy);
+        Cursor cursor = db.query(table, null, selection, null, null, null, orderBy);
         ArrayList<PlaceItem> placeItems = new ArrayList<>();
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex(PlaceEntry._ID));
@@ -1467,8 +1468,9 @@ public class DbReader extends DbHelper {
             float lat = cursor.getFloat(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_LAT));
             float lng = cursor.getFloat(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_LNG));
             int radius = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_RADIUS));
+            boolean hidden = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_HIDDEN)) != 0;
 
-            Place place = new Place(id, name, lat, lng, radius);
+            Place place = new Place(id, name, lat, lng, radius, hidden);
             places.add(place);
         }
 

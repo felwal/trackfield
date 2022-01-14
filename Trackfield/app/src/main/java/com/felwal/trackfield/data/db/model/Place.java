@@ -20,6 +20,7 @@ public class Place implements JSONObjectable {
     private static final String JSON_LAT = "lat";
     private static final String JSON_LNG = "lng";
     private static final String JSON_RADIUS = "radius";
+    private static final String JSON_HIDDEN = "hidden";
 
     public static final String NO_NAME = "Unnamed place";
     public static final int ID_NON_EXISTANT = -1;
@@ -28,13 +29,15 @@ public class Place implements JSONObjectable {
     private String name;
     private LatLng location;
     private int radius = 500;
+    private boolean hidden = false;
 
     //
 
-    public Place(int id, String name, double lat, double lng, int radius) {
+    public Place(int id, String name, double lat, double lng, int radius, boolean hidden) {
         this.id = id;
         this.name = name;
         this.radius = radius;
+        this.hidden = hidden;
         location = new LatLng(lat, lng);
     }
 
@@ -59,6 +62,7 @@ public class Place implements JSONObjectable {
         name = obj.getString(JSON_NAME);
         location = new LatLng(obj.getDouble(JSON_LAT), obj.getDouble(JSON_LNG));
         radius = obj.getInt(JSON_RADIUS);
+        hidden = obj.getBoolean(JSON_HIDDEN);
     }
 
     // set
@@ -69,6 +73,10 @@ public class Place implements JSONObjectable {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public void invertHidden() {
+        hidden = !hidden;
     }
 
     // get
@@ -95,6 +103,10 @@ public class Place implements JSONObjectable {
 
     public int getRadius() {
         return radius;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     //
@@ -129,6 +141,7 @@ public class Place implements JSONObjectable {
             obj.put(JSON_LAT, getLat());
             obj.put(JSON_LNG, getLng());
             obj.put(JSON_RADIUS, radius);
+            obj.put(JSON_HIDDEN, hidden);
         }
         catch (JSONException e) {
             LayoutUtils.handleError(e, c);

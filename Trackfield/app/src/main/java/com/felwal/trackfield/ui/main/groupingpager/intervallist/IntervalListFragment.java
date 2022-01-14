@@ -75,7 +75,7 @@ public class IntervalListFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.getAscending(),
-            Prefs.areHiddenRoutesShown());
+            Prefs.areHiddenGroupsShown());
 
         itemList.add(sorter.copy());
         itemList.addAll(intervalItemList);

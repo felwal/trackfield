@@ -2,6 +2,7 @@ package com.felwal.trackfield.ui.groupdetail.placedetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.MenuRes;
@@ -55,6 +56,16 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     // extends AppCompatActivity
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // hide
+        MenuItem hideItem = menu.findItem(R.id.action_hide_place);
+        hideItem.setChecked(place.isHidden());
+        hideItem.setIcon(place.isHidden() ? R.drawable.ic_hidden :  R.drawable.ic_hide);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
@@ -84,15 +95,21 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
                 R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_EDIT_RADIUS, null)
                 .show(getSupportFragmentManager());
         }
+        else if (itemId == R.id.action_hide_place) {
+            place.invertHidden();
+            DbWriter.get(this).updatePlace(place);
+            invalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.action_place_map) {
+            PlaceMapActivity.startActivity(place.getId(), this);
+        }
         else if (itemId == R.id.action_delete_place) {
             AlertDialog.newInstance(getString(R.string.dialog_title_delete_place),
                 getString(R.string.dialog_msg_delete_place), R.string.dialog_btn_delete,
                 R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_PLACE, null)
                 .show(getSupportFragmentManager());
             return true;
-        }
-        else if (itemId == R.id.action_place_map) {
-            PlaceMapActivity.startActivity(place.getId(), this);
         }
 
         return super.onOptionsItemSelected(item);

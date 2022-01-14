@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 .show(getSupportFragmentManager());
             return true;
         }
-        else if (itemId == R.id.action_show_hidden_routes) {
-            Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
+        else if (itemId == R.id.action_show_hidden_groups) {
+            Prefs.showHiddenGroups(!Prefs.areHiddenGroupsShown());
             mainFragment.updateFragment();
             invalidateOptionsMenu();
             return true;

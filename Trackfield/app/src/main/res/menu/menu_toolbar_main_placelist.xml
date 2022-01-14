@@ -11,6 +11,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_show_hidden_groups"
+        android:title="@string/action_show_hidden"
+        android:icon="@drawable/ic_hide"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_filter_exercises"
         android:title="@string/action_filter"
         android:icon="@drawable/ic_filter"

@@ -180,6 +180,7 @@ public final class DbContract {
         public static final String COLUMN_LAT = "lat";
         public static final String COLUMN_LNG = "lng";
         public static final String COLUMN_RADIUS = "radius";
+        public static final String COLUMN_HIDDEN = "hidden";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -187,6 +188,7 @@ public final class DbContract {
             COLUMN_NAME + " TEXT," +
             COLUMN_LAT + " REAL," +
             COLUMN_LNG + " REAL," +
+            COLUMN_HIDDEN + " INTEGER," +
             COLUMN_RADIUS + " INTEGER)";
 
     }

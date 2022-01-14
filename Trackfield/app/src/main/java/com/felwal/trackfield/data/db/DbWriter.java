@@ -530,6 +530,7 @@ public class DbWriter extends DbHelper {
         cv.put(PlaceEntry.COLUMN_LAT, place.getLat());
         cv.put(PlaceEntry.COLUMN_LNG, place.getLng());
         cv.put(PlaceEntry.COLUMN_RADIUS, place.getRadius());
+        cv.put(PlaceEntry.COLUMN_HIDDEN, place.isHidden());
 
         return cv;
     }

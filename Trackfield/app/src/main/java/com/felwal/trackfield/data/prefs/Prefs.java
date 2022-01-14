@@ -40,7 +40,7 @@ public class Prefs {
     private static final String KEY_THEME = "theme";
     private static final String KEY_MASS = "mass";
     private static final String KEY_BIRTHDAY = "birthday";
-    private static final String KEY_SHOW_HIDDEN_ROUTES = "showHiddenRoutes";
+    private static final String KEY_SHOW_HIDDEN_GROUPS = "showHiddenRoutes";
     private static final String KEY_HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
     @Unimplemented private static final String KEY_INCLCUDE_LONGER = "includeLonger";
     @Unfinished private static final String KEY_INCLCUDE_PACELESS = "includePaceless";
@@ -83,7 +83,7 @@ public class Prefs {
     private static LocalDate birthday = LocalDate.of(2001,1,29);
 
     // filtering
-    private static boolean showHiddenRoutes = true;
+    private static boolean showHiddenGroups = true;
     private static boolean includeLonger = false;
     @Unfinished private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
@@ -151,7 +151,7 @@ public class Prefs {
         savePref(birthday, KEY_BIRTHDAY);
 
         // filtering
-        savePref(showHiddenRoutes, KEY_SHOW_HIDDEN_ROUTES);
+        savePref(showHiddenGroups, KEY_SHOW_HIDDEN_GROUPS);
         savePref(hideSingletonRoutes, KEY_HIDE_SINGLETON_ROUTES);
         savePref(includeLonger, KEY_INCLCUDE_LONGER);
         savePref(distanceLowerLimit, KEY_LIMIT_LOWER);
@@ -208,7 +208,7 @@ public class Prefs {
         birthday = loadPref(new TypeToken<LocalDate>(){}, KEY_BIRTHDAY);
 
         // filtering
-        showHiddenRoutes = loadPref(bool, KEY_SHOW_HIDDEN_ROUTES);
+        showHiddenGroups = loadPref(bool, KEY_SHOW_HIDDEN_GROUPS);
         hideSingletonRoutes = loadPref(bool, KEY_HIDE_SINGLETON_ROUTES);
         includeLonger = loadPref(bool, KEY_INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, KEY_LIMIT_LOWER);
@@ -267,7 +267,7 @@ public class Prefs {
             case KEY_THEME: return theme;
             case KEY_MASS: return mass;
             case KEY_BIRTHDAY: return birthday;
-            case KEY_SHOW_HIDDEN_ROUTES: return showHiddenRoutes;
+            case KEY_SHOW_HIDDEN_GROUPS: return showHiddenGroups;
             case KEY_HIDE_SINGLETON_ROUTES: return hideSingletonRoutes;
             case KEY_INCLCUDE_LONGER: return includeLonger;
             case KEY_LIMIT_LOWER: return distanceLowerLimit;
@@ -331,9 +331,9 @@ public class Prefs {
         savePref(date, KEY_BIRTHDAY);
     }
 
-    public static void showHiddenRoutes(boolean show) {
-        showHiddenRoutes = show;
-        savePref(show, KEY_SHOW_HIDDEN_ROUTES);
+    public static void showHiddenGroups(boolean show) {
+        showHiddenGroups = show;
+        savePref(show, KEY_SHOW_HIDDEN_GROUPS);
     }
 
     public static void hideSingletonRoutes(boolean hide) {
@@ -458,8 +458,8 @@ public class Prefs {
         return birthday;
     }
 
-    public static boolean areHiddenRoutesShown() {
-        return showHiddenRoutes;
+    public static boolean areHiddenGroupsShown() {
+        return showHiddenGroups;
     }
 
     public static boolean areSingletonRoutesHidden() {

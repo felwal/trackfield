@@ -137,6 +137,7 @@
     <string name="action_save">Save</string>
     <string name="action_add">Add</string>
     <string name="action_hide_route">Hide route</string>
+    <string name="action_hide_place">Hide place</string>
     <string name="action_show_hidden">Show hidden</string>
     <string name="action_hide_hidden">Hide hidden</string>
     <string name="action_set_goal">Set goal</string>

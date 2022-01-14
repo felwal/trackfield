@@ -46,9 +46,9 @@ public class RouteListFragment extends RecyclerFragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         // show hidden
-        MenuItem hiddenItem = menu.findItem(R.id.action_show_hidden_routes);
-        hiddenItem.setChecked(Prefs.areHiddenRoutesShown());
-        if (Prefs.areHiddenRoutesShown()) hiddenItem.setIcon(R.drawable.ic_hidden)
+        MenuItem hiddenItem = menu.findItem(R.id.action_show_hidden_groups);
+        hiddenItem.setChecked(Prefs.areHiddenGroupsShown());
+        if (Prefs.areHiddenGroupsShown()) hiddenItem.setIcon(R.drawable.ic_hidden)
             .setTitle(R.string.action_hide_hidden);
         else hiddenItem.setIcon(R.drawable.ic_hide).setTitle(R.string.action_show_hidden);
     }
@@ -89,7 +89,7 @@ public class RouteListFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.getAscending(),
-            Prefs.areHiddenRoutesShown(), Prefs.getExerciseVisibleTypes());
+            Prefs.areHiddenGroupsShown(), Prefs.getExerciseVisibleTypes());
 
         itemList.add(sorter.copy());
         itemList.addAll(routeItemList);
