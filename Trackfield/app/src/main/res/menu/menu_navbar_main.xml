@@ -13,8 +13,8 @@
         android:title="@string/fragment_title_groupingpager" />
 
     <item
-        android:id="@+id/navigation_main_stats"
-        android:icon="@animator/selector_nav_ic_stats"
-        android:title="@string/fragment_title_stats" />
+        android:id="@+id/navigation_main_statistics"
+        android:icon="@animator/selector_nav_ic_statistics"
+        android:title="@string/fragment_title_statistics" />
 
 </menu>

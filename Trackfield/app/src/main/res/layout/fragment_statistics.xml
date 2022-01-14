@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.stats.StatsFragment">
+    tools:context=".ui.main.statistics.StatisticsFragment">
 
     <FrameLayout
-        android:id="@+id/fl_stats"
+        android:id="@+id/fl_statistics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

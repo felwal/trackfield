@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.main.stats;
+package com.felwal.trackfield.ui.main.statistics;
 
 import android.app.Activity;
 
@@ -9,9 +9,9 @@ import com.felwal.trackfield.ui.common.model.RecyclerItem;
 
 import java.util.List;
 
-public class StatsDelegationAdapter extends BaseListAdapter {
+public class StatisticsDelegationAdapter extends BaseListAdapter {
 
-    public StatsDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
+    public StatisticsDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
             .addDelegate(new GraphAdapterDelegate(a));
 

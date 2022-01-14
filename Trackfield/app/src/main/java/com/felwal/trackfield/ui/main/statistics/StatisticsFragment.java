@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.main.stats;
+package com.felwal.trackfield.ui.main.statistics;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -15,9 +15,9 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.main.MainFragment;
 
-public class StatsFragment extends MainFragment {
+public class StatisticsFragment extends MainFragment {
 
-    private StatsRecyclerFragment recyclerFragment;
+    private StatisticsRecyclerFragment recyclerFragment;
 
     // extends Fragment
 
@@ -33,12 +33,12 @@ public class StatsFragment extends MainFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_stats, container, false);
+        View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        FrameLayout frame = view.findViewById(R.id.fl_stats);
-        recyclerFragment = new StatsRecyclerFragment();
+        FrameLayout frame = view.findViewById(R.id.fl_statistics);
+        recyclerFragment = new StatisticsRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
         return view;
@@ -46,7 +46,7 @@ public class StatsFragment extends MainFragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_toolbar_main_stats, menu);
+        inflater.inflate(R.menu.menu_toolbar_main_statistics, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -54,7 +54,7 @@ public class StatsFragment extends MainFragment {
 
     @Override
     protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_stats));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_statistics));
     }
 
     @Override

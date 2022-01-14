@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.main.stats;
+package com.felwal.trackfield.ui.main.statistics;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +19,13 @@ import com.felwal.trackfield.ui.widget.graph.GraphData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class StatsRecyclerFragment extends RecyclerFragment {
+public class StatisticsRecyclerFragment extends RecyclerFragment {
 
     // extends Fragment
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_toolbar_main_stats, menu);
+        inflater.inflate(R.menu.menu_toolbar_main_statistics, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -33,17 +33,17 @@ public class StatsRecyclerFragment extends RecyclerFragment {
 
     @Override
     protected void setEmptyPage() {
-        // Stats currently never displays an empty page
+        // Statistics currently never displays an empty page
     }
 
     @Override
     protected void setSorter() {
-        // Stats currently has no need for sorting
+        // Statistics currently has no need for sorting
     }
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new StatsDelegationAdapter(a, this, items);
+        return new StatisticsDelegationAdapter(a, this, items);
     }
 
     @Override
@@ -103,14 +103,14 @@ public class StatsRecyclerFragment extends RecyclerFragment {
 
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
-        // Stats currently has no need for sorting
+        // Statistics currently has no need for sorting
     }
 
     // implements RecyclerAdapter
 
     @Override
     public void onDelegateClick(View view, int position) {
-        // Stats currently has no delegates supporting clicks
+        // Statistics currently has no delegates supporting clicks
     }
 
 }
