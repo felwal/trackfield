@@ -276,19 +276,25 @@ public class DbReader extends DbHelper {
         // we can use not the magnitude, but the magnitude squared.
         // we cant access the SQLite sqrt() function from Android.
 
-        double radiusSqr = MathUtils.sqr(place.getRadius());
+        // since the angle corresponding to a certain distance varies for longitude and not for latitude,
+        // a circle in meters results in a ellipse in degrees.
+
+        double radius = place.getRadius();
         double lat = place.getLat();
         double lng = place.getLng();
 
-        // calculate degrees to metres conversion
+        // calculate degrees to metres conversion. this differs for latitude and longitude.
         double deltaDeg = 0.001;
-        float[] deltaDistLatArr = new float[1];
-        float[] deltaDistLngArr = new float[1];
-        Location.distanceBetween(lat, lng, lat + deltaDeg, lng, deltaDistLatArr);
-        Location.distanceBetween(lat, lng, lat, lng + deltaDeg, deltaDistLngArr);
-        float deltaDist = (deltaDistLatArr[0] + deltaDistLngArr[0]) * 0.5f; // TODO: ellips?
-        double degToDistMultiplierSqr = MathUtils.sqr(deltaDist / deltaDeg);
-        double radiusSqrDeg = radiusSqr / degToDistMultiplierSqr;
+        float[] deltaLatDistArr = new float[1];
+        float[] deltaLngDistArr = new float[1];
+        Location.distanceBetween(lat, lng, lat + deltaDeg, lng, deltaLatDistArr);
+        Location.distanceBetween(lat, lng, lat, lng + deltaDeg, deltaLngDistArr);
+        float deltaLatDist = deltaLatDistArr[0];
+        float deltaLngDist = deltaLngDistArr[0];
+        double latDistToDegMultiplier = deltaDeg / deltaLatDist;
+        double lngDistToDegMultiplier = deltaDeg / deltaLngDist;
+        double radiusLatDegSqr = MathUtils.sqr(radius * latDistToDegMultiplier);
+        double radiusLngDegSqr = MathUtils.sqr(radius * lngDistToDegMultiplier);
 
         String exerliteColumns = ExerciseEntry.toString(ExerciseEntry.COLUMNS_EXERLITE);
         String table = ExerciseEntry.TABLE_NAME;
@@ -301,10 +307,10 @@ public class DbReader extends DbHelper {
         String queryString =
             "SELECT " + exerliteColumns +
                 " FROM " + table +
-                " WHERE ((" + sqr(lat + " - " + startLat) + " + " + sqr(lng + " - " + startLng) + ")" +
-                " <= " + radiusSqrDeg +
-                " OR (" + sqr(lat + " - " + endLat) + " + " + sqr(lng + " - " + endLng) + ")" +
-                " <= " + radiusSqrDeg + ")" +
+                " WHERE ((" + sqr(lat + " - " + startLat) + " / " + radiusLatDegSqr +
+                " + " + sqr(lng + " - " + startLng) + " / " + radiusLngDegSqr + ") <= 1" +
+                " OR (" + sqr(lat + " - " + endLat) + " / " + radiusLatDegSqr +
+                " + " + sqr(lng + " - " + endLng) + " / " + radiusLngDegSqr + ") <= 1)" +
                 andTypeFilter +
                 " ORDER BY " + orderBy(sortMode, ascending);
 
