@@ -201,8 +201,8 @@
     <string name="dialog_msg_place_name_exists">Please choose a different name.</string>
     <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile phone</string>
     <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
-    <string name="dialog_msg_export">Exercises, routes and distances will be exported to Trackfield folder. Any existing files will be overridden.</string>
-    <string name="dialog_msg_import">Exercises, routes and distances will be imported from Trackfield folder. Any existing data will be overridden.</string>
+    <string name="dialog_msg_export">Exercises, routes, places and distances will be exported to Trackfield folder. Anyexisting files will be overridden.</string>
+    <string name="dialog_msg_import">Exercises, routes, places and distances will be imported from Trackfield folder. Any existing data will be overridden.</string>
     <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified</string>
 
     <!-- toasts -->

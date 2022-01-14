@@ -18,6 +18,7 @@ import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.JSONObjectable;
+import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
 
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ public final class FileUtils {
     private static final String FILENAME_E = "exercises.json";
     private static final String FILENAME_R = "routes.json";
     private static final String FILENAME_D = "distances.json";
+    private static final String FILENAME_P = "places.json";
     private static final String FILENAME_VER = "version.json";
     private static final String FOLDER = "Documents/Trackfield";
     private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/" + FOLDER + "/";
@@ -200,7 +202,7 @@ public final class FileUtils {
      * @return Success
      */
     public static boolean exportJson(Context c) {
-        boolean success = true;
+        boolean success;
 
         // version.json
         JSONObject obj = new JSONObject();
@@ -208,7 +210,7 @@ public final class FileUtils {
         try {
             obj.put(JSON_DB_VERSION, DbReader.get(c).getVersion());
             String jsonStr = obj.toString(2);
-            success &= writeFile(PATH + FILENAME_VER, jsonStr, c);
+            success = writeFile(PATH + FILENAME_VER, jsonStr, c);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -219,6 +221,7 @@ public final class FileUtils {
         success &= writeJSONObjectList(PATH + FILENAME_E, DbReader.get(c).getExercises(), c);
         success &= writeJSONObjectList(PATH + FILENAME_R, DbReader.get(c).getRoutes(true), c);
         success &= writeJSONObjectList(PATH + FILENAME_D, DbReader.get(c).getDistances(), c);
+        success &= writeJSONObjectList(PATH + FILENAME_P, DbReader.get(c).getPlaces(), c);
 
         return success;
     }
@@ -235,6 +238,7 @@ public final class FileUtils {
 
         success = importRoutesJson(c);
         success &= importDistancesJson(c);
+        success &= importPlacesJson(c);
         success &= importExercisesJson(c);
 
         DbWriter.get(c).upgradeToTargetVersion(dbVersion);
@@ -328,6 +332,29 @@ public final class FileUtils {
 
         if (distances.size() == 0) return false;
         DbWriter.get(c).addDistances(distances);
+        return success;
+    }
+
+    /**
+     * @return Success
+     */
+    private static boolean importPlacesJson(Context c) {
+        boolean success = true;
+
+        ArrayList<Place> places = new ArrayList<>();
+
+        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_P, c)) {
+            try {
+                Place p = new Place(obj);
+                places.add(p);
+            }
+            catch (JSONException e) {
+                success = false;
+            }
+        }
+
+        if (places.size() == 0) return false;
+        DbWriter.get(c).addPlaces(places);
         return success;
     }
 
