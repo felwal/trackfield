@@ -73,6 +73,11 @@ public class Trail {
         bounds = new LatLngBounds(southWest, northEast);
     }
 
+    public void calibrateEndPoints() {
+        start = latLngs.get(0);
+        end = latLngs.get(latLngs.size() - 1);
+    }
+
     // get
 
     public String getPolyline() {

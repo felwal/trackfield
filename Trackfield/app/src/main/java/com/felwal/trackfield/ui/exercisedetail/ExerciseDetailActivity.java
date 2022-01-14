@@ -115,14 +115,15 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_exercisedetail, menu);
 
-        // remove pull action if no externalId
+        // remove actions dependent on externalId
         if (!exercise.hasStravaId()) {
             menu.findItem(R.id.action_pull_exercise).setVisible(false);
         }
 
-        // remove hide trail action if no trail
+        // remove actions dependent on trail
         if (!exercise.hasTrail()) {
             menu.findItem(R.id.action_hide_trail).setVisible(false);
+            menu.findItem(R.id.action_recalibrate_endpoints).setVisible(false);
         }
 
         return true;
@@ -175,14 +176,19 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             }
             return true;
         }
+        else if (itemId == R.id.action_recalibrate_endpoints) {
+            if (exercise.hasTrail()) {
+                exercise.getTrail().calibrateEndPoints();
+                DbWriter.get(this).updateExercise(exercise, this);
+            }
+            return true;
+        }
         else if (itemId == R.id.action_hide_trail) {
             if (exercise.hasTrail()) {
                 exercise.invertTrailHidden();
                 DbWriter.get(this).updateExercise(exercise, this);
                 invalidateOptionsMenu();
-                return true;
             }
-
             return true;
         }
 

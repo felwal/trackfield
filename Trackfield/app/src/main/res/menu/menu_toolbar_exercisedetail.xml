@@ -23,6 +23,12 @@
         android:title="@string/action_pull_strava"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_recalibrate_endpoints"
+        android:iconTint="?colorOnPrimary"
+        android:title="@string/action_recalibrate_endpoints"
+        app:showAsAction="never" />
+
     <!--
     <item
         android:id="@+id/action_push_exercise"

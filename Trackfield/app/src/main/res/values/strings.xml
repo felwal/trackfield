@@ -149,6 +149,7 @@
     <string name="action_map">Map</string>
     <string name="action_regenerate">Regenerate</string>
     <string name="action_edit_radius">Edit radius</string>
+    <string name="action_recalibrate_endpoints">Recalibrate endpoints</string>
 
     <!-- dialogs -->
 
