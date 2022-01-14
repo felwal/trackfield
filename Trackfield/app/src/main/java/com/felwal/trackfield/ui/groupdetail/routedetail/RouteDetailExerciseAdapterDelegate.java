@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.groupdetail.distancedetail;
+package com.felwal.trackfield.ui.groupdetail.routedetail;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
@@ -22,22 +22,20 @@ import com.felwal.trackfield.utils.AppConsts;
 import java.time.LocalDate;
 import java.util.List;
 
-class DistanceDetailAdapterDelegate extends
-    BaseAdapterDelegate<Exerlite, RecyclerItem, DistanceDetailAdapterDelegate.ExerciseMediumViewHolder> {
+public class RouteDetailExerciseAdapterDelegate extends
+    BaseAdapterDelegate<Exerlite, RecyclerItem, RouteDetailExerciseAdapterDelegate.ExerciseSmallViewHolder> {
 
     private final BaseListAdapter adapter;
     private final int originId;
-    private final int distance;
 
     //
 
-    DistanceDetailAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter, int originId,
-        int distance) {
+    public RouteDetailExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter,
+        int originId) {
 
         super(a, listener);
         this.adapter = adapter;
         this.originId = originId;
-        this.distance = distance;
     }
 
     // extends AbsListItemAdapterDelegate
@@ -49,41 +47,38 @@ class DistanceDetailAdapterDelegate extends
 
     @NonNull
     @Override
-    public ExerciseMediumViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new ExerciseMediumViewHolder(inflater.inflate(R.layout.item_recycler_exercise_small, parent, false));
+    public ExerciseSmallViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+        return new ExerciseSmallViewHolder(inflater.inflate(R.layout.item_recycler_exercise_tiny, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
+    public void onBindViewHolder(Exerlite item, ExerciseSmallViewHolder vh, @Nullable List<Object> payloads) {
         String date = item.getDate().format(
             adapter.getSortMode() == SorterItem.Mode.DATE || item.isYear(LocalDate.now().getYear())
-                ? AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
+                ? AppConsts.FORMATTER_GROUP_NOYEAR : AppConsts.FORMATTER_GROUP);
 
         vh.primaryTv.setText(date);
-        vh.secondaryTv.setText(item.printValues(distance));
-        vh.captionTv.setText(item.getRoute());
+        vh.secondaryTv.setText(item.printValues());
         vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
         vh.recordMarker.getBackground().setColorFilter(c.getColor(
-            item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
+            item.isTop(1)? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
             PorterDuff.Mode.MULTIPLY);
     }
 
     // vh
 
-    class ExerciseMediumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ExerciseSmallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView primaryTv;
         public final TextView secondaryTv;
-        public final TextView captionTv;
         public final View originMarker;
         public final View recordMarker;
 
-        public ExerciseMediumViewHolder(View itemView) {
+        public ExerciseSmallViewHolder(View itemView) {
             super(itemView);
             primaryTv = itemView.findViewById(R.id.tv_recycler_item_exercise_primary);
             secondaryTv = itemView.findViewById(R.id.tv_recycler_item_exercise_secondary);
-            captionTv = itemView.findViewById(R.id.tv_recycler_item_exercise_caption);
             originMarker = itemView.findViewById(R.id.v_recycler_item_originmarker);
             recordMarker = itemView.findViewById(R.id.v_recycler_item_recordmarker);
             itemView.setOnClickListener(this);

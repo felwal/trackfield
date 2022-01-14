@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 if (fab.isOrWillBeHidden()) fab.show();
                 return true;
             }
-            else if (itemId == R.id.navigation_main_groupings) {
+            else if (itemId == R.id.navigation_main_groupingpager) {
                 if ((mainFragment instanceof GroupingPagerFragment)) mainFragment.scrollToTop();
                 else selectFragment(new GroupingPagerFragment());
                 if (fab.isOrWillBeShown()) fab.hide();

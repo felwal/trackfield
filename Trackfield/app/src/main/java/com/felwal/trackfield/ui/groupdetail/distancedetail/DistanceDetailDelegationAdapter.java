@@ -16,7 +16,7 @@ class DistanceDetailDelegationAdapter extends BaseListAdapter {
 
     DistanceDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId, int distance) {
         delegatesManager
-            .addDelegate(new DistanceDetailAdapterDelegate(a, listener, this, originId, distance))
+            .addDelegate(new DistanceDetailExerciseAdapterDelegate(a, listener, this, originId, distance))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new GraphRecAdapterDelegate(a))
             .addDelegate(new GoalAdapterDelegate(a))

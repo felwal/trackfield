@@ -67,7 +67,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         hideItem.setIcon(route.isHidden() ? R.drawable.ic_hide : R.drawable.ic_hidden);
 
         // goal
-        MenuItem goalItem = menu.findItem(R.id.action_set_rec_goal);
+        MenuItem goalItem = menu.findItem(R.id.action_set_group_goal);
         goalItem.setChecked(route.hasGoalPace());
         goalItem.setIcon(route.hasGoalPace() ? R.drawable.ic_goal_checked : R.drawable.ic_goal);
 
@@ -99,7 +99,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
             }
             return true;
         }
-        else if (itemId == R.id.action_set_rec_goal) {
+        else if (itemId == R.id.action_set_group_goal) {
             int minutes, seconds;
             if (route.getGoalPace() == Route.NO_GOAL_PACE) {
                 minutes = BaseDialogKt.NULL_INT;

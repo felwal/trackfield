@@ -16,7 +16,7 @@ class RouteDetailDelegationAdapter extends BaseListAdapter {
 
     public RouteDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
         delegatesManager
-            .addDelegate(new RouteDetailAdapterDelegate(a, listener, this, originId))
+            .addDelegate(new RouteDetailExerciseAdapterDelegate(a, listener, this, originId))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new GraphRecAdapterDelegate(a))
             .addDelegate(new GoalAdapterDelegate(a))

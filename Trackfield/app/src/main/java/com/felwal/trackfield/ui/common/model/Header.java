@@ -14,7 +14,7 @@ public class Header extends RecyclerItem {
         YEAR,
         MONTH,
         WEEK,
-        REC
+        GROUP
     }
 
     private final String title;

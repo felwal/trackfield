@@ -18,17 +18,17 @@
     <!-- fragments -->
 
     <string name="fragment_title_exercises">Exercises</string>
-    <string name="fragment_title_groupings">Groupings</string>
+    <string name="fragment_title_groupingpager">Groupings</string>
     <string name="fragment_title_stats">Stats</string>
     <string name="fragment_title_settings">Settings</string>
     <string name="fragment_title_settings_strava">Strava</string>
 
     <!-- tabs -->
 
-    <string name="tab_title_groupings_distances">Distances</string>
-    <string name="tab_title_groupings_routes">Routes</string>
-    <string name="tab_title_groupings_places">Places</string>
-    <string name="tab_title_groupings_intervals">Intervals</string>
+    <string name="tab_title_groupingpager_distances">Distances</string>
+    <string name="tab_title_groupingpager_routes">Routes</string>
+    <string name="tab_title_groupingpager_places">Places</string>
+    <string name="tab_title_groupingpager_intervals">Intervals</string>
 
     <!-- edit texts -->
 

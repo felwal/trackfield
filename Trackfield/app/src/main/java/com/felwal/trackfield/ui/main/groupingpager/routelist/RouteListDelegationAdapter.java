@@ -14,7 +14,7 @@ public class RouteListDelegationAdapter extends BaseListAdapter {
 
     public RouteListDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new RouteListAdapterDelegate(a, listener))
+            .addDelegate(new RouteListRouteAdapterDelegate(a, listener))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new GraphWeekAdapterDelegate(a));
 

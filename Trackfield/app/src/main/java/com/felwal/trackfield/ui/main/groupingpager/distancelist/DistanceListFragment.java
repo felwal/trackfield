@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class DistanceListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Distance", SorterItem.Mode.DISTANCE, true)
-        //new SortMode("Amount", SorterItem.Mode.DISTANCE, false)
+        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, true)
+        //new SortMode<>("Amount", SorterItem.Mode.DISTANCE, false)
     );
 
     // extends Fragment
@@ -45,7 +45,7 @@ public class DistanceListFragment extends RecyclerFragment {
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        menu.clear(); // remove R.menu.menu_toolbar_main_recs
+        menu.clear(); // remove R.menu.menu_toolbar_main_groupingpager
         inflater.inflate(R.menu.menu_toolbar_main_distancelist, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

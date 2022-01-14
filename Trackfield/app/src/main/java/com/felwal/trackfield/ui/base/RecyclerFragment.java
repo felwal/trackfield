@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -219,7 +218,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
         for (Exerlite e : fromExerliteList) {
             if ((newYear = e.getDate().getYear()) != year) {
-                toItemList.add(new Header(newYear + "", Header.Type.REC));
+                toItemList.add(new Header(newYear + "", Header.Type.GROUP));
                 year = newYear;
             }
 
@@ -236,7 +235,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
             if (zone != lastZone) {
                 String title = zoneTopBorders[zone] + "°–" + zoneTopBorders[zone + 1] + "°";
-                Header header = new Header(title, Header.Type.REC);
+                Header header = new Header(title, Header.Type.GROUP);
                 toItemList.add(header);
                 lastZone = zone;
             }
@@ -254,7 +253,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
             if (zone != lastZone) {
                 String title = zoneLeftBorders[zone] + "°–" + zoneLeftBorders[zone + 1] + "°";
-                Header header = new Header(title, Header.Type.REC);
+                Header header = new Header(title, Header.Type.GROUP);
                 toItemList.add(header);
                 lastZone = zone;
             }
@@ -265,9 +264,9 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     private void addItemsWithIndexHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
         for (int i = 0; i < fromExerliteList.size(); i++) {
-            if (i == 0) toItemList.add(new Header("Top " + 3, Header.Type.REC));
-            else if (i == 3) toItemList.add(new Header("Top " + 10, Header.Type.REC));
-            else if (i % 10 == 0) toItemList.add(new Header("Top " + (i + 10), Header.Type.REC));
+            if (i == 0) toItemList.add(new Header("Top " + 3, Header.Type.GROUP));
+            else if (i == 3) toItemList.add(new Header("Top " + 10, Header.Type.GROUP));
+            else if (i % 10 == 0) toItemList.add(new Header("Top " + (i + 10), Header.Type.GROUP));
 
             toItemList.add(fromExerliteList.get(i));
         }

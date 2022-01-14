@@ -14,14 +14,13 @@ import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.DelegateClickListener;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
-import com.felwal.trackfield.utils.MathUtils;
 
 import java.util.List;
 
-public class DistanceListAdapterDelegate extends
-    BaseAdapterDelegate<DistanceItem, RecyclerItem, DistanceListAdapterDelegate.DistanceViewHolder> {
+public class DistanceListDistanceAdapterDelegate extends
+    BaseAdapterDelegate<DistanceItem, RecyclerItem, DistanceListDistanceAdapterDelegate.DistanceViewHolder> {
 
-    public DistanceListAdapterDelegate(Activity a, DelegateClickListener listener) {
+    public DistanceListDistanceAdapterDelegate(Activity a, DelegateClickListener listener) {
         super(a, listener);
     }
 

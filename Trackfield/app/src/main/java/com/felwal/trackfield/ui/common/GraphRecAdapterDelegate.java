@@ -30,7 +30,7 @@ public class GraphRecAdapterDelegate extends
 
     @Override
     public boolean isForViewType(@NonNull RecyclerItem item) {
-        return item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_REC);
+        return item instanceof Graph && item.hasTag(RecyclerItem.TAG_GRAPH_GROUP);
     }
 
     @NonNull

@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class IntervalListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Recent", SorterItem.Mode.DATE, false),
-        new SortMode("Amount", SorterItem.Mode.AMOUNT, false)
+        new SortMode<>("Recent", SorterItem.Mode.DATE, false),
+        new SortMode<>("Amount", SorterItem.Mode.AMOUNT, false)
     );
 
     // extends Fragment
@@ -44,7 +44,7 @@ public class IntervalListFragment extends RecyclerFragment {
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        menu.clear(); // remove R.menu.menu_toolbar_main_recs
+        menu.clear(); // remove R.menu.menu_toolbar_main_groupingpager
         inflater.inflate(R.menu.menu_toolbar_main_intervallist, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.groupdetail.placedetail;
+package com.felwal.trackfield.ui.groupdetail.distancedetail;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.trackfield.R;
-import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
+import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.DelegateClickListener;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
@@ -22,16 +22,22 @@ import com.felwal.trackfield.utils.AppConsts;
 import java.time.LocalDate;
 import java.util.List;
 
-class PlaceDetailAdapterDelegate extends
-    BaseAdapterDelegate<Exerlite, RecyclerItem, PlaceDetailAdapterDelegate.ExerciseMediumViewHolder> {
+class DistanceDetailExerciseAdapterDelegate extends
+    BaseAdapterDelegate<Exerlite, RecyclerItem, DistanceDetailExerciseAdapterDelegate.ExerciseMediumViewHolder> {
 
     private final BaseListAdapter adapter;
+    private final int originId;
+    private final int distance;
 
     //
 
-    PlaceDetailAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter) {
+    DistanceDetailExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter, int originId,
+        int distance) {
+
         super(a, listener);
         this.adapter = adapter;
+        this.originId = originId;
+        this.distance = distance;
     }
 
     // extends AbsListItemAdapterDelegate
@@ -51,12 +57,12 @@ class PlaceDetailAdapterDelegate extends
     public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
         String date = item.getDate().format(
             adapter.getSortMode() == SorterItem.Mode.DATE || item.isYear(LocalDate.now().getYear())
-                ? AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
+                ? AppConsts.FORMATTER_GROUP_NOYEAR : AppConsts.FORMATTER_GROUP);
 
         vh.primaryTv.setText(date);
-        vh.secondaryTv.setText(item.printValues());
+        vh.secondaryTv.setText(item.printValues(distance));
         vh.captionTv.setText(item.getRoute());
-        vh.originMarker.setVisibility(View.GONE);
+        vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
         vh.recordMarker.getBackground().setColorFilter(c.getColor(
             item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),

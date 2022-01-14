@@ -31,11 +31,11 @@ public class DistanceDetailFragment extends RecyclerFragment {
     private final static String BUNDLE_ORIGIN_ID = "originId";
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Date", SorterItem.Mode.DATE, false),
-        new SortMode("Pace & Avg time", SorterItem.Mode.PACE, true),
-        new SortMode("Full distance", SorterItem.Mode.DISTANCE, true),
-        new SortMode("Latitude", SorterItem.Mode.START_LAT, false),
-        new SortMode("Longitude", SorterItem.Mode.START_LNG, true)
+        new SortMode<>("Date", SorterItem.Mode.DATE, false),
+        new SortMode<>("Pace & Avg time", SorterItem.Mode.PACE, true),
+        new SortMode<>("Full distance", SorterItem.Mode.DISTANCE, true),
+        new SortMode<>("Latitude", SorterItem.Mode.START_LAT, false),
+        new SortMode<>("Longitude", SorterItem.Mode.START_LNG, true)
     );
 
     private int originId;
@@ -109,7 +109,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
             graph.addData(data);
 
             if (graph.hasMoreThanOnePoint()) {
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
+                graph.setTag(RecyclerItem.TAG_GRAPH_GROUP);
                 itemList.add(graph);
             }
 

@@ -2,7 +2,7 @@ package com.felwal.trackfield.ui.common.model;
 
 public abstract class RecyclerItem {
 
-    public final static String TAG_GRAPH_REC = "recGraph";
+    public final static String TAG_GRAPH_GROUP = "recGraph";
     public final static String TAG_GRAPH_WEEK = "weekGraph";
     public final static String TAG_GRAPH_BASE = "baseGraph";
 

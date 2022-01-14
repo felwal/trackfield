@@ -28,11 +28,11 @@ import java.util.ArrayList;
 public class RouteListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Recent", SorterItem.Mode.DATE, false),
-        new SortMode("Name", SorterItem.Mode.NAME, true),
-        new SortMode("Amount", SorterItem.Mode.AMOUNT, false),
-        new SortMode("Avg distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode("Best pace", SorterItem.Mode.PACE, true)
+        new SortMode<>("Recent", SorterItem.Mode.DATE, false),
+        new SortMode<>("Name", SorterItem.Mode.NAME, true),
+        new SortMode<>("Amount", SorterItem.Mode.AMOUNT, false),
+        new SortMode<>("Avg distance", SorterItem.Mode.DISTANCE, false),
+        new SortMode<>("Best pace", SorterItem.Mode.PACE, true)
     );
 
     // extends Fragment
@@ -58,7 +58,7 @@ public class RouteListFragment extends RecyclerFragment {
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        menu.clear(); // remove R.menu.menu_toolbar_main_recs
+        menu.clear(); // remove R.menu.menu_toolbar_main_groupingpager
         inflater.inflate(R.menu.menu_toolbar_main_routelist, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

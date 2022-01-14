@@ -85,7 +85,7 @@ public class GroupingPagerFragment extends MainFragment {
 
     @Override
     protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_groupings));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_groupingpager));
     }
 
     @Override

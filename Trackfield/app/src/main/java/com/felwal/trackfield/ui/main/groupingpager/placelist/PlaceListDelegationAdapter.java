@@ -13,7 +13,7 @@ public class PlaceListDelegationAdapter extends BaseListAdapter {
 
     public PlaceListDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new PlaceListAdapterDelegate(a, listener))
+            .addDelegate(new PlaceListPlaceAdapterDelegate(a, listener))
             .addDelegate(new SorterAdapterDelegate(a, listener, this));
 
         setItems(items);

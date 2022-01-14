@@ -1,4 +1,4 @@
-package com.felwal.trackfield.ui.main.groupingpager.intervallist;
+package com.felwal.trackfield.ui.main.groupingpager.routelist;
 
 import android.app.Activity;
 import android.view.View;
@@ -13,14 +13,14 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.DelegateClickListener;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
-import com.felwal.trackfield.ui.main.groupingpager.intervallist.model.IntervalItem;
+import com.felwal.trackfield.ui.main.groupingpager.routelist.model.RouteItem;
 
 import java.util.List;
 
-public class IntervalListAdapterDelegate extends
-    BaseAdapterDelegate<IntervalItem, RecyclerItem, IntervalListAdapterDelegate.IntervalViewHolder> {
+public class RouteListRouteAdapterDelegate extends
+    BaseAdapterDelegate<RouteItem, RecyclerItem, RouteListRouteAdapterDelegate.RouteViewHolder> {
 
-    public IntervalListAdapterDelegate(Activity a, DelegateClickListener listener) {
+    public RouteListRouteAdapterDelegate(Activity a, DelegateClickListener listener) {
         super(a, listener);
     }
 
@@ -28,29 +28,29 @@ public class IntervalListAdapterDelegate extends
 
     @Override
     public boolean isForViewType(@NonNull RecyclerItem item) {
-        return item instanceof IntervalItem;
+        return item instanceof RouteItem;
     }
 
     @NonNull
     @Override
-    public IntervalViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new IntervalViewHolder(inflater.inflate(R.layout.item_recycler_group, parent, false));
+    public RouteViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+        return new RouteViewHolder(inflater.inflate(R.layout.item_recycler_group, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(IntervalItem item, IntervalViewHolder vh, @Nullable List<Object> payloads) {
-        vh.primaryTv.setText(item.getInterval());
+    public void onBindViewHolder(RouteItem item, RouteViewHolder vh, @Nullable List<Object> payloads) {
+        vh.primaryTv.setText(item.getName());
         vh.secondaryTv.setText(item.printValues());
     }
 
     // vh
 
-    class IntervalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView primaryTv;
         public final TextView secondaryTv;
 
-        public IntervalViewHolder(View itemView) {
+        public RouteViewHolder(View itemView) {
             super(itemView);
             primaryTv = itemView.findViewById(R.id.tv_recycler_item_group_primary);
             secondaryTv = itemView.findViewById(R.id.tv_recycler_item_group_secondary);

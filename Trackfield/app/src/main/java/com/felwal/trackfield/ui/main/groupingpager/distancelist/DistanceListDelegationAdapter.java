@@ -14,7 +14,7 @@ public class DistanceListDelegationAdapter extends BaseListAdapter {
 
     public DistanceListDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new DistanceListAdapterDelegate(a, listener))
+            .addDelegate(new DistanceListDistanceAdapterDelegate(a, listener))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new GraphWeekAdapterDelegate(a));
 

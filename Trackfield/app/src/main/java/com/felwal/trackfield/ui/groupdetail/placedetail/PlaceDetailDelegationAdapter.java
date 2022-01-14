@@ -14,7 +14,7 @@ class PlaceDetailDelegationAdapter extends BaseListAdapter {
 
     PlaceDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new PlaceDetailAdapterDelegate(a, listener, this))
+            .addDelegate(new PlaceDetailExerciseAdapterDelegate(a, listener, this))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 

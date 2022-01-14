@@ -54,7 +54,7 @@ public class IntervalDetailAdapterDelegate extends
     public void onBindViewHolder(Exerlite item, ExerciseMediumViewHolder vh, @Nullable List<Object> payloads) {
         String date = item.getDate().format(
             adapter.getSortMode() == SorterItem.Mode.DATE || item.isYear(LocalDate.now().getYear()) ?
-                AppConsts.FORMATTER_REC_NOYEAR : AppConsts.FORMATTER_REC);
+                AppConsts.FORMATTER_GROUP_NOYEAR : AppConsts.FORMATTER_GROUP);
 
         vh.primaryTv.setText(date);
         vh.secondaryTv.setText(item.printValues());

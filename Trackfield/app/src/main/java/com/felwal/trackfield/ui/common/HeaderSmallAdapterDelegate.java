@@ -28,7 +28,7 @@ public class HeaderSmallAdapterDelegate extends
 
     @Override
     public boolean isForViewType(@NonNull RecyclerItem item) {
-        return item instanceof Header && ((Header) item).isType(Header.Type.WEEK, Header.Type.REC);
+        return item instanceof Header && ((Header) item).isType(Header.Type.WEEK, Header.Type.GROUP);
     }
 
     @NonNull

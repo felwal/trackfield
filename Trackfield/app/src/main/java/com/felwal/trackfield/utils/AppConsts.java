@@ -51,8 +51,8 @@ public final class AppConsts {
     public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofPattern("EEE, d MMM yyyy 'at' HH:mm");
     public static final DateTimeFormatter FORMATTER_CAPTION = DateTimeFormatter.ofPattern("d MMM yyyy");
     public static final DateTimeFormatter FORMATTER_CAPTION_NOYEAR = DateTimeFormatter.ofPattern("d MMM");
-    public static final DateTimeFormatter FORMATTER_REC = DateTimeFormatter.ofPattern("d MMM ’yy");
-    public static final DateTimeFormatter FORMATTER_REC_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
+    public static final DateTimeFormatter FORMATTER_GROUP = DateTimeFormatter.ofPattern("d MMM ’yy");
+    public static final DateTimeFormatter FORMATTER_GROUP_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
 
     public static final TemporalField WEEK_OF_YEAR = WeekFields.ISO.weekOfWeekBasedYear();
 

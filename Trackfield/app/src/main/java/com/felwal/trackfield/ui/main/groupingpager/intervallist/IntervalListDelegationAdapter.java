@@ -14,7 +14,7 @@ public class IntervalListDelegationAdapter extends BaseListAdapter {
 
     public IntervalListDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
         delegatesManager
-            .addDelegate(new IntervalListAdapterDelegate(a, listener))
+            .addDelegate(new IntervalListIntervalAdapterDelegate(a, listener))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new GraphWeekAdapterDelegate(a));
 

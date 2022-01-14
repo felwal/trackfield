@@ -11,7 +11,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_set_rec_goal"
+        android:id="@+id/action_set_group_goal"
         android:title="@string/action_set_goal"
         android:icon="@drawable/ic_goal"
         android:iconTint="?colorOnPrimary"

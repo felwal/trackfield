@@ -31,10 +31,10 @@ public class RouteDetailFragment extends RecyclerFragment {
     private final static String BUNDLE_ORIGIN_ID = "originId";
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Date", SorterItem.Mode.DATE, false),
-        new SortMode("Distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode("Time", SorterItem.Mode.TIME, true),
-        new SortMode("Pace", SorterItem.Mode.PACE, true)
+        new SortMode<>("Date", SorterItem.Mode.DATE, false),
+        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, false),
+        new SortMode<>("Time", SorterItem.Mode.TIME, true),
+        new SortMode<>("Pace", SorterItem.Mode.PACE, true)
     );
 
     private Route route;
@@ -108,7 +108,7 @@ public class RouteDetailFragment extends RecyclerFragment {
             graph.addData(data);
 
             if (graph.hasMoreThanOnePoint()) {
-                graph.setTag(RecyclerItem.TAG_GRAPH_REC);
+                graph.setTag(RecyclerItem.TAG_GRAPH_GROUP);
                 itemList.add(graph);
             }
 

@@ -8,9 +8,9 @@
         android:title="@string/fragment_title_exercises" />
 
     <item
-        android:id="@+id/navigation_main_groupings"
-        android:icon="@animator/selector_nav_ic_groupings"
-        android:title="@string/fragment_title_groupings" />
+        android:id="@+id/navigation_main_groupingpager"
+        android:icon="@animator/selector_nav_ic_groupingpager"
+        android:title="@string/fragment_title_groupingpager" />
 
     <item
         android:id="@+id/navigation_main_stats"

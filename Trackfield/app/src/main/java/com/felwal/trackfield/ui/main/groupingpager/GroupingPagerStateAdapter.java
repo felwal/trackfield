@@ -21,8 +21,8 @@ import com.google.android.material.tabs.TabLayout;
 public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
 
     @StringRes private static final int[] TAB_TITLES = new int[] {
-        R.string.tab_title_groupings_distances, R.string.tab_title_groupings_routes,
-        R.string.tab_title_groupings_places, R.string.tab_title_groupings_intervals };
+        R.string.tab_title_groupingpager_distances, R.string.tab_title_groupingpager_routes,
+        R.string.tab_title_groupingpager_places, R.string.tab_title_groupingpager_intervals };
 
     private static final int POS_DISTANCES = 0;
     private static final int POS_ROUTES = 1;
@@ -94,7 +94,7 @@ public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
         return (RecyclerFragment) instantiateItem(viewPager, viewPager.getCurrentItem());
     }
 
-    // delegate from RecsFragment to RecyclerFragment
+    // delegate from GroupingPagerFragment to RecyclerFragment
 
     public void scrollToTop() {
         getCurrentFragment().scrollToTop();
