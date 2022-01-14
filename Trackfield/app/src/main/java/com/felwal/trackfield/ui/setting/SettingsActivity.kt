@@ -175,6 +175,12 @@ class SettingsActivity :
                         OnboardingActivity.startActivity(this)
                     }
                 ),
+                ActionItem(
+                    title = getString(R.string.tv_text_settings_title_regenerate_places),
+                    onClick = {
+                        DbWriter.get(this).regeneratePlaces(this)
+                    }
+                ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_recreate),
                     msg = "Recreate database?",

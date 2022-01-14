@@ -75,6 +75,7 @@
     <string name="tv_text_settings_title_birthday">Birthday</string>
     <string name="tv_text_settings_header_developer">Developer options</string>
     <string name="tv_text_settings_title_reboard">Reboard</string>
+    <string name="tv_text_settings_title_regenerate_places">Regenerate places</string>
     <string name="tv_text_settings_title_recreate">Recreate database</string>
 
     <!-- strava settings -->
@@ -147,7 +148,6 @@
     <string name="action_map_recentre">Recentre map</string>
     <string name="action_map_type">Toggle satellite</string>
     <string name="action_map">Map</string>
-    <string name="action_regenerate">Regenerate</string>
     <string name="action_edit_radius">Edit radius</string>
     <string name="action_recalibrate_endpoints">Recalibrate endpoints</string>
 

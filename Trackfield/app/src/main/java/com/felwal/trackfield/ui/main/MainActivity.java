@@ -143,10 +143,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 .show(getSupportFragmentManager());
             return true;
         }
-        else if (itemId == R.id.action_regenerate_places) {
-            DbWriter.get(this).regeneratePlaces(this);
-            mainFragment.updateFragment();
-        }
 
         return super.onOptionsItemSelected(item);
     }
