@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/navigation_main_groupingpager"
-        android:icon="@animator/selector_nav_ic_groupingpager"
+        android:icon="@animator/selector_nav_ic_groupings"
         android:title="@string/fragment_title_groupingpager" />
 
     <item
