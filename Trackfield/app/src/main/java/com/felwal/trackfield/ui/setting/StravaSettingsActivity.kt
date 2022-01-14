@@ -124,15 +124,15 @@ class StravaSettingsActivity :
                     iconRes = R.drawable.ic_device
                 ),
                 StringItem(
-                    title = getString(R.string.tv_text_settings_title_method),
+                    title = getString(R.string.tv_text_settings_title_recordingmethod),
                     value = Prefs.getDefaultRecordingMethod(),
                     msg = getString(R.string.dialog_msg_recording_method),
-                    hint =  getString(R.string.tv_text_settings_hint_method),
+                    hint =  getString(R.string.tv_text_settings_hint_recordingmethod),
                     tag = DIALOG_RECORDING_METHOD,
                     iconRes = R.drawable.ic_gps
                 ),
                 MultiSelectionItem(
-                    title = getString(R.string.tv_text_settings_title_policy),
+                    title = getString(R.string.tv_text_settings_title_pullpolicy),
                     values = Prefs.getPullPolicy().texts,
                     selectedIndices = Prefs.getPullPolicy().checked!!.toIndicesOfTruths(),
                     tag = DIALOG_PULL_POLICY,

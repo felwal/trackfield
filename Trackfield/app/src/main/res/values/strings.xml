@@ -13,7 +13,6 @@
     <string name="activity_title_add">Add</string>
     <string name="activity_title_edit">Edit</string>
     <string name="activity_title_maps">Map</string>
-    <string name="activity_title_track">Track</string>
 
     <!-- fragments -->
 
@@ -86,31 +85,33 @@
     <string name="tv_text_settings_title_request_all">Request all</string>
     <string name="tv_text_settings_title_pull_all">Pull all</string>
     <string name="tv_text_settings_header_request_options">Request options</string>
-    <string name="tv_text_settings_title_device">Device</string>
-    <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc…</string>
-    <string name="tv_text_settings_title_method">Recording method</string>
-    <string name="tv_text_settings_hint_method">GPS, Galileo, Glonass etc…</string>
-    <string name="tv_text_settings_title_policy">Pull policy</string>
+    <string name="tv_text_settings_title_device">Default device</string>
+    <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc …</string>
+    <string name="tv_text_settings_title_recordingmethod">Default Recording method</string>
+    <string name="tv_text_settings_hint_recordingmethod">GPS, Galileo, Glonass etc …</string>
+    <string name="tv_text_settings_title_pullpolicy">Pull policy</string>
 
     <!-- recycler empty states -->
     <string name="tv_text_empty_exerciselist_title">Welcome to Trackfield!</string>
-    <string name="tv_text_empty_exerciselist_message">Add exercises manually with + or connect to Strava in Settings to get started</string>
+    <string name="tv_text_empty_exerciselist_message">Add exercises manually with + or connect to Strava in Settings
+        to get started.</string>
     <string name="tv_text_empty_search_title">No results</string>
-    <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue variation, device, method, note and type</string>
+    <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue
+        variation, device, method, note and type.</string>
     <string name="tv_text_empty_distancelist_title">No distances</string>
-    <string name="tv_text_empty_distancelist_msg">Press + to add a distance</string>
+    <string name="tv_text_empty_distancelist_msg">Press + to add a distance.</string>
     <string name="tv_text_empty_routelist_title">No routes</string>
-    <string name="tv_text_empty_routelist_msg">Your routes will show up here</string>
+    <string name="tv_text_empty_routelist_msg">Your routes will show up here.</string>
     <string name="tv_text_empty_placelist_title">No places</string>
-    <string name="tv_text_empty_placelist_msg">Press + to add a place</string>
+    <string name="tv_text_empty_placelist_msg">Press + to add a place.</string>
     <string name="tv_text_empty_intervallist_title">No intervals</string>
-    <string name="tv_text_empty_intervallist_msg">Your intervals will show up here</string>
+    <string name="tv_text_empty_intervallist_msg">Your intervals will show up here.</string>
     <string name="tv_text_empty_distancedetail_title">No exercises</string>
-    <string name="tv_text_empty_distancedetail_msg">Check filters, or set a goal</string>
+    <string name="tv_text_empty_distancedetail_msg">Check filters, or set a goal.</string>
     <string name="tv_text_empty_routedetail_title">No exercises</string>
-    <string name="tv_text_empty_routedetail_msg">Check filters</string>
+    <string name="tv_text_empty_routedetail_msg">Check filters.</string>
     <string name="tv_text_empty_placedetail_title">No exercises</string>
-    <string name="tv_text_empty_placedetail_msg">Check filters</string>
+    <string name="tv_text_empty_placedetail_msg">Check filters.</string>
 
     <string name="tv_text_fab_add">Add exercise</string>
     <string name="tv_text_fab_request_strava">Request new</string>
@@ -194,16 +195,19 @@
     <string name="dialog_title_continue">Continue?</string>
 
     <!-- messages -->
-    <string name="dialog_msg_delete_exercise">This action cannot be undone</string>
-    <string name="dialog_msg_delete_distance">Your exercises won\'t be affected</string>
-    <string name="dialog_msg_delete_place">Your exercises won\'t be affected</string>
+    <string name="dialog_msg_delete_exercise">This action cannot be undone.</string>
+    <string name="dialog_msg_rename_route">This will update the route field for all affected exercises.</string>
+    <string name="dialog_msg_rename_interval">This will update the interval field for all affected exercises.</string>
+    <string name="dialog_msg_delete_distance">Your exercises won\'t be affected.</string>
+    <string name="dialog_msg_delete_place">Your exercises won\'t be affected.</string>
     <string name="dialog_msg_merge_routes">A route with the selected name already exists. Goal and visibilty will be lost.</string>
     <string name="dialog_msg_place_name_exists">Please choose a different name.</string>
-    <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile phone</string>
-    <string name="dialog_msg_recording_method">Recording method used when requesting from Strava</string>
+    <string name="dialog_msg_device">Device used when Strava doesn\'t provide one, e.g. when recorded on a mobile
+        phone.</string>
+    <string name="dialog_msg_recording_method">Recording method used when requesting from Strava.</string>
     <string name="dialog_msg_export">Exercises, routes, places and distances will be exported to Trackfield folder. Anyexisting files will be overridden.</string>
     <string name="dialog_msg_import">Exercises, routes, places and distances will be imported from Trackfield folder. Any existing data will be overridden.</string>
-    <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified</string>
+    <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified.</string>
 
     <!-- toasts -->
 
@@ -216,8 +220,8 @@
     <string name="toast_err_location">Please grant permission to location</string>
 
     <!-- json -->
-    <string name="toast_json_exporting">Exporting json…</string>
-    <string name="toast_json_importing">Importing json…</string>
+    <string name="toast_json_exporting">Exporting json …</string>
+    <string name="toast_json_importing">Importing json …</string>
     <string name="toast_json_export_successful">Export successful</string>
     <string name="toast_json_import_successful">Import successful</string>
     <string name="toast_json_export_err">Failed to export</string>
@@ -240,7 +244,7 @@
     <string name="toast_strava_req_activities_none">Activities already requested</string>
     <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
     <string name="toast_strava_req_refresh_err">Please authorize to Strava and try again</string>
-    <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken…</string>
+    <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken …</string>
     <string name="toast_strava_pull_activity_successful">Pull successful</string>
     <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
     <string name="toast_strava_pull_activity_err">Failed to pull activity</string>

@@ -45,8 +45,9 @@ public class IntervalDetailActivity extends GroupDetailActivity implements TextD
 
         if (itemId == R.id.action_rename_interval) {
             if (interval != null) {
-                TextDialog.newInstance(getString(R.string.dialog_title_rename_interval), "", interval,
-                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_INTERVAL, null)
+                TextDialog.newInstance(getString(R.string.dialog_title_rename_interval),
+                    getString(R.string.dialog_msg_rename_interval), interval, "",
+                    R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_INTERVAL, null)
                     .show(getSupportFragmentManager());
             }
             return true;

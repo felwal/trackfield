@@ -93,8 +93,9 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         }
         else if (itemId == R.id.action_rename_route) {
             if (route != null) {
-                TextDialog.newInstance(getString(R.string.dialog_title_rename_route), "", route.getName(),
-                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE, null)
+                TextDialog.newInstance(getString(R.string.dialog_title_rename_route),
+                    getString(R.string.dialog_msg_rename_route), route.getName(), "",
+                    R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE, null)
                     .show(getSupportFragmentManager());
             }
             return true;
