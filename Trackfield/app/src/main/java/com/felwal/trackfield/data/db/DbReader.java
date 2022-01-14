@@ -1366,11 +1366,14 @@ public class DbReader extends DbHelper {
             int effectiveDistance = cursor.getInt(
                 cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
+            double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
+            double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
 
             // convert
             LocalDate date = DateUtils.ofEpochSecond(epoch).toLocalDate();
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
+            LatLng start = new LatLng(startLat, startLng);
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
 
             // TODO: subs
@@ -1390,7 +1393,7 @@ public class DbReader extends DbHelper {
             }*/
 
             Exerlite exerlite = new Exerlite(id, type, date, routeName, interval, effectiveDistance, time,
-                distanceDriven);
+                start, distanceDriven);
             exerlites.add(exerlite);
 
             // check pace ranking against previous
