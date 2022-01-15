@@ -227,14 +227,14 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     }
 
     private void addItemsWithLatHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
-        int[] zoneTopBorders = getEvenlySpacesArray(-90, 5, 180 / 5);
+        int[] zoneTopBorders = getEvenlySpacedArray(-90, 1, 180);
         int lastZone = -1;
 
         for (Exerlite e : fromExerliteList) {
             int zone = getZoneIndex(e.getStartLat(), zoneTopBorders);
 
             if (zone != lastZone) {
-                String title = zoneTopBorders[zone] + "°–" + zoneTopBorders[zone + 1] + "°";
+                String title = withSignUnit(zoneTopBorders[zone], "°N", "°S");
                 Header header = new Header(title, Header.Type.GROUP);
                 toItemList.add(header);
                 lastZone = zone;
@@ -245,14 +245,14 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     }
 
     private void addItemsWithLngHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
-        int[] zoneLeftBorders = getEvenlySpacesArray(0, 5, 360 / 5);
+        int[] zoneLeftBorders = getEvenlySpacedArray(0, 1, 360);
         int lastZone = -1;
 
         for (Exerlite e : fromExerliteList) {
             int zone = getZoneIndex(e.getStartLng(), zoneLeftBorders);
 
             if (zone != lastZone) {
-                String title = zoneLeftBorders[zone] + "°–" + zoneLeftBorders[zone + 1] + "°";
+                String title = withSignUnit(zoneLeftBorders[zone], "°E", "°W");
                 Header header = new Header(title, Header.Type.GROUP);
                 toItemList.add(header);
                 lastZone = zone;
@@ -284,7 +284,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         return borders.length - 1;
     }
 
-    private int[] getEvenlySpacesArray(int start, int step, int count) {
+    private int[] getEvenlySpacedArray(int start, int step, int count) {
         int[] arr = new int[count];
 
         for (int i = 0; i < count; i++) {
@@ -292,6 +292,11 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         }
 
         return arr;
+    }
+
+    private String withSignUnit(int value, String posUnit, String negUnit) {
+        if (value >= 0) return value + posUnit;
+        return -1 * value + negUnit;
     }
 
     protected void fadeInEmpty() {
