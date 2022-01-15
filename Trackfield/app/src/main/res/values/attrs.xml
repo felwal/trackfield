@@ -3,4 +3,22 @@
 
     <attr name="mapStyle" format="string|reference" />
 
+    <attr name="colorToolbar" format="color|reference" />
+    <attr name="colorOnToolbar" format="color|reference" />
+
+    <attr name="colorDistance" format="color|reference" />
+    <attr name="colorRoute" format="color|reference" />
+    <attr name="colorRoutevar" format="color|reference" />
+    <attr name="colorPlace" format="color|reference" />
+    <attr name="colorInterval" format="color|reference" />
+    <attr name="colorTime" format="color|reference" />
+    <attr name="colorPace" format="color|reference" />
+    <attr name="colorEnergy" format="color|reference" />
+    <attr name="colorPower" format="color|reference" />
+    <attr name="colorElevation" format="color|reference" />
+
+    <attr name="colorGold" format="color|reference" />
+    <attr name="colorSilver" format="color|reference" />
+    <attr name="colorBronze" format="color|reference" />
+
 </resources>

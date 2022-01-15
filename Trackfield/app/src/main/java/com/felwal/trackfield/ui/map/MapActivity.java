@@ -222,7 +222,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return ResUtilsKt.getColorByAttr(c, R.attr.colorPrimaryVariant);
+        return ResUtilsKt.getColorByAttr(c, R.attr.colorSecondary);
     }
 
     @ColorInt

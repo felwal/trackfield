@@ -72,7 +72,7 @@ public class PlaceMapActivity extends MapActivity {
 
         // marker
         MarkerOptions placeMarker = new MarkerOptions();
-        Drawable drawable = ResUtilsKt.getDrawableCompatWithTint(this, R.drawable.ic_place, R.attr.colorAccent);
+        Drawable drawable = ResUtilsKt.getDrawableCompatWithTint(this, R.drawable.ic_place, R.attr.colorSecondary);
         Bitmap bitmap = ResUtilsKt.toBitmap(drawable);
         BitmapDescriptor bitmapDesc = BitmapDescriptorFactory.fromBitmap(bitmap);
         placeMarker.icon(bitmapDesc);

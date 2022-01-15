@@ -43,7 +43,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
             emptyTitle.setText(R.string.tv_text_empty_exerciselist_title);
             emptyMessage.setText(R.string.tv_text_empty_exerciselist_message);
             emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
-                ResUtilsKt.getColorByAttr(a, R.attr.colorAccent)));
+                ResUtilsKt.getColorByAttr(a, R.attr.colorSecondary)));
         }
         else {
             emptyTitle.setText(R.string.tv_text_empty_search_title);

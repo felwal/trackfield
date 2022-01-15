@@ -1,5 +1,11 @@
 package com.felwal.trackfield.ui.common.model;
 
+import android.content.Context;
+
+import androidx.annotation.ColorInt;
+
+import com.felwal.android.util.ResUtilsKt;
+import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
@@ -116,6 +122,12 @@ public class Exerlite extends RecyclerItem {
 
     public boolean isTop(int top) {
         return this.top == top;
+    }
+
+    @ColorInt
+    public int getMedalColor(Context c) {
+        return ResUtilsKt.getColorByAttr(c,
+            isTop(1) ? R.attr.colorGold : isTop(2) ? R.attr.colorSilver : R.attr.colorBronze);
     }
 
     // print

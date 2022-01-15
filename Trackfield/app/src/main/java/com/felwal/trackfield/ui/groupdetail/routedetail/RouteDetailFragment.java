@@ -77,8 +77,7 @@ public class RouteDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
-            a.getColor(R.color.colorAccRed)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.colorRoute));
     }
 
     @Override

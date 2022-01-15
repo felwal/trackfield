@@ -16,22 +16,22 @@
     <color name="colorGrey96">#F5F5F5</color>
 
     <!-- accent -->
-    <color name="colorAccBlue">#2196F3</color>
-    <color name="colorAccTurqoise">#009688</color>
-    <color name="colorAccGreen">@color/colorGreenLight</color>
-    <color name="colorAccYellow">#FFEB3B</color>
-    <color name="colorAccOrange">#FF9800</color>
-    <color name="colorAccRed">#F44336</color>
-    <color name="colorAccViolet">#9F69FF</color>
+    <color name="colorQuantityBlue">#2196F3</color>
+    <color name="colorQuantityTurqoise">#009688</color>
+    <color name="colorQuantityGreen">@color/colorGreenLight</color>
+    <color name="colorQuantityYellow">#FFEB3B</color>
+    <color name="colorQuantityOrange">#FF9800</color>
+    <color name="colorQuantityRed">#F44336</color>
+    <color name="colorQuantityPurple">#9F69FF</color>
 
     <!-- dark accent -->
-    <color name="colorAccBlueDark">#00323D</color>
-    <color name="colorAccTurqoiseDark">#003D39</color>
-    <color name="colorAccGreenDark">#003D2D</color>
-    <color name="colorAccYellowDark">#383D00</color>
-    <color name="colorAccOrangeDark">#3D2C00</color>
-    <color name="colorAccRedDark">#481B1D</color>
-    <color name="colorAccVioletDark">#FFFFFF</color>
+    <color name="colorQuantityBlueDark">#00323D</color>
+    <color name="colorQuantityTurqoiseDark">#003D39</color>
+    <color name="colorQuantityGreenDark">#003D2D</color>
+    <color name="colorQuantityYellowDark">#383D00</color>
+    <color name="colorQuantityOrangeDark">#3D2C00</color>
+    <color name="colorQuantityRedDark">#481B1D</color>
+    <color name="colorQuantityPurpleDark">#000</color>
 
     <!-- medal -->
     <color name="colorGold">#EAD688</color>

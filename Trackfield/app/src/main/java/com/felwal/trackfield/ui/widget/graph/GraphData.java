@@ -54,7 +54,7 @@ public class GraphData {
             paint.setStyle(Paint.Style.FILL);
         }
         // set default color
-        setPaint(R.attr.colorAccent, c);
+        setPaint(R.attr.colorSecondary, c);
 
         calcMinAndMax();
     }

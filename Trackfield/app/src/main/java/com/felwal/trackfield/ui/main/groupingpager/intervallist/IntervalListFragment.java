@@ -55,8 +55,7 @@ public class IntervalListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_intervallist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_intervallist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_interval),
-            a.getColor(R.color.colorAccViolet)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_interval, R.attr.colorInterval));
     }
 
     @Override

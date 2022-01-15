@@ -68,8 +68,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
-            a.getColor(R.color.colorAccOrange)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.colorPlace));
     }
 
     @Override

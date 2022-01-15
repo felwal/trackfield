@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
@@ -58,9 +59,7 @@ class PlaceDetailExerciseAdapterDelegate extends
         vh.captionTv.setText(item.getRoute());
         vh.originMarker.setVisibility(View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
-        vh.recordMarker.getBackground().setColorFilter(c.getColor(
-            item.isTop(1) ? R.color.colorGold : item.isTop(2) ? R.color.colorSilver : R.color.colorBronze),
-            PorterDuff.Mode.MULTIPLY);
+        vh.recordMarker.getBackground().setColorFilter(item.getMedalColor(c), PorterDuff.Mode.MULTIPLY);
     }
 
     // vh

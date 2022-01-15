@@ -78,8 +78,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
-            a.getColor(R.color.colorAccBlue)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.colorDistance));
     }
 
     @Override

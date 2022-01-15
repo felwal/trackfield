@@ -69,8 +69,7 @@ public class PlaceListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_place),
-            a.getColor(R.color.colorAccOrange)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_place, R.attr.colorPlace));
     }
 
     @Override

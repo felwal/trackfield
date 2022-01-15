@@ -69,8 +69,7 @@ public class RouteListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_route),
-            a.getColor(R.color.colorAccRed)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_route, R.attr.colorRoute));
     }
 
     @Override

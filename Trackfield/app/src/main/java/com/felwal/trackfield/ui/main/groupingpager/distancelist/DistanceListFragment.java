@@ -56,8 +56,8 @@ public class DistanceListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_distance),
-            a.getColor(R.color.colorAccBlue)));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_distance,
+            R.attr.colorDistance));
     }
 
     @Override
