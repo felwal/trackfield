@@ -28,11 +28,11 @@ import java.util.ArrayList;
 public class RouteListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Recent", SorterItem.Mode.DATE, false),
-        new SortMode<>("Name", SorterItem.Mode.NAME, true),
-        new SortMode<>("Amount", SorterItem.Mode.AMOUNT, false),
-        new SortMode<>("Avg distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode<>("Best pace", SorterItem.Mode.PACE, true)
+        SorterItem.sortByDate("Recent"),
+        SorterItem.sortByName(),
+        SorterItem.sortByAmount(),
+        SorterItem.sortByDistance("Avg distance"),
+        SorterItem.sortByPace("Best pace")
     );
 
     // extends Fragment

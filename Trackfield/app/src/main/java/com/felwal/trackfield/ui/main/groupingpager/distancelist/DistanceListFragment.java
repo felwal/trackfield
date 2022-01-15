@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class DistanceListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, true)
-        //new SortMode<>("Amount", SorterItem.Mode.DISTANCE, false)
+        SorterItem.sortByDistance()
+        //SorterItem.sortByAmount() TODO
     );
 
     // extends Fragment

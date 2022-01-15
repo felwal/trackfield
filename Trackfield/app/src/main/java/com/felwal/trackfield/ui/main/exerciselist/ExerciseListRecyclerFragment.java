@@ -27,10 +27,10 @@ import java.util.ArrayList;
 public class ExerciseListRecyclerFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Date", SorterItem.Mode.DATE, false),
-        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode<>("Time", SorterItem.Mode.TIME, false),
-        new SortMode<>("Pace", SorterItem.Mode.PACE, true)
+        SorterItem.sortByDate(),
+        SorterItem.sortByDistance(),
+        SorterItem.sortByTime(),
+        SorterItem.sortByPace()
     );
 
     private String search = "";

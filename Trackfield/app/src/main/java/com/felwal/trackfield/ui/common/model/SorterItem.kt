@@ -24,6 +24,8 @@ class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
     val mode get() = sorter.mode
     val title get() = sorter.layoutString
 
+    //
+
     fun copy() = SorterItem(sorter.copy())
 
     fun select(index: Int) = sorter.select(index)
@@ -40,6 +42,34 @@ class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
     override fun sameContentAs(item: RecyclerItem?): Boolean {
         if (item !is SorterItem) return false
         return selectedIndex == item.selectedIndex && orderReversed == item.orderReversed
+    }
+
+    //
+
+    companion object {
+        @JvmStatic @JvmOverloads
+        fun sortByDate(label: String = "Date") = SortMode(label, Mode.DATE, false)
+
+        @JvmStatic @JvmOverloads
+        fun sortByDistance(label: String = "Distance") = SortMode(label, Mode.DISTANCE, false)
+
+        @JvmStatic @JvmOverloads
+        fun sortByTime(label: String = "Time") = SortMode(label, Mode.TIME, true)
+
+        @JvmStatic @JvmOverloads
+        fun sortByPace(label: String = "Pace") = SortMode(label, Mode.PACE, true)
+
+        @JvmStatic @JvmOverloads
+        fun sortByName(label: String = "Name") = SortMode(label, Mode.NAME, true)
+
+        @JvmStatic @JvmOverloads
+        fun sortByAmount(label: String = "Amount") = SortMode(label, Mode.AMOUNT, false)
+
+        @JvmStatic @JvmOverloads
+        fun sortByLat(label: String = "Latitude") = SortMode(label, Mode.START_LAT, false)
+
+        @JvmStatic @JvmOverloads
+        fun sortByLng(label: String = "Longitude") = SortMode(label, Mode.START_LNG, true)
     }
 
 }

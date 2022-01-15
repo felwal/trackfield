@@ -28,11 +28,11 @@ import java.util.ArrayList;
 public class PlaceListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        //new SortMode<>("Recent", SorterItem.Mode.DATE, false),
-        new SortMode<>("Name", SorterItem.Mode.NAME, true),
-        //new SortMode<>("Amount", SorterItem.Mode.AMOUNT, false),
-        new SortMode<>("Latitude", SorterItem.Mode.START_LAT, false),
-        new SortMode<>("Longitude", SorterItem.Mode.START_LNG, true)
+        //SorterItem.sortByDate("Recent"), TODO
+        SorterItem.sortByName(),
+        //SorterItem.sortByAmount(), TODO
+        SorterItem.sortByLat(),
+        SorterItem.sortByLng()
     );
 
     // extends Fragment

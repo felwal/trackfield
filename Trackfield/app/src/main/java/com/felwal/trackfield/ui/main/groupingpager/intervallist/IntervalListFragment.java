@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class IntervalListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Recent", SorterItem.Mode.DATE, false),
-        new SortMode<>("Amount", SorterItem.Mode.AMOUNT, false)
+        SorterItem.sortByDate("Recent")
+        //SorterItem.sortByAmount() TODO
     );
 
     // extends Fragment

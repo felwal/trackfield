@@ -25,11 +25,11 @@ public class PlaceDetailFragment extends RecyclerFragment {
     private final static String BUNDLE_PLACE_ID = "placeId";
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Location", SorterItem.Mode.START_LAT, false),
-        new SortMode<>("Date", SorterItem.Mode.DATE, false),
-        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, true),
-        new SortMode<>("Time", SorterItem.Mode.TIME, true),
-        new SortMode<>("Pace", SorterItem.Mode.PACE, true)
+        SorterItem.sortByDate(),
+        SorterItem.sortByDistance(),
+        SorterItem.sortByTime(),
+        SorterItem.sortByPace(),
+        SorterItem.sortByLat()
     );
 
     private Place place;

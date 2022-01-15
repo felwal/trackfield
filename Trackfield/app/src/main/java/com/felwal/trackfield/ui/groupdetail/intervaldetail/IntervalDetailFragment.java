@@ -22,10 +22,10 @@ public class IntervalDetailFragment extends RecyclerFragment {
     private final static String BUNDLE_ORIGINID = "originId";
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode<>("Date", SorterItem.Mode.DATE, false),
-        new SortMode<>("Distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode<>("Time", SorterItem.Mode.TIME, true),
-        new SortMode<>("Pace", SorterItem.Mode.PACE, true)
+        SorterItem.sortByDate(),
+        SorterItem.sortByDistance(),
+        SorterItem.sortByTime(),
+        SorterItem.sortByPace()
     );
 
     private String interval;

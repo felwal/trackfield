@@ -111,7 +111,7 @@ class StravaSettingsActivity :
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_PULL_ALL,
                     iconRes = R.drawable.fw_ic_arrow_down_24
-                )//.takeIf { Prefs.isDeveloper() } TODO
+                ).takeIf { Prefs.isDeveloper() }
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_request_options),
