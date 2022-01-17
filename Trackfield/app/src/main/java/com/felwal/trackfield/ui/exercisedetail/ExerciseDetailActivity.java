@@ -29,6 +29,7 @@ import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.routedetail.RouteDetailActivity;
+import com.felwal.trackfield.ui.map.RouteMapActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
