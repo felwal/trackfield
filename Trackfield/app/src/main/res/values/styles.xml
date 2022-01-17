@@ -4,9 +4,9 @@
 
     <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
         <!-- built-in action buttons, e.g. home/up, overflow -->
-        <item name="colorControlNormal">?colorOnToolbar</item>
+        <item name="colorControlNormal">?colorControlToolbar</item>
         <!-- custom action buttons -->
-        <item name="iconTint">?colorOnToolbar</item>
+        <item name="iconTint">?colorControlToolbar</item>
 
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
     </style>

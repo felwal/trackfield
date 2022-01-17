@@ -5,6 +5,7 @@
 
     <attr name="colorToolbar" format="color|reference" />
     <attr name="colorOnToolbar" format="color|reference" />
+    <attr name="colorControlToolbar" format="color|reference" />
 
     <attr name="colorDistance" format="color|reference" />
     <attr name="colorRoute" format="color|reference" />

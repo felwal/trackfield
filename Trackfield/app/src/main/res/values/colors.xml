@@ -11,32 +11,36 @@
     <color name="colorGreenLighter">#D6EFDC</color>
 
     <!-- greyscale -->
-    <color name="colorGrey39">#5F6368</color>
-    <color name="colorGrey64">#9DA3A9</color>
+    <color name="colorGrey0a62">#9E000000</color>
+    <color name="colorGrey100a57">#91FFFFFF</color>
     <color name="colorGrey96">#F5F5F5</color>
 
     <!-- accent -->
-    <color name="colorQuantityBlue">#2196F3</color>
-    <color name="colorQuantityTurqoise">#009688</color>
+    <color name="colorQuantityBlue">#71C0FF</color>
+    <color name="colorQuantityTurqoise">#46CCBF</color>
     <color name="colorQuantityGreen">@color/colorGreenLight</color>
-    <color name="colorQuantityYellow">#FFEB3B</color>
-    <color name="colorQuantityOrange">#FF9800</color>
-    <color name="colorQuantityRed">#F44336</color>
-    <color name="colorQuantityPurple">#9F69FF</color>
+    <color name="colorQuantityYellow">#FFEE57</color>
+    <color name="colorQuantityOrange">#FDA92D</color>
+    <color name="colorQuantityRed">#FC5043</color>
+    <color name="colorQuantityPurple">#AA7AFF</color>
 
     <!-- dark accent -->
-    <color name="colorQuantityBlueDark">#00323D</color>
-    <color name="colorQuantityTurqoiseDark">#003D39</color>
-    <color name="colorQuantityGreenDark">#003D2D</color>
-    <color name="colorQuantityYellowDark">#383D00</color>
-    <color name="colorQuantityOrangeDark">#3D2C00</color>
-    <color name="colorQuantityRedDark">#481B1D</color>
-    <color name="colorQuantityPurpleDark">#000</color>
+    <color name="colorQuantityBlueDark">#008EFF</color>
+    <color name="colorQuantityTurqoiseDark">#00B0A0</color>
+    <color name="colorQuantityGreenDark">@color/colorGreen</color>
+    <color name="colorQuantityYellowDark">#DBC500</color>
+    <color name="colorQuantityOrangeDark">#F19000</color>
+    <color name="colorQuantityRedDark">#DB0F00</color>
+    <color name="colorQuantityPurpleDark">#864BEF</color>
 
     <!-- medal -->
     <color name="colorGold">#EAD688</color>
     <color name="colorSilver">#DADFDC</color>
     <color name="colorBronze">#DC9974</color>
+
+    <color name="colorGoldDark">#F3CA2D</color>
+    <color name="colorSilverDark">#A1A1A1</color>
+    <color name="colorBronzeDark">#E3824E</color>
 
     <!-- translucent -->
     <color name="colorTrans">#00000000</color>
@@ -46,7 +50,7 @@
 
     <!-- application -->
 
-    <color name="text_secondary_lt">@color/colorGrey39</color>
-    <color name="text_secondary_dk">@color/colorGrey64</color>
+    <color name="text_secondary_lt">@color/colorGrey0a62</color>
+    <color name="text_secondary_dk">@color/colorGrey100a57</color>
 
 </resources>

@@ -4,6 +4,6 @@
 
     <item
         android:alpha="0.08"
-        android:color="?colorOnPrimary" />
+        android:color="?colorOnToolbar" />
 
 </selector>

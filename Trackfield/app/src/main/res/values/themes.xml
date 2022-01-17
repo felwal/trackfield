@@ -60,9 +60,9 @@
         <item name="colorElevation">@color/colorQuantityRedDark</item>
 
         <!-- medal colors -->
-        <item name="colorGold">@color/colorGold</item>
-        <item name="colorSilver">@color/colorSilver</item>
-        <item name="colorBronze">@color/colorBronze</item>
+        <item name="colorGold">@color/colorGoldDark</item>
+        <item name="colorSilver">@color/colorSilverDark</item>
+        <item name="colorBronze">@color/colorBronzeDark</item>
 
         <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Light</item>
@@ -76,6 +76,7 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="colorToolbar">?colorPrimary</item>
         <item name="colorOnToolbar">?colorOnPrimary</item>
+        <item name="colorControlToolbar">?colorOnPrimary</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
@@ -83,6 +84,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?android:colorBackground</item>
         <item name="colorToolbar">?android:colorBackground</item>
         <item name="colorOnToolbar">?android:textColorPrimary</item>
+        <item name="colorControlToolbar">?android:textColorSecondary</item>
     </style>
 
     <!-- other -->

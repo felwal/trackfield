@@ -50,6 +50,7 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="colorToolbar">?colorPrimary</item>
         <item name="colorOnToolbar">?colorOnPrimary</item>
+        <item name="colorControlToolbar">?colorOnPrimary</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
@@ -57,6 +58,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?android:colorBackground</item>
         <item name="colorToolbar">?colorSurface</item>
         <item name="colorOnToolbar">?android:textColorPrimary</item>
+        <item name="colorControlToolbar">?android:textColorSecondary</item>
+
+        <!-- primary -->
+        <item name="colorPrimary">?colorSecondary</item>
+        <item name="colorOnPrimary">?colorOnSecondary</item>
+        <item name="colorPrimaryDark">@color/colorGreen</item>
     </style>
 
 </resources>
