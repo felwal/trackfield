@@ -87,9 +87,9 @@
     <string name="tv_text_settings_header_request_options">Request options</string>
     <string name="tv_text_settings_title_device">Default device</string>
     <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc …</string>
-    <string name="tv_text_settings_title_recordingmethod">Default Recording method</string>
+    <string name="tv_text_settings_title_recordingmethod">Default recording method</string>
     <string name="tv_text_settings_hint_recordingmethod">GPS, Galileo, Glonass etc …</string>
-    <string name="tv_text_settings_title_pullpolicy">Pull policy</string>
+    <string name="tv_text_settings_title_request_options">Also request …</string>
 
     <!-- recycler empty states -->
     <string name="tv_text_empty_exerciselist_title">Welcome to Trackfield!</string>
@@ -194,8 +194,8 @@
     <string name="dialog_title_recording_method">Default recording method</string>
     <string name="dialog_title_export">Export json?</string>
     <string name="dialog_title_import">Import json?</string>
-    <string name="dialog_title_pull_policy">Pull overrites</string>
     <string name="dialog_title_continue">Continue?</string>
+    <string name="dialog_title_pull">Pull from Strava</string>
 
     <!-- messages -->
     <string name="dialog_msg_delete_exercise">This action cannot be undone.</string>
@@ -248,6 +248,7 @@
     <string name="toast_strava_req_refresh_successful">RefreshToken successfully requested</string>
     <string name="toast_strava_req_refresh_err">Please authorize to Strava and try again</string>
     <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken …</string>
+    <string name="toast_strava_pulling_activity">Pulling activity …</string>
     <string name="toast_strava_pull_activity_successful">Pull successful</string>
     <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
     <string name="toast_strava_pull_activity_err">Failed to pull activity</string>

@@ -2,6 +2,8 @@ package com.felwal.trackfield.utils.model;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class SwitchChain {
 
     private final SwitchItem[] items;
@@ -36,6 +38,17 @@ public class SwitchChain {
             titles[i] = items[i].getText();
         }
         return titles;
+    }
+
+    public String[] getCheckedTexts() {
+        ArrayList<String> titles = new ArrayList<>();
+        for (SwitchItem item : items) {
+            if (item.isChecked()) titles.add(item.getText());
+        }
+
+        String[] titlesArr = new String[titles.size()];
+        titles.toArray(titlesArr);
+        return titlesArr;
     }
 
     public boolean[] getChecked() {

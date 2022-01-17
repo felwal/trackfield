@@ -19,12 +19,15 @@ import androidx.appcompat.widget.Toolbar;
 import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
+import com.felwal.android.widget.dialog.CheckDialog;
+import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
+import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
@@ -40,7 +43,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener, OnMapReadyCallback {
+public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener,
+    MultiChoiceDialog.DialogListener, OnMapReadyCallback {
 
     public static final int FROM_NONE = 0;
     public static final int FROM_DISTANCE = 1;
@@ -53,6 +57,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
     // dialog tags
     private static final String DIALOG_DELETE_EXERCISE = "deleteExerciseDialog";
+    private static final String DIALOG_PULL = "pullDialog";
 
     private static final int MAP_MAX_ZOOM = 17;
     private static final int MAP_PADDING = 50;
@@ -160,17 +165,10 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
         else if (itemId == R.id.action_pull_exercise) {
             if (exercise.hasStravaId()) {
-                StravaApi strava = new StravaApi(this);
-                LayoutUtils.toast("Pulling activity...", this);
-                strava.pullActivity(exercise.getStravaId(), success -> {
-                    if (success) {
-                        LayoutUtils.toast(R.string.toast_strava_pull_activity_successful, this);
-                        recreate();
-                    }
-                    else {
-                        LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this);
-                    }
-                });
+                CheckDialog.newInstance(getString(R.string.dialog_title_pull),
+                    Prefs.getPullOptions().getTexts(), Prefs.getPullOptions().getChecked(), null,
+                    R.string.dialog_btn_pull, R.string.fw_dialog_btn_cancel, DIALOG_PULL, null
+                ).show(getSupportFragmentManager());
             }
             else {
                 LayoutUtils.toast(R.string.toast_strava_pull_activity_gone, this);
@@ -416,6 +414,27 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
 
         LayoutUtils.crossfadeInLong(mapFragment.getView(), 1);
+    }
+
+    @Override
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] itemStates, @NonNull String tag,
+        @Nullable String passValue) {
+        if (tag.equals(DIALOG_PULL)) {
+            Prefs.setPullOptions(itemStates);
+
+            StravaApi strava = new StravaApi(this);
+            LayoutUtils.toast(getString(R.string.toast_strava_pulling_activity), this);
+
+            strava.pullActivity(exercise.getStravaId(), Prefs.getPullOptions(), success -> {
+                if (success) {
+                    LayoutUtils.toast(R.string.toast_strava_pull_activity_successful, this);
+                    recreate();
+                }
+                else {
+                    LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this);
+                }
+            });
+        }
     }
 
 }

@@ -117,14 +117,14 @@ public class StravaApi {
 
     // pull activities
 
-    public void pullActivity(final long stravaId, ResponseListener listener) {
+    public void pullActivity(final long stravaId, SwitchChain options, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
                     Log.i(LOG_TAG, "response: " + response.toString());
 
-                    boolean success = handlePull(convertToExercise(response));
+                    boolean success = handlePull(convertToExercise(response), options);
 
                     listener.onStravaResponse(success);
                 }, e -> listener.onStravaResponseError(e, a));
@@ -150,7 +150,7 @@ public class StravaApi {
                     response -> {
                         Log.i(LOG_TAG, "response: " + response.toString());
 
-                        boolean success = handlePull(convertToExercise(response));
+                        boolean success = handlePull(convertToExercise(response), Prefs.getPullOptions());
 
                         listener.onStravaResponse(success);
                     }, e -> listener.onStravaResponseError(e, a));
@@ -364,7 +364,7 @@ public class StravaApi {
         }
     }
 
-    private boolean handlePull(Exercise strava) {
+    private boolean handlePull(Exercise strava, SwitchChain options) {
         if (strava == null) return false;
         boolean success;
 
@@ -379,36 +379,34 @@ public class StravaApi {
 
         // merge
         else {
-            SwitchChain policy = Prefs.getPullPolicy();
-
-            // set depending on pull policy
-            if (policy.isChecked(JSON_EXTERNAL_ID)) {
+            // set depending on pull/request options
+            if (options.isChecked(JSON_EXTERNAL_ID)) {
                 existing.setGarminId(strava.getGarminId());
             }
-            if (policy.isChecked(JSON_NAME)) {
+            if (options.isChecked(JSON_NAME)) {
                 existing.setRoute(strava.getRoute());
                 existing.setRouteId(strava.getRouteId());
             }
-            if (policy.isChecked(JSON_TYPE)) {
+            if (options.isChecked(JSON_TYPE)) {
                 existing.setType(strava.getType());
             }
-            if (policy.isChecked(JSON_DATE)) {
+            if (options.isChecked(JSON_DATE)) {
                 existing.setDateTime(strava.getDateTime());
             }
-            if (policy.isChecked(JSON_DEVICE)) {
+            if (options.isChecked(JSON_DEVICE)) {
                 existing.setDevice(strava.getDevice());
             }
-            if (policy.isChecked(JSON_DISTANCE)) {
+            if (options.isChecked(JSON_DISTANCE)) {
                 existing.setDistance(strava.getDistance());
             }
-            if (policy.isChecked(JSON_TIME)) {
+            if (options.isChecked(JSON_TIME)) {
                 existing.setTime(strava.getTime());
             }
-            if (policy.isChecked(JSON_DESCRIPTION) && !strava.getNote().equals("")) {
+            if (options.isChecked(JSON_DESCRIPTION) && !strava.getNote().equals("")) {
                 // dont override note with nothing
                 existing.setNote(strava.getNote());
             }
-            if (policy.isChecked(JSON_MAP)) {
+            if (options.isChecked(JSON_MAP)) {
                 existing.setTrail(strava.getTrail());
             }
 
@@ -443,7 +441,7 @@ public class StravaApi {
                 m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(), m.getSubs(),
                 strava.getTrail(), m.isTrailHidden());
 
-            success &= DbWriter.get(a).updateExercise(merged, a);
+            success = DbWriter.get(a).updateExercise(merged, a);
         }
 
         // import
@@ -464,8 +462,9 @@ public class StravaApi {
 
         // also pull to get data not available to request
         // but only if the user wants data not available to request
-        if (Prefs.getPullPolicy().isChecked(JSON_DEVICE) || Prefs.getPullPolicy().isChecked(JSON_DESCRIPTION)) {
-            pullActivity(strava.getStravaId(), responseSuccess -> {});
+        SwitchChain options = Prefs.getRequestOptions();
+        if (options.isChecked(JSON_DEVICE) || options.isChecked(JSON_DESCRIPTION)) {
+            pullActivity(strava.getStravaId(), options, responseSuccess -> {});
         }
 
         return success;

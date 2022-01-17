@@ -57,7 +57,8 @@ public class Prefs {
     private static final String KEY_STRAVA_ACCESS_EXP_DATE = "stravaAccessExpiration";
     private static final String KEY_STRAVA_DEVICE = "stravaDevice";
     private static final String KEY_STRAVA_METHOD = "stravaRecordingMethod";
-    private static final String KEY_STRAVA_PULL_POLICY = "stravaPullPolicy";
+    private static final String KEY_STRAVA_PULL_OPTIONS = "stravaPullOptions";
+    private static final String KEY_STRAVA_REQUEST_OPTIONS = "stravaRequestOptions";
 
     // file
     private static SharedPreferences sp;
@@ -104,7 +105,7 @@ public class Prefs {
     private static LocalDateTime accessTokenExpiration = LocalDateTime.MIN;
     private static String defaultRecordingMethod = "GPS";
     private static String defaultDevice = "";
-    private static final SwitchChain pullPolicy = new SwitchChain(
+    private static final SwitchChain pullOptions = new SwitchChain(
         new SwitchItem(StravaApi.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
         new SwitchItem(StravaApi.JSON_NAME, "Name (as route)", true),
         new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
@@ -113,6 +114,10 @@ public class Prefs {
         new SwitchItem(StravaApi.JSON_TYPE, "Type", true),
         new SwitchItem(StravaApi.JSON_DATE, "Datetime", true),
         new SwitchItem(StravaApi.JSON_MAP, "Map", true),
+        new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
+    );
+    private static final SwitchChain requestOptions = new SwitchChain(
+        new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
         new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
     );
 
@@ -171,7 +176,8 @@ public class Prefs {
         savePref(accessTokenExpiration, KEY_STRAVA_ACCESS_EXP_DATE);
         savePref(defaultDevice, KEY_STRAVA_DEVICE);
         savePref(defaultRecordingMethod, KEY_STRAVA_METHOD);
-        savePref(pullPolicy.getChecked(), KEY_STRAVA_PULL_POLICY);
+        savePref(pullOptions.getChecked(), KEY_STRAVA_PULL_OPTIONS);
+        savePref(requestOptions.getChecked(), KEY_STRAVA_REQUEST_OPTIONS);
     }
 
     private static void load(Context c) {
@@ -228,7 +234,8 @@ public class Prefs {
         accessTokenExpiration = loadPref(new TypeToken<LocalDateTime>(){}, KEY_STRAVA_ACCESS_EXP_DATE);
         defaultDevice = loadPref(str, KEY_STRAVA_DEVICE);
         defaultRecordingMethod = loadPref(str, KEY_STRAVA_METHOD);
-        pullPolicy.setChecked(loadPref(boolArr, KEY_STRAVA_PULL_POLICY));
+        pullOptions.setChecked(loadPref(boolArr, KEY_STRAVA_PULL_OPTIONS));
+        requestOptions.setChecked(loadPref(boolArr, KEY_STRAVA_REQUEST_OPTIONS));
     }
 
     // tools
@@ -283,7 +290,8 @@ public class Prefs {
             case KEY_STRAVA_ACCESS_EXP_DATE: return accessTokenExpiration;
             case KEY_STRAVA_DEVICE: return defaultDevice;
             case KEY_STRAVA_METHOD: return defaultRecordingMethod;
-            case KEY_STRAVA_PULL_POLICY: return pullPolicy.getChecked();
+            case KEY_STRAVA_PULL_OPTIONS: return pullOptions.getChecked();
+            case KEY_STRAVA_REQUEST_OPTIONS: return requestOptions.getChecked();
             default: return new Object();
         }
     }
@@ -411,9 +419,14 @@ public class Prefs {
         savePref(defaultRecordingMethod, KEY_STRAVA_METHOD);
     }
 
-    public static void setPullSettings(boolean[] checked) {
-        Prefs.pullPolicy.setChecked(checked);
-        savePref(pullPolicy.getChecked(), KEY_STRAVA_PULL_POLICY);
+    public static void setPullOptions(boolean[] checked) {
+        Prefs.pullOptions.setChecked(checked);
+        savePref(pullOptions.getChecked(), KEY_STRAVA_PULL_OPTIONS);
+    }
+
+    public static void setRequestOptions(boolean[] checked) {
+        Prefs.requestOptions.setChecked(checked);
+        savePref(requestOptions.getChecked(), KEY_STRAVA_REQUEST_OPTIONS);
     }
 
     public static void setColorGreen() {
@@ -526,8 +539,12 @@ public class Prefs {
         return defaultRecordingMethod;
     }
 
-    public static SwitchChain getPullPolicy() {
-        return pullPolicy;
+    public static SwitchChain getPullOptions() {
+        return pullOptions;
+    }
+
+    public static SwitchChain getRequestOptions() {
+        return requestOptions;
     }
 
     // get driven

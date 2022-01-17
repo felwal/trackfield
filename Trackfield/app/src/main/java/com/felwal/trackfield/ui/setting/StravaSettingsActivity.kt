@@ -21,7 +21,7 @@ private const val DIALOG_DEVICE = "deviceDialog"
 private const val DIALOG_RECORDING_METHOD = "methodDialog"
 private const val DIALOG_REQUEST_ALL = "requestAllDialog"
 private const val DIALOG_PULL_ALL = "pullAllDialog"
-private const val DIALOG_PULL_POLICY = "pullPolicyDialog"
+private const val DIALOG_REQUEST_OPTIONS = "requestOptionsDialog"
 
 class StravaSettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
@@ -100,14 +100,12 @@ class StravaSettingsActivity :
                 ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_request_all),
-                    msg = "Request all exercises?",
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_REQUEST_ALL,
                     iconRes = R.drawable.ic_send
                 ),
                 ConfirmationItem(
                     title = getString(R.string.tv_text_settings_title_pull_all),
-                    msg = "Pull all exercises?",
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_PULL_ALL,
                     iconRes = R.drawable.fw_ic_arrow_down_24
@@ -132,10 +130,11 @@ class StravaSettingsActivity :
                     iconRes = R.drawable.ic_gps
                 ),
                 MultiSelectionItem(
-                    title = getString(R.string.tv_text_settings_title_pullpolicy),
-                    values = Prefs.getPullPolicy().texts,
-                    selectedIndices = Prefs.getPullPolicy().checked!!.toIndicesOfTruths(),
-                    tag = DIALOG_PULL_POLICY,
+                    title = getString(R.string.tv_text_settings_title_request_options),
+                    desc = Prefs.getRequestOptions().checkedTexts.contentToString().replace("[", "").replace("]", ""),
+                    values = Prefs.getRequestOptions().texts,
+                    selectedIndices = Prefs.getRequestOptions().checked!!.toIndicesOfTruths(),
+                    tag = DIALOG_REQUEST_OPTIONS,
                     iconRes = R.drawable.ic_tune
                 )
             ),
@@ -175,8 +174,8 @@ class StravaSettingsActivity :
 
     override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String, passValue: String?) {
         when (tag) {
-            DIALOG_PULL_POLICY -> {
-                Prefs.setPullSettings(itemStates)
+            DIALOG_REQUEST_OPTIONS -> {
+                Prefs.setRequestOptions(itemStates)
                 reflateViews()
             }
         }
