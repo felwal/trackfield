@@ -9,11 +9,12 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_map"
-        android:background="@color/colorTrans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Widget.Trackfield.Toolbar" />
+        android:theme="@style/Widget.Trackfield.Toolbar.Map" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fr_map"

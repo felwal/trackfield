@@ -11,8 +11,6 @@
     <color name="colorGreenLighter">#D6EFDC</color>
 
     <!-- greyscale -->
-    <color name="colorGrey0a62">#9E000000</color>
-    <color name="colorGrey100a57">#91FFFFFF</color>
     <color name="colorGrey96">#F5F5F5</color>
 
     <!-- accent -->
@@ -47,10 +45,5 @@
     <color name="colorHalfTrans">#66000000</color>
     <color name="colorGreenLightTrans">#605BB974</color>
     <color name="colorGreenDarkTrans">#600C7E46</color>
-
-    <!-- application -->
-
-    <color name="text_secondary_lt">@color/colorGrey0a62</color>
-    <color name="text_secondary_dk">@color/colorGrey100a57</color>
 
 </resources>
