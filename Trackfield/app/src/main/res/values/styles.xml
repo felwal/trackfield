@@ -126,7 +126,7 @@
     <style name="ThemeOverlay.Trackfield.DatePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Dark</item>
         <item name="android:colorSecondary">@color/green_light</item>
-        <item name="android:colorBackground">@color/fw_grey19</item>
+        <item name="android:colorBackground">@color/fw_grey_19</item>
         <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
     </style>
 
@@ -149,7 +149,7 @@
     <style name="ThemeOverlay.Trackfield.TimePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Dark</item>
         <item name="android:colorSecondary">@color/green_light</item>
-        <item name="android:colorBackground">@color/fw_grey19</item>
+        <item name="android:colorBackground">@color/fw_grey_19</item>
         <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>-
     </style>
 
@@ -161,7 +161,7 @@
 
     <style name="Widget.Trackfield.TimePicker.Dark" parent="@android:style/Widget.Material.TimePicker">
         <item name="android:headerBackground">@color/green</item>
-        <item name="android:numbersBackgroundColor">@color/fw_grey25</item>
+        <item name="android:numbersBackgroundColor">@color/fw_grey_25</item>
     </style>
 
     <style name="Widget.Trackfield.TimePicker.Light" parent="@android:style/Widget.Material.Light.TimePicker">

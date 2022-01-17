@@ -16,7 +16,7 @@
 
         <!-- widget -->
         <item name="chipBackgroundColor">@color/green_darker</item>
-        <item name="chipSurfaceColor">@color/fw_grey13</item>
+        <item name="chipSurfaceColor">@color/fw_grey_13</item>
 
         <!-- quantity colors -->
         <item name="colorDistance">@color/quantity_blue</item>
