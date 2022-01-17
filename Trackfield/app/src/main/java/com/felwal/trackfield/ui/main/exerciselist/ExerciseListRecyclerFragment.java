@@ -2,11 +2,12 @@ package com.felwal.trackfield.ui.main.exerciselist;
 
 import android.view.View;
 
+import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.base.BaseAdapter;
+import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Header;
@@ -26,10 +27,10 @@ import java.util.ArrayList;
 public class ExerciseListRecyclerFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
-        new SortMode("Date", SorterItem.Mode.DATE, false),
-        new SortMode("Distance", SorterItem.Mode.DISTANCE, false),
-        new SortMode("Time", SorterItem.Mode.TIME, false),
-        new SortMode("Pace", SorterItem.Mode.PACE, true)
+        SorterItem.sortByDate(),
+        SorterItem.sortByDistance(),
+        SorterItem.sortByTime(),
+        SorterItem.sortByPace()
     );
 
     private String search = "";
@@ -41,25 +42,27 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (search.equals("")) {
             emptyTitle.setText(R.string.tv_text_empty_exerciselist_title);
             emptyMessage.setText(R.string.tv_text_empty_exerciselist_message);
-            emptyImage.setImageResource(R.drawable.ic_empty_exercise);
+            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
+                ResUtilsKt.getColorByAttr(a, R.attr.colorSecondary)));
         }
         else {
             emptyTitle.setText(R.string.tv_text_empty_search_title);
             emptyMessage.setText(R.string.tv_text_empty_search_msg);
-            emptyImage.setImageResource(R.drawable.ic_empty_search);
+            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_search),
+                ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary)));
         }
     }
 
     @Override
     protected void setSorter() {
         sorter.setSelection(
-            Prefs.getSorterIndex(AppConsts.Layout.EXERCISES),
-            Prefs.getSorterInversion(AppConsts.Layout.EXERCISES));
+            Prefs.getSorterIndex(AppConsts.Layout.EXERCISE_LIST),
+            Prefs.getSorterInversion(AppConsts.Layout.EXERCISE_LIST));
     }
 
     @Override
-    protected BaseAdapter getAdapter() {
-        return new ExerciseListAdapter(a, this, items);
+    protected BaseListAdapter getAdapter() {
+        return new ExerciseListDelegationAdapter(a, this, items);
     }
 
     @Override
@@ -179,7 +182,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     public void onSortSheetDismiss(int selectedIndex) {
         sorter.select(selectedIndex);
-        Prefs.setSorter(AppConsts.Layout.EXERCISES, sorter.getSelectedIndex(), sorter.getOrderReversed());
+        Prefs.setSorter(AppConsts.Layout.EXERCISE_LIST, sorter.getSelectedIndex(), sorter.getOrderReversed());
         updateRecycler();
     }
 

@@ -8,13 +8,13 @@
         android:title="@string/fragment_title_exercises" />
 
     <item
-        android:id="@+id/navigation_main_records"
-        android:icon="@animator/selector_nav_ic_records"
-        android:title="@string/fragment_title_records" />
+        android:id="@+id/navigation_main_groupingpager"
+        android:icon="@animator/selector_nav_ic_groupings"
+        android:title="@string/fragment_title_groupingpager" />
 
     <item
-        android:id="@+id/navigation_main_stats"
-        android:icon="@animator/selector_nav_ic_stats"
-        android:title="@string/fragment_title_stats" />
+        android:id="@+id/navigation_main_statistics"
+        android:icon="@animator/selector_nav_ic_statistics"
+        android:title="@string/fragment_title_statistics" />
 
 </menu>

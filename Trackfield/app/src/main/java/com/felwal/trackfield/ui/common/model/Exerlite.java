@@ -1,8 +1,15 @@
 package com.felwal.trackfield.ui.common.model;
 
+import android.content.Context;
+
+import androidx.annotation.ColorInt;
+
+import com.felwal.android.util.ResUtilsKt;
+import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -19,13 +26,14 @@ public class Exerlite extends RecyclerItem {
     private final String interval;
     private final int distance;
     private final float time;
+    private final LatLng start;
     private final boolean distanceDriven;
     private int top = 0;
 
     //
 
     public Exerlite(int id, String type, LocalDate date, String route, String interval, int distance, float time,
-        boolean distanceDriven) {
+        LatLng start, boolean distanceDriven) {
 
         this.id = id;
         this.type = type;
@@ -34,6 +42,7 @@ public class Exerlite extends RecyclerItem {
         this.interval = interval;
         this.distance = distance;
         this.time = time;
+        this.start = start;
         this.distanceDriven = distanceDriven;
     }
 
@@ -67,6 +76,14 @@ public class Exerlite extends RecyclerItem {
 
     public float getTime() {
         return time;
+    }
+
+    public double getStartLat() {
+        return start.latitude;
+    }
+
+    public double getStartLng() {
+        return start.longitude;
     }
 
     // get driven
@@ -105,6 +122,12 @@ public class Exerlite extends RecyclerItem {
 
     public boolean isTop(int top) {
         return this.top == top;
+    }
+
+    @ColorInt
+    public int getMedalColor(Context c) {
+        return ResUtilsKt.getColorByAttr(c,
+            isTop(1) ? R.attr.colorGold : isTop(2) ? R.attr.colorSilver : R.attr.colorBronze);
     }
 
     // print

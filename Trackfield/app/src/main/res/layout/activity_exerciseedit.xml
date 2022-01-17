@@ -9,6 +9,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -127,7 +129,7 @@
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:text="s"
-                    android:textColor="@color/colorAccBlue"
+                    android:textColor="?colorDistance"
                     android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1.Quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -165,7 +167,7 @@
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:text="t"
-                    android:textColor="@color/colorAccTurqoise"
+                    android:textColor="?colorTime"
                     android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1.Quantity"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_edit_s"

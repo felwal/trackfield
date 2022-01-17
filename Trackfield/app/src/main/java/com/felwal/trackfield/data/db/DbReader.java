@@ -2,6 +2,7 @@ package com.felwal.trackfield.data.db;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,18 +10,21 @@ import androidx.annotation.Nullable;
 
 import com.felwal.trackfield.data.db.DbContract.DistanceEntry;
 import com.felwal.trackfield.data.db.DbContract.ExerciseEntry;
+import com.felwal.trackfield.data.db.DbContract.PlaceEntry;
 import com.felwal.trackfield.data.db.DbContract.RouteEntry;
 import com.felwal.trackfield.data.db.DbContract.SubEntry;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
+import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.SorterItem;
-import com.felwal.trackfield.ui.main.recordlist.distancelist.model.DistanceItem;
-import com.felwal.trackfield.ui.main.recordlist.intervallist.model.IntervalItem;
-import com.felwal.trackfield.ui.main.recordlist.routelist.model.RouteItem;
+import com.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
+import com.felwal.trackfield.ui.main.groupingpager.intervallist.model.IntervalItem;
+import com.felwal.trackfield.ui.main.groupingpager.placelist.model.PlaceItem;
+import com.felwal.trackfield.ui.main.groupingpager.routelist.model.RouteItem;
 import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.DateUtils;
 import com.felwal.trackfield.utils.MathUtils;
@@ -28,6 +32,7 @@ import com.felwal.trackfield.utils.annotation.Unfinished;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -264,6 +269,73 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
+    public ArrayList<Exerlite> getExerlitesByPlace(Place place, SorterItem.Mode sortMode, boolean ascending,
+        @NonNull ArrayList<String> types) {
+
+        // since we are merely comparing distances in a binary sense of shorter or longer,
+        // we can use not the magnitude, but the magnitude squared.
+        // we cant access the SQLite sqrt() function from Android.
+
+        // since the angle corresponding to a certain distance varies for longitude and not for latitude,
+        // a circle in meters results in a ellipse in degrees.
+
+        double radius = place.getRadius();
+        double lat = place.getLat();
+        double lng = place.getLng();
+
+        // calculate degrees to metres conversion. this differs for latitude and longitude.
+        double deltaDeg = 0.001;
+        float[] deltaLatDistArr = new float[1];
+        float[] deltaLngDistArr = new float[1];
+        Location.distanceBetween(lat, lng, lat + deltaDeg, lng, deltaLatDistArr);
+        Location.distanceBetween(lat, lng, lat, lng + deltaDeg, deltaLngDistArr);
+        float deltaLatDist = deltaLatDistArr[0];
+        float deltaLngDist = deltaLngDistArr[0];
+        double latDistToDegMultiplier = deltaDeg / deltaLatDist;
+        double lngDistToDegMultiplier = deltaDeg / deltaLngDist;
+        double radiusLatDegSqr = MathUtils.sqr(radius * latDistToDegMultiplier);
+        double radiusLngDegSqr = MathUtils.sqr(radius * lngDistToDegMultiplier);
+
+        String exerliteColumns = ExerciseEntry.toString(ExerciseEntry.COLUMNS_EXERLITE);
+        String table = ExerciseEntry.TABLE_NAME;
+        String startLat = ExerciseEntry.COLUMN_START_LAT;
+        String startLng = ExerciseEntry.COLUMN_START_LNG;
+        String endLat = ExerciseEntry.COLUMN_END_LAT;
+        String endLng = ExerciseEntry.COLUMN_END_LNG;
+        String andTypeFilter = typeFilter(" AND", types);
+
+        String queryString =
+            "SELECT " + exerliteColumns +
+                " FROM " + table +
+                " WHERE ((" + sqr(lat + " - " + startLat) + " / " + radiusLatDegSqr +
+                " + " + sqr(lng + " - " + startLng) + " / " + radiusLngDegSqr + ") <= 1" +
+                " OR (" + sqr(lat + " - " + endLat) + " / " + radiusLatDegSqr +
+                " + " + sqr(lng + " - " + endLng) + " / " + radiusLngDegSqr + ") <= 1)" +
+                andTypeFilter +
+                " ORDER BY " + orderBy(sortMode, ascending);
+
+        Cursor cursor = db.rawQuery(queryString, null);
+        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
+        cursor.close();
+
+        return exerlites;
+    }
+
+    @NonNull
+    public ArrayList<Exercise> getExercisesWithTrail(SorterItem.Mode sortMode, boolean ascending) {
+
+        String selection = ExerciseEntry.COLUMN_START_LAT + " IS NOT NULL AND " +
+            ExerciseEntry.COLUMN_START_LNG + " IS NOT NULL";
+        String orderBy = orderBy(sortMode, ascending);
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, null, selection, null, null, null, orderBy, null);
+        ArrayList<Exercise> exercises = unpackCursor(cursor);
+        cursor.close();
+
+        return exercises;
+    }
+
+    @NonNull
     public ArrayList<Exerlite> getExerlitesByInterval(String interval, SorterItem.Mode sortMode, boolean ascending) {
         String[] colums = ExerciseEntry.COLUMNS_EXERLITE;
         String selection = ExerciseEntry.COLUMN_INTERVAL + " = ?";
@@ -458,6 +530,82 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return goalPace;
+    }
+
+    // get places
+
+    @NonNull
+    public ArrayList<Place> getPlaces() {
+        String queryString = "SELECT * FROM " + PlaceEntry.TABLE_NAME;
+
+        Cursor cursor = db.rawQuery(queryString, null);
+        ArrayList<Place> places = unpackPlaceCursor(cursor);
+        cursor.close();
+
+        return places;
+    }
+
+    @NonNull
+    public Place getPlace(int placeId) {
+        // TODO: nullable?
+        String selection = PlaceEntry._ID + " = ?";
+        String[] selectionArgs = { Integer.toString(placeId) };
+
+        Cursor cursor = db.query(PlaceEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        ArrayList<Place> places = unpackPlaceCursor(cursor);
+        cursor.close();
+
+        return places.size() > 0 ? places.get(0) : new Place();
+    }
+
+    public int getPlaceId(String name) {
+        String[] columns = { PlaceEntry._ID };
+        String selection = PlaceEntry.COLUMN_NAME + " = ?";
+        String[] selectionArgs = { name };
+
+        Cursor cursor = db.query(PlaceEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+        int id = Place.ID_NON_EXISTANT;
+        while (cursor.moveToNext()) {
+            id = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry._ID));
+        }
+        cursor.close();
+
+        return id;
+    }
+
+    public ArrayList<Place> generatePlaces() {
+        ArrayList<Place> places = getPlaces();
+        ArrayList<Place> newPlaces = new ArrayList<>();
+
+        ArrayList<Exercise> exercises = getExercisesWithTrail(SorterItem.Mode.DATE, false);
+
+        for (Exercise e : exercises) {
+            boolean startHasPlace = false;
+            boolean endHasPlace = false;
+
+            LatLng start = e.getTrail().getStart();
+            LatLng end = e.getTrail().getEnd();
+
+            for (Place p : places) {
+                if (p.contains(start)) startHasPlace = true;
+                if (p.contains(end)) endHasPlace = true;
+
+                if (startHasPlace && endHasPlace) break;
+            }
+
+            Place startPlace = null;
+            if (!startHasPlace) {
+                startPlace = new Place(start);
+                places.add(startPlace);
+                newPlaces.add(startPlace);
+            }
+            if (!endHasPlace && (startPlace == null || !startPlace.contains(end))) {
+                places.add(new Place(end));
+                newPlaces.add(new Place(end));
+            }
+        }
+
+        return newPlaces;
     }
 
     // get trail
@@ -708,6 +856,31 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return intervalItems;
+    }
+
+    @NonNull
+    public ArrayList<PlaceItem> getPlaceItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
+        String table = PlaceEntry.TABLE_NAME;
+        String selection = includeHidden ? null : PlaceEntry.COLUMN_HIDDEN + " != 1";
+        String sortCol;
+        switch (sortMode) {
+            case START_LAT: sortCol = PlaceEntry.COLUMN_LAT; break;
+            case START_LNG: sortCol = PlaceEntry.COLUMN_LNG; break;
+            case NAME:
+            default: sortCol = PlaceEntry.COLUMN_NAME; break;
+        }
+        String orderBy = sortCol + sortOrder(ascending); // TODO
+
+        Cursor cursor = db.query(table, null, selection, null, null, null, orderBy);
+        ArrayList<PlaceItem> placeItems = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(PlaceEntry._ID));
+            String name = cursor.getString(cursor.getColumnIndex(PlaceEntry.COLUMN_NAME));
+            placeItems.add(new PlaceItem(id, name));
+        }
+        cursor.close();
+
+        return placeItems;
     }
 
     // projections
@@ -1175,8 +1348,7 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
 
             Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
-                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail);
-            exercise.setTrailHidden(hideTrail);
+                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail, hideTrail);
             exercises.add(exercise);
         }
 
@@ -1197,11 +1369,14 @@ public class DbReader extends DbHelper {
             int effectiveDistance = cursor.getInt(
                 cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
+            double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
+            double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
 
             // convert
             LocalDate date = DateUtils.ofEpochSecond(epoch).toLocalDate();
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
+            LatLng start = new LatLng(startLat, startLng);
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
 
             // TODO: subs
@@ -1221,7 +1396,7 @@ public class DbReader extends DbHelper {
             }*/
 
             Exerlite exerlite = new Exerlite(id, type, date, routeName, interval, effectiveDistance, time,
-                distanceDriven);
+                start, distanceDriven);
             exerlites.add(exerlite);
 
             // check pace ranking against previous
@@ -1284,6 +1459,24 @@ public class DbReader extends DbHelper {
         }
 
         return distances;
+    }
+
+    private ArrayList<Place> unpackPlaceCursor(Cursor cursor) {
+        ArrayList<Place> places = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry._ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_NAME));
+            float lat = cursor.getFloat(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_LAT));
+            float lng = cursor.getFloat(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_LNG));
+            int radius = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_RADIUS));
+            boolean hidden = cursor.getInt(cursor.getColumnIndexOrThrow(PlaceEntry.COLUMN_HIDDEN)) != 0;
+
+            Place place = new Place(id, name, lat, lng, radius, hidden);
+            places.add(place);
+        }
+
+        return places;
     }
 
     private ArrayList<Route> unpackRouteCursor(Cursor cursor) {
@@ -1390,6 +1583,22 @@ public class DbReader extends DbHelper {
 
     private String sum(String column) {
         return fun("sum", column);
+    }
+
+    private String pow(String base, int exponent) {
+        if (exponent < 0) throw new InvalidParameterException("Only nonnegative exponents are supported.");
+
+        String baseParenthesised = "(" + base + ")";
+
+        StringBuilder expression = new StringBuilder(baseParenthesised);
+        for (int i = 1; i < exponent; i++) {
+            expression.append(" * ").append(baseParenthesised);
+        }
+        return expression.toString();
+    }
+
+    private String sqr(String base) {
+        return pow(base, 2);
     }
 
     // sql sub-clauses

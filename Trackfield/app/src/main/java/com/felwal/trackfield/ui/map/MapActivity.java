@@ -1,5 +1,6 @@
 package com.felwal.trackfield.ui.map;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -222,19 +223,18 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(Context c) {
-        return ResUtilsKt.getColorByAttr(c, R.attr.colorPrimaryVariant);
+        return ResUtilsKt.getColorByAttr(c, R.attr.colorSecondary);
     }
 
+    @SuppressLint("ResourceType")
     @ColorInt
     protected static int getColorDeselected(Context c) {
-        return c.getColor(ScreenUtils.isThemeLight(c)
-            ? R.color.colorGreenDarkTrans
-            : R.color.colorGreenLightTrans);
+        return c.getColor(R.animator.selector_color_polyline_deselected);
     }
 
     @ColorInt
     protected static int getColorHidden(Context c) {
-        return c.getColor(R.color.colorTrans);
+        return c.getColor(android.R.color.transparent);
     }
 
 }

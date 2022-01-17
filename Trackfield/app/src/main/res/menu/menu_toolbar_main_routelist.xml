@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_show_hidden_routes"
-        android:title="@string/action_add"
+        android:id="@+id/action_show_hidden_groups"
+        android:title="@string/action_show_hidden"
         android:icon="@drawable/ic_hide"
         android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />

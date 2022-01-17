@@ -10,7 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.FloatingActionMenu;
 import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
@@ -20,17 +19,19 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
+import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListFragment;
 import com.felwal.trackfield.ui.main.exerciselist.ExerciseListRecyclerFragment;
-import com.felwal.trackfield.ui.main.recordlist.RecordListFragment;
-import com.felwal.trackfield.ui.main.stats.StatsFragment;
+import com.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
+import com.felwal.trackfield.ui.main.statistics.StatisticsFragment;
 import com.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import com.felwal.trackfield.ui.setting.SettingsActivity;
 import com.felwal.trackfield.utils.FileUtils;
+import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // dialog tags
     private static final String DIALOG_FILTER_EXERCISES = "filterExercisesDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
+    private static final String DIALOG_ADD_PLACE_LAT = "addPlaceLatDialog";
+    private static final String DIALOG_ADD_PLACE_LNG = "addPlaceLngDialog";
 
     private static boolean appInitialized = false;
 
@@ -117,21 +120,27 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
             ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES)
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES, null)
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
             DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE)
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE, null)
                 .show(getSupportFragmentManager());
             return true;
         }
-        else if (itemId == R.id.action_show_hidden_routes) {
-            Prefs.showHiddenRoutes(!Prefs.areHiddenRoutesShown());
+        else if (itemId == R.id.action_show_hidden_groups) {
+            Prefs.showHiddenGroups(!Prefs.areHiddenGroupsShown());
             mainFragment.updateFragment();
             invalidateOptionsMenu();
+            return true;
+        }
+        else if (itemId == R.id.action_add_place) {
+            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LAT, null)
+                .show(getSupportFragmentManager());
             return true;
         }
 
@@ -171,15 +180,15 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
                 if (fab.isOrWillBeHidden()) fab.show();
                 return true;
             }
-            else if (itemId == R.id.navigation_main_records) {
-                if ((mainFragment instanceof RecordListFragment)) mainFragment.scrollToTop();
-                else selectFragment(new RecordListFragment());
+            else if (itemId == R.id.navigation_main_groupingpager) {
+                if ((mainFragment instanceof GroupingPagerFragment)) mainFragment.scrollToTop();
+                else selectFragment(new GroupingPagerFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
                 return true;
             }
-            else if (itemId == R.id.navigation_main_stats) {
-                if ((mainFragment instanceof StatsFragment)) mainFragment.scrollToTop();
-                else selectFragment(new StatsFragment());
+            else if (itemId == R.id.navigation_main_statistics) {
+                if ((mainFragment instanceof StatisticsFragment)) mainFragment.scrollToTop();
+                else selectFragment(new StatisticsFragment());
                 if (fab.isOrWillBeShown()) fab.hide();
                 return true;
             }
@@ -243,17 +252,30 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     // implements dialogs
 
+    private double lat = 0; // TODO: temp
+
     @Override
-    public void onDecimalDialogPositiveClick(float input, String tag) {
+    public void onDecimalDialogPositiveClick(float input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
-            int distance = (int) (input * 1000);
+            int distance = (int) MathUtils.round(input * 1000, 0);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
+            mainFragment.updateFragment();
+        }
+        if (tag.equals(DIALOG_ADD_PLACE_LAT)) {
+            lat = input;
+            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
+                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LNG, null)
+                .show(getSupportFragmentManager());
+        }
+        if (tag.equals(DIALOG_ADD_PLACE_LNG)) {
+            Place place = new Place(lat, input);
+            DbWriter.get(this).addPlace(place);
             mainFragment.updateFragment();
         }
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag) {
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
         if (tag.equals(DIALOG_FILTER_EXERCISES)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

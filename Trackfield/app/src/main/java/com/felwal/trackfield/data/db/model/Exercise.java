@@ -74,7 +74,7 @@ public class Exercise implements JSONObjectable {
 
     public Exercise(int id, long stravaId, long garminId, String type, LocalDateTime dateTime, int routeId,
         String route, String routeVar, String interval, String note, String device, String recordingMethod,
-        int distance, float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail) {
+        int distance, float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail, boolean trailHidden) {
 
         this.id = id;
         this.stravaId = stravaId;
@@ -92,6 +92,7 @@ public class Exercise implements JSONObjectable {
         this.time = time;
         this.subs = subs == null ? new ArrayList<>() : subs;
         this.trail = trail;
+        this.trailHidden = trailHidden;
     }
 
     public Exercise(JSONObject obj, Context c) throws JSONException {

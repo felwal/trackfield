@@ -3,6 +3,7 @@ package com.felwal.trackfield.data.db.model;
 import android.content.Context;
 
 import com.felwal.trackfield.utils.LayoutUtils;
+import com.felwal.trackfield.utils.MathUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +67,12 @@ public class Distance implements JSONObjectable {
 
     public boolean hasGoalPace() {
         return goalPace != NO_GOAL_PACE;
+    }
+
+    // print
+
+    public String printTitle() {
+        return MathUtils.prefix(getDistance(), 3, "m");
     }
 
     // implements JSONObjectable

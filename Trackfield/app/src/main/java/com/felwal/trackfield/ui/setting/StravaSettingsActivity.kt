@@ -111,7 +111,7 @@ class StravaSettingsActivity :
                     dialogPosBtnRes = R.string.fw_dialog_btn_ok,
                     tag = DIALOG_PULL_ALL,
                     iconRes = R.drawable.fw_ic_arrow_down_24
-                )//.takeIf { Prefs.isDeveloper() } TODO
+                ).takeIf { Prefs.isDeveloper() }
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_request_options),
@@ -124,15 +124,15 @@ class StravaSettingsActivity :
                     iconRes = R.drawable.ic_device
                 ),
                 StringItem(
-                    title = getString(R.string.tv_text_settings_title_method),
+                    title = getString(R.string.tv_text_settings_title_recordingmethod),
                     value = Prefs.getDefaultRecordingMethod(),
                     msg = getString(R.string.dialog_msg_recording_method),
-                    hint =  getString(R.string.tv_text_settings_hint_method),
+                    hint =  getString(R.string.tv_text_settings_hint_recordingmethod),
                     tag = DIALOG_RECORDING_METHOD,
                     iconRes = R.drawable.ic_gps
                 ),
                 MultiSelectionItem(
-                    title = getString(R.string.tv_text_settings_title_policy),
+                    title = getString(R.string.tv_text_settings_title_pullpolicy),
                     values = Prefs.getPullPolicy().texts,
                     selectedIndices = Prefs.getPullPolicy().checked!!.toIndicesOfTruths(),
                     tag = DIALOG_PULL_POLICY,
@@ -144,7 +144,7 @@ class StravaSettingsActivity :
 
     // dialog
 
-    override fun onAlertDialogPositiveClick(passValue: String?, tag: String) {
+    override fun onAlertDialogPositiveClick(tag: String, passValue: String?) {
         when (tag) {
             DIALOG_REQUEST_ALL -> {
                 strava.requestAllActivities { successCount, errorCount ->
@@ -160,7 +160,7 @@ class StravaSettingsActivity :
         }
     }
 
-    override fun onTextDialogPositiveClick(input: String, tag: String) {
+    override fun onTextDialogPositiveClick(input: String, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_DEVICE -> {
                 Prefs.setDefaultDevice(input)
@@ -173,7 +173,7 @@ class StravaSettingsActivity :
         }
     }
 
-    override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String) {
+    override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_PULL_POLICY -> {
                 Prefs.setPullSettings(itemStates)

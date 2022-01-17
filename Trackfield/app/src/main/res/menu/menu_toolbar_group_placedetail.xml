@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_filter_exercises"
+        android:title="@string/action_filter"
+        android:icon="@drawable/ic_filter"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_rename_place"
+        android:title="@string/action_rename"
+        android:icon="@drawable/ic_rename"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_edit_radius"
+        android:title="@string/action_edit_radius"
+        android:icon="@drawable/ic_edit"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_hide_place"
+        android:title="@string/action_hide_place"
+        android:icon="@drawable/ic_hide"
+        android:iconTint="?colorOnPrimary"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_place_map"
+        android:title="@string/action_map"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete_place"
+        android:title="@string/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:iconTint="?colorOnPrimary"
+        app:showAsAction="ifRoom" />
+
+</menu>

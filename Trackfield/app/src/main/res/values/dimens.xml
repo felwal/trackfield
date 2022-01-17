@@ -53,9 +53,8 @@
     <dimen name="layout_graph_medium">175dp</dimen>
     <dimen name="layout_graph_large">200dp</dimen>
 
-    <dimen name="layout_mappreview_corner_radius">10dp</dimen>
-
-    <dimen name="layout_searchview_corner_radius">4dp</dimen>
+    <dimen name="layout_mappreview_corner_radius">@dimen/fw_corner_radius_medium_component</dimen>
+    <dimen name="layout_searchview_corner_radius">@dimen/fw_corner_radius_small_component</dimen>
 
     <!-- type -->
 

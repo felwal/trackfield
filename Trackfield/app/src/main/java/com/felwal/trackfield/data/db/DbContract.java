@@ -41,7 +41,7 @@ public final class DbContract {
 
         public static final String[] COLUMNS_EXERLITE = {
             _ID, COLUMN_TYPE, COLUMN_DATE, COLUMN_ROUTE_ID, COLUMN_ROUTE_VAR, COLUMN_INTERVAL, COLUMN_DISTANCE,
-            COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME
+            COLUMN_EFFECTIVE_DISTANCE, COLUMN_TIME, COLUMN_START_LAT, COLUMN_START_LNG
         };
         public static final String[] COLUMNS_TRAIL = {
             COLUMN_POLYLINE, COLUMN_START_LAT, COLUMN_START_LNG, COLUMN_END_LAT, COLUMN_END_LNG
@@ -104,6 +104,10 @@ public final class DbContract {
                     return COLUMN_TIME + "=0 OR " + COLUMN_EFFECTIVE_DISTANCE + "=0, " + SELECTION_PACE;
                 case NAME:
                     return COLUMN_ROUTE;
+                case START_LAT:
+                    return COLUMN_START_LAT;
+                case START_LNG:
+                    return COLUMN_START_LNG;
                 case DATE:
                 default:
                     return COLUMN_DATE;
@@ -166,6 +170,26 @@ public final class DbContract {
             COLUMN_BEST_PACE + " REAL," +
             COLUMN_GOAL_PACE + " REAL," +
             COLUMN_HIDDEN + " INTEGER)";
+
+    }
+
+    public static class PlaceEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "places";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_LAT = "lat";
+        public static final String COLUMN_LNG = "lng";
+        public static final String COLUMN_RADIUS = "radius";
+        public static final String COLUMN_HIDDEN = "hidden";
+
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_NAME + " TEXT," +
+            COLUMN_LAT + " REAL," +
+            COLUMN_LNG + " REAL," +
+            COLUMN_HIDDEN + " INTEGER," +
+            COLUMN_RADIUS + " INTEGER)";
 
     }
 

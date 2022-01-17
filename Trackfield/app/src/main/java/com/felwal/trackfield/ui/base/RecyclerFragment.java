@@ -43,7 +43,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected final ArrayList<RecyclerItem> items = new ArrayList<>();
 
     private RecyclerView recycler;
-    private BaseAdapter adapter;
+    private BaseListAdapter adapter;
     private ConstraintLayout emptyCl;
 
     // extends Fragment
@@ -104,7 +104,7 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     // get
 
-    protected abstract BaseAdapter getAdapter();
+    protected abstract BaseListAdapter getAdapter();
 
     protected abstract ArrayList<RecyclerItem> getRecyclerItems();
 
@@ -199,30 +199,104 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     public abstract void onSortSheetDismiss(int selectedIndex);
 
-    // tools
+    // add items
 
     protected void addItemsWithHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList,
         SorterItem.Mode sortMode) {
 
-        if (sortMode == SorterItem.Mode.DATE) {
-            int year = -1;
-            int newYear;
-            for (Exerlite e : fromExerliteList) {
-                if ((newYear = e.getDate().getYear()) != year) {
-                    toItemList.add(new Header(newYear + "", Header.Type.REC));
-                    year = newYear;
-                }
-                toItemList.add(e);
+        switch (sortMode) {
+            case DATE: addItemsWithYearHeaders(toItemList, fromExerliteList); break;
+            case START_LAT: addItemsWithLatHeaders(toItemList, fromExerliteList); break;
+            case START_LNG: addItemsWithLngHeaders(toItemList, fromExerliteList); break;
+            default: addItemsWithIndexHeaders(toItemList, fromExerliteList); break;
+        }
+    }
+
+    private void addItemsWithYearHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
+        int year = -1;
+        int newYear;
+
+        for (Exerlite e : fromExerliteList) {
+            if ((newYear = e.getDate().getYear()) != year) {
+                toItemList.add(new Header(newYear + "", Header.Type.GROUP));
+                year = newYear;
+            }
+
+            toItemList.add(e);
+        }
+    }
+
+    private void addItemsWithLatHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
+        int[] zoneTopBorders = getEvenlySpacedArray(-90, 1, 180);
+        int lastZone = -1;
+
+        for (Exerlite e : fromExerliteList) {
+            int zone = getZoneIndex(e.getStartLat(), zoneTopBorders);
+
+            if (zone != lastZone) {
+                String title = withSignUnit(zoneTopBorders[zone], "°N", "°S");
+                Header header = new Header(title, Header.Type.GROUP);
+                toItemList.add(header);
+                lastZone = zone;
+            }
+
+            toItemList.add(e);
+        }
+    }
+
+    private void addItemsWithLngHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
+        int[] zoneLeftBorders = getEvenlySpacedArray(0, 1, 360);
+        int lastZone = -1;
+
+        for (Exerlite e : fromExerliteList) {
+            int zone = getZoneIndex(e.getStartLng(), zoneLeftBorders);
+
+            if (zone != lastZone) {
+                String title = withSignUnit(zoneLeftBorders[zone], "°E", "°W");
+                Header header = new Header(title, Header.Type.GROUP);
+                toItemList.add(header);
+                lastZone = zone;
+            }
+
+            toItemList.add(e);
+        }
+    }
+
+    private void addItemsWithIndexHeaders(ArrayList<RecyclerItem> toItemList, ArrayList<Exerlite> fromExerliteList) {
+        for (int i = 0; i < fromExerliteList.size(); i++) {
+            if (i == 0) toItemList.add(new Header("Top " + 3, Header.Type.GROUP));
+            else if (i == 3) toItemList.add(new Header("Top " + 10, Header.Type.GROUP));
+            else if (i % 10 == 0) toItemList.add(new Header("Top " + (i + 10), Header.Type.GROUP));
+
+            toItemList.add(fromExerliteList.get(i));
+        }
+    }
+
+    // tools
+
+    private int getZoneIndex(double value, int[] borders) {
+        for (int i = 1; i < borders.length; i++) {
+            if (value < borders[i]) {
+                return i - 1;
             }
         }
-        else {
-            for (int i = 0; i < fromExerliteList.size(); i++) {
-                if (i == 0) toItemList.add(new Header("Top " + 3, Header.Type.REC));
-                else if (i == 3) toItemList.add(new Header("Top " + 10, Header.Type.REC));
-                else if (i % 10 == 0) toItemList.add(new Header("Top " + (i + 10), Header.Type.REC));
-                toItemList.add(fromExerliteList.get(i));
-            }
+
+        return borders.length - 1;
+    }
+
+    private int[] getEvenlySpacedArray(int start, int step, int count) {
+        int[] arr = new int[count];
+
+        for (int i = 0; i < count; i++) {
+            arr[i] = start + i * step;
         }
+
+        return arr;
+    }
+
+    private String withSignUnit(int value, String posUnit, String negUnit) {
+        if (value >= 0) return value + posUnit;
+        return -1 * value + negUnit;
     }
 
     protected void fadeInEmpty() {

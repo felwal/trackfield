@@ -4,7 +4,7 @@
 
     <item
         android:state_checked="true"
-        android:color="?android:textColorHighlight" />
+        android:color="?colorSecondary" />
 
     <item android:color="?android:textColorSecondary" />
 

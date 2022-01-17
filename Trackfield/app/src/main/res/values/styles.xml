@@ -2,11 +2,27 @@
 
     <!-- appbar -->
 
+    <style name="Widget.Trackfield.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:elevation">@dimen/elev_toolbar</item>
+
+        <item name="android:background">?colorToolbar</item>
+        <item name="titleTextColor">?colorOnToolbar</item>
+        <item name="android:textColor">?colorOnToolbar</item>
+
+        <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
+    </style>
+
+    <style name="Widget.Trackfield.Toolbar.Map">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="colorControlNormal">?android:textColorPrimary</item>
+    </style>
+
     <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
         <!-- built-in action buttons, e.g. home/up, overflow -->
-        <item name="colorControlNormal">?colorOnPrimary</item>
+        <item name="colorControlNormal">?colorControlToolbar</item>
         <!-- custom action buttons -->
-        <item name="iconTint">?colorOnPrimary</item>
+        <item name="iconTint">?colorControlToolbar</item>
 
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
     </style>
@@ -19,30 +35,19 @@
 
     <style name="Widget.Trackfield.SearchView" parent="Widget.AppCompat.SearchView" />
 
-    <style name="Widget.Trackfield.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation">@dimen/elev_toolbar</item>
-        <item name="android:background">?colorPrimary</item>
-        <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar</item>
-
-        <item name="titleTextColor">?colorOnPrimary</item>
-        <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
-    </style>
-
     <!-- widget -->
 
     <style name="ThemeOverlay.Trackfield.Fam" parent="ThemeOverlay.Felwal.Fam">
         <item name="fw_mainFabStyle">@style/Widget.Trackfield.Fab</item>
         <item name="fw_miniFabStyle">@style/Widget.Trackfield.Fab.Mini</item>
 
-        <item name="fw_closedFabColor">?colorPrimaryVariant</item>
+        <item name="fw_closedFabColor">?colorSecondary</item>
         <item name="fw_openedFabColor">?colorSurface</item>
-        <item name="fw_miniFabColor">?colorPrimaryVariant</item>
+        <item name="fw_miniFabColor">?colorSecondary</item>
 
-        <item name="fw_closedIconTint">?android:textColorPrimaryInverse</item>
+        <item name="fw_closedIconTint">?colorOnSecondary</item>
         <item name="fw_openedIconTint">?android:textColorSecondary</item>
-        <item name="fw_miniIconTint">?android:textColorPrimaryInverse</item>
+        <item name="fw_miniIconTint">?colorOnSecondary</item>
 
         <item name="fw_closedIconSrc">@drawable/ic_add</item>
         <item name="fw_openedIconSrc">@drawable/ic_cancel</item>
@@ -55,11 +60,11 @@
     </style>
 
     <style name="Widget.Trackfield.Fab" parent="Widget.Felwal.Fab">
-        <item name="android:textColorPrimary">?android:textColorPrimaryInverse</item>
+        <item name="android:textColorPrimary">?colorOnSecondary</item>
 
         <item name="fabSize">normal</item>
-        <item name="backgroundTint">?colorPrimaryVariant</item>
-        <item name="tint">?android:textColorPrimaryInverse</item>
+        <item name="backgroundTint">?colorSecondary</item>
+        <item name="tint">?colorOnSecondary</item>
         <!--<item name="rippleColor">@color/colorGreenDarker</item>-->
     </style>
 
@@ -99,7 +104,7 @@
         <item name="tabIndicatorHeight">@dimen/layout_indicator_tab_height</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabTextAppearance">@style/TextAppearance.Trackfield.Subtitle2.TabLayoutTitle</item>
-        <item name="tabSelectedTextColor">?android:textColorHighlight</item>
+        <item name="tabSelectedTextColor">?colorSecondary</item>
     </style>
 
     <style name="Widget.Trackfield.Chip" parent="Theme.MaterialComponents.DayNight">
@@ -120,47 +125,47 @@
 
     <style name="ThemeOverlay.Trackfield.DatePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Dark</item>
-        <item name="android:colorAccent">@color/colorGreenLight</item>
+        <item name="android:colorSecondary">@color/green_light</item>
         <item name="android:colorBackground">@color/fw_grey19</item>
-        <!--<item name="android:textColorSecondary">@color/text_secondary_dk</item>-->
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
     </style>
 
     <style name="ThemeOverlay.Trackfield.DatePicker.Light" parent="android:Theme.Material.Light.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Light</item>
-        <item name="android:colorAccent">@color/colorGreen</item>
-        <item name="android:textColorSecondary">@color/text_secondary_lt</item>
+        <item name="android:colorSecondary">@color/green</item>
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
     </style>
 
     <style name="Widget.Trackfield.DatePicker.Dark" parent="@android:style/Widget.Material.DatePicker">
-        <item name="android:headerBackground">@color/colorGreen</item>
+        <item name="android:headerBackground">@color/green</item>
     </style>
 
     <style name="Widget.Trackfield.DatePicker.Light" parent="@android:style/Widget.Material.Light.DatePicker">
-        <item name="android:headerBackground">@color/colorGreen</item>
+        <item name="android:headerBackground">@color/green</item>
     </style>
 
     <!-- time picker -->
 
     <style name="ThemeOverlay.Trackfield.TimePicker.Dark" parent="android:Theme.Material.Dialog">
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Dark</item>
-        <item name="android:colorAccent">@color/colorGreenLight</item>
+        <item name="android:colorSecondary">@color/green_light</item>
         <item name="android:colorBackground">@color/fw_grey19</item>
-        <!--<item name="android:textColorSecondary">@color/text_secondary_dk</item>-->
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>-
     </style>
 
     <style name="ThemeOverlay.Trackfield.TimePicker.Light" parent="android:Theme.Material.Light.Dialog">
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Light</item>
-        <item name="android:colorAccent">@color/colorGreen</item>
-        <item name="android:textColorSecondary">@color/text_secondary_lt</item>
+        <item name="android:colorSecondary">@color/green</item>
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
     </style>
 
     <style name="Widget.Trackfield.TimePicker.Dark" parent="@android:style/Widget.Material.TimePicker">
-        <item name="android:headerBackground">@color/colorGreen</item>
+        <item name="android:headerBackground">@color/green</item>
         <item name="android:numbersBackgroundColor">@color/fw_grey25</item>
     </style>
 
     <style name="Widget.Trackfield.TimePicker.Light" parent="@android:style/Widget.Material.Light.TimePicker">
-        <item name="android:headerBackground">@color/colorGreen</item>
+        <item name="android:headerBackground">@color/green</item>
     </style>
 
     <!-- textappearance: base -->
@@ -209,7 +214,7 @@
     </style>
 
     <style name="TextAppearance.Trackfield.Subtitle1.Year">
-        <item name="android:textColor">?android:textColorHighlight</item>
+        <item name="android:textColor">?colorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -219,7 +224,7 @@
     </style>
 
     <style name="TextAppearance.Trackfield.Subtitle3.Month">
-        <item name="android:textColor">?android:textColorHighlight</item>
+        <item name="android:textColor">?colorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -234,12 +239,12 @@
     </style>
 
     <style name="TextAppearance.Trackfield.Caption.Week">
-        <item name="android:textColor">?android:textColorHighlight</item>
+        <item name="android:textColor">?colorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Trackfield.Caption.SettingHeader">
-        <item name="android:textColor">?android:textColorHighlight</item>
+        <item name="android:textColor">?colorSecondary</item>
         <item name="android:textStyle">bold</item>
 
         <item name="textAllCaps">false</item>

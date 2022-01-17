@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- dark theme -->
 
     <style name="Theme.Trackfield" parent="Theme.Default">
-        <item name="android:windowLightStatusBar">false</item>
-
         <!-- text -->
-        <item name="android:textColorPrimary">@color/fw_white</item>
-        <item name="android:textColorSecondary">@color/text_secondary_dk</item>
-        <item name="android:textColorHighlight">@color/colorGreenLight</item>
-        <item name="android:textColorPrimaryInverse">@color/fw_black</item>
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>
 
         <!-- primary -->
-        <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorPrimaryVariant">@color/colorGreenLight</item>
+        <item name="colorPrimary">@color/green</item>
         <item name="colorOnPrimary">@color/fw_white</item>
-
-        <!-- accent -->
-        <item name="colorAccent">@color/colorGreenLight</item>
-
-        <!-- background -->
-        <item name="android:colorBackgroundFloating">@color/fw_felwal_surface_dk</item>
+        <item name="colorPrimaryDark">@color/green_dark</item>
+        <item name="colorSecondary">@color/green_light</item>
+        <item name="colorOnSecondary">?android:colorBackground</item>
 
         <!-- widget -->
-        <item name="android:colorButtonNormal">@color/fw_grey19</item>
-        <item name="android:colorActivatedHighlight">@color/colorGreenLight</item>
-        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
+        <item name="chipBackgroundColor">@color/green_darker</item>
         <item name="chipSurfaceColor">@color/fw_grey13</item>
 
-        <!-- TODO: whats this? -->
-        <item name="color">@color/colorGreenDarker</item>
+        <!-- quantity colors -->
+        <item name="colorDistance">@color/quantity_blue</item>
+        <item name="colorRoute">@color/quantity_red</item>
+        <item name="colorRoutevar">@color/quantity_red</item>
+        <item name="colorPlace">@color/quantity_orange</item>
+        <item name="colorInterval">@color/quantity_purple</item>
+        <item name="colorTime">@color/quantity_turqoise</item>
+        <item name="colorPace">@color/quantity_green</item>
+        <item name="colorEnergy">@color/quantity_yellow</item>
+        <item name="colorPower">@color/quantity_orange</item>
+        <item name="colorElevation">@color/quantity_red</item>
 
-        <item name="mapStyle">@string/mapstyle_dark_json</item>
+        <!-- medal colors -->
+        <item name="colorGold">@color/gold</item>
+        <item name="colorSilver">@color/silver</item>
+        <item name="colorBronze">@color/bronze</item>
 
         <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
         <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Dark</item>
+        <item name="mapStyle">@string/mapstyle_dark_json</item>
     </style>
 
     <!-- color combinations -->
 
     <style name="Theme.Trackfield.Green">
-        <!-- primary -->
-        <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorOnPrimary">@color/fw_white</item>
-
-        <!-- accent -->
-        <item name="colorAccent">@color/colorGreenLight</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorToolbar">?colorPrimary</item>
+        <item name="colorOnToolbar">?colorOnPrimary</item>
+        <item name="colorControlToolbar">?colorOnToolbar</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
-        <!-- primary -->
-        <item name="colorPrimary">@color/fw_grey19</item>
-        <item name="colorPrimaryDark">@color/fw_grey13</item>
-        <item name="colorOnPrimary">@color/fw_white</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?android:colorBackground</item>
+        <item name="colorToolbar">?colorSurface</item>
+        <item name="colorOnToolbar">?android:textColorPrimary</item>
+        <item name="colorControlToolbar">?colorOnToolbar</item>
 
-        <!-- accent -->
-        <item name="colorAccent">@color/colorGreenLight</item>
+        <!-- primary -->
+        <item name="colorPrimary">?colorSecondary</item>
+        <item name="colorOnPrimary">?colorOnSecondary</item>
+        <item name="colorPrimaryDark">@color/green</item>
     </style>
 
 </resources>

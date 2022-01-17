@@ -76,18 +76,27 @@
             android:label="@string/activity_title_maps"
             android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity" />
 
-        <!-- record detail -->
+        <activity
+            android:name="com.felwal.trackfield.ui.map.PlaceMapActivity"
+            android:label="@string/activity_title_maps"
+            android:parentActivityName="com.felwal.trackfield.ui.groupdetail.placedetail.PlaceDetailActivity" />
+
+        <!-- group detail -->
 
         <activity
-            android:name="com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity"
+            android:name="com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.recorddetail.routedetail.RouteDetailActivity"
+            android:name="com.felwal.trackfield.ui.groupdetail.routedetail.RouteDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <activity
-            android:name="com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity"
+            android:name="com.felwal.trackfield.ui.groupdetail.placedetail.PlaceDetailActivity"
+            android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
+
+        <activity
+            android:name="com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity" />
 
         <!-- settings -->

@@ -26,10 +26,9 @@ import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
-import com.felwal.trackfield.ui.map.RouteMapActivity;
-import com.felwal.trackfield.ui.recorddetail.distancedetail.DistanceDetailActivity;
-import com.felwal.trackfield.ui.recorddetail.intervaldetail.IntervalDetailActivity;
-import com.felwal.trackfield.ui.recorddetail.routedetail.RouteDetailActivity;
+import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
+import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
+import com.felwal.trackfield.ui.groupdetail.routedetail.RouteDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
@@ -116,14 +115,15 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_exercisedetail, menu);
 
-        // remove pull action if no externalId
+        // remove actions dependent on externalId
         if (!exercise.hasStravaId()) {
             menu.findItem(R.id.action_pull_exercise).setVisible(false);
         }
 
-        // remove hide trail action if no trail
+        // remove actions dependent on trail
         if (!exercise.hasTrail()) {
             menu.findItem(R.id.action_hide_trail).setVisible(false);
+            menu.findItem(R.id.action_recalibrate_endpoints).setVisible(false);
         }
 
         return true;
@@ -176,14 +176,19 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             }
             return true;
         }
+        else if (itemId == R.id.action_recalibrate_endpoints) {
+            if (exercise.hasTrail()) {
+                exercise.getTrail().calibrateEndPoints();
+                DbWriter.get(this).updateExercise(exercise, this);
+            }
+            return true;
+        }
         else if (itemId == R.id.action_hide_trail) {
             if (exercise.hasTrail()) {
                 exercise.invertTrailHidden();
                 DbWriter.get(this).updateExercise(exercise, this);
                 invalidateOptionsMenu();
-                return true;
             }
-
             return true;
         }
         else if (itemId == R.id.action_map_routevar) {
@@ -381,7 +386,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     // implements BinaryDialog, OnMapReadyCallback
 
     @Override
-    public void onAlertDialogPositiveClick(String passValue, String tag) {
+    public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DELETE_EXERCISE)) {
             try {
                 LayoutUtils.toast(DbWriter.get(this).deleteExercise(exercise, this), this);
@@ -395,7 +400,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     }
 
     @Override
-    public void onAlertDialogNeutralClick(@Nullable String s, @NonNull String s1) {
+    public void onAlertDialogNeutralClick(@NonNull String tag, @Nullable String passValue) {
     }
 
     @Override

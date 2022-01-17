@@ -14,13 +14,15 @@ public final class AppConsts {
     // enums
 
     public enum Layout {
-        EXERCISES,
-        DISTANCES,
-        ROUTES,
-        INTERVALS,
-        DISTANCE,
-        ROUTE,
-        INTERVAL
+        EXERCISE_LIST,
+        DISTANCE_LIST,
+        ROUTE_LIST,
+        PLACE_LIST,
+        INTERVAL_LIST,
+        DISTANCE_DETAIL,
+        ROUTE_DETAIL,
+        PLACE_DETAIL,
+        INTERVAL_DETAIL
     }
 
     public enum UnitVelocity {
@@ -49,8 +51,8 @@ public final class AppConsts {
     public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofPattern("EEE, d MMM yyyy 'at' HH:mm");
     public static final DateTimeFormatter FORMATTER_CAPTION = DateTimeFormatter.ofPattern("d MMM yyyy");
     public static final DateTimeFormatter FORMATTER_CAPTION_NOYEAR = DateTimeFormatter.ofPattern("d MMM");
-    public static final DateTimeFormatter FORMATTER_REC = DateTimeFormatter.ofPattern("d MMM ’yy");
-    public static final DateTimeFormatter FORMATTER_REC_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
+    public static final DateTimeFormatter FORMATTER_GROUP = DateTimeFormatter.ofPattern("d MMM ’yy");
+    public static final DateTimeFormatter FORMATTER_GROUP_NOYEAR = DateTimeFormatter.ofPattern("d MMMM");
 
     public static final TemporalField WEEK_OF_YEAR = WeekFields.ISO.weekOfWeekBasedYear();
 
