@@ -8,32 +8,32 @@
         <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>
 
         <!-- primary -->
-        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorPrimary">@color/green</item>
         <item name="colorOnPrimary">@color/fw_white</item>
-        <item name="colorPrimaryDark">@color/colorGreenDark</item>
-        <item name="colorSecondary">@color/colorGreenLight</item>
+        <item name="colorPrimaryDark">@color/green_dark</item>
+        <item name="colorSecondary">@color/green_light</item>
         <item name="colorOnSecondary">?android:colorBackground</item>
 
         <!-- widget -->
-        <item name="chipBackgroundColor">@color/colorGreenDarker</item>
+        <item name="chipBackgroundColor">@color/green_darker</item>
         <item name="chipSurfaceColor">@color/fw_grey13</item>
 
         <!-- quantity colors -->
-        <item name="colorDistance">@color/colorQuantityBlue</item>
-        <item name="colorRoute">@color/colorQuantityRed</item>
-        <item name="colorRoutevar">@color/colorQuantityRed</item>
-        <item name="colorPlace">@color/colorQuantityOrange</item>
-        <item name="colorInterval">@color/colorQuantityPurple</item>
-        <item name="colorTime">@color/colorQuantityTurqoise</item>
-        <item name="colorPace">@color/colorQuantityGreen</item>
-        <item name="colorEnergy">@color/colorQuantityYellow</item>
-        <item name="colorPower">@color/colorQuantityOrange</item>
-        <item name="colorElevation">@color/colorQuantityRed</item>
+        <item name="colorDistance">@color/quantity_blue</item>
+        <item name="colorRoute">@color/quantity_red</item>
+        <item name="colorRoutevar">@color/quantity_red</item>
+        <item name="colorPlace">@color/quantity_orange</item>
+        <item name="colorInterval">@color/quantity_purple</item>
+        <item name="colorTime">@color/quantity_turqoise</item>
+        <item name="colorPace">@color/quantity_green</item>
+        <item name="colorEnergy">@color/quantity_yellow</item>
+        <item name="colorPower">@color/quantity_orange</item>
+        <item name="colorElevation">@color/quantity_red</item>
 
         <!-- medal colors -->
-        <item name="colorGold">@color/colorGold</item>
-        <item name="colorSilver">@color/colorSilver</item>
-        <item name="colorBronze">@color/colorBronze</item>
+        <item name="colorGold">@color/gold</item>
+        <item name="colorSilver">@color/silver</item>
+        <item name="colorBronze">@color/bronze</item>
 
         <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
@@ -60,7 +60,7 @@
         <!-- primary -->
         <item name="colorPrimary">?colorSecondary</item>
         <item name="colorOnPrimary">?colorOnSecondary</item>
-        <item name="colorPrimaryDark">@color/colorGreen</item>
+        <item name="colorPrimaryDark">@color/green</item>
     </style>
 
 </resources>
