@@ -38,6 +38,7 @@ public class Prefs {
     private static final String KEY_DAILY_CHART = "dailyChart";
     private static final String KEY_COLOR = "color";
     private static final String KEY_THEME = "theme";
+    private static final String KEY_FILE_LOCATION = "fileLocation";
     private static final String KEY_MASS = "mass";
     private static final String KEY_BIRTHDAY = "birthday";
     private static final String KEY_SHOW_HIDDEN_GROUPS = "showHiddenRoutes";
@@ -82,6 +83,10 @@ public class Prefs {
     // profile
     private static float mass = 60;
     private static LocalDate birthday = LocalDate.of(2001,1,29);
+
+    // file
+    private static final String FILE_LOCATION_DEFAULT = "Documents/Trackfield";
+    private static String fileLocation = FILE_LOCATION_DEFAULT;
 
     // filtering
     private static boolean showHiddenGroups = true;
@@ -205,6 +210,9 @@ public class Prefs {
         showWeekHeaders = loadPref(bool, KEY_WEEK_HEADERS);
         showDailyChart = loadPref(bool, KEY_DAILY_CHART);
 
+        // file
+        fileLocation = loadPref(str, KEY_FILE_LOCATION);
+
         // look
         color = loadPref(new TypeToken<Integer>(){}, KEY_COLOR);
         theme = loadPref(in, KEY_THEME);
@@ -272,6 +280,7 @@ public class Prefs {
             case KEY_DAILY_CHART: return showDailyChart;
             case KEY_COLOR: return color;
             case KEY_THEME: return theme;
+            case KEY_FILE_LOCATION: return fileLocation;
             case KEY_MASS: return mass;
             case KEY_BIRTHDAY: return birthday;
             case KEY_SHOW_HIDDEN_GROUPS: return showHiddenGroups;
@@ -327,6 +336,11 @@ public class Prefs {
     public static void setTheme(int theme) {
         Prefs.theme = theme;
         savePref(Prefs.theme, KEY_THEME);
+    }
+
+    public static void setFileLocation(String fileLocation) {
+        Prefs.fileLocation = fileLocation;
+        savePref(fileLocation, KEY_FILE_LOCATION);
     }
 
     public static void setMass(float kilos) {
@@ -461,6 +475,10 @@ public class Prefs {
 
     public static int getTheme() {
         return theme;
+    }
+
+    public static String getFileLocation() {
+        return fileLocation;
     }
 
     public static float getMass() {

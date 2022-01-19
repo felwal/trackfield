@@ -11,6 +11,7 @@ import com.felwal.android.ui.AbsSettingsActivity
 import com.felwal.android.widget.dialog.AlertDialog
 import com.felwal.android.widget.dialog.DecimalDialog
 import com.felwal.android.widget.dialog.SingleChoiceDialog
+import com.felwal.android.widget.dialog.TextDialog
 import com.felwal.trackfield.R
 import com.felwal.trackfield.data.db.DbWriter
 import com.felwal.trackfield.data.prefs.Prefs
@@ -26,6 +27,7 @@ import java.time.LocalDate
 private const val DIALOG_THEME = "themeDialog"
 private const val DIALOG_COLOR = "colorDialog"
 private const val DIALOG_MASS = "massDialog"
+private const val DIALOG_FILE_LOCATION = "locationDialog"
 private const val DIALOG_EXPORT = "exportDialog"
 private const val DIALOG_IMPORT = "importDialog"
 private const val DIALOG_RECREATE_DB = "recreateDbDialog"
@@ -34,7 +36,8 @@ class SettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
     AlertDialog.DialogListener,
     DecimalDialog.DialogListener,
-    SingleChoiceDialog.DialogListener {
+    SingleChoiceDialog.DialogListener,
+    TextDialog.DialogListener {
 
     // view
     private lateinit var binding: ActivitySettingsBinding
@@ -132,6 +135,14 @@ class SettingsActivity :
                     dialogPosBtnRes = R.string.dialog_btn_import,
                     tag = DIALOG_IMPORT,
                     iconRes = R.drawable.ic_import
+                ),
+                StringItem(
+                    title = getString(R.string.tv_text_settings_title_file_location),
+                    desc = Prefs.getFileLocation(),
+                    value = Prefs.getFileLocation(),
+                    hint =  getString(R.string.tv_text_settings_hint_file_location),
+                    tag = DIALOG_FILE_LOCATION,
+                    iconRes = R.drawable.ic_folder
                 )
             ),
             ItemSection(
@@ -246,6 +257,15 @@ class SettingsActivity :
             DIALOG_COLOR -> {
                 Prefs.setColor(selectedIndex)
                 MainActivity.recreateOnRestart = true
+                recreate()
+            }
+        }
+    }
+
+    override fun onTextDialogPositiveClick(input: String, tag: String, passValue: String?) {
+        when (tag) {
+            DIALOG_FILE_LOCATION -> {
+                Prefs.setFileLocation(input)
                 recreate()
             }
         }

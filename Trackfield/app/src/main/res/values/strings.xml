@@ -66,6 +66,8 @@
     <string name="tv_text_settings_header_services">Third party services</string>
     <string name="tv_text_settings_title_strava">Strava</string>
     <string name="tv_text_settings_header_file">File</string>
+    <string name="tv_text_settings_title_file_location">File location</string>
+    <string name="tv_text_settings_hint_file_location">Documents/Trackfield</string>
     <string name="tv_text_settings_title_export">Export json</string>
     <string name="tv_text_settings_title_import">Import json</string>
     <string name="tv_text_settings_header_profile">Profile</string>

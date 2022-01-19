@@ -20,6 +20,7 @@ import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.JSONObjectable;
 import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
+import com.felwal.trackfield.data.prefs.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,14 +39,12 @@ import java.util.List;
 // File
 public final class FileUtils {
 
-    // filena,es
+    // filenames
     private static final String FILENAME_E = "exercises.json";
     private static final String FILENAME_R = "routes.json";
     private static final String FILENAME_D = "distances.json";
     private static final String FILENAME_P = "places.json";
     private static final String FILENAME_VER = "version.json";
-    private static final String FOLDER = "Documents/Trackfield";
-    private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/" + FOLDER + "/";
 
     // json keys
     private static final String JSON_DB_VERSION = "db_version";
@@ -54,6 +53,12 @@ public final class FileUtils {
 
     private FileUtils() {
         // this utility class is not publicly instantiable
+    }
+
+    //
+
+    private static String getPath(String filename) {
+        return Environment.getExternalStorageDirectory().getPath() + "/" + Prefs.getFileLocation() + "/" + filename;
     }
 
     // general file tools
@@ -210,7 +215,7 @@ public final class FileUtils {
         try {
             obj.put(JSON_DB_VERSION, DbReader.get(c).getVersion());
             String jsonStr = obj.toString(2);
-            success = writeFile(PATH + FILENAME_VER, jsonStr, c);
+            success = writeFile(getPath(FILENAME_VER), jsonStr, c);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -218,10 +223,10 @@ public final class FileUtils {
         }
 
         // jsonarrays
-        success &= writeJSONObjectList(PATH + FILENAME_E, DbReader.get(c).getExercises(), c);
-        success &= writeJSONObjectList(PATH + FILENAME_R, DbReader.get(c).getRoutes(true), c);
-        success &= writeJSONObjectList(PATH + FILENAME_D, DbReader.get(c).getDistances(), c);
-        success &= writeJSONObjectList(PATH + FILENAME_P, DbReader.get(c).getPlaces(), c);
+        success &= writeJSONObjectList(getPath(FILENAME_E), DbReader.get(c).getExercises(), c);
+        success &= writeJSONObjectList(getPath(FILENAME_R), DbReader.get(c).getRoutes(true), c);
+        success &= writeJSONObjectList(getPath(FILENAME_D), DbReader.get(c).getDistances(), c);
+        success &= writeJSONObjectList(getPath(FILENAME_P), DbReader.get(c).getPlaces(), c);
 
         return success;
     }
@@ -251,7 +256,7 @@ public final class FileUtils {
      */
     private static int importVersionJson(Context c) {
         int dbVersion;
-        String pathname = PATH + FILENAME_VER;
+        String pathname = getPath(FILENAME_VER);
 
         try {
             String response = readJson(pathname, c);
@@ -273,7 +278,7 @@ public final class FileUtils {
 
         ArrayList<Exercise> exercises = new ArrayList<>();
 
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_E, c)) {
+        for (JSONObject obj : readJSONObjectList(getPath(FILENAME_E), c)) {
             try {
                 DbReader.get(c);
                 Exercise e = new Exercise(obj, c);
@@ -297,7 +302,7 @@ public final class FileUtils {
 
         ArrayList<Route> routes = new ArrayList<>();
 
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_R, c)) {
+        for (JSONObject obj : readJSONObjectList(getPath(FILENAME_R), c)) {
             try {
                 Route r = new Route(obj);
                 routes.add(r);
@@ -320,7 +325,7 @@ public final class FileUtils {
 
         ArrayList<Distance> distances = new ArrayList<>();
 
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_D, c)) {
+        for (JSONObject obj : readJSONObjectList(getPath(FILENAME_D), c)) {
             try {
                 Distance d = new Distance(obj);
                 distances.add(d);
@@ -343,7 +348,7 @@ public final class FileUtils {
 
         ArrayList<Place> places = new ArrayList<>();
 
-        for (JSONObject obj : readJSONObjectList(PATH + FILENAME_P, c)) {
+        for (JSONObject obj : readJSONObjectList(getPath(FILENAME_P), c)) {
             try {
                 Place p = new Place(obj);
                 places.add(p);
