@@ -30,9 +30,6 @@
     <!-- light theme -->
 
     <style name="Theme.Trackfield" parent="Theme.Default">
-        <!-- text -->
-        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
-
         <!-- primary -->
         <item name="colorPrimary">@color/green</item>
         <item name="colorOnPrimary">@color/fw_white</item>
