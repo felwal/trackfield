@@ -423,7 +423,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             Prefs.setPullOptions(itemStates);
 
             StravaApi strava = new StravaApi(this);
-            LayoutUtils.toast(getString(R.string.toast_strava_pulling_activity), this);
+            LayoutUtils.toast(R.string.toast_strava_pull_activity, this);
 
             strava.pullActivity(exercise.getStravaId(), Prefs.getPullOptions(), success -> {
                 if (success) {

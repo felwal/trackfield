@@ -143,7 +143,7 @@ public class StravaApi {
         if (stravaIds.size() == 0) return;
 
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast("Pulling activities...", a);
+            LayoutUtils.toast(R.string.toast_strava_pull_activities, a);
 
             for (long stravaId : stravaIds) {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
@@ -164,7 +164,7 @@ public class StravaApi {
 
     private void requestActivity(final int index, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast("Requesting activity...", a);
+            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
                 Log.i(LOG_TAG, "response: " + response);
@@ -189,7 +189,7 @@ public class StravaApi {
 
     private void requestActivities(final int page, MultiResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast("Requesting activities...", a);
+            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
@@ -232,7 +232,7 @@ public class StravaApi {
 
     private void requestNewActivities(final int page, MultiResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast("Requesting activities...", a);
+            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {

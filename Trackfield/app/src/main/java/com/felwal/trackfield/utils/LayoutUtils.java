@@ -32,13 +32,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 // Layout
 public final class LayoutUtils {
 
-    public enum Direction {
-        LEFT,
-        TOP,
-        RIGHT,
-        BOTTOM
-    }
-
     private static final int ANIM_DURATION = 100;
     private static final int ANIM_DURATION_LONG = 250;
     private static final int ANIM_DURATION_RECYCLER = 175;

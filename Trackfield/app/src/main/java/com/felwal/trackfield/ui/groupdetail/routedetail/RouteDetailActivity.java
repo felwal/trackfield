@@ -153,7 +153,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(String input, String tag, String passValue) {
+    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_ROUTE)) {
             if (input.equals("") || input.equals(route.getName())) return;
 
@@ -164,7 +164,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
                 AlertDialog.newInstance(getString(R.string.dialog_title_merge_routes),
                     getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge,
                     R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    input, DIALOG_MERGE_ROUTES)
+                    DIALOG_MERGE_ROUTES, input)
                     .show(getSupportFragmentManager());
             }
             else {
