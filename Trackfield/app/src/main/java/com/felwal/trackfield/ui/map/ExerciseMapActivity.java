@@ -36,7 +36,7 @@ public class ExerciseMapActivity extends MapActivity {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        seletedPolylines = setReadyMap(googleMap, trail, MAP_PADDING, this);
+        selectedPolylines = setReadyMap(googleMap, trail, MAP_PADDING, this);
         googleMap.setOnPolylineClickListener(this);
 
         // start marker
@@ -75,7 +75,7 @@ public class ExerciseMapActivity extends MapActivity {
 
         // draw polylines
         PolylineOptions options = new PolylineOptions();
-        options.color(getColorSelected(c));
+        options.color(getColorSelected(false, c));
         options.addAll(trail.getLatLngs());
         Polyline polyline = googleMap.addPolyline(options);
         ArrayList<Polyline> polylines = new ArrayList<>();

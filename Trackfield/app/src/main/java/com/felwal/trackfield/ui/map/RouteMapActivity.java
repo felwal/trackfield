@@ -59,7 +59,7 @@ public class RouteMapActivity extends MapActivity {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        seletedPolylines = setReadyMap(googleMap, trails, MAP_PADDING);
+        selectedPolylines = setReadyMap(googleMap, trails, MAP_PADDING);
         googleMap.setOnPolylineClickListener(this);
     }
 
@@ -81,7 +81,7 @@ public class RouteMapActivity extends MapActivity {
         ArrayList<Polyline> polylines = new ArrayList<>();
         for (List<LatLng> latLngs : trails.getLatLngs()) {
             PolylineOptions options = new PolylineOptions().zIndex(0);
-            options.color(getColorSelected(this));
+            options.color(getColorSelected());
             options.addAll(latLngs);
             polylines.add(googleMap.addPolyline(options));
         }
