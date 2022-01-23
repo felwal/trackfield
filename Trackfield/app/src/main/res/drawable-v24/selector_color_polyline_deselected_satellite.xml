@@ -4,6 +4,6 @@
 
     <item
         android:alpha="@dimen/alpha_polyline_deselected"
-        android:color="?colorSecondary" />
+        android:color="@color/polyline_satellite" />
 
 </selector>

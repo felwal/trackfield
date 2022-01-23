@@ -13,5 +13,7 @@
     <!-- greyscale -->
     <color name="grey_96">#F5F5F5</color>
 
+    <!-- application -->
+    <color name="polyline_satellite">@color/fw_material_green_200</color>
 
 </resources>

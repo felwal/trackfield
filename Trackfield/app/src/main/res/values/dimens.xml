@@ -67,9 +67,13 @@
     <dimen name="type_body">14sp</dimen>
     <dimen name="type_caption">12sp</dimen>
 
-    <!-- elevations -->
+    <!-- elevation -->
 
     <dimen name="elev_toolbar">4dp</dimen>
     <dimen name="elev_navbar">8dp</dimen>
+
+    <!-- color -->
+
+    <dimen name="alpha_polyline_deselected">0.38</dimen>
 
 </resources>

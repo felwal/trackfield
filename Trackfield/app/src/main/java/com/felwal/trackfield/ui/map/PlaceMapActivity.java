@@ -10,20 +10,15 @@ import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Place;
-import com.felwal.trackfield.ui.map.model.Trail;
-import com.felwal.trackfield.ui.map.model.Trails;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PlaceMapActivity extends MapActivity {
 
@@ -48,7 +43,7 @@ public class PlaceMapActivity extends MapActivity {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         super.onMapReady(googleMap);
-        seletedPolylines = setReadyMap(googleMap);
+        selectedPolylines = setReadyMap(googleMap);
         googleMap.setOnPolylineClickListener(this);
     }
 
@@ -66,7 +61,7 @@ public class PlaceMapActivity extends MapActivity {
         CircleOptions circle = new CircleOptions();
         circle.center(place.getLocation());
         circle.radius(place.getRadius());
-        circle.fillColor(getColorDeselected(this));
+        circle.fillColor(getColorDeselected());
         circle.strokeWidth(0f);
         googleMap.addCircle(circle);
 

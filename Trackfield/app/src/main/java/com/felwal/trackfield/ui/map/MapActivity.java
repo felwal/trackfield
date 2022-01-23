@@ -41,12 +41,13 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected static final int MAP_PADDING = 100;
     protected static final int MAP_MAX_ZOOM = 18;
 
-    protected ArrayList<Polyline> seletedPolylines = new ArrayList<>();
+    protected ArrayList<Polyline> selectedPolylines = new ArrayList<>();
     protected final ArrayList<Polyline> tempPolylines = new ArrayList<>();
 
     protected int id;
     protected GoogleMap map;
     protected boolean tempShown = false;
+    protected boolean satellite = false;
 
     // extends AppCompatActivity
 
@@ -93,10 +94,17 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             return true;
         }
         else if (itemId == R.id.action_toggle_map_type) {
-            //googleMap.setMapType(googleMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID :
-            //    (googleMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID ? GoogleMap.MAP_TYPE_TERRAIN : GoogleMap.MAP_TYPE_NORMAL));
-            map.setMapType(map.getMapType() == GoogleMap.MAP_TYPE_NORMAL ? GoogleMap.MAP_TYPE_HYBRID
-                : GoogleMap.MAP_TYPE_NORMAL);
+            // toggle normal/satellite + update polylines color
+
+            map.setMapType(satellite ? GoogleMap.MAP_TYPE_NORMAL : GoogleMap.MAP_TYPE_HYBRID);
+            satellite = !satellite;
+
+            @ColorInt int selectedColor = getColorSelected();
+            @ColorInt int deselectedColor = getColorDeselected();
+
+            for (Polyline p : selectedPolylines) p.setColor(selectedColor);
+            for (Polyline p : tempPolylines) p.setColor(deselectedColor);
+
             return true;
         }
         else if (itemId == R.id.action_toggle_map_history) {
@@ -141,7 +149,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
             for (HashMap.Entry<Integer, String> entry : getRestOfPolylines(id).entrySet()) {
                 // options
                 PolylineOptions options = new PolylineOptions();
-                options.color(getColorDeselected(this));
+                options.color(getColorDeselected());
                 options.width(ScreenUtils.px(3));
                 options.addAll(PolyUtil.decode(entry.getValue()));
 
@@ -195,9 +203,9 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         //moveCamera(googleMap, bounds, MAP_PADDING, true);
 
         // appearance
-        polyline.setColor(getColorSelected(this));
+        polyline.setColor(getColorSelected());
         for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorHidden(this));
-        for (Polyline line : seletedPolylines) line.setColor(getColorHidden(this));
+        for (Polyline line : selectedPolylines) line.setColor(getColorHidden(this));
     }
 
     @Override
@@ -213,22 +221,27 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         if (polyline == null) return;
 
         // appearence
-        polyline.setColor(getColorDeselected(this));
-        for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorDeselected(this));
-        for (Polyline line : seletedPolylines) line.setColor(getColorSelected(this));
+        polyline.setColor(getColorDeselected());
+        for (Polyline line : getPolylineComplement(polyline)) line.setColor(getColorDeselected());
+        for (Polyline line : selectedPolylines) line.setColor(getColorSelected());
     }
 
     // get static
 
     @ColorInt
-    protected static int getColorSelected(Context c) {
-        return ResUtilsKt.getColorByAttr(c, R.attr.colorSecondary);
+    protected int getColorSelected() {
+        return getColorSelected(satellite, this);
     }
 
-    @SuppressLint("ResourceType")
     @ColorInt
-    protected static int getColorDeselected(Context c) {
-        return c.getColor(R.drawable.selector_color_polyline_deselected);
+    protected static int getColorSelected(boolean satellite, Context c) {
+        return satellite ? c.getColor(R.color.polyline_satellite) : ResUtilsKt.getColorByAttr(c, R.attr.colorSecondary);
+    }
+
+    @ColorInt @SuppressLint("ResourceType")
+    protected int getColorDeselected() {
+        return getColor(satellite ? R.drawable.selector_color_polyline_deselected_satellite
+            : R.drawable.selector_color_polyline_deselected);
     }
 
     @ColorInt
