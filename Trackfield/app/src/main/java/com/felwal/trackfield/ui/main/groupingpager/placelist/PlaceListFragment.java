@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
@@ -69,7 +68,7 @@ public class PlaceListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_place, R.attr.colorPlace));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_place, R.attr.tf_colorPlace));
     }
 
     @Override

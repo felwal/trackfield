@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Place;
@@ -68,7 +67,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.colorPlace));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorPlace));
     }
 
     @Override

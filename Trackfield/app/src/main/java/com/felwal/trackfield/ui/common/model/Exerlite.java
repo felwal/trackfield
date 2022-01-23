@@ -127,7 +127,7 @@ public class Exerlite extends RecyclerItem {
     @ColorInt
     public int getMedalColor(Context c) {
         return ResUtilsKt.getColorByAttr(c,
-            isTop(1) ? R.attr.colorGold : isTop(2) ? R.attr.colorSilver : R.attr.colorBronze);
+            isTop(1) ? R.attr.tf_colorGold : isTop(2) ? R.attr.tf_colorSilver : R.attr.tf_colorBronze);
     }
 
     // print

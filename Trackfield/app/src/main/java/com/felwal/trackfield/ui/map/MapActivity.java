@@ -15,7 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.widget.sheet.PeekSheet;
-import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -177,7 +176,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     }
 
     protected static void setMapStyle(GoogleMap googleMap, Context c) {
-        MapStyleOptions style = new MapStyleOptions(ResUtilsKt.getStringByAttr(c, R.attr.mapStyle));
+        MapStyleOptions style = new MapStyleOptions(ResUtilsKt.getStringByAttr(c, R.attr.tf_mapStyle));
         googleMap.setMapStyle(style);
     }
 

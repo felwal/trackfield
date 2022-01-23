@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
@@ -55,7 +54,7 @@ public class IntervalListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_intervallist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_intervallist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_interval, R.attr.colorInterval));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_interval, R.attr.tf_colorInterval));
     }
 
     @Override

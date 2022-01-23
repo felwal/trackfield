@@ -42,45 +42,45 @@
         <item name="chipSurfaceColor">@color/grey_96</item>
 
         <!-- quantity colors -->
-        <item name="colorDistance">@color/quantity_blue_dark</item>
-        <item name="colorRoute">@color/quantity_red_dark</item>
-        <item name="colorRoutevar">@color/quantity_red_dark</item>
-        <item name="colorPlace">@color/quantity_orange_dark</item>
-        <item name="colorInterval">@color/quantity_purple_dark</item>
-        <item name="colorTime">@color/quantity_turqoise_dark</item>
-        <item name="colorPace">@color/quantity_green_dark</item>
-        <item name="colorEnergy">@color/quantity_yellow_dark</item>
-        <item name="colorPower">@color/quantity_orange_dark</item>
-        <item name="colorElevation">@color/quantity_red_dark</item>
+        <item name="tf_colorDistance">@color/quantity_blue_dark</item>
+        <item name="tf_colorRoute">@color/quantity_red_dark</item>
+        <item name="tf_colorRoutevar">@color/quantity_red_dark</item>
+        <item name="tf_colorPlace">@color/quantity_orange_dark</item>
+        <item name="tf_colorInterval">@color/quantity_purple_dark</item>
+        <item name="tf_colorTime">@color/quantity_turqoise_dark</item>
+        <item name="tf_colorPace">@color/quantity_green_dark</item>
+        <item name="tf_colorEnergy">@color/quantity_yellow_dark</item>
+        <item name="tf_colorPower">@color/quantity_orange_dark</item>
+        <item name="tf_colorElevation">@color/quantity_red_dark</item>
 
         <!-- medal colors -->
-        <item name="colorGold">@color/gold_dark</item>
-        <item name="colorSilver">@color/silver_dark</item>
-        <item name="colorBronze">@color/bronze_dark</item>
+        <item name="tf_colorGold">@color/gold_dark</item>
+        <item name="tf_colorSilver">@color/silver_dark</item>
+        <item name="tf_colorBronze">@color/bronze_dark</item>
 
         <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Light</item>
         <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Light</item>
-        <item name="mapStyle">@string/mapstyle_light_json</item>
+        <item name="tf_mapStyle">@string/mapstyle_light_json</item>
     </style>
 
     <!-- color combinations -->
 
     <style name="Theme.Trackfield.Green">
         <item name="android:windowLightStatusBar">false</item>
-        <item name="colorToolbar">?colorPrimary</item>
-        <item name="colorOnToolbar">?colorOnPrimary</item>
-        <item name="colorControlToolbar">?colorOnToolbar</item>
-        <item name="colorTextSecondaryOnToolbar">?android:textColorSecondaryInverse</item>
+        <item name="tf_colorToolbar">?colorPrimary</item>
+        <item name="tf_colorOnToolbar">?colorOnPrimary</item>
+        <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
+        <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondaryInverse</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor" tools:targetApi="l">?android:colorBackground</item>
-        <item name="colorToolbar">?android:colorBackground</item>
-        <item name="colorOnToolbar">?android:textColorPrimary</item>
-        <item name="colorControlToolbar">?colorOnToolbar</item>
-        <item name="colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
+        <item name="tf_colorToolbar">?android:colorBackground</item>
+        <item name="tf_colorOnToolbar">?android:textColorPrimary</item>
+        <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
+        <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
     </style>
 
     <!-- other -->

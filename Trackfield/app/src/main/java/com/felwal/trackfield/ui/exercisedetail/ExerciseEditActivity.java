@@ -37,8 +37,6 @@ import com.felwal.trackfield.utils.TypeUtils;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -139,7 +137,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
         // set cancel icon as home
         Drawable homeIcon = ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_cancel,
-            R.attr.colorControlToolbar);
+            R.attr.tf_colorControlToolbar);
         ab.setHomeAsUpIndicator(homeIcon);
     }
 

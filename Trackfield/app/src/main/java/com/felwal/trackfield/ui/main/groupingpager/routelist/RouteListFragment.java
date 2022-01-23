@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
@@ -69,7 +68,7 @@ public class RouteListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_route, R.attr.colorRoute));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_route, R.attr.tf_colorRoute));
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Distance;
@@ -78,7 +77,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.colorDistance));
+        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorDistance));
     }
 
     @Override

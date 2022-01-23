@@ -5,9 +5,9 @@
     <style name="Widget.Trackfield.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:elevation">@dimen/elev_toolbar</item>
 
-        <item name="android:background">?colorToolbar</item>
-        <item name="titleTextColor">?colorOnToolbar</item>
-        <item name="android:textColor">?colorOnToolbar</item>
+        <item name="android:background">?tf_colorToolbar</item>
+        <item name="titleTextColor">?tf_colorOnToolbar</item>
+        <item name="android:textColor">?tf_colorOnToolbar</item>
 
         <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
@@ -20,12 +20,12 @@
 
     <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
         <!-- built-in action buttons, e.g. home/up, overflow -->
-        <item name="colorControlNormal">?colorControlToolbar</item>
+        <item name="colorControlNormal">?tf_colorControlToolbar</item>
         <!-- custom action buttons -->
-        <item name="iconTint">?colorControlToolbar</item>
+        <item name="iconTint">?tf_colorControlToolbar</item>
 
-        <item name="android:editTextColor">?colorOnToolbar</item>
-        <item name="android:textColorHint">?attr/colorTextSecondaryOnToolbar</item>
+        <item name="android:editTextColor">?tf_colorOnToolbar</item>
+        <item name="android:textColorHint">?tf_colorTextSecondaryOnToolbar</item>
 
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
     </style>

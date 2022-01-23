@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
@@ -57,7 +56,7 @@ public class DistanceListFragment extends RecyclerFragment {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancelist_msg));
         emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_distance,
-            R.attr.colorDistance));
+            R.attr.tf_colorDistance));
     }
 
     @Override
