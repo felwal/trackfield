@@ -4,40 +4,14 @@
     <!-- palette -->
 
     <!-- main -->
-    <color name="green_light">#5BB974</color>
-    <color name="green">#0F9D58</color>
-    <color name="green_dark">#0C7E46</color>
-    <color name="green_darker">#395443</color>
-    <color name="green_lighter">#D6EFDC</color>
+    <color name="green_300">@color/fw_material_green_300</color>
+    <color name="green_400">@color/fw_material_green_400</color>
+    <color name="green_600">@color/fw_material_green_600</color>
+    <color name="green_800">@color/fw_material_green_800</color>
+    <color name="green_900">@color/fw_material_green_900</color>
 
     <!-- greyscale -->
     <color name="grey_96">#F5F5F5</color>
 
-    <!-- accent -->
-    <color name="quantity_blue">#71C0FF</color>
-    <color name="quantity_turqoise">#46CCBF</color>
-    <color name="quantity_green">@color/green_light</color>
-    <color name="quantity_yellow">#FFEE57</color>
-    <color name="quantity_orange">#FDA92D</color>
-    <color name="quantity_red">#FC5043</color>
-    <color name="quantity_purple">#AA7AFF</color>
-
-    <!-- dark accent -->
-    <color name="quantity_blue_dark">#008EFF</color>
-    <color name="quantity_turqoise_dark">#00B0A0</color>
-    <color name="quantity_green_dark">@color/green</color>
-    <color name="quantity_yellow_dark">#DBC500</color>
-    <color name="quantity_orange_dark">#F19000</color>
-    <color name="quantity_red_dark">#DB0F00</color>
-    <color name="quantity_purple_dark">#864BEF</color>
-
-    <!-- medal -->
-    <color name="gold">#EAD688</color>
-    <color name="silver">#DADFDC</color>
-    <color name="bronze">#DC9974</color>
-
-    <color name="gold_dark">#F3CA2D</color>
-    <color name="silver_dark">#A1A1A1</color>
-    <color name="bronze_dark">#E3824E</color>
 
 </resources>

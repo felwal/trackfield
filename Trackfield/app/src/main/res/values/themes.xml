@@ -31,32 +31,32 @@
 
     <style name="Theme.Trackfield" parent="Theme.Default">
         <!-- primary -->
-        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimary">@color/green_600</item>
         <item name="colorOnPrimary">@color/fw_white</item>
-        <item name="colorPrimaryDark">@color/green_dark</item>
-        <item name="colorSecondary">@color/green</item>
+        <item name="colorPrimaryDark">@color/green_800</item>
+        <item name="colorSecondary">@color/green_600</item>
         <item name="colorOnSecondary">@color/fw_white</item>
 
         <!-- widget -->
-        <item name="chipBackgroundColor">@color/green_lighter</item>
+        <item name="chipBackgroundColor">@color/green_300</item>
         <item name="chipSurfaceColor">@color/grey_96</item>
 
         <!-- quantity colors -->
-        <item name="tf_colorDistance">@color/quantity_blue_dark</item>
-        <item name="tf_colorRoute">@color/quantity_red_dark</item>
-        <item name="tf_colorRoutevar">@color/quantity_red_dark</item>
-        <item name="tf_colorPlace">@color/quantity_orange_dark</item>
-        <item name="tf_colorInterval">@color/quantity_purple_dark</item>
-        <item name="tf_colorTime">@color/quantity_turqoise_dark</item>
-        <item name="tf_colorPace">@color/quantity_green_dark</item>
-        <item name="tf_colorEnergy">@color/quantity_yellow_dark</item>
-        <item name="tf_colorPower">@color/quantity_orange_dark</item>
-        <item name="tf_colorElevation">@color/quantity_red_dark</item>
+        <item name="tf_colorPlace">@color/fw_material_orange_deep_600</item>
+        <item name="tf_colorRoute">@color/fw_material_red_600</item>
+        <item name="tf_colorRoutevar">@color/fw_material_pink_600</item>
+        <item name="tf_colorInterval">@color/fw_material_purple_deep_500</item>
+        <item name="tf_colorDistance">@color/fw_material_blue_600</item>
+        <item name="tf_colorTime">@color/fw_material_teal_600</item>
+        <item name="tf_colorPace">@color/fw_material_green_600</item>
+        <item name="tf_colorEnergy">@color/fw_material_yellow_700</item>
+        <item name="tf_colorPower">@color/fw_material_orange_600</item>
+        <item name="tf_colorElevation">@color/fw_material_orange_deep_600</item>
 
         <!-- medal colors -->
-        <item name="tf_colorGold">@color/gold_dark</item>
-        <item name="tf_colorSilver">@color/silver_dark</item>
-        <item name="tf_colorBronze">@color/bronze_dark</item>
+        <item name="tf_colorGold">@color/fw_material_yellow_700</item>
+        <item name="tf_colorSilver">@color/fw_material_grey_500</item>
+        <item name="tf_colorBronze">@color/fw_material_orange_deep_300</item>
 
         <!-- theme -->
         <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker</item>
