@@ -229,7 +229,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     @SuppressLint("ResourceType")
     @ColorInt
     protected static int getColorDeselected(Context c) {
-        return c.getColor(R.animator.selector_color_polyline_deselected);
+        return c.getColor(R.drawable.selector_color_polyline_deselected);
     }
 
     @ColorInt
