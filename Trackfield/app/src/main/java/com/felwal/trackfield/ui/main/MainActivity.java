@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.FloatingActionMenu;
+import com.felwal.android.widget.dialog.CheckDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
-import com.felwal.android.widget.sheet.CheckSheet;
-import com.felwal.android.widget.sheet.MultiChoiceSheet;
 import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -46,7 +45,7 @@ import kotlin.Unit;
 import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
 
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
-    MultiChoiceSheet.SheetListener, SortSheet.SheetListener {
+    MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
 
@@ -122,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
-            CheckSheet.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                null, DIALOG_FILTER, null)
+            CheckDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems, null,
+                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -285,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     }
 
     @Override
-    public void onMultiChoiceSheetItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
+    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
         @Nullable String passValue) {
 
         if (tag.equals(DIALOG_FILTER)) {
