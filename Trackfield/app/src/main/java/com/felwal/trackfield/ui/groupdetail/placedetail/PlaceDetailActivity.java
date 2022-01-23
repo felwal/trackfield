@@ -11,10 +11,11 @@ import androidx.annotation.NonNull;
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.android.widget.dialog.NumberDialog;
 import com.felwal.android.widget.dialog.TextDialog;
+import com.felwal.android.widget.sheet.CheckSheet;
+import com.felwal.android.widget.sheet.MultiChoiceSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 public class PlaceDetailActivity extends GroupDetailActivity implements TextDialog.DialogListener,
-    AlertDialog.DialogListener, MultiChoiceDialog.DialogListener, NumberDialog.DialogListener {
+    AlertDialog.DialogListener, MultiChoiceSheet.SheetListener, NumberDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_PLACE_ID = "placeId";
@@ -76,8 +77,8 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
+            CheckSheet.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                null, DIALOG_FILTER, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -172,7 +173,9 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
+    public void onMultiChoiceSheetItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
+        @Nullable String passValue) {
+
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);

@@ -11,9 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.FloatingActionMenu;
-import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.DecimalDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
+import com.felwal.android.widget.sheet.CheckSheet;
+import com.felwal.android.widget.sheet.MultiChoiceSheet;
 import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
@@ -36,6 +37,8 @@ import com.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 import kotlin.Unit;
@@ -43,12 +46,12 @@ import kotlin.Unit;
 import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
 
 public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
-    MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
+    MultiChoiceSheet.SheetListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
 
     // dialog tags
-    private static final String DIALOG_FILTER_EXERCISES = "filterExercisesDialog";
+    private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
     private static final String DIALOG_ADD_PLACE_LAT = "addPlaceLatDialog";
     private static final String DIALOG_ADD_PLACE_LNG = "addPlaceLngDialog";
@@ -119,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_EXERCISES, null)
+            CheckSheet.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                null, DIALOG_FILTER, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -274,22 +277,24 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
         }
     }
 
+    // implements SortSheet
+
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
-        if (tag.equals(DIALOG_FILTER_EXERCISES)) {
+    public void onSortSheetItemClick(int selectedIndex) {
+        mainFragment.onSortSheetClick(selectedIndex);
+    }
+
+    @Override
+    public void onMultiChoiceSheetItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
+        @Nullable String passValue) {
+
+        if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
 
             Prefs.setExerciseVisibleTypes(visibleTypes);
             mainFragment.updateFragment();
         }
-    }
-
-    // implements SortSheet
-
-    @Override
-    public void onSortSheetItemClick(int selectedIndex) {
-        mainFragment.onSortSheetClick(selectedIndex);
     }
 
 }

@@ -11,8 +11,9 @@ import androidx.annotation.NonNull;
 import com.felwal.android.util.CollectionUtilsKt;
 import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.ChipDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
+import com.felwal.android.widget.sheet.CheckSheet;
+import com.felwal.android.widget.sheet.MultiChoiceSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -22,17 +23,19 @@ import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class DistanceDetailActivity extends GroupDetailActivity implements AlertDialog.DialogListener,
-    TimeDialog.DialogListener, MultiChoiceDialog.DialogListener {
+    TimeDialog.DialogListener, MultiChoiceSheet.SheetListener {
 
     // extras names
     private static final String EXTRA_DISTANCE = "distance";
 
     // dialog tags
     private static final String DIALOG_DELETE_DISTANCE = "deleteDistanceDialog";
-    private static final String DIALOG_FILTER_DISTANCE = "filterDistanceDialog";
+    private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_GOAL_DISTANCE = "goalDistanceDialog";
 
     private int length;
@@ -80,8 +83,8 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
 
             int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
-            ChipDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER_DISTANCE, null)
+            CheckSheet.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems,
+                null, DIALOG_FILTER, null)
                 .show(getSupportFragmentManager());
 
             return true;
@@ -171,8 +174,10 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     }
 
     @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag, String passValue) {
-        if (tag.equals(DIALOG_FILTER_DISTANCE)) {
+    public void onMultiChoiceSheetItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
+        @Nullable String passValue) {
+
+        if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
                 CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
 
