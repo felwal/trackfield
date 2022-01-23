@@ -45,6 +45,7 @@
         <item name="colorToolbar">?colorPrimary</item>
         <item name="colorOnToolbar">?colorOnPrimary</item>
         <item name="colorControlToolbar">?colorOnToolbar</item>
+        <item name="colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
@@ -53,6 +54,7 @@
         <item name="colorToolbar">?colorSurface</item>
         <item name="colorOnToolbar">?android:textColorPrimary</item>
         <item name="colorControlToolbar">?colorOnToolbar</item>
+        <item name="colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
 
         <!-- primary -->
         <item name="colorPrimary">?colorSecondary</item>

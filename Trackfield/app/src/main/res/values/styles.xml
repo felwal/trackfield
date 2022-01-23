@@ -15,7 +15,7 @@
 
     <style name="Widget.Trackfield.Toolbar.Map">
         <item name="android:background">@android:color/transparent</item>
-        <item name="colorControlNormal">?android:textColorPrimary</item>
+        <item name="android:theme">@style/ThemeOverlay.Trackfield.ActionBar.Map</item>
     </style>
 
     <style name="ThemeOverlay.Trackfield.ActionBar" parent="">
@@ -24,7 +24,17 @@
         <!-- custom action buttons -->
         <item name="iconTint">?colorControlToolbar</item>
 
+        <item name="android:editTextColor">?colorOnToolbar</item>
+        <item name="android:textColorHint">?attr/colorTextSecondaryOnToolbar</item>
+
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
+    </style>
+
+    <style name="ThemeOverlay.Trackfield.ActionBar.Map" parent="">
+        <!-- built-in action buttons, e.g. home/up, overflow -->
+        <item name="colorControlNormal">?android:textColorPrimary</item>
+        <!-- custom action buttons -->
+        <item name="iconTint">?android:textColorPrimary</item>
     </style>
 
     <style name="ThemeOverlay.Trackfield.ActionBarPopup" parent="ThemeOverlay.AppCompat.DayNight">
@@ -123,14 +133,10 @@
 
     <!-- date picker -->
 
-    <style name="ThemeOverlay.Trackfield.DatePicker.Dark" parent="android:Theme.Material.Dialog">
-        <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Dark</item>
-        <item name="android:colorSecondary">@color/green_light</item>
-        <item name="android:colorBackground">@color/fw_grey_19</item>
-        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
-    </style>
+    <style name="ThemeOverlay.Trackfield.DatePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <!-- shape (background and buttons) -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Felwal.Dialog</item>
 
-    <style name="ThemeOverlay.Trackfield.DatePicker.Light" parent="android:Theme.Material.Light.Dialog">
         <item name="android:datePickerStyle">@style/Widget.Trackfield.DatePicker.Light</item>
         <item name="android:colorSecondary">@color/green</item>
         <item name="android:textColorSecondary">@animator/selector_color_text_secondary_lt</item>
@@ -139,9 +145,13 @@
     <style name="Widget.Trackfield.DatePicker.Dark" parent="@android:style/Widget.Material.DatePicker">
         <item name="android:headerBackground">@color/green</item>
     </style>
+    <style name="Widget.Trackfield.DatePicker" parent="@style/Widget.MaterialComponents.TimePicker">
+        <!-- shape (background and buttons) -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Felwal.Dialog</item>
 
     <style name="Widget.Trackfield.DatePicker.Light" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:headerBackground">@color/green</item>
+        <item name="android:headerBackground">?colorPrimary</item>
     </style>
 
     <!-- time picker -->
@@ -150,7 +160,7 @@
         <item name="android:timePickerStyle">@style/Widget.Trackfield.TimePicker.Dark</item>
         <item name="android:colorSecondary">@color/green_light</item>
         <item name="android:colorBackground">@color/fw_grey_19</item>
-        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>-
+        <item name="android:textColorSecondary">@animator/selector_color_text_secondary_dk</item>
     </style>
 
     <style name="ThemeOverlay.Trackfield.TimePicker.Light" parent="android:Theme.Material.Light.Dialog">
