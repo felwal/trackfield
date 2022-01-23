@@ -33,7 +33,7 @@
         <item name="tf_colorBronze">@color/bronze</item>
 
         <!-- theme -->
-        <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker.Dark</item>
+        <item name="android:datePickerDialogTheme">@style/ThemeOverlay.Trackfield.DatePicker</item>
         <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Trackfield.TimePicker.Dark</item>
         <item name="tf_mapStyle">@string/mapstyle_dark_json</item>
     </style>
