@@ -64,10 +64,12 @@ fun <E> List<E>.split(count: Int): List<List<E>> {
     return sublists
 }
 
-fun Menu.enableOptionalIcons(c: Context) {
-    setOptionalIconsVisible(true)
-    setOptionalIconsColor(c.getColorByAttr(R.attr.colorControlNormal));
-}
+fun Menu.createOptionalIcons() = setOptionalIconsVisible(true)
+
+/**
+ * Call this from [Activity.onPrepareOptionsMenu]; the colors need updating every time.
+ */
+fun Menu.prepareOptionalIcons(c: Context) = setOptionalIconsColor(c.getColorByAttr(R.attr.colorControlNormal));
 
 val Menu.optionalItems
     @SuppressLint("RestrictedApi")

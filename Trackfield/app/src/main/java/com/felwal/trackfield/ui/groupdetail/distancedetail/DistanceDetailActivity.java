@@ -62,16 +62,6 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     // extends AppCompatActivity
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // goal
-        MenuItem goalItem = menu.findItem(R.id.action_set_distance_goal);
-        goalItem.setChecked(distance.hasGoalPace());
-        //goalItem.setIcon(distance.hasGoalPace() ? R.drawable.ic_goal_filled : R.drawable.ic_goal);
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
@@ -156,7 +146,6 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
             distance.setGoalPace(MathUtils.seconds(0, input1, input2));
             DbWriter.get(this).updateDistance(distance);
 
-            invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
         }
     }
@@ -167,7 +156,6 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
             distance.removeGoalPace();
             DbWriter.get(this).updateDistance(distance);
 
-            invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
         }
     }

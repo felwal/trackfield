@@ -19,7 +19,6 @@
         android:id="@+id/action_set_group_goal"
         android:title="@string/action_set_goal"
         android:icon="@drawable/ic_goal"
-        android:checkable="true"
         app:showAsAction="ifRoom" />
 
     <item

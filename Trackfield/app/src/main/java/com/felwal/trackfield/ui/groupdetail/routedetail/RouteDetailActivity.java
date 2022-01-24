@@ -66,11 +66,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         hideItem.setChecked(route.isHidden());
         //hideItem.setIcon(route.isHidden() ? R.drawable.ic_show_filled :  R.drawable.ic_show);
 
-        // goal
-        MenuItem goalItem = menu.findItem(R.id.action_set_group_goal);
-        goalItem.setChecked(route.hasGoalPace());
-        //goalItem.setIcon(route.hasGoalPace() ? R.drawable.ic_goal_filled : R.drawable.ic_goal);
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -121,7 +116,9 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         else if (itemId == R.id.action_hide_route) {
             route.invertHidden();
             DbWriter.get(this).updateRoute(route, this);
-            invalidateOptionsMenu();
+            // to get immediate check feedback (before the menu closes), update it here,
+            // instead of calling invalidateOptionsMenu(), since that also resets the optional icon colors.
+            item.setChecked(route.isHidden());
             return true;
         }
         else if (itemId == R.id.action_map_route) {
@@ -198,7 +195,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
             route.setGoalPace(MathUtils.seconds(0, input1, input2));
             DbWriter.get(this).updateRoute(route, this);
 
-            invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
         }
     }
@@ -209,7 +205,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
             route.removeGoalPace();
             DbWriter.get(this).updateRoute(route, this);
 
-            invalidateOptionsMenu();
             recyclerFragment.updateRecycler();
         }
     }

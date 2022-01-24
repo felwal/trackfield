@@ -98,7 +98,9 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
         else if (itemId == R.id.action_hide_place) {
             place.invertHidden();
             DbWriter.get(this).updatePlace(place);
-            invalidateOptionsMenu();
+            // to get immediate check feedback (before the menu closes), update it here,
+            // instead of calling invalidateOptionsMenu(), since that also resets the optional icon colors.
+            item.setChecked(place.isHidden());
             return true;
         }
         else if (itemId == R.id.action_place_map) {

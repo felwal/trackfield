@@ -50,8 +50,14 @@ public abstract class GroupDetailActivity extends AppCompatActivity implements S
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(getToolbarMenuRes(), menu);
-        UtilsKt.enableOptionalIcons(menu, this);
+        UtilsKt.createOptionalIcons(menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        UtilsKt.prepareOptionalIcons(menu, this);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

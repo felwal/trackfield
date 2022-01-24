@@ -122,7 +122,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_exercisedetail, menu);
-        UtilsKt.enableOptionalIcons(menu, this);
+        UtilsKt.createOptionalIcons(menu);
 
         // remove actions dependent on externalId
         if (!exercise.hasStravaId()) {
@@ -140,6 +140,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        UtilsKt.prepareOptionalIcons(menu, this);
+
         // hide trail
         MenuItem hideItem = menu.findItem(R.id.action_hide_trail);
         hideItem.setChecked(exercise.isTrailHidden());
@@ -189,7 +191,9 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             if (exercise.hasTrail()) {
                 exercise.invertTrailHidden();
                 DbWriter.get(this).updateExercise(exercise, this);
-                invalidateOptionsMenu();
+                // to get immediate check feedback (before the menu closes), update it here,
+                // instead of calling invalidateOptionsMenu(), since that also resets the optional icon colors.
+                item.setChecked(exercise.isTrailHidden());
             }
             return true;
         }
