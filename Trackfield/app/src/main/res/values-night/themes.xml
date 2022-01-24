@@ -46,6 +46,7 @@
         <item name="tf_colorOnToolbar">?colorOnPrimary</item>
         <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
         <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
+        <item name="tf_colorTextIndicatorOnToobar">@android:color/white</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
@@ -55,10 +56,11 @@
         <item name="tf_colorOnToolbar">?android:textColorPrimary</item>
         <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
         <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
+        <item name="tf_colorTextIndicatorOnToobar">?colorPrimary</item>
 
         <!-- primary -->
-        <item name="colorPrimary">?colorSecondary</item>
-        <item name="colorOnPrimary">?colorOnSecondary</item>
+        <item name="colorPrimary">@color/green_400</item>
+        <item name="colorOnPrimary">?android:colorBackground</item>
         <item name="colorPrimaryDark">@color/green_600</item>
     </style>
 

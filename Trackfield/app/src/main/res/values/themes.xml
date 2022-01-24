@@ -38,7 +38,7 @@
         <item name="colorOnSecondary">@color/fw_white</item>
 
         <!-- widget -->
-        <item name="chipBackgroundColor">@color/green_300</item>
+        <item name="chipBackgroundColor">@color/green_200</item>
         <item name="chipSurfaceColor">@color/grey_96</item>
 
         <!-- quantity colors -->
@@ -72,6 +72,7 @@
         <item name="tf_colorOnToolbar">?colorOnPrimary</item>
         <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
         <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondaryInverse</item>
+        <item name="tf_colorTextIndicatorOnToobar">@color/green_200</item>
     </style>
 
     <style name="Theme.Trackfield.Mono">
@@ -81,6 +82,7 @@
         <item name="tf_colorOnToolbar">?android:textColorPrimary</item>
         <item name="tf_colorControlToolbar">?tf_colorOnToolbar</item>
         <item name="tf_colorTextSecondaryOnToolbar">?android:textColorSecondary</item>
+        <item name="tf_colorTextIndicatorOnToobar">?colorPrimary</item>
     </style>
 
     <!-- other -->
