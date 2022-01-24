@@ -7,21 +7,18 @@
         android:id="@+id/action_add_distance"
         android:title="@string/action_add"
         android:icon="@drawable/ic_add"
-        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_filter_exercises"
         android:title="@string/action_filter"
         android:icon="@drawable/ic_filter"
-        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_settings"
-        android:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
 </menu>

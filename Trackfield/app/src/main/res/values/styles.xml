@@ -60,7 +60,7 @@
         <item name="fw_miniIconTint">?colorOnSecondary</item>
 
         <item name="fw_closedIconSrc">@drawable/ic_add</item>
-        <item name="fw_openedIconSrc">@drawable/ic_cancel</item>
+        <item name="fw_openedIconSrc">@drawable/ic_close</item>
 
         <item name="fw_textAppearance">@style/TextAppearance.Trackfield.Body.FabTitle</item>
 

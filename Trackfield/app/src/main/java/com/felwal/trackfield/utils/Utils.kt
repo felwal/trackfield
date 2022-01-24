@@ -1,17 +1,22 @@
 package com.felwal.trackfield.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Location
+import android.view.Menu
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.FloatRange
+import androidx.appcompat.view.menu.MenuBuilder
+import com.felwal.android.util.getColorByAttr
 import com.felwal.android.util.getDrawableCompat
 import com.felwal.android.util.getResIdByAttr
-import com.google.android.gms.maps.model.LatLng
+import com.felwal.android.util.setOptionalIconsVisible
+import com.felwal.android.util.toColorStateList
+import com.felwal.trackfield.R
 
 fun Context.getBitmap(@DrawableRes id: Int): Bitmap? = getDrawableCompat(id)?.toBitmap()
 
@@ -58,3 +63,16 @@ fun <E> List<E>.split(count: Int): List<List<E>> {
 
     return sublists
 }
+
+fun Menu.enableOptionalIcons(c: Context) {
+    setOptionalIconsVisible(true)
+    setOptionalIconsColor(c.getColorByAttr(R.attr.colorControlNormal));
+}
+
+val Menu.optionalItems
+    @SuppressLint("RestrictedApi")
+    get() = (this as? MenuBuilder)?.nonActionItems
+
+@SuppressLint("RestrictedApi")
+fun Menu.setOptionalIconsColor(@ColorInt color: Int) =
+    optionalItems?.forEach { it.iconTintList = color.toColorStateList() }

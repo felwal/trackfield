@@ -4,7 +4,7 @@
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_exercises_selected" />
+        android:drawable="@drawable/ic_exercises_filled" />
 
     <item android:drawable="@drawable/ic_exercises" />
 

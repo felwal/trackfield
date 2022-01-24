@@ -4,7 +4,7 @@
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_statistics_selected" />
+        android:drawable="@drawable/ic_statistics_filled" />
 
     <item android:drawable="@drawable/ic_statistics" />
 

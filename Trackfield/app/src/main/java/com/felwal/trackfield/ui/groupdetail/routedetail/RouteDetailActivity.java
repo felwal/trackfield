@@ -64,12 +64,12 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hide_route);
         hideItem.setChecked(route.isHidden());
-        hideItem.setIcon(route.isHidden() ? R.drawable.ic_hidden :  R.drawable.ic_hide);
+        //hideItem.setIcon(route.isHidden() ? R.drawable.ic_show_filled :  R.drawable.ic_show);
 
         // goal
         MenuItem goalItem = menu.findItem(R.id.action_set_group_goal);
         goalItem.setChecked(route.hasGoalPace());
-        goalItem.setIcon(route.hasGoalPace() ? R.drawable.ic_goal_checked : R.drawable.ic_goal);
+        //goalItem.setIcon(route.hasGoalPace() ? R.drawable.ic_goal_filled : R.drawable.ic_goal);
 
         return super.onPrepareOptionsMenu(menu);
     }

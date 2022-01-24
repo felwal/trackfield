@@ -135,8 +135,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         ab.setTitle(getToolbarTitleRes());
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // set cancel icon as home
-        Drawable homeIcon = ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_cancel,
+        // set close icon as home
+        Drawable homeIcon = ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_close,
             R.attr.tf_colorControlToolbar);
         ab.setHomeAsUpIndicator(homeIcon);
     }

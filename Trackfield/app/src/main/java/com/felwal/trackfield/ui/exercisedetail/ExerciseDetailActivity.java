@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.android.util.ResUtilsKt;
+import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.CheckDialog;
@@ -37,6 +38,7 @@ import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
+import com.felwal.trackfield.utils.UtilsKt;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -120,6 +122,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_exercisedetail, menu);
+        UtilsKt.enableOptionalIcons(menu, this);
 
         // remove actions dependent on externalId
         if (!exercise.hasStravaId()) {

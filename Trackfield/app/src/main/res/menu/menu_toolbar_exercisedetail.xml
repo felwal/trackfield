@@ -5,47 +5,46 @@
 
     <item
         android:id="@+id/action_edit_exercise"
-        android:icon="@drawable/ic_edit"
         android:title="@string/action_edit"
-        android:iconTint="?colorOnPrimary"
+        android:icon="@drawable/ic_edit"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_delete_exercise"
-        android:icon="@drawable/ic_delete"
-        android:iconTint="?colorOnPrimary"
         android:title="@string/action_delete"
+        android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_pull_exercise"
-        android:iconTint="?colorOnPrimary"
         android:title="@string/action_pull_strava"
+        android:icon="@drawable/fw_ic_arrow_down_24"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_recalibrate_endpoints"
-        android:iconTint="?colorOnPrimary"
         android:title="@string/action_recalibrate_endpoints"
+        android:icon="@drawable/ic_calibrate"
         app:showAsAction="never" />
 
     <!--
     <item
         android:id="@+id/action_push_exercise"
         android:title="@string/action_push_strava"
+        android:icon="@drawable/fw_ic_arrow_up_24"
         app:showAsAction="never"/>-->
 
     <item
         android:id="@+id/action_hide_trail"
-        android:iconTint="?colorOnPrimary"
         android:title="@string/action_hide_trail"
+        android:icon="@drawable/ic_hide"
         android:checkable="true"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_map_routevar"
         android:title="@string/action_map_routevar"
-        android:iconTint="?colorOnPrimary"
+        android:icon="@drawable/ic_map"
         app:showAsAction="never" />
 
 </menu>

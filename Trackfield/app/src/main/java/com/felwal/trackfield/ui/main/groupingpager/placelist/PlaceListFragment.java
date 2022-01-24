@@ -47,9 +47,9 @@ public class PlaceListFragment extends RecyclerFragment {
         // show hidden
         MenuItem hiddenItem = menu.findItem(R.id.action_show_hidden_groups);
         hiddenItem.setChecked(Prefs.areHiddenGroupsShown());
-        if (Prefs.areHiddenGroupsShown()) hiddenItem.setIcon(R.drawable.ic_hidden)
+        if (Prefs.areHiddenGroupsShown()) hiddenItem.setIcon(R.drawable.ic_show_filled)
             .setTitle(R.string.action_hide_hidden);
-        else hiddenItem.setIcon(R.drawable.ic_hide).setTitle(R.string.action_show_hidden);
+        else hiddenItem.setIcon(R.drawable.ic_show).setTitle(R.string.action_show_hidden);
     }
 
     /**

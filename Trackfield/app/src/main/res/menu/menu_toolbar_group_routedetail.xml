@@ -7,36 +7,32 @@
         android:id="@+id/action_filter_exercises"
         android:title="@string/action_filter"
         android:icon="@drawable/ic_filter"
-        android:iconTint="?colorOnPrimary"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_set_group_goal"
-        android:title="@string/action_set_goal"
-        android:icon="@drawable/ic_goal"
-        android:iconTint="?colorOnPrimary"
-        android:checkable="true"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_rename_route"
         android:title="@string/action_rename"
         android:icon="@drawable/ic_rename"
-        android:iconTint="?colorOnPrimary"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_set_group_goal"
+        android:title="@string/action_set_goal"
+        android:icon="@drawable/ic_goal"
+        android:checkable="true"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_hide_route"
         android:title="@string/action_hide_route"
         android:icon="@drawable/ic_hide"
-        android:iconTint="?colorOnPrimary"
         android:checkable="true"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_map_route"
         android:title="@string/action_map_route"
-        android:iconTint="?colorOnPrimary"
+        android:icon="@drawable/ic_map"
         app:showAsAction="never" />
 
 </menu>

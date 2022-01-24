@@ -15,7 +15,6 @@ import com.felwal.android.widget.dialog.CheckDialog;
 import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.android.widget.dialog.NumberDialog;
 import com.felwal.android.widget.dialog.TextDialog;
-import com.felwal.android.widget.sheet.MultiChoiceSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -61,7 +60,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hide_place);
         hideItem.setChecked(place.isHidden());
-        hideItem.setIcon(place.isHidden() ? R.drawable.ic_hidden :  R.drawable.ic_hide);
+        //hideItem.setIcon(place.isHidden() ? R.drawable.ic_show_filled :  R.drawable.ic_show);
 
         return super.onPrepareOptionsMenu(menu);
     }

@@ -66,7 +66,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
         // goal
         MenuItem goalItem = menu.findItem(R.id.action_set_distance_goal);
         goalItem.setChecked(distance.hasGoalPace());
-        goalItem.setIcon(distance.hasGoalPace() ? R.drawable.ic_goal_checked : R.drawable.ic_goal);
+        //goalItem.setIcon(distance.hasGoalPace() ? R.drawable.ic_goal_filled : R.drawable.ic_goal);
 
         return super.onPrepareOptionsMenu(menu);
     }
