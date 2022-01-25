@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.CheckDialog;
@@ -272,13 +271,13 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         setTvHideIfEmpty(exercise.getDevice(), deviceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
 
-        setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.tv_view_i));
-        setTvHideIfEmpty(exercise.printDistance(false, this), distanceTv, findViewById(R.id.tv_view_s));
-        setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.tv_view_t));
-        setTvHideIfEmpty(exercise.printPace(true, this), paceTv, findViewById(R.id.tv_view_v));
-        setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.tv_view_e));
-        setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.tv_view_p));
-        setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.tv_view_h));
+        setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.iv_view_interval));
+        setTvHideIfEmpty(exercise.printDistance(false, this), distanceTv, findViewById(R.id.iv_view_distance));
+        setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.iv_view_time));
+        setTvHideIfEmpty(exercise.printPace(true, this), paceTv, findViewById(R.id.iv_view_pace));
+        setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.iv_view_energy));
+        setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.iv_view_power));
+        setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.iv_view_elevation));
 
         // set listeners
 

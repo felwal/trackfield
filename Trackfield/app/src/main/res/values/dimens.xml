@@ -16,6 +16,11 @@
     <dimen name="spacing_searchview_vertical">4dp</dimen>
     <dimen name="spacing_searchview_right">8dp</dimen>
 
+    <dimen name="spacing_exercisedetail_valuetext_start">@dimen/spacing_small</dimen>
+    <dimen name="spacing_exercisedetail_valueicon_start">@dimen/spacing_medium</dimen>
+    <dimen name="spacing_exercisedetail_valueicon_top">12dp</dimen>
+    <dimen name="spacing_valueicon_bg_padding">6</dimen>
+
     <!-- icon -->
 
     <dimen name="icon_size">24dp</dimen>
@@ -31,6 +36,8 @@
     <dimen name="layout_marker_origin_width">4dp</dimen>
     <dimen name="layout_indicator_tab_height">3dp</dimen>
     <dimen name="layout_indicator_tab_radius">3dp</dimen>
+    <dimen name="layout_valueicon_bg_size">36dp</dimen> <!-- (icon_size + 2 * spacing_icon_bg) -->
+    <dimen name="layout_valueicon_bg_radius">18dp</dimen> <!-- (icon_size + 2 * spacing_icon_bg) / 2 -->
 
     <!-- settings item -->
     <dimen name="layout_settings_item">50dp</dimen>
@@ -75,5 +82,6 @@
     <!-- color -->
 
     <dimen name="alpha_polyline_deselected">0.38</dimen>
+    <dimen name="alpha_valueicon_bg">0.1</dimen>
 
 </resources>
