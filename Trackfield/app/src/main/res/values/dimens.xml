@@ -21,6 +21,8 @@
     <dimen name="spacing_exercisedetail_valueicon_top">12dp</dimen>
     <dimen name="spacing_valueicon_bg_padding">6</dimen>
 
+    <dimen name="spacing_exerciseedit_edge">@dimen/spacing_small</dimen>
+
     <!-- icon -->
 
     <dimen name="icon_size">24dp</dimen>

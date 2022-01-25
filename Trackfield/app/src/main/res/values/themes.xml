@@ -52,6 +52,8 @@
         <item name="tf_colorEnergy">@color/fw_material_yellow_700</item>
         <item name="tf_colorPower">@color/fw_material_orange_600</item>
         <item name="tf_colorElevation">@color/fw_material_orange_deep_600</item>
+        <item name="tf_colorNote">@color/fw_material_brown_600</item>
+        <item name="tf_colorDate">@color/fw_material_grey_600</item>
 
         <!-- medal colors -->
         <item name="tf_colorGold">@color/fw_material_yellow_700</item>

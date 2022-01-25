@@ -35,74 +35,139 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_route"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_route"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_route"
+                    app:srcCompat="@drawable/layer_ic_route"
+                    app:tint="?tf_colorRoute" />
+
                 <AutoCompleteTextView
                     android:id="@+id/et_exerciseedit_route"
-                    android:layout_width="180dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_width="0dp"
                     android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     android:hint="@string/et_hint_exerciseedit_route"
                     android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
                     android:windowSoftInputMode="stateHidden"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_route"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/et_text_exerciseedit_route"
                     style="@style/Widget.Trackfield.EditText" />
 
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_routevar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_routevar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_routevar"
+                    app:srcCompat="@drawable/layer_ic_routevar"
+                    app:tint="?tf_colorRoutevar" />
+
                 <AutoCompleteTextView
                     android:id="@+id/et_exerciseedit_routevar"
                     android:layout_width="0dp"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginTop="@dimen/spacing_tiny"
                     android:hint="@string/et_hint_exerciseedit_routevar"
                     android:completionThreshold="0"
                     android:inputType="textPersonName"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_route"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_route"
-                    style="@style/Widget.Trackfield.EditText.Small" />
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_route"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_route"
+                    style="@style/Widget.Trackfield.EditText" />
+
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_date"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_date"
+                    app:srcCompat="@drawable/layer_ic_date"
+                    app:tint="?tf_colorDate" />
 
                 <EditText
                     android:id="@+id/et_exerciseedit_date"
-                    android:layout_width="120dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_width="0dp"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="false"
                     android:hint="@string/et_hint_exerciseedit_date"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    app:layout_constraintEnd_toStartOf="@+id/et_exerciseedit_time"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_date"
                     app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_interval"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <EditText
                     android:id="@+id/et_exerciseedit_time"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
                     android:editable="false"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     android:hint="@string/et_hint_exerciseedit_time"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_date"
                     app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_date"
                     style="@style/Widget.Trackfield.EditText" />
 
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_interval"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_interval"
+                    app:srcCompat="@drawable/layer_ic_interval"
+                    app:tint="?tf_colorInterval" />
+
                 <AutoCompleteTextView
                     android:id="@+id/et_exerciseedit_interval"
-                    android:layout_width="180dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_width="0dp"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:hint="@string/et_hint_exerciseedit_interval"
                     android:completionThreshold="0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_route"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_interval"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_routevar"
                     style="@style/Widget.Trackfield.EditText" />
+
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginTop="@dimen/spacing_tiny"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_note"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_note"
+                    app:srcCompat="@drawable/layer_ic_note"
+                    app:tint="?tf_colorNote" />
 
                 <EditText
                     android:id="@+id/et_exerciseedit_note"
                     android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     android:hint="@string/et_hint_exerciseedit_note"
                     android:inputType="textMultiLine|textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_note"
                     app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_date"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
@@ -126,7 +191,7 @@
                     android:id="@+id/iv_exerciseedit_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -150,7 +215,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_tiny"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     android:gravity="end|center_vertical"
                     android:switchPadding="10dp"
                     android:text="@string/sw_text_drive"
@@ -163,7 +228,7 @@
                     android:id="@+id/iv_exerciseedit_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:layout_marginTop="@dimen/spacing_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exerciseedit_distance"
@@ -238,7 +303,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/et_exerciseedit_device"
                     android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:hint="@string/et_hint_exerciseedit_device"
                     android:completionThreshold="0"
@@ -252,7 +317,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/et_exerciseedit_recording_method"
                     android:layout_width="0dp"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     android:hint="@string/et_hint_exerciseedit_recordingmethod"
                     android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
@@ -266,13 +331,14 @@
                     android:id="@+id/actv_exerciseedit_type"
                     android:layout_width="0dp"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:hint="@string/et_hint_exerciseedit_type"
                     android:completionThreshold="0"
                     android:layout_marginBottom="@dimen/spacing_tiny"
                     android:inputType="textCapWords"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/et_exerciseedit_device"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_device"
                     style="@style/Widget.Trackfield.EditText.Small" />
