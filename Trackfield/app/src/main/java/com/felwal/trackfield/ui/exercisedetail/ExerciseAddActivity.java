@@ -34,7 +34,7 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
 
     @Override
     protected int getToolbarTitleRes() {
-        return R.string.activity_title_add;
+        return R.string.activity_title_exerciseadd;
     }
 
     @Override

@@ -16,8 +16,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_edit_radius"
-        android:title="@string/action_edit_radius"
+        android:id="@+id/action_exerciseedit_radius"
+        android:title="@string/action_exerciseedit_radius"
         android:icon="@drawable/ic_edit"
         app:showAsAction="ifRoom" />
 

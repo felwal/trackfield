@@ -53,20 +53,20 @@
             android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity"
             android:exported="true"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
-            android:label="@string/activity_title_view" />
+            android:label="@string/activity_title_exercisedetail" />
 
         <activity
             android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseEditActivity"
             android:exported="true"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
-            android:label="@string/activity_title_edit"
+            android:label="@string/activity_title_exerciseedit"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name="com.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity"
             android:parentActivityName="com.felwal.trackfield.ui.main.MainActivity"
             android:exported="true"
-            android:label="@string/activity_title_add"
+            android:label="@string/activity_title_exerciseadd"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- map -->
@@ -75,19 +75,19 @@
             android:name="com.felwal.trackfield.ui.map.ExerciseMapActivity"
             android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity"
             android:exported="true"
-            android:label="@string/activity_title_maps" />
+            android:label="@string/activity_title_map" />
 
         <activity
             android:name="com.felwal.trackfield.ui.map.RouteMapActivity"
             android:parentActivityName="com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity"
             android:exported="true"
-            android:label="@string/activity_title_maps" />
+            android:label="@string/activity_title_map" />
 
         <activity
             android:name="com.felwal.trackfield.ui.map.PlaceMapActivity"
             android:parentActivityName="com.felwal.trackfield.ui.groupdetail.placedetail.PlaceDetailActivity"
             android:exported="true"
-            android:label="@string/activity_title_maps" />
+            android:label="@string/activity_title_map" />
 
         <!-- group detail -->
 

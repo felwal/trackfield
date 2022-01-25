@@ -10,50 +10,50 @@
     android:paddingRight="@dimen/fw_spacing_dialog_horizontal_textfield">
 
     <EditText
-        android:id="@+id/et_dialog_time_minutes"
+        android:id="@+id/et_timedialog_minutes"
         android:layout_width="0dp"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@id/tv_dialog_time_colon"
+        app:layout_constraintEnd_toStartOf="@id/tv_timedialog_colon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.EditText" />
 
     <TextView
-        android:id="@+id/tv_dialog_time_colon"
+        android:id="@+id/tv_timedialog_colon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_diminutive"
         android:layout_marginEnd="@dimen/spacing_diminutive"
         android:text=":"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_dialog_time_minutes"
-        app:layout_constraintEnd_toStartOf="@+id/et_dialog_time_seconds"
-        app:layout_constraintStart_toEndOf="@+id/et_dialog_time_minutes"
-        app:layout_constraintTop_toTopOf="@+id/et_dialog_time_minutes" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_timedialog_minutes"
+        app:layout_constraintEnd_toStartOf="@+id/et_timedialog_seconds"
+        app:layout_constraintStart_toEndOf="@+id/et_timedialog_minutes"
+        app:layout_constraintTop_toTopOf="@+id/et_timedialog_minutes" />
 
     <EditText
-        android:id="@+id/et_dialog_time_seconds"
+        android:id="@+id/et_timedialog_seconds"
         android:layout_width="0dp"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_dialog_time_colon"
+        app:layout_constraintStart_toEndOf="@id/tv_timedialog_colon"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.EditText" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_dialog_time_type"
+        android:id="@+id/cg_timedialog_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:checkedChip="@id/cp_dialog_time_pace"
+        app:checkedChip="@id/cp_timedialog_pace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_dialog_time_minutes"
+        app:layout_constraintTop_toBottomOf="@+id/et_timedialog_minutes"
         app:singleLine="true"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/cp_dialog_time_pace"
+            android:id="@+id/cp_timedialog_pace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -66,12 +66,12 @@
             style="@style/Widget.Trackfield.Chip" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/cp_dialog_time_time"
+            android:id="@+id/cp_timedialog_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
             android:clickable="true"
-            android:text="@string/cp_dialog_time"
+            android:text="@string/cp_timedialog"
             app:checkedIconVisible="false"
             style="@style/Widget.Trackfield.Chip" />
 

@@ -6,7 +6,7 @@
     android:layout_height="55dp">
 
     <TextView
-        android:id="@+id/tv_edit_item_sub_s"
+        android:id="@+id/tv_exerciseedit_item_sub_s"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginStart="@dimen/spacing_medium"
@@ -19,18 +19,18 @@
         style="@style/Widget.Trackfield.TextView" />
 
     <EditText
-        android:id="@+id/et_edit_item_sub_distance"
+        android:id="@+id/et_exerciseedit_item_sub_distance"
         android:layout_width="45dp"
         android:hint="km"
         android:inputType="numberDecimal"
         android:text="@string/et_text_exerciseedit_distance"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_edit_item_sub_s"
+        app:layout_constraintStart_toEndOf="@+id/tv_exerciseedit_item_sub_s"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.EditText" />
 
     <TextView
-        android:id="@+id/tv_edit_item_sub_t"
+        android:id="@+id/tv_exerciseedit_item_sub_t"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginStart="@dimen/spacing_small"
@@ -38,48 +38,48 @@
         android:textColor="?tf_colorTime"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1.Quantity"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_distance"
+        app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_item_sub_distance"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.TextView" />
 
     <EditText
-        android:id="@+id/et_edit_item_sub_hours"
+        android:id="@+id/et_exerciseedit_item_sub_hours"
         android:layout_width="45dp"
         android:hint="hh"
         android:inputType="number"
         android:maxLength="2"
         android:text="@string/et_text_exerciseedit_time"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_edit_item_sub_t"
+        app:layout_constraintStart_toEndOf="@+id/tv_exerciseedit_item_sub_t"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.EditText" />
 
     <EditText
-        android:id="@+id/et_edit_item_sub_minutes"
+        android:id="@+id/et_exerciseedit_item_sub_minutes"
         android:layout_width="45dp"
         android:hint="mm"
         android:inputType="number"
         android:maxLength="2"
         android:text="@string/et_text_exerciseedit_time"
-        app:layout_constraintBottom_toBottomOf="@+id/et_edit_item_sub_hours"
-        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_hours"
-        app:layout_constraintTop_toTopOf="@+id/et_edit_item_sub_hours"
+        app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_item_sub_hours"
+        app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_item_sub_hours"
+        app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_item_sub_hours"
         style="@style/Widget.Trackfield.EditText" />
 
     <EditText
-        android:id="@+id/et_edit_item_sub_seconds"
+        android:id="@+id/et_exerciseedit_item_sub_seconds"
         android:layout_width="45dp"
         android:hint="ss"
         android:inputType="number|numberDecimal"
         android:maxLength="5"
         android:text="@string/et_text_exerciseedit_time"
-        app:layout_constraintBottom_toBottomOf="@+id/et_edit_item_sub_minutes"
-        app:layout_constraintStart_toEndOf="@+id/et_edit_item_sub_minutes"
-        app:layout_constraintTop_toTopOf="@+id/et_edit_item_sub_minutes"
+        app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_item_sub_minutes"
+        app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_item_sub_minutes"
+        app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_item_sub_minutes"
         style="@style/Widget.Trackfield.EditText" />
 
     <Button
-        android:id="@+id/btn_edit_item_sub_remove"
+        android:id="@+id/btn_exerciseedit_item_sub_remove"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_medium"

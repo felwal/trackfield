@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_view_item_sub_s"
+        android:id="@+id/tv_exercisedetail_item_sub_s"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginStart="@dimen/spacing_medium"
@@ -24,18 +24,18 @@
         style="@style/Widget.Trackfield.TextView" />
 
     <TextView
-        android:id="@+id/tv_view_item_sub_distance"
+        android:id="@+id/tv_exercisedetail_item_sub_distance"
         android:layout_height="25dp"
         android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_s"
-        app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_s"
-        app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_s"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_exercisedetail_item_sub_s"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_item_sub_s"
+        app:layout_constraintTop_toTopOf="@+id/tv_exercisedetail_item_sub_s"
         tools:text="distance"
         style="@style/Widget.Trackfield.TextView" />
 
     <TextView
-        android:id="@+id/tv_view_item_sub_t"
+        android:id="@+id/tv_exercisedetail_item_sub_t"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginStart="@dimen/spacing_medium"
@@ -46,24 +46,24 @@
         android:textColor="?tf_colorTime"
         android:textSize="@dimen/type_subtitle3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_distance"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_item_sub_distance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         style="@style/Widget.Trackfield.EditText" />
 
     <TextView
-        android:id="@+id/tv_view_item_sub_time"
+        android:id="@+id/tv_exercisedetail_item_sub_time"
         android:layout_height="25dp"
         android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_t"
-        app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_t"
-        app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_t"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_exercisedetail_item_sub_t"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_item_sub_t"
+        app:layout_constraintTop_toTopOf="@+id/tv_exercisedetail_item_sub_t"
         tools:text="time"
         style="@style/Widget.Trackfield.TextView" />
 
     <TextView
-        android:id="@+id/tv_view_item_sub_v"
+        android:id="@+id/tv_exercisedetail_item_sub_v"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginStart="@dimen/spacing_medium"
@@ -74,18 +74,18 @@
         android:textColor="?tf_colorPace"
         android:textSize="@dimen/type_subtitle3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_time"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_item_sub_time"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.EditText" />
 
     <TextView
-        android:id="@+id/tv_view_item_sub_velocity"
+        android:id="@+id/tv_exercisedetail_item_sub_velocity"
         android:layout_height="25dp"
         android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_view_item_sub_v"
-        app:layout_constraintStart_toEndOf="@+id/tv_view_item_sub_v"
-        app:layout_constraintTop_toTopOf="@+id/tv_view_item_sub_v"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_exercisedetail_item_sub_v"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_item_sub_v"
+        app:layout_constraintTop_toTopOf="@+id/tv_exercisedetail_item_sub_v"
         tools:text="pace"
         style="@style/Widget.Trackfield.TextView" />
 

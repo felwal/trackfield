@@ -156,7 +156,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             finish();
             return true;
         }
-        else if (itemId == R.id.action_edit_exercise) {
+        else if (itemId == R.id.action_exerciseedit_exercise) {
             ExerciseEditActivity.startActivity(this, exerciseId);
             return true;
         }
@@ -207,56 +207,56 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     // set
 
     private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.tb_view);
+        final Toolbar tb = findViewById(R.id.tb_exercisedetail);
         setSupportActionBar(tb);
         final ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.activity_title_view));
+        ab.setTitle(getResources().getString(R.string.activity_title_exercisedetail));
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void setTexts() {
         // subs
         if (exercise.subCount() > 0) {
-            final LinearLayout ll = findViewById(R.id.ll_view);
+            final LinearLayout ll = findViewById(R.id.ll_exercisedetail);
 
             for (int i = 0; i < exercise.subCount(); i++) {
 
                 Sub sub = exercise.getSub(i);
-                final View subView = getLayoutInflater().inflate(R.layout.item_view_sub, ll, false);
+                final View subView = getLayoutInflater().inflate(R.layout.item_exercisedetail_sub, ll, false);
                 ll.addView(subView, ll.getChildCount() - 1);
 
-                final TextView sDistanceTv = subView.findViewById(R.id.tv_view_item_sub_distance);
-                final TextView sTimeTv = subView.findViewById(R.id.tv_view_item_sub_time);
-                final TextView sPaceTv = subView.findViewById(R.id.tv_view_item_sub_velocity);
+                final TextView sDistanceTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_distance);
+                final TextView sTimeTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_time);
+                final TextView sPaceTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_velocity);
 
-                setTvHideIfEmpty(sub.printDistance(), sDistanceTv, subView.findViewById(R.id.tv_view_item_sub_s));
-                setTvHideIfEmpty(sub.printTime(true), sTimeTv, subView.findViewById(R.id.tv_view_item_sub_t));
-                setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_view_item_sub_v));
+                setTvHideIfEmpty(sub.printDistance(), sDistanceTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_s));
+                setTvHideIfEmpty(sub.printTime(true), sTimeTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_t));
+                setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_v));
 
                 if (i % 2 == 0) {
                     subView.setBackgroundColor(ResUtilsKt.getColorByAttr(this, R.attr.colorSurface));
                 }
             }
             //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
-            findViewById(R.id.v_view_divider1).setVisibility(View.INVISIBLE);
+            findViewById(R.id.v_exercisedetail_divider1).setVisibility(View.INVISIBLE);
         }
 
         // get
-        TextView routeTv = findViewById(R.id.tv_view_route);
-        TextView routeVarTv = findViewById(R.id.tv_view_routevar);
-        TextView intervalTv = findViewById(R.id.tv_view_interval);
-        TextView dateTv = findViewById(R.id.tv_view_date);
-        TextView distanceTv = findViewById(R.id.tv_view_distance);
-        TextView timeTv = findViewById(R.id.tv_view_time);
-        TextView paceTv = findViewById(R.id.tv_view_velocity);
-        TextView energyTv = findViewById(R.id.tv_view_energy);
-        TextView powerTv = findViewById(R.id.tv_view_power);
-        TextView elevationTv = findViewById(R.id.tv_view_elevation);
-        TextView noteTv = findViewById(R.id.tv_view_note);
-        TextView idTv = findViewById(R.id.tv_view_id);
-        TextView typeTv = findViewById(R.id.tv_view_type);
-        TextView deviceTv = findViewById(R.id.tv_view_device);
-        TextView recordingMethodTv = findViewById(R.id.tv_view_recording_method);
+        TextView routeTv = findViewById(R.id.tv_exercisedetail_route);
+        TextView routeVarTv = findViewById(R.id.tv_exercisedetail_routevar);
+        TextView intervalTv = findViewById(R.id.tv_exercisedetail_interval);
+        TextView dateTv = findViewById(R.id.tv_exercisedetail_date);
+        TextView distanceTv = findViewById(R.id.tv_exercisedetail_distance);
+        TextView timeTv = findViewById(R.id.tv_exercisedetail_time);
+        TextView paceTv = findViewById(R.id.tv_exercisedetail_velocity);
+        TextView energyTv = findViewById(R.id.tv_exercisedetail_energy);
+        TextView powerTv = findViewById(R.id.tv_exercisedetail_power);
+        TextView elevationTv = findViewById(R.id.tv_exercisedetail_elevation);
+        TextView noteTv = findViewById(R.id.tv_exercisedetail_note);
+        TextView idTv = findViewById(R.id.tv_exercisedetail_id);
+        TextView typeTv = findViewById(R.id.tv_exercisedetail_type);
+        TextView deviceTv = findViewById(R.id.tv_exercisedetail_device);
+        TextView recordingMethodTv = findViewById(R.id.tv_exercisedetail_recording_method);
 
         // set
 
@@ -271,13 +271,13 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         setTvHideIfEmpty(exercise.getDevice(), deviceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
 
-        setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.iv_view_interval));
-        setTvHideIfEmpty(exercise.printDistance(false, this), distanceTv, findViewById(R.id.iv_view_distance));
-        setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.iv_view_time));
-        setTvHideIfEmpty(exercise.printPace(true, this), paceTv, findViewById(R.id.iv_view_pace));
-        setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.iv_view_energy));
-        setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.iv_view_power));
-        setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.iv_view_elevation));
+        setTvHideIfEmpty(exercise.getInterval(), intervalTv, findViewById(R.id.iv_exercisedetail_interval));
+        setTvHideIfEmpty(exercise.printDistance(false, this), distanceTv, findViewById(R.id.iv_exercisedetail_distance));
+        setTvHideIfEmpty(exercise.printTime(true), timeTv, findViewById(R.id.iv_exercisedetail_time));
+        setTvHideIfEmpty(exercise.printPace(true, this), paceTv, findViewById(R.id.iv_exercisedetail_pace));
+        setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.iv_exercisedetail_energy));
+        setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.iv_exercisedetail_power));
+        setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.iv_exercisedetail_elevation));
 
         // set listeners
 
@@ -338,7 +338,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         });
 
         // open strava
-        ImageView stravaIv = findViewById(R.id.iv_view_strava_link);
+        ImageView stravaIv = findViewById(R.id.iv_exercisedetail_strava);
         if (exercise.hasStravaId()) {
             stravaIv.setOnClickListener(v -> StravaApi.launchStravaActivity(exercise.getStravaId(), this));
         }
@@ -347,7 +347,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
 
         // open garmin
-        ImageView garminIv = findViewById(R.id.iv_view_garmin_link);
+        ImageView garminIv = findViewById(R.id.iv_exercisedetail_garmin);
         if (exercise.hasGarminId()) {
             garminIv.setOnClickListener(v -> StravaApi.launchGarminActivity(exercise.getGarminId(), this));
         }
@@ -357,18 +357,18 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     }
 
     private void setMap() {
-        FrameLayout frame = findViewById(R.id.fl_view_map);
+        FrameLayout frame = findViewById(R.id.fl_exercisedetail_map);
         if (!exercise.hasTrail()) {
             frame.setVisibility(View.GONE);
             return;
         }
-        findViewById(R.id.v_view_divider1).setVisibility(View.INVISIBLE);
+        findViewById(R.id.v_exercisedetail_divider1).setVisibility(View.INVISIBLE);
         frame.setClipToOutline(true);
 
         // fragment
         if (mapFragment == null) {
             mapFragment = SupportMapFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_view_map, mapFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_exercisedetail_map, mapFragment).commit();
             mapFragment.getMapAsync(this);
         }
     }

@@ -90,8 +90,8 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
             }
             return true;
         }
-        else if (itemId == R.id.action_edit_radius) {
-            NumberDialog.newInstance(getString(R.string.dialog_title_edit_radius), "", place.getRadius(), "500",
+        else if (itemId == R.id.action_exerciseedit_radius) {
+            NumberDialog.newInstance(getString(R.string.dialog_title_exerciseedit_radius), "", place.getRadius(), "500",
                 R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_EDIT_RADIUS, null)
                 .show(getSupportFragmentManager());
         }

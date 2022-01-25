@@ -44,7 +44,7 @@ public class ExerciseListFragment extends MainFragment {
         setHasOptionsMenu(true);
         setToolbarTitle();
 
-        FrameLayout frame = view.findViewById(R.id.fl_exercises);
+        FrameLayout frame = view.findViewById(R.id.fl_exerciselist);
         recyclerFragment = new ExerciseListRecyclerFragment();
         getChildFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
 
@@ -86,7 +86,7 @@ public class ExerciseListFragment extends MainFragment {
 
     @Override
     protected void setToolbarTitle() {
-        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_exercises));
+        ((MainActivity) getActivity()).setToolbarTitle(getResources().getString(R.string.fragment_title_exerciselist));
     }
 
     @Override

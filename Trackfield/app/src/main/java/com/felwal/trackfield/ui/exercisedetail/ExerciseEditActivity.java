@@ -129,7 +129,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     // set
 
     private void setToolbar() {
-        final Toolbar tb = findViewById(R.id.tb_edit);
+        final Toolbar tb = findViewById(R.id.tb_exerciseedit);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setTitle(getToolbarTitleRes());
@@ -143,21 +143,21 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     private void findEditTexts() {
         // edittexts
-        routeActv = findViewById(R.id.et_route);
-        routeVarActv = findViewById(R.id.et_routeVar);
-        intervalActv = findViewById(R.id.et_interval);
-        dateEt = findViewById(R.id.et_date);
-        timeEt = findViewById(R.id.et_time);
-        noteEt = findViewById(R.id.et_note);
-        distanceEt = findViewById(R.id.et_edit_distance);
-        hoursEt = findViewById(R.id.et_edit_hours);
-        minutesEt = findViewById(R.id.et_edit_minutes);
-        secondsEt = findViewById(R.id.et_edit_seconds);
+        routeActv = findViewById(R.id.et_exerciseedit_route);
+        routeVarActv = findViewById(R.id.et_exerciseedit_routevar);
+        intervalActv = findViewById(R.id.et_exerciseedit_interval);
+        dateEt = findViewById(R.id.et_exerciseedit_date);
+        timeEt = findViewById(R.id.et_exerciseedit_time);
+        noteEt = findViewById(R.id.et_exerciseedit_note);
+        distanceEt = findViewById(R.id.et_exerciseedit_distance);
+        hoursEt = findViewById(R.id.et_exerciseedit_hours);
+        minutesEt = findViewById(R.id.et_exerciseedit_minutes);
+        secondsEt = findViewById(R.id.et_exerciseedit_seconds);
         //polylineEt = findViewById(R.id.editText_polyline);
-        deviceActv = findViewById(R.id.et_edit_device);
-        recordingMethodActv = findViewById(R.id.et_edit_recording_method);
-        drivenSw = findViewById(R.id.sw_edit_drive_distance);
-        typeActv = findViewById(R.id.actv_edit_type);
+        deviceActv = findViewById(R.id.et_exerciseedit_device);
+        recordingMethodActv = findViewById(R.id.et_exerciseedit_recording_method);
+        drivenSw = findViewById(R.id.sw_exerciseedit_drive_distance);
+        typeActv = findViewById(R.id.actv_exerciseedit_type);
 
         // actv adapters
         setAdapter(typeActv, DbReader.get(this).getTypes());
@@ -175,16 +175,16 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             Sub sub = exercise.getSub(i);
 
             // add views
-            LinearLayout ll = findViewById(R.id.ll_edit);
-            View subView = getLayoutInflater().inflate(R.layout.item_edit_sub, ll, false);
+            LinearLayout ll = findViewById(R.id.ll_exerciseedit);
+            View subView = getLayoutInflater().inflate(R.layout.item_exerciseedit_sub, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
             setRemoveSubBtnListener(ll, subView);
 
-            EditText sDistanceEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_distance);
-            EditText sHoursEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_hours);
-            EditText sMinutesEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_minutes);
-            EditText sSecondsEt = subViews.get(i).findViewById(R.id.et_edit_item_sub_seconds);
+            EditText sDistanceEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_distance);
+            EditText sHoursEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_hours);
+            EditText sMinutesEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_minutes);
+            EditText sSecondsEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_seconds);
 
             float[] time = MathUtils.getTimeParts(sub.getTime());
 
@@ -282,7 +282,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     @StringRes
     protected int getToolbarTitleRes() {
-        return R.string.activity_title_edit;
+        return R.string.activity_title_exerciseedit;
     }
 
     protected boolean haveEditsBeenMade() {
@@ -398,10 +398,10 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         for (int i = 0; i < subViews.size(); i++) {
             View v = subViews.get(i);
 
-            EditText sDistanceEt = v.findViewById(R.id.et_edit_item_sub_distance);
-            EditText sHoursEt = v.findViewById(R.id.et_edit_item_sub_hours);
-            EditText sMinutesEt = v.findViewById(R.id.et_edit_item_sub_minutes);
-            EditText sSecondsEt = v.findViewById(R.id.et_edit_item_sub_seconds);
+            EditText sDistanceEt = v.findViewById(R.id.et_exerciseedit_item_sub_distance);
+            EditText sHoursEt = v.findViewById(R.id.et_exerciseedit_item_sub_hours);
+            EditText sMinutesEt = v.findViewById(R.id.et_exerciseedit_item_sub_minutes);
+            EditText sSecondsEt = v.findViewById(R.id.et_exerciseedit_item_sub_seconds);
 
             int distance = (int) (Float.parseFloat(sDistanceEt.getText().toString()) * 1000);
             int hours = Integer.parseInt(sHoursEt.getText().toString());
@@ -427,10 +427,10 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     @Unimplemented
     private void setAddSubBtnListener() {
-        final Button addSubBtn = findViewById(R.id.btn_edit_add_sub);
+        final Button addSubBtn = findViewById(R.id.btn_exerciseedit_add_sub);
         addSubBtn.setOnClickListener(v -> {
-            final LinearLayout ll = findViewById(R.id.ll_edit);
-            final View subView = getLayoutInflater().inflate(R.layout.item_edit_sub, ll, false);
+            final LinearLayout ll = findViewById(R.id.ll_exerciseedit);
+            final View subView = getLayoutInflater().inflate(R.layout.item_exerciseedit_sub, ll, false);
             ll.addView(subView, ll.getChildCount() - 1);
             subViews.add(subView);
 
@@ -440,7 +440,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     @Unimplemented
     private void setRemoveSubBtnListener(final LinearLayout ll, final View subView) {
-        final Button removeBtn = subView.findViewById(R.id.btn_edit_item_sub_remove);
+        final Button removeBtn = subView.findViewById(R.id.btn_exerciseedit_item_sub_remove);
         removeBtn.setOnClickListener(v -> {
             ll.removeView(subView);
             subViews.remove(subView);

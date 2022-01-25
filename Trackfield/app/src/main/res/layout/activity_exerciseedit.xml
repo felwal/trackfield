@@ -8,7 +8,7 @@
     tools:context=".ui.exercisedetail.ExerciseEditActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_edit"
+        android:id="@+id/tb_exerciseedit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,10 +23,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_edit">
+        app:layout_constraintTop_toBottomOf="@+id/tb_exerciseedit">
 
         <LinearLayout
-            android:id="@+id/ll_edit"
+            android:id="@+id/ll_exerciseedit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -36,7 +36,7 @@
                 android:layout_height="match_parent">
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_route"
+                    android:id="@+id/et_exerciseedit_route"
                     android:layout_width="180dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
@@ -50,50 +50,50 @@
                     style="@style/Widget.Trackfield.EditText" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_routeVar"
+                    android:id="@+id/et_exerciseedit_routevar"
                     android:layout_width="0dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_exerciseedit_routevar"
                     android:completionThreshold="0"
                     android:inputType="textPersonName"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_route"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_route"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_route"
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_route"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
                 <EditText
-                    android:id="@+id/et_date"
+                    android:id="@+id/et_exerciseedit_date"
                     android:layout_width="120dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:editable="false"
                     android:hint="@string/et_hint_exerciseedit_date"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_interval"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_interval"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <EditText
-                    android:id="@+id/et_time"
+                    android:id="@+id/et_exerciseedit_time"
                     android:layout_width="120dp"
                     android:editable="false"
                     android:hint="@string/et_hint_exerciseedit_time"
-                    app:layout_constraintStart_toEndOf="@+id/et_date"
-                    app:layout_constraintTop_toTopOf="@+id/et_date"
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_date"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_date"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_interval"
+                    android:id="@+id/et_exerciseedit_interval"
                     android:layout_width="180dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:hint="@string/et_hint_exerciseedit_interval"
                     android:completionThreshold="0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_route"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_route"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <EditText
-                    android:id="@+id/et_note"
+                    android:id="@+id/et_exerciseedit_note"
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_tiny"
@@ -103,27 +103,27 @@
                     android:textAlignment="viewStart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_date"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_date"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
                 <View
-                    android:id="@+id/v_edit_divider1"
+                    android:id="@+id/v_exerciseedit_divider1"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_note"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_note"
                     style="@style/Widget.Felwal.Divider" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_edit_default_sub"
+                android:id="@+id/cl_exerciseedit_default_sub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/iv_edit_distance"
+                    android:id="@+id/iv_exerciseedit_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_medium"
@@ -134,19 +134,19 @@
                     app:tint="?tf_colorDistance" />
 
                 <EditText
-                    android:id="@+id/et_edit_distance"
+                    android:id="@+id/et_exerciseedit_distance"
                     android:layout_width="90dp"
                     android:hint="@string/et_hint_exerciseedit_distance"
                     android:inputType="numberDecimal"
                     android:text="@string/et_text_exerciseedit_distance"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_edit_distance"
-                    app:layout_constraintStart_toEndOf="@+id/iv_edit_distance"
-                    app:layout_constraintTop_toTopOf="@+id/iv_edit_distance"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_distance"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_distance"
+                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_distance"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/sw_edit_drive_distance"
+                    android:id="@+id/sw_exerciseedit_drive_distance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_tiny"
@@ -154,61 +154,61 @@
                     android:gravity="end|center_vertical"
                     android:switchPadding="10dp"
                     android:text="@string/sw_text_drive"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_edit_distance"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_distance"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_edit_distance"
-                    app:layout_constraintTop_toTopOf="@+id/iv_edit_distance" />
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_distance"
+                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_distance" />
 
                 <ImageView
-                    android:id="@+id/iv_edit_duration"
+                    android:id="@+id/iv_exerciseedit_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_edit_distance"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_exerciseedit_distance"
                     app:srcCompat="@drawable/layer_ic_duration"
                     app:tint="?tf_colorTime" />
 
                 <EditText
-                    android:id="@+id/et_edit_hours"
+                    android:id="@+id/et_exerciseedit_hours"
                     android:layout_width="45dp"
                     android:hint="@string/et_hint_exerciseedit_hours"
                     android:inputType="number"
                     android:maxLength="2"
                     android:text="@string/et_text_exerciseedit_time"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_edit_duration"
-                    app:layout_constraintStart_toEndOf="@+id/iv_edit_duration"
-                    app:layout_constraintTop_toTopOf="@+id/iv_edit_duration"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_duration"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_duration"
+                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_duration"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <EditText
-                    android:id="@+id/et_edit_minutes"
+                    android:id="@+id/et_exerciseedit_minutes"
                     android:layout_width="45dp"
                     android:hint="@string/et_hint_exerciseedit_minutes"
                     android:inputType="number"
                     android:maxLength="2"
                     android:text="@string/et_text_exerciseedit_time"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_edit_hours"
-                    app:layout_constraintStart_toEndOf="@+id/et_edit_hours"
-                    app:layout_constraintTop_toTopOf="@+id/et_edit_hours"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_hours"
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_hours"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_hours"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <EditText
-                    android:id="@+id/et_edit_seconds"
+                    android:id="@+id/et_exerciseedit_seconds"
                     android:layout_width="45dp"
                     android:hint="@string/et_hint_exerciseedit_seconds"
                     android:inputType="number|numberDecimal"
                     android:maxLength="5"
                     android:text="@string/et_text_exerciseedit_time"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_edit_minutes"
-                    app:layout_constraintStart_toEndOf="@+id/et_edit_minutes"
-                    app:layout_constraintTop_toTopOf="@+id/et_edit_minutes"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_minutes"
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_minutes"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_minutes"
                     style="@style/Widget.Trackfield.EditText" />
 
                 <Button
-                    android:id="@+id/btn_edit_add_sub"
+                    android:id="@+id/btn_exerciseedit_add_sub"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_medium"
@@ -217,7 +217,7 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_edit_seconds"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_seconds"
                     style="@style/Widget.AppCompat.Button.Colored" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -227,7 +227,7 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/v_edit_divider2"
+                    android:id="@+id/v_exerciseedit_divider2"
                     android:layout_marginTop="@dimen/spacing_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -236,7 +236,7 @@
                     style="@style/Widget.Felwal.Divider" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_edit_device"
+                    android:id="@+id/et_exerciseedit_device"
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
@@ -244,13 +244,13 @@
                     android:completionThreshold="0"
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
-                    app:layout_constraintEnd_toStartOf="@+id/et_edit_recording_method"
+                    app:layout_constraintEnd_toStartOf="@+id/et_exerciseedit_recording_method"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/v_edit_divider2"
+                    app:layout_constraintTop_toBottomOf="@+id/v_exerciseedit_divider2"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_edit_recording_method"
+                    android:id="@+id/et_exerciseedit_recording_method"
                     android:layout_width="0dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:hint="@string/et_hint_exerciseedit_recordingmethod"
@@ -258,12 +258,12 @@
                     android:inputType="textPersonName|textCapSentences"
                     android:textAlignment="viewStart"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_edit_device"
-                    app:layout_constraintTop_toTopOf="@+id/et_edit_device"
+                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_device"
+                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_device"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/actv_edit_type"
+                    android:id="@+id/actv_exerciseedit_type"
                     android:layout_width="0dp"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginStart="@dimen/spacing_medium"
@@ -272,9 +272,9 @@
                     android:layout_marginBottom="@dimen/spacing_tiny"
                     android:inputType="textCapWords"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/et_edit_device"
+                    app:layout_constraintEnd_toEndOf="@+id/et_exerciseedit_device"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_edit_device"
+                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_device"
                     style="@style/Widget.Trackfield.EditText.Small" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

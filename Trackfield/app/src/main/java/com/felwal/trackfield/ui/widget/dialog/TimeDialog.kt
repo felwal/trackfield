@@ -38,8 +38,8 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
 
     override fun buildDialog(): AlertDialog {
         val root = inflater.inflate(R.layout.dialog_time, null)
-        val et1 = root.findViewById<EditText>(R.id.et_dialog_time_minutes)
-        val et2 = root.findViewById<EditText>(R.id.et_dialog_time_seconds)
+        val et1 = root.findViewById<EditText>(R.id.et_timedialog_minutes)
+        val et2 = root.findViewById<EditText>(R.id.et_timedialog_seconds)
 
         et1.hint = hint1
         et2.hint = hint2

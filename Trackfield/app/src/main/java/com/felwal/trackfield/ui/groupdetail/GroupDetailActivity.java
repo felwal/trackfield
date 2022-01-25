@@ -11,8 +11,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
@@ -36,7 +34,7 @@ public abstract class GroupDetailActivity extends AppCompatActivity implements S
         ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groupdetail);
-        frame = findViewById(R.id.fl_group);
+        frame = findViewById(R.id.fl_groupdetail);
 
         getExtras(getIntent());
     }
@@ -75,7 +73,7 @@ public abstract class GroupDetailActivity extends AppCompatActivity implements S
     // set
 
     protected void setToolbar(String title) {
-        final Toolbar tb = findViewById(R.id.tb_group);
+        final Toolbar tb = findViewById(R.id.tb_groupdetail);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // up btn

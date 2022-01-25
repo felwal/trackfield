@@ -8,7 +8,7 @@
     tools:context=".ui.groupdetail.GroupDetailActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/cdl_group"
+        android:id="@+id/cdl_groupdetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="parent"
@@ -17,17 +17,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-            android:id="@+id/fl_group"
+            android:id="@+id/fl_groupdetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_group" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_groupdetail" />
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/ab_group"
+            android:id="@+id/ab_groupdetail"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/ctb_group"
+                android:id="@+id/ctb_groupdetail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentScrim="?colorPrimary"
@@ -44,7 +44,7 @@
                 app:titleEnabled="false">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/tb_group"
+                    android:id="@+id/tb_groupdetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
