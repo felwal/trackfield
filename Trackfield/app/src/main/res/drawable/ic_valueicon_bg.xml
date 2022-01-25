@@ -7,7 +7,7 @@
 
     <path
 
-        android:fillColor="@drawable/selector_color_valueicon_bg"
+        android:fillColor="@color/selector_color_valueicon_bg"
         android:pathData="M4 0H5H6H18H19H20C22.2091 0 24 1.79086 24 4V5V6V18V19V20C24 22.2091 22.2091 24 20 24H19H18H6H5H4C1.79086 24 0 22.2091 0 20V19V18V6V5V4C0 1.79086 1.79086 0 4 0Z" />
 
 </vector>

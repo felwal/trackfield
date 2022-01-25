@@ -8,7 +8,7 @@
         android:right="@dimen/spacing_searchview_right">
 
         <shape>
-            <solid android:color="@drawable/selector_searchview_bg_color" />
+            <solid android:color="@color/selector_color_searchview_bg" />
             <corners android:radius="@dimen/layout_searchview_corner_radius" />
         </shape>
 

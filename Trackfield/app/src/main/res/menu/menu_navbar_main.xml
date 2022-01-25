@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/navigation_main_exercises"
-        android:icon="@drawable/selector_nav_ic_exercise"
+        android:icon="@drawable/selector_ic_nav_exercise"
         android:title="@string/fragment_title_exerciselist" />
 
     <item
         android:id="@+id/navigation_main_groupingpager"
-        android:icon="@drawable/selector_nav_ic_groupings"
+        android:icon="@drawable/selector_ic_nav_groupings"
         android:title="@string/fragment_title_groupingpager" />
 
     <item
         android:id="@+id/navigation_main_statistics"
-        android:icon="@drawable/selector_nav_ic_statistics"
+        android:icon="@drawable/selector_ic_nav_statistics"
         android:title="@string/fragment_title_statistics" />
 
 </menu>
