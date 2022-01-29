@@ -35,9 +35,9 @@
     <string name="et_text_exerciseedit_route">Route</string>
     <string name="et_hint_exerciseedit_route">Route</string>
     <string name="et_hint_exerciseedit_routevar">Route variation</string>
-    <string name="et_hint_exerciseedit_date">yyyy/MM/dd</string>
+    <string name="et_hint_exerciseedit_date">Date</string>
     <string name="et_text_exerciseedit_time">0</string>
-    <string name="et_hint_exerciseedit_time">hh:mm:ss</string>
+    <string name="et_hint_exerciseedit_time">Time</string>
     <string name="et_hint_exerciseedit_interval">Interval</string>
     <string name="et_hint_exerciseedit_note">Note</string>
     <string name="et_text_exerciseedit_distance">0</string>

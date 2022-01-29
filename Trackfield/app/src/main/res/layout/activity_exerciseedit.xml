@@ -29,19 +29,21 @@
             android:id="@+id/ll_exerciseedit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_exerciseedit_til_top"
+            android:clipToPadding="false"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
                 android:clipToPadding="false">
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_route"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_route"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_route"
@@ -53,7 +55,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_route"
                     app:layout_constraintTop_toTopOf="parent"
@@ -68,11 +69,19 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <ImageView
                     android:id="@+id/iv_exerciseedit_routevar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_routevar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_routevar"
@@ -83,12 +92,10 @@
                     android:id="@+id/til_exerciseedit_routevar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_routevar"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_route"
+                    app:layout_constraintTop_toTopOf="parent"
                     style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                     <AutoCompleteTextView
@@ -100,11 +107,19 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <ImageView
                     android:id="@+id/iv_exerciseedit_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_date"
@@ -115,12 +130,11 @@
                     android:id="@+id/til_exerciseedit_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
                     app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_time"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_date"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_routevar">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -136,11 +150,9 @@
                     android:id="@+id/til_exerciseedit_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_date"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_routevar">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -152,11 +164,19 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <ImageView
                     android:id="@+id/iv_exerciseedit_note"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_note"
                     app:layout_constraintStart_toStartOf="parent"
@@ -168,12 +188,10 @@
                     android:id="@+id/til_exerciseedit_note"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_note"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_date">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -187,22 +205,22 @@
 
             <View
                 android:id="@+id/v_exerciseedit_divider1"
+                android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 style="@style/Widget.Felwal.Divider" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_exerciseedit_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
                 android:clipToPadding="false">
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_interval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_interval"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_interval"
@@ -214,7 +232,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_interval"
                     app:layout_constraintTop_toTopOf="parent"
@@ -229,11 +246,19 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <ImageView
                     android:id="@+id/iv_exerciseedit_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_distance"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_distance"
@@ -244,15 +269,13 @@
                     android:id="@+id/til_exerciseedit_distance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:suffixText="@string/et_suffix_exerciseedit_distance"
                     app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_calculate"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_distance"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_interval">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -262,11 +285,19 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <ImageView
                     android:id="@+id/iv_exerciseedit_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_hours"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_hours"
@@ -277,13 +308,12 @@
                     android:id="@+id/til_exerciseedit_hours"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
                     app:suffixText="@string/et_suffix_exerciseedit_hours"
                     app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_minutes"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_duration"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -298,12 +328,11 @@
                     android:id="@+id/til_exerciseedit_minutes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
                     app:suffixText="@string/et_suffix_exerciseedit_minutes"
                     app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_seconds"
                     app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_hours"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -318,12 +347,10 @@
                     android:id="@+id/til_exerciseedit_seconds"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:suffixText="@string/et_suffix_exerciseedit_seconds"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_minutes"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -338,6 +365,7 @@
 
             <View
                 android:id="@+id/v_exerciseedit_divider2"
+                android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -346,15 +374,43 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_start_noicon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_type"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
                 android:clipToPadding="false">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_exerciseedit_device"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_start_noicon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -369,43 +425,29 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_exerciseedit_recordingmethod"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_start_noicon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_device"
+                    app:layout_constraintTop_toTopOf="parent"
                     style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/et_hint_exerciseedit_recordingmethod"
-                        android:inputType="text|textCapSentences"
-                        android:completionThreshold="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_exerciseedit_type"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_recordingmethod"
-                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/et_hint_exerciseedit_type"
                         android:inputType="text|textCapSentences"
                         android:completionThreshold="1" />
 

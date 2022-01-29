@@ -22,9 +22,10 @@
     <dimen name="spacing_valueicon_bg_padding">6</dimen>
 
     <dimen name="spacing_exerciseedit_edge">@dimen/spacing_small</dimen>
+    <dimen name="spacing_exerciseedit_til_start">@dimen/spacing_small</dimen>
+    <!-- layout_valueicon_bg_size + spacing_exercisedetail_valuetext_start -->
+    <dimen name="spacing_exerciseedit_til_start_noicon">52dp</dimen>
     <dimen name="spacing_exerciseedit_til_top">@dimen/spacing_small</dimen>
-    <!-- layout_valueicon_bg_size + spacing_exerciseedit_edge + spacing_exercisedetail_valuetext_start -->
-    <dimen name="spacing_exerciseedit_til_noicon_start">68dp</dimen>
 
     <!-- icon -->
 

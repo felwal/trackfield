@@ -80,9 +80,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         ScreenUtils.updateTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exerciseedit);
-        setToolbar();
 
-        loadData();
+        setToolbar();
         findEditTexts();
         setEditTexts();
         setListeners();
@@ -165,6 +164,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     }
 
     protected void setEditTexts() {
+        loadData();
+
         float[] time = MathUtils.getTimeParts(exercise.getTime());
         String hoursTxt = (int) time[2] + "";
         String minutesTxt = (int) time[1] + "";
