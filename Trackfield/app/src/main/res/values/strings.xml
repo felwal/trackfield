@@ -52,6 +52,7 @@
     <string name="et_hint_exerciseedit_device">Device</string>
     <string name="et_hint_exerciseedit_recordingmethod">Recording method</string>
     <string name="et_hint_exerciseedit_type">Type</string>
+    <string name="et_hint_exerciseedit_label">Label</string>
 
     <!-- text views -->
 
@@ -103,7 +104,7 @@
         to get started.</string>
     <string name="tv_text_empty_search_title">No results</string>
     <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue
-        variation, device, method, note and type.</string>
+        variation, note, type, label, device and recording method.</string>
     <string name="tv_text_empty_distancelist_title">No distances</string>
     <string name="tv_text_empty_distancelist_msg">Press + to add a distance.</string>
     <string name="tv_text_empty_routelist_title">No routes</string>

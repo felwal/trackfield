@@ -404,6 +404,7 @@ public class DbWriter extends DbHelper {
         cv.put(ExerciseEntry.COLUMN_STRAVA_ID, e.getStravaId());
         cv.put(ExerciseEntry.COLUMN_GARMIN_ID, e.getGarminId());
         cv.put(ExerciseEntry.COLUMN_TYPE, e.getType());
+        cv.put(ExerciseEntry.COLUMN_LABEL, e.getLabel());
         cv.put(ExerciseEntry.COLUMN_DATE, e.getEpoch());
         cv.put(ExerciseEntry.COLUMN_ROUTE_ID, e.getRouteId());
         cv.put(ExerciseEntry.COLUMN_ROUTE, e.getRoute());

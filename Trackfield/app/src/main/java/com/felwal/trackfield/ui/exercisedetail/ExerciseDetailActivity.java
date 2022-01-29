@@ -226,6 +226,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         TextView noteTv = findViewById(R.id.tv_exercisedetail_note);
         TextView idTv = findViewById(R.id.tv_exercisedetail_id);
         TextView typeTv = findViewById(R.id.tv_exercisedetail_type);
+        TextView labelTv = findViewById(R.id.tv_exercisedetail_label);
         TextView deviceTv = findViewById(R.id.tv_exercisedetail_device);
         TextView recordingMethodTv = findViewById(R.id.tv_exercisedetail_recording_method);
 
@@ -238,7 +239,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         setTvHideIfEmpty(exercise.getNote(), noteTv);
 
         idTv.setText(exercise.printId());
-        typeTv.setText(exercise.getType());
+        setTvHideIfEmpty(exercise.getType(), typeTv);
+        setTvHideIfEmpty(exercise.getLabel(), labelTv);
         setTvHideIfEmpty(exercise.getDevice(), deviceTv);
         setTvHideIfEmpty(exercise.getRecordingMethod(), recordingMethodTv);
 
@@ -252,7 +254,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
         // set listeners
 
-        // open activity
+        // group shortcuts
         if (fromRecycler != FROM_ROUTE) {
             routeTv.setOnClickListener(v ->
                 RouteDetailActivity.startActivity(ExerciseDetailActivity.this, exercise.getRouteId(), exercise.getId()));
@@ -263,6 +265,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
         if (fromRecycler != FROM_DISTANCE) {
             distanceTv.setOnClickListener(v -> {
+                // TODO: always rounds up?
                 int longestDistance = DbReader.get(ExerciseDetailActivity.this).longestDistanceWithinLimits(
                     exercise.getEffectiveDistance(this));
                 DistanceDetailActivity.startActivity(ExerciseDetailActivity.this, longestDistance, exercise.getId());

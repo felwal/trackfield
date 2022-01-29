@@ -417,6 +417,44 @@
                 android:clipToPadding="false">
 
                 <ImageView
+                    android:id="@+id/iv_exerciseedit_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_label"
+                    app:srcCompat="@drawable/layer_ic_label"
+                    app:tint="?tf_colorMisc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_start"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_exerciseedit_label"
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_label"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
+                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
+                <ImageView
                     android:id="@+id/iv_exerciseedit_device"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

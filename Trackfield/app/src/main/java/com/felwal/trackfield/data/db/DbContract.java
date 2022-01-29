@@ -18,6 +18,7 @@ public final class DbContract {
         public static final String COLUMN_STRAVA_ID = "strava_id";
         public static final String COLUMN_GARMIN_ID = "garmin_id";
         public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_LABEL = "label";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_ROUTE_ID = "route_id";
         @Deprecated public static final String COLUMN_ROUTE = "route";
@@ -52,6 +53,7 @@ public final class DbContract {
             COLUMN_STRAVA_ID + " INTEGER," +
             COLUMN_GARMIN_ID + " INTEGER," +
             COLUMN_TYPE + " TEXT," +
+            COLUMN_LABEL + " TEXT," +
             COLUMN_DATE + " INTEGER," +
             COLUMN_ROUTE_ID + " INTEGER," +
             COLUMN_ROUTE + " TEXT," +

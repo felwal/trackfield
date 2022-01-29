@@ -58,6 +58,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     protected TextInputLayout dateTil;
     protected TextInputLayout timeTil;
     protected TextInputLayout typeTil;
+    protected TextInputLayout labelTil;
 
     // arguments
     private int exerciseId;
@@ -154,11 +155,13 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         deviceTil = findViewById(R.id.til_exerciseedit_device);
         recordingMethodTil = findViewById(R.id.til_exerciseedit_recordingmethod);
         typeTil = findViewById(R.id.til_exerciseedit_type);
+        labelTil = findViewById(R.id.til_exerciseedit_label);
 
         // actv adapters
-        setAdapter(typeTil, DbReader.get(this).getTypes());
         setAdapter(routeTil, DbReader.get(this).getRouteNames());
         setAdapter(intervalTil, DbReader.get(this).getIntervals());
+        setAdapter(typeTil, DbReader.get(this).getTypes());
+        setAdapter(labelTil, DbReader.get(this).getLabels());
         setAdapter(deviceTil, DbReader.get(this).getDevices());
         setAdapter(recordingMethodTil, DbReader.get(this).getMethods());
     }
@@ -186,6 +189,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         et(deviceTil).setText(exercise.getDevice());
         et(recordingMethodTil).setText(exercise.getRecordingMethod());
         et(typeTil).setText(exercise.getType());
+        et(labelTil).setText(exercise.getLabel());
 
         if (isDistanceDriven) {
             et(distanceTil).setEnabled(false);
@@ -325,6 +329,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             String dataSource = et(deviceTil).getText().toString().trim();
             String recordingMethod = et(recordingMethodTil).getText().toString().trim();
             String type = TypeUtils.toWordCase(et(typeTil).getText().toString()).trim();
+            String label = TypeUtils.toWordCase(et(labelTil).getText().toString()).trim();
             String interval = et(intervalTil).getText().toString().trim();
 
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
@@ -339,7 +344,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, dateTime, routeId,
+                exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, label, dateTime, routeId,
                     route, routeVar, interval, note, dataSource, recordingMethod, distance, time, null, false);
 
                 boolean success = DbWriter.get(this).addExercise(exercise, this);
@@ -348,8 +353,8 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             // save edit
             else {
                 exercise = new Exercise(exercise.getId(), exercise.getStravaId(), exercise.getGarminId(), type,
-                    dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time,
-                    exercise.getTrail(), exercise.isTrailHidden());
+                    label, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance,
+                    time, exercise.getTrail(), exercise.isTrailHidden());
 
                 boolean success = DbWriter.get(this).updateExercise(exercise, this);
                 LayoutUtils.toast(success, this);

@@ -185,7 +185,8 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_DEVICE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_NOTE + " LIKE " + "'%" + search + "%' OR " +
-                ExerciseEntry.COLUMN_TYPE + " LIKE " + "'%" + search + "%')" +
+                ExerciseEntry.COLUMN_TYPE + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_LABEL + " LIKE " + "'%" + search + "%')" +
                 typeFilter(" AND", Prefs.getExerciseVisibleTypes());
         String orderBy = orderBy(sortMode, ascending);
 
@@ -959,6 +960,25 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
+    public ArrayList<String> getLabels() {
+        String[] columns = { ExerciseEntry.COLUMN_LABEL };
+        String selection = ExerciseEntry.COLUMN_LABEL + " != ''";
+        String groupBy = ExerciseEntry.COLUMN_LABEL;
+        String orderBy = "count() DESC";
+
+        Cursor cursor = db.query(true, ExerciseEntry.TABLE_NAME, columns, selection, null, groupBy, null, orderBy,
+            null);
+        ArrayList<String> labels = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String label = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_LABEL));
+            labels.add(label);
+        }
+        cursor.close();
+
+        return labels;
+    }
+
+    @NonNull
     public ArrayList<String> getRouteNames() {
         String[] columns = { ExerciseEntry.COLUMN_ROUTE };
         String groupBy = ExerciseEntry.COLUMN_ROUTE;
@@ -1301,6 +1321,7 @@ public class DbReader extends DbHelper {
             long stravaId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_STRAVA_ID));
             long garminId = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_GARMIN_ID));
             String type = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
+            String label = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_LABEL));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
             String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
@@ -1329,8 +1350,8 @@ public class DbReader extends DbHelper {
             if (interval == null) interval = "";
             String routeName = getRouteName(routeId);
 
-            Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
-                interval, note, dataSource, recordingMethod, distance, time, trail, hideTrail);
+            Exercise exercise = new Exercise(id, stravaId, garminId, type, label, dateTime, routeId, routeName,
+                routeVar, interval, note, dataSource, recordingMethod, distance, time, trail, hideTrail);
             exercises.add(exercise);
         }
 

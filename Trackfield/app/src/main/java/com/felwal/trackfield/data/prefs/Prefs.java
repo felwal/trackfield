@@ -116,8 +116,9 @@ public class Prefs {
         new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
         new SwitchItem(StravaApi.JSON_DISTANCE, "Distance", true),
         new SwitchItem(StravaApi.JSON_TIME, "Elapsed time", true),
-        new SwitchItem(StravaApi.JSON_TYPE, "Type", true),
-        new SwitchItem(StravaApi.JSON_DATE, "Datetime", true),
+        new SwitchItem(StravaApi.JSON_TYPE, "Sport (as type)", true),
+        new SwitchItem(StravaApi.JSON_COMMUTE, "Commute (as label)", true),
+        new SwitchItem(StravaApi.JSON_DATE, "Date & time", true),
         new SwitchItem(StravaApi.JSON_MAP, "Map", true),
         new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
     );

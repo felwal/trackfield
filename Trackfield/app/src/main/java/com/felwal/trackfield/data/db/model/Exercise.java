@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Exercise implements JSONObjectable {
 
@@ -34,6 +33,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_STRAVA_ID = "strava_id";
     private static final String JSON_GARMIN_ID = "garmin_id";
     private static final String JSON_TYPE = "type";
+    private static final String JSON_LABEL = "label";
     private static final String JSON_EPOCH = "epoch";
     private static final String JSON_ROUTE_ID = "route_id";
     private static final String JSON_ROUTEVAR = "route_var";
@@ -55,6 +55,7 @@ public class Exercise implements JSONObjectable {
     private long stravaId;
     private long garminId;
     private String type;
+    private String label;
     private LocalDateTime dateTime;
     private int routeId;
     private String route;
@@ -66,18 +67,19 @@ public class Exercise implements JSONObjectable {
     private int distance;
     private float time;
     private Trail trail;
-    private boolean trailHidden = false;
+    private boolean trailHidden;
 
     //
 
-    public Exercise(int id, long stravaId, long garminId, String type, LocalDateTime dateTime, int routeId,
-        String route, String routeVar, String interval, String note, String device, String recordingMethod,
+    public Exercise(int id, long stravaId, long garminId, String type, String label, LocalDateTime dateTime,
+        int routeId, String route, String routeVar, String interval, String note, String device, String recordingMethod,
         int distance, float time, @Nullable Trail trail, boolean trailHidden) {
 
         this.id = id;
         this.stravaId = stravaId;
         this.garminId = garminId == 0 ? NO_ID : garminId;
         this.type = type;
+        this.label = label;
         this.dateTime = dateTime;
         this.routeId = routeId;
         this.route = route;
@@ -97,6 +99,7 @@ public class Exercise implements JSONObjectable {
         stravaId = obj.getLong(JSON_STRAVA_ID);
         garminId = obj.getLong(JSON_GARMIN_ID);
         type = obj.getString(JSON_TYPE);
+        label = obj.getString(JSON_LABEL);
         dateTime = DateUtils.ofEpochSecond(obj.getInt(JSON_EPOCH));
         routeId = obj.getInt(JSON_ROUTE_ID);
         route = DbReader.get(c).getRouteName(routeId);
@@ -142,6 +145,10 @@ public class Exercise implements JSONObjectable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public void setDateTime(LocalDateTime dateTime) {
@@ -212,6 +219,10 @@ public class Exercise implements JSONObjectable {
 
     public String getType() {
         return type;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public LocalDateTime getDateTime() {
@@ -430,6 +441,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_STRAVA_ID, stravaId);
             obj.put(JSON_GARMIN_ID, garminId);
             obj.put(JSON_TYPE, getType());
+            obj.put(JSON_LABEL, getLabel());
             obj.put(JSON_EPOCH, getEpoch());
             obj.put(JSON_ROUTE_ID, routeId);
             obj.put(JSON_ROUTEVAR, routeVar);

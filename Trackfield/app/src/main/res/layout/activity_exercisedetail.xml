@@ -328,11 +328,22 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_type"
-                    android:layout_marginStart="@dimen/spacing_tiny"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
-                    app:layout_constraintStart_toEndOf="@+id/tv_exercisedetail_id"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exercisedetail_id"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_id"
                     tools:text="Type"
+                    style="@style/Widget.Trackfield.TextView" />
+
+                <TextView
+                    android:id="@+id/tv_exercisedetail_label"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_tiny"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_type"
+                    tools:text="Label"
                     style="@style/Widget.Trackfield.TextView" />
 
                 <TextView
@@ -341,7 +352,7 @@
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_type"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_label"
                     tools:text="Device"
                     style="@style/Widget.Trackfield.TextView" />
 

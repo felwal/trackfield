@@ -56,6 +56,7 @@ public class StravaApi {
     public static final String JSON_START = "start_latlng";
     public static final String JSON_END = "end_latlng";
     public static final String JSON_DEVICE = "device_name";
+    public static final String JSON_COMMUTE = "commute";
 
     // api values
     private static final String CLIENT_ID = BuildConfig.STRAVA_CLIENT_ID;
@@ -312,6 +313,7 @@ public class StravaApi {
             int time = obj.getInt(JSON_TIME);
             String type = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
+            String label = obj.getBoolean(JSON_COMMUTE) ? "Commute" : "";
 
             // external id
             String externalId;
@@ -354,8 +356,8 @@ public class StravaApi {
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
 
-            return new Exercise(Exercise.NO_ID, stravaId, garminId, type, dateTime, routeId, name, "", "", description,
-                device, method, distance, time, trail, false);
+            return new Exercise(Exercise.NO_ID, stravaId, garminId, type, label, dateTime, routeId, name, "", "",
+                description, device, method, distance, time, trail, false);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -389,6 +391,9 @@ public class StravaApi {
             }
             if (options.isChecked(JSON_TYPE)) {
                 existing.setType(strava.getType());
+            }
+            if (options.isChecked(JSON_COMMUTE)) {
+                existing.setLabel(strava.getLabel());
             }
             if (options.isChecked(JSON_DATE)) {
                 existing.setDateTime(strava.getDateTime());
@@ -437,8 +442,8 @@ public class StravaApi {
         if (matching.size() == 1) {
             Exercise m = matching.get(0);
             Exercise merged = new Exercise(m.getId(), strava.getStravaId(), strava.getGarminId(), m.getType(),
-                strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(), m.getNote(),
-                m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(),
+                strava.getLabel(), strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
+                m.getNote(), m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(),
                 strava.getTrail(), m.isTrailHidden());
 
             success = DbWriter.get(a).updateExercise(merged, a);
