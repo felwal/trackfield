@@ -190,7 +190,7 @@ public class StravaApi {
 
     private void requestActivities(final int page, MultiResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
+            LayoutUtils.toast(R.string.toast_strava_req_activities, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
@@ -233,7 +233,7 @@ public class StravaApi {
 
     private void requestNewActivities(final int page, MultiResponseListener listener) {
         ((TokenRequester) accessToken -> {
-            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
+            LayoutUtils.toast(R.string.toast_strava_req_activities, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {

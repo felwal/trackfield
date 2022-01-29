@@ -196,8 +196,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             distanceTil.setEndIconDrawable(R.drawable.ic_calculate_filled);
         }
 
-        actv(routeTil).setDropDownVerticalOffset(0);
-
         // polyline
         /*if (exercise.hasTrail()) {
             polylineEt.setText(exercise.getTrail().getPolyline());

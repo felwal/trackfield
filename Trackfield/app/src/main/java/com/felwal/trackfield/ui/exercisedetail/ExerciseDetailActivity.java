@@ -172,6 +172,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
                 ).show(getSupportFragmentManager());
             }
             else {
+                // TODO: snackbar with 'remove id' action?
                 LayoutUtils.toast(R.string.toast_strava_pull_activity_gone, this);
             }
             return true;

@@ -90,7 +90,7 @@
     <string name="tv_text_settings_header_requests">Request activities</string>
     <string name="tv_text_settings_title_request_new">Request new</string>
     <string name="tv_text_settings_title_request_all">Request all</string>
-    <string name="tv_text_settings_title_pull_all">Pull all</string>
+    <string name="tv_text_settings_title_pull_all">Pull all from Strava</string>
     <string name="tv_text_settings_header_request_options">Request options</string>
     <string name="tv_text_settings_title_device">Default device</string>
     <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc …</string>

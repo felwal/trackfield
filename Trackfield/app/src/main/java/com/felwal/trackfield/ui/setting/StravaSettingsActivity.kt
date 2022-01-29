@@ -104,9 +104,11 @@ class StravaSettingsActivity :
                     tag = DIALOG_REQUEST_ALL,
                     iconRes = R.drawable.ic_send
                 ),
-                ConfirmationItem(
+                MultiSelectionItem(
                     title = getString(R.string.tv_text_settings_title_pull_all),
-                    dialogPosBtnRes = R.string.fw_dialog_btn_ok,
+                    values = Prefs.getPullOptions().texts,
+                    selectedIndices = Prefs.getPullOptions().checked.toIndicesOfTruths(),
+                    //dialogPosBtnRes = R.string.dialog_btn_pull,
                     tag = DIALOG_PULL_ALL,
                     iconRes = R.drawable.fw_ic_arrow_down_24
                 ).takeIf { Prefs.isDeveloper() }
@@ -150,12 +152,6 @@ class StravaSettingsActivity :
                     StravaApi.toastResponse(successCount, errorCount, this)
                 }
             }
-            DIALOG_PULL_ALL -> {
-                strava.pullAllActivities { success ->
-                    // we dont want to toast for every successfully requested activity
-                    if (!success) LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this)
-                }
-            }
         }
     }
 
@@ -174,6 +170,13 @@ class StravaSettingsActivity :
 
     override fun onMultiChoiceDialogItemsSelected(itemStates: BooleanArray, tag: String, passValue: String?) {
         when (tag) {
+            DIALOG_PULL_ALL -> {
+                Prefs.setPullOptions(itemStates)
+                strava.pullAllActivities { success ->
+                    // we dont want to toast for every successfully requested activity
+                    if (!success) LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this)
+                }
+            }
             DIALOG_REQUEST_OPTIONS -> {
                 Prefs.setRequestOptions(itemStates)
                 reflateViews()
