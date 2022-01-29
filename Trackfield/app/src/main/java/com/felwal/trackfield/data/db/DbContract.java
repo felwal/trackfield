@@ -3,7 +3,6 @@ package com.felwal.trackfield.data.db;
 import android.provider.BaseColumns;
 
 import com.felwal.trackfield.ui.common.model.SorterItem;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 public final class DbContract {
 
@@ -113,23 +112,6 @@ public final class DbContract {
                     return COLUMN_DATE;
             }
         }
-
-    }
-
-    @Unimplemented
-    public static class SubEntry implements BaseColumns {
-
-        public static final String TABLE_NAME = "subs";
-        public static final String COLUMN_SUPERID = "super_id";
-        public static final String COLUMN_DISTANCE = "distance";
-        public static final String COLUMN_TIME = "time";
-
-        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_SUPERID + " INTEGER," +
-            COLUMN_DISTANCE + " INTEGER," +
-            COLUMN_TIME + " REAL)";
 
     }
 

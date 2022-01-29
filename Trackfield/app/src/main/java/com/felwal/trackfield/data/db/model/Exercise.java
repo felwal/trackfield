@@ -13,7 +13,6 @@ import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 import com.felwal.trackfield.utils.annotation.Unfinished;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -68,13 +67,12 @@ public class Exercise implements JSONObjectable {
     private float time;
     private Trail trail;
     private boolean trailHidden = false;
-    @Unimplemented private final ArrayList<Sub> subs;
 
     //
 
     public Exercise(int id, long stravaId, long garminId, String type, LocalDateTime dateTime, int routeId,
         String route, String routeVar, String interval, String note, String device, String recordingMethod,
-        int distance, float time, @Nullable ArrayList<Sub> subs, @Nullable Trail trail, boolean trailHidden) {
+        int distance, float time, @Nullable Trail trail, boolean trailHidden) {
 
         this.id = id;
         this.stravaId = stravaId;
@@ -90,7 +88,6 @@ public class Exercise implements JSONObjectable {
         this.recordingMethod = recordingMethod;
         this.distance = distance;
         this.time = time;
-        this.subs = subs == null ? new ArrayList<>() : subs;
         this.trail = trail;
         this.trailHidden = trailHidden;
     }
@@ -131,9 +128,6 @@ public class Exercise implements JSONObjectable {
                 trail = new Trail(polyline);
             }
         }
-
-        // TODO: subs
-        subs = new ArrayList<>();
     }
 
     // set
@@ -192,13 +186,6 @@ public class Exercise implements JSONObjectable {
 
     public void setTrail(Trail trail) {
         this.trail = trail;
-    }
-
-    @Unimplemented
-    public void setSubsSuperId(int id) {
-        for (Sub sub : subs) {
-            sub.setSuperId(id);
-        }
     }
 
     public void setTrailHidden(boolean hidden) {
@@ -287,11 +274,6 @@ public class Exercise implements JSONObjectable {
         return trail;
     }
 
-    @Unimplemented
-    public ArrayList<Sub> getSubs() {
-        return subs;
-    }
-
     // get driven
 
     public boolean hasStravaId() {
@@ -369,35 +351,6 @@ public class Exercise implements JSONObjectable {
 
     public boolean isTrailHidden() {
         return trailHidden;
-    }
-
-    @Unimplemented
-    public Sub getSub(int index) {
-        if (index >= subCount()) return null;
-        return subs.get(index);
-    }
-
-    @Unimplemented
-    public int getSubsDistance() {
-        int distance = 0;
-        for (Sub s : subs) {
-            distance += s.getDistance();
-        }
-        return distance;
-    }
-
-    @Unimplemented
-    public float getSubsTime() {
-        float time = 0;
-        for (Sub s : subs) {
-            time += s.getTime();
-        }
-        return time;
-    }
-
-    @Unimplemented
-    public int subCount() {
-        return subs != null ? subs.size() : 0;
     }
 
     // print

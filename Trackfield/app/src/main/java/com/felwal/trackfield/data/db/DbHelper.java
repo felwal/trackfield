@@ -23,7 +23,6 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DbContract.ExerciseEntry.CREATE_TABLE);
-        db.execSQL(DbContract.SubEntry.CREATE_TABLE);
         db.execSQL(DbContract.RouteEntry.CREATE_TABLE);
         db.execSQL(DbContract.DistanceEntry.CREATE_TABLE);
         db.execSQL(DbContract.PlaceEntry.CREATE_TABLE);
@@ -34,7 +33,6 @@ public abstract class DbHelper extends SQLiteOpenHelper {
         if (oldVersion < 1) {
             // oldVersion 0 is used to simply recreate
             db.execSQL(DbContract.ExerciseEntry.DELETE_TABLE);
-            db.execSQL(DbContract.SubEntry.DELETE_TABLE);
             db.execSQL(DbContract.RouteEntry.DELETE_TABLE);
             db.execSQL(DbContract.DistanceEntry.DELETE_TABLE);
             db.execSQL(DbContract.PlaceEntry.DELETE_TABLE);
@@ -48,7 +46,6 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DbContract.ExerciseEntry.DELETE_TABLE);
-        db.execSQL(DbContract.SubEntry.DELETE_TABLE);
         db.execSQL(DbContract.RouteEntry.DELETE_TABLE);
         db.execSQL(DbContract.DistanceEntry.DELETE_TABLE);
         onCreate(db);

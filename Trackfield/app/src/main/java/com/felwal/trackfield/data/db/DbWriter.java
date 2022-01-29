@@ -10,11 +10,9 @@ import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
-import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.annotation.Debug;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
 
 import java.util.ArrayList;
 
@@ -88,13 +86,11 @@ public class DbWriter extends DbHelper {
         ContentValues cv = fillExerciseContentValues(e, c);
 
         long id = db.insert(ExerciseEntry.TABLE_NAME, null, cv);
-        e.setSubsSuperId((int) id);
-        final boolean subSuccess = addSubs(e.getSubs());
 
         // must be called to keep effective distance current
         updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
 
-        return success(id) && subSuccess;
+        return success(id);
     }
 
     /**
@@ -113,7 +109,6 @@ public class DbWriter extends DbHelper {
         String[] whereArgs = { Integer.toString(e.getId()) };
 
         int count = db.update(ExerciseEntry.TABLE_NAME, newCv, where, whereArgs);
-        boolean subSuccess = updateSubs(e.getSubs());
 
         // delete route if changed and empty
         if (old.getRouteId() != e.getRouteId()) {
@@ -129,7 +124,7 @@ public class DbWriter extends DbHelper {
             updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
         }
 
-        return count > 0 && subSuccess;
+        return count > 0;
     }
 
     /**
@@ -141,11 +136,9 @@ public class DbWriter extends DbHelper {
      */
     public boolean deleteExercise(@NonNull Exercise e, Context c) {
         String selection = ExerciseEntry._ID + " = ?";
-        String subSelection = SubEntry.COLUMN_SUPERID + " = ?";
         String[] selectionArgs = { Integer.toString(e.getId()) };
 
         long result = db.delete(ExerciseEntry.TABLE_NAME, selection, selectionArgs);
-        long subResult = db.delete(SubEntry.TABLE_NAME, subSelection, selectionArgs);
 
         // route
         deleteRouteIfEmpty(e.getRouteId(), c);
@@ -153,7 +146,7 @@ public class DbWriter extends DbHelper {
         // effective distance
         updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
 
-        return success(result) && success(subResult);
+        return success(result);
     }
 
     // single columns
@@ -217,55 +210,6 @@ public class DbWriter extends DbHelper {
             success &= deleteRouteIfEmpty(route.getId(), c);
         }
         return success;
-    }
-
-    // subs
-
-    @Unimplemented
-    private boolean addSubs(@NonNull ArrayList<Sub> subs) {
-        boolean success = true;
-        for (Sub sub : subs) {
-            success &= addSub(sub);
-        }
-        return success;
-    }
-
-    @Unimplemented
-    private boolean addSub(Sub sub) {
-        ContentValues cvSub = fillSubContentValues(sub);
-        long result = db.insert(SubEntry.TABLE_NAME, null, cvSub);
-        return success(result);
-    }
-
-    @Unimplemented
-    private boolean updateSubs(@NonNull ArrayList<Sub> subs) {
-        boolean success = true;
-        for (Sub sub : subs) {
-
-            if (sub.getId() != -1) {
-                ContentValues newCv = fillSubContentValues(sub);
-                String selection = SubEntry._ID + " = ?";
-                String[] selectionArgs = { Integer.toString(sub.getId()) };
-
-                int count = db.update(SubEntry.TABLE_NAME, newCv, selection, selectionArgs);
-                success &= count > 0;
-            }
-            else {
-                success &= addSub(sub);
-            }
-        }
-
-        return success;
-    }
-
-    @Unimplemented
-    public boolean deleteSub(@NonNull Sub sub) {
-        String selection = SubEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(sub.getId()) };
-
-        long result = db.delete(SubEntry.TABLE_NAME, selection, selectionArgs);
-
-        return success(result);
     }
 
     // distances
@@ -497,17 +441,6 @@ public class DbWriter extends DbHelper {
             cv.put(ExerciseEntry.COLUMN_END_LNG, (Double) null);
             cv.put(ExerciseEntry.COLUMN_POLYLINE, (String) null);
         }
-
-        return cv;
-    }
-
-    @NonNull
-    private ContentValues fillSubContentValues(@NonNull Sub sub) {
-        ContentValues cv = new ContentValues();
-
-        cv.put(SubEntry.COLUMN_SUPERID, sub.getSuperId());
-        cv.put(SubEntry.COLUMN_DISTANCE, sub.getDistance());
-        cv.put(SubEntry.COLUMN_TIME, sub.getTime());
 
         return cv;
     }

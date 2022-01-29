@@ -8,12 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -26,7 +23,6 @@ import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.model.Exercise;
-import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.utils.ScreenUtils;
@@ -34,13 +30,11 @@ import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseEditActivity extends AppCompatActivity implements AlertDialog.DialogListener {
@@ -64,7 +58,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     protected TextInputLayout dateTil;
     protected TextInputLayout timeTil;
     protected TextInputLayout typeTil;
-    @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
 
     // arguments
     private int exerciseId;
@@ -93,7 +86,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         findEditTexts();
         setEditTexts();
         setListeners();
-        //setAddSubBtnListener();
     }
 
     @Override
@@ -173,30 +165,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     }
 
     protected void setEditTexts() {
-        // subs
-        for (int i = 0; i < exercise.subCount(); i++) {
-            Sub sub = exercise.getSub(i);
-
-            // add views
-            LinearLayout ll = findViewById(R.id.ll_exerciseedit);
-            View subView = getLayoutInflater().inflate(R.layout.item_exerciseedit_sub, ll, false);
-            ll.addView(subView, ll.getChildCount() - 1);
-            subViews.add(subView);
-            setRemoveSubBtnListener(ll, subView);
-
-            EditText sDistanceEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_distance);
-            EditText sHoursEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_hours);
-            EditText sMinutesEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_minutes);
-            EditText sSecondsEt = subViews.get(i).findViewById(R.id.et_exerciseedit_item_sub_seconds);
-
-            float[] time = MathUtils.getTimeParts(sub.getTime());
-
-            sDistanceEt.setText((float) sub.getDistance() / 1000 + "");
-            sHoursEt.setText((int) time[2] + "");
-            sMinutesEt.setText((int) time[1] + "");
-            sSecondsEt.setText(time[0] + "");
-        }
-
         float[] time = MathUtils.getTimeParts(exercise.getTime());
         String hoursTxt = (int) time[2] + "";
         String minutesTxt = (int) time[1] + "";
@@ -356,7 +324,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             String dataSource = et(deviceTil).getText().toString().trim();
             String recordingMethod = et(recordingMethodTil).getText().toString().trim();
             String type = TypeUtils.toWordCase(et(typeTil).getText().toString()).trim();
-            ArrayList<Sub> subs = parseSubs();
             String interval = et(intervalTil).getText().toString().trim();
 
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
@@ -372,7 +339,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                 }*/
 
                 exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, dateTime, routeId,
-                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, subs, null, false);
+                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, null, false);
 
                 boolean success = DbWriter.get(this).addExercise(exercise, this);
                 LayoutUtils.toast(success, this);
@@ -381,7 +348,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             else {
                 exercise = new Exercise(exercise.getId(), exercise.getStravaId(), exercise.getGarminId(), type,
                     dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance, time,
-                    subs, exercise.getTrail(), exercise.isTrailHidden());
+                    exercise.getTrail(), exercise.isTrailHidden());
 
                 boolean success = DbWriter.get(this).updateExercise(exercise, this);
                 LayoutUtils.toast(success, this);
@@ -399,63 +366,6 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         catch (Exception e) {
             LayoutUtils.handleError(e, this);
         }
-    }
-
-    @Unimplemented
-    private ArrayList<Sub> parseSubs() {
-        ArrayList<Sub> subs = new ArrayList<>();
-
-        // add
-        for (int i = 0; i < subViews.size(); i++) {
-            View v = subViews.get(i);
-
-            EditText sDistanceEt = v.findViewById(R.id.et_exerciseedit_item_sub_distance);
-            EditText sHoursEt = v.findViewById(R.id.et_exerciseedit_item_sub_hours);
-            EditText sMinutesEt = v.findViewById(R.id.et_exerciseedit_item_sub_minutes);
-            EditText sSecondsEt = v.findViewById(R.id.et_exerciseedit_item_sub_seconds);
-
-            int distance = (int) (Float.parseFloat(sDistanceEt.getText().toString()) * 1000);
-            int hours = Integer.parseInt(sHoursEt.getText().toString());
-            int minutes = Integer.parseInt(sMinutesEt.getText().toString());
-            float seconds = Float.parseFloat(sSecondsEt.getText().toString());
-            float time = hours * 3600 + minutes * 60 + seconds;
-            int subId = (exercise != null && i < exercise.subCount()) ? exercise.getSub(i).getId() : -1;
-
-            subs.add(new Sub(subId, exerciseId, distance, time));
-        }
-
-        // delete
-        for (int i = 0; exercise != null && i < exercise.subCount(); i++) {
-            if (i >= subs.size()) {
-                DbWriter.get(this).deleteSub(exercise.getSub(i));
-            }
-        }
-
-        return subs;
-    }
-
-    // sub listeners
-
-    @Unimplemented
-    private void setAddSubBtnListener() {
-        /*final Button addSubBtn = findViewById(R.id.btn_exerciseedit_add_sub);
-        addSubBtn.setOnClickListener(v -> {
-            final LinearLayout ll = findViewById(R.id.ll_exerciseedit);
-            final View subView = getLayoutInflater().inflate(R.layout.item_exerciseedit_sub, ll, false);
-            ll.addView(subView, ll.getChildCount() - 1);
-            subViews.add(subView);
-
-            setRemoveSubBtnListener(ll, subView);
-        });*/
-    }
-
-    @Unimplemented
-    private void setRemoveSubBtnListener(final LinearLayout ll, final View subView) {
-        final Button removeBtn = subView.findViewById(R.id.btn_exerciseedit_item_sub_remove);
-        removeBtn.setOnClickListener(v -> {
-            ll.removeView(subView);
-            subViews.remove(subView);
-        });
     }
 
     // implements BinaryDialog

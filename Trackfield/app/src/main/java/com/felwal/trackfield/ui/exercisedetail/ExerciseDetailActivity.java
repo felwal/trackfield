@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.android.widget.dialog.AlertDialog;
 import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.android.widget.dialog.CheckDialog;
@@ -25,7 +23,6 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
-import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
@@ -215,32 +212,6 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     }
 
     private void setTexts() {
-        // subs
-        if (exercise.subCount() > 0) {
-            final LinearLayout ll = findViewById(R.id.ll_exercisedetail);
-
-            for (int i = 0; i < exercise.subCount(); i++) {
-
-                Sub sub = exercise.getSub(i);
-                final View subView = getLayoutInflater().inflate(R.layout.item_exercisedetail_sub, ll, false);
-                ll.addView(subView, ll.getChildCount() - 1);
-
-                final TextView sDistanceTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_distance);
-                final TextView sTimeTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_time);
-                final TextView sPaceTv = subView.findViewById(R.id.tv_exercisedetail_item_sub_velocity);
-
-                setTvHideIfEmpty(sub.printDistance(), sDistanceTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_s));
-                setTvHideIfEmpty(sub.printTime(true), sTimeTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_t));
-                setTvHideIfEmpty(sub.printPace(true), sPaceTv, subView.findViewById(R.id.tv_exercisedetail_item_sub_v));
-
-                if (i % 2 == 0) {
-                    subView.setBackgroundColor(ResUtilsKt.getColorByAttr(this, R.attr.colorSurface));
-                }
-            }
-            //findViewById(R.id.divider11).setVisibility(View.VISIBLE);
-            findViewById(R.id.v_exercisedetail_divider1).setVisibility(View.INVISIBLE);
-        }
-
         // get
         TextView routeTv = findViewById(R.id.tv_exercisedetail_route);
         TextView routeVarTv = findViewById(R.id.tv_exercisedetail_routevar);

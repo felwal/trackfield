@@ -12,12 +12,10 @@ import com.felwal.trackfield.data.db.DbContract.DistanceEntry;
 import com.felwal.trackfield.data.db.DbContract.ExerciseEntry;
 import com.felwal.trackfield.data.db.DbContract.PlaceEntry;
 import com.felwal.trackfield.data.db.DbContract.RouteEntry;
-import com.felwal.trackfield.data.db.DbContract.SubEntry;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
-import com.felwal.trackfield.data.db.model.Sub;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.SorterItem;
@@ -29,7 +27,6 @@ import com.felwal.trackfield.ui.map.model.Trail;
 import com.felwal.trackfield.utils.DateUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.annotation.Unfinished;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.security.InvalidParameterException;
@@ -364,21 +361,6 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return exerlites;
-    }
-
-    // get subs
-
-    @Unimplemented
-    @NonNull
-    private ArrayList<Sub> getSubs(int superId) {
-        String selection = SubEntry.COLUMN_SUPERID + " = ?";
-        String[] selectionArgs = { Integer.toString(superId) };
-
-        Cursor cursor = db.query(SubEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
-        ArrayList<Sub> subs = unpackSubCursor(cursor);
-        cursor.close();
-
-        return subs;
     }
 
     // get routes
@@ -801,7 +783,7 @@ public class DbReader extends DbHelper {
 
         String orderBy;
         switch (sortMode) {
-            case AMOUNT: // TODO: sub med inner join nödvändig?
+            case AMOUNT:
                 //orderBy = "count(" + "" + ")";
                 //break;
             case DISTANCE:
@@ -1348,7 +1330,7 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
 
             Exercise exercise = new Exercise(id, stravaId, garminId, type, dateTime, routeId, routeName, routeVar,
-                interval, note, dataSource, recordingMethod, distance, time, getSubs(id), trail, hideTrail);
+                interval, note, dataSource, recordingMethod, distance, time, trail, hideTrail);
             exercises.add(exercise);
         }
 
@@ -1378,22 +1360,6 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
             LatLng start = new LatLng(startLat, startLng);
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
-
-            // TODO: subs
-            /*if (effectiveDistance == 0 && time == 0) {
-                String selection = SubEntry.COLUMN_SUPERID + " = ?";
-                String[] selectionArgs = { Integer.toString(id) };
-                String[] columns = { SubEntry.COLUMN_DISTANCE, SubEntry.COLUMN_TIME };
-
-                Cursor subCursor = db.query(SubEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-                while (subCursor.moveToNext()) {
-                    int subDistance = subCursor.getInt(subCursor.getColumnIndexOrThrow(SubEntry.COLUMN_DISTANCE));
-                    float subTime = subCursor.getInt(subCursor.getColumnIndexOrThrow(SubEntry.COLUMN_TIME));
-                    effectiveDistance += subDistance;
-                    time += subTime;
-                }
-                subCursor.close();
-            }*/
 
             Exerlite exerlite = new Exerlite(id, type, date, routeName, interval, effectiveDistance, time,
                 start, distanceDriven);
@@ -1429,23 +1395,6 @@ public class DbReader extends DbHelper {
 
         return exerlites;
     }
-
-    private ArrayList<Sub> unpackSubCursor(Cursor cursor) {
-        ArrayList<Sub> subs = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry._ID));
-            int superId = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_SUPERID));
-            int distance = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_DISTANCE));
-            float time = cursor.getInt(cursor.getColumnIndexOrThrow(SubEntry.COLUMN_TIME));
-
-            Sub sub = new Sub(id, superId, distance, time);
-            subs.add(sub);
-        }
-
-        return subs;
-    }
-
     private ArrayList<Distance> unpackDistanceCursor(Cursor cursor) {
         ArrayList<Distance> distances = new ArrayList<>();
 
