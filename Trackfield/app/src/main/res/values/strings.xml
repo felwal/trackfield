@@ -29,22 +29,26 @@
     <string name="tab_title_groupingpager_places">Places</string>
     <string name="tab_title_groupingpager_intervals">Intervals</string>
 
-    <!-- edit texts -->
+    <!-- textfields -->
 
     <!-- edit -->
     <string name="et_text_exerciseedit_route">Route</string>
     <string name="et_hint_exerciseedit_route">Route</string>
-    <string name="et_hint_exerciseedit_routevar">variation</string>
+    <string name="et_hint_exerciseedit_routevar">Route variation</string>
     <string name="et_hint_exerciseedit_date">yyyy/MM/dd</string>
     <string name="et_text_exerciseedit_time">0</string>
-    <string name="et_hint_exerciseedit_time">HH:mm:ss</string>
+    <string name="et_hint_exerciseedit_time">hh:mm:ss</string>
     <string name="et_hint_exerciseedit_interval">Interval</string>
     <string name="et_hint_exerciseedit_note">Note</string>
     <string name="et_text_exerciseedit_distance">0</string>
-    <string name="et_hint_exerciseedit_distance">km</string>
-    <string name="et_hint_exerciseedit_hours">HH</string>
+    <string name="et_hint_exerciseedit_distance">Distance</string>
+    <string name="et_suffix_exerciseedit_distance">km</string>
+    <string name="et_hint_exerciseedit_hours">hh</string>
+    <string name="et_suffix_exerciseedit_hours">h</string>
     <string name="et_hint_exerciseedit_minutes">mm</string>
+    <string name="et_suffix_exerciseedit_minutes">m</string>
     <string name="et_hint_exerciseedit_seconds">ss</string>
+    <string name="et_suffix_exerciseedit_seconds">s</string>
     <string name="et_hint_exerciseedit_device">Device</string>
     <string name="et_hint_exerciseedit_recordingmethod">Recording method</string>
     <string name="et_hint_exerciseedit_type">Type</string>

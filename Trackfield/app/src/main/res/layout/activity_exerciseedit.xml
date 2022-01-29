@@ -33,117 +33,124 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_route"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_route"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_route"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_route"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_route"
                     app:srcCompat="@drawable/layer_ic_route"
                     app:tint="?tf_colorRoute" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/et_exerciseedit_route"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_route"
                     android:layout_width="0dp"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:hint="@string/et_hint_exerciseedit_route"
-                    android:completionThreshold="0"
-                    android:inputType="textPersonName|textCapSentences"
-                    android:windowSoftInputMode="stateHidden"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_route"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@string/et_text_exerciseedit_route"
-                    style="@style/Widget.Trackfield.EditText" />
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_route"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_routevar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_routevar"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_routevar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_routevar"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_routevar"
                     app:srcCompat="@drawable/layer_ic_routevar"
                     app:tint="?tf_colorRoutevar" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/et_exerciseedit_routevar"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_routevar"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:layout_marginTop="@dimen/spacing_tiny"
-                    android:hint="@string/et_hint_exerciseedit_routevar"
-                    android:completionThreshold="0"
-                    android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_route"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_route"
-                    style="@style/Widget.Trackfield.EditText" />
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_routevar"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_route"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_routevar"
+                        android:inputType="text"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_date"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_date"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_date"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_date"
                     app:srcCompat="@drawable/layer_ic_date"
                     app:tint="?tf_colorDate" />
 
-                <EditText
-                    android:id="@+id/et_exerciseedit_date"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_date"
                     android:layout_width="0dp"
-                    android:layout_marginTop="@dimen/spacing_tiny"
-                    android:editable="false"
-                    android:hint="@string/et_hint_exerciseedit_date"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    app:layout_constraintEnd_toStartOf="@+id/et_exerciseedit_time"
-                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_date"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_interval"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <EditText
-                    android:id="@+id/et_exerciseedit_time"
-                    android:layout_width="0dp"
-                    android:editable="false"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:hint="@string/et_hint_exerciseedit_time"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_date"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_date"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <ImageView
-                    android:id="@+id/iv_exerciseedit_interval"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_interval"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_interval"
-                    app:srcCompat="@drawable/layer_ic_interval"
-                    app:tint="?tf_colorInterval" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/et_exerciseedit_interval"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="@dimen/spacing_tiny"
-                    android:hint="@string/et_hint_exerciseedit_interval"
-                    android:completionThreshold="0"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
+                    app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_time"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_date"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_routevar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_date"
+                        android:focusable="true"
+                        android:editable="false"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_interval"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_routevar"
-                    style="@style/Widget.Trackfield.EditText" />
+                    app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_date"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_routevar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_time"
+                        android:focusable="true"
+                        android:editable="false"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_note"
@@ -151,197 +158,258 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_note"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_note"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_note"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_note"
                     app:srcCompat="@drawable/layer_ic_note"
                     app:tint="?tf_colorNote" />
 
-                <EditText
-                    android:id="@+id/et_exerciseedit_note"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_note"
                     android:layout_width="0dp"
-                    android:layout_marginTop="@dimen/spacing_tiny"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:hint="@string/et_hint_exerciseedit_note"
-                    android:inputType="textMultiLine|textPersonName|textCapSentences"
-                    android:textAlignment="viewStart"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_note"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_date"
-                    style="@style/Widget.Trackfield.EditText.Small" />
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_date">
 
-                <View
-                    android:id="@+id/v_exerciseedit_divider1"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_note"
-                    style="@style/Widget.Felwal.Divider" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_note"
+                        android:inputType="textMultiLine|text|textCapSentences" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/v_exerciseedit_divider1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.Felwal.Divider" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_exerciseedit_default_sub"
+                android:id="@+id/cl_exerciseedit_data"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
+
+                <ImageView
+                    android:id="@+id/iv_exerciseedit_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_interval"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_interval"
+                    app:srcCompat="@drawable/layer_ic_interval"
+                    app:tint="?tf_colorInterval" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_interval"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_interval"
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_interval"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    android:layout_marginTop="@dimen/spacing_tiny"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_distance"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_distance"
                     app:srcCompat="@drawable/layer_ic_distance"
                     app:tint="?tf_colorDistance" />
 
-                <EditText
-                    android:id="@+id/et_exerciseedit_distance"
-                    android:layout_width="90dp"
-                    android:hint="@string/et_hint_exerciseedit_distance"
-                    android:inputType="numberDecimal"
-                    android:text="@string/et_text_exerciseedit_distance"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_distance"
-                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_distance"
-                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_distance"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/sw_exerciseedit_drive_distance"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_distance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_tiny"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:gravity="end|center_vertical"
-                    android:switchPadding="10dp"
-                    android:text="@string/sw_text_drive"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_distance"
+                    app:suffixText="@string/et_suffix_exerciseedit_distance"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_calculate"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_distance"
-                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_distance" />
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_distance"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_interval">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_distance"
+                        android:inputType="numberDecimal" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/iv_exerciseedit_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    android:layout_marginTop="@dimen/spacing_medium"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_exerciseedit_hours"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_exerciseedit_distance"
+                    app:layout_constraintTop_toTopOf="@+id/til_exerciseedit_hours"
                     app:srcCompat="@drawable/layer_ic_duration"
                     app:tint="?tf_colorTime" />
 
-                <EditText
-                    android:id="@+id/et_exerciseedit_hours"
-                    android:layout_width="45dp"
-                    android:hint="@string/et_hint_exerciseedit_hours"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:text="@string/et_text_exerciseedit_time"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_exerciseedit_duration"
-                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_duration"
-                    app:layout_constraintTop_toTopOf="@+id/iv_exerciseedit_duration"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <EditText
-                    android:id="@+id/et_exerciseedit_minutes"
-                    android:layout_width="45dp"
-                    android:hint="@string/et_hint_exerciseedit_minutes"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:text="@string/et_text_exerciseedit_time"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_hours"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_hours"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_hours"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <EditText
-                    android:id="@+id/et_exerciseedit_seconds"
-                    android:layout_width="45dp"
-                    android:hint="@string/et_hint_exerciseedit_seconds"
-                    android:inputType="number|numberDecimal"
-                    android:maxLength="5"
-                    android:text="@string/et_text_exerciseedit_time"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_exerciseedit_minutes"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_minutes"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_minutes"
-                    style="@style/Widget.Trackfield.EditText" />
-
-                <Button
-                    android:id="@+id/btn_exerciseedit_add_sub"
-                    android:layout_width="45dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_hours"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/spacing_medium"
-                    android:text="+"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
+                    app:suffixText="@string/et_suffix_exerciseedit_hours"
+                    app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_minutes"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_duration"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_hours"
+                        android:maxLength="2"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_minutes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_til_top"
+                    app:suffixText="@string/et_suffix_exerciseedit_minutes"
+                    app:layout_constraintEnd_toStartOf="@id/til_exerciseedit_seconds"
+                    app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_hours"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_minutes"
+                        android:maxLength="2"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_seconds"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    app:suffixText="@string/et_suffix_exerciseedit_seconds"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_seconds"
-                    style="@style/Widget.AppCompat.Button.Colored" />
+                    app:layout_constraintStart_toEndOf="@+id/til_exerciseedit_minutes"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_distance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_seconds"
+                        android:maxLength="2"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/v_exerciseedit_divider2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Widget.Felwal.Divider" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/spacing_exerciseedit_til_top"
+                android:clipToPadding="false">
 
-                <View
-                    android:id="@+id/v_exerciseedit_divider2"
-                    android:layout_marginTop="@dimen/spacing_medium"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_device"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="invisible"
-                    style="@style/Widget.Felwal.Divider" />
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-                <AutoCompleteTextView
-                    android:id="@+id/et_exerciseedit_device"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:hint="@string/et_hint_exerciseedit_device"
-                    android:completionThreshold="0"
-                    android:inputType="textPersonName|textCapSentences"
-                    android:textAlignment="viewStart"
-                    app:layout_constraintEnd_toStartOf="@+id/et_exerciseedit_recording_method"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/v_exerciseedit_divider2"
-                    style="@style/Widget.Trackfield.EditText.Small" />
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_device"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/et_exerciseedit_recording_method"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_recordingmethod"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
                     android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:hint="@string/et_hint_exerciseedit_recordingmethod"
-                    android:completionThreshold="0"
-                    android:inputType="textPersonName|textCapSentences"
-                    android:textAlignment="viewStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_exerciseedit_device"
-                    app:layout_constraintTop_toTopOf="@+id/et_exerciseedit_device"
-                    style="@style/Widget.Trackfield.EditText.Small" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/actv_exerciseedit_type"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
-                    android:layout_marginStart="@dimen/spacing_exerciseedit_edge"
-                    android:hint="@string/et_hint_exerciseedit_type"
-                    android:completionThreshold="0"
-                    android:layout_marginBottom="@dimen/spacing_tiny"
-                    android:inputType="textCapWords"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_exerciseedit_device"
-                    style="@style/Widget.Trackfield.EditText.Small" />
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_device"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_recordingmethod"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_exerciseedit_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exerciseedit_til_top"
+                    android:layout_marginStart="@dimen/spacing_exerciseedit_til_noicon_start"
+                    android:layout_marginEnd="@dimen/spacing_exerciseedit_edge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_exerciseedit_recordingmethod"
+                    style="@style/Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/et_hint_exerciseedit_type"
+                        android:inputType="text|textCapSentences"
+                        android:completionThreshold="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

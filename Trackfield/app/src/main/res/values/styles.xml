@@ -48,7 +48,7 @@
 
     <style name="Widget.Trackfield.SearchView" parent="Widget.AppCompat.SearchView" />
 
-    <!-- widget -->
+    <!-- fab -->
 
     <style name="ThemeOverlay.Trackfield.Fam" parent="ThemeOverlay.Felwal.Fam">
         <item name="fw_mainFabStyle">@style/Widget.Trackfield.Fab</item>
@@ -82,6 +82,14 @@
     </style>
 
     <style name="Widget.Trackfield.Fab.Mini" parent="Widget.Felwal.Fab.Mini" />
+
+    <!-- widget -->
+
+    <style name="Widget.Trackfield.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+    <style name="Widget.Trackfield.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        
+    </style>
 
     <style name="Widget.Trackfield.TextView" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>

@@ -24,6 +24,7 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.Felwal.Dialog</item>
         <item name="actionBarTheme">@style/ThemeOverlay.Trackfield.ActionBar</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.Trackfield.ActionBarPopup</item>
+        <item name="textInputStyle">@style/Widget.Trackfield.TextInputLayout.OutlinedBox</item>
         <item name="fw_floatingActionMenuTheme">@style/ThemeOverlay.Trackfield.Fam</item>
     </style>
 

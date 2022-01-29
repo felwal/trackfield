@@ -35,7 +35,7 @@ import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 import com.felwal.trackfield.utils.annotation.Unimplemented;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,25 +51,26 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     // dialog tags
     private static final String DIALOG_DISCARD = "discardDialog";
 
-    protected AutoCompleteTextView routeActv;
-    protected AutoCompleteTextView routeVarActv;
-    protected AutoCompleteTextView intervalActv;
-    protected EditText noteEt;
-    protected EditText distanceEt;
-    protected EditText hoursEt;
-    protected EditText minutesEt;
-    protected EditText secondsEt;
-    protected AutoCompleteTextView deviceActv;
-    protected AutoCompleteTextView recordingMethodActv;
-    protected EditText dateEt;
-    protected EditText timeEt;
-    protected SwitchMaterial drivenSw;
-    protected AutoCompleteTextView typeActv;
+    protected TextInputLayout routeTil;
+    protected TextInputLayout routeVarTil;
+    protected TextInputLayout intervalTil;
+    protected TextInputLayout noteTil;
+    protected TextInputLayout distanceTil;
+    protected TextInputLayout hoursTil;
+    protected TextInputLayout minutesTil;
+    protected TextInputLayout secondsTil;
+    protected TextInputLayout deviceTil;
+    protected TextInputLayout recordingMethodTil;
+    protected TextInputLayout dateTil;
+    protected TextInputLayout timeTil;
+    protected TextInputLayout typeTil;
     @Unimplemented private final ArrayList<View> subViews = new ArrayList<>();
 
     // arguments
     private int exerciseId;
     private Exercise exercise;
+
+    protected boolean isDistanceDriven = false;
 
     //
 
@@ -88,9 +89,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         setContentView(R.layout.activity_exerciseedit);
         setToolbar();
 
-        // extras
-        exerciseId = getIntent().getIntExtra(EXTRA_ID, -1);
-
+        loadData();
         findEditTexts();
         setEditTexts();
         setListeners();
@@ -128,6 +127,14 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     // set
 
+    private void loadData() {
+        // extras
+        exerciseId = getIntent().getIntExtra(EXTRA_ID, -1);
+
+        exercise = DbReader.get(this).getExercise(exerciseId);
+        isDistanceDriven = exercise.isDistanceDriven();
+    }
+
     private void setToolbar() {
         final Toolbar tb = findViewById(R.id.tb_exerciseedit);
         setSupportActionBar(tb);
@@ -143,33 +150,29 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     private void findEditTexts() {
         // edittexts
-        routeActv = findViewById(R.id.et_exerciseedit_route);
-        routeVarActv = findViewById(R.id.et_exerciseedit_routevar);
-        intervalActv = findViewById(R.id.et_exerciseedit_interval);
-        dateEt = findViewById(R.id.et_exerciseedit_date);
-        timeEt = findViewById(R.id.et_exerciseedit_time);
-        noteEt = findViewById(R.id.et_exerciseedit_note);
-        distanceEt = findViewById(R.id.et_exerciseedit_distance);
-        hoursEt = findViewById(R.id.et_exerciseedit_hours);
-        minutesEt = findViewById(R.id.et_exerciseedit_minutes);
-        secondsEt = findViewById(R.id.et_exerciseedit_seconds);
-        //polylineEt = findViewById(R.id.editText_polyline);
-        deviceActv = findViewById(R.id.et_exerciseedit_device);
-        recordingMethodActv = findViewById(R.id.et_exerciseedit_recording_method);
-        drivenSw = findViewById(R.id.sw_exerciseedit_drive_distance);
-        typeActv = findViewById(R.id.actv_exerciseedit_type);
+        routeTil = findViewById(R.id.til_exerciseedit_route);
+        routeVarTil = findViewById(R.id.til_exerciseedit_routevar);
+        intervalTil = findViewById(R.id.til_exerciseedit_interval);
+        dateTil = findViewById(R.id.til_exerciseedit_date);
+        timeTil = findViewById(R.id.til_exerciseedit_time);
+        noteTil = findViewById(R.id.til_exerciseedit_note);
+        distanceTil = findViewById(R.id.til_exerciseedit_distance);
+        hoursTil = findViewById(R.id.til_exerciseedit_hours);
+        minutesTil = findViewById(R.id.til_exerciseedit_minutes);
+        secondsTil = findViewById(R.id.til_exerciseedit_seconds);
+        deviceTil = findViewById(R.id.til_exerciseedit_device);
+        recordingMethodTil = findViewById(R.id.til_exerciseedit_recordingmethod);
+        typeTil = findViewById(R.id.til_exerciseedit_type);
 
         // actv adapters
-        setAdapter(typeActv, DbReader.get(this).getTypes());
-        setAdapter(routeActv, DbReader.get(this).getRouteNames());
-        setAdapter(intervalActv, DbReader.get(this).getIntervals());
-        setAdapter(deviceActv, DbReader.get(this).getDevices());
-        setAdapter(recordingMethodActv, DbReader.get(this).getMethods());
+        setAdapter(typeTil, DbReader.get(this).getTypes());
+        setAdapter(routeTil, DbReader.get(this).getRouteNames());
+        setAdapter(intervalTil, DbReader.get(this).getIntervals());
+        setAdapter(deviceTil, DbReader.get(this).getDevices());
+        setAdapter(recordingMethodTil, DbReader.get(this).getMethods());
     }
 
     protected void setEditTexts() {
-        exercise = DbReader.get(this).getExercise(exerciseId);
-
         // subs
         for (int i = 0; i < exercise.subCount(); i++) {
             Sub sub = exercise.getSub(i);
@@ -195,27 +198,32 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         }
 
         float[] time = MathUtils.getTimeParts(exercise.getTime());
+        String hoursTxt = (int) time[2] + "";
+        String minutesTxt = (int) time[1] + "";
+        String secondsTxt = time[0] + "";
+        String distanceTxt = (float) exercise.getEffectiveDistance(this) / 1000 + "";
 
         // set texts
-        routeActv.setText(exercise.getRoute());
-        routeVarActv.setText(exercise.getRouteVar());
-        intervalActv.setText(exercise.getInterval());
-        dateEt.setText(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE));
-        timeEt.setText(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME));
-        noteEt.setText(exercise.getNote());
-        distanceEt.setText((float) exercise.getEffectiveDistance(this) / 1000 + "");
-        hoursEt.setText((int) time[2] + "");
-        minutesEt.setText((int) time[1] + "");
-        secondsEt.setText(time[0] + "");
-        deviceActv.setText(exercise.getDevice());
-        recordingMethodActv.setText(exercise.getRecordingMethod());
-        drivenSw.setChecked(exercise.isDistanceDriven());
-        typeActv.setText(exercise.getType());
+        et(routeTil).setText(exercise.getRoute());
+        et(routeVarTil).setText(exercise.getRouteVar());
+        et(intervalTil).setText(exercise.getInterval());
+        et(dateTil).setText(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE));
+        et(timeTil).setText(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME));
+        et(noteTil).setText(exercise.getNote());
+        et(distanceTil).setText(distanceTxt);
+        et(hoursTil).setText(hoursTxt);
+        et(minutesTil).setText(minutesTxt);
+        et(secondsTil).setText(secondsTxt);
+        et(deviceTil).setText(exercise.getDevice());
+        et(recordingMethodTil).setText(exercise.getRecordingMethod());
+        et(typeTil).setText(exercise.getType());
 
-        if (exercise.isDistanceDriven()) {
-            distanceEt.setEnabled(false);
-            distanceEt.setTextColor(ResUtilsKt.getColorByAttr(this, android.R.attr.textColorSecondary));
+        if (isDistanceDriven) {
+            et(distanceTil).setEnabled(false);
+            distanceTil.setEndIconDrawable(R.drawable.ic_calculate_filled);
         }
+
+        actv(routeTil).setDropDownVerticalOffset(0);
 
         // polyline
         /*if (exercise.hasTrail()) {
@@ -226,56 +234,49 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     private void setListeners() {
         // distance checked driven listener
-        drivenSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            distanceEt.setEnabled(!isChecked);
-            distanceEt.setTextColor(ResUtilsKt.getColorByAttr(this, isChecked
-                ? android.R.attr.textColorSecondary
-                : android.R.attr.textColorPrimary));
+        distanceTil.setEndIconOnClickListener(v -> {
+            isDistanceDriven = !isDistanceDriven;
+            distanceTil.setEndIconDrawable(isDistanceDriven ? R.drawable.ic_calculate_filled : R.drawable.ic_calculate);
+            et(distanceTil).setEnabled(!isDistanceDriven);
         });
 
         // date focus listener
-        dateEt.setOnFocusChangeListener((v, hasFocus) -> {
+        et(dateTil).setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) return;
-            LocalDate dateSelect = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
+            LocalDate dateSelect = LocalDate.parse(et(dateTil).getText(), AppConsts.FORMATTER_EDIT_DATE);
 
             DatePickerDialog dialog = new DatePickerDialog(ExerciseEditActivity.this, (picker, year, month, dayOfMonth) ->
-                dateEt.setText(LocalDate.of(year, month + 1, dayOfMonth).format(AppConsts.FORMATTER_EDIT_DATE)),
+                et(dateTil).setText(LocalDate.of(year, month + 1, dayOfMonth).format(AppConsts.FORMATTER_EDIT_DATE)),
                 dateSelect.getYear(), dateSelect.getMonthValue() - 1, dateSelect.getDayOfMonth());
 
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
             dialog.show();
-            dateEt.clearFocus();
+            dateTil.clearFocus();
         });
 
         // time focus listener
-        timeEt.setOnFocusChangeListener((v, hasFocus) -> {
+        et(timeTil).setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) return;
-            LocalTime timeSelect = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
+            LocalTime timeSelect = LocalTime.parse(et(timeTil).getText(), AppConsts.FORMATTER_EDIT_TIME);
 
             TimePickerDialog dialog = new TimePickerDialog(ExerciseEditActivity.this, (picker, hour, minute) ->
-                timeEt.setText(LocalTime.of(hour, minute, 0).format(AppConsts.FORMATTER_EDIT_TIME)),
+                et(timeTil).setText(LocalTime.of(hour, minute, 0).format(AppConsts.FORMATTER_EDIT_TIME)),
                 timeSelect.getHour(), timeSelect.getMinute(), true);
 
             dialog.show();
-            timeEt.clearFocus();
+            timeTil.clearFocus();
         });
 
         // route focus listener
-        routeActv.setOnFocusChangeListener((v, hasFocus) -> {
+        et(routeTil).setOnFocusChangeListener((v, hasFocus) -> {
             // update dropdown depending on typed route
             if (!hasFocus) {
-                String route = routeActv.getText().toString();
+                String route = et(routeTil).getText().toString();
                 int routeId = DbReader.get(this).getRouteId(route);
 
-                setAdapter(routeVarActv, DbReader.get(this).getRouteVariations(routeId));
+               setAdapter(routeVarTil, DbReader.get(this).getRouteVariations(routeId));
             }
         });
-
-        // focus & click listeners
-        addDropDownListener(typeActv);
-        addDropDownListener(routeVarActv);
-        addDropDownListener(deviceActv);
-        addDropDownListener(recordingMethodActv);
     }
 
     // get
@@ -288,22 +289,30 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     protected boolean haveEditsBeenMade() {
         float[] time = MathUtils.getTimeParts(exercise.getTime());
 
-        return !routeActv.getText().toString().equals(exercise.getRoute())
-            || !routeVarActv.getText().toString().equals(exercise.getRouteVar())
-            || !dateEt.getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))
-            || !timeEt.getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))
-            || !noteEt.getText().toString().equals(exercise.getNote())
-            || !distanceEt.getText().toString().equals((float) exercise.getEffectiveDistance(this) / 1000 + "")
-            || !hoursEt.getText().toString().equals((int) time[2] + "")
-            || !minutesEt.getText().toString().equals((int) time[1] + "")
-            || !secondsEt.getText().toString().equals(time[0] + "")
-            || !deviceActv.getText().toString().equals(exercise.getDevice())
-            || !recordingMethodActv.getText().toString().equals(exercise.getRecordingMethod())
-            || !typeActv.getText().toString().equals(exercise.getType())
-            || drivenSw.isChecked() != exercise.isDistanceDriven();
+        return !et(routeTil).getText().toString().equals(exercise.getRoute())
+            || !et(routeVarTil).getText().toString().equals(exercise.getRouteVar())
+            || !et(dateTil).getText().toString().equals(exercise.getDate().format(AppConsts.FORMATTER_EDIT_DATE))
+            || !et(timeTil).getText().toString().equals(exercise.getDateTime().format(AppConsts.FORMATTER_EDIT_TIME))
+            || !et(noteTil).getText().toString().equals(exercise.getNote())
+            || !et(distanceTil).getText().toString().equals((float) exercise.getEffectiveDistance(this) / 1000 + "")
+            || !et(hoursTil).getText().toString().equals((int) time[2] + "")
+            || !et(minutesTil).getText().toString().equals((int) time[1] + "")
+            || !et(secondsTil).getText().toString().equals(time[0] + "")
+            || !et(deviceTil).getText().toString().equals(exercise.getDevice())
+            || !et(recordingMethodTil).getText().toString().equals(exercise.getRecordingMethod())
+            || !et(typeTil).getText().toString().equals(exercise.getType())
+            || isDistanceDriven != exercise.isDistanceDriven();
     }
 
     // tools
+
+    protected EditText et(TextInputLayout til) {
+        return til.getEditText();
+    }
+
+    protected AutoCompleteTextView actv(TextInputLayout til) {
+        return (AutoCompleteTextView) et(til);
+    }
 
     private void showDiscardDialog() {
         AlertDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
@@ -311,15 +320,17 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             .show(getSupportFragmentManager());
     }
 
-    private void setAdapter(AutoCompleteTextView actv, List<String> dropDownList) {
-        ArrayAdapter<String> actvAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dropDownList);
-        actv.setAdapter(actvAdapter);
+    private void setAdapter(TextInputLayout til, List<String> items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        actv(til).setAdapter(adapter);
     }
 
     /**
      * Make an {@link AutoCompleteTextView} show its dropdown on focus and click
      */
-    private void addDropDownListener(AutoCompleteTextView actv) {
+    private void addDropDownListener(TextInputLayout til) {
+        AutoCompleteTextView actv = actv(til);
+
         actv.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) actv.showDropDown();
         });
@@ -331,22 +342,22 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     private void parseAndSave() {
         try {
             // parse
-            String route = routeActv.getText().toString().trim();
-            String routeVar = routeVarActv.getText().toString().trim();
-            LocalDate date = LocalDate.parse(dateEt.getText(), AppConsts.FORMATTER_EDIT_DATE);
-            LocalTime localTime = LocalTime.parse(timeEt.getText(), AppConsts.FORMATTER_EDIT_TIME);
-            String note = noteEt.getText().toString().trim();
-            int distance = !drivenSw.isChecked() ? (int) (Float.parseFloat(distanceEt.getText().toString()) * 1000)
-                : Exercise.DISTANCE_DRIVEN;
-            int hours = Integer.parseInt(hoursEt.getText().toString());
-            int minutes = Integer.parseInt(minutesEt.getText().toString());
-            float seconds = Float.parseFloat(secondsEt.getText().toString());
+            String route = et(routeTil).getText().toString().trim();
+            String routeVar = et(routeVarTil).getText().toString().trim();
+            LocalDate date = LocalDate.parse(et(dateTil).getText(), AppConsts.FORMATTER_EDIT_DATE);
+            LocalTime localTime = LocalTime.parse(et(timeTil).getText(), AppConsts.FORMATTER_EDIT_TIME);
+            String note = et(noteTil).getText().toString().trim();
+            int distance = isDistanceDriven ? Exercise.DISTANCE_DRIVEN
+                : (int) (Float.parseFloat(et(distanceTil).getText().toString()) * 1000);
+            int hours = Integer.parseInt(et(hoursTil).getText().toString());
+            int minutes = Integer.parseInt(et(minutesTil).getText().toString());
+            float seconds = Float.parseFloat(et(secondsTil).getText().toString());
             float time = hours * 3600 + minutes * 60 + seconds;
-            String dataSource = deviceActv.getText().toString().trim();
-            String recordingMethod = recordingMethodActv.getText().toString().trim();
-            String type = TypeUtils.toWordCase(typeActv.getText().toString()).trim();
+            String dataSource = et(deviceTil).getText().toString().trim();
+            String recordingMethod = et(recordingMethodTil).getText().toString().trim();
+            String type = TypeUtils.toWordCase(et(typeTil).getText().toString()).trim();
             ArrayList<Sub> subs = parseSubs();
-            String interval = intervalActv.getText().toString().trim();
+            String interval = et(intervalTil).getText().toString().trim();
 
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
@@ -427,7 +438,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     @Unimplemented
     private void setAddSubBtnListener() {
-        final Button addSubBtn = findViewById(R.id.btn_exerciseedit_add_sub);
+        /*final Button addSubBtn = findViewById(R.id.btn_exerciseedit_add_sub);
         addSubBtn.setOnClickListener(v -> {
             final LinearLayout ll = findViewById(R.id.ll_exerciseedit);
             final View subView = getLayoutInflater().inflate(R.layout.item_exerciseedit_sub, ll, false);
@@ -435,7 +446,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             subViews.add(subView);
 
             setRemoveSubBtnListener(ll, subView);
-        });
+        });*/
     }
 
     @Unimplemented

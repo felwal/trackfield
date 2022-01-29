@@ -26,8 +26,8 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
 
     @Override
     protected void setEditTexts() {
-        dateEt.setText(creationDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
-        timeEt.setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
+        et(dateTil).setText(creationDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
+        et(timeTil).setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
     }
 
     // get
@@ -41,19 +41,19 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
     protected boolean haveEditsBeenMade() {
         Resources res = getResources();
 
-        return !routeActv.getText().toString().equals("")
-            || !routeVarActv.getText().toString().equals("")
-            || !dateEt.getText().toString().equals(creationDate)
-            || !timeEt.getText().toString().equals(creationTime)
-            || !noteEt.getText().toString().equals("")
-            || !distanceEt.getText().toString().equals(res.getString(R.string.et_text_exerciseedit_distance))
-            || !hoursEt.getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
-            || !minutesEt.getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
-            || !secondsEt.getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
-            || !deviceActv.getText().toString().equals("")
-            || !recordingMethodActv.getText().toString().equals("")
-            || !typeActv.getText().toString().equals("")
-            || drivenSw.isChecked();
+        return !et(routeTil).getText().toString().equals("")
+            || !et(routeVarTil).getText().toString().equals("")
+            || !et(dateTil).getText().toString().equals(creationDate)
+            || !et(timeTil).getText().toString().equals(creationTime)
+            || !et(noteTil).getText().toString().equals("")
+            || !et(distanceTil).getText().toString().equals(res.getString(R.string.et_text_exerciseedit_distance))
+            || !et(hoursTil).getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
+            || !et(minutesTil).getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
+            || !et(secondsTil).getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
+            || !et(deviceTil).getText().toString().equals("")
+            || !et(recordingMethodTil).getText().toString().equals("")
+            || !et(typeTil).getText().toString().equals("")
+            || isDistanceDriven;
     }
 
 }

@@ -27,8 +27,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
         SorterItem.sortByDate(),
         SorterItem.sortByDistance(),
         SorterItem.sortByTime(),
-        SorterItem.sortByPace(),
-        SorterItem.sortByLat()
+        SorterItem.sortByPace()
     );
 
     private Place place;

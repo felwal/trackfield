@@ -22,6 +22,9 @@
     <dimen name="spacing_valueicon_bg_padding">6</dimen>
 
     <dimen name="spacing_exerciseedit_edge">@dimen/spacing_small</dimen>
+    <dimen name="spacing_exerciseedit_til_top">@dimen/spacing_small</dimen>
+    <!-- layout_valueicon_bg_size + spacing_exerciseedit_edge + spacing_exercisedetail_valuetext_start -->
+    <dimen name="spacing_exerciseedit_til_noicon_start">68dp</dimen>
 
     <!-- icon -->
 
@@ -85,5 +88,9 @@
 
     <dimen name="alpha_polyline_deselected">0.38</dimen>
     <dimen name="alpha_valueicon_bg">0.1</dimen>
+
+    <!-- misc -->
+
+    <dimen name="completion_threshhold_actv">1</dimen>
 
 </resources>
