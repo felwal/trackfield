@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_show_hidden_groups"
+        android:title="@string/action_show_hidden"
+        android:icon="@drawable/ic_show"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_settings"

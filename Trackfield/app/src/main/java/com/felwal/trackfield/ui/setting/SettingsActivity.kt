@@ -89,10 +89,10 @@ class SettingsActivity :
                     iconRes = R.drawable.ic_title
                 ),
                 BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_singletion_routes),
-                    value = Prefs.areSingletonRoutesHidden(),
-                    onSwitch = { Prefs.hideSingletonRoutes(it) },
-                    iconRes = R.drawable.ic_route
+                    title = getString(R.string.tv_text_settings_title_singletion_groups),
+                    value = Prefs.areSingletonGroupsHidden(),
+                    onSwitch = { Prefs.hideSingletonGroups(it) },
+                    iconRes = R.drawable.ic_groupings
                 )
             ),
             ItemSection(

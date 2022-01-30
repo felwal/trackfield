@@ -64,7 +64,7 @@
     <!-- settings -->
     <string name="tv_text_settings_header_display">Display options</string>
     <string name="tv_text_settings_title_week_headers">Week headers</string>
-    <string name="tv_text_settings_title_singletion_routes">Hide singleton routes</string>
+    <string name="tv_text_settings_title_singletion_groups">Hide singleton groups</string>
     <string name="tv_text_settings_header_look">Look</string>
     <string name="tv_text_settings_title_theme">Theme</string>
     <string name="tv_text_settings_title_color">Color</string>

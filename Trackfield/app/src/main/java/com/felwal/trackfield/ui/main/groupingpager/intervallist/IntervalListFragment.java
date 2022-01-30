@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,6 +38,16 @@ public class IntervalListFragment extends RecyclerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        // show hidden
+        MenuItem hiddenItem = menu.findItem(R.id.action_show_hidden_groups);
+        hiddenItem.setChecked(Prefs.areHiddenGroupsShown());
+        if (Prefs.areHiddenGroupsShown()) hiddenItem.setIcon(R.drawable.ic_show_filled)
+            .setTitle(R.string.action_hide_hidden);
+        else hiddenItem.setIcon(R.drawable.ic_show).setTitle(R.string.action_show_hidden);
     }
 
     /**

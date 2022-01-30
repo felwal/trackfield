@@ -763,7 +763,7 @@ public class DbReader extends DbHelper {
         String whereHidden = includeHidden ? "" : " AND " + col(tabRoutes, colRoHidden) + " != 1";
         String where = " WHERE 1 = 1" + whereHidden + typeFilter(" AND", types);
         String groupBy = " GROUP BY " + col(aliEx, colExRouteid);
-        String having = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : " HAVING count(1) > 1";
+        String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : " HAVING count(1) > 1";
 
         String orderBy = " ORDER BY ";
         switch (sortMode) {
@@ -867,7 +867,7 @@ public class DbReader extends DbHelper {
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_INTERVAL + " != ''";
         String groupBy = ExerciseEntry.COLUMN_INTERVAL;
-        String having = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : colAmount + " > 1";
+        String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : colAmount + " > 1";
 
         String orderBy;
         switch (sortMode) {

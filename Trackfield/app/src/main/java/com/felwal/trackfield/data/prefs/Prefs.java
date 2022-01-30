@@ -42,7 +42,7 @@ public class Prefs {
     private static final String KEY_MASS = "mass";
     private static final String KEY_BIRTHDAY = "birthday";
     private static final String KEY_SHOW_HIDDEN_GROUPS = "showHiddenRoutes";
-    private static final String KEY_HIDE_SINGLETON_ROUTES = "hideSingletonRoutes";
+    private static final String KEY_HIDE_SINGLETON_GROUPS = "hideSingletonGroups";
     @Unimplemented private static final String KEY_INCLCUDE_LONGER = "includeLonger";
     @Unfinished private static final String KEY_INCLCUDE_PACELESS = "includePaceless";
     private static final String KEY_LIMIT_LOWER = "lowerLimit";
@@ -74,7 +74,7 @@ public class Prefs {
     // display options
     private static boolean showWeekHeaders = true;
     private static boolean showDailyChart = true;
-    private static boolean hideSingletonRoutes = false;
+    private static boolean hideSingletonGroups = false;
 
     // look
     private static int color = 1;
@@ -163,7 +163,7 @@ public class Prefs {
 
         // filtering
         savePref(showHiddenGroups, KEY_SHOW_HIDDEN_GROUPS);
-        savePref(hideSingletonRoutes, KEY_HIDE_SINGLETON_ROUTES);
+        savePref(hideSingletonGroups, KEY_HIDE_SINGLETON_GROUPS);
         savePref(includeLonger, KEY_INCLCUDE_LONGER);
         savePref(distanceLowerLimit, KEY_LIMIT_LOWER);
         savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
@@ -224,7 +224,7 @@ public class Prefs {
 
         // filtering
         showHiddenGroups = loadPref(bool, KEY_SHOW_HIDDEN_GROUPS);
-        hideSingletonRoutes = loadPref(bool, KEY_HIDE_SINGLETON_ROUTES);
+        hideSingletonGroups = loadPref(bool, KEY_HIDE_SINGLETON_GROUPS);
         includeLonger = loadPref(bool, KEY_INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, KEY_LIMIT_LOWER);
         distanceUpperLimit = loadPref(in, KEY_LIMIT_UPPER);
@@ -285,7 +285,7 @@ public class Prefs {
             case KEY_MASS: return mass;
             case KEY_BIRTHDAY: return birthday;
             case KEY_SHOW_HIDDEN_GROUPS: return showHiddenGroups;
-            case KEY_HIDE_SINGLETON_ROUTES: return hideSingletonRoutes;
+            case KEY_HIDE_SINGLETON_GROUPS: return hideSingletonGroups;
             case KEY_INCLCUDE_LONGER: return includeLonger;
             case KEY_LIMIT_LOWER: return distanceLowerLimit;
             case KEY_LIMIT_UPPER: return distanceUpperLimit;
@@ -359,9 +359,9 @@ public class Prefs {
         savePref(show, KEY_SHOW_HIDDEN_GROUPS);
     }
 
-    public static void hideSingletonRoutes(boolean hide) {
-        hideSingletonRoutes = hide;
-        savePref(hide, KEY_HIDE_SINGLETON_ROUTES);
+    public static void hideSingletonGroups(boolean hide) {
+        hideSingletonGroups = hide;
+        savePref(hide, KEY_HIDE_SINGLETON_GROUPS);
     }
 
     @Unfinished
@@ -494,8 +494,8 @@ public class Prefs {
         return showHiddenGroups;
     }
 
-    public static boolean areSingletonRoutesHidden() {
-        return hideSingletonRoutes;
+    public static boolean areSingletonGroupsHidden() {
+        return hideSingletonGroups;
     }
 
     @Unfinished
