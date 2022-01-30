@@ -38,8 +38,8 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_route"
-                    android:layout_marginStart="@dimen/spacing_medium"
-                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_edge"
                     android:textAppearance="@style/TextAppearance.Trackfield.Headline2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_tiny"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exercisedetail_edge"
                     android:fontFamily="sans-serif-condensed"
                     android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_date"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_diminutive"
                     android:textAppearance="@style/TextAppearance.Trackfield.Body"
                     app:layout_constraintStart_toStartOf="parent"
@@ -73,9 +73,9 @@
                 <TextView
                     android:id="@+id/tv_exercisedetail_note"
                     android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exercisedetail_edge"
                     android:textAppearance="@style/TextAppearance.Trackfield.Body"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,7 @@
                     android:id="@+id/iv_exercisedetail_interval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_small"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -117,7 +117,7 @@
                     android:id="@+id/iv_exercisedetail_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_interval"
@@ -139,7 +139,7 @@
                     android:id="@+id/iv_exercisedetail_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_distance"
@@ -161,7 +161,7 @@
                     android:id="@+id/iv_exercisedetail_pace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_time"
@@ -183,7 +183,7 @@
                     android:id="@+id/iv_exercisedetail_energy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_pace"
@@ -205,7 +205,7 @@
                     android:id="@+id/iv_exercisedetail_power"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_energy"
@@ -227,7 +227,7 @@
                     android:id="@+id/iv_exercisedetail_elevation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_valueicon_start"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_power"
@@ -247,9 +247,8 @@
 
                 <View
                     android:id="@+id/v_exercisedetail_divider1"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginHorizontal="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_elevation"
@@ -265,23 +264,20 @@
                 <FrameLayout
                     android:id="@+id/fl_exercisedetail_map"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="@dimen/spacing_tiny"
-                    android:layout_marginEnd="@dimen/spacing_tiny"
+                    android:layout_height="@dimen/layout_mappreview_height"
+                    android:layout_marginHorizontal="@dimen/spacing_exercisedetail_edge_mappreview"
                     android:background="@drawable/shape_mappreview_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </FrameLayout>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/spacing_medium">
+                android:paddingBottom="@dimen/spacing_exercisedetail_edge">
 
                 <View
                     android:id="@+id/v_exercisedetail_divider2"
@@ -299,7 +295,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_exercisedetail_edge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_logo_strava"
@@ -318,7 +314,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_id"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
@@ -328,7 +324,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_type"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
@@ -338,7 +334,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_label"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
@@ -348,7 +344,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_device"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
@@ -358,7 +354,7 @@
 
                 <TextView
                     android:id="@+id/tv_exercisedetail_recording_method"
-                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_tiny"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"

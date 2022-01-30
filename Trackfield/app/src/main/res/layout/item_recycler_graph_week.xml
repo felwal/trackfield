@@ -8,11 +8,9 @@
 
     <com.felwal.trackfield.ui.widget.graph.GraphView
         android:id="@+id/cv_recycler_item_graph_surface"
-        android:layout_width="125dp"
-        android:layout_height="@dimen/layout_graph_small"
-        android:layout_marginEnd="@dimen/spacing_medium"
-        android:fadingEdge="horizontal"
-        android:fadingEdgeLength="@dimen/spacing_medium"
+        android:layout_width="@dimen/layout_graph_small_width"
+        android:layout_height="@dimen/layout_graph_small_height"
+        android:layout_marginEnd="@dimen/spacing_recycler_edge_item"
         android:paddingTop="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_small"
         android:requiresFadingEdge="horizontal"

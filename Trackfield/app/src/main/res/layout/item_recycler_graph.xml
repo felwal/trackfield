@@ -9,9 +9,8 @@
     <com.felwal.trackfield.ui.widget.graph.GraphView
         android:id="@+id/cv_recycler_item_graph_surface"
         android:layout_width="0dp"
-        android:layout_height="@dimen/layout_graph_large"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layout_height="@dimen/layout_graph_large_height"
+        android:layout_marginHorizontal="@dimen/spacing_recycler_edge_item"
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="@dimen/spacing_medium"
         android:paddingTop="@dimen/spacing_tiny"

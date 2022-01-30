@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/layout_recycler_tiny_40dp"
+    android:layout_height="@dimen/layout_recycler_item_tiny_40dp"
+    android:paddingHorizontal="@dimen/spacing_recycler_edge_item"
     android:background="?selectableItemBackground">
 
     <TextView
@@ -11,7 +12,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/spacing_medium"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
         tools:text="Primary"
@@ -22,7 +22,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="@dimen/spacing_medium"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
         tools:text="Secondary"

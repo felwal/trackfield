@@ -36,7 +36,7 @@ public class GraphRecAdapterDelegate extends
     @NonNull
     @Override
     public GraphRecViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
-        return new GraphRecViewHolder(inflater.inflate(R.layout.item_recycler_graph_rec, parent, false));
+        return new GraphRecViewHolder(inflater.inflate(R.layout.item_recycler_graph_group, parent, false));
     }
 
     @Override

@@ -29,7 +29,7 @@
             android:id="@+id/ll_exerciseedit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/spacing_exerciseedit_til_top"
+            android:paddingVertical="@dimen/spacing_exerciseedit_edge"
             android:clipToPadding="false"
             android:orientation="vertical">
 
@@ -37,7 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/spacing_exerciseedit_edge"
-                android:paddingTop="@dimen/spacing_exerciseedit_til_top"
                 android:clipToPadding="false">
 
                 <ImageView

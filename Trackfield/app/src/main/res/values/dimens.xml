@@ -12,20 +12,31 @@
     <dimen name="spacing_tiny">8dp</dimen>
     <dimen name="spacing_diminutive">4dp</dimen>
 
+    <dimen name="spacing_edge">@dimen/spacing_small</dimen>
+    <dimen name="spacing_edge_large">@dimen/spacing_medium</dimen>
+
     <!-- searchview -->
     <dimen name="spacing_searchview_vertical">4dp</dimen>
     <dimen name="spacing_searchview_right">8dp</dimen>
 
+    <!-- exercisedetail -->
+    <dimen name="spacing_exercisedetail_edge">@dimen/spacing_edge</dimen>
+    <dimen name="spacing_exercisedetail_edge_mappreview">@dimen/spacing_exercisedetail_edge</dimen>
     <dimen name="spacing_exercisedetail_valuetext_start">@dimen/spacing_small</dimen>
     <dimen name="spacing_exercisedetail_valueicon_start">@dimen/spacing_medium</dimen>
     <dimen name="spacing_exercisedetail_valueicon_top">12dp</dimen>
-    <dimen name="spacing_valueicon_bg_padding">6</dimen>
 
-    <dimen name="spacing_exerciseedit_edge">@dimen/spacing_small</dimen>
+    <!-- peeksheet -->
+    <dimen name="spacing_peeksheet_edge">@dimen/spacing_edge</dimen>
+
+    <!-- exerciseedit -->
+    <dimen name="spacing_exerciseedit_edge">@dimen/spacing_edge</dimen>
     <dimen name="spacing_exerciseedit_til_start">@dimen/spacing_small</dimen>
-    <!-- layout_valueicon_bg_size + spacing_exercisedetail_valuetext_start -->
-    <dimen name="spacing_exerciseedit_til_start_noicon">52dp</dimen>
     <dimen name="spacing_exerciseedit_til_top">@dimen/spacing_small</dimen>
+
+    <!-- recycler -->
+    <dimen name="spacing_recycler_edge">@dimen/spacing_edge</dimen>
+    <dimen name="spacing_recycler_edge_item">@dimen/spacing_edge_large</dimen>
 
     <!-- icon -->
 
@@ -33,6 +44,9 @@
     <dimen name="icon_viewport_size">24.0</dimen>
     <dimen name="icon_launcher_size">108dp</dimen>
     <dimen name="icon_launcher_viewport_size">108</dimen>
+
+    <dimen name="layout_valueicon_size">24dp</dimen>
+    <dimen name="layout_valueicon_bg_size">36dp</dimen>
 
     <!-- layout -->
 
@@ -42,17 +56,15 @@
     <dimen name="layout_marker_origin_width">4dp</dimen>
     <dimen name="layout_indicator_tab_height">3dp</dimen>
     <dimen name="layout_indicator_tab_radius">3dp</dimen>
-    <dimen name="layout_valueicon_bg_size">36dp</dimen> <!-- (icon_size + 2 * spacing_icon_bg) -->
-    <dimen name="layout_valueicon_bg_radius">18dp</dimen> <!-- (icon_size + 2 * spacing_icon_bg) / 2 -->
 
     <!-- settings item -->
     <dimen name="layout_settings_item">50dp</dimen>
     <dimen name="layout_settings_header">30dp</dimen>
 
     <!-- recycler item -->
-    <dimen name="layout_recycler_medium">62dp</dimen>
-    <dimen name="layout_recycler_small_50dp">50dp</dimen>
-    <dimen name="layout_recycler_tiny_40dp">40dp</dimen>
+    <dimen name="layout_recycler_item_medium">62dp</dimen>
+    <dimen name="layout_recycler_item_small_50dp">50dp</dimen>
+    <dimen name="layout_recycler_item_tiny_40dp">40dp</dimen>
 
     <!-- recycler header -->
     <dimen name="layout_recycler_header_year">40dp</dimen>
@@ -62,10 +74,12 @@
     <dimen name="layout_recycler_header_week">25dp</dimen>
 
     <!-- graph -->
-    <dimen name="layout_graph_small">64dp</dimen>
-    <dimen name="layout_graph_medium">175dp</dimen>
-    <dimen name="layout_graph_large">200dp</dimen>
+    <dimen name="layout_graph_small_height">64dp</dimen>
+    <dimen name="layout_graph_small_width">125dp</dimen>
+    <dimen name="layout_graph_medium_height">175dp</dimen>
+    <dimen name="layout_graph_large_height">200dp</dimen>
 
+    <dimen name="layout_mappreview_height">200dp</dimen>
     <dimen name="layout_mappreview_corner_radius">@dimen/fw_corner_radius_medium_component</dimen>
     <dimen name="layout_searchview_corner_radius">@dimen/fw_corner_radius_small_component</dimen>
 

@@ -25,8 +25,8 @@
 
             <com.felwal.trackfield.ui.widget.graph.GraphView
                 android:id="@+id/cv_recycler_item_graph_surface"
-                android:layout_width="@dimen/layout_graph_medium"
-                android:layout_height="@dimen/layout_graph_medium"
+                android:layout_width="@dimen/layout_graph_medium_height"
+                android:layout_height="@dimen/layout_graph_medium_height"
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="@dimen/spacing_medium"
                 android:paddingTop="@dimen/spacing_small"
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/tv_recycler_item_graph_high"
-        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginStart="@dimen/spacing_recycler_edge"
         android:layout_marginTop="@dimen/spacing_small"
         android:textAppearance="@style/TextAppearance.Trackfield.Caption"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
 
     <TextView
         android:id="@+id/tv_recycler_item_graph_low"
-        android:layout_marginStart="@dimen/spacing_tiny"
+        android:layout_marginStart="@dimen/spacing_recycler_edge"
         android:layout_marginBottom="@dimen/spacing_small"
         android:textAppearance="@style/TextAppearance.Trackfield.Caption"
         app:layout_constraintBottom_toBottomOf="parent"

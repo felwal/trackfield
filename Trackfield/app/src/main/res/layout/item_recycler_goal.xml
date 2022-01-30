@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/spacing_recycler_edge_item"
     android:background="?selectableItemBackground">
 
     <TextView
@@ -14,7 +15,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/spacing_medium"
         android:gravity="center"
         android:textColor="?android:textColorSecondary"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
@@ -28,7 +28,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="@dimen/spacing_medium"
         android:gravity="center"
         android:textColor="?android:textColorSecondary"
         android:textAppearance="@style/TextAppearance.Trackfield.Subtitle3"
