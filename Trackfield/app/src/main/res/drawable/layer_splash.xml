@@ -7,6 +7,6 @@
     <item
         android:drawable="@drawable/vector_splash_trademark"
         android:gravity="center"
-        android:bottom="22dp" />
+        android:bottom="@dimen/spacing_splash_trademark_bottom" />
 
 </layer-list>

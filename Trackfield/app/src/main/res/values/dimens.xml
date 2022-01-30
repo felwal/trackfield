@@ -38,6 +38,8 @@
     <dimen name="spacing_recycler_edge">@dimen/spacing_edge</dimen>
     <dimen name="spacing_recycler_edge_item">@dimen/spacing_edge_large</dimen>
 
+    <dimen name="spacing_splash_trademark_bottom">22dp</dimen>
+
     <!-- icon -->
 
     <dimen name="icon_size">24dp</dimen>
