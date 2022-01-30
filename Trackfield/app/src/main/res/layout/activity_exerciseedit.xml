@@ -356,8 +356,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/et_hint_exerciseedit_seconds"
-                        android:maxLength="2"
-                        android:inputType="number" />
+                        android:maxLength="5"
+                        android:inputType="number|numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

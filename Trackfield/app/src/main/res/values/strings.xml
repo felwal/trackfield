@@ -46,8 +46,8 @@
     <string name="et_hint_exerciseedit_hours">hh</string>
     <string name="et_suffix_exerciseedit_hours">h</string>
     <string name="et_hint_exerciseedit_minutes">mm</string>
-    <string name="et_suffix_exerciseedit_minutes">m</string>
-    <string name="et_hint_exerciseedit_seconds">ss</string>
+    <string name="et_suffix_exerciseedit_minutes">min</string>
+    <string name="et_hint_exerciseedit_seconds">ss.ss</string>
     <string name="et_suffix_exerciseedit_seconds">s</string>
     <string name="et_hint_exerciseedit_device">Device</string>
     <string name="et_hint_exerciseedit_recordingmethod">Recording method</string>
