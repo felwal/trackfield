@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
@@ -17,7 +18,6 @@ import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
-import com.felwal.trackfield.utils.LayoutUtils;
 
 public class PeekSheet extends BaseSheet {
 
@@ -91,9 +91,9 @@ public class PeekSheet extends BaseSheet {
 
     private void buildSheet() {
         // find
-        TextView routeTv = view.findViewById(R.id.tv_sheet_peek_route);
-        TextView routeVarTv = view.findViewById(R.id.tv_sheet_peek_routevar);
-        TextView dateTv = view.findViewById(R.id.tv_sheet_peek_date);
+        TextView routeTv = view.findViewById(R.id.tv_peeksheet_route);
+        TextView routeVarTv = view.findViewById(R.id.tv_peeksheet_routevar);
+        TextView dateTv = view.findViewById(R.id.tv_peeksheet_date);
         TextView distanceTv = view.findViewById(R.id.tv_peeksheet_distance);
         TextView timeTv = view.findViewById(R.id.tv_peeksheet_time);
         TextView paceTv = view.findViewById(R.id.tv_peeksheet_velocity);
@@ -107,7 +107,6 @@ public class PeekSheet extends BaseSheet {
         paceTv.setText(exercise.printPace(false, a));
 
         // set text color
-        // TODO: xml attribute does not work - why?
         int textColor = ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);
@@ -116,7 +115,8 @@ public class PeekSheet extends BaseSheet {
         timeTv.setTextColor(textColor);
         paceTv.setTextColor(textColor);
 
-        // open full view
+        // open exercisedetail
+        //ConstraintLayout headerCl = view.findViewById(R.id.cl_peeksheet_header);
         view.setOnClickListener(view -> ExerciseDetailActivity.startActivity(a, exercise.getId()));
     }
 

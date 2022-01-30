@@ -7,112 +7,177 @@
     android:layout_height="wrap_content"
     android:background="@drawable/fw_shape_sheet_bg"
     android:orientation="vertical"
-    android:padding="@dimen/spacing_peeksheet_edge"
+    android:paddingBottom="@dimen/spacing_peeksheet_edge"
     app:behavior_hideable="true"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-    <TextView
-        android:id="@+id/tv_sheet_peek_route"
-        android:textAppearance="@style/TextAppearance.Trackfield.Headline2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Route"
-        style="@style/Widget.Trackfield.TextView" />
-
-    <TextView
-        android:id="@+id/tv_sheet_peek_routevar"
-        android:layout_width="0dp"
-        android:layout_marginStart="@dimen/spacing_tiny"
-        android:layout_marginTop="10dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-condensed"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_peeksheet_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/spacing_peeksheet_edge"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_sheet_peek_route"
-        app:layout_constraintTop_toTopOf="@+id/tv_sheet_peek_route"
-        tools:text="var"
-        style="@style/Widget.Trackfield.TextView" />
-
-    <TextView
-        android:id="@+id/tv_sheet_peek_date"
-        android:layout_marginTop="@dimen/spacing_tiny"
-        android:textAppearance="@style/TextAppearance.Trackfield.Body"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_route"
-        tools:text="Date"
-        style="@style/Widget.Trackfield.TextView" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_sheet_peek_distance"
+        <TextView
+            android:id="@+id/tv_peeksheet_route"
+            android:textAppearance="@style/TextAppearance.Felwal.Dialog.Title"
+            android:layout_marginStart="@dimen/spacing_peeksheet_edge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Route"
+            style="@style/Widget.Trackfield.TextView" />
+
+        <TextView
+            android:id="@+id/tv_peeksheet_routevar"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/spacing_tiny"
+            android:layout_marginEnd="@dimen/spacing_peeksheet_edge"
+            android:layout_marginTop="1dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-condensed"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_route"
+            app:layout_constraintTop_toTopOf="@+id/tv_peeksheet_route"
+            tools:text="var"
+            style="@style/Widget.Trackfield.TextView" />
+
+        <TextView
+            android:id="@+id/tv_peeksheet_date"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:layout_marginStart="@dimen/spacing_peeksheet_edge"
+            android:textAppearance="@style/TextAppearance.Trackfield.Body"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_peeksheet_route"
+            tools:text="Date"
+            style="@style/Widget.Trackfield.TextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/v_peeksheet_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?strokeColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_peeksheet_header"
+        style="@style/Widget.Felwal.Divider" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_peeksheet_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_small"
-        android:gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_peeksheet_edge"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sheet_peek_date"
-        app:srcCompat="@drawable/layer_ic_distance"
-        app:tint="?tf_colorDistance" />
+        app:layout_constraintTop_toBottomOf="@+id/v_peeksheet_divider">
 
-    <TextView
-        android:id="@+id/tv_peeksheet_distance"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
-        android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_sheet_peek_distance"
-        app:layout_constraintStart_toEndOf="@+id/iv_sheet_peek_distance"
-        app:layout_constraintTop_toTopOf="@+id/iv_sheet_peek_distance"
-        tools:text="distance"
-        style="@style/Widget.Trackfield.TextView" />
+        <ImageView
+            android:id="@+id/iv_peeksheet_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/layer_ic_distance"
+            app:tint="?tf_colorDistance" />
 
-    <ImageView
-        android:id="@+id/iv_peeksheet_duration"
+        <TextView
+            android:id="@+id/tv_peeksheet_distance"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+            android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_peeksheet_distance"
+            app:layout_constraintStart_toEndOf="@+id/iv_peeksheet_distance"
+            app:layout_constraintTop_toTopOf="@+id/iv_peeksheet_distance"
+            tools:text="distance"
+            style="@style/Widget.Trackfield.TextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_peeksheet_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:layout_marginBottom="@dimen/spacing_tiny"
-        android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_sheet_peek_distance"
-        app:layout_constraintStart_toEndOf="@+id/tv_peeksheet_distance"
-        app:layout_constraintTop_toTopOf="@+id/iv_sheet_peek_distance"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/layer_ic_duration"
-        app:tint="?tf_colorTime" />
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintStart_toEndOf="@+id/cl_peeksheet_distance"
+        app:layout_constraintTop_toBottomOf="@+id/v_peeksheet_divider">
 
-    <TextView
-        android:id="@+id/tv_peeksheet_time"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
-        android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_peeksheet_duration"
-        app:layout_constraintStart_toEndOf="@+id/iv_peeksheet_duration"
-        app:layout_constraintTop_toTopOf="@+id/iv_peeksheet_duration"
-        tools:text="time"
-        style="@style/Widget.Trackfield.TextView" />
+        <ImageView
+            android:id="@+id/iv_peeksheet_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/layer_ic_duration"
+            app:tint="?tf_colorTime" />
 
-    <ImageView
-        android:id="@+id/iv_peeksheet_pace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
-        app:layout_constraintStart_toStartOf="@+id/iv_sheet_peek_distance"
-        app:layout_constraintTop_toBottomOf="@+id/iv_sheet_peek_distance"
-        app:srcCompat="@drawable/layer_ic_pace"
-        app:tint="?tf_colorPace" />
+        <TextView
+            android:id="@+id/tv_peeksheet_time"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+            android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_peeksheet_duration"
+            app:layout_constraintStart_toEndOf="@+id/iv_peeksheet_duration"
+            app:layout_constraintTop_toTopOf="@+id/iv_peeksheet_duration"
+            tools:text="time"
+            style="@style/Widget.Trackfield.TextView" />
 
-    <TextView
-        android:id="@+id/tv_peeksheet_velocity"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_peeksheet_pace"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
-        android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_peeksheet_pace"
-        app:layout_constraintStart_toEndOf="@+id/iv_peeksheet_pace"
-        app:layout_constraintTop_toTopOf="@+id/iv_peeksheet_pace"
-        tools:text="pace"
-        style="@style/Widget.Trackfield.TextView" />
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginEnd="@dimen/spacing_peeksheet_edge"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cl_peeksheet_duration"
+        app:layout_constraintTop_toBottomOf="@+id/v_peeksheet_divider">
+
+        <ImageView
+            android:id="@+id/iv_peeksheet_pace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/layer_ic_pace"
+            app:tint="?tf_colorPace" />
+
+        <TextView
+            android:id="@+id/tv_peeksheet_velocity"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+            android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_peeksheet_pace"
+            app:layout_constraintStart_toEndOf="@+id/iv_peeksheet_pace"
+            app:layout_constraintTop_toTopOf="@+id/iv_peeksheet_pace"
+            tools:text="pace"
+            style="@style/Widget.Trackfield.TextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
