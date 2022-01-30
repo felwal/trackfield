@@ -53,11 +53,11 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
         // month graph
 
         GraphData dataThisMonth = new GraphData(
-            a, DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            a, DbReader.get(a).getMonthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
 
         GraphData dataLastMonth = new GraphData(
-            a, DbReader.get(a).monthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
+            a, DbReader.get(a).getMonthDailyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusMonths(1)),
             GraphData.GRAPH_LINE, false, false);
         dataLastMonth.setPaint(android.R.attr.listDivider, a);
 
@@ -69,11 +69,11 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
         // year graph
 
         GraphData dataThisYear = new GraphData(
-            a, DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+            a, DbReader.get(a).getYearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
             GraphData.GRAPH_LINE, false, false);
 
         GraphData dataLastYear = new GraphData(
-            a, DbReader.get(a).yearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            a, DbReader.get(a).getYearWeeklyIntegralDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
             GraphData.GRAPH_LINE, false, false);
         dataLastYear.setPaint(android.R.attr.listDivider, a);
 
@@ -85,11 +85,11 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
         // year chart
 
         GraphData dataThisYearMonthly = new GraphData(
-            a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
+            a, DbReader.get(a).getYearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()), GraphData.GRAPH_BAR,
             false, false);
 
         GraphData dataLastYearMonthly = new GraphData(
-            a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
+            a, DbReader.get(a).getYearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now().minusYears(1)),
             GraphData.GRAPH_BAR, false, false);
         dataLastYearMonthly.setPaint(android.R.attr.listDivider, a);
 

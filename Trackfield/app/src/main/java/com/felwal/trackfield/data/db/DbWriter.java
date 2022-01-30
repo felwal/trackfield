@@ -166,7 +166,7 @@ public class DbWriter extends DbHelper {
      * @return True if operaton successful
      */
     private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
-        int effectiveDistance = DbReader.get(c).avgDistance(routeId, routeVar);
+        int effectiveDistance = DbReader.get(c).getAvgDistance(routeId, routeVar);
 
         ContentValues cv = new ContentValues();
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);

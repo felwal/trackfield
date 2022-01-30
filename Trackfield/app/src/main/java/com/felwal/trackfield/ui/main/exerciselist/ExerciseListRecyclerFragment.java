@@ -3,7 +3,6 @@ package com.felwal.trackfield.ui.main.exerciselist;
 import android.view.View;
 
 import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
@@ -74,7 +73,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (exerliteList.size() != 0) {
             if (Prefs.isDailyChartShown()) {
                 GraphData weekData = new GraphData(
-                    a, DbReader.get(a).weekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).getWeekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph weekGraph = new Graph(false, Borders.none(), true, false, true);
@@ -245,7 +244,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                 ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
                 GraphData yearData = new GraphData(
-                    a, DbReader.get(a).yearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).getYearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph yearGraph = new Graph(false, Borders.none(), true, false, true);

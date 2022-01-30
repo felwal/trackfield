@@ -308,7 +308,7 @@ public class Exercise implements JSONObjectable {
     }
 
     public int getEffectiveDistance(Context c) {
-        if (isDistanceDriven()) return DbReader.get(c).avgDistance(routeId, routeVar);
+        if (isDistanceDriven()) return DbReader.get(c).getAvgDistance(routeId, routeVar);
         return distance;
     }
 

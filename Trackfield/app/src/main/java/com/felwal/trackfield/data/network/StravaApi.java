@@ -206,7 +206,7 @@ public class StravaApi {
                             Exercise strava = convertToExercise(obj);
 
                             // if stravaId already exists, continue to next; dont override
-                            if (DbReader.get(a).existsStravaId(strava.getStravaId())) continue;
+                            if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
 
                             success = handleRequest(strava);
                         }
@@ -250,7 +250,7 @@ public class StravaApi {
                             Exercise strava = convertToExercise(obj);
 
                             // if stravaId already exists, we are done; all new have been requested
-                            if (DbReader.get(a).existsStravaId(strava.getStravaId())) {
+                            if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) {
                                 loopBroken = true;
                                 break;
                             }
