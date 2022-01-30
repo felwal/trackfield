@@ -1,5 +1,6 @@
 package com.felwal.trackfield.data.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
@@ -818,7 +819,7 @@ public class DbReader extends DbHelper {
         return distanceItems;
     }
 
-    @NonNull
+    @NonNull @SuppressLint("Range")
     public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
         String colAmount = "amount";
 
@@ -827,10 +828,24 @@ public class DbReader extends DbHelper {
         String selection = ExerciseEntry.COLUMN_INTERVAL + " != ''";
         String groupBy = ExerciseEntry.COLUMN_INTERVAL;
         String having = includeHidden || !Prefs.areSingletonRoutesHidden() ? "" : "count(1) > 1";
-        String orderBy = orderBy(sortMode, ascending);
+
+        String orderBy;
+        switch (sortMode) {
+            case NAME:
+                orderBy = ExerciseEntry.COLUMN_INTERVAL;
+                break;
+            case AMOUNT:
+                orderBy = colAmount;
+                break;
+            case DATE:
+            default:
+                orderBy = "max(" + ExerciseEntry.COLUMN_DATE + ")";
+        }
+        orderBy += sortOrder(ascending);
 
         Cursor cursor = db.query(table, columns, selection, null, groupBy, having, orderBy);
         ArrayList<IntervalItem> intervalItems = new ArrayList<>();
+
         while (cursor.moveToNext()) {
             String interval = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_INTERVAL));
             int amount = cursor.getInt(cursor.getColumnIndex(colAmount));
