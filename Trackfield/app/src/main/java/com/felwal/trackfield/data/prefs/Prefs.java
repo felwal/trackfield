@@ -36,6 +36,8 @@ public class Prefs {
     private static final String KEY_FIRST_LOGIN = "firstLogin";
     private static final String KEY_WEEK_HEADERS = "weekHeaders";
     private static final String KEY_DAILY_CHART = "dailyChart";
+    private static final String KEY_DRIVING_PREFER_SAME_TYPE = "preferSameType";
+    private static final String KEY_DRIVING_FALLBACK_TO_ROUTE = "fallbackToRoute";
     private static final String KEY_COLOR = "color";
     private static final String KEY_THEME = "theme";
     private static final String KEY_FILE_LOCATION = "fileLocation";
@@ -75,6 +77,10 @@ public class Prefs {
     private static boolean showWeekHeaders = true;
     private static boolean showDailyChart = true;
     private static boolean hideSingletonGroups = false;
+
+    // data
+    private static boolean preferSameTypeWhenDriving = false;
+    private static boolean fallbackToRouteWhenDriving = true;
 
     // look
     private static int color = 1;
@@ -211,6 +217,10 @@ public class Prefs {
         showWeekHeaders = loadPref(bool, KEY_WEEK_HEADERS);
         showDailyChart = loadPref(bool, KEY_DAILY_CHART);
 
+        // data
+        preferSameTypeWhenDriving = loadPref(bool, KEY_DRIVING_PREFER_SAME_TYPE);
+        fallbackToRouteWhenDriving = loadPref(bool, KEY_DRIVING_FALLBACK_TO_ROUTE);
+
         // file
         fileLocation = loadPref(str, KEY_FILE_LOCATION);
 
@@ -279,6 +289,8 @@ public class Prefs {
             case KEY_FIRST_LOGIN: return firstLogin;
             case KEY_WEEK_HEADERS: return showWeekHeaders;
             case KEY_DAILY_CHART: return showDailyChart;
+            case KEY_DRIVING_PREFER_SAME_TYPE: return preferSameTypeWhenDriving;
+            case KEY_DRIVING_FALLBACK_TO_ROUTE: return fallbackToRouteWhenDriving;
             case KEY_COLOR: return color;
             case KEY_THEME: return theme;
             case KEY_FILE_LOCATION: return fileLocation;
@@ -327,6 +339,16 @@ public class Prefs {
     public static void showDailyChart(boolean show) {
         showDailyChart = show;
         savePref(show, KEY_DAILY_CHART);
+    }
+
+    public static void setPreferSameTypeWhenDriving(boolean prefer) {
+        preferSameTypeWhenDriving = prefer;
+        savePref(prefer, KEY_DRIVING_PREFER_SAME_TYPE);
+    }
+
+    public static void setFallbackToRouteWhenDriving(boolean fallback) {
+        fallbackToRouteWhenDriving = fallback;
+        savePref(fallback, KEY_DRIVING_FALLBACK_TO_ROUTE);
     }
 
     public static void setColor(int colorConst) {
@@ -468,6 +490,14 @@ public class Prefs {
 
     public static boolean isDailyChartShown() {
         return showDailyChart;
+    }
+
+    public static boolean preferSameTypeWhenDriving() {
+        return preferSameTypeWhenDriving;
+    }
+
+    public static boolean fallbackToRouteWhenDriving() {
+        return fallbackToRouteWhenDriving;
     }
 
     public static int getColor() {

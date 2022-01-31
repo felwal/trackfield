@@ -74,7 +74,7 @@ public class DbWriter extends DbHelper {
 
     /**
      * Adds an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, String, Context)}</p>
      *
      * @param e The exercise to add
      * @return True if the exercise was added successfully
@@ -88,14 +88,14 @@ public class DbWriter extends DbHelper {
         long id = db.insert(ExerciseEntry.TABLE_NAME, null, cv);
 
         // must be called to keep effective distance current
-        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), e.getType(), c);
 
         return success(id);
     }
 
     /**
      * Updates an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)} when changed routeId, routeVar or
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, String, Context)} when changed routeId, routeVar or
      * distance</p>
      *
      * @param e The exercise to update
@@ -115,13 +115,17 @@ public class DbWriter extends DbHelper {
             deleteRouteIfEmpty(old.getRouteId(), c);
         }
 
-        // update effective distance if routeId, routeVar or distance updated
+        // update effective distance if routeId, routeVar, distance or type updated
         if (old.getRouteId() != e.getRouteId() || !old.getRouteVar().equals(e.getRouteVar())) {
-            updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), c);
-            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+            updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), old.getType(), c);
+            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), e.getType(), c);
         }
         else if (old.getDistance() != e.getDistance()) {
-            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), e.getType(), c);
+        }
+        else if (!old.getType().equals(e.getType())) {
+            updateEffectiveDistance(old.getRouteId(), old.getRouteVar(), old.getType(), c);
+            updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), e.getType(), c);
         }
 
         return count > 0;
@@ -129,7 +133,7 @@ public class DbWriter extends DbHelper {
 
     /**
      * Deletes an exercise
-     * <p>Internally calls {@link #updateEffectiveDistance(int, String, Context)}</p>
+     * <p>Internally calls {@link #updateEffectiveDistance(int, String, String, Context)}</p>
      *
      * @param e The exercise to delete
      * @return True if the exercise was added successfully
@@ -144,7 +148,7 @@ public class DbWriter extends DbHelper {
         deleteRouteIfEmpty(e.getRouteId(), c);
 
         // effective distance
-        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), c);
+        updateEffectiveDistance(e.getRouteId(), e.getRouteVar(), e.getType(), c);
 
         return success(result);
     }
@@ -157,20 +161,26 @@ public class DbWriter extends DbHelper {
      * <ul>
      *     <li>{@link #addExercise(Exercise, Context)} when an exercise is created</li>
      *     <li>{@link #deleteExercise(Exercise, Context)} when an exercise is deleted</li>
-     *     <li>{@link #updateExercise(Exercise, Context)} when distance of an exercise is edited
-     *     and(twice) when rotue or routeVar of is edited</li>
+     *     <li>{@link #updateExercise(Exercise, Context)} when distance of an exercise is edited,
+     *     (twice) when rotue or routeVar of is edited and (twice) when type is edited.</li>
+     *     <li>And when updating {@link Prefs#setPreferSameTypeWhenDriving(boolean)} and
+     *     {@link Prefs#setFallbackToRouteWhenDriving(boolean)} </li>
      * </ul></p>
      *
      * @param routeId The routeId to edit effective distance of
      * @param routeVar The routeVar to edit effective distance of
+     * @param type
      * @return True if operaton successful
      */
-    private boolean updateEffectiveDistance(int routeId, String routeVar, Context c) {
-        int effectiveDistance = DbReader.get(c).getAvgDistance(routeId, routeVar);
+    private boolean updateEffectiveDistance(int routeId, String routeVar, String type, Context c) {
+        // TODO: call when changing settings
+
+        int effectiveDistance = DbReader.get(c).getDrivenDistance(routeId, routeVar, type);
 
         ContentValues cv = new ContentValues();
         cv.put(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE, effectiveDistance);
 
+        // TODO
         String where = ExerciseEntry.COLUMN_ROUTE_ID + " = ? AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = ?" +
             " AND " + ExerciseEntry.COLUMN_DISTANCE + " = ?";
         String[] whereArgs = { Integer.toString(routeId), routeVar, Integer.toString(Exercise.DISTANCE_DRIVEN) };

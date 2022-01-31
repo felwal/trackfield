@@ -35,6 +35,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -219,6 +220,30 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         return exerlites;
+    }
+
+    @SuppressLint("Range")
+    public int getExerliteCountByRoute(int routeId, @Nullable String routeVar, SorterItem.Mode sortMode,
+        boolean ascending, @NonNull ArrayList<String> types) {
+
+        String colAmount = "amount";
+
+        String[] select = { "count() AS " + colAmount };
+        String from = ExerciseEntry.TABLE_NAME;
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
+            (routeVar != null ? " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" : "") +
+            typeFilter(" AND", types);
+        String orderBy = orderBy(sortMode, ascending);
+
+        Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
+        int amount = 0;
+
+        while (cursor.moveToNext()) {
+            amount = cursor.getInt(cursor.getColumnIndex(colAmount));
+        }
+        cursor.close();
+
+        return amount;
     }
 
     /**
@@ -926,14 +951,36 @@ public class DbReader extends DbHelper {
     // projections
 
     @SuppressLint("Range")
-    public int getAvgDistance(int routeId, String routeVar) {
+    public int getDrivenDistance(int routeId, String routeVar, String type) {
+        ArrayList<String> types = new ArrayList<>(Collections.singleton(type));
         String colAvgDistance = "avg_distance";
+
+        // the filter will be applied with priority:
+        // 1. route and routevar and type
+        // 2. route and routevar
+        // 3. route and type
+        // 4. route
+
+        boolean filterByRoutevar = !Prefs.fallbackToRouteWhenDriving()
+            || getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, new ArrayList<>()) > 1;
+
+        boolean filterByType = Prefs.preferSameTypeWhenDriving()
+            && ((filterByRoutevar && getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, types) > 1)
+            || getExerliteCountByRoute(routeId, null, SorterItem.Mode.DATE, true, types) > 1);
+
+        String andTypeFilter = filterByType
+            ? " AND " + ExerciseEntry.COLUMN_TYPE + " = '" + type  + "'"
+            : "";
+        String andRoutevarFilter = filterByRoutevar
+            ? " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'"
+            : "";
 
         String query =
             "SELECT avg(" + ExerciseEntry.COLUMN_DISTANCE + ") AS " + colAvgDistance +
                 " FROM " + ExerciseEntry.TABLE_NAME +
                 " WHERE " + ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
-                " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" +
+                andTypeFilter +
+                andRoutevarFilter +
                 " AND " + ExerciseEntry.COLUMN_DISTANCE + " != " + Exercise.DISTANCE_DRIVEN +
                 " AND " + ExerciseEntry.COLUMN_DISTANCE + " != " + 0;
 
@@ -1446,10 +1493,11 @@ public class DbReader extends DbHelper {
             String type = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TYPE));
             long epoch = cursor.getLong(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DATE));
             int routeId = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_ID));
+            String routeVar = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_ROUTE_VAR));
             String interval = cursor.getString(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_INTERVAL));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
-            int effectiveDistance = cursor.getInt(
-                cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE));
+            //int effectiveDistance =
+            //    cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
             double startLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LAT));
             double startLng = cursor.getDouble(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_START_LNG));
@@ -1460,6 +1508,7 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
             LatLng start = new LatLng(startLat, startLng);
             boolean distanceDriven = distance == Exercise.DISTANCE_DRIVEN;
+            int effectiveDistance = distanceDriven ? getDrivenDistance(routeId, routeVar, type) : distance;
 
             Exerlite exerlite = new Exerlite(id, type, date, routeName, interval, effectiveDistance, time,
                 start, distanceDriven);
@@ -1495,6 +1544,7 @@ public class DbReader extends DbHelper {
 
         return exerlites;
     }
+
     private ArrayList<Distance> unpackDistanceCursor(Cursor cursor) {
         ArrayList<Distance> distances = new ArrayList<>();
 

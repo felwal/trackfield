@@ -96,6 +96,23 @@ class SettingsActivity :
                 )
             ),
             ItemSection(
+                title = getString(R.string.tv_text_settings_header_data),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_driving_prefer_same_type),
+                    descOn = getString(R.string.tv_text_settings_msg_driving_prefer_same_type),
+                    value = Prefs.preferSameTypeWhenDriving(),
+                    onSwitch = { Prefs.setPreferSameTypeWhenDriving(it) },
+                    iconRes = R.drawable.ic_calculate
+                ),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_driving_fallback_to_route),
+                    descOn = getString(R.string.tv_text_settings_msg_driving_fallback_to_route),
+                    value = Prefs.fallbackToRouteWhenDriving(),
+                    onSwitch = { Prefs.setFallbackToRouteWhenDriving(it) },
+                    iconRes = R.drawable.ic_calculate
+                )
+            ),
+            ItemSection(
                 title = getString(R.string.tv_text_settings_header_look),
                 SingleSelectionItem(
                     title = getString(R.string.tv_text_settings_title_theme),

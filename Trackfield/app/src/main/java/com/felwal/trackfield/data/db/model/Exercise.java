@@ -65,6 +65,7 @@ public class Exercise implements JSONObjectable {
     private String device;
     private String recordingMethod;
     private int distance;
+    private int drivenDistance;
     private float time;
     private Trail trail;
     private boolean trailHidden;
@@ -308,7 +309,8 @@ public class Exercise implements JSONObjectable {
     }
 
     public int getEffectiveDistance(Context c) {
-        if (isDistanceDriven()) return DbReader.get(c).getAvgDistance(routeId, routeVar);
+        // TODO: to field
+        if (isDistanceDriven()) return DbReader.get(c).getDrivenDistance(routeId, routeVar, type);
         return distance;
     }
 

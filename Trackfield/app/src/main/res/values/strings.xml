@@ -65,6 +65,12 @@
     <string name="tv_text_settings_header_display">Display options</string>
     <string name="tv_text_settings_title_week_headers">Week headers</string>
     <string name="tv_text_settings_title_singletion_groups">Hide singleton groups</string>
+    <string name="tv_text_settings_header_data">Data</string>
+    <string name="tv_text_settings_title_driving_prefer_same_type">Prefer same type when driving</string>
+    <string name="tv_text_settings_msg_driving_prefer_same_type">When there is data. Route variation will take
+        precedence over type.</string>
+    <string name="tv_text_settings_title_driving_fallback_to_route">Fallback to route when driving</string>
+    <string name="tv_text_settings_msg_driving_fallback_to_route">When there is no route variation data</string>
     <string name="tv_text_settings_header_look">Look</string>
     <string name="tv_text_settings_title_theme">Theme</string>
     <string name="tv_text_settings_title_color">Color</string>
