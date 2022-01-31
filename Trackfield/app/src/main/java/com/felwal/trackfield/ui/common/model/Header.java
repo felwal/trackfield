@@ -62,6 +62,10 @@ public class Header extends RecyclerItem {
         if (this.lastIndex == 0) this.lastIndex = lastIndex;
     }
 
+    public void setExpanded(boolean expanded) {
+        childrenExpanded = expanded;
+    }
+
     public void invertExpanded() {
         childrenExpanded = !childrenExpanded;
     }

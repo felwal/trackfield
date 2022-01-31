@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:paddingHorizontal="@dimen/spacing_recycler_edge_item"
-    android:layout_height="@dimen/layout_recycler_header_year">
+    android:layout_height="@dimen/layout_recycler_header_year"
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/tv_recycler_item_header_primary"

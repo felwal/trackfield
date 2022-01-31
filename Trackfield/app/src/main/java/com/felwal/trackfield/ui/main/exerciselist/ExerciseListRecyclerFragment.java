@@ -1,5 +1,6 @@
 package com.felwal.trackfield.ui.main.exerciselist;
 
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.felwal.android.util.ResUtilsKt;
@@ -193,10 +194,6 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         updateRecycler();
     }
 
-    private RecyclerItem getItemOfAll(int pos) {
-        return allItems.get(pos);
-    }
-
     // implements DelegateClickListener
 
     @Override
@@ -255,6 +252,27 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                 updateRecycler(newItems);
             }
         }
+    }
+
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+        // expand and collapse headers by zooming in and out
+
+        float scale = detector.getScaleFactor();
+
+        if (scale < 1) {
+            collapseAll();
+            // consider this event as handled
+            return true;
+        }
+        else if (scale > 1) {
+            expandAll();
+            // consider this event as handled
+            return true;
+        }
+
+        // don't consider this event as handled
+        return false;
     }
 
 }

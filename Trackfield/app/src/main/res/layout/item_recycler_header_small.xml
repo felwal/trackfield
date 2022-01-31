@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/layout_recycler_header_month">
+    android:layout_height="@dimen/layout_recycler_header_month"
+    android:background="?selectableItemBackground">
 
     <View
         android:id="@+id/v_recycler_item_header_divider"

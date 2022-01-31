@@ -1,8 +1,11 @@
 package com.felwal.trackfield.ui.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,11 +26,13 @@ import com.felwal.trackfield.ui.common.model.Header;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.MainActivity;
+import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 import java.util.ArrayList;
 
-public abstract class RecyclerFragment extends Fragment implements DelegateClickListener {
+public abstract class RecyclerFragment extends Fragment implements DelegateClickListener,
+    ScaleGestureDetector.OnScaleGestureListener {
 
     protected Activity a;
     protected DbReader reader;
@@ -46,8 +51,11 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     private BaseListAdapter adapter;
     private ConstraintLayout emptyCl;
 
+    private ScaleGestureDetector scaleDetector;
+
     // extends Fragment
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_recycler, container, false);
@@ -74,6 +82,12 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         if (a instanceof MainActivity) {
             ((MainActivity) a).setRecyclerScrollListener(recycler, this);
         }
+
+        scaleDetector = new ScaleGestureDetector(a, this);
+        recycler.setOnTouchListener((v, event) -> {
+            scaleDetector.onTouchEvent(event);
+            return false;
+        });
 
         return view;
     }
@@ -111,6 +125,10 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
     protected RecyclerItem getItem(int position) {
         if (position < 0 || position >= adapter.getItems().size()) return null;
         return adapter.getItems().get(position);
+    }
+
+    protected RecyclerItem getItemOfAll(int pos) {
+        return allItems.get(pos);
     }
 
     protected ArrayList<RecyclerItem> getVisibleItems() {
@@ -175,6 +193,40 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
             final ArrayList<RecyclerItem> newItems = getVisibleItems();
             a.runOnUiThread(() -> updateRecycler(newItems));
         }).start();
+    }
+
+    public void collapseAll() {
+        for (RecyclerItem item : allItems) {
+            if (item instanceof Header && ((Header) item).isType(Header.Type.YEAR)) {
+                ((Header) item).setExpanded(false);
+            }
+            else if (item instanceof Header && ((Header) item).isType(Header.Type.MONTH)) {
+                ((Header) item).setExpanded(false);
+                item.setCollapsedLevel(1);
+            }
+            else if (item instanceof Exerlite || item instanceof Header && ((Header) item).isType(Header.Type.WEEK)) {
+                item.setCollapsedLevel(2);
+            }
+        }
+
+        updateRecycler(getVisibleItems());
+    }
+
+    public void expandAll() {
+        for (RecyclerItem item : allItems) {
+            if (item instanceof Header && ((Header) item).isType(Header.Type.YEAR)) {
+                ((Header) item).setExpanded(true);
+            }
+            else if (item instanceof Header && ((Header) item).isType(Header.Type.MONTH)) {
+                ((Header) item).setExpanded(true);
+                item.setCollapsedLevel(0);
+            }
+            else if (item instanceof Exerlite || item instanceof Header && ((Header) item).isType(Header.Type.WEEK)) {
+                item.setCollapsedLevel(0);
+            }
+        }
+
+        updateRecycler(getVisibleItems());
     }
 
     public void scrollToTop() {
@@ -305,6 +357,25 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
 
     protected void fadeOutEmpty() {
         a.runOnUiThread(() -> LayoutUtils.crossfadeOut(emptyCl));
+    }
+
+    // implements OnScaleGestureListener
+
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+        // consider this event as handled
+        return true;
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        // continue recognizing this gesture
+        return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector detector) {
+        // currently zooming is only enabled in ExerciseListRecyclerFragment
     }
 
 }

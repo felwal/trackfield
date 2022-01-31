@@ -1,5 +1,7 @@
 package com.felwal.trackfield.ui.common.model;
 
+import androidx.annotation.IntRange;
+
 public abstract class RecyclerItem {
 
     public final static String TAG_GRAPH_GROUP = "recGraph";
@@ -14,6 +16,10 @@ public abstract class RecyclerItem {
     public void changeVisibility(boolean expand) {
         if (expand && collapsedLevel > 0) collapsedLevel--;
         else collapsedLevel++;
+    }
+
+    public void setCollapsedLevel(@IntRange(from = 0) int collapsedLevel) {
+        this.collapsedLevel = Math.max(0, collapsedLevel);
     }
 
     public void setTag(String tag) {
