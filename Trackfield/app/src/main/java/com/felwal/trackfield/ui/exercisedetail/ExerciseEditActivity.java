@@ -25,6 +25,7 @@ import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
+import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
@@ -358,6 +359,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                 LayoutUtils.toast(success, this);
             }
 
+            MainActivity.updateFragmentOnRestart = true;
             finish();
         }
         catch (NumberFormatException e) {

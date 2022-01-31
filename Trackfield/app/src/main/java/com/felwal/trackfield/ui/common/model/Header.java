@@ -26,6 +26,11 @@ public class Header extends RecyclerItem {
     private int firstIndex = 0;
     private int lastIndex = 0;
 
+    // since we update expansion on and submit the same object,
+    // we need a way to check if it is updated.
+    // TODO: currently this overrides the height animation.
+    private boolean expansionUpdated = false;
+
     //
 
     public Header(String title, Type type, int firstIndex, @Nullable HeaderValue... headerValues) {
@@ -64,10 +69,12 @@ public class Header extends RecyclerItem {
 
     public void setExpanded(boolean expanded) {
         childrenExpanded = expanded;
+        expansionUpdated = true;
     }
 
     public void invertExpanded() {
         childrenExpanded = !childrenExpanded;
+        expansionUpdated = true;
     }
 
     // get
@@ -122,8 +129,12 @@ public class Header extends RecyclerItem {
     public boolean sameContentAs(RecyclerItem item) {
         if (!(item instanceof Header)) return false;
         Header other = (Header) item;
-        return type == other.type && title.equals(other.getTitle()) && Arrays.equals(headerValues, other.headerValues)
-            && childrenExpanded == other.childrenExpanded;
+
+        boolean sameContent = type == other.type && title.equals(other.getTitle())
+            && Arrays.equals(headerValues, other.headerValues); //&& !expansionUpdated;
+
+        expansionUpdated = false;
+        return sameContent;
     }
 
 }

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
+    public static boolean updateFragmentOnRestart = false;
 
     // dialog tags
     private static final String DIALOG_FILTER = "filterDialog";
@@ -95,7 +96,10 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             recreateOnRestart = false;
         }
         else {
-            mainFragment.updateFragment();
+            if (updateFragmentOnRestart) {
+                mainFragment.updateFragment();
+                updateFragmentOnRestart = false;
+            }
             if (fam.isMenuOpen()) fam.closeMenu();
         }
     }

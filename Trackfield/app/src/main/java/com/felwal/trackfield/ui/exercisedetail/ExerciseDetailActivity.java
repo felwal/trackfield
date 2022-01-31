@@ -25,6 +25,7 @@ import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
@@ -153,7 +154,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             finish();
             return true;
         }
-        else if (itemId == R.id.action_exerciseedit_exercise) {
+        else if (itemId == R.id.action_edit_exercise) {
             ExerciseEditActivity.startActivity(this, exerciseId);
             return true;
         }
@@ -162,6 +163,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
                 getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete,
                 R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_EXERCISE, null)
                 .show(getSupportFragmentManager());
+
+            MainActivity.updateFragmentOnRestart = true;
             return true;
         }
         else if (itemId == R.id.action_pull_exercise) {
@@ -170,6 +173,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
                     Prefs.getPullOptions().getTexts(), Prefs.getPullOptions().getChecked(), null,
                     R.string.dialog_btn_pull, R.string.fw_dialog_btn_cancel, DIALOG_PULL, null
                 ).show(getSupportFragmentManager());
+
+                MainActivity.updateFragmentOnRestart = true;
             }
             else {
                 // TODO: snackbar with 'remove id' action?

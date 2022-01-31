@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_exerciseedit_exercise"
+        android:id="@+id/action_edit_exercise"
         android:title="@string/action_exerciseedit"
         android:icon="@drawable/ic_edit"
         app:showAsAction="always" />
