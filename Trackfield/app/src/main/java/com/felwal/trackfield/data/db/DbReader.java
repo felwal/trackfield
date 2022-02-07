@@ -232,6 +232,7 @@ public class DbReader extends DbHelper {
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
             (routeVar != null ? " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" : "") +
+            " AND " + ExerciseEntry.COLUMN_DISTANCE + " != " + Exercise.DISTANCE_DRIVEN +
             typeFilter(" AND", types);
         String orderBy = orderBy(sortMode, ascending);
 
@@ -770,7 +771,7 @@ public class DbReader extends DbHelper {
         final String aliBestPace = "best_pace";
 
         String select = "SELECT " + col(aliEx, colExRouteid) + ", " + col(tabRoutes, colRoName) + ", " +
-            "count(1) AS " + aliAmount + ", " + "avg(" + col(aliEx, colExDist) + ") AS " + aliAvgDist + ", " +
+            "count() AS " + aliAmount + ", " + "avg(" + col(aliEx, colExDist) + ") AS " + aliAvgDist + ", " +
             col(aliA, aliBestPace);
         String from = " FROM " + tabExercises + " AS " + aliEx;
 
@@ -788,7 +789,7 @@ public class DbReader extends DbHelper {
         String whereHidden = includeHidden ? "" : " AND " + col(tabRoutes, colRoHidden) + " != 1";
         String where = " WHERE 1 = 1" + whereHidden + typeFilter(" AND", types);
         String groupBy = " GROUP BY " + col(aliEx, colExRouteid);
-        String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : " HAVING count(1) > 1";
+        String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : " HAVING count() > 1";
 
         String orderBy = " ORDER BY ";
         switch (sortMode) {
@@ -888,7 +889,7 @@ public class DbReader extends DbHelper {
     public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
         String colAmount = "amount";
 
-        String[] select = { ExerciseEntry.COLUMN_INTERVAL, "count(1) AS " + colAmount };
+        String[] select = { ExerciseEntry.COLUMN_INTERVAL, "count() AS " + colAmount };
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_INTERVAL + " != ''";
         String groupBy = ExerciseEntry.COLUMN_INTERVAL;
@@ -1053,14 +1054,14 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull @SuppressLint("Range")
-    public ArrayList<String> getTypes() {
+    public ArrayList<String> getTypes(@Nullable String limit) {
         String[] select = { ExerciseEntry.COLUMN_TYPE };
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_TYPE + " != ''";
         String groupBy = ExerciseEntry.COLUMN_TYPE;
         String orderBy = "count() DESC";
 
-        Cursor cursor = db.query(true, from, select, where, null, groupBy, null, orderBy, null);
+        Cursor cursor = db.query(true, from, select, where, null, groupBy, null, orderBy, limit);
         ArrayList<String> types = new ArrayList<>();
 
         while (cursor.moveToNext()) {

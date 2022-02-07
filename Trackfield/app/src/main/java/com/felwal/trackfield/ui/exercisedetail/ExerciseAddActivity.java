@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 
 import com.felwal.trackfield.R;
+import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.utils.AppConsts;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ExerciseAddActivity extends ExerciseEditActivity {
 
@@ -26,8 +28,15 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
 
     @Override
     protected void setEditTexts() {
+        // use 'now' as default
         et(dateTil).setText(creationDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
         et(timeTil).setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
+
+        // use the most common type as default
+        ArrayList<String> mostCommonType = DbReader.get(this).getTypes("1");
+        if (mostCommonType.size() != 0) {
+            et(typeTil).setText(mostCommonType.get(0));
+        }
     }
 
     // get

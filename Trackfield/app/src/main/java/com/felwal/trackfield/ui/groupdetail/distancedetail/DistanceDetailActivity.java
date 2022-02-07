@@ -2,7 +2,6 @@ package com.felwal.trackfield.ui.groupdetail.distancedetail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.MenuRes;
@@ -66,7 +65,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes();
+            ArrayList<String> types = DbReader.get(this).getTypes(null);
             String[] items = new String[types.size()];
             types.toArray(items);
 
@@ -166,7 +165,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setDistanceVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();

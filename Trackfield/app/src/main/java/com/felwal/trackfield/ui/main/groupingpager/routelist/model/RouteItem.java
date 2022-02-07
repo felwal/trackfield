@@ -47,7 +47,7 @@ public class RouteItem extends RecyclerItem {
     // print
 
     private String printAvgDistance() {
-        return avgDistance != 0 ? MathUtils.prefix(avgDistance, 1, "m") : AppConsts.NO_VALUE;
+        return avgDistance != 0 ? MathUtils.prefix(avgDistance, 1, false, "m") : AppConsts.NO_VALUE;
     }
 
     private String printBestPace() {

@@ -161,7 +161,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         // actv adapters
         setAdapter(routeTil, DbReader.get(this).getRouteNames());
         setAdapter(intervalTil, DbReader.get(this).getIntervals());
-        setAdapter(typeTil, DbReader.get(this).getTypes());
+        setAdapter(typeTil, DbReader.get(this).getTypes(null));
         setAdapter(labelTil, DbReader.get(this).getLabels());
         setAdapter(deviceTil, DbReader.get(this).getDevices());
         setAdapter(recordingMethodTil, DbReader.get(this).getMethods());

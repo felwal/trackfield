@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -146,7 +147,6 @@ public final class FileUtils {
         }
     }
 
-    @Nullable
     private static String readJson(String pathname, Context c) {
         if (hasNotPermissionToStorage(c)) return null;
 
@@ -170,7 +170,7 @@ public final class FileUtils {
             response = builder.toString();
         }
         catch (IOException e) {
-            LayoutUtils.handleError(e, c);
+            // the files were not found. just return the empty string and check for failure that way.
         }
 
         return response;

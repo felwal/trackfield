@@ -82,7 +82,7 @@ public class Prefs {
     private static boolean preferSameTypeWhenDriving = false;
     private static boolean fallbackToRouteWhenDriving = true;
 
-    // look
+    // appearance
     private static int color = 1;
     private static int theme = 0;
 

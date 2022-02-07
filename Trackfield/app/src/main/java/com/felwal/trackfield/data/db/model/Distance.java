@@ -72,7 +72,7 @@ public class Distance implements JSONObjectable {
     // print
 
     public String printTitle() {
-        return MathUtils.prefix(getDistance(), 3, "m");
+        return MathUtils.prefix(getDistance(), 3, true, "m");
     }
 
     // implements JSONObjectable

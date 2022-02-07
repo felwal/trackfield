@@ -81,39 +81,7 @@ class SettingsActivity :
     override fun inflateSettingItems() {
         inflateSections(
             ItemSection(
-                title = getString(R.string.tv_text_settings_header_display),
-                BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_week_headers),
-                    value = Prefs.isWeekHeadersShown(),
-                    onSwitch = { Prefs.showWeekHeaders(it) },
-                    iconRes = R.drawable.ic_title
-                ),
-                BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_singletion_groups),
-                    value = Prefs.areSingletonGroupsHidden(),
-                    onSwitch = { Prefs.hideSingletonGroups(it) },
-                    iconRes = R.drawable.ic_groupings
-                )
-            ),
-            ItemSection(
-                title = getString(R.string.tv_text_settings_header_data),
-                BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_driving_prefer_same_type),
-                    descOn = getString(R.string.tv_text_settings_msg_driving_prefer_same_type),
-                    value = Prefs.preferSameTypeWhenDriving(),
-                    onSwitch = { Prefs.setPreferSameTypeWhenDriving(it) },
-                    iconRes = R.drawable.ic_calculate
-                ),
-                BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_driving_fallback_to_route),
-                    descOn = getString(R.string.tv_text_settings_msg_driving_fallback_to_route),
-                    value = Prefs.fallbackToRouteWhenDriving(),
-                    onSwitch = { Prefs.setFallbackToRouteWhenDriving(it) },
-                    iconRes = R.drawable.ic_calculate
-                )
-            ),
-            ItemSection(
-                title = getString(R.string.tv_text_settings_header_look),
+                title = getString(R.string.tv_text_settings_header_appearance),
                 SingleSelectionItem(
                     title = getString(R.string.tv_text_settings_title_theme),
                     values = AppConsts.themeNames.toTypedArray(),
@@ -130,11 +98,55 @@ class SettingsActivity :
                 )
             ),
             ItemSection(
+                title = getString(R.string.tv_text_settings_header_display),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_week_headers),
+                    value = Prefs.isWeekHeadersShown(),
+                    onSwitch = {
+                        Prefs.showWeekHeaders(it)
+                        MainActivity.updateFragmentOnRestart = true
+                    },
+                    iconRes = R.drawable.ic_title
+                ),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_singletion_groups),
+                    value = Prefs.areSingletonGroupsHidden(),
+                    onSwitch = {
+                        Prefs.hideSingletonGroups(it)
+                        MainActivity.updateFragmentOnRestart = true
+                    },
+                    iconRes = R.drawable.ic_groupings
+                )
+            ),
+            ItemSection(
                 title = getString(R.string.tv_text_settings_header_services),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_strava),
                     onClick = { StravaSettingsActivity.startActivity(this) },
                     iconRes = R.drawable.ic_logo_strava
+                )
+            ),
+            ItemSection(
+                title = getString(R.string.tv_text_settings_header_data),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_driving_prefer_same_type),
+                    descOn = getString(R.string.tv_text_settings_msg_driving_prefer_same_type),
+                    value = Prefs.preferSameTypeWhenDriving(),
+                    onSwitch = {
+                        Prefs.setPreferSameTypeWhenDriving(it)
+                        MainActivity.recreateOnRestart = true;
+                    },
+                    iconRes = R.drawable.ic_calculate
+                ),
+                BooleanItem(
+                    title = getString(R.string.tv_text_settings_title_driving_fallback_to_route),
+                    descOn = getString(R.string.tv_text_settings_msg_driving_fallback_to_route),
+                    value = Prefs.fallbackToRouteWhenDriving(),
+                    onSwitch = {
+                        Prefs.setFallbackToRouteWhenDriving(it)
+                        MainActivity.recreateOnRestart = true;
+                    },
+                    iconRes = R.drawable.ic_calculate
                 )
             ),
             ItemSection(
@@ -207,6 +219,7 @@ class SettingsActivity :
                     title = getString(R.string.tv_text_settings_title_regenerate_places),
                     onClick = {
                         DbWriter.get(this).regeneratePlaces(this)
+                        MainActivity.recreateOnRestart = true;
                     }
                 ),
                 ConfirmationItem(
@@ -246,11 +259,13 @@ class SettingsActivity :
                             else R.string.toast_json_import_err,
                             this
                         )
+                        MainActivity.recreateOnRestart = true;
                     }
                 }.start()
             }
             DIALOG_RECREATE_DB -> {
                 DbWriter.get(this).recreate()
+                MainActivity.recreateOnRestart = true;
             }
         }
     }

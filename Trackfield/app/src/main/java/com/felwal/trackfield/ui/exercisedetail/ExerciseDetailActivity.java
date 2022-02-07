@@ -297,11 +297,15 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         });
         energyTv.setOnClickListener(v -> {
             String text = energyTv.getText().toString();
-            String joules = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.JOULES, this), 2, "J");
-            String calories = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.CALORIES, this), 2, "cal");
-            String watthours = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.WATTHOURS, this), 2, "Wh");
-            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(AppConsts.UnitEnergy.ELECTRONVOLTS, this), 19,
-                "eV");
+
+            String joules = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.JOULES, this),
+                2, false, "J");
+            String calories = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.CALORIES, this),
+                2, false, "cal");
+            String watthours = MathUtils.prefix(exercise.getEnergy(AppConsts.UnitEnergy.WATTHOURS, this),
+                2, false, "Wh");
+            String electronvolts = MathUtils.bigPrefix(exercise.getEnergy(AppConsts.UnitEnergy.ELECTRONVOLTS, this),
+                19, "eV");
 
             if (text.equals(joules)) {
                 energyTv.setText(calories);

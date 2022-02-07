@@ -381,7 +381,7 @@ public class Exercise implements JSONObjectable {
 
         String print = distance == 0 ? AppConsts.NO_VALUE : unitlessKm
             ? MathUtils.round(distance / 1000f, DISTANCE_DECIMALS) + ""
-            : MathUtils.prefix(distance, DISTANCE_DECIMALS, "m");
+            : MathUtils.prefix(distance, DISTANCE_DECIMALS, false, "m");
 
         return isDistanceDriven() ? TypeUtils.notateDriven(print) : print;
     }
@@ -414,14 +414,14 @@ public class Exercise implements JSONObjectable {
         int energy = getEnergy(AppConsts.UnitEnergy.JOULES, c);
 
         if (energy == 0) return AppConsts.NO_VALUE;
-        return MathUtils.prefix(energy, 2, "J");
+        return MathUtils.prefix(energy, 2, false, "J");
     }
 
     public String printPower(Context c) {
         int power = getPower(c);
 
         if (power == 0) return AppConsts.NO_VALUE;
-        return MathUtils.prefix(power, 2, "W");
+        return MathUtils.prefix(power, 2, false, "W");
     }
 
     @Unfinished

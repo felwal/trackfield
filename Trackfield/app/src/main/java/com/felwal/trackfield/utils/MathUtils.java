@@ -70,7 +70,7 @@ public final class MathUtils {
 
     // strings
 
-    public static String prefix(float value, int decimals, String unit) {
+    public static String prefix(float value, int decimals, boolean hideTrailingZeros, String unit) {
         String prefix = "";
         boolean integer = false;
 
@@ -93,7 +93,7 @@ public final class MathUtils {
         else integer = true;
 
         value = round(value, decimals);
-        integer |= value % 1f == 0;
+        integer |= hideTrailingZeros && value % 1f == 0;
 
         return (integer ? Integer.toString((int) value) : value) + " " + prefix + unit;
     }

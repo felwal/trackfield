@@ -47,7 +47,7 @@ public class DistanceItem extends RecyclerItem {
     }
 
     public String printTitle() {
-        return MathUtils.prefix(getDistance(), 3, "m");
+        return MathUtils.prefix(getDistance(), 3, true, "m");
     }
 
     // extends RecyclerItem

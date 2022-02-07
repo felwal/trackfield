@@ -19,6 +19,7 @@ import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.map.RouteMapActivity;
 import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
@@ -74,7 +75,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes();
+            ArrayList<String> types = DbReader.get(this).getTypes(null);
             String[] items = new String[types.size()];
             types.toArray(items);
 
@@ -156,7 +157,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
 
             int existingIdForNewName = DbReader.get(this).getRouteId(input);
 
-            // update route
+            // merge
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
                 AlertDialog.newInstance(getString(R.string.dialog_title_merge_routes),
                     getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge,
@@ -164,10 +165,13 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
                     DIALOG_MERGE_ROUTES, input)
                     .show(getSupportFragmentManager());
             }
+            // rename
             else {
                 DbWriter.get(this).updateRouteName(route.getName(), input);
                 route.setName(input);
                 DbWriter.get(this).updateRoute(route, this);
+
+                MainActivity.updateFragmentOnRestart = true;
                 finish();
                 startActivity(this, route.getId(), originId);
             }
@@ -180,6 +184,8 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
             DbWriter.get(this).updateRouteName(route.getName(), passValue);
             route.setName(passValue);
             int newId = DbWriter.get(this).updateRoute(route, this);
+
+            MainActivity.updateFragmentOnRestart = true;
             finish();
             startActivity(this, newId, originId);
         }
@@ -215,7 +221,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setRouteVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();

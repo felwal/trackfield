@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             return true;
         }
         else if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes();
+            ArrayList<String> types = DbReader.get(this).getTypes(null);
             String[] items = new String[types.size()];
             types.toArray(items);
 
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setExerciseVisibleTypes(visibleTypes);
             mainFragment.updateFragment();

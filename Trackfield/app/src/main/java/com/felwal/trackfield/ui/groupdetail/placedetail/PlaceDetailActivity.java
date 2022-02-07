@@ -70,7 +70,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes();
+            ArrayList<String> types = DbReader.get(this).getTypes(null);
             String[] items = new String[types.size()];
             types.toArray(items);
 
@@ -179,7 +179,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(), checkedItems);
+                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setDistanceVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();
