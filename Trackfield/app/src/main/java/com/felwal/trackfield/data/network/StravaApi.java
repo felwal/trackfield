@@ -123,11 +123,11 @@ public class StravaApi {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                    Log.i(LOG_TAG, "response: " + response.toString());
+                Log.i(LOG_TAG, "response: " + response.toString());
 
-                    boolean success = handlePull(convertToExercise(response), options);
+                boolean success = handlePull(convertToExercise(response), options);
 
-                    listener.onStravaResponse(success);
+                listener.onStravaResponse(success);
                 }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
@@ -162,6 +162,22 @@ public class StravaApi {
     }
 
     // request activities
+    public void requestActivity(long stravaId, ResponseListener listener) {
+        ((TokenRequester) accessToken -> {
+            LayoutUtils.toast(R.string.toast_strava_req_activity, a);
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
+                response -> {
+                Log.i(LOG_TAG, "response: " + response);
+
+                boolean success = handleRequest(convertToExercise(response));
+
+                listener.onStravaResponse(success);
+            }, e -> listener.onStravaResponseError(e, a));
+
+            queue.add(request);
+        }).requestAccessToken(a);
+    }
 
     private void requestActivity(final int index, ResponseListener listener) {
         ((TokenRequester) accessToken -> {

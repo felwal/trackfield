@@ -11,6 +11,7 @@ import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
+import com.felwal.trackfield.ui.main.MainActivity;
 
 public class IntervalDetailActivity extends GroupDetailActivity implements TextDialog.DialogListener {
 
@@ -89,6 +90,7 @@ public class IntervalDetailActivity extends GroupDetailActivity implements TextD
 
             DbWriter.get(this).updateInterval(interval, input);
 
+            MainActivity.updateFragmentOnRestart = true;
             finish();
             startActivity(this, input, originId);
         }

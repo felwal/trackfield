@@ -770,6 +770,7 @@ public class DbReader extends DbHelper {
         final String aliAvgDist = "avg_distance";
         final String aliBestPace = "best_pace";
 
+        // TODO: dont count driven distances into avg
         String select = "SELECT " + col(aliEx, colExRouteid) + ", " + col(tabRoutes, colRoName) + ", " +
             "count() AS " + aliAmount + ", " + "avg(" + col(aliEx, colExDist) + ") AS " + aliAvgDist + ", " +
             col(aliA, aliBestPace);
@@ -804,6 +805,9 @@ public class DbReader extends DbHelper {
                 break;
             case PACE:
                 orderBy += col(aliA, aliBestPace);
+                break;
+            case DATE_ALT:
+                orderBy += "min(" + colExDate + ")";
                 break;
             case DATE:
             default:

@@ -28,6 +28,7 @@ public class RouteListFragment extends RecyclerFragment {
 
     private final SorterItem sorter = new SorterItem(
         SorterItem.sortByDate("Recent"),
+        SorterItem.sortByDateAlt("Discovered"),
         SorterItem.sortByName(),
         SorterItem.sortByAmount(),
         SorterItem.sortByDistance("Avg distance"),

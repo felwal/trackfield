@@ -22,6 +22,7 @@ import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
+import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.map.PlaceMapActivity;
 
 import org.jetbrains.annotations.Nullable;
@@ -138,13 +139,13 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(String input, String tag, String passValue) {
+    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_PLACE)) {
             if (input.equals("") || input.equals(place.getName())) return;
 
             int existingIdForNewName = DbReader.get(this).getPlaceId(input);
 
-            // update route
+            // update place
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
                 AlertDialog.newInstance(getString(R.string.dialog_title_place_name_exists),
                     getString(R.string.dialog_msg_place_name_exists), R.string.fw_dialog_btn_ok,
@@ -155,6 +156,8 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
             else {
                 place.setName(input);
                 DbWriter.get(this).updatePlace(place);
+
+                MainActivity.updateFragmentOnRestart = true;
                 finish();
                 startActivity(this, place.getId());
             }
@@ -165,6 +168,8 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DELETE_PLACE)) {
             DbWriter.get(this).deletePlace(place);
+
+            MainActivity.updateFragmentOnRestart = true;
             finish();
         }
     }
@@ -187,9 +192,9 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     }
 
     @Override
-    public void onNumberDialogPositiveClick(int input, @NonNull String tag, @Nullable String passValue) {
+    public void onNumberDialogPositiveClick(long input, @NonNull String tag, @Nullable String passValue) {
         if (tag.equals(DIALOG_EDIT_RADIUS)) {
-            place.setRadius(input);
+            place.setRadius((int) input);
             DbWriter.get(this).updatePlace(place);
             recyclerFragment.updateRecycler();
         }

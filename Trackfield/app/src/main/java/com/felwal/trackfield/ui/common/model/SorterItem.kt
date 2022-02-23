@@ -10,7 +10,7 @@ class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
     }
 
     enum class Mode {
-        DATE, DISTANCE, TIME, PACE, NAME, AMOUNT, START_LAT, START_LNG
+        DATE, DATE_ALT, DISTANCE, TIME, PACE, NAME, AMOUNT, START_LAT, START_LNG
     }
 
     var sorter = Sorter(*sortModes)
@@ -49,6 +49,9 @@ class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
     companion object {
         @JvmStatic @JvmOverloads
         fun sortByDate(label: String = "Date") = SortMode(label, Mode.DATE, false)
+
+        @JvmStatic @JvmOverloads
+        fun sortByDateAlt(label: String = "Date") = SortMode(label, Mode.DATE_ALT, false)
 
         @JvmStatic @JvmOverloads
         fun sortByDistance(label: String = "Distance") = SortMode(label, Mode.DISTANCE, false)

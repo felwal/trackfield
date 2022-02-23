@@ -94,6 +94,8 @@
     <string name="tv_text_settings_header_connection">Connection</string>
     <string name="tv_text_settings_title_auth">Authorize</string>
     <string name="tv_text_settings_header_requests">Request activities</string>
+    <string name="tv_text_settings_title_request_specific">Request specific</string>
+    <string name="tv_text_settings_hint_request_specific">Strava activity id</string>
     <string name="tv_text_settings_title_request_new">Request new</string>
     <string name="tv_text_settings_title_request_all">Request all</string>
     <string name="tv_text_settings_title_pull_all">Pull all from Strava</string>

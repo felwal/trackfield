@@ -4,16 +4,46 @@
     <!-- palette -->
 
     <!-- main -->
-    <color name="green_200">@color/fw_material_green_200</color>
-    <color name="green_400">@color/fw_material_green_400</color>
-    <color name="green_600">@color/fw_material_green_600</color>
-    <color name="green_800">@color/fw_material_green_800</color>
-    <color name="green_900">@color/fw_material_green_900</color>
+    <color name="green_lr">@color/fw_material_green_200</color>
+    <color name="green_lt">@color/fw_material_green_400</color>
+    <color name="green">@color/fw_material_green_600</color>
+    <color name="green_dk">@color/fw_material_green_800</color>
+    <color name="green_dr">@color/fw_material_green_900</color>
 
     <!-- greyscale -->
     <color name="grey_96">#F5F5F5</color>
 
+    <!-- light theme colors -->
+    <color name="red">@color/fw_material_red_600</color>
+    <color name="pink">@color/fw_material_pink_600</color>
+    <color name="purple_deep">@color/fw_material_purple_deep_500</color>
+    <color name="blue">@color/fw_material_blue_600</color>
+    <color name="teal">@color/fw_material_teal_600</color>
+    <color name="yellow">@color/fw_material_yellow_700</color>
+    <color name="gold">@color/fw_material_yellow_700</color>
+    <color name="orange">@color/fw_material_orange_600</color>
+    <color name="orange_deep">@color/fw_material_orange_deep_600</color>
+    <color name="bronze">@color/fw_material_orange_deep_300</color>
+    <color name="brown">@color/fw_material_brown_600</color>
+    <color name="silver">@color/fw_material_grey_500</color>
+    <color name="grey_blue">@color/fw_material_grey_blue_600</color>
+
+    <!-- dark theme colors -->
+    <color name="red_lt">@color/fw_material_red_400</color>
+    <color name="pink_lt">@color/fw_material_pink_400</color>
+    <color name="purple_deep_lt">@color/fw_material_purple_deep_400</color>
+    <color name="blue_lt">@color/fw_material_blue_400</color>
+    <color name="teal_lt">@color/fw_material_teal_400</color>
+    <color name="yellow_lt">@color/fw_material_yellow_400</color>
+    <color name="gold_lt">@color/fw_material_yellow_200</color>
+    <color name="orange_lt">@color/fw_material_orange_400</color>
+    <color name="orange_deep_lt">@color/fw_material_orange_deep_400</color>
+    <color name="bronze_lt">@color/fw_material_orange_deep_200</color>
+    <color name="brown_lt">@color/fw_material_brown_300</color>
+    <color name="silver_lt">@color/fw_material_grey_200</color>
+    <color name="grey_blue_lt">@color/fw_material_grey_blue_400</color>
+
     <!-- application -->
-    <color name="polyline_satellite">@color/green_200</color>
+    <color name="polyline_satellite">@color/green_lr</color>
 
 </resources>

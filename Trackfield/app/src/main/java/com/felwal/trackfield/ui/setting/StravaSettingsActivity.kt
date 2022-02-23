@@ -9,22 +9,26 @@ import com.felwal.android.ui.AbsSettingsActivity
 import com.felwal.android.util.toIndicesOfTruths
 import com.felwal.android.widget.dialog.AlertDialog
 import com.felwal.android.widget.dialog.MultiChoiceDialog
+import com.felwal.android.widget.dialog.NumberDialog
 import com.felwal.android.widget.dialog.TextDialog
 import com.felwal.trackfield.R
 import com.felwal.trackfield.data.network.StravaApi
 import com.felwal.trackfield.data.prefs.Prefs
 import com.felwal.trackfield.databinding.ActivitySettingsBinding
+import com.felwal.trackfield.ui.main.MainActivity
 import com.felwal.trackfield.utils.LayoutUtils
 import com.felwal.trackfield.utils.ScreenUtils
 
 private const val DIALOG_DEVICE = "deviceDialog"
 private const val DIALOG_RECORDING_METHOD = "methodDialog"
+private const val DIALOG_REQUEST_SPECIFIC = "requestSpecificDialog"
 private const val DIALOG_REQUEST_ALL = "requestAllDialog"
 private const val DIALOG_PULL_ALL = "pullAllDialog"
 private const val DIALOG_REQUEST_OPTIONS = "requestOptionsDialog"
 
 class StravaSettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
+    NumberDialog.DialogListener,
     AlertDialog.DialogListener,
     TextDialog.DialogListener,
     MultiChoiceDialog.DialogListener {
@@ -89,6 +93,13 @@ class StravaSettingsActivity :
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_requests),
+                NumberItem(
+                    title = getString(R.string.tv_text_settings_title_request_specific),
+                    value = 0,
+                    hint = getString(R.string.tv_text_settings_hint_request_specific),
+                    iconRes = R.drawable.ic_send,
+                    tag = DIALOG_REQUEST_SPECIFIC
+                ),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_request_new),
                     onClick = {
@@ -180,6 +191,15 @@ class StravaSettingsActivity :
             DIALOG_REQUEST_OPTIONS -> {
                 Prefs.setRequestOptions(itemStates)
                 reflateViews()
+            }
+        }
+    }
+
+    override fun onNumberDialogPositiveClick(input: Long, tag: String, passValue: String?) {
+        when (tag) {
+            DIALOG_REQUEST_SPECIFIC -> strava.requestActivity(input) {
+                MainActivity.updateFragmentOnRestart = true
+                LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this)
             }
         }
     }
