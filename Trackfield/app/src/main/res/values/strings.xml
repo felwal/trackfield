@@ -2,7 +2,7 @@
 
     <!-- app -->
 
-    <string name="package_name">com.felwal.trackfield</string>
+    <string name="package_name">me.felwal.trackfield</string>
     <string name="app_name">Trackfield</string>
     <string name="app_version">0.0.0</string>
 

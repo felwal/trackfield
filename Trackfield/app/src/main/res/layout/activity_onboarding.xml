@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green"
-    tools:context=".ui.onboarding.OnboardingActivity">
+    tools:context="me.felwal.trackfield.ui.onboarding.OnboardingActivity">
 
     <TextView
         android:id="@+id/tv_onboarding_subtitle"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.exercisedetail.ExerciseDetailActivity">
+    tools:context="me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_exercisedetail"

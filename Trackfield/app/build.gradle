@@ -10,7 +10,7 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "com.felwal.trackfield"
+        applicationId "me.felwal.trackfield"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode 1

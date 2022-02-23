@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:scrollbars="none">
 
-    <com.felwal.trackfield.ui.widget.graph.GraphView
+    <me.felwal.trackfield.ui.widget.graph.GraphView
         android:id="@+id/cv_recycler_item_graph_surface"
         android:layout_width="0dp"
         android:layout_height="@dimen/layout_graph_large_height"
