@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
-import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.main.MainFragment;
+
+import me.felwal.android.util.ViewKt;
+import me.felwal.android.util.WidgetKt;
 
 public class ExerciseListFragment extends MainFragment {
 
@@ -62,7 +64,7 @@ public class ExerciseListFragment extends MainFragment {
         final SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setQueryHint("Search");
-        ViewUtilsKt.setActionItemRipple(ViewUtilsKt.getCloseIcon(searchView));
+        ViewKt.setActionItemRipple(WidgetKt.getCloseIcon(searchView));
         searchView.setBackgroundResource(R.drawable.layer_searchview_bg);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

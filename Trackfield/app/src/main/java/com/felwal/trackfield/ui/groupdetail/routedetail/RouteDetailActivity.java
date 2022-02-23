@@ -4,24 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
-import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.CheckDialog;
-import com.felwal.android.widget.dialog.MultiChoiceDialog;
-import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Route;
 import com.felwal.trackfield.data.prefs.Prefs;
+import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import com.felwal.trackfield.ui.main.MainActivity;
 import com.felwal.trackfield.ui.map.RouteMapActivity;
-import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import com.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import com.felwal.trackfield.utils.MathUtils;
 
@@ -29,7 +24,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public class RouteDetailActivity extends GroupDetailActivity implements TextDialog.DialogListener,
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.util.CollectionsKt;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
+
+public class RouteDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
     TimeDialog.DialogListener, MultiChoiceDialog.DialogListener, AlertDialog.DialogListener {
 
     // extras names
@@ -79,19 +84,25 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
             String[] items = new String[types.size()];
             types.toArray(items);
 
-            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
+            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
 
-            CheckDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems, null,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
+            CheckDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_title_filter), "",
+                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_FILTER, null),
+                new CheckListOption(items, checkedItems, null))
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_rename_route) {
             if (route != null) {
-                TextDialog.newInstance(getString(R.string.dialog_title_rename_route),
-                    getString(R.string.dialog_msg_rename_route), route.getName(), "",
-                    R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_ROUTE, null)
+                InputDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_rename_route),
+                        getString(R.string.dialog_msg_rename_route),
+                        R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                        DIALOG_RENAME_ROUTE, null),
+                    new InputOption(route.getName(), "", EditorInfo.TYPE_CLASS_TEXT))
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -108,9 +119,11 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
                 seconds = (int) timeParts[0];
             }
 
-            TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
-                minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_ROUTE, null)
+            TimeDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_set_goal), "",
+                    R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, R.string.dialog_btn_delete,
+                    DIALOG_GOAL_ROUTE, null),
+                minutes, seconds, "min", "sec")
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -151,7 +164,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
+    public void onInputDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_ROUTE)) {
             if (input.equals("") || input.equals(route.getName())) return;
 
@@ -159,10 +172,11 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
 
             // merge
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
-                AlertDialog.newInstance(getString(R.string.dialog_title_merge_routes),
-                    getString(R.string.dialog_msg_merge_routes), R.string.dialog_btn_merge,
-                    R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    DIALOG_MERGE_ROUTES, input)
+                AlertDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_merge_routes),
+                        getString(R.string.dialog_msg_merge_routes),
+                        R.string.dialog_btn_merge, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                        DIALOG_MERGE_ROUTES, input))
                     .show(getSupportFragmentManager());
             }
             // rename
@@ -221,7 +235,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements TextDial
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
+                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setRouteVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.ui.map.model.Trails;
 import com.felwal.trackfield.utils.LocationUtilsKt;
@@ -16,6 +15,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class RouteMapActivity extends MapActivity {
 
@@ -89,7 +90,7 @@ public class RouteMapActivity extends MapActivity {
         // draw routevar average polyline
         if (routeVar != null) {
             PolylineOptions options = new PolylineOptions().zIndex(1);
-            options.color(ResUtilsKt.getColorByAttr(this, android.R.attr.textColorPrimary));
+            options.color(ResourcesKt.getColorByAttr(this, android.R.attr.textColorPrimary));
             options.addAll(LocationUtilsKt.averageSegment(trails.getLatLngs()));
             polylines.add(googleMap.addPolyline(options));
         }

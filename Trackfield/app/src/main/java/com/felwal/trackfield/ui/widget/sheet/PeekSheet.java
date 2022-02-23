@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class PeekSheet extends BaseSheet {
 
@@ -107,10 +107,10 @@ public class PeekSheet extends BaseSheet {
         paceTv.setText(exercise.printPace(false, a));
 
         // set text color
-        int textColor = ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary);
+        int textColor = ResourcesKt.getColorByAttr(a, android.R.attr.textColorPrimary);
         routeTv.setTextColor(textColor);
         routeVarTv.setTextColor(textColor);
-        dateTv.setTextColor(ResUtilsKt.getColorByAttr(a, android.R.attr.textColorSecondary));
+        dateTv.setTextColor(ResourcesKt.getColorByAttr(a, android.R.attr.textColorSecondary));
         distanceTv.setTextColor(textColor);
         timeTv.setTextColor(textColor);
         paceTv.setTextColor(textColor);

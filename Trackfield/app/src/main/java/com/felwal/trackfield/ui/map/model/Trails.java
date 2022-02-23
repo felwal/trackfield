@@ -1,7 +1,5 @@
 package com.felwal.trackfield.ui.map.model;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 

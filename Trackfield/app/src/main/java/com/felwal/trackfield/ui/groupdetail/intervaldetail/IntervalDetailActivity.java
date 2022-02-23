@@ -3,17 +3,22 @@ package com.felwal.trackfield.ui.groupdetail.intervaldetail;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
-import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import com.felwal.trackfield.ui.main.MainActivity;
 
-public class IntervalDetailActivity extends GroupDetailActivity implements TextDialog.DialogListener {
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
+
+public class IntervalDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_INTERVAL = "interval";
@@ -46,9 +51,12 @@ public class IntervalDetailActivity extends GroupDetailActivity implements TextD
 
         if (itemId == R.id.action_rename_interval) {
             if (interval != null) {
-                TextDialog.newInstance(getString(R.string.dialog_title_rename_interval),
-                    getString(R.string.dialog_msg_rename_interval), interval, "",
-                    R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_INTERVAL, null)
+                InputDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_rename_interval),
+                        getString(R.string.dialog_msg_rename_interval),
+                        R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                        DIALOG_RENAME_INTERVAL, null),
+                    new InputOption(interval, "", EditorInfo.TYPE_CLASS_TEXT))
                     .show(getSupportFragmentManager());
             }
             return true;
@@ -84,7 +92,7 @@ public class IntervalDetailActivity extends GroupDetailActivity implements TextD
     // implements TextDialog
 
     @Override
-    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
+    public void onInputDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_INTERVAL)) {
             if (input.equals("")) return;
 

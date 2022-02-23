@@ -4,17 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
-import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.CheckDialog;
-import com.felwal.android.widget.dialog.MultiChoiceDialog;
-import com.felwal.android.widget.dialog.NumberDialog;
-import com.felwal.android.widget.dialog.TextDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -29,8 +23,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public class PlaceDetailActivity extends GroupDetailActivity implements TextDialog.DialogListener,
-    AlertDialog.DialogListener, MultiChoiceDialog.DialogListener, NumberDialog.DialogListener {
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.util.CollectionsKt;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
+
+public class PlaceDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
+    AlertDialog.DialogListener, MultiChoiceDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_PLACE_ID = "placeId";
@@ -75,25 +79,34 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
             String[] items = new String[types.size()];
             types.toArray(items);
 
-            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
+            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
-            CheckDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems, null,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
+            CheckDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_title_filter), "",
+                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_FILTER, null),
+                new CheckListOption(items, checkedItems, null))
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_rename_place) {
             if (place != null) {
-                TextDialog.newInstance(getString(R.string.dialog_title_rename_place), "", place.getName(),
-                    "", R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, DIALOG_RENAME_PLACE, null)
+                InputDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_rename_place), "",
+                        R.string.dialog_btn_rename, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                        DIALOG_RENAME_PLACE, null),
+                    new InputOption(place.getName(), "", EditorInfo.TYPE_CLASS_TEXT))
                     .show(getSupportFragmentManager());
             }
             return true;
         }
         else if (itemId == R.id.action_exerciseedit_radius) {
-            NumberDialog.newInstance(getString(R.string.dialog_title_exerciseedit_radius), "", place.getRadius(), "500",
-                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_EDIT_RADIUS, null)
+            InputDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_exerciseedit_radius), "",
+                    R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_EDIT_RADIUS, null),
+                new InputOption(place.getRadius(), "500"))
                 .show(getSupportFragmentManager());
         }
         else if (itemId == R.id.action_hide_place) {
@@ -108,9 +121,11 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
             PlaceMapActivity.startActivity(place.getId(), this);
         }
         else if (itemId == R.id.action_delete_place) {
-            AlertDialog.newInstance(getString(R.string.dialog_title_delete_place),
-                getString(R.string.dialog_msg_delete_place), R.string.dialog_btn_delete,
-                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_PLACE, null)
+            AlertDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_delete_place),
+                    getString(R.string.dialog_msg_delete_place),
+                    R.string.dialog_btn_delete, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_DELETE_PLACE, null))
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -139,7 +154,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
     // implements dialogs
 
     @Override
-    public void onTextDialogPositiveClick(@NonNull String input, String tag, String passValue) {
+    public void onInputDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_RENAME_PLACE)) {
             if (input.equals("") || input.equals(place.getName())) return;
 
@@ -147,10 +162,11 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
 
             // update place
             if (existingIdForNewName != Route.ID_NON_EXISTANT) {
-                AlertDialog.newInstance(getString(R.string.dialog_title_place_name_exists),
-                    getString(R.string.dialog_msg_place_name_exists), R.string.fw_dialog_btn_ok,
-                    BaseDialogKt.NO_RES, BaseDialogKt.NO_RES,
-                    input, DIALOG_NAME_ALREADY_EXISTS)
+                AlertDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_place_name_exists),
+                        getString(R.string.dialog_msg_place_name_exists),
+                        R.string.fw_dialog_btn_ok, BaseDialogKt.NO_RES, BaseDialogKt.NO_RES,
+                        input, DIALOG_NAME_ALREADY_EXISTS))
                     .show(getSupportFragmentManager());
             }
             else {
@@ -161,6 +177,11 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
                 finish();
                 startActivity(this, place.getId());
             }
+        }
+        else if (tag.equals(DIALOG_EDIT_RADIUS)) {
+            place.setRadius(Integer.parseInt(input));
+            DbWriter.get(this).updatePlace(place);
+            recyclerFragment.updateRecycler();
         }
     }
 
@@ -184,18 +205,9 @@ public class PlaceDetailActivity extends GroupDetailActivity implements TextDial
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
+                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setDistanceVisibleTypes(visibleTypes);
-            recyclerFragment.updateRecycler();
-        }
-    }
-
-    @Override
-    public void onNumberDialogPositiveClick(long input, @NonNull String tag, @Nullable String passValue) {
-        if (tag.equals(DIALOG_EDIT_RADIUS)) {
-            place.setRadius((int) input);
-            DbWriter.get(this).updatePlace(place);
             recyclerFragment.updateRecycler();
         }
     }

@@ -2,6 +2,7 @@ package com.felwal.trackfield.ui.main;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -9,17 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.widget.FloatingActionMenu;
-import com.felwal.android.widget.dialog.CheckDialog;
-import com.felwal.android.widget.dialog.DecimalDialog;
-import com.felwal.android.widget.dialog.MultiChoiceDialog;
-import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Distance;
-import com.felwal.trackfield.data.db.model.Place;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
@@ -41,10 +35,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 import kotlin.Unit;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.util.CollectionsKt;
+import me.felwal.android.widget.FloatingActionMenu;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
 
-import static com.felwal.android.widget.dialog.DecimalDialogKt.NO_FLOAT_TEXT;
-
-public class MainActivity extends AppCompatActivity implements DecimalDialog.DialogListener,
+public class MainActivity extends AppCompatActivity implements InputDialog.DialogListener,
     MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
@@ -53,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
     // dialog tags
     private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
-    private static final String DIALOG_ADD_PLACE_LAT = "addPlaceLatDialog";
-    private static final String DIALOG_ADD_PLACE_LNG = "addPlaceLngDialog";
 
     private static boolean appInitialized = false;
 
@@ -123,17 +123,23 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             String[] items = new String[types.size()];
             types.toArray(items);
 
-            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
+            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
 
-            CheckDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems, null,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
+            CheckDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_title_filter), "",
+                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_FILTER, null),
+                new CheckListOption(items, checkedItems, null))
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
-            DecimalDialog.newInstance(getString(R.string.dialog_title_add_distance), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_DISTANCE, null)
+            InputDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_add_distance), "",
+                    R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_ADD_DISTANCE, null),
+                new InputOption("", "", EditorInfo.TYPE_NUMBER_FLAG_DECIMAL))
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -144,9 +150,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
             return true;
         }
         else if (itemId == R.id.action_add_place) {
-            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LAT, null)
-                .show(getSupportFragmentManager());
+            // TODO
             return true;
         }
 
@@ -258,24 +262,11 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
     // implements dialogs
 
-    private double lat = 0; // TODO: temp
-
     @Override
-    public void onDecimalDialogPositiveClick(float input, String tag, String passValue) {
+    public void onInputDialogPositiveClick(String input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
-            int distance = (int) MathUtils.round(input * 1000, 0);
+            int distance = (int) MathUtils.round(Float.valueOf(input) * 1000, 0);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
-            mainFragment.updateFragment();
-        }
-        if (tag.equals(DIALOG_ADD_PLACE_LAT)) {
-            lat = input;
-            DecimalDialog.newInstance(getString(R.string.dialog_title_add_place), "", NO_FLOAT_TEXT,
-                "", R.string.dialog_btn_add, R.string.fw_dialog_btn_cancel, DIALOG_ADD_PLACE_LNG, null)
-                .show(getSupportFragmentManager());
-        }
-        if (tag.equals(DIALOG_ADD_PLACE_LNG)) {
-            Place place = new Place(lat, input);
-            DbWriter.get(this).addPlace(place);
             mainFragment.updateFragment();
         }
     }
@@ -293,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements DecimalDialog.Dia
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
+                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setExerciseVisibleTypes(visibleTypes);
             mainFragment.updateFragment();

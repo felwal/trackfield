@@ -15,21 +15,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.CheckDialog;
-import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.network.StravaApi;
 import com.felwal.trackfield.data.prefs.Prefs;
-import com.felwal.trackfield.ui.main.MainActivity;
-import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.ui.groupdetail.routedetail.RouteDetailActivity;
+import com.felwal.trackfield.ui.main.MainActivity;
+import com.felwal.trackfield.ui.map.ExerciseMapActivity;
 import com.felwal.trackfield.ui.map.RouteMapActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
@@ -41,6 +37,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import org.jetbrains.annotations.Nullable;
+
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
 
 public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener,
     MultiChoiceDialog.DialogListener, OnMapReadyCallback {
@@ -159,9 +162,11 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             return true;
         }
         else if (itemId == R.id.action_delete_exercise) {
-            AlertDialog.newInstance(getString(R.string.dialog_title_delete_exercise),
-                getString(R.string.dialog_msg_delete_exercise), R.string.dialog_btn_delete,
-                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_EXERCISE, null)
+            AlertDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_delete_exercise),
+                    getString(R.string.dialog_msg_delete_exercise),
+                    R.string.dialog_btn_delete, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_DELETE_EXERCISE, null))
                 .show(getSupportFragmentManager());
 
             MainActivity.updateFragmentOnRestart = true;
@@ -169,10 +174,12 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
         else if (itemId == R.id.action_pull_exercise) {
             if (exercise.hasStravaId()) {
-                CheckDialog.newInstance(getString(R.string.dialog_title_pull),
-                    Prefs.getPullOptions().getTexts(), Prefs.getPullOptions().getChecked(), null,
-                    R.string.dialog_btn_pull, R.string.fw_dialog_btn_cancel, DIALOG_PULL, null
-                ).show(getSupportFragmentManager());
+                CheckDialog.newInstance(
+                    new DialogOption(getString(R.string.dialog_title_pull), "",
+                        R.string.dialog_btn_pull, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                        DIALOG_PULL, null),
+                    new CheckListOption(Prefs.getPullOptions().getTexts(), Prefs.getPullOptions().getChecked(), null))
+                    .show(getSupportFragmentManager());
 
                 MainActivity.updateFragmentOnRestart = true;
             }

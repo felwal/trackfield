@@ -5,7 +5,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.felwal.trackfield.data.db.DbContract.*;
+import com.felwal.trackfield.data.db.DbContract.DistanceEntry;
+import com.felwal.trackfield.data.db.DbContract.ExerciseEntry;
+import com.felwal.trackfield.data.db.DbContract.PlaceEntry;
+import com.felwal.trackfield.data.db.DbContract.RouteEntry;
 import com.felwal.trackfield.data.db.model.Distance;
 import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.model.Place;

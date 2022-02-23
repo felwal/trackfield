@@ -7,11 +7,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.LinearLayout
-import com.felwal.android.ui.AbsSettingsActivity
-import com.felwal.android.widget.dialog.AlertDialog
-import com.felwal.android.widget.dialog.DecimalDialog
-import com.felwal.android.widget.dialog.SingleChoiceDialog
-import com.felwal.android.widget.dialog.TextDialog
 import com.felwal.trackfield.R
 import com.felwal.trackfield.data.db.DbWriter
 import com.felwal.trackfield.data.prefs.Prefs
@@ -22,6 +17,10 @@ import com.felwal.trackfield.utils.AppConsts
 import com.felwal.trackfield.utils.FileUtils
 import com.felwal.trackfield.utils.LayoutUtils
 import com.felwal.trackfield.utils.ScreenUtils
+import me.felwal.android.fragment.app.AbsSettingsActivity
+import me.felwal.android.fragment.dialog.AlertDialog
+import me.felwal.android.fragment.dialog.InputDialog
+import me.felwal.android.fragment.dialog.SingleChoiceDialog
 import java.time.LocalDate
 
 private const val DIALOG_THEME = "themeDialog"
@@ -35,9 +34,8 @@ private const val DIALOG_RECREATE_DB = "recreateDbDialog"
 class SettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
     AlertDialog.DialogListener,
-    DecimalDialog.DialogListener,
     SingleChoiceDialog.DialogListener,
-    TextDialog.DialogListener {
+    InputDialog.DialogListener {
 
     // view
     private lateinit var binding: ActivitySettingsBinding
@@ -270,15 +268,6 @@ class SettingsActivity :
         }
     }
 
-    override fun onDecimalDialogPositiveClick(input: Float, tag: String, passValue: String?) {
-        when (tag) {
-            DIALOG_MASS -> {
-                Prefs.setMass(input)
-                reflateViews()
-            }
-        }
-    }
-
     override fun onSingleChoiceDialogItemSelected(selectedIndex: Int, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_THEME -> {
@@ -294,11 +283,15 @@ class SettingsActivity :
         }
     }
 
-    override fun onTextDialogPositiveClick(input: String, tag: String, passValue: String?) {
+    override fun onInputDialogPositiveClick(input: String, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_FILE_LOCATION -> {
                 Prefs.setFileLocation(input)
                 recreate()
+            }
+            DIALOG_MASS -> {
+                Prefs.setMass(input.toFloat())
+                reflateViews()
             }
         }
     }

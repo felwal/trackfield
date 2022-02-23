@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.ColorInt;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.MathUtils;
@@ -14,6 +13,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class Exerlite extends RecyclerItem {
 
@@ -126,7 +127,7 @@ public class Exerlite extends RecyclerItem {
 
     @ColorInt
     public int getMedalColor(Context c) {
-        return ResUtilsKt.getColorByAttr(c,
+        return ResourcesKt.getColorByAttr(c,
             isTop(1) ? R.attr.tf_colorGold : isTop(2) ? R.attr.tf_colorSilver : R.attr.tf_colorBronze);
     }
 

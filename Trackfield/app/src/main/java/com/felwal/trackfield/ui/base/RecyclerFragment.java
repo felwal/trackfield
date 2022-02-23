@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.felwal.android.widget.sheet.SortSheet;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.ui.common.model.Exerlite;
@@ -26,10 +24,12 @@ import com.felwal.trackfield.ui.common.model.Header;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
 import com.felwal.trackfield.ui.main.MainActivity;
-import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 import java.util.ArrayList;
+
+import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.widget.control.SheetOption;
 
 public abstract class RecyclerFragment extends Fragment implements DelegateClickListener,
     ScaleGestureDetector.OnScaleGestureListener {
@@ -243,8 +243,11 @@ public abstract class RecyclerFragment extends Fragment implements DelegateClick
         if (item instanceof SorterItem) {
             SorterItem sorterItem = (SorterItem) item;
 
-            SortSheet sheet = SortSheet.newInstance("Sort by", sorterItem.getSorter(), "sorter");
+            SortSheet sheet = SortSheet.newInstance(
+                new SheetOption("Sort by", "", "sorter", null),
+                sorterItem.getSorter());
             sheet.show(getChildFragmentManager());
+
             getChildFragmentManager().executePendingTransactions();
         }
     }

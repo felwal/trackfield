@@ -10,14 +10,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.felwal.android.util.ResUtilsKt;
-import com.felwal.trackfield.R;
-import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.annotation.Unfinished;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class GraphView extends View implements View.OnTouchListener {
 
@@ -35,13 +34,13 @@ public class GraphView extends View implements View.OnTouchListener {
     private final float barRadius = ScreenUtils.px(6);
 
     private final Paint borderPaint = new Paint() {{
-        setColor(ResUtilsKt.getColorByAttr(getContext(), android.R.attr.listDivider));
+        setColor(ResourcesKt.getColorByAttr(getContext(), android.R.attr.listDivider));
         setAntiAlias(true);
         setStrokeWidth(ScreenUtils.px(1));
         setStyle(Paint.Style.STROKE);
     }};
     private final Paint gridPaint = new Paint() {{
-        setColor(ResUtilsKt.getColorByAttr(getContext(), android.R.attr.listDivider));
+        setColor(ResourcesKt.getColorByAttr(getContext(), android.R.attr.listDivider));
         setAntiAlias(true);
         setStrokeWidth(ScreenUtils.px(1));
         setStyle(Paint.Style.STROKE);

@@ -3,8 +3,6 @@ package com.felwal.trackfield.data.db.model;
 import android.content.Context;
 import android.location.Location;
 
-import androidx.core.location.LocationCompat;
-
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;

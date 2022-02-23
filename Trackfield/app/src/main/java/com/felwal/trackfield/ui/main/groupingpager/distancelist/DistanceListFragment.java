@@ -9,19 +9,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
+import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import com.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
-import com.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class DistanceListFragment extends RecyclerFragment {
 
@@ -55,7 +56,7 @@ public class DistanceListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancelist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancelist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_distance,
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_distance,
             R.attr.tf_colorDistance));
     }
 

@@ -1,7 +1,7 @@
 package com.felwal.trackfield.ui.common.model
 
-import com.felwal.android.widget.sheet.SortMode
-import com.felwal.android.widget.sheet.Sorter
+import me.felwal.android.fragment.sheet.SortMode
+import me.felwal.android.fragment.sheet.Sorter
 
 class SorterItem(vararg sortModes: SortMode<Mode>) : RecyclerItem() {
 

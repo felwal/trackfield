@@ -3,7 +3,6 @@ package com.felwal.trackfield.ui.main.exerciselist;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.prefs.Prefs;
@@ -14,15 +13,17 @@ import com.felwal.trackfield.ui.common.model.Header;
 import com.felwal.trackfield.ui.common.model.HeaderValue;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
+import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.ui.widget.graph.Borders;
 import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.ui.widget.graph.GraphData;
-import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class ExerciseListRecyclerFragment extends RecyclerFragment {
 
@@ -42,14 +43,14 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (search.equals("")) {
             emptyTitle.setText(R.string.tv_text_empty_exerciselist_title);
             emptyMessage.setText(R.string.tv_text_empty_exerciselist_message);
-            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_run),
-                ResUtilsKt.getColorByAttr(a, R.attr.colorSecondary)));
+            emptyImage.setImageDrawable(ResourcesKt.withTint(ResourcesKt.getDrawableCompat(a, R.drawable.ic_run),
+                ResourcesKt.getColorByAttr(a, R.attr.colorSecondary)));
         }
         else {
             emptyTitle.setText(R.string.tv_text_empty_search_title);
             emptyMessage.setText(R.string.tv_text_empty_search_msg);
-            emptyImage.setImageDrawable(ResUtilsKt.withTint(ResUtilsKt.getDrawableCompat(a, R.drawable.ic_search),
-                ResUtilsKt.getColorByAttr(a, android.R.attr.textColorPrimary)));
+            emptyImage.setImageDrawable(ResourcesKt.withTint(ResourcesKt.getDrawableCompat(a, R.drawable.ic_search),
+                ResourcesKt.getColorByAttr(a, android.R.attr.textColorPrimary)));
         }
     }
 

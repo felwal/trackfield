@@ -8,13 +8,10 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -25,7 +22,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 
-import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.widget.graph.Borders;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

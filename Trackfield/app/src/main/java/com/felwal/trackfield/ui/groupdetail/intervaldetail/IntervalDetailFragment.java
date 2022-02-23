@@ -3,7 +3,6 @@ package com.felwal.trackfield.ui.groupdetail.intervaldetail;
 import android.os.Bundle;
 import android.view.View;
 
-import com.felwal.android.widget.sheet.SortMode;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;

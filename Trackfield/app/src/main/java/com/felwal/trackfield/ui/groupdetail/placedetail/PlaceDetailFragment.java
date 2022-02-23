@@ -3,7 +3,6 @@ package com.felwal.trackfield.ui.groupdetail.placedetail;
 import android.os.Bundle;
 import android.view.View;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Place;
@@ -17,6 +16,8 @@ import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class PlaceDetailFragment extends RecyclerFragment {
 
@@ -66,7 +67,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorPlace));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorPlace));
     }
 
     @Override

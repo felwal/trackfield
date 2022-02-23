@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Place;
@@ -19,6 +18,8 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class PlaceMapActivity extends MapActivity {
 
@@ -67,8 +68,8 @@ public class PlaceMapActivity extends MapActivity {
 
         // marker
         MarkerOptions placeMarker = new MarkerOptions();
-        Drawable drawable = ResUtilsKt.getDrawableCompatWithTint(this, R.drawable.ic_place, R.attr.colorSecondary);
-        Bitmap bitmap = ResUtilsKt.toBitmap(drawable);
+        Drawable drawable = ResourcesKt.getDrawableCompatWithTint(this, R.drawable.ic_place, R.attr.colorSecondary);
+        Bitmap bitmap = ResourcesKt.toBitmap(drawable);
         BitmapDescriptor bitmapDesc = BitmapDescriptorFactory.fromBitmap(bitmap);
         placeMarker.icon(bitmapDesc);
         placeMarker.position(place.getLocation());

@@ -7,11 +7,6 @@ import android.view.MenuItem;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
-import com.felwal.android.util.CollectionUtilsKt;
-import com.felwal.android.widget.dialog.BaseDialogKt;
-import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.CheckDialog;
-import com.felwal.android.widget.dialog.MultiChoiceDialog;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
@@ -24,6 +19,14 @@ import com.felwal.trackfield.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.util.CollectionsKt;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
 
 public class DistanceDetailActivity extends GroupDetailActivity implements AlertDialog.DialogListener,
     TimeDialog.DialogListener, MultiChoiceDialog.DialogListener {
@@ -69,18 +72,23 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
             String[] items = new String[types.size()];
             types.toArray(items);
 
-            int[] checkedItems = CollectionUtilsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
+            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
 
-            CheckDialog.newInstance(getString(R.string.dialog_title_title_filter), items, checkedItems, null,
-                R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, DIALOG_FILTER, null)
+            CheckDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_title_filter), "",
+                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_FILTER, null),
+                new CheckListOption(items, checkedItems, null))
                 .show(getSupportFragmentManager());
 
             return true;
         }
         else if (itemId == R.id.action_delete_distance) {
-            AlertDialog.newInstance(getString(R.string.dialog_title_delete_distance),
-                getString(R.string.dialog_msg_delete_distance), R.string.dialog_btn_delete,
-                R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DELETE_DISTANCE, null)
+            AlertDialog.newInstance(
+                new DialogOption(
+                    getString(R.string.dialog_title_delete_distance), getString(R.string.dialog_msg_delete_distance),
+                    R.string.dialog_btn_delete, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                    DIALOG_DELETE_DISTANCE, null))
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -96,9 +104,11 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
                 minutes = (int) timeParts[1];
                 seconds = (int) timeParts[0];
             }
-            TimeDialog.newInstance(getString(R.string.dialog_title_set_goal), "",
-                minutes, seconds, "min", "sec", R.string.dialog_btn_delete,
-                R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, DIALOG_GOAL_DISTANCE, null)
+            TimeDialog.newInstance(
+                new DialogOption(getString(R.string.dialog_title_set_goal), "",
+                    R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, R.string.dialog_btn_delete,
+                    DIALOG_GOAL_DISTANCE, null),
+                minutes, seconds, "min", "sec")
                 .show(getSupportFragmentManager());
             return true;
         }
@@ -165,7 +175,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
 
         if (tag.equals(DIALOG_FILTER)) {
             ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionUtilsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
+                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
 
             Prefs.setDistanceVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();

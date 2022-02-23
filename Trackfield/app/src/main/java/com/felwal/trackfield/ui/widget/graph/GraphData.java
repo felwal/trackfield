@@ -6,13 +6,14 @@ import android.graphics.PointF;
 
 import androidx.annotation.AttrRes;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class GraphData {
 
@@ -67,7 +68,7 @@ public class GraphData {
     }
 
     public void setPaint(@AttrRes int colorAttrResId, Context c) {
-        paint.setColor(ResUtilsKt.getColorByAttr(c, colorAttrResId));
+        paint.setColor(ResourcesKt.getColorByAttr(c, colorAttrResId));
     }
 
     // calc

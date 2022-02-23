@@ -10,19 +10,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.prefs.Prefs;
 import com.felwal.trackfield.ui.base.BaseListAdapter;
 import com.felwal.trackfield.ui.base.RecyclerFragment;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
+import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import com.felwal.trackfield.ui.main.groupingpager.intervallist.model.IntervalItem;
-import com.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class IntervalListFragment extends RecyclerFragment {
 
@@ -66,7 +67,7 @@ public class IntervalListFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_intervallist_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_intervallist_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_interval, R.attr.tf_colorInterval));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_interval, R.attr.tf_colorInterval));
     }
 
     @Override

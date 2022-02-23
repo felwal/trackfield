@@ -12,8 +12,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.util.ViewUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.ui.widget.sheet.PeekSheet;
 import com.felwal.trackfield.utils.ScreenUtils;
@@ -32,6 +30,8 @@ import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import me.felwal.android.util.ResourcesKt;
 
 public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
     GoogleMap.OnPolylineClickListener, PeekSheet.SheetListener {
@@ -185,7 +185,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     }
 
     protected static void setMapStyle(GoogleMap googleMap, Context c) {
-        MapStyleOptions style = new MapStyleOptions(ResUtilsKt.getStringByAttr(c, R.attr.tf_mapStyle));
+        MapStyleOptions style = new MapStyleOptions(ResourcesKt.getStringByAttr(c, R.attr.tf_mapStyle));
         googleMap.setMapStyle(style);
     }
 
@@ -236,7 +236,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
 
     @ColorInt
     protected static int getColorSelected(boolean satellite, Context c) {
-        return satellite ? c.getColor(R.color.polyline_satellite) : ResUtilsKt.getColorByAttr(c, R.attr.colorSecondary);
+        return satellite ? c.getColor(R.color.polyline_satellite) : ResourcesKt.getColorByAttr(c, R.attr.colorSecondary);
     }
 
     @ColorInt @SuppressLint("ResourceType")

@@ -2,12 +2,12 @@ package com.felwal.trackfield.ui.widget.dialog
 
 import android.os.Bundle
 import android.widget.EditText
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import com.felwal.android.util.toast
-import com.felwal.android.widget.dialog.BaseDialog
-import com.felwal.android.widget.dialog.NO_INT_TEXT
 import com.felwal.trackfield.R
+import me.felwal.android.fragment.dialog.BaseDialog
+import me.felwal.android.fragment.dialog.NO_INT_TEXT
+import me.felwal.android.util.toast
+import me.felwal.android.widget.control.DialogOption
 
 private const val ARG_TEXT1 = "text1"
 private const val ARG_TEXT2 = "text2"
@@ -48,24 +48,19 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
 
         return builder.run {
             setView(root)
-            setTitle(title)
-            if (message != "") setMessage(message)
-
-            setPositiveButton(posBtnTxtRes) { _, _ ->
-                listener ?: return@setPositiveButton
+            setDialogOptions(option, {
+                listener?.onTimeDialogNeutralClick(option.tag)
+            }, {
+                listener ?: return@setDialogOptions
                 try {
                     val input1 = et1.text.toString().toInt()
                     val input2 = et2.text.toString().toInt()
-                    listener?.onTimeDialogPositiveClick(input1, input2, dialogTag)
+                    listener?.onTimeDialogPositiveClick(input1, input2, option.tag)
                 }
                 catch (e: NumberFormatException) {
                     activity?.toast(R.string.fw_toast_e_input)
                 }
-            }
-            setNeutralButton(neuBtnTxtRes!!) { _, _ ->
-                listener?.onTimeDialogNeutralClick(dialogTag)
-            }
-            setCancelButton(negBtnTxtRes)
+            })
 
             show()
         }
@@ -84,24 +79,17 @@ class TimeDialog : BaseDialog<TimeDialog.DialogListener>() {
     companion object {
         @JvmStatic
         fun newInstance(
-            title: String,
-            message: String = "",
+            option: DialogOption,
             text1: Int = NO_INT_TEXT,
             text2: Int = NO_INT_TEXT,
             hint1: String = "",
             hint2: String = "",
-            @StringRes neuBtnTxtRes: Int,
-            @StringRes posBtnTxtRes: Int = R.string.fw_dialog_btn_ok,
-            @StringRes negBtnTxtRes: Int = R.string.fw_dialog_btn_cancel,
-            tag: String,
-            passValue: String? = null
         ): TimeDialog = TimeDialog().apply {
-            arguments = putBaseBundle(title, message, posBtnTxtRes, negBtnTxtRes, tag, passValue).apply {
+            arguments = putBaseBundle(option).apply {
                 putInt(ARG_TEXT1, text1)
                 putInt(ARG_TEXT2, text2)
                 putString(ARG_HINT1, hint1)
                 putString(ARG_HINT2, hint2)
-                putInt(ARG_NEUTRAL_BUTTON_RES, neuBtnTxtRes)
             }
         }
     }

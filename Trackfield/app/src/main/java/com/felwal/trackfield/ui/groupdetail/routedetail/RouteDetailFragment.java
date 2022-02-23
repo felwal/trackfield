@@ -3,7 +3,6 @@ package com.felwal.trackfield.ui.groupdetail.routedetail;
 import android.os.Bundle;
 import android.view.View;
 
-import com.felwal.android.util.ResUtilsKt;
 import com.felwal.trackfield.R;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.model.Route;
@@ -14,14 +13,16 @@ import com.felwal.trackfield.ui.common.model.Exerlite;
 import com.felwal.trackfield.ui.common.model.Goal;
 import com.felwal.trackfield.ui.common.model.RecyclerItem;
 import com.felwal.trackfield.ui.common.model.SorterItem;
+import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.ui.widget.graph.Borders;
 import com.felwal.trackfield.ui.widget.graph.Graph;
 import com.felwal.trackfield.ui.widget.graph.GraphData;
-import com.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.TypeUtils;
 
 import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 
 public class RouteDetailFragment extends RecyclerFragment {
 
@@ -76,7 +77,7 @@ public class RouteDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routedetail_msg));
-        emptyImage.setImageDrawable(ResUtilsKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorRoute));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorRoute));
     }
 
     @Override

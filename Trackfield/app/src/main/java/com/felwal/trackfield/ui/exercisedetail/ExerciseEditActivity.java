@@ -18,18 +18,15 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.felwal.android.util.ResUtilsKt;
-import com.felwal.android.widget.dialog.AlertDialog;
-import com.felwal.android.widget.dialog.BaseDialogKt;
 import com.felwal.trackfield.R;
-import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.data.db.DbReader;
 import com.felwal.trackfield.data.db.DbWriter;
+import com.felwal.trackfield.data.db.model.Exercise;
 import com.felwal.trackfield.ui.main.MainActivity;
-import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.LayoutUtils;
 import com.felwal.trackfield.utils.MathUtils;
+import com.felwal.trackfield.utils.ScreenUtils;
 import com.felwal.trackfield.utils.TypeUtils;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,6 +34,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.util.ResourcesKt;
+import me.felwal.android.widget.control.DialogOption;
 
 public class ExerciseEditActivity extends AppCompatActivity implements AlertDialog.DialogListener {
 
@@ -136,7 +138,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         ab.setDisplayHomeAsUpEnabled(true);
 
         // set close icon as home
-        Drawable homeIcon = ResUtilsKt.getDrawableCompatWithFilter(this, R.drawable.ic_close,
+        Drawable homeIcon = ResourcesKt.getDrawableCompatWithFilter(this, R.drawable.ic_close,
             R.attr.tf_colorControlToolbar);
         ab.setHomeAsUpIndicator(homeIcon);
     }
@@ -287,8 +289,10 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     }
 
     private void showDiscardDialog() {
-        AlertDialog.newInstance(getString(R.string.dialog_title_discard), "", R.string.dialog_btn_discard,
-            R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES, DIALOG_DISCARD, null)
+        AlertDialog.newInstance(
+            new DialogOption(getString(R.string.dialog_title_discard), "",
+                R.string.dialog_btn_discard, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
+                DIALOG_DISCARD, null))
             .show(getSupportFragmentManager());
     }
 

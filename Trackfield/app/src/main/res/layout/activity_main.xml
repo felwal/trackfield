@@ -58,7 +58,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.felwal.android.widget.FloatingActionMenu
+    <me.felwal.android.widget.FloatingActionMenu
         android:id="@+id/fam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

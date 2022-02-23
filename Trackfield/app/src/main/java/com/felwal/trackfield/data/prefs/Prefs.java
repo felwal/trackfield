@@ -6,14 +6,13 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.felwal.trackfield.R;
-
 import com.felwal.trackfield.data.network.StravaApi;
-import com.felwal.trackfield.utils.annotation.Unimplemented;
-import com.felwal.trackfield.utils.model.SwitchChain;
-import com.felwal.trackfield.utils.model.SwitchItem;
 import com.felwal.trackfield.utils.AppConsts;
 import com.felwal.trackfield.utils.annotation.Debug;
 import com.felwal.trackfield.utils.annotation.Unfinished;
+import com.felwal.trackfield.utils.annotation.Unimplemented;
+import com.felwal.trackfield.utils.model.SwitchChain;
+import com.felwal.trackfield.utils.model.SwitchItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

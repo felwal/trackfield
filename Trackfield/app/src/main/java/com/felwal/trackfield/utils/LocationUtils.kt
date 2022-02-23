@@ -1,12 +1,9 @@
 package com.felwal.trackfield.utils
 
 import android.location.Location
-import android.util.Log
 import androidx.annotation.FloatRange
 import com.google.android.gms.maps.model.LatLng
-import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.roundToInt
 
 typealias Segment = List<LatLng>
 

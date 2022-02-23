@@ -5,12 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
-import com.felwal.android.ui.AbsSettingsActivity
-import com.felwal.android.util.toIndicesOfTruths
-import com.felwal.android.widget.dialog.AlertDialog
-import com.felwal.android.widget.dialog.MultiChoiceDialog
-import com.felwal.android.widget.dialog.NumberDialog
-import com.felwal.android.widget.dialog.TextDialog
 import com.felwal.trackfield.R
 import com.felwal.trackfield.data.network.StravaApi
 import com.felwal.trackfield.data.prefs.Prefs
@@ -18,6 +12,11 @@ import com.felwal.trackfield.databinding.ActivitySettingsBinding
 import com.felwal.trackfield.ui.main.MainActivity
 import com.felwal.trackfield.utils.LayoutUtils
 import com.felwal.trackfield.utils.ScreenUtils
+import me.felwal.android.fragment.app.AbsSettingsActivity
+import me.felwal.android.fragment.dialog.AlertDialog
+import me.felwal.android.fragment.dialog.InputDialog
+import me.felwal.android.fragment.dialog.MultiChoiceDialog
+import me.felwal.android.util.toIndicesOfTruths
 
 private const val DIALOG_DEVICE = "deviceDialog"
 private const val DIALOG_RECORDING_METHOD = "methodDialog"
@@ -28,9 +27,8 @@ private const val DIALOG_REQUEST_OPTIONS = "requestOptionsDialog"
 
 class StravaSettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
-    NumberDialog.DialogListener,
     AlertDialog.DialogListener,
-    TextDialog.DialogListener,
+    InputDialog.DialogListener,
     MultiChoiceDialog.DialogListener {
 
     // view
@@ -166,7 +164,7 @@ class StravaSettingsActivity :
         }
     }
 
-    override fun onTextDialogPositiveClick(input: String, tag: String, passValue: String?) {
+    override fun onInputDialogPositiveClick(input: String, tag: String, passValue: String?) {
         when (tag) {
             DIALOG_DEVICE -> {
                 Prefs.setDefaultDevice(input)
@@ -175,6 +173,10 @@ class StravaSettingsActivity :
             DIALOG_RECORDING_METHOD -> {
                 Prefs.setDefaultRecordingMethod(input)
                 reflateViews()
+            }
+            DIALOG_REQUEST_SPECIFIC -> strava.requestActivity(input.toLong()) {
+                MainActivity.updateFragmentOnRestart = true
+                LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this)
             }
         }
     }
@@ -191,15 +193,6 @@ class StravaSettingsActivity :
             DIALOG_REQUEST_OPTIONS -> {
                 Prefs.setRequestOptions(itemStates)
                 reflateViews()
-            }
-        }
-    }
-
-    override fun onNumberDialogPositiveClick(input: Long, tag: String, passValue: String?) {
-        when (tag) {
-            DIALOG_REQUEST_SPECIFIC -> strava.requestActivity(input) {
-                MainActivity.updateFragmentOnRestart = true
-                LayoutUtils.toast(R.string.toast_strava_req_activity_successful, this)
             }
         }
     }
