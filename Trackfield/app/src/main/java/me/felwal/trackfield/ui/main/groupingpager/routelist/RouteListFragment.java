@@ -91,13 +91,13 @@ public class RouteListFragment extends RecyclerFragment {
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.getAscending(),
             Prefs.areHiddenGroupsShown(), Prefs.getMainFilter());
 
-        itemList.add(sorter.copy());
-        itemList.addAll(routeItemList);
-        if (routeItemList.size() == 0) {
-            itemList.remove(sorter);
-            fadeInEmpty();
+        if (routeItemList.size() != 0) {
+            itemList.add(sorter.copy());
+            itemList.addAll(routeItemList);
+
+            fadeOutEmpty();
         }
-        else fadeOutEmpty();
+        else fadeInEmpty();
 
         return itemList;
     }

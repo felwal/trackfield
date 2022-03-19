@@ -90,13 +90,13 @@ public class PlaceListFragment extends RecyclerFragment {
         ArrayList<PlaceItem> placeItemList = reader.getPlaceItems(sorter.getMode(), sorter.getAscending(),
             Prefs.areHiddenGroupsShown());
 
-        itemList.add(sorter.copy());
-        itemList.addAll(placeItemList);
-        if (placeItemList.size() == 0) {
-            itemList.remove(sorter);
-            fadeInEmpty();
+        if (placeItemList.size() != 0) {
+            itemList.add(sorter.copy());
+            itemList.addAll(placeItemList);
+
+            fadeOutEmpty();
         }
-        else fadeOutEmpty();
+        else fadeInEmpty();
 
         return itemList;
     }

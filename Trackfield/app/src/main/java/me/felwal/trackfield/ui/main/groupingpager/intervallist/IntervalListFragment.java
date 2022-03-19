@@ -88,13 +88,13 @@ public class IntervalListFragment extends RecyclerFragment {
         ArrayList<IntervalItem> intervalItemList = reader.getIntervalItems(sorter.getMode(), sorter.getAscending(),
             Prefs.areHiddenGroupsShown(), Prefs.getMainFilter());
 
-        itemList.add(sorter.copy());
-        itemList.addAll(intervalItemList);
-        if (intervalItemList.size() == 0) {
-            itemList.remove(sorter);
-            fadeInEmpty();
+        if (intervalItemList.size() != 0) {
+            itemList.add(sorter.copy());
+            itemList.addAll(intervalItemList);
+
+            fadeOutEmpty();
         }
-        else fadeOutEmpty();
+        else fadeInEmpty();
 
         return itemList;
     }

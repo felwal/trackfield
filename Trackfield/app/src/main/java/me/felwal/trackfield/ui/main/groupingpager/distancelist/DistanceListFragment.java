@@ -78,13 +78,13 @@ public class DistanceListFragment extends RecyclerFragment {
         ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sorter.getMode(), sorter.getAscending(),
             Prefs.getMainFilter());
 
-        itemList.add(sorter.copy());
-        itemList.addAll(distanceItemList);
-        if (distanceItemList.size() == 0) {
-            itemList.remove(sorter);
-            fadeInEmpty();
+        if (distanceItemList.size() != 0) {
+            itemList.add(sorter.copy());
+            itemList.addAll(distanceItemList);
+
+            fadeOutEmpty();
         }
-        else fadeOutEmpty();
+        else fadeInEmpty();
 
         return itemList;
     }
