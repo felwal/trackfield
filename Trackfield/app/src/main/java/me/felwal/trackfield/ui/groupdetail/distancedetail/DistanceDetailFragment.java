@@ -6,6 +6,7 @@ import android.view.View;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.model.Distance;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
@@ -14,6 +15,7 @@ import me.felwal.trackfield.ui.common.model.Goal;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
+import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 
 import me.felwal.android.util.ResourcesKt;
 
-public class DistanceDetailFragment extends RecyclerFragment {
+public class DistanceDetailFragment extends GroupDetailFragment {
 
     // bundle keys
     private final static String BUNDLE_DISTANCE = "distance";
@@ -38,7 +40,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
         SorterItem.sortByLng()
     );
 
-    private int originId;
+    private int originId = Exercise.NO_ID;
     private int distance;
 
     //
@@ -63,13 +65,10 @@ public class DistanceDetailFragment extends RecyclerFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             distance = bundle.getInt(BUNDLE_DISTANCE, -1);
-            originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
-
-            // filtering depending on origin
-            Prefs.setGroupVisibleTypes(originId == -1
-                ? Prefs.getMainVisibleTypes()
-                : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
+            originId = bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID);
         }
+
+        updateFilterByOrigin(originId);
     }
 
     // extends RecyclerFragment

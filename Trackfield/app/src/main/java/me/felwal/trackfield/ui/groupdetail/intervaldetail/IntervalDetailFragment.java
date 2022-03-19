@@ -5,6 +5,7 @@ import android.view.View;
 
 import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
@@ -12,11 +13,12 @@ import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
+import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
 import me.felwal.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
 
-public class IntervalDetailFragment extends RecyclerFragment {
+public class IntervalDetailFragment extends GroupDetailFragment {
 
     // bundle keys
     private final static String BUNDLE_INTERVAL = "interval";
@@ -30,7 +32,7 @@ public class IntervalDetailFragment extends RecyclerFragment {
     );
 
     private String interval;
-    private int originId;
+    private int originId = Exercise.NO_ID;
 
     //
 
@@ -54,8 +56,10 @@ public class IntervalDetailFragment extends RecyclerFragment {
 
         if (bundle != null) {
             interval = bundle.getString(BUNDLE_INTERVAL, "");
-            originId = bundle.getInt(BUNDLE_ORIGINID, -1);
+            originId = bundle.getInt(BUNDLE_ORIGINID, Exercise.NO_ID);
         }
+
+        updateFilterByOrigin(originId);
     }
 
     // extends RecyclerFragment

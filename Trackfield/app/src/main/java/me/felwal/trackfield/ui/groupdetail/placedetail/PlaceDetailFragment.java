@@ -13,13 +13,14 @@ import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
+import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
 import me.felwal.trackfield.utils.AppConsts;
 
 import java.util.ArrayList;
 
 import me.felwal.android.util.ResourcesKt;
 
-public class PlaceDetailFragment extends RecyclerFragment {
+public class PlaceDetailFragment extends GroupDetailFragment {
 
     // bundle keys
     private final static String BUNDLE_PLACE_ID = "placeId";
@@ -55,10 +56,9 @@ public class PlaceDetailFragment extends RecyclerFragment {
         if (bundle != null) {
             int placeId = bundle.getInt(BUNDLE_PLACE_ID, -1);
             place = DbReader.get(a).getPlace(placeId);
-
-            // filtering
-            Prefs.setGroupVisibleTypes(Prefs.getMainVisibleTypes());
         }
+
+        updateFilterByOrigin(null);
     }
 
     // extends RecyclerFragment

@@ -1,5 +1,6 @@
 package me.felwal.trackfield.ui.groupdetail;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,11 +16,13 @@ import java.util.ArrayList;
 
 import me.felwal.android.fragment.sheet.SortSheet;
 import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.prefs.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.utils.ScreenUtils;
+import me.felwal.trackfield.utils.TypeUtils;
 import me.felwal.trackfield.utils.UtilsKt;
 
 public abstract class GroupDetailActivity extends ExerciseFilterActivity implements SortSheet.SheetListener {
@@ -90,6 +93,13 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
     protected void selectFragment(RecyclerFragment recyclerFragment) {
         this.recyclerFragment = recyclerFragment;
         getSupportFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
+    }
+
+    public static void updateFilter(Activity a, int originId) {
+        // filtering depending on origin
+        Prefs.setGroupVisibleTypes(originId == -1
+            ? Prefs.getMainVisibleTypes()
+            : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
     }
 
     @NonNull @Override
