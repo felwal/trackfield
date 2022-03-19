@@ -3,6 +3,8 @@ package me.felwal.trackfield.ui.groupdetail.intervaldetail;
 import android.os.Bundle;
 import android.view.View;
 
+import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
@@ -60,7 +62,10 @@ public class IntervalDetailFragment extends RecyclerFragment {
 
     @Override
     protected void setEmptyPage() {
-        // Interval currently never displays an empty page
+        emptyTitle.setText(getString(R.string.tv_text_empty_intervaldetail_title));
+        emptyMessage.setText(getString(R.string.tv_text_empty_intervaldetail_msg));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_exercise,
+            R.attr.tf_colorInterval));
     }
 
     @Override
@@ -79,10 +84,17 @@ public class IntervalDetailFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByInterval(interval, sorter.getMode(),
-            sorter.getAscending());
+            sorter.getAscending(), Prefs.getGroupFilter());
 
-        itemList.add(sorter.copy());
-        addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
+        if (exerliteList.size() != 0) {
+            itemList.add(sorter.copy());
+            addItemsWithHeaders(itemList, exerliteList, sorter.getMode());
+
+            fadeOutEmpty();
+        }
+        else {
+            fadeInEmpty();
+        }
 
         return itemList;
     }

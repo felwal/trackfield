@@ -367,10 +367,12 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlitesByInterval(String interval, SorterItem.Mode sortMode, boolean ascending) {
+    public ArrayList<Exerlite> getExerlitesByInterval(String interval, SorterItem.Mode sortMode, boolean ascending,
+        ExerciseFilter filter) {
+
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_INTERVAL + " = ?";
+        String where = ExerciseEntry.COLUMN_INTERVAL + " = ?" + exerciseFilter(" AND", filter);
         String[] whereArgs = { interval };
         String orderBy = orderBy(sortMode, ascending);
 
@@ -892,13 +894,13 @@ public class DbReader extends DbHelper {
 
     @NonNull @SuppressLint("Range")
     public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending,
-        boolean includeHidden) {
+        boolean includeHidden, ExerciseFilter filter) {
 
         String colAmount = "amount";
 
         String[] select = { ExerciseEntry.COLUMN_INTERVAL, "count() AS " + colAmount };
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_INTERVAL + " != ''";
+        String where = ExerciseEntry.COLUMN_INTERVAL + " != ''" + exerciseFilter(" AND", filter);
         String groupBy = ExerciseEntry.COLUMN_INTERVAL;
         String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : colAmount + " > 1";
 

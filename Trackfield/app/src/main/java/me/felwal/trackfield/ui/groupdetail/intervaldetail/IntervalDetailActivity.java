@@ -49,6 +49,10 @@ public class IntervalDetailActivity extends GroupDetailActivity implements Input
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
+        if (itemId == R.id.action_filter_exercises) {
+            showFilterSheet();
+            return true;
+        }
         if (itemId == R.id.action_rename_interval) {
             if (interval != null) {
                 InputDialog.newInstance(

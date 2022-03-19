@@ -127,6 +127,8 @@
     <string name="tv_text_empty_routedetail_msg">Check filters.</string>
     <string name="tv_text_empty_placedetail_title">No exercises</string>
     <string name="tv_text_empty_placedetail_msg">Check filters.</string>
+    <string name="tv_text_empty_intervaldetail_title">No exercises</string>
+    <string name="tv_text_empty_intervaldetail_msg">Check filters.</string>
 
     <string name="tv_text_fab_add">Add exercise</string>
     <string name="tv_text_fab_request_strava">Request new</string>
