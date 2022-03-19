@@ -86,12 +86,13 @@ abstract class ExerciseFilterActivity : MultidimFilterActivity() {
     override val dimensions: Array<FilterDimension>
         get() = arrayOf(
             FilterDimension(
-                "Type", R.drawable.ic_sport, getString(R.string.dialog_title_filter_types),
+                getString(R.string.sheet_item_type), R.drawable.ic_sport, getString(R.string.dialog_title_filter_types),
                 DbReader.get(this).types, filter.visibleTypes, SHEET_FILTER_TYPE
             ),
             FilterDimension(
-                "Label", R.drawable.ic_label, getString(R.string.dialog_title_filter_labels),
-                DbReader.get(this).getLabels(true), filter.visibleLabels, SHEET_FILTER_LABEL
+                getString(R.string.sheet_item_label), R.drawable.ic_label,
+                getString(R.string.dialog_title_filter_labels), DbReader.get(this).getLabels(true),
+                filter.visibleLabels, SHEET_FILTER_LABEL
             )
         )
 

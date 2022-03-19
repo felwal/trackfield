@@ -328,7 +328,7 @@
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_id"
-                    tools:text="Type"
+                    tools:text="Sport"
                     style="@style/Widget.Trackfield.TextView" />
 
                 <TextView

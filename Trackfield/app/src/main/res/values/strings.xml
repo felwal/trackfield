@@ -51,7 +51,7 @@
     <string name="et_suffix_exerciseedit_seconds">s</string>
     <string name="et_hint_exerciseedit_device">Device</string>
     <string name="et_hint_exerciseedit_recordingmethod">Recording method</string>
-    <string name="et_hint_exerciseedit_type">Type</string>
+    <string name="et_hint_exerciseedit_type">Sport</string>
     <string name="et_hint_exerciseedit_label">Label</string>
 
     <!-- text views -->
@@ -66,9 +66,9 @@
     <string name="tv_text_settings_title_week_headers">Week headers</string>
     <string name="tv_text_settings_title_singletion_groups">Hide singleton groups</string>
     <string name="tv_text_settings_header_data">Data</string>
-    <string name="tv_text_settings_title_driving_prefer_same_type">Prefer same type when driving</string>
+    <string name="tv_text_settings_title_driving_prefer_same_type">Prefer same sport when driving</string>
     <string name="tv_text_settings_msg_driving_prefer_same_type">When there is data. Route variation will take
-        precedence over type.</string>
+        precedence over sport.</string>
     <string name="tv_text_settings_title_driving_fallback_to_route">Fallback to route when driving</string>
     <string name="tv_text_settings_msg_driving_fallback_to_route">When there is no route variation data</string>
     <string name="tv_text_settings_header_appearance">Appearance</string>
@@ -112,7 +112,7 @@
         to get started.</string>
     <string name="tv_text_empty_search_title">No results</string>
     <string name="tv_text_empty_search_msg">Check spelling and filters. You can search for: #id, route, rotue
-        variation, note, type, label, device and recording method.</string>
+        variation, note, sport, label, device and recording method.</string>
     <string name="tv_text_empty_distancelist_title">No distances</string>
     <string name="tv_text_empty_distancelist_msg">Press + to add a distance.</string>
     <string name="tv_text_empty_routelist_title">No routes</string>
@@ -133,7 +133,7 @@
     <string name="tv_text_fab_add">Add exercise</string>
     <string name="tv_text_fab_request_strava">Request new</string>
 
-    <string name="tv_text_dialog_filter_msg">Types</string>
+    <string name="tv_text_dialog_filter_msg">Sports</string>
 
     <!-- other components -->
 
@@ -201,7 +201,7 @@
     <string name="dialog_title_add_place">Add place</string>
     <string name="dialog_title_delete_place">Delete place?</string>
     <string name="dialog_title_filter">Filter by</string>
-    <string name="dialog_title_filter_types">Filter by type</string>
+    <string name="dialog_title_filter_types">Filter by sport</string>
     <string name="dialog_title_filter_labels">Filter by label</string>
     <string name="dialog_title_discard">Discard edits?</string>
     <string name="dialog_title_theme">Theme</string>
@@ -232,7 +232,11 @@
         Any existing files will be overridden.</string>
     <string name="dialog_msg_import">Exercises, routes, places and distances will be imported from the specified
         folder. Any existing data will be overridden.</string>
-    <string name="dialgo_msg_filter_empty">To filter by type, add at least one exercise with type specified.</string>
+    <string name="dialgo_msg_filter_empty">To filter by sport, add at least one exercise with sport specified.</string>
+
+    <!-- items -->
+    <string name="sheet_item_type">Sport</string>
+    <string name="sheet_item_label">Label</string>
 
     <!-- toasts -->
 
