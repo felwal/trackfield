@@ -190,6 +190,7 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_DATE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_ROUTE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_ROUTE_VAR + " LIKE " + "'%" + search + "%' OR " +
+                ExerciseEntry.COLUMN_INTERVAL + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_DEVICE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_RECORDING_METHOD + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_NOTE + " LIKE " + "'%" + search + "%' OR " +
