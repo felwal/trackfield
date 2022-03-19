@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.network.StravaApi;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.utils.AppConsts;
 import me.felwal.trackfield.utils.annotation.Debug;
 import me.felwal.trackfield.utils.annotation.Unfinished;

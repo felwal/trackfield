@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import me.felwal.android.fragment.sheet.SortSheet;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.data.prefs.ExerciseFilter;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;

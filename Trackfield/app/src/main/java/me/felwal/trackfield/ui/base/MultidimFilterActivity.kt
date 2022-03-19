@@ -14,11 +14,9 @@ import me.felwal.android.widget.control.ListOption
 import me.felwal.android.widget.control.SheetOption
 import me.felwal.trackfield.R
 import me.felwal.trackfield.data.db.DbReader
-import me.felwal.trackfield.data.prefs.ExerciseFilter
+import me.felwal.trackfield.ui.base.ExerciseFilter
 
 private const val SHEET_FILTER = "filterSheet"
-private const val SHEET_FILTER_TYPE = "filterByTypeSheet"
-private const val SHEET_FILTER_LABEL = "filterByLabelSheet"
 
 class FilterDimension(
     val label: String,
@@ -29,6 +27,12 @@ class FilterDimension(
     val tag: String
 ) {
     val featureIcons get() = listOf(icon).repeated(featureLabels.size).toIntArray()
+    val isShallow get() = featureLabels.size == 0
+
+    companion object {
+        fun shallow(label: String, @DrawableRes icon: Int, tag: String) =
+            FilterDimension(label, icon, "", arrayListOf(), arrayListOf(), tag)
+    }
 }
 
 abstract class MultidimFilterActivity :
@@ -58,6 +62,12 @@ abstract class MultidimFilterActivity :
     override fun onSingleChoiceSheetItemSelected(selectedIndex: Int, tag: String, passValue: String?) {
         if (tag == SHEET_FILTER) {
             val dim = dimensions[selectedIndex]
+
+            if (dim.isShallow) {
+                onShallowItemClick(dim.tag)
+                return
+            }
+
             val checkedIndices = dim.featureLabels.indicesOf(dim.checkedFeatureLabels).toMutableList().apply {
                 // if some checkedFeatureLabels don't exist in featureLabels, we get -1's.
                 // this occurs when a type is removed, but still saved in prefs.
@@ -80,50 +90,6 @@ abstract class MultidimFilterActivity :
 
     abstract fun onMultidimFilter(itemStates: BooleanArray, tag: String)
 
-}
-
-abstract class ExerciseFilterActivity : MultidimFilterActivity() {
-
-    abstract val filter: ExerciseFilter
-
-    //
-
-    override val dimensions: Array<FilterDimension>
-        get() = arrayOf(
-            FilterDimension(
-                getString(R.string.sheet_item_type), R.drawable.ic_sport, getString(R.string.dialog_title_filter_types),
-                DbReader.get(this).types, filter.visibleTypes, SHEET_FILTER_TYPE
-            ),
-            FilterDimension(
-                getString(R.string.sheet_item_label), R.drawable.ic_label,
-                getString(R.string.dialog_title_filter_labels), DbReader.get(this).getLabels(true),
-                filter.visibleLabels, SHEET_FILTER_LABEL
-            )
-        )
-
-    override fun onMultidimFilter(itemStates: BooleanArray, tag: String) {
-        when (tag) {
-            SHEET_FILTER_TYPE -> {
-                val visibleTypes = getCheckedLabels(DbReader.get(this).types, itemStates)
-                applyTypeFilter(visibleTypes)
-                showFilterSheet()
-            }
-            SHEET_FILTER_LABEL -> {
-                val visibleLabels = getCheckedLabels(DbReader.get(this).getLabels(true), itemStates)
-                applyLabelFilter(visibleLabels)
-                showFilterSheet()
-            }
-        }
-
-        onExerciseFilter()
-    }
-
-    //
-
-    abstract fun applyTypeFilter(visibleTypes: ArrayList<String>)
-
-    abstract fun applyLabelFilter(visibleLabels: ArrayList<String>)
-
-    abstract fun onExerciseFilter()
+    abstract fun onShallowItemClick(tag: String)
 
 }

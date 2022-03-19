@@ -25,7 +25,7 @@ import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.network.StravaApi;
-import me.felwal.trackfield.data.prefs.ExerciseFilter;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;

@@ -17,7 +17,7 @@ import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
-import me.felwal.trackfield.data.prefs.ExerciseFilter;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.SorterItem;
