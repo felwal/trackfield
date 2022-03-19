@@ -58,7 +58,12 @@ abstract class MultidimFilterActivity :
     override fun onSingleChoiceSheetItemSelected(selectedIndex: Int, tag: String, passValue: String?) {
         if (tag == SHEET_FILTER) {
             val dim = dimensions[selectedIndex]
-            val checkedIndices = dim.featureLabels.indicesOf(dim.checkedFeatureLabels).toIntArray()
+            val checkedIndices = dim.featureLabels.indicesOf(dim.checkedFeatureLabels).toMutableList().apply {
+                // if some checkedFeatureLabels don't exist in featureLabels, we get -1's.
+                // this occurs when a type is removed, but still saved in prefs.
+                // as a solution, just remove those -1's. the outdated prefs will be updated automatically.
+                removeAll { it == -1 }
+            }.toIntArray()
 
             CheckSheet.newInstance(
                 SheetOption(dim.title, "", dim.tag, null),
