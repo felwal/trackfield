@@ -347,6 +347,9 @@ public class StravaApi {
             String description = obj.has(JSON_DESCRIPTION) ? obj.getString(JSON_DESCRIPTION) : "";
             String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : Prefs.getDefaultDevice();
 
+            // for some reason description now comes as "null" instead of not at all
+            if (description.equals("null")) description = "";
+
             // never available; use default
             String method = Prefs.getDefaultRecordingMethod();
 
