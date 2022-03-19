@@ -35,7 +35,7 @@ import me.felwal.android.widget.control.DialogOption;
 import me.felwal.android.widget.control.InputOption;
 
 public class RouteDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
-    TimeDialog.DialogListener, MultiChoiceDialog.DialogListener, AlertDialog.DialogListener {
+    TimeDialog.DialogListener, AlertDialog.DialogListener {
 
     // extras names
     public static final String EXTRA_ROUTE_ID = "routeId";
@@ -44,7 +44,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
     private static final String DIALOG_RENAME_ROUTE = "renameRouteDialog";
     private static final String DIALOG_MERGE_ROUTES = "mergeRouteDialog";
     private static final String DIALOG_GOAL_ROUTE = "goalRouteDialog";
-    private static final String DIALOG_FILTER = "filterDialog";
 
     private Route route;
 
@@ -80,18 +79,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes(null);
-            String[] items = new String[types.size()];
-            types.toArray(items);
-
-            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getRouteVisibleTypes().toArray());
-
-            CheckDialog.newInstance(
-                new DialogOption(getString(R.string.dialog_title_title_filter), "",
-                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    DIALOG_FILTER, null),
-                new CheckListOption(items, checkedItems, null))
-                .show(getSupportFragmentManager());
+            showFilterSheet();
 
             return true;
         }
@@ -105,10 +93,12 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
                     new InputOption(route.getName(), "", EditorInfo.TYPE_CLASS_TEXT))
                     .show(getSupportFragmentManager());
             }
+
             return true;
         }
         else if (itemId == R.id.action_set_group_goal) {
             int minutes, seconds;
+
             if (route.getGoalPace() == Route.NO_GOAL_PACE) {
                 minutes = BaseDialogKt.NULL_INT;
                 seconds = BaseDialogKt.NULL_INT;
@@ -125,6 +115,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
                     DIALOG_GOAL_ROUTE, null),
                 minutes, seconds, "min", "sec")
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_hide_route) {
@@ -133,6 +124,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
             // to get immediate check feedback (before the menu closes), update it here,
             // instead of calling invalidateOptionsMenu(), since that also resets the optional icon colors.
             item.setChecked(route.isHidden());
+
             return true;
         }
         else if (itemId == R.id.action_map_route) {
@@ -225,19 +217,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
             route.removeGoalPace();
             DbWriter.get(this).updateRoute(route, this);
 
-            recyclerFragment.updateRecycler();
-        }
-    }
-
-    @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
-        @Nullable String passValue) {
-
-        if (tag.equals(DIALOG_FILTER)) {
-            ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
-
-            Prefs.setRouteVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();
         }
     }

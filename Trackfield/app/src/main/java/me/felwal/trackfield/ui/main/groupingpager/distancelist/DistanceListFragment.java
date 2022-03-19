@@ -76,7 +76,7 @@ public class DistanceListFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<DistanceItem> distanceItemList = reader.getDistanceItems(sorter.getMode(), sorter.getAscending(),
-            Prefs.getExerciseVisibleTypes());
+            Prefs.getMainFilter());
 
         itemList.add(sorter.copy());
         itemList.addAll(distanceItemList);

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/ic_run"
+        android:drawable="@drawable/ic_exercise"
         android:width="@dimen/layout_valueicon_size"
         android:height="@dimen/layout_valueicon_size"
         android:gravity="center" />

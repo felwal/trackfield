@@ -198,7 +198,9 @@
     <string name="dialog_title_set_goal">Set pace goal</string>
     <string name="dialog_title_add_place">Add place</string>
     <string name="dialog_title_delete_place">Delete place?</string>
-    <string name="dialog_title_title_filter">Filter exercises</string>
+    <string name="dialog_title_filter">Filter by</string>
+    <string name="dialog_title_filter_types">Filter by type</string>
+    <string name="dialog_title_filter_labels">Filter by label</string>
     <string name="dialog_title_discard">Discard edits?</string>
     <string name="dialog_title_theme">Theme</string>
     <string name="dialog_title_color">Color</string>

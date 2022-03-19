@@ -34,7 +34,7 @@ import me.felwal.android.widget.control.DialogOption;
 import me.felwal.android.widget.control.InputOption;
 
 public class PlaceDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
-    AlertDialog.DialogListener, MultiChoiceDialog.DialogListener {
+    AlertDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_PLACE_ID = "placeId";
@@ -43,7 +43,6 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
     private static final String DIALOG_RENAME_PLACE = "renamePlaceDialog";
     private static final String DIALOG_NAME_ALREADY_EXISTS = "placeNameExistsDialog";
     private static final String DIALOG_DELETE_PLACE = "deletePlaceDialog";
-    private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_EDIT_RADIUS = "editRadiusDialog";
 
     private Place place;
@@ -75,18 +74,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes(null);
-            String[] items = new String[types.size()];
-            types.toArray(items);
-
-            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
-
-            CheckDialog.newInstance(
-                new DialogOption(getString(R.string.dialog_title_title_filter), "",
-                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    DIALOG_FILTER, null),
-                new CheckListOption(items, checkedItems, null))
-                .show(getSupportFragmentManager());
+            showFilterSheet();
 
             return true;
         }
@@ -99,6 +87,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
                     new InputOption(place.getName(), "", EditorInfo.TYPE_CLASS_TEXT))
                     .show(getSupportFragmentManager());
             }
+
             return true;
         }
         else if (itemId == R.id.action_exerciseedit_radius) {
@@ -115,6 +104,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
             // to get immediate check feedback (before the menu closes), update it here,
             // instead of calling invalidateOptionsMenu(), since that also resets the optional icon colors.
             item.setChecked(place.isHidden());
+
             return true;
         }
         else if (itemId == R.id.action_place_map) {
@@ -127,6 +117,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
                     R.string.dialog_btn_delete, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
                     DIALOG_DELETE_PLACE, null))
                 .show(getSupportFragmentManager());
+
             return true;
         }
 
@@ -197,19 +188,6 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
 
     @Override
     public void onAlertDialogNeutralClick(@NonNull String tag, String passValue) {
-    }
-
-    @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
-        @Nullable String passValue) {
-
-        if (tag.equals(DIALOG_FILTER)) {
-            ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
-
-            Prefs.setDistanceVisibleTypes(visibleTypes);
-            recyclerFragment.updateRecycler();
-        }
     }
 
 }

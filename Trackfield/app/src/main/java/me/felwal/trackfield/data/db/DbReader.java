@@ -17,6 +17,7 @@ import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
+import me.felwal.trackfield.data.prefs.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.SorterItem;
@@ -141,12 +142,12 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types, int startIndex, int endIndex) {
+    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending, ExerciseFilter filter,
+        int startIndex, int endIndex) {
 
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
         String from = ExerciseEntry.TABLE_NAME;
-        String where = typeFilter("", types);
+        String where = exerciseFilter("", filter);
         String orderBy = orderBy(sortMode, ascending);
         String limit = Integer.toString(endIndex);
 
@@ -158,12 +159,10 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull
-    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types) {
-
+    public ArrayList<Exerlite> getExerlites(SorterItem.Mode sortMode, boolean ascending, ExerciseFilter filter) {
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
         String from = ExerciseEntry.TABLE_NAME;
-        String where = typeFilter("", types);
+        String where = exerciseFilter("", filter);
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
@@ -177,9 +176,11 @@ public class DbReader extends DbHelper {
      * Note: when updating this, also update {@link me.felwal.trackfield.R.string#tv_text_empty_search_msg}
      */
     @NonNull
-    public ArrayList<Exerlite> getExerlitesBySearch(String search, SorterItem.Mode sortMode, boolean ascending) {
+    public ArrayList<Exerlite> getExerlitesBySearch(String search, SorterItem.Mode sortMode, boolean ascending,
+        ExerciseFilter filter) {
+
         if (search.equals("")) {
-            return getExerlites(sortMode, ascending, Prefs.getExerciseVisibleTypes());
+            return getExerlites(sortMode, ascending, filter);
         }
 
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
@@ -194,7 +195,7 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_NOTE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_TYPE + " LIKE " + "'%" + search + "%' OR " +
                 ExerciseEntry.COLUMN_LABEL + " LIKE " + "'%" + search + "%')" +
-                typeFilter(" AND", Prefs.getExerciseVisibleTypes());
+                exerciseFilter(" AND", filter);
         String orderBy = orderBy(sortMode, ascending);
 
         Log.i(LOG_TAG, "search where: " + where);
@@ -208,11 +209,11 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlitesByRoute(int routeId, SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types) {
+        @Nullable ExerciseFilter filter) {
 
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + typeFilter(" AND", types);
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + exerciseFilter(" AND", filter);
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
@@ -233,7 +234,7 @@ public class DbReader extends DbHelper {
         String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
             (routeVar != null ? " AND " + ExerciseEntry.COLUMN_ROUTE_VAR + " = '" + routeVar + "'" : "") +
             " AND " + ExerciseEntry.COLUMN_DISTANCE + " != " + Exercise.DISTANCE_DRIVEN +
-            typeFilter(" AND", types);
+            columnFilter(" AND", ExerciseEntry.COLUMN_TYPE, types);
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
@@ -254,7 +255,7 @@ public class DbReader extends DbHelper {
      * @param distance The length to consider exerlites in regards to
      * @param sortMode Mode to sort by
      * @param ascending Ordering by value
-     * @param types Types to filter in
+     * @param filter Types to filter in
      * @return List of filtered exerlites
      *
      * @see MathUtils#minDistance(int)
@@ -263,7 +264,7 @@ public class DbReader extends DbHelper {
      */
     @NonNull
     public ArrayList<Exerlite> getExerlitesByDistance(int distance, SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types) {
+        ExerciseFilter filter) {
 
         int minDist = MathUtils.minDistance(distance);
         int maxDist = MathUtils.maxDistance(distance);
@@ -273,7 +274,7 @@ public class DbReader extends DbHelper {
         String table = ExerciseEntry.TABLE_NAME;
         String id = ExerciseEntry._ID;
         String dist = ExerciseEntry.COLUMN_EFFECTIVE_DISTANCE;
-        String andTypeFilter = typeFilter(" AND", types);
+        String andExerciseFilter = exerciseFilter(" AND", filter);
 
         // sqlite 3.25, säkert effektivare
         /*String query3p25 = "SELECT row_number over (ORDER BY " + orderByPace + ") AS rownum, " + exerliteColumns +
@@ -286,9 +287,9 @@ public class DbReader extends DbHelper {
             "SELECT " + exerliteColumns +
                 " FROM " + table +
                 " WHERE (" + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist +
-                " AND " + dist + " <= " + maxDist + ") " + andTypeFilter +
+                " AND " + dist + " <= " + maxDist + ") " + andExerciseFilter +
                 " OR " + id + " IN (SELECT " + id + " FROM " + table + " WHERE " + dist + " >= " + minDist +
-                andTypeFilter + " ORDER BY " + orderByPace + " LIMIT 3))" +
+                andExerciseFilter + " ORDER BY " + orderByPace + " LIMIT 3))" +
                 " ORDER BY " + orderBy(sortMode, ascending);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -300,7 +301,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlitesByPlace(Place place, SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types) {
+        ExerciseFilter filter) {
 
         // since we are merely comparing distances in a binary sense of shorter or longer,
         // we can use not the magnitude, but the magnitude squared.
@@ -332,7 +333,7 @@ public class DbReader extends DbHelper {
         String startLng = ExerciseEntry.COLUMN_START_LNG;
         String endLat = ExerciseEntry.COLUMN_END_LAT;
         String endLng = ExerciseEntry.COLUMN_END_LNG;
-        String andTypeFilter = typeFilter(" AND", types);
+        String andExerciseFilter = exerciseFilter(" AND", filter);
 
         String query =
             "SELECT " + exerliteColumns +
@@ -341,7 +342,7 @@ public class DbReader extends DbHelper {
                 " + " + sqr(lng + " - " + startLng) + " / " + radiusLngDegSqr + ") <= 1" +
                 " OR (" + sqr(lat + " - " + endLat) + " / " + radiusLatDegSqr +
                 " + " + sqr(lng + " - " + endLng) + " / " + radiusLngDegSqr + ") <= 1)" +
-                andTypeFilter +
+                andExerciseFilter +
                 " ORDER BY " + orderBy(sortMode, ascending);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -382,13 +383,13 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<Exerlite> getExerlitesByDate(LocalDateTime min, LocalDateTime max, SorterItem.Mode sortMode,
-        boolean ascending, @NonNull ArrayList<String> types) {
+        boolean ascending, ExerciseFilter filter) {
 
         String[] select = ExerciseEntry.COLUMNS_EXERLITE;
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_DATE + " >= " + DateUtils.toEpochSecond(DateUtils.first(min, max)) +
             " AND " + ExerciseEntry.COLUMN_DATE + " <= " + DateUtils.toEpochSecond(DateUtils.last(min, max)) +
-            typeFilter(" AND", types);
+            exerciseFilter(" AND", filter);
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(true, from, select, where, null, null, null, orderBy, null);
@@ -751,7 +752,7 @@ public class DbReader extends DbHelper {
 
     @NonNull
     public ArrayList<RouteItem> getRouteItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden,
-        @NonNull ArrayList<String> types) {
+        ExerciseFilter filter) {
 
         final String tabExercises = ExerciseEntry.TABLE_NAME;
         final String tabRoutes = RouteEntry.TABLE_NAME;
@@ -782,13 +783,13 @@ public class DbReader extends DbHelper {
             "SELECT " + col(aliEx2, colExRouteid) + ", " +
             "min(" + col(aliEx2, colExTime) + "/" + col(aliEx2, colExDist) + ")*1000" + " AS " + aliBestPace +
             " FROM " + tabExercises + " AS " + aliEx2 +
-            " WHERE " + col(aliEx2, colExTime) + " > 0 AND " + col(aliEx2, colExDist) + " > 0" + typeFilter(
-            " AND", types) +
+            " WHERE " + col(aliEx2, colExTime) + " > 0 AND " + col(aliEx2, colExDist) + " > 0" +
+            exerciseFilter(" AND", filter) +
             " GROUP BY " + col(aliEx2, colExRouteid) +
             ") AS " + aliA + " ON " + col(aliA, colExRouteid) + " = " + col(aliEx, colExRouteid);
 
         String whereHidden = includeHidden ? "" : " AND " + col(tabRoutes, colRoHidden) + " != 1";
-        String where = " WHERE 1 = 1" + whereHidden + typeFilter(" AND", types);
+        String where = " WHERE 1 = 1" + whereHidden + exerciseFilter(" AND", filter);
         String groupBy = " GROUP BY " + col(aliEx, colExRouteid);
         String having = includeHidden || !Prefs.areSingletonGroupsHidden() ? "" : " HAVING count() > 1";
 
@@ -838,7 +839,7 @@ public class DbReader extends DbHelper {
 
     @NonNull @SuppressLint("Range")
     public ArrayList<DistanceItem> getDistanceItems(SorterItem.Mode sortMode, boolean ascending,
-        @NonNull ArrayList<String> types) {
+        ExerciseFilter filter) {
 
         String tabExercises = ExerciseEntry.TABLE_NAME;
         String tabDistances = DistanceEntry.TABLE_NAME;
@@ -866,7 +867,7 @@ public class DbReader extends DbHelper {
         " SELECT min(" + tabColExPace + ")" +
             " FROM " + tabExercises +
             " WHERE " + colExEffDist + " >= " + col(tabDistances, colDiDist) + " - " + Prefs.getDistanceLowerLimit() +
-            " AND " + colExTime + " != 0 " + typeFilter("AND", types) + ")" +
+            " AND " + colExTime + " != 0 " + exerciseFilter("AND", filter) + ")" +
             " AS " + colBestPace +
             " FROM " + tabDistances;
 
@@ -890,7 +891,9 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull @SuppressLint("Range")
-    public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending, boolean includeHidden) {
+    public ArrayList<IntervalItem> getIntervalItems(SorterItem.Mode sortMode, boolean ascending,
+        boolean includeHidden) {
+
         String colAmount = "amount";
 
         String[] select = { ExerciseEntry.COLUMN_INTERVAL, "count() AS " + colAmount };
@@ -1057,11 +1060,15 @@ public class DbReader extends DbHelper {
         return externalIds;
     }
 
+    public ArrayList<String> getTypes() {
+        return getTypes(true, null);
+    }
+
     @NonNull @SuppressLint("Range")
-    public ArrayList<String> getTypes(@Nullable String limit) {
+    public ArrayList<String> getTypes(boolean includeEmpty, @Nullable String limit) {
         String[] select = { ExerciseEntry.COLUMN_TYPE };
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_TYPE + " != ''";
+        String where = includeEmpty ? null : ExerciseEntry.COLUMN_TYPE + " != ''";
         String groupBy = ExerciseEntry.COLUMN_TYPE;
         String orderBy = "count() DESC";
 
@@ -1078,10 +1085,10 @@ public class DbReader extends DbHelper {
     }
 
     @NonNull @SuppressLint("Range")
-    public ArrayList<String> getLabels() {
+    public ArrayList<String> getLabels(boolean includeEmpty) {
         String[] select = { ExerciseEntry.COLUMN_LABEL };
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_LABEL + " != ''";
+        String where = includeEmpty ? null : ExerciseEntry.COLUMN_LABEL + " != ''";
         String groupBy = ExerciseEntry.COLUMN_LABEL;
         String orderBy = "count() DESC";
 
@@ -1200,7 +1207,7 @@ public class DbReader extends DbHelper {
     // streamlined graph data
 
     @Unfinished @SuppressLint("Range")
-    public TreeMap<Float, Float> aggregateDistance(@NonNull ArrayList<String> types, LocalDate startDate,
+    public TreeMap<Float, Float> aggregateDistance(ExerciseFilter filter, LocalDate startDate,
         int nodeCount, ChronoUnit groupUnit) {
         // TODO
 
@@ -1218,7 +1225,7 @@ public class DbReader extends DbHelper {
                 sum(colDist) + " AS " + colTotDist +
                 " FROM " + ExerciseEntry.TABLE_NAME +
                 " WHERE " + colDdate + " >= " + startEpoch +
-                " AND " + colDdate + " < " + endEpoch + typeFilter(" AND", types) +
+                " AND " + colDdate + " < " + endEpoch + exerciseFilter(" AND", filter) +
                 " GROUP BY " + colDateGroup +
                 " ORDER BY " + orderBy(SorterItem.Mode.DATE, true);
 
@@ -1254,7 +1261,7 @@ public class DbReader extends DbHelper {
     }
 
     @SuppressLint("Range")
-    public TreeMap<Float, Float> getPaceNodesByDistance(int distance, @NonNull ArrayList<String> types) {
+    public TreeMap<Float, Float> getPaceNodesByDistance(int distance, ExerciseFilter filter) {
         int minDist = MathUtils.minDistance(distance);
         int maxDist = MathUtils.maxDistance(distance);
 
@@ -1265,7 +1272,7 @@ public class DbReader extends DbHelper {
         String selPace = "pace";
 
         String select = ExerciseEntry.SELECTION_PACE + " AS " + selPace;
-        String andTypeFilter = typeFilter(" AND", types);
+        String andTypeFilter = exerciseFilter(" AND", filter);
         String orderByPace = orderBy(SorterItem.Mode.PACE, true);
         String orderByDate = orderBy(SorterItem.Mode.DATE, true);
 
@@ -1294,13 +1301,13 @@ public class DbReader extends DbHelper {
     }
 
     @SuppressLint("Range")
-    public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, @NonNull ArrayList<String> types) {
+    public TreeMap<Float, Float> getPaceNodesByRoute(int routeId, ExerciseFilter filter) {
         String colPace = "pace";
 
         String[] select = { ExerciseEntry.SELECTION_PACE + " AS " + colPace };
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + colPace + " > 0" +
-            typeFilter(" AND", types);
+            exerciseFilter(" AND", filter);
         String orderBy = orderBy(SorterItem.Mode.DATE, true);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
@@ -1318,11 +1325,11 @@ public class DbReader extends DbHelper {
 
     // graph data
 
-    public TreeMap<Float, Float> getWeekDailyDistance(@NonNull ArrayList<String> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> getWeekDailyDistance(ExerciseFilter filter, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfWeek(includingDate),
-            DateUtils.atEndOfWeek(includingDate), SorterItem.Mode.DATE, false, types);
+            DateUtils.atEndOfWeek(includingDate), SorterItem.Mode.DATE, false, filter);
 
         for (Exerlite e : exerlites) {
             int key = e.getDate().getDayOfWeek().getValue();
@@ -1337,12 +1344,11 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> getYearMonthlyDistance(@NonNull ArrayList<String> types, LocalDate includingDate) {
+    public TreeMap<Float, Float> getYearMonthlyDistance(ExerciseFilter filter, LocalDate includingDate) {
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> monthAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
-            DateUtils.atEndOfYear(includingDate),
-            SorterItem.Mode.DATE, false, types);
+            DateUtils.atEndOfYear(includingDate), SorterItem.Mode.DATE, false, filter);
 
         for (Exerlite e : exerlites) {
             int key = e.getDate()
@@ -1369,13 +1375,13 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> getMonthDailyIntegralDistance(@NonNull ArrayList<String> types,
+    public TreeMap<Float, Float> getMonthDailyIntegralDistance(ExerciseFilter filter,
         LocalDate includingDate) {
 
         TreeMap<Float, Float> points = new TreeMap<>();
         TreeMap<Integer, Integer> dayAndDistance = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfMonth(includingDate),
-            DateUtils.atEndOfMonth(includingDate), SorterItem.Mode.DATE, false, types);
+            DateUtils.atEndOfMonth(includingDate), SorterItem.Mode.DATE, false, filter);
 
         float totalDistance = 0;
 
@@ -1399,12 +1405,11 @@ public class DbReader extends DbHelper {
         return points;
     }
 
-    public TreeMap<Float, Float> getYearWeeklyIntegralDistance(@NonNull ArrayList<String> types,
-        LocalDate includingDate) {
+    public TreeMap<Float, Float> getYearWeeklyIntegralDistance(ExerciseFilter filter, LocalDate includingDate) {
 
         TreeMap<Float, Float> points = new TreeMap<>();
         ArrayList<Exerlite> exerlites = getExerlitesByDate(DateUtils.atStartOfYear(includingDate),
-            DateUtils.atEndOfYear(includingDate), SorterItem.Mode.DATE, true, types);
+            DateUtils.atEndOfYear(includingDate), SorterItem.Mode.DATE, true, filter);
 
         float totalDistance = 0;
         float lastWeek = 0;
@@ -1699,27 +1704,37 @@ public class DbReader extends DbHelper {
 
     // sql sub-clauses
 
+    private String exerciseFilter(String precedingKeyword, @Nullable ExerciseFilter filter) {
+        if (filter == null) return "";
+
+        String typeFilter = columnFilter(precedingKeyword, ExerciseEntry.COLUMN_TYPE, filter.getVisibleTypes());
+        String labelFilter = columnFilter(typeFilter.trim().isEmpty() ? precedingKeyword : " AND",
+            ExerciseEntry.COLUMN_LABEL, filter.getVisibleLabels());
+
+        return typeFilter + labelFilter;
+    }
+
     /**
-     * Add to any SQL where string to also filter by type Includes spacing after keyword, but not before it; use the
+     * Add filtering to any SQL where string. Includes spacing after keyword, but not before it; use the
      * form " AND".
      *
-     * <p>Note: do not substitue passing a keyword for adding one before this string;
+     * <p>Note: do not substitute passing a keyword for adding one before this string;
      * this takes care of empty lists by not filtering at all, while substituting does not.</p>
      *
      * @param precedingKeyword To precede the statement with if list isn't empty
-     * @param visibleTypes Types to filter in
+     * @param column The column to filter
+     * @param visibleValues Values to filter in
      * @return The SQL query where string
      */
-    @NonNull
-    private String typeFilter(@NonNull String precedingKeyword, @NonNull ArrayList<String> visibleTypes) {
+    private String columnFilter(@NonNull String precedingKeyword, String column, ArrayList<String> visibleValues) {
         StringBuilder filter = new StringBuilder();
 
-        for (int i = 0; i < visibleTypes.size(); i++) {
+        for (int i = 0; i < visibleValues.size(); i++) {
             if (i == 0) filter.append(precedingKeyword).append(" (");
 
-            filter.append(ExerciseEntry.COLUMN_TYPE + " = '").append(visibleTypes.get(i)).append("'");
+            filter.append(column).append(" = '").append(visibleValues.get(i)).append("'");
 
-            if (i == visibleTypes.size() - 1) filter.append(")");
+            if (i == visibleValues.size() - 1) filter.append(")");
             else filter.append(" OR ");
         }
         return filter.toString();

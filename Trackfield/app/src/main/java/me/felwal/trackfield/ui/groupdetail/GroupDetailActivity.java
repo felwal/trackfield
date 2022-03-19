@@ -7,18 +7,22 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.ui.base.RecyclerFragment;
-import me.felwal.trackfield.utils.ScreenUtils;
+import java.util.ArrayList;
 
 import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.prefs.ExerciseFilter;
+import me.felwal.trackfield.data.prefs.Prefs;
+import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
+import me.felwal.trackfield.ui.base.RecyclerFragment;
+import me.felwal.trackfield.utils.ScreenUtils;
 import me.felwal.trackfield.utils.UtilsKt;
 
-public abstract class GroupDetailActivity extends AppCompatActivity implements SortSheet.SheetListener {
+public abstract class GroupDetailActivity extends ExerciseFilterActivity implements SortSheet.SheetListener {
 
     // extras names
     protected static final String EXTRA_ORIGIN_ID = "orignId";
@@ -88,6 +92,21 @@ public abstract class GroupDetailActivity extends AppCompatActivity implements S
         getSupportFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
     }
 
+    @NonNull @Override
+    public ExerciseFilter getFilter() {
+        return Prefs.getGroupFilter();
+    }
+
+    @Override
+    public void applyTypeFilter(@NonNull ArrayList<String> visibleTypes) {
+        Prefs.setGroupVisibleTypes(visibleTypes);
+    }
+
+    @Override
+    public void applyLabelFilter(@NonNull ArrayList<String> visibleLabels) {
+        Prefs.setGroupVisibleLabels(visibleLabels);
+    }
+
     // abstract
 
     protected abstract void getExtras(Intent intent);
@@ -95,7 +114,12 @@ public abstract class GroupDetailActivity extends AppCompatActivity implements S
     @MenuRes
     protected abstract int getToolbarMenuRes();
 
-    // implements SortSheet
+    // implements dialogs
+
+    @Override
+    public void onExerciseFilter() {
+        recyclerFragment.updateRecycler();
+    }
 
     @Override
     public void onSortSheetItemClick(int selectedIndex) {

@@ -33,7 +33,7 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
         et(timeTil).setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
 
         // use the most common type as default
-        ArrayList<String> mostCommonType = DbReader.get(this).getTypes("1");
+        ArrayList<String> mostCommonType = DbReader.get(this).getTypes(false, "1");
         if (mostCommonType.size() != 0) {
             et(typeTil).setText(mostCommonType.get(0));
         }

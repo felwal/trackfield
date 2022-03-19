@@ -206,7 +206,7 @@ public class DbWriter extends DbHelper {
      */
     private boolean deleteRouteIfEmpty(int routeId, Context c) {
         int remainingOfRoute = DbReader.get(c)
-            .getExerlitesByRoute(routeId, SorterItem.Mode.DATE, false, new ArrayList<>()).size();
+            .getExerlitesByRoute(routeId, SorterItem.Mode.DATE, false, null).size();
         if (remainingOfRoute == 0) return deleteRoute(routeId);
         return false;
     }

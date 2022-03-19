@@ -48,9 +48,10 @@ public class Prefs {
     @Unfinished private static final String KEY_INCLCUDE_PACELESS = "includePaceless";
     private static final String KEY_LIMIT_LOWER = "lowerLimit";
     private static final String KEY_LIMIT_UPPER = "upperLimit";
-    private static final String KEY_TYPES_EXERCISE = "typesExercise";
-    private static final String KEY_TYPES_ROUTE = "typesRoute";
-    private static final String KEY_TYPES_DISTANCE = "typesDistance";
+    private static final String KEY_TYPES_MAIN = "typesMain";
+    private static final String KEY_LABES_MAIN = "labelsMain";
+    private static final String KEY_TYPES_GROUP = "typesGroup";
+    private static final String KEY_LABELS_GROUP = "labelsGroup";
     private static final String KEY_SORT_SELECTED_INDICES = "sorterSelectedIndices";
     private static final String KEY_SORT_SELECTED_INVERSIONS = "sorterSelectedInversions";
     private static final String KEY_STRAVA_AUTH = "stravaAuthCode";
@@ -99,9 +100,10 @@ public class Prefs {
     @Unfinished private static boolean includePaceless = true;
     private static int distanceLowerLimit = 630;
     private static int distanceUpperLimit = 999;
-    @NonNull private static ArrayList<String> exerciseVisibleTypes = new ArrayList<>();
-    @NonNull private static ArrayList<String> routeVisibleTypes = new ArrayList<>(); // TODO: remove
-    @NonNull private static ArrayList<String> distanceVisibleTypes = new ArrayList<>(); // TODO: remove
+    @NonNull private static ArrayList<String> mainVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> mainVisibleLabels = new ArrayList<>();
+    @NonNull private static ArrayList<String> groupVisibleTypes = new ArrayList<>();
+    @NonNull private static ArrayList<String> groupVisibleLabels = new ArrayList<>();
 
     // sorting (using AppConsts.Layout.ordinal() as index)
     private static int[] sorterSelectedIndices = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -172,9 +174,10 @@ public class Prefs {
         savePref(includeLonger, KEY_INCLCUDE_LONGER);
         savePref(distanceLowerLimit, KEY_LIMIT_LOWER);
         savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
-        savePref(exerciseVisibleTypes, KEY_TYPES_EXERCISE);
-        savePref(routeVisibleTypes, KEY_TYPES_ROUTE);
-        savePref(distanceVisibleTypes, KEY_TYPES_DISTANCE);
+        savePref(mainVisibleTypes, KEY_TYPES_MAIN);
+        savePref(mainVisibleLabels, KEY_LABES_MAIN);
+        savePref(groupVisibleTypes, KEY_TYPES_GROUP);
+        savePref(groupVisibleLabels, KEY_LABELS_GROUP);
 
         // sorting
         savePref(sorterSelectedIndices, KEY_SORT_SELECTED_INDICES);
@@ -237,9 +240,10 @@ public class Prefs {
         includeLonger = loadPref(bool, KEY_INCLCUDE_LONGER);
         distanceLowerLimit = loadPref(in, KEY_LIMIT_LOWER);
         distanceUpperLimit = loadPref(in, KEY_LIMIT_UPPER);
-        exerciseVisibleTypes = loadPref(strList, KEY_TYPES_EXERCISE);
-        routeVisibleTypes = loadPref(strList, KEY_TYPES_ROUTE);
-        distanceVisibleTypes = loadPref(strList, KEY_TYPES_DISTANCE);
+        mainVisibleTypes = loadPref(strList, KEY_TYPES_MAIN);
+        mainVisibleLabels = loadPref(strList, KEY_LABES_MAIN);
+        groupVisibleTypes = loadPref(strList, KEY_TYPES_GROUP);
+        groupVisibleLabels = loadPref(strList, KEY_LABELS_GROUP);
 
         // sorting
         sorterSelectedIndices = loadPref(new TypeToken<int[]>(){}, KEY_SORT_SELECTED_INDICES);
@@ -300,9 +304,10 @@ public class Prefs {
             case KEY_INCLCUDE_LONGER: return includeLonger;
             case KEY_LIMIT_LOWER: return distanceLowerLimit;
             case KEY_LIMIT_UPPER: return distanceUpperLimit;
-            case KEY_TYPES_EXERCISE: return exerciseVisibleTypes;
-            case KEY_TYPES_ROUTE: return routeVisibleTypes;
-            case KEY_TYPES_DISTANCE: return distanceVisibleTypes;
+            case KEY_TYPES_MAIN: return mainVisibleTypes;
+            case KEY_LABES_MAIN: return mainVisibleLabels;
+            case KEY_TYPES_GROUP: return groupVisibleTypes;
+            case KEY_LABELS_GROUP: return groupVisibleLabels;
             case KEY_SORT_SELECTED_INDICES: return sorterSelectedIndices;
             case KEY_SORT_SELECTED_INVERSIONS: return sorterSelectedInversions;
             case KEY_STRAVA_AUTH: return authCode;
@@ -403,19 +408,24 @@ public class Prefs {
         savePref(distanceUpperLimit, KEY_LIMIT_UPPER);
     }
 
-    public static void setExerciseVisibleTypes(@NonNull ArrayList<String> types) {
-        exerciseVisibleTypes = types;
-        savePref(types, KEY_TYPES_EXERCISE);
+    public static void setMainVisibleTypes(@NonNull ArrayList<String> types) {
+        mainVisibleTypes = types;
+        savePref(types, KEY_TYPES_MAIN);
     }
 
-    public static void setRouteVisibleTypes(@NonNull ArrayList<String> types) {
-        routeVisibleTypes = types;
-        savePref(types, KEY_TYPES_ROUTE);
+    public static void setMainVisibleLabels(@NonNull ArrayList<String> labels) {
+        mainVisibleLabels = labels;
+        savePref(labels, KEY_LABES_MAIN);
     }
 
-    public static void setDistanceVisibleTypes(@NonNull ArrayList<String> types) {
-        distanceVisibleTypes = types;
-        savePref(types, KEY_TYPES_DISTANCE);
+    public static void setGroupVisibleTypes(@NonNull ArrayList<String> types) {
+        groupVisibleTypes = types;
+        savePref(types, KEY_TYPES_GROUP);
+    }
+
+    public static void setGroupVisibleLabels(@NonNull ArrayList<String> labels) {
+        groupVisibleLabels = labels;
+        savePref(labels, KEY_LABELS_GROUP);
     }
 
     public static void setSorter(AppConsts.Layout layout, int selectedIndex, boolean orderInverted) {
@@ -541,18 +551,33 @@ public class Prefs {
     }
 
     @NonNull
-    public static ArrayList<String> getExerciseVisibleTypes() {
-        return exerciseVisibleTypes;
+    public static ExerciseFilter getMainFilter() {
+        return new ExerciseFilter(mainVisibleTypes, mainVisibleLabels);
     }
 
     @NonNull
-    public static ArrayList<String> getRouteVisibleTypes() {
-        return routeVisibleTypes;
+    public static ArrayList<String> getMainVisibleTypes() {
+        return mainVisibleTypes;
     }
 
     @NonNull
-    public static ArrayList<String> getDistanceVisibleTypes() {
-        return distanceVisibleTypes;
+    public static ArrayList<String> getMainVisibleLabels() {
+        return mainVisibleLabels;
+    }
+
+    @NonNull
+    public static ExerciseFilter getGroupFilter() {
+        return new ExerciseFilter(groupVisibleTypes, groupVisibleLabels);
+    }
+
+    @NonNull
+    public static ArrayList<String> getGroupVisibleTypes() {
+        return groupVisibleTypes;
+    }
+
+    @NonNull
+    public static ArrayList<String> getGroupVisibleLabels() {
+        return groupVisibleLabels;
     }
 
     public static int getSorterIndex(AppConsts.Layout layout) {

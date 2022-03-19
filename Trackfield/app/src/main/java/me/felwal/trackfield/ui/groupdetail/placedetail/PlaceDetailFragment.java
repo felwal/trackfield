@@ -57,7 +57,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
             place = DbReader.get(a).getPlace(placeId);
 
             // filtering
-            Prefs.setDistanceVisibleTypes(Prefs.getExerciseVisibleTypes());
+            Prefs.setGroupVisibleTypes(Prefs.getMainVisibleTypes());
         }
     }
 
@@ -67,7 +67,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_placedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_placedetail_msg));
-        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorPlace));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_exercise, R.attr.tf_colorPlace));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class PlaceDetailFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByPlace(place, sorter.getMode(),
-            sorter.getAscending(), Prefs.getDistanceVisibleTypes());
+            sorter.getAscending(), Prefs.getGroupFilter());
 
         if (exerliteList.size() != 0) {
             itemList.add(sorter.copy());

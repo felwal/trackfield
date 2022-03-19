@@ -66,8 +66,8 @@ public class DistanceDetailFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setDistanceVisibleTypes(originId == -1
-                ? Prefs.getExerciseVisibleTypes()
+            Prefs.setGroupVisibleTypes(originId == -1
+                ? Prefs.getMainVisibleTypes()
                 : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }
@@ -78,7 +78,7 @@ public class DistanceDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_distancedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_distancedetail_msg));
-        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorDistance));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_exercise, R.attr.tf_colorDistance));
     }
 
     @Override
@@ -97,11 +97,11 @@ public class DistanceDetailFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByDistance(distance, sorter.getMode(),
-            sorter.getAscending(), Prefs.getDistanceVisibleTypes());
+            sorter.getAscending(), Prefs.getGroupFilter());
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
-                a, DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getDistanceVisibleTypes()),
+                a, DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getGroupFilter()),
                 GraphData.GRAPH_BEZIER, false, false);
 
             Graph graph = new Graph(true, Borders.horizontal(), false, true, false);

@@ -89,7 +89,7 @@ public class RouteListFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<RouteItem> routeItemList = reader.getRouteItems(sorter.getMode(), sorter.getAscending(),
-            Prefs.areHiddenGroupsShown(), Prefs.getExerciseVisibleTypes());
+            Prefs.areHiddenGroupsShown(), Prefs.getMainFilter());
 
         itemList.add(sorter.copy());
         itemList.addAll(routeItemList);

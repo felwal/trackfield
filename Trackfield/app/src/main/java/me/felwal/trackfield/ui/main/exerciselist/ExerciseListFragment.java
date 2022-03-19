@@ -93,7 +93,9 @@ public class ExerciseListFragment extends MainFragment {
 
     @Override
     public void scrollToTop() {
-        recyclerFragment.scrollToTop();
+        if (recyclerFragment != null) {
+            recyclerFragment.scrollToTop();
+        }
     }
 
     @Override

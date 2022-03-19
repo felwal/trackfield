@@ -6,16 +6,28 @@ import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
+import kotlin.Unit;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.widget.FloatingActionMenu;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
 import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.network.StravaApi;
+import me.felwal.trackfield.data.prefs.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
+import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
 import me.felwal.trackfield.ui.main.exerciselist.ExerciseListFragment;
@@ -27,33 +39,14 @@ import me.felwal.trackfield.ui.setting.SettingsActivity;
 import me.felwal.trackfield.utils.FileUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.ScreenUtils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-
-import kotlin.Unit;
-import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.CheckDialog;
-import me.felwal.android.fragment.dialog.InputDialog;
-import me.felwal.android.fragment.dialog.MultiChoiceDialog;
-import me.felwal.android.fragment.sheet.SortSheet;
-import me.felwal.android.util.CollectionsKt;
-import me.felwal.android.widget.FloatingActionMenu;
-import me.felwal.android.widget.control.CheckListOption;
-import me.felwal.android.widget.control.DialogOption;
-import me.felwal.android.widget.control.InputOption;
-
-public class MainActivity extends AppCompatActivity implements InputDialog.DialogListener,
-    MultiChoiceDialog.DialogListener, SortSheet.SheetListener {
+public class MainActivity extends ExerciseFilterActivity implements InputDialog.DialogListener,
+    SortSheet.SheetListener {
 
     public static boolean recreateOnRestart = false;
     public static boolean updateFragmentOnRestart = false;
 
     // dialog tags
-    private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_ADD_DISTANCE = "addDistanceDialog";
 
     private static boolean appInitialized = false;
@@ -119,19 +112,7 @@ public class MainActivity extends AppCompatActivity implements InputDialog.Dialo
             return true;
         }
         else if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes(null);
-            String[] items = new String[types.size()];
-            types.toArray(items);
-
-            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getExerciseVisibleTypes().toArray());
-
-            CheckDialog.newInstance(
-                new DialogOption(getString(R.string.dialog_title_title_filter), "",
-                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    DIALOG_FILTER, null),
-                new CheckListOption(items, checkedItems, null))
-                .show(getSupportFragmentManager());
-
+            showFilterSheet();
             return true;
         }
         else if (itemId == R.id.action_add_distance) {
@@ -141,12 +122,14 @@ public class MainActivity extends AppCompatActivity implements InputDialog.Dialo
                     DIALOG_ADD_DISTANCE, null),
                 new InputOption("", "", EditorInfo.TYPE_NUMBER_FLAG_DECIMAL))
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_show_hidden_groups) {
             Prefs.showHiddenGroups(!Prefs.areHiddenGroupsShown());
             mainFragment.updateFragment();
             invalidateOptionsMenu();
+
             return true;
         }
         else if (itemId == R.id.action_add_place) {
@@ -260,60 +243,40 @@ public class MainActivity extends AppCompatActivity implements InputDialog.Dialo
         mainFragment.updateFragment();
     }
 
+    @NonNull @Override
+    public ExerciseFilter getFilter() {
+        return Prefs.getMainFilter();
+    }
+
+    @Override
+    public void applyTypeFilter(@NonNull ArrayList<String> visibleTypes) {
+        Prefs.setMainVisibleTypes(visibleTypes);
+    }
+
+    @Override
+    public void applyLabelFilter(@NonNull ArrayList<String> visibleLabels) {
+        Prefs.setMainVisibleLabels(visibleLabels);
+    }
+
     // implements dialogs
 
     @Override
-    public void onInputDialogPositiveClick(String input, String tag, String passValue) {
+    public void onInputDialogPositiveClick(@NonNull String input, String tag, String passValue) {
         if (tag.equals(DIALOG_ADD_DISTANCE)) {
-            int distance = (int) MathUtils.round(Float.valueOf(input) * 1000, 0);
+            int distance = (int) MathUtils.round(Float.parseFloat(input) * 1000, 0);
             DbWriter.get(this).addDistance(new Distance(-1, distance));
             mainFragment.updateFragment();
         }
     }
 
-    // implements SortSheet
+    @Override
+    public void onExerciseFilter() {
+        mainFragment.updateFragment();
+    }
 
     @Override
     public void onSortSheetItemClick(int selectedIndex) {
         mainFragment.onSortSheetClick(selectedIndex);
     }
 
-    @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
-        @Nullable String passValue) {
-
-        if (tag.equals(DIALOG_FILTER)) {
-            ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
-
-            Prefs.setExerciseVisibleTypes(visibleTypes);
-            mainFragment.updateFragment();
-        }
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

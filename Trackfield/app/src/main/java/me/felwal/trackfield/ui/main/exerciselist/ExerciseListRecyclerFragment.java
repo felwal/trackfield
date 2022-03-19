@@ -3,6 +3,10 @@ package me.felwal.trackfield.ui.main.exerciselist;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.prefs.Prefs;
@@ -19,11 +23,6 @@ import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
 import me.felwal.trackfield.utils.AppConsts;
 import me.felwal.trackfield.utils.LayoutUtils;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import me.felwal.android.util.ResourcesKt;
 
 public class ExerciseListRecyclerFragment extends RecyclerFragment {
 
@@ -43,7 +42,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (search.equals("")) {
             emptyTitle.setText(R.string.tv_text_empty_exerciselist_title);
             emptyMessage.setText(R.string.tv_text_empty_exerciselist_message);
-            emptyImage.setImageDrawable(ResourcesKt.withTint(ResourcesKt.getDrawableCompat(a, R.drawable.ic_run),
+            emptyImage.setImageDrawable(ResourcesKt.withTint(ResourcesKt.getDrawableCompat(a, R.drawable.ic_exercise),
                 ResourcesKt.getColorByAttr(a, R.attr.colorSecondary)));
         }
         else {
@@ -69,13 +68,14 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
     @Override
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
-        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.getAscending());
+        ArrayList<Exerlite> exerliteList = reader.getExerlitesBySearch(search, sorter.getMode(), sorter.getAscending(),
+            Prefs.getMainFilter());
 
         // sorter & charts
         if (exerliteList.size() != 0) {
             if (Prefs.isDailyChartShown()) {
                 GraphData weekData = new GraphData(
-                    a, DbReader.get(a).getWeekDailyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).getWeekDailyDistance(Prefs.getMainFilter(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph weekGraph = new Graph(false, Borders.none(), true, false, true);
@@ -242,7 +242,7 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                 ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
 
                 GraphData yearData = new GraphData(
-                    a, DbReader.get(a).getYearMonthlyDistance(Prefs.getExerciseVisibleTypes(), LocalDate.now()),
+                    a, DbReader.get(a).getYearMonthlyDistance(Prefs.getMainFilter(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
                 Graph yearGraph = new Graph(false, Borders.none(), true, false, true);

@@ -65,8 +65,8 @@ public class RouteDetailFragment extends RecyclerFragment {
             originId = bundle.getInt(BUNDLE_ORIGIN_ID, -1);
 
             // filtering depending on origin
-            Prefs.setRouteVisibleTypes(originId == -1
-                ? Prefs.getExerciseVisibleTypes()
+            Prefs.setGroupVisibleTypes(originId == -1
+                ? Prefs.getMainVisibleTypes()
                 : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
         }
     }
@@ -77,7 +77,7 @@ public class RouteDetailFragment extends RecyclerFragment {
     protected void setEmptyPage() {
         emptyTitle.setText(getString(R.string.tv_text_empty_routedetail_title));
         emptyMessage.setText(getString(R.string.tv_text_empty_routedetail_msg));
-        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_run, R.attr.tf_colorRoute));
+        emptyImage.setImageDrawable(ResourcesKt.getDrawableCompatWithTint(a, R.drawable.ic_exercise, R.attr.tf_colorRoute));
     }
 
     @Override
@@ -96,11 +96,11 @@ public class RouteDetailFragment extends RecyclerFragment {
     protected ArrayList<RecyclerItem> getRecyclerItems() {
         ArrayList<RecyclerItem> itemList = new ArrayList<>();
         ArrayList<Exerlite> exerliteList = reader.getExerlitesByRoute(route.getId(), sorter.getMode(),
-            sorter.getAscending(), Prefs.getRouteVisibleTypes());
+            sorter.getAscending(), Prefs.getGroupFilter());
 
         if (exerliteList.size() != 0) {
             GraphData data = new GraphData(
-                a, DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getRouteVisibleTypes()),
+                a, DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getGroupFilter()),
                 GraphData.GRAPH_BEZIER, false, false);
 
             Graph graph = new Graph(true, Borders.horizontal(), false, true, false);

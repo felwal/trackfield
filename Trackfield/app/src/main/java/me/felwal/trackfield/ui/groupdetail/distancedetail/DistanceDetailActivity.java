@@ -29,14 +29,13 @@ import me.felwal.android.widget.control.CheckListOption;
 import me.felwal.android.widget.control.DialogOption;
 
 public class DistanceDetailActivity extends GroupDetailActivity implements AlertDialog.DialogListener,
-    TimeDialog.DialogListener, MultiChoiceDialog.DialogListener {
+    TimeDialog.DialogListener {
 
     // extras names
     private static final String EXTRA_DISTANCE = "distance";
 
     // dialog tags
     private static final String DIALOG_DELETE_DISTANCE = "deleteDistanceDialog";
-    private static final String DIALOG_FILTER = "filterDialog";
     private static final String DIALOG_GOAL_DISTANCE = "goalDistanceDialog";
 
     private int length;
@@ -68,19 +67,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_filter_exercises) {
-            ArrayList<String> types = DbReader.get(this).getTypes(null);
-            String[] items = new String[types.size()];
-            types.toArray(items);
-
-            int[] checkedItems = CollectionsKt.indicesOf(items, Prefs.getDistanceVisibleTypes().toArray());
-
-            CheckDialog.newInstance(
-                new DialogOption(getString(R.string.dialog_title_title_filter), "",
-                    R.string.dialog_btn_filter, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
-                    DIALOG_FILTER, null),
-                new CheckListOption(items, checkedItems, null))
-                .show(getSupportFragmentManager());
-
+            showFilterSheet();
             return true;
         }
         else if (itemId == R.id.action_delete_distance) {
@@ -90,11 +77,13 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
                     R.string.dialog_btn_delete, R.string.fw_dialog_btn_cancel, BaseDialogKt.NO_RES,
                     DIALOG_DELETE_DISTANCE, null))
                 .show(getSupportFragmentManager());
+
             return true;
         }
         else if (itemId == R.id.action_set_distance_goal) {
             float goalPace = DbReader.get(this).getDistanceGoal(length);
             int minutes, seconds;
+
             if (goalPace == Distance.NO_GOAL_PACE) {
                 minutes = BaseDialogKt.NULL_INT;
                 seconds = BaseDialogKt.NULL_INT;
@@ -104,12 +93,14 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
                 minutes = (int) timeParts[1];
                 seconds = (int) timeParts[0];
             }
+
             TimeDialog.newInstance(
                 new DialogOption(getString(R.string.dialog_title_set_goal), "",
                     R.string.dialog_btn_set, R.string.fw_dialog_btn_cancel, R.string.dialog_btn_delete,
                     DIALOG_GOAL_DISTANCE, null),
                 minutes, seconds, "min", "sec")
                 .show(getSupportFragmentManager());
+
             return true;
         }
 
@@ -165,19 +156,6 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
             distance.removeGoalPace();
             DbWriter.get(this).updateDistance(distance);
 
-            recyclerFragment.updateRecycler();
-        }
-    }
-
-    @Override
-    public void onMultiChoiceDialogItemsSelected(@NonNull boolean[] checkedItems, @NonNull String tag,
-        @Nullable String passValue) {
-
-        if (tag.equals(DIALOG_FILTER)) {
-            ArrayList<String> visibleTypes = (ArrayList<String>)
-                CollectionsKt.filter(DbReader.get(this).getTypes(null), checkedItems);
-
-            Prefs.setDistanceVisibleTypes(visibleTypes);
             recyclerFragment.updateRecycler();
         }
     }
