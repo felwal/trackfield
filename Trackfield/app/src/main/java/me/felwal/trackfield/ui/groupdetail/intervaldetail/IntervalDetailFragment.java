@@ -32,7 +32,6 @@ public class IntervalDetailFragment extends GroupDetailFragment {
     );
 
     private String interval;
-    private int originId = Exercise.NO_ID;
 
     //
 
@@ -56,10 +55,10 @@ public class IntervalDetailFragment extends GroupDetailFragment {
 
         if (bundle != null) {
             interval = bundle.getString(BUNDLE_INTERVAL, "");
-            originId = bundle.getInt(BUNDLE_ORIGINID, Exercise.NO_ID);
+            setOriginId(bundle.getInt(BUNDLE_ORIGINID, Exercise.NO_ID));
         }
 
-        updateFilterByOrigin(originId);
+        updateFilterByOrigin();
     }
 
     // extends RecyclerFragment
@@ -81,7 +80,7 @@ public class IntervalDetailFragment extends GroupDetailFragment {
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new IntervalDetailDelegationAdapter(a, this, items, originId);
+        return new IntervalDetailDelegationAdapter(a, this, items, getOriginId());
     }
 
     @Override
@@ -110,18 +109,11 @@ public class IntervalDetailFragment extends GroupDetailFragment {
         updateRecycler();
     }
 
-    // implements DelegateClickListener
+    // implements GroupDetailFragment
 
     @Override
-    public void onDelegateClick(View view, int position) {
-        RecyclerItem item = getItem(position);
-
-        if (item instanceof Exerlite) {
-            int id = ((Exerlite) items.get(position)).getId();
-            if (originId != id) ExerciseDetailActivity.startActivity(a, id, ExerciseDetailActivity.FROM_INTERVAL);
-        }
-
-        super.onDelegateClick(item);
+    public int getFrom() {
+        return ExerciseDetailActivity.FROM_INTERVAL;
     }
 
 }

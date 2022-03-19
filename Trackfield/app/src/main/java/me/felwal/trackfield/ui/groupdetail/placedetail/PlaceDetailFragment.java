@@ -58,7 +58,7 @@ public class PlaceDetailFragment extends GroupDetailFragment {
             place = DbReader.get(a).getPlace(placeId);
         }
 
-        updateFilterByOrigin(null);
+        updateFilterByOrigin();
     }
 
     // extends RecyclerFragment
@@ -106,18 +106,11 @@ public class PlaceDetailFragment extends GroupDetailFragment {
         updateRecycler();
     }
 
-    // implements DelegateClickListener
+    // implements GroupDetailFragment
 
     @Override
-    public void onDelegateClick(View view, int position) {
-        RecyclerItem item = getItem(position);
-
-        if (item instanceof Exerlite) {
-            int id = ((Exerlite) items.get(position)).getId();
-            ExerciseDetailActivity.startActivity(a, id);
-        }
-
-        super.onDelegateClick(item);
+    public int getFrom() {
+        return ExerciseDetailActivity.FROM_PLACE;
     }
 
 }

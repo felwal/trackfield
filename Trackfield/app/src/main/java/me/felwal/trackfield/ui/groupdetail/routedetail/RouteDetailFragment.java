@@ -40,7 +40,6 @@ public class RouteDetailFragment extends GroupDetailFragment {
     );
 
     private Route route;
-    private int originId = Exercise.NO_ID;
 
     //
 
@@ -64,10 +63,10 @@ public class RouteDetailFragment extends GroupDetailFragment {
 
         if (bundle != null) {
             route = DbReader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, Route.ID_NON_EXISTANT));
-            originId = bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID);
+            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID));
         }
 
-        updateFilterByOrigin(originId);
+        updateFilterByOrigin();
     }
 
     // extends RecyclerFragment
@@ -88,7 +87,7 @@ public class RouteDetailFragment extends GroupDetailFragment {
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new RouteDetailDelegationAdapter(a, this, items, originId);
+        return new RouteDetailDelegationAdapter(a, this, items, getOriginId());
     }
 
     @Override
@@ -132,18 +131,11 @@ public class RouteDetailFragment extends GroupDetailFragment {
         updateRecycler();
     }
 
-    // implements DelegateClickListener
+    // implements GroupDetailFragment
 
     @Override
-    public void onDelegateClick(View view, int position) {
-        RecyclerItem item = getItem(position);
-
-        if (item instanceof Exerlite) {
-            int id = ((Exerlite) items.get(position)).getId();
-            if (originId != id) ExerciseDetailActivity.startActivity(a, id, ExerciseDetailActivity.FROM_ROUTE);
-        }
-
-        super.onDelegateClick(item);
+    public int getFrom() {
+        return ExerciseDetailActivity.FROM_ROUTE;
     }
 
 }

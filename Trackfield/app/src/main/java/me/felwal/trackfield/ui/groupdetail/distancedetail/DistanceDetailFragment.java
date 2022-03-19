@@ -40,7 +40,6 @@ public class DistanceDetailFragment extends GroupDetailFragment {
         SorterItem.sortByLng()
     );
 
-    private int originId = Exercise.NO_ID;
     private int distance;
 
     //
@@ -65,10 +64,10 @@ public class DistanceDetailFragment extends GroupDetailFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             distance = bundle.getInt(BUNDLE_DISTANCE, -1);
-            originId = bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID);
+            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID));
         }
 
-        updateFilterByOrigin(originId);
+        updateFilterByOrigin();
     }
 
     // extends RecyclerFragment
@@ -89,7 +88,7 @@ public class DistanceDetailFragment extends GroupDetailFragment {
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new DistanceDetailDelegationAdapter(a, this, items, originId, distance);
+        return new DistanceDetailDelegationAdapter(a, this, items, getOriginId(), distance);
     }
 
     @Override
@@ -133,18 +132,11 @@ public class DistanceDetailFragment extends GroupDetailFragment {
         updateRecycler();
     }
 
-    // implements DelegateClickListener
+    // implements GroupDetailFragment
 
     @Override
-    public void onDelegateClick(View view, int position) {
-        RecyclerItem item = getItem(position);
-
-        if (item instanceof Exerlite) {
-            int id = ((Exerlite) items.get(position)).getId();
-            if (originId != id) ExerciseDetailActivity.startActivity(a, id, ExerciseDetailActivity.FROM_DISTANCE);
-        }
-
-        super.onDelegateClick(item);
+    public int getFrom() {
+        return ExerciseDetailActivity.FROM_DISTANCE;
     }
 
 }

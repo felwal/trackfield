@@ -53,6 +53,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     public static final int FROM_DISTANCE = 1;
     public static final int FROM_ROUTE = 2;
     public static final int FROM_INTERVAL = 3;
+    public static final int FROM_PLACE = 4;
 
     // extras names
     private static final String EXTRA_ID = "id";
@@ -71,7 +72,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     // arguments
     private int exerciseId;
     private Exercise exercise;
-    private int fromRecycler = FROM_NONE;
+    private int from = FROM_NONE;
 
     //
 
@@ -100,7 +101,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         // extras
         Intent intent = getIntent();
         exerciseId = intent.getIntExtra(EXTRA_ID, -1);
-        fromRecycler = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
+        from = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
         // get exercise
         exercise = DbReader.get(this).getExercise(exerciseId);
@@ -268,23 +269,26 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
         // set listeners
 
-        // group shortcuts
-        if (fromRecycler != FROM_ROUTE) {
-            routeTv.setOnClickListener(v ->
-                RouteDetailActivity.startActivity(ExerciseDetailActivity.this, exercise.getRouteId(), exercise.getId()));
-        }
-        if (fromRecycler != FROM_INTERVAL) {
-            intervalTv.setOnClickListener(v ->
-                IntervalDetailActivity.startActivity(ExerciseDetailActivity.this, exercise.getInterval(), exercise.getId()));
-        }
-        if (fromRecycler != FROM_DISTANCE) {
-            distanceTv.setOnClickListener(v -> {
+        // shortcuts to groups
+        routeTv.setOnClickListener(v -> {
+            if (from == FROM_ROUTE) finish();
+            else RouteDetailActivity.startActivity(ExerciseDetailActivity.this, exercise.getRouteId(),
+                exercise.getId());
+        });
+        intervalTv.setOnClickListener(v -> {
+            if (from == FROM_INTERVAL) finish();
+            else IntervalDetailActivity.startActivity(ExerciseDetailActivity.this, exercise.getInterval(),
+                exercise.getId());
+        });
+        distanceTv.setOnClickListener(v -> {
+            if (from == FROM_DISTANCE) finish();
+            else {
                 // TODO: always rounds up?
                 int longestDistance = DbReader.get(ExerciseDetailActivity.this).getLongestDistanceWithinLimits(
                     exercise.getEffectiveDistance(this));
                 DistanceDetailActivity.startActivity(ExerciseDetailActivity.this, longestDistance, exercise.getId());
-            });
-        }
+            }
+        });
 
         // toggle units
         paceTv.setOnClickListener(v -> {
