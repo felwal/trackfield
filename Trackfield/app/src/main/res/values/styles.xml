@@ -27,8 +27,9 @@
         <item name="android:editTextColor">?tf_colorOnToolbar</item>
         <item name="android:textColorHint">?tf_colorTextSecondaryOnToolbar</item>
 
-        <!-- fix the text indicator color; we dont want green on green -->
-        <item name="colorSecondary">?tf_colorTextIndicatorOnToobar</item>
+        <!-- fix the text cursor color; we dont want green on green -->
+        <!-- TODO: this also changes dropdown checkbox color -->
+        <!--<item name="colorSecondary">?tf_colorTextIndicatorOnToobar</item>-->
 
         <item name="searchViewStyle">@style/Widget.Trackfield.SearchView.ActionBar</item>
     </style>

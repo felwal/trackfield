@@ -69,7 +69,6 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
         // hide
         MenuItem hideItem = menu.findItem(R.id.action_hide_route);
         hideItem.setChecked(route.isHidden());
-        //hideItem.setIcon(route.isHidden() ? R.drawable.ic_show_filled :  R.drawable.ic_show);
 
         return super.onPrepareOptionsMenu(menu);
     }
