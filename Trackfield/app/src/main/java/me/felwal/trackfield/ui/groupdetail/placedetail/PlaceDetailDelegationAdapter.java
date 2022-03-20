@@ -12,9 +12,9 @@ import java.util.List;
 
 class PlaceDetailDelegationAdapter extends BaseListAdapter {
 
-    PlaceDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items) {
+    PlaceDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
         delegatesManager
-            .addDelegate(new PlaceDetailExerciseAdapterDelegate(a, listener, this))
+            .addDelegate(new PlaceDetailExerciseAdapterDelegate(a, listener, this, originId))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))
             .addDelegate(new HeaderSmallAdapterDelegate(a, listener));
 

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Route;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
@@ -51,7 +52,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
     public static void startActivity(Context c, int routeId, int originId) {
         Intent intent = new Intent(c, RouteDetailActivity.class);
         intent.putExtra(EXTRA_ROUTE_ID, routeId);
-        if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
+        if (originId != Exercise.ID_NONE) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
@@ -132,8 +133,10 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
     @Override
     protected void getExtras(Intent intent) {
         if (!intent.hasExtra(EXTRA_ROUTE_ID)) return;
-        route = DbReader.get(this).getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, -1));
-        originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
+
+        route = DbReader.get(this).getRoute(intent.getIntExtra(EXTRA_ROUTE_ID, Route.ID_NON_EXISTANT));
+        originId = intent.hasExtra(EXTRA_ORIGIN_ID)
+            ? intent.getIntExtra(EXTRA_ORIGIN_ID, Exercise.ID_NONE) : Exercise.ID_NONE;
 
         setToolbar(route.getName());
         selectFragment(RouteDetailFragment.newInstance(route.getId(), originId));

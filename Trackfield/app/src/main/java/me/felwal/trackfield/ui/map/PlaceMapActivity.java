@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -84,7 +85,7 @@ public class PlaceMapActivity extends MapActivity {
 
     @Override
     protected HashMap<Integer, String> getRestOfPolylines(int exceptId) {
-        return DbReader.get(this).getPolylines(-1);
+        return DbReader.get(this).getPolylines(Exercise.ID_NONE);
     }
 
 }

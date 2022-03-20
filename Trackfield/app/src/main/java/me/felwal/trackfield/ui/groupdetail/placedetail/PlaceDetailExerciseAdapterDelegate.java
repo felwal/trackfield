@@ -26,12 +26,16 @@ class PlaceDetailExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, PlaceDetailExerciseAdapterDelegate.ExerciseMediumViewHolder> {
 
     private final BaseListAdapter adapter;
+    private final int originId;
 
     //
 
-    PlaceDetailExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter) {
+    PlaceDetailExerciseAdapterDelegate(Activity a, DelegateClickListener listener, BaseListAdapter adapter,
+        int originId) {
+
         super(a, listener);
         this.adapter = adapter;
+        this.originId = originId;
     }
 
     // extends AbsListItemAdapterDelegate
@@ -56,7 +60,7 @@ class PlaceDetailExerciseAdapterDelegate extends
         vh.primaryTv.setText(date);
         vh.secondaryTv.setText(item.printValues());
         vh.captionTv.setText(item.getRoute());
-        vh.originMarker.setVisibility(View.GONE);
+        vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
         vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
         vh.recordMarker.getBackground().setColorFilter(item.getMedalColor(c), PorterDuff.Mode.MULTIPLY);
     }

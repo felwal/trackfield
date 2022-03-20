@@ -5,6 +5,7 @@ import android.view.View;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
@@ -24,6 +25,7 @@ public class PlaceDetailFragment extends GroupDetailFragment {
 
     // bundle keys
     private final static String BUNDLE_PLACE_ID = "placeId";
+    private final static String BUNDLE_ORIGIN_ID = "originId";
 
     private final SorterItem sorter = new SorterItem(
         SorterItem.sortByDate(),
@@ -36,11 +38,12 @@ public class PlaceDetailFragment extends GroupDetailFragment {
 
     //
 
-    public static PlaceDetailFragment newInstance(int placeId) {
+    public static PlaceDetailFragment newInstance(int placeId, int originId) {
         PlaceDetailFragment instance = new PlaceDetailFragment();
         Bundle bundle = new Bundle();
 
         bundle.putInt(BUNDLE_PLACE_ID, placeId);
+        bundle.putInt(BUNDLE_ORIGIN_ID, originId);
 
         instance.setArguments(bundle);
         return instance;
@@ -54,8 +57,10 @@ public class PlaceDetailFragment extends GroupDetailFragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int placeId = bundle.getInt(BUNDLE_PLACE_ID, -1);
+            int placeId = bundle.getInt(BUNDLE_PLACE_ID, Place.ID_NON_EXISTANT);
             place = DbReader.get(a).getPlace(placeId);
+            int originId = bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.ID_NONE);
+            setOriginId(originId);
         }
 
         updateFilterByOrigin();
@@ -79,7 +84,7 @@ public class PlaceDetailFragment extends GroupDetailFragment {
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new PlaceDetailDelegationAdapter(a, this, items);
+        return new PlaceDetailDelegationAdapter(a, this, items, getOriginId());
     }
 
     @Override

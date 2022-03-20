@@ -3,6 +3,8 @@ package me.felwal.trackfield.data.db.model;
 import android.content.Context;
 import android.location.Location;
 
+import androidx.annotation.Nullable;
+
 import me.felwal.trackfield.utils.LayoutUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -128,6 +130,14 @@ public class Place implements JSONObjectable {
     }
 
     // extends
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof Place)) return false;
+
+        Place other = (Place) obj;
+        return id == other.id;
+    }
 
     @Override
     public JSONObject toJSONObject(Context c) {

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbWriter;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
 
@@ -39,7 +40,7 @@ public class IntervalDetailActivity extends GroupDetailActivity implements Input
     public static void startActivity(Context c, String interval, int originId) {
         Intent intent = new Intent(c, IntervalDetailActivity.class);
         intent.putExtra(EXTRA_INTERVAL, interval);
-        if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
+        if (originId != Exercise.ID_NONE) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
@@ -80,8 +81,10 @@ public class IntervalDetailActivity extends GroupDetailActivity implements Input
     @Override
     protected void getExtras(Intent intent) {
         if (!intent.hasExtra(EXTRA_INTERVAL)) return;
+
         interval = intent.getStringExtra(EXTRA_INTERVAL);
-        originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
+        originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, Exercise.ID_NONE)
+            : Exercise.ID_NONE;
 
         setToolbar(interval);
         selectFragment(IntervalDetailFragment.newInstance(interval, originId));

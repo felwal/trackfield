@@ -20,7 +20,7 @@ public class IntervalDetailFragment extends GroupDetailFragment {
 
     // bundle keys
     private final static String BUNDLE_INTERVAL = "interval";
-    private final static String BUNDLE_ORIGINID = "originId";
+    private final static String BUNDLE_ORIGIN_ID = "originId";
 
     private final SorterItem sorter = new SorterItem(
         SorterItem.sortByDate(),
@@ -38,7 +38,7 @@ public class IntervalDetailFragment extends GroupDetailFragment {
         Bundle bundle = new Bundle();
 
         bundle.putString(BUNDLE_INTERVAL, interval);
-        bundle.putInt(BUNDLE_ORIGINID, originId);
+        bundle.putInt(BUNDLE_ORIGIN_ID, originId);
 
         instance.setArguments(bundle);
         return instance;
@@ -53,7 +53,7 @@ public class IntervalDetailFragment extends GroupDetailFragment {
 
         if (bundle != null) {
             interval = bundle.getString(BUNDLE_INTERVAL, "");
-            setOriginId(bundle.getInt(BUNDLE_ORIGINID, Exercise.ID_NONE));
+            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.ID_NONE));
         }
 
         updateFilterByOrigin();

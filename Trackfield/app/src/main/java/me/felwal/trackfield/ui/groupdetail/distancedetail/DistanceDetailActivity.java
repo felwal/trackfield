@@ -11,6 +11,7 @@ import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import me.felwal.trackfield.utils.MathUtils;
@@ -47,7 +48,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
 
         Intent intent = new Intent(c, DistanceDetailActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
-        if (originId != -1) intent.putExtra(EXTRA_ORIGIN_ID, originId);
+        if (originId != Exercise.ID_NONE) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
@@ -103,8 +104,10 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     @Override
     protected void getExtras(Intent intent) {
         if (!intent.hasExtra(EXTRA_DISTANCE)) return;
+
         length = intent.getIntExtra(EXTRA_DISTANCE, 0);
-        originId = intent.hasExtra(EXTRA_ORIGIN_ID) ? intent.getIntExtra(EXTRA_ORIGIN_ID, -1) : -1;
+        originId = intent.hasExtra(EXTRA_ORIGIN_ID)
+            ? intent.getIntExtra(EXTRA_ORIGIN_ID, Exercise.ID_NONE) : Exercise.ID_NONE;
         distance = DbReader.get(this).getDistance(length);
 
         setToolbar(distance.printTitle());

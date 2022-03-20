@@ -15,14 +15,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import me.felwal.android.util.ViewKt;
+import me.felwal.android.util.WidgetKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Exercise;
+import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.network.StravaApi;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
+import me.felwal.trackfield.ui.groupdetail.placedetail.PlaceDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.routedetail.RouteDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.map.ExerciseMapActivity;
@@ -100,7 +104,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
         // extras
         Intent intent = getIntent();
-        exerciseId = intent.getIntExtra(EXTRA_ID, -1);
+        exerciseId = intent.getIntExtra(EXTRA_ID, Exercise.ID_NONE);
         from = intent.getIntExtra(EXTRA_FROM, FROM_NONE);
 
         // get exercise
@@ -237,6 +241,8 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         TextView paceTv = findViewById(R.id.tv_exercisedetail_velocity);
         TextView energyTv = findViewById(R.id.tv_exercisedetail_energy);
         TextView powerTv = findViewById(R.id.tv_exercisedetail_power);
+        TextView startTv = findViewById(R.id.tv_exercisedetail_start);
+        TextView endTv = findViewById(R.id.tv_exercisedetail_end);
         TextView elevationTv = findViewById(R.id.tv_exercisedetail_elevation);
         TextView noteTv = findViewById(R.id.tv_exercisedetail_note);
         TextView typeTv = findViewById(R.id.tv_exercisedetail_type);
@@ -263,6 +269,37 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.iv_exercisedetail_energy));
         setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.iv_exercisedetail_power));
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.iv_exercisedetail_elevation));
+
+        // set start and end tvs's and listeners
+        if (exercise.hasTrail()) {
+            Place start = exercise.getStartPlace(this);
+            Place end = exercise.getEndPlace(this);
+
+            startTv.setText(start.getName());
+
+            // set end only if not the same as start
+            if (!start.equals(end)) endTv.setText(end.getName());
+            else {
+                endTv.setVisibility(View.GONE);
+                findViewById(R.id.iv_exercisedetail_end).setVisibility(View.GONE);
+            }
+
+            // shortcuts to groups
+            startTv.setOnClickListener(v -> {
+                if (from == FROM_PLACE) finish();
+                else PlaceDetailActivity.startActivity(ExerciseDetailActivity.this, start.getId(), exercise.getId());
+            });
+            endTv.setOnClickListener(v -> {
+                if (from == FROM_PLACE) finish();
+                else PlaceDetailActivity.startActivity(ExerciseDetailActivity.this, end.getId(), exercise.getId());
+            });
+        }
+        else {
+            startTv.setVisibility(View.GONE);
+            endTv.setVisibility(View.GONE);
+            findViewById(R.id.iv_exercisedetail_start).setVisibility(View.GONE);
+            findViewById(R.id.iv_exercisedetail_end).setVisibility(View.GONE);
+        }
 
         // set listeners
 

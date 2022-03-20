@@ -358,6 +358,14 @@ public class Exercise implements JSONObjectable {
         return (int) (getEnergy(AppConsts.UnitEnergy.JOULES, c) / time);
     }
 
+    public Place getStartPlace(Context c) {
+        return DbReader.get(c).getPlace(trail.getStart());
+    }
+
+    public Place getEndPlace(Context c) {
+        return DbReader.get(c).getPlace(trail.getEnd());
+    }
+
     public boolean hasTrail() {
         return trail != null && trail.getPolyline() != null && trail.getLatLngs().size() != 0;
     }

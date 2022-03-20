@@ -13,7 +13,9 @@ import java.util.List;
 
 class IntervalDetailDelegationAdapter extends BaseListAdapter {
 
-    public IntervalDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items, int originId) {
+    public IntervalDetailDelegationAdapter(Activity a, DelegateClickListener listener, List<RecyclerItem> items,
+        int originId) {
+
         delegatesManager
             .addDelegate(new IntervalDetailAdapterDelegate(a, listener, this, originId))
             .addDelegate(new SorterAdapterDelegate(a, listener, this))

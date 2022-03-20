@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
+import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
 import me.felwal.trackfield.data.prefs.Prefs;
@@ -54,6 +55,15 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
 
         Intent intent = new Intent(c, PlaceDetailActivity.class);
         intent.putExtra(EXTRA_PLACE_ID, placeId);
+        c.startActivity(intent);
+    }
+
+    public static void startActivity(Context c, int placeId, int originId) {
+        if (placeId == Place.ID_NON_EXISTANT) return;
+
+        Intent intent = new Intent(c, PlaceDetailActivity.class);
+        intent.putExtra(EXTRA_PLACE_ID, placeId);
+        if (originId != Exercise.ID_NONE) intent.putExtra(EXTRA_ORIGIN_ID, originId);
         c.startActivity(intent);
     }
 
@@ -130,10 +140,13 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
     protected void getExtras(Intent intent) {
         if (!intent.hasExtra(EXTRA_PLACE_ID)) return;
         int placeId = intent.getIntExtra(EXTRA_PLACE_ID, 0);
+
         place = DbReader.get(this).getPlace(placeId);
+        originId = intent.hasExtra(EXTRA_ORIGIN_ID)
+            ? intent.getIntExtra(EXTRA_ORIGIN_ID, Exercise.ID_NONE) : Exercise.ID_NONE;
 
         setToolbar(place.getName());
-        selectFragment(PlaceDetailFragment.newInstance(placeId));
+        selectFragment(PlaceDetailFragment.newInstance(placeId, originId));
     }
 
     @Override

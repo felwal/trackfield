@@ -224,13 +224,57 @@
                     style="@style/Widget.Trackfield.TextView" />
 
                 <ImageView
-                    android:id="@+id/iv_exercisedetail_elevation"
+                    android:id="@+id/iv_exercisedetail_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_power"
+                    app:srcCompat="@drawable/layer_ic_place"
+                    app:tint="?tf_colorPlace" />
+
+                <TextView
+                    android:id="@+id/tv_exercisedetail_start"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_exercisedetail_start"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exercisedetail_power"
+                    app:layout_constraintTop_toTopOf="@+id/iv_exercisedetail_start"
+                    tools:text="Start"
+                    style="@style/Widget.Trackfield.TextView" />
+
+                <ImageView
+                    android:id="@+id/iv_exercisedetail_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_start"
+                    app:srcCompat="@drawable/layer_ic_place"
+                    app:tint="?tf_colorPlace" />
+
+                <TextView
+                    android:id="@+id/tv_exercisedetail_end"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Subtitle1"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_exercisedetail_end"
+                    app:layout_constraintStart_toEndOf="@+id/iv_exercisedetail_power"
+                    app:layout_constraintTop_toTopOf="@+id/iv_exercisedetail_end"
+                    tools:text="End"
+                    style="@style/Widget.Trackfield.TextView" />
+
+                <ImageView
+                    android:id="@+id/iv_exercisedetail_elevation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_exercisedetail_end"
                     app:srcCompat="@drawable/layer_ic_elevation"
                     app:tint="?tf_colorElevation" />
 

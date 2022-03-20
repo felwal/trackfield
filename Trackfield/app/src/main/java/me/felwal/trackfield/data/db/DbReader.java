@@ -592,6 +592,25 @@ public class DbReader extends DbHelper {
         return places.size() > 0 ? places.get(0) : new Place();
     }
 
+    public Place getPlace(LatLng latlng) {
+        // TODO: check for radius instead, and return a list with all places which contains this.
+
+        double lat = latlng.latitude;
+        double lng = latlng.longitude;
+
+        String from = PlaceEntry.TABLE_NAME;
+        String where = null;
+        String orderBy = sqr(lat + " - " + PlaceEntry.COLUMN_LAT) +
+            " + " + sqr(lng + " - " + PlaceEntry.COLUMN_LNG) + " ASC";
+        String limit = "1";
+
+        Cursor cursor = db.query(from, null, where, null, null, null, orderBy, limit);
+        ArrayList<Place> places = unpackPlaceCursor(cursor);
+        cursor.close();
+
+        return places.size() > 0 ? places.get(0) : new Place();
+    }
+
     public int getPlaceId(String name) {
         String[] select = { PlaceEntry._ID };
         String from = PlaceEntry.TABLE_NAME;
