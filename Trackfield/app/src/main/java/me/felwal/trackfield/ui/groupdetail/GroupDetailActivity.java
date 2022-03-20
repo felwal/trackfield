@@ -54,16 +54,22 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        UtilsKt.prepareOptionalIcons(menu, this);
+
+        // set "filter" check state
+        MenuItem filterItem = menu.findItem(R.id.action_filter_exercises);
+        UtilsKt.fixIconCheckState(filterItem);
+        filterItem.setChecked(Prefs.getGroupFilter().isActive());
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(getToolbarMenuRes(), menu);
         UtilsKt.createOptionalIcons(menu);
         return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        UtilsKt.prepareOptionalIcons(menu, this);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -95,13 +101,6 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
         getSupportFragmentManager().beginTransaction().replace(frame.getId(), recyclerFragment).commit();
     }
 
-    public static void updateFilter(Activity a, int originId) {
-        // filtering depending on origin
-        Prefs.setGroupVisibleTypes(originId == -1
-            ? Prefs.getMainVisibleTypes()
-            : TypeUtils.createList(DbReader.get(a).getExercise(originId).getType()));
-    }
-
     @NonNull @Override
     public ExerciseFilter getFilter() {
         return Prefs.getGroupFilter();
@@ -128,7 +127,10 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
 
     @Override
     public void onExerciseFilter() {
+        // the recyclers' content may have been updated
         recyclerFragment.updateRecycler();
+        // the filter MenuItem's state has been updated
+        invalidateOptionsMenu();
     }
 
     @Override

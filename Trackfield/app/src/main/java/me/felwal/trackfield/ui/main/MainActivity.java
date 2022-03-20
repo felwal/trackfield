@@ -1,6 +1,7 @@
 package me.felwal.trackfield.ui.main;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 
@@ -39,6 +40,7 @@ import me.felwal.trackfield.ui.setting.SettingsActivity;
 import me.felwal.trackfield.utils.FileUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.ScreenUtils;
+import me.felwal.trackfield.utils.UtilsKt;
 
 public class MainActivity extends ExerciseFilterActivity implements InputDialog.DialogListener,
     SortSheet.SheetListener {
@@ -101,6 +103,16 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
     public void onBackPressed() {
         if (fam.isMenuOpen()) fam.closeMenu();
         else super.onBackPressed();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // set "filter" check state
+        MenuItem filterItem = menu.findItem(R.id.action_filter_exercises);
+        UtilsKt.fixIconCheckState(filterItem);
+        filterItem.setChecked(Prefs.getMainFilter().isActive());
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -271,7 +283,10 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
 
     @Override
     public void onExerciseFilter() {
+        // the recyclers' content may have been updated
         mainFragment.updateFragment();
+        // the filter MenuItem's state has been updated
+        invalidateOptionsMenu();
     }
 
     @Override

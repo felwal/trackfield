@@ -12,6 +12,7 @@ class ExerciseFilter(
     val visibleLabels: ArrayList<String>
 ) {
     val count get() = visibleTypes.size + visibleLabels.size
+    val isActive get() = count >= 1
 }
 
 abstract class ExerciseFilterActivity : MultidimFilterActivity() {

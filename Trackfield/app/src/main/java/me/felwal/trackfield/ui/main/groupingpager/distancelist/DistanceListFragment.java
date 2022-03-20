@@ -1,21 +1,18 @@
 package me.felwal.trackfield.ui.main.groupingpager.distancelist;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
-import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
+import me.felwal.trackfield.ui.main.groupingpager.GroupListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import me.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
 import me.felwal.trackfield.utils.AppConsts;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 
 import me.felwal.android.util.ResourcesKt;
 
-public class DistanceListFragment extends RecyclerFragment {
+public class DistanceListFragment extends GroupListFragment {
 
     private final SorterItem sorter = new SorterItem(
         SorterItem.sortByDistance()
@@ -32,12 +29,6 @@ public class DistanceListFragment extends RecyclerFragment {
     );
 
     // extends Fragment
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     /**
      * Inflates toolbar menu in place of {@link GroupingPagerFragment#onCreateOptionsMenu(Menu,
