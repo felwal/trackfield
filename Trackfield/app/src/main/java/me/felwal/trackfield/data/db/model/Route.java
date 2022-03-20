@@ -14,13 +14,13 @@ public class Route implements JSONObjectable {
     private static final String JSON_GOAL_PACE = "goal_pace";
     private static final String JSON_HIDDEN = "hidden";
 
-    public static final String NO_NAME = "[Route not found]";
-    public static final int NO_GOAL_PACE = -1;
+    public static final String NAME_NONE = "[Route not found]";
+    public static final int GOAL_PACE_NONE = -1;
     public static final int ID_NON_EXISTANT = -1;
 
     private final int id;
     private String name;
-    private float goalPace = NO_GOAL_PACE;
+    private float goalPace = GOAL_PACE_NONE;
     private boolean hidden = false;
 
     //
@@ -44,7 +44,7 @@ public class Route implements JSONObjectable {
 
     public Route() {
         id = ID_NON_EXISTANT;
-        name = NO_NAME;
+        name = NAME_NONE;
     }
 
     public Route(JSONObject obj) throws JSONException {
@@ -65,7 +65,7 @@ public class Route implements JSONObjectable {
     }
 
     public void removeGoalPace() {
-        this.goalPace = NO_GOAL_PACE;
+        this.goalPace = GOAL_PACE_NONE;
     }
 
     public void setHidden(boolean hidden) {
@@ -91,7 +91,7 @@ public class Route implements JSONObjectable {
     }
 
     public boolean hasGoalPace() {
-        return goalPace != NO_GOAL_PACE;
+        return goalPace != GOAL_PACE_NONE;
     }
 
     public boolean isHidden() {

@@ -20,7 +20,7 @@ public class Place implements JSONObjectable {
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_HIDDEN = "hidden";
 
-    public static final String NO_NAME = "Unnamed place";
+    public static final String NAME_NONE = "Unnamed place";
     public static final int ID_NON_EXISTANT = -1;
 
     private final int id;
@@ -45,13 +45,13 @@ public class Place implements JSONObjectable {
 
     public Place(LatLng latLng) {
         id = ID_NON_EXISTANT;
-        name = NO_NAME;
+        name = NAME_NONE;
         location = latLng;
     }
 
     public Place() {
         id = ID_NON_EXISTANT;
-        name = NO_NAME;
+        name = NAME_NONE;
         location = new LatLng(0, 0);
     }
 

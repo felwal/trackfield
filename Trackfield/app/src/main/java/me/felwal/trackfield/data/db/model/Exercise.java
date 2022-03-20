@@ -25,8 +25,8 @@ import java.time.LocalDateTime;
 public class Exercise implements JSONObjectable {
 
     public static final int DISTANCE_DRIVEN = -1;
-    public static final int NO_ID = -1;
-    public static final int UNRELEVANT_ID = -2;
+    public static final int ID_NONE = -1;
+    public static final int ID_UNRELEVANT = -2;
 
     // json keys
     private static final String JSON_ID = "_id";
@@ -78,7 +78,7 @@ public class Exercise implements JSONObjectable {
 
         this.id = id;
         this.stravaId = stravaId;
-        this.garminId = garminId == 0 ? NO_ID : garminId;
+        this.garminId = garminId == 0 ? ID_NONE : garminId;
         this.type = type;
         this.label = label;
         this.dateTime = dateTime;
@@ -289,11 +289,11 @@ public class Exercise implements JSONObjectable {
     // get driven
 
     public boolean hasStravaId() {
-        return stravaId != NO_ID && stravaId != UNRELEVANT_ID;
+        return stravaId != ID_NONE && stravaId != ID_UNRELEVANT;
     }
 
     public boolean hasGarminId() {
-        return garminId != NO_ID && garminId != UNRELEVANT_ID;
+        return garminId != ID_NONE && garminId != ID_UNRELEVANT;
     }
 
     public boolean isType(String type) {

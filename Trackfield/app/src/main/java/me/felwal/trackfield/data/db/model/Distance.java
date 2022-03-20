@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 public class Distance implements JSONObjectable {
 
-    public static final int NO_DISTANCE = -1;
-    public static final int NO_GOAL_PACE = -1;
+    public static final int DISTANCE_NONE = -1;
+    public static final int GOAL_PACE_NONE = -1;
 
     // json keys
     private static final String JSON_ID = "_id";
@@ -20,7 +20,7 @@ public class Distance implements JSONObjectable {
 
     private final int id;
     private final int distance;
-    private float goalPace = NO_GOAL_PACE;
+    private float goalPace = GOAL_PACE_NONE;
 
     //
 
@@ -44,7 +44,7 @@ public class Distance implements JSONObjectable {
     // set
 
     public void removeGoalPace() {
-        this.goalPace = NO_GOAL_PACE;
+        this.goalPace = GOAL_PACE_NONE;
     }
 
     public int getId() {
@@ -66,7 +66,7 @@ public class Distance implements JSONObjectable {
     }
 
     public boolean hasGoalPace() {
-        return goalPace != NO_GOAL_PACE;
+        return goalPace != GOAL_PACE_NONE;
     }
 
     // print

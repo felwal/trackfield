@@ -10,7 +10,7 @@ import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity
 
 abstract class GroupDetailFragment : RecyclerFragment() {
 
-    protected var originId = Exercise.NO_ID
+    protected var originId = Exercise.ID_NONE
 
     abstract val from: Int
 
@@ -19,7 +19,7 @@ abstract class GroupDetailFragment : RecyclerFragment() {
     protected fun updateFilterByOrigin() {
         // propagate filtering from main and depending on origin
         Prefs.setGroupVisibleTypes(
-            if (originId == Exercise.NO_ID) Prefs.getMainVisibleTypes()
+            if (originId == Exercise.ID_NONE) Prefs.getMainVisibleTypes()
             else arrayListOf(DbReader.get(a).getExercise(originId)!!.type)
         )
         Prefs.setGroupVisibleLabels(Prefs.getMainVisibleLabels())

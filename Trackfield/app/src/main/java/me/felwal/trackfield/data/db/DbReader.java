@@ -459,7 +459,7 @@ public class DbReader extends DbHelper {
      * Gets the routeName by corresponding routeId.
      *
      * @param routeId Id of route
-     * @return The routeName of the existing route, or {@link Route#NO_NAME} if not existing
+     * @return The routeName of the existing route, or {@link Route#NAME_NONE} if not existing
      */
     @NonNull
     public String getRouteName(int routeId) {
@@ -469,7 +469,7 @@ public class DbReader extends DbHelper {
         String[] whereArgs = { Integer.toString(routeId) };
 
         Cursor cursor = db.query(from, select, where, whereArgs, null, null, null);
-        String name = Route.NO_NAME;
+        String name = Route.NAME_NONE;
         
         while (cursor.moveToNext()) {
             name = cursor.getString(cursor.getColumnIndexOrThrow(RouteEntry.COLUMN_NAME));
@@ -555,7 +555,7 @@ public class DbReader extends DbHelper {
         String where = DistanceEntry.COLUMN_DISTANCE + " = " + distance;
 
         Cursor cursor = db.query(from, select, where, null, null, null, null);
-        float goalPace = Distance.NO_GOAL_PACE;
+        float goalPace = Distance.GOAL_PACE_NONE;
         
         while (cursor.moveToNext()) {
             goalPace = cursor.getFloat(cursor.getColumnIndexOrThrow(DistanceEntry.COLUMN_GOAL_PACE));
@@ -1019,7 +1019,7 @@ public class DbReader extends DbHelper {
         String limit = "1";
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy, limit);
-        int longestDistance = Distance.NO_DISTANCE;
+        int longestDistance = Distance.DISTANCE_NONE;
 
         if (cursor.moveToNext()) {
             longestDistance = cursor.getInt(cursor.getColumnIndex(DistanceEntry.COLUMN_DISTANCE));
@@ -1049,7 +1049,7 @@ public class DbReader extends DbHelper {
         String[] select = { ExerciseEntry.COLUMN_STRAVA_ID };
         String from = ExerciseEntry.TABLE_NAME;
         String where = ExerciseEntry.COLUMN_STRAVA_ID + " != ''" +
-            " AND " + ExerciseEntry.COLUMN_STRAVA_ID + " != " + Exercise.NO_ID;
+            " AND " + ExerciseEntry.COLUMN_STRAVA_ID + " != " + Exercise.ID_NONE;
 
         Cursor cursor = db.query(from, select, where, null, null, null, null);
         ArrayList<Long> externalIds = new ArrayList<>();

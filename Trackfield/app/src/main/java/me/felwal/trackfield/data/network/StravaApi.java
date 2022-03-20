@@ -333,13 +333,13 @@ public class StravaApi {
 
             // external id
             String externalId;
-            long garminId = Exercise.NO_ID;
+            long garminId = Exercise.ID_NONE;
             if (obj.has(JSON_EXTERNAL_ID) && !(externalId = obj.getString(JSON_EXTERNAL_ID)).equals("")) {
                 if (externalId.length() > 12 && externalId.contains("garmin_push_")) {
                     garminId = Long.parseLong(externalId.substring(12));
                 }
                 else {
-                    garminId = Exercise.UNRELEVANT_ID;
+                    garminId = Exercise.ID_UNRELEVANT;
                 }
             }
 
@@ -375,7 +375,7 @@ public class StravaApi {
             Trail trail = polyline == null || polyline.equals("null") || polyline.equals("") ? null :
                 new Trail(polyline, start, end);
 
-            return new Exercise(Exercise.NO_ID, stravaId, garminId, type, label, dateTime, routeId, name, "", "",
+            return new Exercise(Exercise.ID_NONE, stravaId, garminId, type, label, dateTime, routeId, name, "", "",
                 description, device, method, distance, time, trail, false);
         }
         catch (JSONException e) {

@@ -13,7 +13,6 @@ import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Route;
-import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.map.RouteMapActivity;
@@ -22,15 +21,9 @@ import me.felwal.trackfield.utils.MathUtils;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
 import me.felwal.android.fragment.dialog.AlertDialog;
 import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.CheckDialog;
 import me.felwal.android.fragment.dialog.InputDialog;
-import me.felwal.android.fragment.dialog.MultiChoiceDialog;
-import me.felwal.android.util.CollectionsKt;
-import me.felwal.android.widget.control.CheckListOption;
 import me.felwal.android.widget.control.DialogOption;
 import me.felwal.android.widget.control.InputOption;
 
@@ -98,7 +91,7 @@ public class RouteDetailActivity extends GroupDetailActivity implements InputDia
         else if (itemId == R.id.action_set_group_goal) {
             int minutes, seconds;
 
-            if (route.getGoalPace() == Route.NO_GOAL_PACE) {
+            if (route.getGoalPace() == Route.GOAL_PACE_NONE) {
                 minutes = BaseDialogKt.NULL_INT;
                 seconds = BaseDialogKt.NULL_INT;
             }

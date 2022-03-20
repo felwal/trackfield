@@ -1,7 +1,6 @@
 package me.felwal.trackfield.ui.groupdetail.distancedetail;
 
 import android.os.Bundle;
-import android.view.View;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
@@ -9,7 +8,6 @@ import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
-import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.Goal;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
@@ -20,7 +18,6 @@ import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
 import me.felwal.trackfield.utils.AppConsts;
-import me.felwal.trackfield.utils.TypeUtils;
 
 import java.util.ArrayList;
 
@@ -64,7 +61,7 @@ public class DistanceDetailFragment extends GroupDetailFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             distance = bundle.getInt(BUNDLE_DISTANCE, -1);
-            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID));
+            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.ID_NONE));
         }
 
         updateFilterByOrigin();
@@ -112,7 +109,7 @@ public class DistanceDetailFragment extends GroupDetailFragment {
 
             itemList.add(sorter.copy());
             float goalPace = DbReader.get(a).getDistanceGoal(distance);
-            if (goalPace != Distance.NO_GOAL_PACE) {
+            if (goalPace != Distance.GOAL_PACE_NONE) {
                 Goal goal = new Goal(goalPace, distance);
                 itemList.add(goal);
             }

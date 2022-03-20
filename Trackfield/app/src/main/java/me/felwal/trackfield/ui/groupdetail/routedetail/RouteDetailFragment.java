@@ -1,7 +1,6 @@
 package me.felwal.trackfield.ui.groupdetail.routedetail;
 
 import android.os.Bundle;
-import android.view.View;
 
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
@@ -9,7 +8,6 @@ import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Route;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
-import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.Goal;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
@@ -20,7 +18,6 @@ import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
 import me.felwal.trackfield.utils.AppConsts;
-import me.felwal.trackfield.utils.TypeUtils;
 
 import java.util.ArrayList;
 
@@ -63,7 +60,7 @@ public class RouteDetailFragment extends GroupDetailFragment {
 
         if (bundle != null) {
             route = DbReader.get(a).getRoute(bundle.getInt(BUNDLE_ROUTE_ID, Route.ID_NON_EXISTANT));
-            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.NO_ID));
+            setOriginId(bundle.getInt(BUNDLE_ORIGIN_ID, Exercise.ID_NONE));
         }
 
         updateFilterByOrigin();
@@ -111,7 +108,7 @@ public class RouteDetailFragment extends GroupDetailFragment {
 
             itemList.add(sorter.copy());
             route = DbReader.get(a).getRoute(route.getId());
-            if (route.getGoalPace() != Route.NO_GOAL_PACE) {
+            if (route.getGoalPace() != Route.GOAL_PACE_NONE) {
                 Goal goal = new Goal(route.getGoalPace());
                 itemList.add(goal);
             }

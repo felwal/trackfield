@@ -11,21 +11,12 @@ import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
-import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import me.felwal.trackfield.utils.MathUtils;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-
 import me.felwal.android.fragment.dialog.AlertDialog;
 import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.CheckDialog;
-import me.felwal.android.fragment.dialog.MultiChoiceDialog;
-import me.felwal.android.util.CollectionsKt;
-import me.felwal.android.widget.control.CheckListOption;
 import me.felwal.android.widget.control.DialogOption;
 
 public class DistanceDetailActivity extends GroupDetailActivity implements AlertDialog.DialogListener,
@@ -44,7 +35,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     //
 
     public static void startActivity(Context c, int distance) {
-        if (distance == Distance.NO_DISTANCE) return;
+        if (distance == Distance.DISTANCE_NONE) return;
 
         Intent intent = new Intent(c, DistanceDetailActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
@@ -52,7 +43,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
     }
 
     public static void startActivity(Context c, int distance, int originId) {
-        if (distance == Distance.NO_DISTANCE) return;
+        if (distance == Distance.DISTANCE_NONE) return;
 
         Intent intent = new Intent(c, DistanceDetailActivity.class);
         intent.putExtra(EXTRA_DISTANCE, distance);
@@ -84,7 +75,7 @@ public class DistanceDetailActivity extends GroupDetailActivity implements Alert
             float goalPace = DbReader.get(this).getDistanceGoal(length);
             int minutes, seconds;
 
-            if (goalPace == Distance.NO_GOAL_PACE) {
+            if (goalPace == Distance.GOAL_PACE_NONE) {
                 minutes = BaseDialogKt.NULL_INT;
                 seconds = BaseDialogKt.NULL_INT;
             }

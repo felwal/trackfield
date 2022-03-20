@@ -359,7 +359,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                     trail = new Trail(PolyUtil.decode(polyline));
                 }*/
 
-                exercise = new Exercise(Exercise.NO_ID, Exercise.NO_ID, Exercise.NO_ID, type, label, dateTime, routeId,
+                exercise = new Exercise(Exercise.ID_NONE, Exercise.ID_NONE, Exercise.ID_NONE, type, label, dateTime, routeId,
                     route, routeVar, interval, note, dataSource, recordingMethod, distance, time, null, false);
 
                 boolean success = DbWriter.get(this).addExercise(exercise, this);
