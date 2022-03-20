@@ -62,8 +62,8 @@
                 <TextView
                     android:id="@+id/tv_exercisedetail_date"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
-                    android:layout_marginTop="@dimen/spacing_diminutive"
-                    android:textAppearance="@style/TextAppearance.Trackfield.Body"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_date_top"
+                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_route"
                     tools:text="Date"
@@ -73,7 +73,8 @@
                     android:id="@+id/tv_exercisedetail_note"
                     android:layout_width="0dp"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
-                    android:layout_marginTop="@dimen/spacing_tiny"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_note_top"
+                    android:layout_marginBottom="@dimen/spacing_exercisedetail_note_bottom"
                     android:layout_marginEnd="@dimen/spacing_exercisedetail_edge"
                     android:textAppearance="@style/TextAppearance.Trackfield.Body"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -312,22 +313,12 @@
                     app:tint="?android:textColorPrimary" />
 
                 <TextView
-                    android:id="@+id/tv_exercisedetail_id"
+                    android:id="@+id/tv_exercisedetail_type"
                     android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:textAppearance="@style/TextAppearance.Trackfield.Caption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/v_exercisedetail_divider2"
-                    tools:text="#"
-                    style="@style/Widget.Trackfield.TextView" />
-
-                <TextView
-                    android:id="@+id/tv_exercisedetail_type"
-                    android:layout_marginStart="@dimen/spacing_exercisedetail_edge"
-                    android:layout_marginTop="@dimen/spacing_tiny"
-                    android:textAppearance="@style/TextAppearance.Trackfield.Caption"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exercisedetail_id"
                     tools:text="Sport"
                     style="@style/Widget.Trackfield.TextView" />
 

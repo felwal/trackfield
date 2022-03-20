@@ -25,6 +25,9 @@
     <dimen name="spacing_exercisedetail_valuetext_start">@dimen/spacing_small</dimen>
     <dimen name="spacing_exercisedetail_valueicon_start">@dimen/spacing_medium</dimen>
     <dimen name="spacing_exercisedetail_valueicon_top">12dp</dimen>
+    <dimen name="spacing_exercisedetail_date_top">@dimen/spacing_diminutive</dimen>
+    <dimen name="spacing_exercisedetail_note_top">12dp</dimen>
+    <dimen name="spacing_exercisedetail_note_bottom">@dimen/spacing_diminutive</dimen>
 
     <!-- peeksheet -->
     <dimen name="spacing_peeksheet_edge">@dimen/spacing_edge</dimen>

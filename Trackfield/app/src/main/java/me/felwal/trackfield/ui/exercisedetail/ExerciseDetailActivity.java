@@ -239,7 +239,6 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         TextView powerTv = findViewById(R.id.tv_exercisedetail_power);
         TextView elevationTv = findViewById(R.id.tv_exercisedetail_elevation);
         TextView noteTv = findViewById(R.id.tv_exercisedetail_note);
-        TextView idTv = findViewById(R.id.tv_exercisedetail_id);
         TextView typeTv = findViewById(R.id.tv_exercisedetail_type);
         TextView labelTv = findViewById(R.id.tv_exercisedetail_label);
         TextView deviceTv = findViewById(R.id.tv_exercisedetail_device);
@@ -247,13 +246,11 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
         // set
 
-        //setTvHideIfEmpty(exercise.getRoute(), routeTv);
         routeTv.setText(exercise.getRoute());
         routeVarTv.setText(exercise.getRouteVar());
         dateTv.setText(exercise.getDateTime().format(AppConsts.FORMATTER_VIEW));
         setTvHideIfEmpty(exercise.getNote(), noteTv);
 
-        idTv.setText(exercise.printId());
         setTvHideIfEmpty(exercise.getType(), typeTv);
         setTvHideIfEmpty(exercise.getLabel(), labelTv);
         setTvHideIfEmpty(exercise.getDevice(), deviceTv);
