@@ -318,23 +318,35 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
     private void parseAndSave() {
         try {
             // parse
+
+            // number strings
+            String distanceStr = et(distanceTil).getText().toString();
+            String hoursStr = et(hoursTil).getText().toString();
+            String minutesStr = et(minutesTil).getText().toString();
+            String secondsStr = et(secondsTil).getText().toString();
+
+            // numbers
+            int distance = isDistanceDriven
+                ? Exercise.DISTANCE_DRIVEN
+                : distanceStr.equals("") ? 0 : (int) (Float.parseFloat(distanceStr) * 1000);
+            int hours = hoursStr.equals("") ? 0 : Integer.parseInt(hoursStr);
+            int minutes = minutesStr.equals("") ? 0 : Integer.parseInt(minutesStr);
+            float seconds = secondsStr.equals("") ? 0 : Float.parseFloat(secondsStr);
+
+            // strings
             String route = et(routeTil).getText().toString().trim();
             String routeVar = et(routeVarTil).getText().toString().trim();
             LocalDate date = LocalDate.parse(et(dateTil).getText(), AppConsts.FORMATTER_EDIT_DATE);
             LocalTime localTime = LocalTime.parse(et(timeTil).getText(), AppConsts.FORMATTER_EDIT_TIME);
             String note = et(noteTil).getText().toString().trim();
-            int distance = isDistanceDriven ? Exercise.DISTANCE_DRIVEN
-                : (int) (Float.parseFloat(et(distanceTil).getText().toString()) * 1000);
-            int hours = Integer.parseInt(et(hoursTil).getText().toString());
-            int minutes = Integer.parseInt(et(minutesTil).getText().toString());
-            float seconds = Float.parseFloat(et(secondsTil).getText().toString());
-            float time = hours * 3600 + minutes * 60 + seconds;
             String dataSource = et(deviceTil).getText().toString().trim();
             String recordingMethod = et(recordingMethodTil).getText().toString().trim();
             String type = TypeUtils.toWordCase(et(typeTil).getText().toString()).trim();
             String label = TypeUtils.toWordCase(et(labelTil).getText().toString()).trim();
             String interval = et(intervalTil).getText().toString().trim();
 
+            // convert
+            float time = hours * 3600 + minutes * 60 + seconds;
             int routeId = DbReader.get(this).getRouteIdOrCreate(route, this);
             LocalDateTime dateTime = LocalDateTime.of(date, localTime);
 
@@ -367,11 +379,11 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             finish();
         }
         catch (NumberFormatException e) {
-            LayoutUtils.toast(R.string.toast_err_save_empty, this);
+            LayoutUtils.toast(R.string.toast_err_parse, this);
         }
         catch (StringIndexOutOfBoundsException e) {
             //LayoutUtils.toast(R.string.toast_err_decode_polyline, this);
-            LayoutUtils.toast(R.string.toast_err_save_empty, this);
+            LayoutUtils.toast(R.string.toast_err_parse, this);
         }
         catch (Exception e) {
             LayoutUtils.handleError(e, this);

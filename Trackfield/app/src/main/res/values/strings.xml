@@ -36,11 +36,11 @@
     <string name="et_hint_exerciseedit_route">Route</string>
     <string name="et_hint_exerciseedit_routevar">Route variation</string>
     <string name="et_hint_exerciseedit_date">Date</string>
-    <string name="et_text_exerciseedit_time">0</string>
+    <string name="et_text_exerciseedit_time" />
     <string name="et_hint_exerciseedit_time">Time</string>
     <string name="et_hint_exerciseedit_interval">Interval</string>
     <string name="et_hint_exerciseedit_note">Note</string>
-    <string name="et_text_exerciseedit_distance">0</string>
+    <string name="et_text_exerciseedit_distance" />
     <string name="et_hint_exerciseedit_distance">Distance</string>
     <string name="et_suffix_exerciseedit_distance">km</string>
     <string name="et_hint_exerciseedit_hours">hh</string>
@@ -242,8 +242,8 @@
 
     <!-- general errors -->
     <string name="toast_err_no_input">No input</string>
-    <string name="toast_err_save_empty">Can\'t save empty</string>
-    <string name="toast_err_decode_polyline">Problem decoding polyline</string>
+    <string name="toast_err_parse">Failed to parse values</string>
+    <string name="toast_err_decode_polyline">Failed to decode polyline</string>
     <string name="toast_err_display_density">Couldn\'t fetch display density</string>
     <string name="toast_err_parse_jsonobj">Failed to parse JSONObject</string>
     <string name="toast_err_location">Please grant permission to location</string>

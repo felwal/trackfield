@@ -16,6 +16,7 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
 
     private String creationDate;
     private String creationTime;
+    private String defaultType = "";
 
     //
 
@@ -33,9 +34,10 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
         et(timeTil).setText(creationTime = LocalDateTime.now().format(AppConsts.FORMATTER_EDIT_TIME));
 
         // use the most common type as default
-        ArrayList<String> mostCommonType = DbReader.get(this).getTypes(false, "1");
-        if (mostCommonType.size() != 0) {
-            et(typeTil).setText(mostCommonType.get(0));
+        ArrayList<String> mostCommonTypes = DbReader.get(this).getTypes(false, "1");
+        if (mostCommonTypes.size() != 0) {
+            defaultType = mostCommonTypes.get(0);
+            et(typeTil).setText(defaultType);
         }
     }
 
@@ -61,7 +63,7 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
             || !et(secondsTil).getText().toString().equals(res.getString(R.string.et_text_exerciseedit_time))
             || !et(deviceTil).getText().toString().equals("")
             || !et(recordingMethodTil).getText().toString().equals("")
-            || !et(typeTil).getText().toString().equals("")
+            || !et(typeTil).getText().toString().equals(defaultType)
             || isDistanceDriven;
     }
 

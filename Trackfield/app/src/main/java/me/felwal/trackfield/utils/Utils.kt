@@ -13,6 +13,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.graphics.drawable.DrawableWrapper
 import androidx.appcompat.view.menu.MenuBuilder
+import me.felwal.android.annotation.BumpFelwalAndRemove
 import me.felwal.trackfield.R
 import me.felwal.android.util.getColorByAttr
 import me.felwal.android.util.getDrawableCompat
@@ -43,15 +44,19 @@ fun <E> List<E>.split(count: Int): List<List<E>> {
     return sublists
 }
 
+@BumpFelwalAndRemove
 operator fun IntArray.minus(element: Int): IntArray =
     (toMutableList() - element).toIntArray()
 
 //
 
+@BumpFelwalAndRemove
 fun Context.getBitmap(@DrawableRes id: Int): Bitmap? = getDrawableCompat(id)?.toBitmap()
 
+@BumpFelwalAndRemove
 fun Context.getBitmapByAttr(@AttrRes attr: Int): Bitmap? = getBitmap(getResIdByAttr(attr))
 
+@BumpFelwalAndRemove
 fun Drawable.toBitmap(): Bitmap? {
     (this as? BitmapDrawable)?.bitmap?.let { return it }
 
@@ -74,6 +79,7 @@ fun Drawable.toBitmap(): Bitmap? {
 //
 
 /** Fixes checked state being ignored by injecting checked state directly into drawable */
+@BumpFelwalAndRemove
 @SuppressLint("RestrictedApi")
 class CheckDrawableWrapper(val menuItem: MenuItem) : DrawableWrapper(menuItem.icon) {
     @SuppressLint("RestrictedApi")
@@ -85,19 +91,24 @@ class CheckDrawableWrapper(val menuItem: MenuItem) : DrawableWrapper(menuItem.ic
 }
 
 /** Wrap icon drawable with [CheckDrawableWrapper]. */
+@BumpFelwalAndRemove
 fun MenuItem.fixIconCheckState() = apply { icon = CheckDrawableWrapper(this) }
 
+@BumpFelwalAndRemove
 fun Menu.createOptionalIcons() = setOptionalIconsVisible(true)
 
 /**
  * Call this from [Activity.onPrepareOptionsMenu]; the colors need updating every time.
  */
+@BumpFelwalAndRemove
 fun Menu.prepareOptionalIcons(c: Context) = setOptionalIconsColor(c.getColorByAttr(R.attr.colorControlNormal));
 
+@BumpFelwalAndRemove
 val Menu.optionalItems
     @SuppressLint("RestrictedApi")
     get() = (this as? MenuBuilder)?.nonActionItems
 
+@BumpFelwalAndRemove
 @SuppressLint("RestrictedApi")
 fun Menu.setOptionalIconsColor(@ColorInt color: Int) =
     optionalItems?.forEach { it.iconTintList = color.toColorStateList() }
