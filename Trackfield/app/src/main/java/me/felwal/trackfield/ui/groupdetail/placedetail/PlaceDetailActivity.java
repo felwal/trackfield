@@ -9,30 +9,20 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
-import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.map.PlaceMapActivity;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-
-import me.felwal.android.fragment.dialog.AlertDialog;
-import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.CheckDialog;
-import me.felwal.android.fragment.dialog.InputDialog;
-import me.felwal.android.fragment.dialog.MultiChoiceDialog;
-import me.felwal.android.util.CollectionsKt;
-import me.felwal.android.widget.control.CheckListOption;
-import me.felwal.android.widget.control.DialogOption;
-import me.felwal.android.widget.control.InputOption;
 
 public class PlaceDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
     AlertDialog.DialogListener {

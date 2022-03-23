@@ -8,16 +8,15 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
-
-import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.InputDialog;
-import me.felwal.android.widget.control.DialogOption;
-import me.felwal.android.widget.control.InputOption;
 
 public class IntervalDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener {
 

@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
@@ -18,9 +21,6 @@ import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.utils.AppConsts;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public class RouteDetailExerciseAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, RouteDetailExerciseAdapterDelegate.ExerciseSmallViewHolder> {

@@ -2,6 +2,9 @@ package me.felwal.trackfield.ui.groupdetail.distancedetail;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.model.Distance;
@@ -18,10 +21,6 @@ import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
 import me.felwal.trackfield.utils.AppConsts;
-
-import java.util.ArrayList;
-
-import me.felwal.android.util.ResourcesKt;
 
 public class DistanceDetailFragment extends GroupDetailFragment {
 

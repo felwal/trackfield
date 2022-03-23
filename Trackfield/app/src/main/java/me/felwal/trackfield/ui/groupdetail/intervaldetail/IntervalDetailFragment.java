@@ -2,6 +2,8 @@ package me.felwal.trackfield.ui.groupdetail.intervaldetail;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.model.Exercise;
@@ -13,8 +15,6 @@ import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
 import me.felwal.trackfield.utils.AppConsts;
-
-import java.util.ArrayList;
 
 public class IntervalDetailFragment extends GroupDetailFragment {
 
