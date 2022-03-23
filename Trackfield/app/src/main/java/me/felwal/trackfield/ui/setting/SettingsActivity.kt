@@ -205,6 +205,14 @@ class SettingsActivity :
                 )
             ),
             ItemSection(
+                title = getString(R.string.tv_text_settigns_header_about),
+                ActionItem(
+                    title = getString(R.string.tv_text_settings_title_version),
+                    desc = getString(R.string.app_version),
+                    onClick = {}
+                )
+            ),
+            ItemSection(
                 title = getString(R.string.tv_text_settings_header_developer),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_reboard),
