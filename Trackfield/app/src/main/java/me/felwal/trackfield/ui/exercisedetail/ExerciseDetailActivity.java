@@ -15,14 +15,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import me.felwal.android.util.ViewKt;
-import me.felwal.android.util.WidgetKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
-import me.felwal.trackfield.data.network.StravaApi;
+import me.felwal.trackfield.data.network.StravaService;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.groupdetail.distancedetail.DistanceDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.intervaldetail.IntervalDetailActivity;
@@ -381,7 +379,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         // open strava
         ImageView stravaIv = findViewById(R.id.iv_exercisedetail_strava);
         if (exercise.hasStravaId()) {
-            stravaIv.setOnClickListener(v -> StravaApi.launchStravaActivity(exercise.getStravaId(), this));
+            stravaIv.setOnClickListener(v -> StravaService.launchStravaActivity(exercise.getStravaId(), this));
         }
         else {
             stravaIv.setVisibility(View.GONE);
@@ -390,7 +388,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         // open garmin
         ImageView garminIv = findViewById(R.id.iv_exercisedetail_garmin);
         if (exercise.hasGarminId()) {
-            garminIv.setOnClickListener(v -> StravaApi.launchGarminActivity(exercise.getGarminId(), this));
+            garminIv.setOnClickListener(v -> StravaService.launchGarminActivity(exercise.getGarminId(), this));
         }
         else {
             garminIv.setVisibility(View.GONE);
@@ -471,7 +469,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         if (tag.equals(DIALOG_PULL)) {
             Prefs.setPullOptions(itemStates);
 
-            StravaApi strava = new StravaApi(this);
+            StravaService strava = new StravaService(this);
             LayoutUtils.toast(R.string.toast_strava_pull_activity, this);
 
             strava.pullActivity(exercise.getStravaId(), Prefs.getPullOptions(), success -> {

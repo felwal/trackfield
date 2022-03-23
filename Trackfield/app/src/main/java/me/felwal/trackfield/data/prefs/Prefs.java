@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.network.StravaApi;
+import me.felwal.trackfield.data.network.StravaService;
 import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.utils.AppConsts;
 import me.felwal.trackfield.utils.annotation.Debug;
@@ -119,20 +119,20 @@ public class Prefs {
     private static String defaultRecordingMethod = "GPS";
     private static String defaultDevice = "";
     private static final SwitchChain pullOptions = new SwitchChain(
-        new SwitchItem(StravaApi.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
-        new SwitchItem(StravaApi.JSON_NAME, "Name (as route)", true),
-        new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
-        new SwitchItem(StravaApi.JSON_DISTANCE, "Distance", true),
-        new SwitchItem(StravaApi.JSON_TIME, "Elapsed time", true),
-        new SwitchItem(StravaApi.JSON_TYPE, "Sport", true),
-        new SwitchItem(StravaApi.JSON_COMMUTE, "Commute (as label)", true),
-        new SwitchItem(StravaApi.JSON_DATE, "Date & time", true),
-        new SwitchItem(StravaApi.JSON_MAP, "Map", true),
-        new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
+        new SwitchItem(StravaService.JSON_EXTERNAL_ID, "External id (e.g. Garmin)", true),
+        new SwitchItem(StravaService.JSON_NAME, "Name (as route)", true),
+        new SwitchItem(StravaService.JSON_DESCRIPTION, "Description (as note)", true),
+        new SwitchItem(StravaService.JSON_DISTANCE, "Distance", true),
+        new SwitchItem(StravaService.JSON_TIME, "Elapsed time", true),
+        new SwitchItem(StravaService.JSON_TYPE, "Sport", true),
+        new SwitchItem(StravaService.JSON_COMMUTE, "Commute (as label)", true),
+        new SwitchItem(StravaService.JSON_DATE, "Date & time", true),
+        new SwitchItem(StravaService.JSON_MAP, "Map", true),
+        new SwitchItem(StravaService.JSON_DEVICE, "Device", false)
     );
     private static final SwitchChain requestOptions = new SwitchChain(
-        new SwitchItem(StravaApi.JSON_DESCRIPTION, "Description (as note)", true),
-        new SwitchItem(StravaApi.JSON_DEVICE, "Device", false)
+        new SwitchItem(StravaService.JSON_DESCRIPTION, "Description (as note)", true),
+        new SwitchItem(StravaService.JSON_DEVICE, "Device", false)
     );
 
     //

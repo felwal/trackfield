@@ -25,7 +25,7 @@ import me.felwal.android.widget.control.InputOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
-import me.felwal.trackfield.data.network.StravaApi;
+import me.felwal.trackfield.data.network.StravaService;
 import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
@@ -55,7 +55,7 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
 
     private MainFragment mainFragment;
     private ActionBar ab;
-    private StravaApi strava;
+    private StravaService strava;
 
     private FloatingActionMenu fam;
 
@@ -75,7 +75,7 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
         Prefs.setDeveloper(true);
         DbWriter.get(this).useUpdateToolIfEnabled(this);
 
-        strava = new StravaApi(this);
+        strava = new StravaService(this);
 
         // layout
         setBottomNavbar();
@@ -222,7 +222,7 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
             R.drawable.ic_logo_strava,
             View -> {
                 strava.requestNewActivities((successCount, errorCount) ->
-                    StravaApi.toastResponse(successCount, errorCount, this));
+                    StravaService.toastResponse(successCount, errorCount, this));
                 fam.closeMenu();
                 return Unit.INSTANCE;
             }

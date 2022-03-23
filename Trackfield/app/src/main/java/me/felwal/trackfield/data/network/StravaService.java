@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class StravaApi {
+public class StravaService {
 
     // token response json keys
     private static final String JSON_ACCESS_TOKEN = "access_token";
@@ -64,7 +64,7 @@ public class StravaApi {
     private static final String REDIRECT_URI = "https://felwal.github.io/callback";
     private static final int PER_PAGE = 200; // max = 200
 
-    private static final String LOG_TAG = "StravaAPI";
+    private static final String LOG_TAG = "StravaService";
     private static final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     private static RequestQueue queue;
@@ -73,7 +73,7 @@ public class StravaApi {
 
     //
 
-    public StravaApi(Activity a) {
+    public StravaService(Activity a) {
         this.a = a;
         queue = Volley.newRequestQueue(a);
     }
