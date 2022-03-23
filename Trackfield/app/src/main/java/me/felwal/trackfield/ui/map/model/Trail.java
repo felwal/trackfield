@@ -1,5 +1,7 @@
 package me.felwal.trackfield.ui.map.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.PolyUtil;
@@ -130,6 +132,18 @@ public class Trail {
         return latLngs == null ? 0 : latLngs.size();
     }
 
+    //
+
+    @Override
+    public boolean equals(@Nullable @org.jetbrains.annotations.Nullable Object obj) {
+        if (!(obj instanceof Trail)) return false;
+        if (this == obj) return true;
+
+        Trail other = (Trail) obj;
+        return latLngs.equals(other.latLngs) && start.equals(other.start) && end.equals(other.end)
+            && bounds.equals(other.bounds);
+    }
+
     // static tools
 
     public static LatLngBounds bounds(List<LatLng> latLngs) {
@@ -157,34 +171,3 @@ public class Trail {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

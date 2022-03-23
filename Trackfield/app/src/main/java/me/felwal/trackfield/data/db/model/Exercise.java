@@ -485,25 +485,20 @@ public class Exercise implements JSONObjectable {
         return obj;
     }
 
+    //
+
+    @Override
+    public boolean equals(@Nullable @org.jetbrains.annotations.Nullable Object obj) {
+        if (!(obj instanceof Exercise)) return false;
+        if (this == obj) return true;
+
+        Exercise other = (Exercise) obj;
+        return id == other.id && stravaId == other.stravaId && garminId == other.garminId && type.equals(other.type)
+            && label.equals(other.label) && dateTime.equals(other.dateTime) && routeId == other.routeId
+            && routeVar.equals(other.routeVar) && interval.equals(other.interval) && note.equals(other.note)
+            && device.equals(other.device) && recordingMethod.equals(other.recordingMethod)
+            && distance == other.distance && time == other.time && trail.equals(other.trail)
+            && trailHidden == other.trailHidden;
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

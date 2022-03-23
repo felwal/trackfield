@@ -121,8 +121,19 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     protected void onRestart() {
         super.onRestart();
-        // reload edits
-        recreate();
+
+        // reload in case anything has been updated
+        setMap();
+        setTexts();
+
+        // reload if exercise has been updated
+        // doesnt work
+        /*Exercise updated = DbReader.get(this).getExercise(exerciseId);
+        if (!exercise.equals(updated)) {
+            exercise = updated;
+            setMap();
+            setTexts();
+        }*/
     }
 
     @Override
@@ -388,10 +399,12 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
     private void setMap() {
         FrameLayout frame = findViewById(R.id.fl_exercisedetail_map);
+
         if (!exercise.hasTrail()) {
             frame.setVisibility(View.GONE);
             return;
         }
+
         findViewById(R.id.v_exercisedetail_divider1).setVisibility(View.INVISIBLE);
         frame.setClipToOutline(true);
 
