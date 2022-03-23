@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
 import me.felwal.trackfield.R
-import me.felwal.trackfield.data.network.StravaApi
+import me.felwal.trackfield.data.network.StravaService
 import me.felwal.trackfield.data.prefs.Prefs
 import me.felwal.trackfield.databinding.ActivitySettingsBinding
 import me.felwal.trackfield.ui.main.MainActivity
@@ -35,7 +35,7 @@ class StravaSettingsActivity :
     private lateinit var binding: ActivitySettingsBinding
     override val llItemContainer: LinearLayout get() = binding.llSettings
 
-    private lateinit var strava: StravaApi
+    private lateinit var strava: StravaService
 
     // lifecycle
 
@@ -45,7 +45,7 @@ class StravaSettingsActivity :
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        strava = StravaApi(this)
+        strava = StravaService(this)
         strava.handleIntent(intent)
 
         setToolbar()
@@ -102,7 +102,7 @@ class StravaSettingsActivity :
                     title = getString(R.string.tv_text_settings_title_request_new),
                     onClick = {
                         strava.requestNewActivities { successCount, errorCount ->
-                            StravaApi.toastResponse(successCount, errorCount, this)
+                            StravaService.toastResponse(successCount, errorCount, this)
                         }
                     },
                     iconRes = R.drawable.ic_send
@@ -158,7 +158,7 @@ class StravaSettingsActivity :
         when (tag) {
             DIALOG_REQUEST_ALL -> {
                 strava.requestAllActivities { successCount, errorCount ->
-                    StravaApi.toastResponse(successCount, errorCount, this)
+                    StravaService.toastResponse(successCount, errorCount, this)
                 }
             }
         }
