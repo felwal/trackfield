@@ -121,8 +121,14 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     protected void onRestart() {
         super.onRestart();
-        // reload edits
-        recreate();
+
+        // reload if exercise has been updated
+        Exercise updated = DbReader.get(this).getExercise(exerciseId);
+        if (!exercise.equals(updated)) {
+            exercise = updated;
+            setMap();
+            setTexts();
+        }
     }
 
     @Override
