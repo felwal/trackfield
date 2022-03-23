@@ -9,6 +9,13 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.Nullable;
+
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.InputDialog;
+import me.felwal.android.widget.control.DialogOption;
+import me.felwal.android.widget.control.InputOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
@@ -19,14 +26,6 @@ import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.map.RouteMapActivity;
 import me.felwal.trackfield.ui.widget.dialog.TimeDialog;
 import me.felwal.trackfield.utils.MathUtils;
-
-import org.jetbrains.annotations.Nullable;
-
-import me.felwal.android.fragment.dialog.AlertDialog;
-import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.InputDialog;
-import me.felwal.android.widget.control.DialogOption;
-import me.felwal.android.widget.control.InputOption;
 
 public class RouteDetailActivity extends GroupDetailActivity implements InputDialog.DialogListener,
     TimeDialog.DialogListener, AlertDialog.DialogListener {

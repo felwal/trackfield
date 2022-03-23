@@ -1,4 +1,4 @@
-package me.felwal.trackfield.ui.common;
+package me.felwal.trackfield.ui.common.adapterdelegate;
 
 import android.app.Activity;
 import android.view.View;

@@ -1,25 +1,22 @@
 package me.felwal.trackfield.ui.groupdetail.placedetail;
 
 import android.os.Bundle;
-import android.view.View;
 
+import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
-import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
 import me.felwal.trackfield.utils.AppConsts;
-
-import java.util.ArrayList;
-
-import me.felwal.android.util.ResourcesKt;
 
 public class PlaceDetailFragment extends GroupDetailFragment {
 
