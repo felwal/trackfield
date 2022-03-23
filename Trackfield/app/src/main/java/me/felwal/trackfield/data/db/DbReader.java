@@ -347,7 +347,7 @@ public class DbReader extends DbHelper {
                 " ORDER BY " + orderBy(sortMode, ascending);
 
         Cursor cursor = db.rawQuery(query, null);
-        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
+        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, false);
         cursor.close();
 
         return exerlites;
@@ -378,7 +378,7 @@ public class DbReader extends DbHelper {
         String orderBy = orderBy(sortMode, ascending);
 
         Cursor cursor = db.query(from, select, where, whereArgs, null, null, orderBy);
-        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, true);
+        ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, false);
         cursor.close();
 
         return exerlites;

@@ -61,8 +61,7 @@ class PlaceDetailExerciseAdapterDelegate extends
         vh.secondaryTv.setText(item.printValues());
         vh.captionTv.setText(item.getRoute());
         vh.originMarker.setVisibility(item.hasId(originId) ? View.VISIBLE : View.GONE);
-        vh.recordMarker.setVisibility(item.isTop() ? View.VISIBLE : View.GONE);
-        vh.recordMarker.getBackground().setColorFilter(item.getMedalColor(c), PorterDuff.Mode.MULTIPLY);
+        vh.recordMarker.setVisibility(View.GONE);
     }
 
     // vh

@@ -179,7 +179,7 @@ public class PlaceDetailActivity extends GroupDetailActivity implements InputDia
 
                 MainActivity.updateFragmentOnRestart = true;
                 finish();
-                startActivity(this, place.getId());
+                startActivity(this, place.getId(), originId);
             }
         }
         else if (tag.equals(DIALOG_EDIT_RADIUS)) {
