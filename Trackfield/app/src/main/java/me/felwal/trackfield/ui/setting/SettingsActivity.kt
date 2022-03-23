@@ -137,11 +137,11 @@ class SettingsActivity :
                     iconRes = R.drawable.ic_calculate
                 ),
                 BooleanItem(
-                    title = getString(R.string.tv_text_settings_title_driving_fallback_to_route),
-                    descOn = getString(R.string.tv_text_settings_msg_driving_fallback_to_route),
-                    value = Prefs.fallbackToRouteWhenDriving(),
+                    title = getString(R.string.tv_text_settings_title_driving_fall_back_to_route),
+                    descOn = getString(R.string.tv_text_settings_msg_driving_fall_back_to_route),
+                    value = Prefs.fallBackToRouteWhenDriving(),
                     onSwitch = {
-                        Prefs.setFallbackToRouteWhenDriving(it)
+                        Prefs.setFallBackToRouteWhenDriving(it)
                         MainActivity.recreateOnRestart = true;
                     },
                     iconRes = R.drawable.ic_calculate

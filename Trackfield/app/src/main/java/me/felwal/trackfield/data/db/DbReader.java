@@ -991,12 +991,12 @@ public class DbReader extends DbHelper {
         // 3. route and type
         // 4. route
 
-        boolean filterByRoutevar = !Prefs.fallbackToRouteWhenDriving()
-            || getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, new ArrayList<>()) > 1;
+        boolean filterByRoutevar = !Prefs.fallBackToRouteWhenDriving()
+            || getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, new ArrayList<>()) > 0;
 
         boolean filterByType = Prefs.preferSameTypeWhenDriving()
-            && ((filterByRoutevar && getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, types) > 1)
-            || getExerliteCountByRoute(routeId, null, SorterItem.Mode.DATE, true, types) > 1);
+            && ((filterByRoutevar && getExerliteCountByRoute(routeId, routeVar, SorterItem.Mode.DATE, true, types) > 0)
+            || getExerliteCountByRoute(routeId, null, SorterItem.Mode.DATE, true, types) > 0);
 
         String andTypeFilter = filterByType
             ? " AND " + ExerciseEntry.COLUMN_TYPE + " = '" + type  + "'"

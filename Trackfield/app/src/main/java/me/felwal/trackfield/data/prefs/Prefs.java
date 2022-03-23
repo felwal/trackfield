@@ -37,7 +37,7 @@ public class Prefs {
     private static final String KEY_WEEK_HEADERS = "weekHeaders";
     private static final String KEY_DAILY_CHART = "dailyChart";
     private static final String KEY_DRIVING_PREFER_SAME_TYPE = "preferSameType";
-    private static final String KEY_DRIVING_FALLBACK_TO_ROUTE = "fallbackToRoute";
+    private static final String KEY_DRIVING_FALL_BACK_TO_ROUTE = "fallBackToRoute";
     private static final String KEY_COLOR = "color";
     private static final String KEY_THEME = "theme";
     private static final String KEY_FILE_LOCATION = "fileLocation";
@@ -81,7 +81,7 @@ public class Prefs {
 
     // data
     private static boolean preferSameTypeWhenDriving = false;
-    private static boolean fallbackToRouteWhenDriving = true;
+    private static boolean fallBackToRouteWhenDriving = true;
 
     // appearance
     private static int color = 1;
@@ -222,7 +222,7 @@ public class Prefs {
 
         // data
         preferSameTypeWhenDriving = loadPref(bool, KEY_DRIVING_PREFER_SAME_TYPE);
-        fallbackToRouteWhenDriving = loadPref(bool, KEY_DRIVING_FALLBACK_TO_ROUTE);
+        fallBackToRouteWhenDriving = loadPref(bool, KEY_DRIVING_FALL_BACK_TO_ROUTE);
 
         // file
         fileLocation = loadPref(str, KEY_FILE_LOCATION);
@@ -294,7 +294,7 @@ public class Prefs {
             case KEY_WEEK_HEADERS: return showWeekHeaders;
             case KEY_DAILY_CHART: return showDailyChart;
             case KEY_DRIVING_PREFER_SAME_TYPE: return preferSameTypeWhenDriving;
-            case KEY_DRIVING_FALLBACK_TO_ROUTE: return fallbackToRouteWhenDriving;
+            case KEY_DRIVING_FALL_BACK_TO_ROUTE: return fallBackToRouteWhenDriving;
             case KEY_COLOR: return color;
             case KEY_THEME: return theme;
             case KEY_FILE_LOCATION: return fileLocation;
@@ -351,9 +351,9 @@ public class Prefs {
         savePref(prefer, KEY_DRIVING_PREFER_SAME_TYPE);
     }
 
-    public static void setFallbackToRouteWhenDriving(boolean fallback) {
-        fallbackToRouteWhenDriving = fallback;
-        savePref(fallback, KEY_DRIVING_FALLBACK_TO_ROUTE);
+    public static void setFallBackToRouteWhenDriving(boolean fallBack) {
+        fallBackToRouteWhenDriving = fallBack;
+        savePref(fallBack, KEY_DRIVING_FALL_BACK_TO_ROUTE);
     }
 
     public static void setColor(int colorConst) {
@@ -506,8 +506,8 @@ public class Prefs {
         return preferSameTypeWhenDriving;
     }
 
-    public static boolean fallbackToRouteWhenDriving() {
-        return fallbackToRouteWhenDriving;
+    public static boolean fallBackToRouteWhenDriving() {
+        return fallBackToRouteWhenDriving;
     }
 
     public static int getColor() {
