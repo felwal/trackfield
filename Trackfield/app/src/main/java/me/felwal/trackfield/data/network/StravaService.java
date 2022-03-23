@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +20,7 @@ import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.map.model.Trail;
 import me.felwal.trackfield.utils.AppConsts;
+import me.felwal.trackfield.utils.AppLog;
 import me.felwal.trackfield.utils.DateUtils;
 import me.felwal.trackfield.utils.LayoutUtils;
 import me.felwal.trackfield.utils.annotation.Debug;
@@ -64,7 +64,6 @@ public class StravaService {
     private static final String REDIRECT_URI = "https://felwal.github.io/callback";
     private static final int PER_PAGE = 200; // max = 200
 
-    private static final String LOG_TAG = "StravaService";
     private static final DateTimeFormatter FORMATTER_STRAVA = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     private static RequestQueue queue;
@@ -123,7 +122,7 @@ public class StravaService {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                Log.i(LOG_TAG, "response: " + response.toString());
+                AppLog.i("response: " + response.toString());
 
                 boolean success = handlePull(convertToExercise(response), options);
 
@@ -149,7 +148,7 @@ public class StravaService {
             for (long stravaId : stravaIds) {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                     response -> {
-                        Log.i(LOG_TAG, "response: " + response.toString());
+                        AppLog.i("response: " + response.toString());
 
                         boolean success = handlePull(convertToExercise(response), Prefs.getPullOptions());
 
@@ -168,7 +167,7 @@ public class StravaService {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                Log.i(LOG_TAG, "response: " + response);
+                    AppLog.i("response: " + response);
 
                 boolean success = handleRequest(convertToExercise(response));
 
@@ -184,13 +183,13 @@ public class StravaService {
             LayoutUtils.toast(R.string.toast_strava_req_activity, a);
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
-                Log.i(LOG_TAG, "response: " + response);
+                AppLog.i("response: " + response);
 
                 try {
                     JSONObject obj = response.getJSONObject(index);
                     boolean success = handleRequest(convertToExercise(obj));
 
-                    Log.i(LOG_TAG, "response obj: " + obj.toString());
+                    AppLog.i("response obj: " + obj.toString());
 
                     listener.onStravaResponse(success);
                 }
@@ -210,7 +209,7 @@ public class StravaService {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
-                    Log.i(LOG_TAG, "response: " + response);
+                    AppLog.i("response: " + response);
 
                     int successCount = 0;
                     int errorCount = 0;
@@ -253,7 +252,7 @@ public class StravaService {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
-                    Log.i(LOG_TAG, "response: " + response);
+                    AppLog.i("response: " + response);
 
                     int successCount = 0;
                     int errorCount = 0;
@@ -322,7 +321,7 @@ public class StravaService {
 
         try {
             // keys which always exist
-            Log.i(LOG_TAG, "response: " + obj.toString());
+            AppLog.i("response: " + obj.toString());
             long stravaId = obj.getLong(JSON_ID);
             String name = obj.getString(JSON_NAME);
             int distance = (int) obj.getDouble(JSON_DISTANCE);
@@ -395,7 +394,7 @@ public class StravaService {
         if (existing == null) {
             success = DbWriter.get(a).addExercise(strava, a);
             LayoutUtils.toast("Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE), a);
-            Log.i(LOG_TAG, "Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
+            AppLog.i("Pull resulted in import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
         }
 
         // merge
@@ -471,14 +470,14 @@ public class StravaService {
         // import
         else if (matching.size() == 0) {
             success &= DbWriter.get(a).addExercise(strava, a);
-            Log.i(LOG_TAG, "Import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
+            AppLog.i("Import on " + strava.getDate().format(AppConsts.FORMATTER_SQL_DATE));
             //L.toast("Import on " + fromStrava.getDate().format(C.FORMATTER_SQL_DATE), a);
         }
 
         // nothing
         else {
             success = false;
-            Log.i(LOG_TAG, "Multiple choice on " + strava.getDateTime().format(AppConsts.FORMATTER_SQL_DATE));
+            AppLog.i("Multiple choice on " + strava.getDateTime().format(AppConsts.FORMATTER_SQL_DATE));
             //L.toast("Multiple choice on " + fromStrava.getDateTime().format(C.FORMATTER_SQL_DATE), a);
         }
 
@@ -592,7 +591,7 @@ public class StravaService {
                             DateUtils.ofEpochSecond(Integer.parseInt(response.getString(JSON_EXPIRES_AT))));
 
                         //L.toast("accessToken: " + Prefs.getAccessToken(), c);
-                        Log.i(LOG_TAG, "response accessToken: " + Prefs.getAccessToken());
+                        AppLog.i("response accessToken: " + Prefs.getAccessToken());
                         onTokenReady(Prefs.getAccessToken());
                     }
                     catch (JSONException e) {
@@ -600,7 +599,7 @@ public class StravaService {
                         LayoutUtils.handleError("Failed to parse accessToken from Strava", e, c);
                     }
                 }, e -> {
-                Log.i(LOG_TAG, c.getString(R.string.toast_strava_req_access_err) + ": " + e.getMessage());
+                AppLog.i(c.getString(R.string.toast_strava_req_access_err) + ": " + e.getMessage());
                 //LayoutUtils.handleError(R.string.toast_strava_req_access_err, e, c);
 
                 // request refreshToken
@@ -622,7 +621,7 @@ public class StravaService {
                         Prefs.setRefreshToken(response.getString(JSON_REFRESH_TOKEN));
 
                         LayoutUtils.toast(R.string.toast_strava_req_refresh_successful, c);
-                        Log.i(LOG_TAG, "response refreshToken: " + Prefs.getRefreshToken());
+                        AppLog.i("response refreshToken: " + Prefs.getRefreshToken());
                         onTokenReady(Prefs.getRefreshToken());
                     }
                     catch (JSONException e) {

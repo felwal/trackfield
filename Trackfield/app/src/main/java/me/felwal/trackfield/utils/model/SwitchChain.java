@@ -1,8 +1,8 @@
 package me.felwal.trackfield.utils.model;
 
-import android.util.Log;
-
 import java.util.ArrayList;
+
+import me.felwal.trackfield.utils.AppLog;
 
 public class SwitchChain {
 
@@ -65,7 +65,7 @@ public class SwitchChain {
         for (SwitchItem item : items) {
             if (item.getKey().equals(key)) return item;
         }
-        Log.w("SwitchChain", "item not found");
+        AppLog.w("SwitchChain item not found");
         return null;
     }
 

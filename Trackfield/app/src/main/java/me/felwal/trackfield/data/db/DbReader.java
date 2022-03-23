@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +25,7 @@ import me.felwal.trackfield.ui.main.groupingpager.intervallist.model.IntervalIte
 import me.felwal.trackfield.ui.main.groupingpager.placelist.model.PlaceItem;
 import me.felwal.trackfield.ui.main.groupingpager.routelist.model.RouteItem;
 import me.felwal.trackfield.ui.map.model.Trail;
+import me.felwal.trackfield.utils.AppLog;
 import me.felwal.trackfield.utils.DateUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.annotation.Unfinished;
@@ -41,8 +41,6 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 public class DbReader extends DbHelper {
-
-    private static final String LOG_TAG = "Reader";
 
     private static DbReader instance;
 
@@ -91,7 +89,7 @@ public class DbReader extends DbHelper {
         cursor.close();
 
         if (exercises.size() > 1) {
-            Log.w(LOG_TAG + " getExercise", "more than one exercise with stravaId " + stravaId);
+            AppLog.w("getExercise: more than one exercise with stravaId " + stravaId);
         }
 
         return getFirst(exercises);
@@ -199,7 +197,7 @@ public class DbReader extends DbHelper {
                 exerciseFilter(" AND", filter);
         String orderBy = orderBy(sortMode, ascending);
 
-        Log.i(LOG_TAG, "search where: " + where);
+        AppLog.i("search where: " + where);
 
         Cursor cursor = db.query(from, select, where, null, null, null, orderBy, null);
         ArrayList<Exerlite> exerlites = unpackLiteCursor(cursor, false);
@@ -841,7 +839,7 @@ public class DbReader extends DbHelper {
 
         String query = select + from + innerJoin1 + innerJoin2 + where + groupBy + having + orderBy;
 
-        Log.i(LOG_TAG + " getRouteItems", query);
+        AppLog.i("getRouteItems: " + query);
 
         Cursor cursor = db.rawQuery(query, null);
         ArrayList<RouteItem> routeItems = new ArrayList<>();
@@ -895,7 +893,7 @@ public class DbReader extends DbHelper {
 
         String query = "SELECT " + colDiDist + ", " + selectBestPace + " ORDER BY " + orderBy;
 
-        Log.i(LOG_TAG + " getDistanceItems", query);
+        AppLog.i("getDistanceItems: " + query);
 
         Cursor cursor = db.rawQuery(query, null);
         ArrayList<DistanceItem> distanceItems = new ArrayList<>();
@@ -1307,7 +1305,7 @@ public class DbReader extends DbHelper {
                 " AND " + selPace + " > 0" + andTypeFilter + " ORDER BY " + orderByPace + " LIMIT 3))" +
                 " ORDER BY " + orderByDate;
 
-        Log.i(LOG_TAG + " getPaceNodesByDistance", query);
+        AppLog.i(" getPaceNodesByDistance: " + query);
 
         Cursor cursor = db.rawQuery(query, null);
         TreeMap<Float, Float> nodes = new TreeMap<>();
