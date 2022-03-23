@@ -10,9 +10,9 @@ typealias Segment = List<LatLng>
 // subsegment
 
 fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> {
-    i(" ")
-    i("new segment - - - - - - - - - – - - - - - -")
-    i(" ")
+    AppLog.i(" ")
+    AppLog.i("new segment - - - - - - - - - – - - - - - -")
+    AppLog.i(" ")
 
     val subSegPairs = mutableListOf<Pair<Segment, Segment>>()
 
@@ -62,7 +62,7 @@ fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> 
 
         // split; create new subsegment
         if (!isSplitted && deltaDist > deltaDistMax) {
-            i("new splitted subsegment - - - - - - - - - – - - - - - -")
+            AppLog.i("new splitted subsegment - - - - - - - - - – - - - - - -")
 
             // subtract half the stepDist to have the exact endDists as the medians of the distribution
             if (endDist1 - stepDist > startDist1 && endDist2 - stepDist > startDist2) {
@@ -127,7 +127,7 @@ fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> 
                 }
 
                 splitDist2 -= splitStep(splitDeltaDist).also {
-                    i(
+                    AppLog.i(
                         "(2): dist1 = ${endDist1.toInt()}, " +
                             "dist2 = ${splitDist2.toInt()} ∈ [${startDist2.toInt()}, ${endDist2.toInt()}]; " +
                             "splitStep(${splitDeltaDist.toInt()}) = ${it.toInt()}"
@@ -171,7 +171,7 @@ fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> 
 
                 // take bigger steps if there is a long distance between the points
                 splitDist1 -= splitStep(splitDeltaDist).also {
-                    i(
+                    AppLog.i(
                         "(1): dist2 = ${endDist2.toInt()}, " +
                             "dist1 = ${splitDist1.toInt()} ∈ [${startDist1.toInt()}, ${endDist1.toInt()}]; " +
                             "splitStep(${splitDeltaDist.toInt()}) = ${it.toInt()}"
