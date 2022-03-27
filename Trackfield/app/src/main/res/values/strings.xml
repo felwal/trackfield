@@ -87,9 +87,11 @@
     <string name="tv_text_settings_title_birthday">Birthday</string>
     <string name="tv_text_settigns_header_about">About</string>
     <string name="tv_text_settings_title_version">Version</string>
+    <string name="tv_text_settings_title_licenses">Open source licenses</string>
+    <string name="tv_text_settings_msg_licenses">Licenses for third party software</string>
     <string name="tv_text_settings_header_developer">Developer options</string>
     <string name="tv_text_settings_title_reboard">Reboard</string>
-    <string name="tv_text_settings_title_regenerate_places">Regenerate places</string>
+    <string name="tv_text_settings_title_generate_places">Generate places</string>
     <string name="tv_text_settings_title_recreate">Recreate database</string>
 
     <!-- strava settings -->
@@ -106,7 +108,7 @@
     <string name="tv_text_settings_hint_device">Samsung Galaxy S2, S3 etc …</string>
     <string name="tv_text_settings_title_recordingmethod">Default recording method</string>
     <string name="tv_text_settings_hint_recordingmethod">GPS, Galileo, Glonass etc …</string>
-    <string name="tv_text_settings_title_request_options">Also request …</string>
+    <string name="tv_text_settings_title_request_options">Also request</string>
 
     <!-- recycler empty states -->
     <string name="tv_text_empty_exerciselist_title">Welcome to Trackfield!</string>

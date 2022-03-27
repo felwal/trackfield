@@ -1,29 +1,28 @@
 plugins {
+    id 'com.android.application'
+    id 'com.google.android.gms.oss-licenses-plugin'
     id 'com.google.secrets_gradle_plugin' version '0.5'
     id 'kotlin-android'
 }
 
-apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion target_sdk_version
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "me.felwal.trackfield"
+        applicationId 'me.felwal.trackfield'
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionName '1.0'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         // declare resource api keys
         Properties properties = new Properties()
-        if (rootProject.file("local.properties").exists()) {
-            properties.load(rootProject.file("local.properties").newDataInputStream())
+        if (rootProject.file('local.properties').exists()) {
+            properties.load(rootProject.file('local.properties').newDataInputStream())
         }
-        resValue "string", "google_api_key_debug", properties.getProperty("GOOGLE_API_KEY_DEBUG", "")
-        resValue "string", "google_api_key_release", properties.getProperty("GOOGLE_API_KEY_RELEASE", "")
+        resValue 'string', 'google_api_key_debug', properties.getProperty('GOOGLE_API_KEY_DEBUG', '')
+        resValue 'string', 'google_api_key_release', properties.getProperty('GOOGLE_API_KEY_RELEASE', '')
     }
     buildTypes {
         release {
@@ -45,7 +44,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -54,12 +53,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.maps.android:android-maps-utils:2.1.0'
     implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.0'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 

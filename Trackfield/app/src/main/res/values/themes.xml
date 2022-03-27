@@ -99,4 +99,6 @@
         <item name="android:navigationBarColor">?colorPrimary</item>
     </style>
 
+    <style name="Theme.Trackfield.OssLicenses" parent="Theme.AppCompat.Light.DarkActionBar" />
+
 </resources>

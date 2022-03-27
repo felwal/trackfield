@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import me.felwal.android.fragment.app.AbsSettingsActivity
 import me.felwal.android.fragment.dialog.AlertDialog
 import me.felwal.android.fragment.dialog.InputDialog
@@ -210,6 +211,11 @@ class SettingsActivity :
                     title = getString(R.string.tv_text_settings_title_version),
                     desc = getString(R.string.app_version),
                     onClick = {}
+                ),
+                LaunchItem(
+                    title = getString(R.string.tv_text_settings_title_licenses),
+                    desc = getString(R.string.tv_text_settings_msg_licenses),
+                    activity = OssLicensesMenuActivity::class.java
                 )
             ),
             ItemSection(
@@ -222,7 +228,7 @@ class SettingsActivity :
                     }
                 ),
                 ActionItem(
-                    title = getString(R.string.tv_text_settings_title_regenerate_places),
+                    title = getString(R.string.tv_text_settings_title_generate_places),
                     onClick = {
                         DbWriter.get(this).regeneratePlaces(this)
                         MainActivity.recreateOnRestart = true;

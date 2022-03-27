@@ -138,6 +138,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.Trackfield.OssLicenses"
+            android:exported="true" />
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.Trackfield.OssLicenses"
+            android:exported="true" />
+
         <!-- meta-data -->
 
         <meta-data
