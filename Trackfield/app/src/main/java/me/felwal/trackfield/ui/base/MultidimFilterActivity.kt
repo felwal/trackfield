@@ -13,8 +13,6 @@ import me.felwal.android.widget.control.CheckListOption
 import me.felwal.android.widget.control.ListOption
 import me.felwal.android.widget.control.SheetOption
 import me.felwal.trackfield.R
-import me.felwal.trackfield.data.db.DbReader
-import me.felwal.trackfield.ui.base.ExerciseFilter
 
 private const val SHEET_FILTER = "filterSheet"
 

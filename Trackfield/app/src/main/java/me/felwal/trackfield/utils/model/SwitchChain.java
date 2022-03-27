@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import me.felwal.trackfield.utils.AppLog;
 
+@Deprecated
 public class SwitchChain {
 
     private final SwitchItem[] items;

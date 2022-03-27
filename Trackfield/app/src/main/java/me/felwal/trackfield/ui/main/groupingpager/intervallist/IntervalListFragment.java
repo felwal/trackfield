@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
+import me.felwal.android.util.ResourcesKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
@@ -16,10 +19,6 @@ import me.felwal.trackfield.ui.main.groupingpager.GroupListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import me.felwal.trackfield.ui.main.groupingpager.intervallist.model.IntervalItem;
 import me.felwal.trackfield.utils.AppConsts;
-
-import java.util.ArrayList;
-
-import me.felwal.android.util.ResourcesKt;
 
 public class IntervalListFragment extends GroupListFragment {
 

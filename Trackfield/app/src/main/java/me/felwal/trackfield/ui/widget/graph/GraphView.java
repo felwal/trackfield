@@ -10,13 +10,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.felwal.trackfield.utils.ScreenUtils;
-import me.felwal.trackfield.utils.annotation.Unfinished;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.utils.ScreenUtils;
+import me.felwal.trackfield.utils.annotation.Unfinished;
 
 public class GraphView extends View implements View.OnTouchListener {
 

@@ -15,6 +15,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
+import org.jetbrains.annotations.Nullable;
+
+import me.felwal.android.fragment.dialog.AlertDialog;
+import me.felwal.android.fragment.dialog.BaseDialogKt;
+import me.felwal.android.fragment.dialog.CheckDialog;
+import me.felwal.android.fragment.dialog.MultiChoiceDialog;
+import me.felwal.android.util.MenuKt;
+import me.felwal.android.widget.control.CheckListOption;
+import me.felwal.android.widget.control.DialogOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
@@ -33,20 +46,6 @@ import me.felwal.trackfield.utils.AppConsts;
 import me.felwal.trackfield.utils.LayoutUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.ScreenUtils;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import org.jetbrains.annotations.Nullable;
-
-import me.felwal.android.fragment.dialog.AlertDialog;
-import me.felwal.android.fragment.dialog.BaseDialogKt;
-import me.felwal.android.fragment.dialog.CheckDialog;
-import me.felwal.android.fragment.dialog.MultiChoiceDialog;
-import me.felwal.android.widget.control.CheckListOption;
-import me.felwal.android.widget.control.DialogOption;
-import me.felwal.trackfield.utils.UtilsKt;
 
 public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener,
     MultiChoiceDialog.DialogListener, OnMapReadyCallback {
@@ -137,7 +136,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_exercisedetail, menu);
-        UtilsKt.createOptionalIcons(menu);
+        MenuKt.createOptionalIcons(menu);
 
         // remove actions dependent on externalId
         if (!exercise.hasStravaId()) {
@@ -155,7 +154,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        UtilsKt.prepareOptionalIcons(menu, this);
+        MenuKt.prepareOptionalIcons(menu, this);
 
         // hide trail
         MenuItem hideItem = menu.findItem(R.id.action_hide_trail);

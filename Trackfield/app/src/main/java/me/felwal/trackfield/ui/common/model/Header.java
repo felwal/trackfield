@@ -2,11 +2,11 @@ package me.felwal.trackfield.ui.common.model;
 
 import androidx.annotation.Nullable;
 
+import java.util.Arrays;
+
 import me.felwal.trackfield.utils.AppConsts;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.annotation.Unfinished;
-
-import java.util.Arrays;
 
 public class Header extends RecyclerItem {
 

@@ -2,6 +2,8 @@ package me.felwal.trackfield.ui.main.exerciselist;
 
 import android.app.Activity;
 
+import java.util.List;
+
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.DelegateClickListener;
 import me.felwal.trackfield.ui.common.adapterdelegate.GraphWeekAdapterDelegate;
@@ -10,8 +12,6 @@ import me.felwal.trackfield.ui.common.adapterdelegate.HeaderMediumAdapterDelegat
 import me.felwal.trackfield.ui.common.adapterdelegate.HeaderSmallAdapterDelegate;
 import me.felwal.trackfield.ui.common.adapterdelegate.SorterAdapterDelegate;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
-
-import java.util.List;
 
 class ExerciseListDelegationAdapter extends BaseListAdapter {
 

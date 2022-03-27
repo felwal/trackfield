@@ -21,8 +21,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 
-import me.felwal.trackfield.ui.widget.graph.Borders;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import me.felwal.trackfield.ui.widget.graph.Borders;
 
 // Layout
 public final class LayoutUtils {

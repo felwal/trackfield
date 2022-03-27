@@ -1,5 +1,6 @@
 package me.felwal.trackfield.utils.model;
 
+@Deprecated
 public class SwitchItem {
 
     private String key;

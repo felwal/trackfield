@@ -14,14 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.prefs.Prefs;
-import me.felwal.trackfield.ui.main.MainActivity;
-import me.felwal.trackfield.ui.main.MainFragment;
-
 import me.felwal.android.util.ViewKt;
 import me.felwal.android.util.WidgetKt;
-import me.felwal.trackfield.utils.UtilsKt;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.ui.main.MainActivity;
+import me.felwal.trackfield.ui.main.MainFragment;
 
 public class ExerciseListFragment extends MainFragment {
 

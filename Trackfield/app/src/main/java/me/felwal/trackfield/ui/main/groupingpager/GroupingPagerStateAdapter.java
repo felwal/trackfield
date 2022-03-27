@@ -10,13 +10,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.main.groupingpager.distancelist.DistanceListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.intervallist.IntervalListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.placelist.PlaceListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.routelist.RouteListFragment;
-import com.google.android.material.tabs.TabLayout;
 
 public class GroupingPagerStateAdapter extends FragmentPagerAdapter {
 

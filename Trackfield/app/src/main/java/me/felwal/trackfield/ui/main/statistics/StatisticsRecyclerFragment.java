@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.prefs.Prefs;
@@ -15,9 +18,6 @@ import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class StatisticsRecyclerFragment extends RecyclerFragment {
 

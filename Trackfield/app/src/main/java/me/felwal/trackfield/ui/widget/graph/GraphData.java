@@ -6,14 +6,13 @@ import android.graphics.PointF;
 
 import androidx.annotation.AttrRes;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.utils.ScreenUtils;
-import me.felwal.trackfield.utils.TypeUtils;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.utils.ScreenUtils;
+import me.felwal.trackfield.utils.TypeUtils;
 
 public class GraphData {
 

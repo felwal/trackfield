@@ -3,11 +3,11 @@ package me.felwal.trackfield.ui.widget.dialog
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import me.felwal.trackfield.R
 import me.felwal.android.fragment.dialog.BaseDialog
 import me.felwal.android.fragment.dialog.NO_INT_TEXT
 import me.felwal.android.util.toast
 import me.felwal.android.widget.control.DialogOption
+import me.felwal.trackfield.R
 
 private const val ARG_TEXT1 = "text1"
 private const val ARG_TEXT2 = "text2"

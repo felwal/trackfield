@@ -19,6 +19,7 @@ import kotlin.Unit;
 import me.felwal.android.fragment.dialog.BaseDialogKt;
 import me.felwal.android.fragment.dialog.InputDialog;
 import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.util.MenuKt;
 import me.felwal.android.widget.FloatingActionMenu;
 import me.felwal.android.widget.control.DialogOption;
 import me.felwal.android.widget.control.InputOption;
@@ -26,8 +27,8 @@ import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbWriter;
 import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.network.StravaService;
-import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseAddActivity;
@@ -40,7 +41,6 @@ import me.felwal.trackfield.ui.setting.SettingsActivity;
 import me.felwal.trackfield.utils.FileUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.ScreenUtils;
-import me.felwal.trackfield.utils.UtilsKt;
 
 public class MainActivity extends ExerciseFilterActivity implements InputDialog.DialogListener,
     SortSheet.SheetListener {
@@ -109,7 +109,7 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
     public boolean onPrepareOptionsMenu(Menu menu) {
         // set "filter" check state
         MenuItem filterItem = menu.findItem(R.id.action_filter_exercises);
-        UtilsKt.fixIconCheckState(filterItem);
+        MenuKt.fixIconCheckState(filterItem);
         filterItem.setChecked(Prefs.getMainFilter().isActive());
 
         return super.onPrepareOptionsMenu(menu);

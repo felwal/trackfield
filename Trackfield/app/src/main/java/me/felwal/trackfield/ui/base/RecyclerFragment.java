@@ -17,6 +17,10 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
+import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.widget.control.SheetOption;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.ui.common.model.Exerlite;
@@ -25,11 +29,6 @@ import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.utils.LayoutUtils;
-
-import java.util.ArrayList;
-
-import me.felwal.android.fragment.sheet.SortSheet;
-import me.felwal.android.widget.control.SheetOption;
 
 public abstract class RecyclerFragment extends Fragment implements DelegateClickListener,
     ScaleGestureDetector.OnScaleGestureListener {

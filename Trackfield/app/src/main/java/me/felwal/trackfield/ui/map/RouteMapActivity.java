@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.ui.map.model.Trails;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -17,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.ui.map.model.Trails;
 import me.felwal.trackfield.utils.LocationUtilsKt;
 
 public class RouteMapActivity extends MapActivity {

@@ -2,11 +2,11 @@ package me.felwal.trackfield.data.db.model;
 
 import android.content.Context;
 
-import me.felwal.trackfield.utils.LayoutUtils;
-import me.felwal.trackfield.utils.MathUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import me.felwal.trackfield.utils.LayoutUtils;
+import me.felwal.trackfield.utils.MathUtils;
 
 public class Distance implements JSONObjectable {
 

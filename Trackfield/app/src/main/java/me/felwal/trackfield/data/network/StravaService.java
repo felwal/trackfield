@@ -10,6 +10,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import me.felwal.trackfield.BuildConfig;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
@@ -25,15 +35,6 @@ import me.felwal.trackfield.utils.DateUtils;
 import me.felwal.trackfield.utils.LayoutUtils;
 import me.felwal.trackfield.utils.annotation.Debug;
 import me.felwal.trackfield.utils.model.SwitchChain;
-import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 public class StravaService {
 

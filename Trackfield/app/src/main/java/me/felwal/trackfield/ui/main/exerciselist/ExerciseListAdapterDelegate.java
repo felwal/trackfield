@@ -9,13 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import me.felwal.trackfield.ui.base.DelegateClickListener;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
-
-import java.util.List;
 
 public class ExerciseListAdapterDelegate extends
     BaseAdapterDelegate<Exerlite, RecyclerItem, ExerciseListAdapterDelegate.ExerciseViewHolder> {

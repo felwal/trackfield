@@ -18,16 +18,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.data.db.DbWriter;
-import me.felwal.trackfield.data.db.model.Exercise;
-import me.felwal.trackfield.ui.main.MainActivity;
-import me.felwal.trackfield.utils.AppConsts;
-import me.felwal.trackfield.utils.LayoutUtils;
-import me.felwal.trackfield.utils.MathUtils;
-import me.felwal.trackfield.utils.ScreenUtils;
-import me.felwal.trackfield.utils.TypeUtils;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
@@ -39,6 +29,16 @@ import me.felwal.android.fragment.dialog.AlertDialog;
 import me.felwal.android.fragment.dialog.BaseDialogKt;
 import me.felwal.android.util.ResourcesKt;
 import me.felwal.android.widget.control.DialogOption;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.data.db.DbWriter;
+import me.felwal.trackfield.data.db.model.Exercise;
+import me.felwal.trackfield.ui.main.MainActivity;
+import me.felwal.trackfield.utils.AppConsts;
+import me.felwal.trackfield.utils.LayoutUtils;
+import me.felwal.trackfield.utils.MathUtils;
+import me.felwal.trackfield.utils.ScreenUtils;
+import me.felwal.trackfield.utils.TypeUtils;
 
 public class ExerciseEditActivity extends AppCompatActivity implements AlertDialog.DialogListener {
 

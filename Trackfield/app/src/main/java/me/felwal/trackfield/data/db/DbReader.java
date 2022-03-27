@@ -8,6 +8,17 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.security.InvalidParameterException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 import me.felwal.trackfield.data.db.DbContract.DistanceEntry;
 import me.felwal.trackfield.data.db.DbContract.ExerciseEntry;
 import me.felwal.trackfield.data.db.DbContract.PlaceEntry;
@@ -16,8 +27,8 @@ import me.felwal.trackfield.data.db.model.Distance;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
-import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.data.prefs.Prefs;
+import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.ui.common.model.Exerlite;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
@@ -29,16 +40,6 @@ import me.felwal.trackfield.utils.AppLog;
 import me.felwal.trackfield.utils.DateUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.annotation.Unfinished;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.security.InvalidParameterException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 public class DbReader extends DbHelper {
 

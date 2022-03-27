@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import me.felwal.android.fragment.app.AbsSettingsActivity
+import me.felwal.android.fragment.dialog.AlertDialog
+import me.felwal.android.fragment.dialog.InputDialog
+import me.felwal.android.fragment.dialog.SingleChoiceDialog
 import me.felwal.trackfield.R
 import me.felwal.trackfield.data.db.DbWriter
 import me.felwal.trackfield.data.prefs.Prefs
@@ -17,10 +21,6 @@ import me.felwal.trackfield.utils.AppConsts
 import me.felwal.trackfield.utils.FileUtils
 import me.felwal.trackfield.utils.LayoutUtils
 import me.felwal.trackfield.utils.ScreenUtils
-import me.felwal.android.fragment.app.AbsSettingsActivity
-import me.felwal.android.fragment.dialog.AlertDialog
-import me.felwal.android.fragment.dialog.InputDialog
-import me.felwal.android.fragment.dialog.SingleChoiceDialog
 import java.time.LocalDate
 
 private const val DIALOG_THEME = "themeDialog"
@@ -118,7 +118,7 @@ class SettingsActivity :
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_services),
-                ActionItem(
+                LaunchItem(
                     title = getString(R.string.tv_text_settings_title_strava),
                     onClick = { StravaSettingsActivity.startActivity(this) },
                     iconRes = R.drawable.ic_logo_strava

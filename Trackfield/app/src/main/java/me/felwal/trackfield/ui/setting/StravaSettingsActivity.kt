@@ -5,6 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
+import me.felwal.android.fragment.app.AbsSettingsActivity
+import me.felwal.android.fragment.dialog.AlertDialog
+import me.felwal.android.fragment.dialog.InputDialog
+import me.felwal.android.fragment.dialog.MultiChoiceDialog
+import me.felwal.android.util.toIndicesOfTruths
 import me.felwal.trackfield.R
 import me.felwal.trackfield.data.network.StravaService
 import me.felwal.trackfield.data.prefs.Prefs
@@ -12,11 +17,6 @@ import me.felwal.trackfield.databinding.ActivitySettingsBinding
 import me.felwal.trackfield.ui.main.MainActivity
 import me.felwal.trackfield.utils.LayoutUtils
 import me.felwal.trackfield.utils.ScreenUtils
-import me.felwal.android.fragment.app.AbsSettingsActivity
-import me.felwal.android.fragment.dialog.AlertDialog
-import me.felwal.android.fragment.dialog.InputDialog
-import me.felwal.android.fragment.dialog.MultiChoiceDialog
-import me.felwal.android.util.toIndicesOfTruths
 
 private const val DIALOG_DEVICE = "deviceDialog"
 private const val DIALOG_RECORDING_METHOD = "methodDialog"
@@ -83,7 +83,7 @@ class StravaSettingsActivity :
         inflateSections(
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_connection),
-                ActionItem(
+                LinkItem(
                     title = getString(R.string.tv_text_settings_title_auth),
                     onClick = { strava.authorizeStrava() },
                     iconRes = R.drawable.ic_key
@@ -93,6 +93,7 @@ class StravaSettingsActivity :
                 title = getString(R.string.tv_text_settings_header_requests),
                 NumberItem(
                     title = getString(R.string.tv_text_settings_title_request_specific),
+                    desc = "",
                     value = 0,
                     hint = getString(R.string.tv_text_settings_hint_request_specific),
                     iconRes = R.drawable.ic_send,

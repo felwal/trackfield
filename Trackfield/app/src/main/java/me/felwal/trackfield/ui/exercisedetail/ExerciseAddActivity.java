@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.utils.AppConsts;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.utils.AppConsts;
 
 public class ExerciseAddActivity extends ExerciseEditActivity {
 

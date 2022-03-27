@@ -1,10 +1,10 @@
 package me.felwal.trackfield.ui.widget.graph;
 
-import me.felwal.trackfield.ui.common.model.RecyclerItem;
-import me.felwal.trackfield.utils.MathUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import me.felwal.trackfield.ui.common.model.RecyclerItem;
+import me.felwal.trackfield.utils.MathUtils;
 
 public class Graph extends RecyclerItem {
 

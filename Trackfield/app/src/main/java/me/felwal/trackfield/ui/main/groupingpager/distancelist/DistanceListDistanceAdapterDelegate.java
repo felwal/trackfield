@@ -9,13 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import me.felwal.trackfield.ui.base.DelegateClickListener;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.main.groupingpager.distancelist.model.DistanceItem;
-
-import java.util.List;
 
 public class DistanceListDistanceAdapterDelegate extends
     BaseAdapterDelegate<DistanceItem, RecyclerItem, DistanceListDistanceAdapterDelegate.DistanceViewHolder> {

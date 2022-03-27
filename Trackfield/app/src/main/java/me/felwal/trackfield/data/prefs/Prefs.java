@@ -5,6 +5,14 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.network.StravaService;
 import me.felwal.trackfield.ui.base.ExerciseFilter;
@@ -14,13 +22,6 @@ import me.felwal.trackfield.utils.annotation.Unfinished;
 import me.felwal.trackfield.utils.annotation.Unimplemented;
 import me.felwal.trackfield.utils.model.SwitchChain;
 import me.felwal.trackfield.utils.model.SwitchItem;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 

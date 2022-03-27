@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 import me.felwal.trackfield.data.db.DbContract.DistanceEntry;
 import me.felwal.trackfield.data.db.DbContract.ExerciseEntry;
 import me.felwal.trackfield.data.db.DbContract.PlaceEntry;
@@ -16,8 +18,6 @@ import me.felwal.trackfield.data.db.model.Route;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.map.model.Trail;
 import me.felwal.trackfield.utils.annotation.Debug;
-
-import java.util.ArrayList;
 
 public class DbWriter extends DbHelper {
 

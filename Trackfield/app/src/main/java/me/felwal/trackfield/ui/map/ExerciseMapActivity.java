@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.ui.map.model.Trail;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.ui.map.model.Trail;
 
 public class ExerciseMapActivity extends MapActivity {
 

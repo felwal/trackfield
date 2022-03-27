@@ -1,12 +1,12 @@
 package me.felwal.trackfield.utils;
 
-import me.felwal.trackfield.R;
-
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import me.felwal.trackfield.R;
 
 // Consts
 public final class AppConsts {

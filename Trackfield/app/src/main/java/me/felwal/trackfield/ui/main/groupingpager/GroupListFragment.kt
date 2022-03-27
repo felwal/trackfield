@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import me.felwal.android.util.fixIconCheckState
 import me.felwal.trackfield.R
 import me.felwal.trackfield.data.prefs.Prefs
 import me.felwal.trackfield.ui.base.RecyclerFragment
-import me.felwal.trackfield.utils.fixIconCheckState
 
 abstract class GroupListFragment : RecyclerFragment() {
 

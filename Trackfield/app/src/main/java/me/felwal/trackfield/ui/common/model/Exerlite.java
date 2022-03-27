@@ -4,10 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.ColorInt;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.utils.AppConsts;
-import me.felwal.trackfield.utils.MathUtils;
-import me.felwal.trackfield.utils.TypeUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.LocalDate;
@@ -15,6 +11,10 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.utils.AppConsts;
+import me.felwal.trackfield.utils.MathUtils;
+import me.felwal.trackfield.utils.TypeUtils;
 
 public class Exerlite extends RecyclerItem {
 

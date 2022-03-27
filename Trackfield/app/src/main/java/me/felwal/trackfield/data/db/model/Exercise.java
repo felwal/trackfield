@@ -4,6 +4,15 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.map.model.Trail;
@@ -13,14 +22,6 @@ import me.felwal.trackfield.utils.LayoutUtils;
 import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.TypeUtils;
 import me.felwal.trackfield.utils.annotation.Unfinished;
-import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Exercise implements JSONObjectable {
 

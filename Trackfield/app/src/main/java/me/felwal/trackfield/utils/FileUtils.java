@@ -11,16 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import me.felwal.trackfield.data.db.DbHelper;
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.data.db.DbWriter;
-import me.felwal.trackfield.data.db.model.Distance;
-import me.felwal.trackfield.data.db.model.Exercise;
-import me.felwal.trackfield.data.db.model.JSONObjectable;
-import me.felwal.trackfield.data.db.model.Place;
-import me.felwal.trackfield.data.db.model.Route;
-import me.felwal.trackfield.data.prefs.Prefs;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +24,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import me.felwal.trackfield.data.db.DbHelper;
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.data.db.DbWriter;
+import me.felwal.trackfield.data.db.model.Distance;
+import me.felwal.trackfield.data.db.model.Exercise;
+import me.felwal.trackfield.data.db.model.JSONObjectable;
+import me.felwal.trackfield.data.db.model.Place;
+import me.felwal.trackfield.data.db.model.Route;
+import me.felwal.trackfield.data.prefs.Prefs;
 
 // File
 public final class FileUtils {

@@ -1,10 +1,11 @@
 package me.felwal.trackfield.ui.base;
 
-import me.felwal.trackfield.ui.common.model.RecyclerItem;
-import me.felwal.trackfield.ui.common.model.SorterItem;
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter;
 
 import java.util.List;
+
+import me.felwal.trackfield.ui.common.model.RecyclerItem;
+import me.felwal.trackfield.ui.common.model.SorterItem;
 
 public abstract class BaseListAdapter extends ListDelegationAdapter<List<RecyclerItem>> {
 

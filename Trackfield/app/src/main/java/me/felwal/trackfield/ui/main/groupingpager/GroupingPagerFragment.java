@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.main.MainActivity;
 import me.felwal.trackfield.ui.main.MainFragment;
@@ -19,7 +21,6 @@ import me.felwal.trackfield.ui.main.groupingpager.distancelist.DistanceListFragm
 import me.felwal.trackfield.ui.main.groupingpager.intervallist.IntervalListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.placelist.PlaceListFragment;
 import me.felwal.trackfield.ui.main.groupingpager.routelist.RouteListFragment;
-import com.google.android.material.tabs.TabLayout;
 
 public class GroupingPagerFragment extends MainFragment {
 

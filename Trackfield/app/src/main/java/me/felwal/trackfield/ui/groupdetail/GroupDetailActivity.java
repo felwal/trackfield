@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 
 import me.felwal.android.fragment.sheet.SortSheet;
+import me.felwal.android.util.MenuKt;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.model.Exercise;
 import me.felwal.trackfield.data.prefs.Prefs;
@@ -21,7 +22,6 @@ import me.felwal.trackfield.ui.base.ExerciseFilter;
 import me.felwal.trackfield.ui.base.ExerciseFilterActivity;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.utils.ScreenUtils;
-import me.felwal.trackfield.utils.UtilsKt;
 
 public abstract class GroupDetailActivity extends ExerciseFilterActivity implements SortSheet.SheetListener {
 
@@ -53,11 +53,11 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        UtilsKt.prepareOptionalIcons(menu, this);
+        MenuKt.prepareOptionalIcons(menu, this);
 
         // set "filter" check state
         MenuItem filterItem = menu.findItem(R.id.action_filter_exercises);
-        UtilsKt.fixIconCheckState(filterItem);
+        MenuKt.fixIconCheckState(filterItem);
         filterItem.setChecked(Prefs.getGroupFilter().isActive());
 
         return super.onPrepareOptionsMenu(menu);
@@ -66,7 +66,7 @@ public abstract class GroupDetailActivity extends ExerciseFilterActivity impleme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(getToolbarMenuRes(), menu);
-        UtilsKt.createOptionalIcons(menu);
+        MenuKt.createOptionalIcons(menu);
         return true;
     }
 

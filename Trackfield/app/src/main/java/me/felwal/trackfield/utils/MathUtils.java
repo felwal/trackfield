@@ -1,8 +1,8 @@
 package me.felwal.trackfield.utils;
 
-import me.felwal.trackfield.data.prefs.Prefs;
-
 import java.math.BigDecimal;
+
+import me.felwal.trackfield.data.prefs.Prefs;
 
 // Math
 public final class MathUtils {

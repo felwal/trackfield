@@ -5,13 +5,14 @@ import android.location.Location;
 
 import androidx.annotation.Nullable;
 
-import me.felwal.trackfield.utils.LayoutUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import me.felwal.trackfield.utils.LayoutUtils;
 
 public class Place implements JSONObjectable {
 

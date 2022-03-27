@@ -6,10 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.data.db.DbReader;
-import me.felwal.trackfield.data.db.model.Exercise;
-import me.felwal.trackfield.data.db.model.Place;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -21,6 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.data.db.DbReader;
+import me.felwal.trackfield.data.db.model.Exercise;
+import me.felwal.trackfield.data.db.model.Place;
 
 public class PlaceMapActivity extends MapActivity {
 

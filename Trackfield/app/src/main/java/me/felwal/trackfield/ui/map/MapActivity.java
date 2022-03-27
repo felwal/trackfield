@@ -12,9 +12,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import me.felwal.trackfield.R;
-import me.felwal.trackfield.ui.widget.sheet.PeekSheet;
-import me.felwal.trackfield.utils.ScreenUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.R;
+import me.felwal.trackfield.ui.widget.sheet.PeekSheet;
+import me.felwal.trackfield.utils.ScreenUtils;
 
 public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
     GoogleMap.OnPolylineClickListener, PeekSheet.SheetListener {

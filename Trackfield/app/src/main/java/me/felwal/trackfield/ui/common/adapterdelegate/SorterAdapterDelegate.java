@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.DelegateClickListener;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
-
-import java.util.List;
 
 public class SorterAdapterDelegate extends
     BaseAdapterDelegate<SorterItem, RecyclerItem, SorterAdapterDelegate.SorterViewHolder> {

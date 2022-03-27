@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.ui.base.BaseAdapterDelegate;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphView;
 import me.felwal.trackfield.utils.MathUtils;
-
-import java.util.List;
 
 public class GraphRecAdapterDelegate extends
     BaseAdapterDelegate<Graph, RecyclerItem, GraphRecAdapterDelegate.GraphRecViewHolder> {
