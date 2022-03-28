@@ -120,6 +120,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         super.onRestart();
 
         // reload in case anything has been updated
+        exercise = DbReader.get(this).getExercise(exerciseId);
         setMap();
         setTexts();
 

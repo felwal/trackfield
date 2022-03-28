@@ -135,7 +135,7 @@ class SettingsActivity :
                         Prefs.setPreferSameTypeWhenDriving(it)
                         MainActivity.recreateOnRestart = true;
                     },
-                    iconRes = R.drawable.ic_calculate
+                    iconRes = R.drawable.ic_drive
                 ),
                 BooleanItem(
                     title = getString(R.string.tv_text_settings_title_driving_fall_back_to_route),
@@ -145,7 +145,7 @@ class SettingsActivity :
                         Prefs.setFallBackToRouteWhenDriving(it)
                         MainActivity.recreateOnRestart = true;
                     },
-                    iconRes = R.drawable.ic_calculate
+                    iconRes = R.drawable.ic_drive
                 )
             ),
             ItemSection(

@@ -196,7 +196,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
         if (isDistanceDriven) {
             et(distanceTil).setEnabled(false);
-            distanceTil.setEndIconDrawable(R.drawable.ic_calculate_filled);
+            distanceTil.setEndIconDrawable(R.drawable.ic_drive_filled);
         }
 
         // polyline
@@ -210,7 +210,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         // distance checked driven listener
         distanceTil.setEndIconOnClickListener(v -> {
             isDistanceDriven = !isDistanceDriven;
-            distanceTil.setEndIconDrawable(isDistanceDriven ? R.drawable.ic_calculate_filled : R.drawable.ic_calculate);
+            distanceTil.setEndIconDrawable(isDistanceDriven ? R.drawable.ic_drive_filled : R.drawable.ic_drive);
             et(distanceTil).setEnabled(!isDistanceDriven);
         });
 

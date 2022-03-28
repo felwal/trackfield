@@ -271,7 +271,7 @@
                     android:layout_marginStart="@dimen/spacing_exercisedetail_valuetext_start"
                     app:suffixText="@string/et_suffix_exerciseedit_distance"
                     app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/ic_calculate"
+                    app:endIconDrawable="@drawable/ic_drive"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exerciseedit_distance"
                     app:layout_constraintTop_toTopOf="parent">
