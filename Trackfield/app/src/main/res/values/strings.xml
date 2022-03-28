@@ -6,6 +6,9 @@
     <string name="app_name">Trackfield</string>
     <string name="app_version">0.0.0</string>
 
+    <string name="link_source">https://github.com/felwal/trackfield</string>
+    <string name="link_privacy_polcy">about:blank</string>
+
     <!-- activities -->
 
     <string name="activity_title_onboarding">Onboarding</string>
@@ -84,13 +87,15 @@
     <string name="tv_text_settings_title_import">Import json</string>
     <string name="tv_text_settings_header_profile">Profile</string>
     <string name="tv_text_settings_title_mass">Mass</string>
+    <string name="tv_text_settings_msg_mass">Used for calculating energy and power.</string>
     <string name="tv_text_settings_hint_mass">Kg</string>
     <string name="tv_text_settings_title_birthday">Birthday</string>
     <string name="tv_text_settigns_header_about">About</string>
     <string name="tv_text_settings_title_version">Version</string>
     <string name="tv_text_settings_title_licenses">Open source licenses</string>
     <string name="tv_text_settings_msg_licenses">Licenses for third party software</string>
-    <string name="tv_text_settings_title_source">View source code</string>
+    <string name="tv_text_settings_title_privacy_policy">Privacy policy</string>
+    <string name="tv_text_settings_title_source">Source code</string>
     <string name="tv_text_settings_msg_source">On Github</string>
     <string name="tv_text_settings_header_developer">Developer options</string>
     <string name="tv_text_settings_title_reboard">Reboard</string>

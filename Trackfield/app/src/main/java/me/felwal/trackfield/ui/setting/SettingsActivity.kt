@@ -178,6 +178,7 @@ class SettingsActivity :
                 FloatItem(
                     title = getString(R.string.tv_text_settings_title_mass),
                     desc = Prefs.getMass().toString() + " kg",
+                    msg = getString(R.string.tv_text_settings_msg_mass),
                     value = Prefs.getMass(),
                     hint = getString(R.string.tv_text_settings_hint_mass),
                     tag = DIALOG_MASS,
@@ -219,10 +220,14 @@ class SettingsActivity :
                     activity = OssLicensesMenuActivity::class.java
                 ),
                 LinkItem(
+                    title = getString(R.string.tv_text_settings_title_privacy_policy),
+                    iconRes = R.drawable.ic_policy,
+                    link = getString(R.string.link_privacy_polcy)
+                ),
+                LinkItem(
                     title = getString(R.string.tv_text_settings_title_source),
-                    desc = getString(R.string.tv_text_settings_msg_source),
                     iconRes = R.drawable.ic_code,
-                    link = "https://github.com/felwal/trackfield"
+                    link = getString(R.string.link_source)
                 )
             ),
             ItemSection(
