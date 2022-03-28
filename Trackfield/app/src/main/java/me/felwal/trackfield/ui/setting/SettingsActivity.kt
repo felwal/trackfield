@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import me.felwal.android.annotation.ExportToFelwal
 import me.felwal.android.fragment.app.AbsSettingsActivity
 import me.felwal.android.fragment.dialog.AlertDialog
 import me.felwal.android.fragment.dialog.InputDialog
@@ -206,29 +207,10 @@ class SettingsActivity :
                     iconRes = R.drawable.ic_date
                 )
             ),
-            ItemSection(
-                title = getString(R.string.tv_text_settigns_header_about),
-                ActionItem(
-                    title = getString(R.string.tv_text_settings_title_version),
-                    desc = getString(R.string.app_version),
-                    onClick = {}
-                ),
-                LaunchItem(
-                    title = getString(R.string.tv_text_settings_title_licenses),
-                    desc = getString(R.string.tv_text_settings_msg_licenses),
-                    iconRes = R.drawable.ic_license,
-                    activity = OssLicensesMenuActivity::class.java
-                ),
-                LinkItem(
-                    title = getString(R.string.tv_text_settings_title_privacy_policy),
-                    iconRes = R.drawable.ic_policy,
-                    link = getString(R.string.link_privacy_polcy)
-                ),
-                LinkItem(
-                    title = getString(R.string.tv_text_settings_title_source),
-                    iconRes = R.drawable.ic_code,
-                    link = getString(R.string.link_source)
-                )
+            aboutSection(
+                appVersion = getString(R.string.app_version),
+                privacyPolicyLink = getString(R.string.link_privacy_polcy),
+                sourceCodeLink = getString(R.string.link_source)
             ),
             ItemSection(
                 title = getString(R.string.tv_text_settings_header_developer),
@@ -255,6 +237,33 @@ class SettingsActivity :
             ).takeIf { Prefs.isDeveloper() }
         )
     }
+
+    @ExportToFelwal
+    private fun aboutSection(appVersion: String, privacyPolicyLink: String, sourceCodeLink: String) =
+        ItemSection(
+            title = getString(R.string.tv_text_settigns_header_about),
+            ActionItem(
+                title = getString(R.string.tv_text_settings_title_version),
+                desc = appVersion,
+                onClick = {}
+            ),
+            LaunchItem(
+                title = getString(R.string.tv_text_settings_title_licenses),
+                desc = getString(R.string.tv_text_settings_msg_licenses),
+                iconRes = R.drawable.ic_license,
+                activity = OssLicensesMenuActivity::class.java
+            ),
+            LinkItem(
+                title = getString(R.string.tv_text_settings_title_privacy_policy),
+                iconRes = R.drawable.ic_policy,
+                link = privacyPolicyLink
+            ),
+            LinkItem(
+                title = getString(R.string.tv_text_settings_title_source),
+                iconRes = R.drawable.ic_code,
+                link = sourceCodeLink
+            )
+        )
 
     // dialog
 
