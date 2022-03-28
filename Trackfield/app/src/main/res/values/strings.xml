@@ -89,6 +89,8 @@
     <string name="tv_text_settings_title_version">Version</string>
     <string name="tv_text_settings_title_licenses">Open source licenses</string>
     <string name="tv_text_settings_msg_licenses">Licenses for third party software</string>
+    <string name="tv_text_settings_title_source">View source code</string>
+    <string name="tv_text_settings_msg_source">On Github</string>
     <string name="tv_text_settings_header_developer">Developer options</string>
     <string name="tv_text_settings_title_reboard">Reboard</string>
     <string name="tv_text_settings_title_generate_places">Generate places</string>

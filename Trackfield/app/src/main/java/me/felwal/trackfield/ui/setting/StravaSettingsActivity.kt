@@ -26,7 +26,7 @@ private const val DIALOG_PULL_ALL = "pullAllDialog"
 private const val DIALOG_REQUEST_OPTIONS = "requestOptionsDialog"
 
 class StravaSettingsActivity :
-    AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
+    AbsSettingsActivity(dividerMode = DividerMode.AFTER_SECTION, indentEverything = true),
     AlertDialog.DialogListener,
     InputDialog.DialogListener,
     MultiChoiceDialog.DialogListener {

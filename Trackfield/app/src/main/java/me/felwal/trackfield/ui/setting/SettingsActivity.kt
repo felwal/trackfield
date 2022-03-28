@@ -33,7 +33,7 @@ private const val DIALOG_IMPORT = "importDialog"
 private const val DIALOG_RECREATE_DB = "recreateDbDialog"
 
 class SettingsActivity :
-    AbsSettingsActivity(dividerMode = DividerMode.IN_SECTION, indentEverything = false),
+    AbsSettingsActivity(dividerMode = DividerMode.AFTER_SECTION, indentEverything = true),
     AlertDialog.DialogListener,
     SingleChoiceDialog.DialogListener,
     InputDialog.DialogListener {
@@ -215,7 +215,14 @@ class SettingsActivity :
                 LaunchItem(
                     title = getString(R.string.tv_text_settings_title_licenses),
                     desc = getString(R.string.tv_text_settings_msg_licenses),
+                    iconRes = R.drawable.ic_license,
                     activity = OssLicensesMenuActivity::class.java
+                ),
+                LinkItem(
+                    title = getString(R.string.tv_text_settings_title_source),
+                    desc = getString(R.string.tv_text_settings_msg_source),
+                    iconRes = R.drawable.ic_code,
+                    link = "https://github.com/felwal/trackfield"
                 )
             ),
             ItemSection(
