@@ -418,14 +418,21 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             tv.setVisibility(View.GONE);
             alsoHide.setVisibility(View.GONE);
         }
-        else tv.setText(value);
+        else {
+            tv.setVisibility(View.VISIBLE);
+            alsoHide.setVisibility(View.VISIBLE);
+            tv.setText(value);
+        }
     }
 
     private void setTvHideIfEmpty(String value, TextView tv) {
         if (value.equals(AppConsts.NO_VALUE) || value.equals(AppConsts.NO_VALUE_TIME) || value.equals("")) {
             tv.setVisibility(View.GONE);
         }
-        else tv.setText(value);
+        else {
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(value);
+        }
     }
 
     // implements BinaryDialog, OnMapReadyCallback
