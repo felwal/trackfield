@@ -326,7 +326,6 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         distanceTv.setOnClickListener(v -> {
             if (from == FROM_DISTANCE) finish();
             else {
-                // TODO: always rounds up?
                 int longestDistance = DbReader.get(ExerciseDetailActivity.this).getLongestDistanceWithinLimits(
                     exercise.getEffectiveDistance(this));
                 DistanceDetailActivity.startActivity(ExerciseDetailActivity.this, longestDistance, exercise.getId());

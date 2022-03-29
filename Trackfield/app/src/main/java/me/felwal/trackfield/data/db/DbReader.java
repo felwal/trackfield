@@ -1026,8 +1026,11 @@ public class DbReader extends DbHelper {
 
     @SuppressLint("Range")
     public int getLongestDistanceWithinLimits(int ofDistance) {
-        int minDist = MathUtils.minDistance(ofDistance);
-        int maxDist = MathUtils.maxDistance(ofDistance);
+        // don't use MathUtils#minDistance and MathUtils#maxDistance, because upperLimit and lowerLimit
+        // are not neccessarily the same, and therefore the function doesn't work the other way;
+        // here we have the Exercise distance, not the Distance distance.
+        int minDist = ofDistance - Prefs.getDistanceUpperLimit();
+        int maxDist = ofDistance + Prefs.getDistanceLowerLimit();
 
         String[] select = { DistanceEntry.COLUMN_DISTANCE };
         String from = DistanceEntry.TABLE_NAME;
