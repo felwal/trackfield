@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Repositories/trackfield/Trackfield/app/src/main/res/drawable/ic_groupings_filled.xml" value="0.16" />
+        <entry key="..\:/Repositories/trackfield/Trackfield/app/src/main/res/drawable/ic_heart.xml" value="0.16" />
+        <entry key="..\:/Repositories/trackfield/Trackfield/app/src/main/res/drawable/layer_ic_heartrate.xml" value="0.16" />
+        <entry key="..\:/Repositories/trackfield/Trackfield/app/src/main/res/layout/activity_exercisedetail.xml" value="0.33" />
+        <entry key="..\:/Repositories/trackfield/Trackfield/app/src/main/res/layout/activity_exerciseedit.xml" value="0.2171875" />
         <entry key="..\:/Users/nilsf/Repositories/trackfield/Trackfield/app/src/main/res/drawable/ic_auto_filled.xml" value="0.2855" />
         <entry key="..\:/Users/nilsf/Repositories/trackfield/Trackfield/app/src/main/res/drawable/ic_code.xml" value="0.2855" />
         <entry key="..\:/Users/nilsf/Repositories/trackfield/Trackfield/app/src/main/res/drawable/ic_license.xml" value="0.2855" />
