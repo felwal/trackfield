@@ -130,7 +130,7 @@ public class StravaService {
                 boolean success = handlePull(convertToExercise(response), options);
 
                 listener.onStravaResponse(success);
-                }, e -> listener.onStravaResponseError(e, a));
+            }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -142,38 +142,38 @@ public class StravaService {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
-                    AppLog.i("response: " + response);
+                AppLog.i("response: " + response);
 
-                    int successCount = 0;
-                    int errorCount = 0;
+                int successCount = 0;
+                int errorCount = 0;
 
-                    for (int index = 0; index < response.length(); index++) {
-                        boolean success;
-                        try {
-                            JSONObject obj = response.getJSONObject(index);
-                            Exercise strava = convertToExercise(obj);
+                for (int index = 0; index < response.length(); index++) {
+                    boolean success;
+                    try {
+                        JSONObject obj = response.getJSONObject(index);
+                        Exercise strava = convertToExercise(obj);
 
-                            // only pull existing activities
-                            if (!DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
+                        // only pull existing activities
+                        if (!DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
 
-                            success = handlePull(strava, options);
-                        }
-                        catch (JSONException e) {
-                            success = false;
-                            e.printStackTrace();
-                        }
-
-                        if (success) successCount++;
-                        else errorCount++;
+                        success = handlePull(strava, options);
+                    }
+                    catch (JSONException e) {
+                        success = false;
+                        e.printStackTrace();
                     }
 
-                    // request next page
-                    if (response.length() == PER_PAGE) {
-                        pullActivities(page + 1, options, listener);
-                    }
+                    if (success) successCount++;
+                    else errorCount++;
+                }
 
-                    listener.onStravaResponse(successCount, errorCount);
-                }, e -> listener.onStravaResponseError(e, a));
+                // pull next page
+                if (response.length() == PER_PAGE) {
+                    pullActivities(page + 1, options, listener);
+                }
+
+                listener.onStravaResponse(successCount, errorCount);
+            }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -195,12 +195,12 @@ public class StravaService {
             for (long stravaId : stravaIds) {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                     response -> {
-                        AppLog.i("response: " + response.toString());
+                    AppLog.i("response: " + response.toString());
 
-                        boolean success = handlePull(convertToExercise(response), Prefs.getPullOptions());
+                    boolean success = handlePull(convertToExercise(response), Prefs.getPullOptions());
 
-                        listener.onStravaResponse(success);
-                    }, e -> listener.onStravaResponseError(e, a));
+                    listener.onStravaResponse(success);
+                }, e -> listener.onStravaResponseError(e, a));
 
                 queue.add(request);
             }
@@ -215,7 +215,7 @@ public class StravaService {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getActivityURL(stravaId), null,
                 response -> {
-                    AppLog.i("response: " + response);
+                AppLog.i("response: " + response);
 
                 boolean success = handleRequest(convertToExercise(response));
 
@@ -230,7 +230,8 @@ public class StravaService {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast(R.string.toast_strava_req_activity, a);
 
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null, response -> {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(1), null,
+                response -> {
                 AppLog.i("response: " + response);
 
                 try {
@@ -257,39 +258,39 @@ public class StravaService {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
-                    AppLog.i("response: " + response);
+                AppLog.i("response: " + response);
 
-                    int successCount = 0;
-                    int errorCount = 0;
+                int successCount = 0;
+                int errorCount = 0;
 
-                    for (int index = 0; index < response.length(); index++) {
-                        boolean success;
-                        try {
-                            JSONObject obj = response.getJSONObject(index);
-                            Exercise strava = convertToExercise(obj);
+                for (int index = 0; index < response.length(); index++) {
+                    boolean success;
+                    try {
+                        JSONObject obj = response.getJSONObject(index);
+                        Exercise strava = convertToExercise(obj);
 
-                            // if stravaId already exists, continue to next; dont override
-                            if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
+                        // if stravaId already exists, continue to next; dont override
+                        if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
 
-                            success = handleRequest(strava);
-                        }
-                        catch (JSONException e) {
-                            success = false;
-                            e.printStackTrace();
-                            //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
-                        }
-
-                        if (success) successCount++;
-                        else errorCount++;
+                        success = handleRequest(strava);
+                    }
+                    catch (JSONException e) {
+                        success = false;
+                        e.printStackTrace();
+                        //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                     }
 
-                    // request next page
-                    if (response.length() == PER_PAGE) {
-                        requestActivities(page + 1, listener);
-                    }
+                    if (success) successCount++;
+                    else errorCount++;
+                }
 
-                    listener.onStravaResponse(successCount, errorCount);
-                }, e -> listener.onStravaResponseError(e, a));
+                // request next page
+                if (response.length() == PER_PAGE) {
+                    requestActivities(page + 1, listener);
+                }
+
+                listener.onStravaResponse(successCount, errorCount);
+            }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
@@ -301,43 +302,43 @@ public class StravaService {
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
                 response -> {
-                    AppLog.i("response: " + response);
+                AppLog.i("response: " + response);
 
-                    int successCount = 0;
-                    int errorCount = 0;
-                    boolean loopBroken = false;
+                int successCount = 0;
+                int errorCount = 0;
+                boolean loopBroken = false;
 
-                    for (int index = 0; index < response.length(); index++) {
-                        boolean success;
-                        try {
-                            JSONObject obj = response.getJSONObject(index);
-                            Exercise strava = convertToExercise(obj);
+                for (int index = 0; index < response.length(); index++) {
+                    boolean success;
+                    try {
+                        JSONObject obj = response.getJSONObject(index);
+                        Exercise strava = convertToExercise(obj);
 
-                            // if stravaId already exists, we are done; all new have been requested
-                            if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) {
+                        // if stravaId already exists, we are done; all new have been requested
+                        if (DbReader.get(a).doesStravaIdExist(strava.getStravaId())) {
                                 loopBroken = true;
                                 break;
                             }
 
-                            success = handleRequest(strava);
-                        }
-                        catch (JSONException e) {
-                            success = false;
-                            e.printStackTrace();
-                            //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
-                        }
-
-                        if (success) successCount++;
-                        else errorCount++;
+                        success = handleRequest(strava);
+                    }
+                    catch (JSONException e) {
+                        success = false;
+                        e.printStackTrace();
+                        //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                     }
 
-                    // request next page
-                    if (!loopBroken && response.length() == PER_PAGE) {
-                        requestNewActivities(page + 1, listener);
-                    }
+                    if (success) successCount++;
+                    else errorCount++;
+                }
 
-                    listener.onStravaResponse(successCount, errorCount);
-                }, e -> listener.onStravaResponseError(e, a));
+                // request next page
+                if (!loopBroken && response.length() == PER_PAGE) {
+                    requestNewActivities(page + 1, listener);
+                }
+
+                listener.onStravaResponse(successCount, errorCount);
+            }, e -> listener.onStravaResponseError(e, a));
 
             queue.add(request);
         }).requestAccessToken(a);
