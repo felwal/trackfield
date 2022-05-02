@@ -290,6 +290,15 @@
     <string name="toast_strava_req_access_err">Failed to request new accessToken, requesting new refreshToken …</string>
     <string name="toast_strava_pull_activities">Pulling activities …</string>
     <string name="toast_strava_pull_activity">Pulling activity …</string>
+    <string name="toast_strava_pull_activities_none">Nothing to pull</string>
+    <plurals name="toast_strava_pull_activities_successful">
+        <item quantity="one">%d pull successful</item>
+        <item quantity="other">%d pulls successful</item>
+    </plurals>
+    <plurals name="toast_strava_pull_activities_err">
+        <item quantity="one">%d pull failed</item>
+        <item quantity="other">%d pulls failed</item>
+    </plurals>
     <string name="toast_strava_pull_activity_successful">Pull successful</string>
     <string name="toast_strava_pull_activity_gone">Could not find Strava activity</string>
     <string name="toast_strava_pull_activity_err">Failed to pull activity</string>

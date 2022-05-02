@@ -25,9 +25,10 @@ import me.felwal.trackfield.utils.annotation.Unfinished;
 
 public class Exercise implements JSONObjectable {
 
-    public static final int DISTANCE_DRIVEN = -1;
     public static final int ID_NONE = -1;
     public static final int ID_UNRELEVANT = -2;
+    public static final int DISTANCE_DRIVEN = -1;
+    public static final float HEARTRATE_NONE = 0f;
 
     // json keys
     private static final String JSON_ID = "_id";
@@ -42,6 +43,7 @@ public class Exercise implements JSONObjectable {
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_EFFECTIVE_DISTANCE = "effective_distance";
     private static final String JSON_TIME = "time";
+    private static final String JSON_HEARTRATE_AVG = "avg_heartrate";
     private static final String JSON_DEVICE = "device";
     private static final String JSON_RECORDING_METHOD = "recording_method";
     private static final String JSON_NOTE = "note";
@@ -68,6 +70,7 @@ public class Exercise implements JSONObjectable {
     private int distance;
     private int drivenDistance;
     private float time;
+    private float avgHeartrate;
     private Trail trail;
     private boolean trailHidden;
 
@@ -75,7 +78,7 @@ public class Exercise implements JSONObjectable {
 
     public Exercise(int id, long stravaId, long garminId, String type, String label, LocalDateTime dateTime,
         int routeId, String route, String routeVar, String interval, String note, String device, String recordingMethod,
-        int distance, float time, @Nullable Trail trail, boolean trailHidden) {
+        int distance, float time, float avgHeartrate, @Nullable Trail trail, boolean trailHidden) {
 
         this.id = id;
         this.stravaId = stravaId;
@@ -92,6 +95,7 @@ public class Exercise implements JSONObjectable {
         this.recordingMethod = recordingMethod;
         this.distance = distance;
         this.time = time;
+        this.avgHeartrate = avgHeartrate;
         this.trail = trail;
         this.trailHidden = trailHidden;
     }
@@ -109,6 +113,7 @@ public class Exercise implements JSONObjectable {
         interval = obj.getString(JSON_INTERVAL);
         distance = obj.getInt(JSON_DISTANCE);
         time = (float) obj.getDouble(JSON_TIME);
+        avgHeartrate = (float) obj.getDouble(JSON_HEARTRATE_AVG);
         device = obj.getString(JSON_DEVICE);
         recordingMethod = obj.getString(JSON_RECORDING_METHOD);
         note = obj.getString(JSON_NOTE);
@@ -193,6 +198,10 @@ public class Exercise implements JSONObjectable {
         this.time = time;
     }
 
+    public void setAvgHeartrate(float avgHeartrate) {
+        this.avgHeartrate = avgHeartrate;
+    }
+
     public void setTrail(Trail trail) {
         this.trail = trail;
     }
@@ -269,6 +278,10 @@ public class Exercise implements JSONObjectable {
 
     public float getTime() {
         return time;
+    }
+
+    public float getAvgHeartrate() {
+        return avgHeartrate;
     }
 
     @Unfinished
@@ -419,6 +432,11 @@ public class Exercise implements JSONObjectable {
         return velocityPrint;
     }
 
+    public String printAvgHeartrate() {
+        return avgHeartrate == HEARTRATE_NONE ?  AppConsts.NO_VALUE
+            : MathUtils.prefix(avgHeartrate, 0, false, "bpm");
+    }
+
     public String printEnergy(Context c) {
         int energy = getEnergy(AppConsts.UnitEnergy.JOULES, c);
 
@@ -460,6 +478,7 @@ public class Exercise implements JSONObjectable {
             obj.put(JSON_DISTANCE, distance);
             obj.put(JSON_EFFECTIVE_DISTANCE, getEffectiveDistance(c));
             obj.put(JSON_TIME, time);
+            obj.put(JSON_HEARTRATE_AVG, avgHeartrate);
             obj.put(JSON_DEVICE, device);
             obj.put(JSON_RECORDING_METHOD, recordingMethod);
             obj.put(JSON_NOTE, note);
@@ -498,8 +517,8 @@ public class Exercise implements JSONObjectable {
             && label.equals(other.label) && dateTime.equals(other.dateTime) && routeId == other.routeId
             && routeVar.equals(other.routeVar) && interval.equals(other.interval) && note.equals(other.note)
             && device.equals(other.device) && recordingMethod.equals(other.recordingMethod)
-            && distance == other.distance && time == other.time && trail.equals(other.trail)
-            && trailHidden == other.trailHidden;
+            && distance == other.distance && time == other.time && avgHeartrate == other.avgHeartrate
+            && trail.equals(other.trail) && trailHidden == other.trailHidden;
     }
 
 }

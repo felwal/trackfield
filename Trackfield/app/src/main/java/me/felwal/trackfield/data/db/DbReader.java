@@ -112,10 +112,9 @@ public class DbReader extends DbHelper {
         String colDate = ExerciseEntry.COLUMN_DATE;
 
         String from = ExerciseEntry.TABLE_NAME;
-        String where = colDate + " = ? OR " + colDate + " = ? OR " + colDate + " = ?";
+        String where = colDate + " = ? OR " + colDate + " = ?";
         String[] whereArgs = { Long.toString(DateUtils.toEpochSecond(dateTime)),
-            Long.toString(DateUtils.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES))),
-            Long.toString(DateUtils.toEpochSecond(DateUtils.dateTime(dateTime.toLocalDate()))) };
+            Long.toString(DateUtils.toEpochSecond(dateTime.truncatedTo(ChronoUnit.MINUTES))) };
 
         Cursor cursor = db.query(true, from, null, where, whereArgs, null, null, null, null);
         ArrayList<Exercise> exercises = unpackCursor(cursor);
@@ -1492,6 +1491,7 @@ public class DbReader extends DbHelper {
                 ExerciseEntry.COLUMN_RECORDING_METHOD));
             int distance = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_DISTANCE));
             float time = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TIME));
+            float avgHeartrate = cursor.getFloat(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_HEARTRATE_AVG));
             boolean hideTrail = cursor.getInt(cursor.getColumnIndexOrThrow(ExerciseEntry.COLUMN_TRAIL_HIDDEN)) != 0;
 
             // convert trail
@@ -1511,7 +1511,7 @@ public class DbReader extends DbHelper {
             String routeName = getRouteName(routeId);
 
             Exercise exercise = new Exercise(id, stravaId, garminId, type, label, dateTime, routeId, routeName,
-                routeVar, interval, note, dataSource, recordingMethod, distance, time, trail, hideTrail);
+                routeVar, interval, note, dataSource, recordingMethod, distance, time, avgHeartrate, trail, hideTrail);
             exercises.add(exercise);
         }
 

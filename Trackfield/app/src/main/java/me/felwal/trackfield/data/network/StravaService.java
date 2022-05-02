@@ -50,6 +50,8 @@ public class StravaService {
     public static final String JSON_DESCRIPTION = "description";
     public static final String JSON_DISTANCE = "distance";
     public static final String JSON_TIME = "elapsed_time";
+    public static final String JSON_HEARTRATE_HAS = "has_heartrate";
+    public static final String JSON_HEARTRATE_AVG = "average_heartrate";
     public static final String JSON_TYPE = "type";
     public static final String JSON_DATE = "start_date_local";
     public static final String JSON_MAP = "map";
@@ -134,10 +136,54 @@ public class StravaService {
         }).requestAccessToken(a);
     }
 
+    private void pullActivities(final int page, SwitchChain options, MultiResponseListener listener) {
+        ((TokenRequester) accessToken -> {
+            LayoutUtils.toast(R.string.toast_strava_pull_activities, a);
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getActivitiesURL(page), null,
+                response -> {
+                    AppLog.i("response: " + response);
+
+                    int successCount = 0;
+                    int errorCount = 0;
+
+                    for (int index = 0; index < response.length(); index++) {
+                        boolean success;
+                        try {
+                            JSONObject obj = response.getJSONObject(index);
+                            Exercise strava = convertToExercise(obj);
+
+                            // only pull existing activities
+                            if (!DbReader.get(a).doesStravaIdExist(strava.getStravaId())) continue;
+
+                            success = handlePull(strava, options);
+                        }
+                        catch (JSONException e) {
+                            success = false;
+                            e.printStackTrace();
+                        }
+
+                        if (success) successCount++;
+                        else errorCount++;
+                    }
+
+                    // request next page
+                    if (response.length() == PER_PAGE) {
+                        pullActivities(page + 1, options, listener);
+                    }
+
+                    listener.onStravaResponse(successCount, errorCount);
+                }, e -> listener.onStravaResponseError(e, a));
+
+            queue.add(request);
+        }).requestAccessToken(a);
+    }
+
     /**
      * Pulls every exercise with a stravaId, one at a time. As we have a limitation to request amounts, the user
      * should not be able to invoke this method. TODO: find a better way of mass-pulling
      */
+    @Deprecated
     @Debug
     public void pullAllActivities(ResponseListener listener) {
         ArrayList<Long> stravaIds = DbReader.get(a).getStravaIds();
@@ -162,6 +208,7 @@ public class StravaService {
     }
 
     // request activities
+
     public void requestActivity(long stravaId, ResponseListener listener) {
         ((TokenRequester) accessToken -> {
             LayoutUtils.toast(R.string.toast_strava_req_activity, a);
@@ -231,8 +278,9 @@ public class StravaService {
                             e.printStackTrace();
                             //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                         }
-                        successCount += success ? 1 : 0;
-                        errorCount += success ? 0 : 1;
+
+                        if (success) successCount++;
+                        else errorCount++;
                     }
 
                     // request next page
@@ -278,8 +326,9 @@ public class StravaService {
                             e.printStackTrace();
                             //LayoutUtils.handleError(R.string.toast_err_parse_jsonobj, e, a);
                         }
-                        successCount += success ? 1 : 0;
-                        errorCount += success ? 0 : 1;
+
+                        if (success) successCount++;
+                        else errorCount++;
                     }
 
                     // request next page
@@ -294,7 +343,11 @@ public class StravaService {
         }).requestAccessToken(a);
     }
 
-    // request activities: helper methods
+    // request/pull helper methods
+
+    public void pullAllActivities(MultiResponseListener listener) {
+        pullActivities(1, Prefs.getPullOptions(), listener);
+    }
 
     public void requestLastActivity(ResponseListener listener) {
         requestActivity(0, listener);
@@ -321,12 +374,15 @@ public class StravaService {
         if (obj == null) return null;
 
         try {
-            // keys which always exist
             AppLog.i("response: " + obj.toString());
+
+            // keys which always exist
             long stravaId = obj.getLong(JSON_ID);
             String name = obj.getString(JSON_NAME);
             int distance = (int) obj.getDouble(JSON_DISTANCE);
             int time = obj.getInt(JSON_TIME);
+            boolean hasHeartrate = obj.getBoolean(JSON_HEARTRATE_HAS);
+            float avgHeartrate = hasHeartrate ? (float) obj.getDouble(JSON_HEARTRATE_AVG) : Exercise.HEARTRATE_NONE;
             String type = obj.getString(JSON_TYPE);
             String date = obj.getString(JSON_DATE);
             String label = obj.getBoolean(JSON_COMMUTE) ? "Commute" : "";
@@ -376,7 +432,7 @@ public class StravaService {
                 new Trail(polyline, start, end);
 
             return new Exercise(Exercise.ID_NONE, stravaId, garminId, type, label, dateTime, routeId, name, "", "",
-                description, device, method, distance, time, trail, false);
+                description, device, method, distance, time, avgHeartrate, trail, false);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -417,7 +473,7 @@ public class StravaService {
             if (options.isChecked(JSON_DATE)) {
                 existing.setDateTime(strava.getDateTime());
             }
-            if (options.isChecked(JSON_DEVICE)) {
+            if (options.isChecked(JSON_DEVICE) && !strava.getDevice().equals("")) {
                 existing.setDevice(strava.getDevice());
             }
             if (options.isChecked(JSON_DISTANCE)) {
@@ -425,6 +481,9 @@ public class StravaService {
             }
             if (options.isChecked(JSON_TIME)) {
                 existing.setTime(strava.getTime());
+            }
+            if (options.isChecked(JSON_HEARTRATE_AVG)) {
+                existing.setAvgHeartrate(strava.getAvgHeartrate());
             }
             if (options.isChecked(JSON_DESCRIPTION) && !strava.getNote().equals("")) {
                 // dont override note with nothing
@@ -443,7 +502,7 @@ public class StravaService {
     }
 
     /**
-     * Imports requested exercise to db or potentially merges with a mathing one (same datetime).
+     * Imports requested exercise to db or potentially merges with a matching one (same datetime).
      * If the stravaId already exists, the exercise is ignored and does NOT override the existing one.
      */
     private boolean handleRequest(Exercise strava) {
@@ -454,7 +513,7 @@ public class StravaService {
         Exercise existing = DbReader.get(a).getExercise(strava.getStravaId());
         if (existing != null) return true;
 
-        // merge with matching, ie not already linked to strava activity
+        // merge with matching, i.e. not already linked to strava activity
         ArrayList<Exercise> matching = DbReader.get(a).getExercises(strava.getDateTime());
 
         // merge
@@ -463,7 +522,7 @@ public class StravaService {
             Exercise merged = new Exercise(m.getId(), strava.getStravaId(), strava.getGarminId(), m.getType(),
                 strava.getLabel(), strava.getDateTime(), m.getRouteId(), m.getRoute(), m.getRouteVar(), m.getInterval(),
                 m.getNote(), m.getDevice(), m.getRecordingMethod(), strava.getDistance(), strava.getTime(),
-                strava.getTrail(), m.isTrailHidden());
+                strava.getAvgHeartrate(), strava.getTrail(), m.isTrailHidden());
 
             success = DbWriter.get(a).updateExercise(merged, a);
         }
@@ -538,7 +597,21 @@ public class StravaService {
 
     // tools
 
-    public static void toastResponse(int successCount, int errorCount, Context c) {
+    public static void toastPullResults(int successCount, int errorCount, Context c) {
+        if (successCount == 0 && errorCount == 0) {
+            LayoutUtils.toast(R.string.toast_strava_pull_activities_none, c);
+        }
+        else {
+            if (successCount != 0) {
+                LayoutUtils.toast(R.plurals.toast_strava_pull_activities_successful, successCount, c);
+            }
+            if (errorCount != 0) {
+                LayoutUtils.toast(R.plurals.toast_strava_pull_activities_err, errorCount, c);
+            }
+        }
+    }
+
+    public static void toastRequestResults(int successCount, int errorCount, Context c) {
         if (successCount == 0 && errorCount == 0) {
             LayoutUtils.toast(R.string.toast_strava_req_activities_none, c);
         }

@@ -103,7 +103,7 @@ class StravaSettingsActivity :
                     title = getString(R.string.tv_text_settings_title_request_new),
                     onClick = {
                         strava.requestNewActivities { successCount, errorCount ->
-                            StravaService.toastResponse(successCount, errorCount, this)
+                            StravaService.toastRequestResults(successCount, errorCount, this)
                         }
                     },
                     iconRes = R.drawable.ic_send
@@ -159,7 +159,7 @@ class StravaSettingsActivity :
         when (tag) {
             DIALOG_REQUEST_ALL -> {
                 strava.requestAllActivities { successCount, errorCount ->
-                    StravaService.toastResponse(successCount, errorCount, this)
+                    StravaService.toastRequestResults(successCount, errorCount, this)
                 }
             }
         }
@@ -186,9 +186,8 @@ class StravaSettingsActivity :
         when (tag) {
             DIALOG_PULL_ALL -> {
                 Prefs.setPullOptions(itemStates)
-                strava.pullAllActivities { success ->
-                    // we dont want to toast for every successfully requested activity
-                    if (!success) LayoutUtils.toast(R.string.toast_strava_pull_activity_err, this)
+                strava.pullAllActivities { successCount, errorCount ->
+                    StravaService.toastPullResults(successCount, errorCount, this)
                 }
             }
             DIALOG_REQUEST_OPTIONS -> {

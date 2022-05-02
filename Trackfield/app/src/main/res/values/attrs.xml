@@ -18,6 +18,7 @@
     <attr name="tf_colorPace" format="color|reference" />
     <attr name="tf_colorEnergy" format="color|reference" />
     <attr name="tf_colorPower" format="color|reference" />
+    <attr name="tf_colorHeartrate" format="color|reference" />
     <attr name="tf_colorElevation" format="color|reference" />
     <attr name="tf_colorNote" format="color|reference" />
     <attr name="tf_colorDate" format="color|reference" />

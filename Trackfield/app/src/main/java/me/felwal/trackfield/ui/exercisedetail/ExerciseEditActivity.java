@@ -360,7 +360,9 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
                 }*/
 
                 exercise = new Exercise(Exercise.ID_NONE, Exercise.ID_NONE, Exercise.ID_NONE, type, label, dateTime, routeId,
-                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time, null, false);
+                    route, routeVar, interval, note, dataSource, recordingMethod, distance, time,
+                    Exercise.HEARTRATE_NONE, null,
+                    false);
 
                 boolean success = DbWriter.get(this).addExercise(exercise, this);
                 LayoutUtils.toast(success, this);
@@ -369,7 +371,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             else {
                 exercise = new Exercise(exercise.getId(), exercise.getStravaId(), exercise.getGarminId(), type,
                     label, dateTime, routeId, route, routeVar, interval, note, dataSource, recordingMethod, distance,
-                    time, exercise.getTrail(), exercise.isTrailHidden());
+                    time, exercise.getAvgHeartrate(), exercise.getTrail(), exercise.isTrailHidden());
 
                 boolean success = DbWriter.get(this).updateExercise(exercise, this);
                 LayoutUtils.toast(success, this);

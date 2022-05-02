@@ -125,6 +125,7 @@ public class Prefs {
         new SwitchItem(StravaService.JSON_DESCRIPTION, "Description (as note)", true),
         new SwitchItem(StravaService.JSON_DISTANCE, "Distance", true),
         new SwitchItem(StravaService.JSON_TIME, "Elapsed time", true),
+        new SwitchItem(StravaService.JSON_HEARTRATE_AVG, "Avg heart rate", true),
         new SwitchItem(StravaService.JSON_TYPE, "Sport", true),
         new SwitchItem(StravaService.JSON_COMMUTE, "Commute (as label)", true),
         new SwitchItem(StravaService.JSON_DATE, "Date & time", true),

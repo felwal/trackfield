@@ -26,6 +26,7 @@
         <item name="tf_colorEnergy">@color/yellow_lt</item>
         <item name="tf_colorPower">@color/orange_lt</item>
         <item name="tf_colorElevation">@color/orange_deep_lt</item>
+        <item name="tf_colorHeartrate">@color/red</item>
         <item name="tf_colorNote">@color/brown_lt</item>
         <item name="tf_colorDate">@color/grey_blue_lt</item>
         <item name="tf_colorMisc">?colorControlNormal</item>

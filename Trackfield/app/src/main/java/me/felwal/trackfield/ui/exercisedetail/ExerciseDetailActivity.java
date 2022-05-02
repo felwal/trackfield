@@ -253,6 +253,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         TextView startTv = findViewById(R.id.tv_exercisedetail_start);
         TextView endTv = findViewById(R.id.tv_exercisedetail_end);
         TextView elevationTv = findViewById(R.id.tv_exercisedetail_elevation);
+        TextView heartrateTv = findViewById(R.id.tv_exercisedetail_heartrate);
         TextView noteTv = findViewById(R.id.tv_exercisedetail_note);
         TextView typeTv = findViewById(R.id.tv_exercisedetail_type);
         TextView labelTv = findViewById(R.id.tv_exercisedetail_label);
@@ -278,6 +279,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         setTvHideIfEmpty(exercise.printEnergy(this), energyTv, findViewById(R.id.iv_exercisedetail_energy));
         setTvHideIfEmpty(exercise.printPower(this), powerTv, findViewById(R.id.iv_exercisedetail_power));
         setTvHideIfEmpty(exercise.printElevation(), elevationTv, findViewById(R.id.iv_exercisedetail_elevation));
+        setTvHideIfEmpty(exercise.printAvgHeartrate(), heartrateTv, findViewById(R.id.iv_exercisedetail_heartrate));
 
         // set start and end tvs's and listeners
         if (exercise.hasTrail()) {

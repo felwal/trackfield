@@ -30,6 +30,7 @@ public final class DbContract {
         public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_EFFECTIVE_DISTANCE = "effective_distance";
         public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_HEARTRATE_AVG = "avg_heartrate";
         public static final String COLUMN_START_LAT = "start_lat";
         public static final String COLUMN_START_LNG = "start_lng";
         public static final String COLUMN_END_LAT = "end_lat";
@@ -65,6 +66,7 @@ public final class DbContract {
             COLUMN_DISTANCE + " INTEGER," +
             COLUMN_EFFECTIVE_DISTANCE + " INTEGER," +
             COLUMN_TIME + " REAL," +
+            COLUMN_HEARTRATE_AVG + " REAL," +
             COLUMN_START_LAT + " REAL," +
             COLUMN_START_LNG + " REAL," +
             COLUMN_END_LAT + " REAL," +

@@ -88,13 +88,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_interval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -116,14 +116,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -145,13 +144,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -173,13 +172,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_pace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -201,14 +200,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_energy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -230,13 +228,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_power"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -258,13 +256,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -279,20 +277,20 @@
                     app:layout_constraintBottom_toBottomOf="@+id/iv_exercisedetail_start"
                     app:layout_constraintStart_toEndOf="@+id/iv_exercisedetail_start"
                     app:layout_constraintTop_toTopOf="@+id/iv_exercisedetail_start"
-                    tools:text="Start"
+                    tools:text="start"
                     style="@style/Widget.Trackfield.TextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -307,20 +305,20 @@
                     app:layout_constraintBottom_toBottomOf="@+id/iv_exercisedetail_end"
                     app:layout_constraintStart_toEndOf="@+id/iv_exercisedetail_end"
                     app:layout_constraintTop_toTopOf="@+id/iv_exercisedetail_end"
-                    tools:text="End"
+                    tools:text="end"
                     style="@style/Widget.Trackfield.TextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_elevation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -342,13 +340,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_exercisedetail_heartrate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_exercisedetail_valueicon_top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -363,7 +361,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_exercisedetail_heartrate"
                     app:layout_constraintTop_toTopOf="@+id/iv_exercisedetail_heartrate"
-                    tools:text="heartrate"
+                    tools:text="heart rate"
                     style="@style/Widget.Trackfield.TextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -383,7 +381,6 @@
                     android:id="@+id/fl_exercisedetail_map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_mappreview_height"
-                    android:layout_marginHorizontal="@dimen/spacing_exercisedetail_edge_mappreview"
                     android:background="@drawable/shape_mappreview_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

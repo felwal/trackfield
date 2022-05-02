@@ -222,7 +222,7 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
             R.drawable.ic_logo_strava,
             View -> {
                 strava.requestNewActivities((successCount, errorCount) ->
-                    StravaService.toastResponse(successCount, errorCount, this));
+                    StravaService.toastRequestResults(successCount, errorCount, this));
                 fam.closeMenu();
                 return Unit.INSTANCE;
             }
