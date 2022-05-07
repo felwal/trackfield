@@ -43,8 +43,8 @@ public class GraphRecAdapterDelegate extends
     public void onBindViewHolder(@NonNull Graph item, GraphRecViewHolder vh, @Nullable List<Object> payloads) {
         vh.graphView.restoreDefaultFocus();
         vh.graphView.setGraph(item);
-        vh.lowTv.setText(MathUtils.stringTime(item.getMax(), true));
-        vh.highTv.setText(MathUtils.stringTime(item.getMin(), true));
+        vh.lowTv.setText(MathUtils.stringTime(item.getAxes().get(0).getMax(), true));
+        vh.highTv.setText(MathUtils.stringTime(item.getAxes().get(0).getMin(), true));
     }
 
     // vh

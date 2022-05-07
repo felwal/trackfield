@@ -17,6 +17,7 @@ import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
+import me.felwal.trackfield.ui.widget.graph.Axis;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
@@ -98,8 +99,10 @@ public class DistanceDetailFragment extends GroupDetailFragment {
                 a, DbReader.get(a).getPaceNodesByDistance(distance, Prefs.getGroupFilter()),
                 GraphData.GRAPH_BEZIER, false, false);
 
-            Graph graph = new Graph(true, Borders.horizontal(), false, true, false);
-            graph.addData(data);
+            Graph graph = new Graph(true, Borders.horizontal(), false);
+            Axis axis = new Axis(true, false);
+            axis.addData(data);
+            graph.addAxis(axis);
 
             if (graph.hasMoreThanOnePoint()) {
                 graph.setTag(RecyclerItem.TAG_GRAPH_GROUP);

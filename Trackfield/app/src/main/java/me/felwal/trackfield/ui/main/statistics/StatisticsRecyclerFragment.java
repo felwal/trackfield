@@ -15,6 +15,7 @@ import me.felwal.trackfield.data.prefs.Prefs;
 import me.felwal.trackfield.ui.base.BaseListAdapter;
 import me.felwal.trackfield.ui.base.RecyclerFragment;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
+import me.felwal.trackfield.ui.widget.graph.Axis;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
@@ -61,8 +62,10 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
             GraphData.GRAPH_LINE, false, false);
         dataLastMonth.setPaint(android.R.attr.listDivider, a);
 
-        Graph monthGraph = new Graph(false, Borders.all(), true, false, true);
-        monthGraph.addData(dataThisMonth, dataLastMonth);
+        Graph monthGraph = new Graph(false, Borders.all(), true);
+        Axis monthAxis = new Axis(false, true);
+        monthAxis.addData(dataThisMonth, dataLastMonth);
+        monthGraph.addAxis(monthAxis);
         monthGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
         itemList.add(monthGraph);
 
@@ -77,8 +80,10 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
             GraphData.GRAPH_LINE, false, false);
         dataLastYear.setPaint(android.R.attr.listDivider, a);
 
-        Graph yearGraph = new Graph(false, Borders.all(), true, false, true);
-        yearGraph.addData(dataThisYear, dataLastYear);
+        Graph yearGraph = new Graph(false, Borders.all(), true);
+        Axis yearAxis = new Axis(false, true);
+        yearAxis.addData(dataThisYear, dataLastYear);
+        yearGraph.addAxis(yearAxis);
         yearGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
         itemList.add(yearGraph);
 
@@ -93,10 +98,12 @@ public class StatisticsRecyclerFragment extends RecyclerFragment {
             GraphData.GRAPH_BAR, false, false);
         dataLastYearMonthly.setPaint(android.R.attr.listDivider, a);
 
-        Graph yearBar = new Graph(false, Borders.all(), true, false, true);
-        yearBar.addData(dataThisYearMonthly, dataLastYearMonthly);
-        yearBar.setTag(RecyclerItem.TAG_GRAPH_BASE);
-        itemList.add(yearBar);
+        Graph yearBarGraph = new Graph(false, Borders.all(), true);
+        Axis yearBarAxis = new Axis(false, true);
+        yearBarAxis.addData(dataThisYearMonthly, dataLastYearMonthly);
+        yearBarGraph.addAxis(yearBarAxis);
+        yearBarGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
+        itemList.add(yearBarGraph);
 
         return itemList;
     }

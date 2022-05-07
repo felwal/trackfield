@@ -17,6 +17,7 @@ import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
 import me.felwal.trackfield.ui.groupdetail.GroupDetailFragment;
+import me.felwal.trackfield.ui.widget.graph.Axis;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
@@ -93,12 +94,24 @@ public class RouteDetailFragment extends GroupDetailFragment {
             sorter.getAscending(), Prefs.getGroupFilter());
 
         if (exerliteList.size() != 0) {
-            GraphData data = new GraphData(
+            GraphData hrData = new GraphData(
+                a, DbReader.get(a).getHeartrateNodesByRoute(route.getId(), Prefs.getGroupFilter()),
+                GraphData.GRAPH_POINTS, false, false);
+            hrData.setPaint(R.attr.tf_colorHeartrate, a);
+
+            GraphData paceData = new GraphData(
                 a, DbReader.get(a).getPaceNodesByRoute(route.getId(), Prefs.getGroupFilter()),
                 GraphData.GRAPH_BEZIER, false, false);
 
-            Graph graph = new Graph(true, Borders.horizontal(), false, true, false);
-            graph.addData(data);
+            Axis hrAxis = new Axis(false, false);
+            Axis paceAxis = new Axis(true, false);
+
+            hrAxis.addData(hrData);
+            paceAxis.addData(paceData);
+
+            Graph graph = new Graph(true, Borders.horizontal(), false);
+            graph.addAxis(hrAxis);
+            graph.addAxis(paceAxis);
 
             if (graph.hasMoreThanOnePoint()) {
                 graph.setTag(RecyclerItem.TAG_GRAPH_GROUP);

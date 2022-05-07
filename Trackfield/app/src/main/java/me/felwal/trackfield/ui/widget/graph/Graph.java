@@ -4,73 +4,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
-import me.felwal.trackfield.utils.MathUtils;
 
 public class Graph extends RecyclerItem {
 
-    private final ArrayList<GraphData> data = new ArrayList<>();
-    private float start, end, min, max;
+    private final ArrayList<Axis> axes = new ArrayList<>();
+
+    private float start = 0f;
+    private float end = 0f;
 
     private final Borders borders;
     private final boolean[] grids = new boolean[2];
 
     private final boolean widthFixed;
-    private final boolean yInverted;
-    private final boolean zeroAsMin;
 
     //
 
-    public Graph(boolean xGrid, Borders borders, boolean widthFixed, boolean yInverted, boolean zeroAsMin) {
+    public Graph(boolean xGrid, Borders borders, boolean widthFixed) {
         grids[0] = xGrid;
         this.borders = borders;
         this.widthFixed = widthFixed;
-        this.yInverted = yInverted;
-        this.zeroAsMin = zeroAsMin;
     }
 
     // set
 
-    /**
-     * Adds data sets, topmost first.
-     *
-     * @param data Data to add
-     */
-    public void addData(GraphData... data) {
-        for (GraphData datum : data) {
-            if (datum.isEmpty()) continue;
-            updateDomainAndRange(datum);
-            this.data.add(0, datum);
-        }
+    public void addAxis(Axis axis) {
+        updateRange(axis);
+        axes.add(0, axis);
     }
 
-    private void updateDomainAndRange(GraphData newData) {
-        if (hasData()) {
-            start = Math.min(start, newData.getStart());
-            end = Math.max(end, newData.getEnd());
-            min = zeroAsMin ? 0 : Math.min(min, newData.getMin());
-            max = Math.max(max, newData.getMax());
+    private void updateRange(Axis newAxis) {
+        if (!axes.isEmpty()) {
+            start = Math.min(start, newAxis.getStart());
+            end = Math.max(end, newAxis.getEnd());
         }
         else {
-            start = newData.getStart();
-            end = newData.getEnd();
-            min = zeroAsMin ? 0 : newData.getMin();
-            max = newData.getMax();
+            start = newAxis.getStart();
+            end = newAxis.getEnd();
         }
     }
 
     // get data
 
-    public ArrayList<GraphData> getData() {
-        return data;
+    public ArrayList<Axis> getAxes() {
+        return axes;
     }
 
     public boolean hasData() {
-        return data != null && data.size() > 0;
+        for (Axis axis : axes) {
+            if (axis.getHasData()) return true;
+        }
+        return false;
     }
 
     public boolean hasMoreThanOnePoint() {
-        for (GraphData datum : data) {
-            if (datum.getPointCount() > 1) return true;
+        for (Axis axis : axes) {
+            if (axis.getHasMoreThanOnePoint()) return true;
         }
         return false;
     }
@@ -83,20 +71,8 @@ public class Graph extends RecyclerItem {
         return end;
     }
 
-    public float getMin() {
-        return min;
-    }
-
-    public float getMax() {
-        return max;
-    }
-
     public float getDomainSize() {
         return end - start;
-    }
-
-    public float getRangeSize() {
-        return max - min;
     }
 
     // get canvas properties
@@ -117,24 +93,29 @@ public class Graph extends RecyclerItem {
         return borders;
     }
 
-    // calc
-
-    public float bias(float y) {
-        return max == min ? 0 : MathUtils.heaviside(yInverted) + MathUtils.signum(!yInverted) * (y - min) / (max - min);
-    }
-
     // compare
 
     private boolean sameArgsAs(Graph graph) {
-        return Arrays.equals(grids, graph.grids) && borders.equals(graph.borders) && widthFixed == graph.widthFixed &&
-            yInverted == graph.yInverted;
+        if (axes.size() != graph.axes.size()) return false;
+
+        for (int i = 0; i < axes.size(); i++) {
+            if (!axes.get(i).sameArgsAs(graph.axes.get(i))) {
+                return false;
+            }
+        }
+
+        return Arrays.equals(grids, graph.grids) && borders.equals(graph.borders) && widthFixed == graph.widthFixed;
     }
 
     private boolean sameDataAs(Graph graph) {
-        if (data.size() != graph.data.size()) return false;
-        for (int i = 0; i < graph.data.size(); i++) {
-            if (!data.get(i).sameDataPointsAs(graph.data.get(i))) return false;
+        if (axes.size() != graph.axes.size()) return false;
+
+        for (int i = 0; i < axes.size(); i++) {
+            if (!axes.get(i).sameDataAs(graph.axes.get(i))) {
+                return false;
+            }
         }
+
         return true;
     }
 

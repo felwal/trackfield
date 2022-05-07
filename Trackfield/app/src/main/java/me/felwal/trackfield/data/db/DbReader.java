@@ -1329,7 +1329,7 @@ public class DbReader extends DbHelper {
 
         String[] select = { ExerciseEntry.SELECTION_PACE + " AS " + colPace };
         String from = ExerciseEntry.TABLE_NAME;
-        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId + " AND " + colPace + " > 0" +
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
             exerciseFilter(" AND", filter);
         String orderBy = orderBy(SorterItem.Mode.DATE, true);
 
@@ -1339,7 +1339,36 @@ public class DbReader extends DbHelper {
 
         while (cursor.moveToNext()) {
             float pace = cursor.getFloat(cursor.getColumnIndex(colPace));
+            if (pace <= 0) {
+                rowNum++;
+                continue;
+            }
             nodes.put((float) rowNum++, pace);
+        }
+        cursor.close();
+
+        return nodes;
+    }
+
+    @SuppressLint("Range")
+    public TreeMap<Float, Float> getHeartrateNodesByRoute(int routeId, ExerciseFilter filter) {
+        String[] select = { ExerciseEntry.COLUMN_HEARTRATE_AVG };
+        String from = ExerciseEntry.TABLE_NAME;
+        String where = ExerciseEntry.COLUMN_ROUTE_ID + " = " + routeId +
+            exerciseFilter(" AND", filter);
+        String orderBy = orderBy(SorterItem.Mode.DATE, true);
+
+        Cursor cursor = db.query(from, select, where, null, null, null, orderBy);
+        TreeMap<Float, Float> nodes = new TreeMap<>();
+        int rowNum = 0;
+
+        while (cursor.moveToNext()) {
+            float heartrate = cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_HEARTRATE_AVG));
+            if (heartrate == Exercise.HEARTRATE_NONE) {
+                rowNum++;
+                continue;
+            }
+            nodes.put((float) rowNum++, heartrate);
         }
         cursor.close();
 

@@ -72,23 +72,26 @@ public class GraphView extends View implements View.OnTouchListener {
         // draw
         drawGrid(canvas);
         drawBorders(canvas);
-        for (GraphData datum : graph.getData()) {
-            switch (datum.getGraphType()) {
-                case GraphData.GRAPH_LINE:
-                    drawLineCurve(canvas, datum);
-                    break;
-                case GraphData.GRAPH_BEZIER:
-                    drawBezierCurve(canvas, datum);
-                    break;
-                case GraphData.GRAPH_SPLINE:
-                    drawSplineCurve(canvas, datum);
-                    break;
-                case GraphData.GRAPH_BAR:
-                    drawBars(canvas, datum);
-                    break;
-                case GraphData.GRAPH_POINTS:
-                    drawPoints(canvas, datum);
-                    break;
+
+        for (Axis axis : graph.getAxes()) {
+            for (GraphData datum : axis.getData()) {
+                switch (datum.getGraphType()) {
+                    case GraphData.GRAPH_LINE:
+                        drawLineCurve(canvas, datum);
+                        break;
+                    case GraphData.GRAPH_BEZIER:
+                        drawBezierCurve(canvas, datum);
+                        break;
+                    case GraphData.GRAPH_SPLINE:
+                        drawSplineCurve(canvas, datum);
+                        break;
+                    case GraphData.GRAPH_BAR:
+                        drawBars(canvas, datum);
+                        break;
+                    case GraphData.GRAPH_POINTS:
+                        drawPoints(canvas, datum);
+                        break;
+                }
             }
         }
     }
@@ -114,7 +117,7 @@ public class GraphView extends View implements View.OnTouchListener {
     private void calcPoints() {
         if (!updateData) return;
 
-        boolean hasBars = graph.hasData() && graph.getData().get(0).isGraphType(GraphData.GRAPH_BAR);
+        boolean hasBars = graph.hasData() && graph.getAxes().get(0).getData().get(0).isGraphType(GraphData.GRAPH_BAR);
 
         // dimensions
         if (graph.isWidthFixed()) {
@@ -127,15 +130,17 @@ public class GraphView extends View implements View.OnTouchListener {
             setLayoutParams(params);
         }
 
-        for (GraphData datum : graph.getData()) {
-            ArrayList<PointF> surPoints = new ArrayList<>();
+        for (Axis axis : graph.getAxes()) {
+            for (GraphData datum : axis.getData()) {
+                ArrayList<PointF> surPoints = new ArrayList<>();
 
-            for (TreeMap.Entry<Float, Float> entry : datum.getNodes().entrySet()) {
-                float y = height + getPaddingTop() - graph.bias(entry.getValue()) * height;
-                float x = (entry.getKey() - graph.getStart()) * unitWidth + (hasBars ? barRadius : 0);
-                surPoints.add(new PointF(x, y));
+                for (TreeMap.Entry<Float, Float> entry : datum.getNodes().entrySet()) {
+                    float y = height + getPaddingTop() - axis.bias(entry.getValue()) * height;
+                    float x = (entry.getKey() - graph.getStart()) * unitWidth + (hasBars ? barRadius : 0);
+                    surPoints.add(new PointF(x, y));
+                }
+                datum.setSurfacePoints(surPoints);
             }
-            datum.setSurfacePoints(surPoints);
         }
 
         updateData = false;

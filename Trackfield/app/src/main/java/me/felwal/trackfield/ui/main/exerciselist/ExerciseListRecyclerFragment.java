@@ -18,6 +18,7 @@ import me.felwal.trackfield.ui.common.model.HeaderValue;
 import me.felwal.trackfield.ui.common.model.RecyclerItem;
 import me.felwal.trackfield.ui.common.model.SorterItem;
 import me.felwal.trackfield.ui.exercisedetail.ExerciseDetailActivity;
+import me.felwal.trackfield.ui.widget.graph.Axis;
 import me.felwal.trackfield.ui.widget.graph.Borders;
 import me.felwal.trackfield.ui.widget.graph.Graph;
 import me.felwal.trackfield.ui.widget.graph.GraphData;
@@ -78,8 +79,11 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
                     a, DbReader.get(a).getWeekDailyDistance(Prefs.getMainFilter(), LocalDate.now()),
                     GraphData.GRAPH_BAR, false, false);
 
-                Graph weekGraph = new Graph(false, Borders.none(), true, false, true);
-                weekGraph.addData(weekData);
+                Graph weekGraph = new Graph(false, Borders.none(), true);
+                Axis weekAxis = new Axis(false, true);
+                weekAxis.addData(weekData);
+                weekGraph.addAxis(weekAxis);
+
                 weekGraph.setTag(RecyclerItem.TAG_GRAPH_WEEK);
                 itemList.add(weekGraph);
             }
@@ -237,20 +241,8 @@ public class ExerciseListRecyclerFragment extends RecyclerFragment {
         if (item instanceof Header) {
             Header header = (Header) item;
 
-            // TODO: header longclick
             if (false && header.isType(Header.Type.YEAR)) {
-                ArrayList<RecyclerItem> newItems = new ArrayList<>(items);
-
-                GraphData yearData = new GraphData(
-                    a, DbReader.get(a).getYearMonthlyDistance(Prefs.getMainFilter(), LocalDate.now()),
-                    GraphData.GRAPH_BAR, false, false);
-
-                Graph yearGraph = new Graph(false, Borders.none(), true, false, true);
-                yearGraph.addData(yearData);
-                yearGraph.setTag(RecyclerItem.TAG_GRAPH_BASE);
-                newItems.add(position + 1, yearGraph);
-
-                updateRecycler(newItems);
+                // TODO: header longclick. open year stats activity
             }
         }
     }
