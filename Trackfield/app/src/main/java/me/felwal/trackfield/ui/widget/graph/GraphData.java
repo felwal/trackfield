@@ -73,7 +73,7 @@ public class GraphData {
     // calc
 
     private void calcMinAndMax() {
-        if (getDataPointCount() == 0) return;
+        if (getPointCount() == 0) return;
 
         min = nodes.firstEntry().getValue();
         max = nodes.firstEntry().getValue();
@@ -164,7 +164,8 @@ public class GraphData {
         return TypeUtils.treeMapsEquals(nodes, data.nodes);
     }
 
-    public int getDataPointCount() {
+    public float getPointCount() {
+        if (nodes == null) return 0;
         return nodes.size();
     }
 
@@ -188,11 +189,6 @@ public class GraphData {
 
     public float getDomainSize() {
         return nodes.lastKey() - nodes.firstKey();
-    }
-
-    public float getPointCount() {
-        if (nodes == null) return 0;
-        return nodes.size();
     }
 
 }

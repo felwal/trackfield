@@ -16,8 +16,8 @@ class Axis(
     var min = 0f
     var max = 0f
 
-    val hasData = data.size > 0
-    val hasMoreThanOnePoint = data.all { it.pointCount > 1 }
+    val hasData get() = data.size > 0
+    val hasMoreThanOnePoint get() = data.any { it.pointCount > 1 }
 
     // set
 

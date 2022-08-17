@@ -28,11 +28,11 @@ public class Graph extends RecyclerItem {
     // set
 
     public void addAxis(Axis axis) {
-        updateRange(axis);
+        updateDomain(axis);
         axes.add(0, axis);
     }
 
-    private void updateRange(Axis newAxis) {
+    private void updateDomain(Axis newAxis) {
         if (!axes.isEmpty()) {
             start = Math.min(start, newAxis.getStart());
             end = Math.max(end, newAxis.getEnd());
