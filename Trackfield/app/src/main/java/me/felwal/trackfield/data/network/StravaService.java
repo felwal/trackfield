@@ -48,6 +48,7 @@ public class StravaService {
     public static final String JSON_EXTERNAL_ID = "external_id";
     public static final String JSON_NAME = "name";
     public static final String JSON_DESCRIPTION = "description";
+    public static final String JSON_NOTE = "private_note";
     public static final String JSON_DISTANCE = "distance";
     public static final String JSON_TIME = "elapsed_time";
     public static final String JSON_HEARTRATE_HAS = "has_heartrate";
@@ -402,10 +403,15 @@ public class StravaService {
 
             // only available in pull
             String description = obj.has(JSON_DESCRIPTION) ? obj.getString(JSON_DESCRIPTION) : "";
+            String note = obj.has(JSON_NOTE) ? obj.getString(JSON_NOTE) : "";
             String device = obj.has(JSON_DEVICE) ? obj.getString(JSON_DEVICE) : Prefs.getDefaultDevice();
 
             // for some reason description now comes as "null" instead of not at all
             if (description.equals("null")) description = "";
+            if (note.equals("null")) note = "";
+
+            // merge public and private notes
+            description = (description + "\n\n" + note).trim();
 
             // never available; use default
             String method = Prefs.getDefaultRecordingMethod();
