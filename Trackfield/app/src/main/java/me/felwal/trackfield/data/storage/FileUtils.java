@@ -1,10 +1,11 @@
-package me.felwal.trackfield.utils;
+package me.felwal.trackfield.data.storage;
 
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 
 import androidx.annotation.Nullable;
@@ -34,6 +35,8 @@ import me.felwal.trackfield.data.db.model.JSONObjectable;
 import me.felwal.trackfield.data.db.model.Place;
 import me.felwal.trackfield.data.db.model.Route;
 import me.felwal.trackfield.data.prefs.Prefs;
+import me.felwal.trackfield.utils.AppLog;
+import me.felwal.trackfield.utils.LayoutUtils;
 
 // File
 public final class FileUtils {
@@ -66,7 +69,7 @@ public final class FileUtils {
      * @return Success
      */
     private static boolean writeFile(String pathname, String content, Context c) {
-        if (hasNotPermissionToStorage(c)) return false;
+        if (!hasPermissionToStorage(c)) return false;
 
         try {
             // open
@@ -93,7 +96,7 @@ public final class FileUtils {
 
     @Nullable
     private static List<String> readFile(String pathname, Context c) {
-        if (hasNotPermissionToStorage(c)) return null;
+        if (!hasPermissionToStorage(c)) return null;
 
         List<String> lines = new ArrayList<>();
 
@@ -146,7 +149,10 @@ public final class FileUtils {
     }
 
     private static String readJson(String pathname, Context c) {
-        if (hasNotPermissionToStorage(c)) return null;
+        if (!hasPermissionToStorage(c)) {
+            AppLog.i("does not have permission to storage");
+            return null;
+        }
 
         String response = "";
 
@@ -363,33 +369,17 @@ public final class FileUtils {
 
     // permissions
 
-    public static boolean shouldAskPermissions(Context c) {
-        return hasNotPermissionToStorage(c) || hasNotPermissionToLocation(c);
-    }
-
-    @TargetApi(23)
-    public static void askPermissions(Activity a) {
-        String[] permissions = {
-            "android.permission.READ_EXTERNAL_STORAGE",
-            "android.permission.WRITE_EXTERNAL_STORAGE",
-            "android.permission.ACCESS_FINE_LOCATION",
-            "android.permission.ACCESS_COARSE_LOCATION" };
-        int requestCode = 200;
-        ActivityCompat.requestPermissions(a, permissions, requestCode);
-    }
-
-    public static boolean hasNotPermissionToStorage(Context c) {
-        return !(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_GRANTED);
-    }
-
-    public static boolean hasNotPermissionToLocation(Context c) {
-        return !(ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED);
+    public static boolean hasPermissionToStorage(Context c) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return ContextCompat.checkSelfPermission(c, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+        }
+        else {
+            return ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
 }

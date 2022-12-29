@@ -38,8 +38,8 @@ import me.felwal.trackfield.ui.main.groupingpager.GroupingPagerFragment;
 import me.felwal.trackfield.ui.main.statistics.StatisticsFragment;
 import me.felwal.trackfield.ui.onboarding.OnboardingActivity;
 import me.felwal.trackfield.ui.setting.SettingsActivity;
-import me.felwal.trackfield.utils.FileUtils;
 import me.felwal.trackfield.utils.MathUtils;
+import me.felwal.trackfield.utils.PermissionUtilsKt;
 import me.felwal.trackfield.utils.ScreenUtils;
 
 public class MainActivity extends ExerciseFilterActivity implements InputDialog.DialogListener,
@@ -156,7 +156,9 @@ public class MainActivity extends ExerciseFilterActivity implements InputDialog.
 
     private void initApp() {
         if (!appInitialized) {
-            if (FileUtils.shouldAskPermissions(this)) FileUtils.askPermissions(this);
+            if (PermissionUtilsKt.shouldAskPermissions(this)) {
+                PermissionUtilsKt.askPermissions(this);
+            }
             Prefs.setUpAndLoad(this);
             appInitialized = true;
         }

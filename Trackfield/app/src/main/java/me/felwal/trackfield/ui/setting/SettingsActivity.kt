@@ -16,11 +16,11 @@ import me.felwal.android.fragment.dialog.SingleChoiceDialog
 import me.felwal.trackfield.R
 import me.felwal.trackfield.data.db.DbWriter
 import me.felwal.trackfield.data.prefs.Prefs
+import me.felwal.trackfield.data.storage.BackupManager
 import me.felwal.trackfield.databinding.ActivitySettingsBinding
 import me.felwal.trackfield.ui.main.MainActivity
 import me.felwal.trackfield.ui.onboarding.OnboardingActivity
 import me.felwal.trackfield.utils.AppConsts
-import me.felwal.trackfield.utils.FileUtils
 import me.felwal.trackfield.utils.LayoutUtils
 import me.felwal.trackfield.utils.ScreenUtils
 import java.time.LocalDate
@@ -33,6 +33,8 @@ private const val DIALOG_EXPORT = "exportDialog"
 private const val DIALOG_IMPORT = "importDialog"
 private const val DIALOG_RECREATE_DB = "recreateDbDialog"
 
+private const val REQUEST_FILE_LOCATION = 0;
+
 class SettingsActivity :
     AbsSettingsActivity(dividerMode = DividerMode.AFTER_SECTION, indentEverything = true),
     AlertDialog.DialogListener,
@@ -43,6 +45,8 @@ class SettingsActivity :
     private lateinit var binding: ActivitySettingsBinding
     override val llItemContainer: LinearLayout get() = binding.llSettings
 
+    private lateinit var backupManager: BackupManager
+
     // lifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +54,8 @@ class SettingsActivity :
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        backupManager = BackupManager(applicationContext)
 
         setToolbar()
         inflateSettingItems()
@@ -165,12 +171,10 @@ class SettingsActivity :
                     tag = DIALOG_IMPORT,
                     iconRes = R.drawable.ic_import
                 ),
-                StringItem(
+                ActionItem(
                     title = getString(R.string.tv_text_settings_title_file_location),
                     desc = Prefs.getFileLocation(),
-                    value = Prefs.getFileLocation(),
-                    hint =  getString(R.string.tv_text_settings_hint_file_location),
-                    tag = DIALOG_FILE_LOCATION,
+                    onClick = { selectFileLocation() },
                     iconRes = R.drawable.ic_folder
                 )
             ),
@@ -188,22 +192,7 @@ class SettingsActivity :
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_birthday),
                     desc = Prefs.getBirthday()?.format(AppConsts.FORMATTER_CAPTION) ?: "",
-                    onClick = {
-                        val bd = Prefs.getBirthday()
-
-                        val yearSelect = bd?.year ?: 1970
-                        val monthSelect = (bd?.monthValue ?: 1) - 1
-                        val daySelect = bd?.dayOfMonth ?: 1
-
-                        val picker =
-                            DatePickerDialog(this, { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                                Prefs.setBirthday(LocalDate.of(year, month + 1, dayOfMonth))
-                                recreate()
-                            }, yearSelect, monthSelect, daySelect)
-
-                        picker.datePicker.maxDate = System.currentTimeMillis()
-                        picker.show()
-                    },
+                    onClick = { pickBirthday() },
                     iconRes = R.drawable.ic_date
                 )
             ),
@@ -265,6 +254,58 @@ class SettingsActivity :
             )
         )
 
+    //
+
+    private fun pickBirthday() {
+        val bd = Prefs.getBirthday()
+
+        val yearSelect = bd?.year ?: 1970
+        val monthSelect = (bd?.monthValue ?: 1) - 1
+        val daySelect = bd?.dayOfMonth ?: 1
+
+        val picker =
+            DatePickerDialog(this, { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                Prefs.setBirthday(LocalDate.of(year, month + 1, dayOfMonth))
+                recreate()
+            }, yearSelect, monthSelect, daySelect)
+
+        picker.datePicker.maxDate = System.currentTimeMillis()
+        picker.show()
+    }
+
+    //
+
+    private fun selectFileLocation() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        intent.addFlags(
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+        )
+
+        startActivityForResult(intent, REQUEST_FILE_LOCATION, null);
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (data != null && requestCode == REQUEST_FILE_LOCATION) {
+            onSelectFileLocationResult(resultCode, data);
+        }
+    }
+
+    private fun onSelectFileLocationResult(resultCode: Int, data: Intent) {
+        val uri = data.data
+        if (resultCode != RESULT_OK || uri == null) return;
+
+        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        contentResolver.takePersistableUriPermission(uri, flags);
+
+        Prefs.setFileLocation(uri.toString())
+    }
+
     // dialog
 
     override fun onAlertDialogPositiveClick(tag: String, passValue: String?) {
@@ -272,7 +313,7 @@ class SettingsActivity :
             DIALOG_EXPORT -> {
                 LayoutUtils.toast(R.string.toast_json_exporting, this)
                 Thread {
-                    val success = FileUtils.exportJson(this)
+                    val success = backupManager.writeBackup()
                     runOnUiThread {
                         LayoutUtils.toast(
                             if (success) R.string.toast_json_export_successful
@@ -285,7 +326,7 @@ class SettingsActivity :
             DIALOG_IMPORT -> {
                 LayoutUtils.toast(R.string.toast_json_importing, this)
                 Thread {
-                    val success = FileUtils.importJson(this)
+                    val success = backupManager.readBackup()
                     runOnUiThread {
                         LayoutUtils.toast(
                             if (success) R.string.toast_json_import_successful
