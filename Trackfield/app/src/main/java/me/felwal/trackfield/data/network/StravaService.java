@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -393,8 +394,11 @@ public class StravaService {
             String externalId;
             long garminId = Exercise.ID_NONE;
             if (obj.has(JSON_EXTERNAL_ID) && !(externalId = obj.getString(JSON_EXTERNAL_ID)).equals("")) {
-                if (externalId.length() > 12 && externalId.contains("garmin_push_")) {
-                    garminId = Long.parseLong(externalId.substring(12));
+                if (externalId.contains("garmin")) {
+                    // garmin_push_id has been changed to garmin_ping_id.
+                    // however, the new id is something else; we can't link
+                    // to the exercise in Garmin Connect anymore.
+                    //garminId = Long.parseLong(externalId.substring(externalId.lastIndexOf("_") + 1));
                 }
                 else {
                     garminId = Exercise.ID_UNRELEVANT;
