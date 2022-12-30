@@ -173,7 +173,7 @@ class SettingsActivity :
                 ),
                 ActionItem(
                     title = getString(R.string.tv_text_settings_title_file_location),
-                    desc = Prefs.getFileLocation(),
+                    desc = Prefs.getFileLocation().replace("%3A", ": ").replace("%2F", "/"),
                     onClick = { selectFileLocation() },
                     iconRes = R.drawable.ic_folder
                 )
