@@ -87,8 +87,10 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
         setToolbar();
         findEditTexts();
-        setEditTexts();
+        loadData();
+        setAdapters();
         setListeners();
+        setEditTexts();
     }
 
     @Override
@@ -122,7 +124,7 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
 
     // set
 
-    private void loadData() {
+    protected void loadData() {
         // extras
         exerciseId = getIntent().getIntExtra(EXTRA_ID, -1);
 
@@ -159,19 +161,9 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
         recordingMethodTil = findViewById(R.id.til_exerciseedit_recordingmethod);
         typeTil = findViewById(R.id.til_exerciseedit_type);
         labelTil = findViewById(R.id.til_exerciseedit_label);
-
-        // actv adapters
-        setAdapter(routeTil, DbReader.get(this).getRouteNames());
-        setAdapter(intervalTil, DbReader.get(this).getIntervals());
-        setAdapter(typeTil, DbReader.get(this).getTypes(false, null));
-        setAdapter(labelTil, DbReader.get(this).getLabels(false));
-        setAdapter(deviceTil, DbReader.get(this).getDevices());
-        setAdapter(recordingMethodTil, DbReader.get(this).getMethods());
     }
 
     protected void setEditTexts() {
-        loadData();
-
         float[] time = MathUtils.getTimeParts(exercise.getTime());
         String hoursTxt = (int) time[2] + "";
         String minutesTxt = (int) time[1] + "";
@@ -204,6 +196,20 @@ public class ExerciseEditActivity extends AppCompatActivity implements AlertDial
             polylineEt.setText(exercise.getTrail().getPolyline());
             polylineEt.setFocusable(false);
         }*/
+    }
+
+    private void setAdapters() {
+        // actv adapters
+        setAdapter(routeTil, DbReader.get(this).getRouteNames());
+        setAdapter(intervalTil, DbReader.get(this).getIntervals());
+        setAdapter(typeTil, DbReader.get(this).getTypes(false, null));
+        setAdapter(labelTil, DbReader.get(this).getLabels(false));
+        setAdapter(deviceTil, DbReader.get(this).getDevices());
+        setAdapter(recordingMethodTil, DbReader.get(this).getMethods());
+
+        if (exercise != null) {
+            setAdapter(routeVarTil, DbReader.get(this).getRouteVariations(exercise.getRouteId()));
+        }
     }
 
     private void setListeners() {

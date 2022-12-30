@@ -28,6 +28,11 @@ public class ExerciseAddActivity extends ExerciseEditActivity {
     // set
 
     @Override
+    protected void loadData() {
+        // nothing to load
+    }
+
+    @Override
     protected void setEditTexts() {
         // use 'now' as default
         et(dateTil).setText(creationDate = LocalDate.now().format(AppConsts.FORMATTER_EDIT_DATE));
