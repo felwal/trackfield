@@ -16,9 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.Trackfield.Toolbar.Map" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fr_map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mv_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -2,9 +2,9 @@ package me.felwal.trackfield.ui.map.model;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.maps.android.PolyUtil;
+import com.mapbox.geojson.utils.PolylineUtils;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class Trail {
 
     public Trail(String polyline, LatLng start, LatLng end) {
         this.polyline = polyline;
-        latLngs = PolyUtil.decode(polyline);
+        latLngs = LocationUtilsKt.toLatLngs(PolylineUtils.decode(polyline, 5));
         this.start = start;
         this.end = end;
         setBounds();
@@ -31,12 +31,12 @@ public class Trail {
 
     public Trail(String polyline) {
         this.polyline = polyline;
-        latLngs = PolyUtil.decode(polyline);
+        latLngs = LocationUtilsKt.toLatLngs(PolylineUtils.decode(polyline, 5));
         setBounds();
     }
 
     public Trail(List<LatLng> latLngs, LatLng start, LatLng end) {
-        polyline = PolyUtil.encode(latLngs);
+        polyline = PolylineUtils.encode(LocationUtilsKt.toPoints(latLngs), 5);
         this.latLngs = latLngs;
         this.start = start;
         this.end = end;
@@ -44,7 +44,7 @@ public class Trail {
     }
 
     public Trail(List<LatLng> latLngs) {
-        polyline = PolyUtil.encode(latLngs);
+        polyline = PolylineUtils.encode(LocationUtilsKt.toPoints(latLngs), 5);
         this.latLngs = latLngs;
         setBounds();
     }
@@ -52,27 +52,7 @@ public class Trail {
     // set
 
     private void setBounds() {
-        if (latLngs.size() == 0) return;
-        LatLng ll0 = latLngs.get(0);
-
-        double north = ll0.latitude;
-        double south = ll0.latitude;
-        double east = ll0.longitude;
-        double west = ll0.longitude;
-
-        for (int i = 1; i < latLngs.size(); i++) {
-            LatLng lli = latLngs.get(i);
-
-            if (lli.latitude > north) north = lli.latitude;
-            else if (lli.latitude < south) south = lli.latitude;
-
-            if (lli.longitude > east) east = lli.longitude;
-            else if (lli.longitude < west) west = lli.longitude;
-        }
-
-        LatLng northEast = new LatLng(north, east);
-        LatLng southWest = new LatLng(south, west);
-        bounds = new LatLngBounds(southWest, northEast);
+        bounds = LocationUtilsKt.getBounds(latLngs);
     }
 
     public void calibrateEndPoints() {
@@ -105,19 +85,19 @@ public class Trail {
     // get driven
 
     public double getStartLat() {
-        return start.latitude;
+        return start.getLatitude();
     }
 
     public double getStartLng() {
-        return start.longitude;
+        return start.getLongitude();
     }
 
     public double getEndLat() {
-        return end.latitude;
+        return end.getLatitude();
     }
 
     public double getEndLng() {
-        return end.longitude;
+        return end.getLongitude();
     }
 
     public boolean hasStartEnd() {
@@ -142,32 +122,6 @@ public class Trail {
         Trail other = (Trail) obj;
         return latLngs.equals(other.latLngs) && start.equals(other.start) && end.equals(other.end)
             && bounds.equals(other.bounds);
-    }
-
-    // static tools
-
-    public static LatLngBounds bounds(List<LatLng> latLngs) {
-        if (latLngs.size() == 0) return null;
-        LatLng ll0 = latLngs.get(0);
-
-        double north = ll0.latitude;
-        double south = ll0.latitude;
-        double east = ll0.longitude;
-        double west = ll0.longitude;
-
-        for (int i = 1; i < latLngs.size(); i++) {
-            LatLng lli = latLngs.get(i);
-
-            if (lli.latitude > north) north = lli.latitude;
-            else if (lli.latitude < south) south = lli.latitude;
-
-            if (lli.longitude > east) east = lli.longitude;
-            else if (lli.longitude < west) west = lli.longitude;
-        }
-
-        LatLng northEast = new LatLng(north, east);
-        LatLng southWest = new LatLng(south, west);
-        return new LatLngBounds(southWest, northEast);
     }
 
 }

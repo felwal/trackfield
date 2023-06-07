@@ -2,11 +2,11 @@ package me.felwal.trackfield.ui.exercisedetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +15,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.LineManager;
+import com.mapbox.mapboxsdk.plugins.annotation.LineOptions;
+import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +34,10 @@ import me.felwal.android.fragment.dialog.BaseDialogKt;
 import me.felwal.android.fragment.dialog.CheckDialog;
 import me.felwal.android.fragment.dialog.MultiChoiceDialog;
 import me.felwal.android.util.MenuKt;
+import me.felwal.android.util.ResourcesKt;
 import me.felwal.android.widget.control.CheckListOption;
 import me.felwal.android.widget.control.DialogOption;
+import me.felwal.trackfield.BuildConfig;
 import me.felwal.trackfield.R;
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.data.db.DbWriter;
@@ -48,7 +58,7 @@ import me.felwal.trackfield.utils.MathUtils;
 import me.felwal.trackfield.utils.ScreenUtils;
 
 public class ExerciseDetailActivity extends AppCompatActivity implements AlertDialog.DialogListener,
-    MultiChoiceDialog.DialogListener, OnMapReadyCallback {
+    MultiChoiceDialog.DialogListener, OnMapReadyCallback, Style.OnStyleLoaded {
 
     public static final int FROM_NONE = 0;
     public static final int FROM_DISTANCE = 1;
@@ -67,13 +77,13 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     private static final int MAP_MAX_ZOOM = 17;
     private static final int MAP_PADDING = 50;
 
-    private GoogleMap map;
-    private SupportMapFragment mapFragment;
-
     // arguments
     private int exerciseId;
     private Exercise exercise;
     private int from = FROM_NONE;
+
+    private MapView mapView;
+    private MapboxMap mapboxMap;
 
     //
 
@@ -95,6 +105,7 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ScreenUtils.updateTheme(this);
+        Mapbox.getInstance(this, BuildConfig.MAPBOX_DOWNLOADS_TOKEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercisedetail);
         setToolbar();
@@ -111,8 +122,18 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
             return;
         }
 
+        // map
+        mapView = findViewById(R.id.mv_exercisedetail_map);
+        mapView.onCreate(savedInstanceState);
+
         setMap();
         setTexts();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mapView != null) mapView.onStart();
     }
 
     @Override
@@ -227,6 +248,24 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null) mapView.onLowMemory();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mapView != null) mapView.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mapView != null) mapView.onDestroy();
     }
 
     // set
@@ -397,22 +436,16 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     }
 
     private void setMap() {
-        FrameLayout frame = findViewById(R.id.fl_exercisedetail_map);
-
         if (!exercise.hasTrail()) {
-            frame.setVisibility(View.GONE);
+            mapView.setVisibility(View.GONE);
             return;
         }
 
         findViewById(R.id.v_exercisedetail_divider1).setVisibility(View.INVISIBLE);
-        frame.setClipToOutline(true);
+        mapView.setClipToOutline(true);
+        mapView.getMapAsync(this);
 
-        // fragment
-        if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_exercisedetail_map, mapFragment).commit();
-            mapFragment.getMapAsync(this);
-        }
+        LayoutUtils.crossfadeInLong(mapView, 1);
     }
 
     private void setTvHideIfEmpty(String value, TextView tv, View alsoHide) {
@@ -440,6 +473,41 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
     // implements BinaryDialog, OnMapReadyCallback
 
     @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        this.mapboxMap = mapboxMap;
+        mapboxMap.setStyle(ScreenUtils.isThemeLight(this) ? Style.LIGHT : Style.DARK, this);
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull Style style) {
+        LatLngBounds bounds = exercise.getTrail().getBounds();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, MAP_PADDING);
+        mapboxMap.moveCamera(cu);
+
+        mapboxMap.addOnMapClickListener(latLng -> {
+            ExerciseMapActivity.startActivity(exerciseId, ExerciseDetailActivity.this);
+            return true;
+        });
+
+        LineManager lineManager = new LineManager(mapView, mapboxMap, style);
+
+        LineOptions lineOptions = new LineOptions()
+            .withLatLngs(exercise.getTrail().getLatLngs())
+            .withLineColor(ColorUtils.colorToRgbaString(ResourcesKt.getColorByAttr(this, R.attr.colorSecondary)))
+            .withLineWidth((float) ScreenUtils.px(1));
+
+        lineManager.create(lineOptions);
+
+        /*
+        ExerciseMapActivity.setReadyMap(map, exercise.getTrail(), MAP_PADDING, this);
+        map.getUiSettings().setAllGesturesEnabled(false);
+        map.setMaxZoomPreference(MAP_MAX_ZOOM);
+
+        map.setOnMapClickListener(latLng -> ExerciseMapActivity.startActivity(exerciseId, ExerciseDetailActivity.this));
+        */
+    }
+
+    @Override
     public void onAlertDialogPositiveClick(String tag, String passValue) {
         if (tag.equals(DIALOG_DELETE_EXERCISE)) {
             try {
@@ -455,20 +523,6 @@ public class ExerciseDetailActivity extends AppCompatActivity implements AlertDi
 
     @Override
     public void onAlertDialogNeutralClick(@NonNull String tag, @Nullable String passValue) {
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        if (map == null) {
-            map = googleMap;
-            ExerciseMapActivity.setReadyMap(map, exercise.getTrail(), MAP_PADDING, this);
-            map.getUiSettings().setAllGesturesEnabled(false);
-            map.setMaxZoomPreference(MAP_MAX_ZOOM);
-
-            map.setOnMapClickListener(latLng -> ExerciseMapActivity.startActivity(exerciseId, ExerciseDetailActivity.this));
-        }
-
-        LayoutUtils.crossfadeInLong(mapFragment.getView(), 1);
     }
 
     @Override

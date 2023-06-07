@@ -377,8 +377,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/fl_exercisedetail_map"
+                <com.mapbox.mapboxsdk.maps.MapView
+                    android:id="@+id/mv_exercisedetail_map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_mappreview_height"
                     android:background="@drawable/shape_mappreview_bg"

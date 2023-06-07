@@ -1,7 +1,7 @@
 package me.felwal.trackfield.ui.map.model;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,16 +36,16 @@ public class Trails {
     }
 
     public LatLngBounds getBounds() {
-        double north = trails.get(0).getBounds().northeast.latitude;
-        double south = trails.get(0).getBounds().southwest.latitude;
-        double east = trails.get(0).getBounds().northeast.longitude;
-        double west = trails.get(0).getBounds().southwest.longitude;
+        double north = trails.get(0).getBounds().getLatNorth();
+        double south = trails.get(0).getBounds().getLatSouth();
+        double east = trails.get(0).getBounds().getLonEast();
+        double west = trails.get(0).getBounds().getLonWest();
 
         for (int i = 1; i < trails.size(); i++) {
-            double n = trails.get(i).getBounds().northeast.latitude;
-            double s = trails.get(i).getBounds().southwest.latitude;
-            double e = trails.get(i).getBounds().northeast.longitude;
-            double w = trails.get(i).getBounds().southwest.longitude;
+            double n = trails.get(i).getBounds().getLatNorth();
+            double s = trails.get(i).getBounds().getLatSouth();
+            double e = trails.get(i).getBounds().getLonEast();
+            double w = trails.get(i).getBounds().getLonWest();
 
             north = Math.max(north, n);
             south = Math.min(south, s);
@@ -53,10 +53,7 @@ public class Trails {
             west = Math.min(west, w);
         }
 
-        LatLng northEast = new LatLng(north, east);
-        LatLng southWest = new LatLng(south, west);
-
-        return new LatLngBounds(southWest, northEast);
+        return LatLngBounds.from(north, east, south, west);
     }
 
     // get driven

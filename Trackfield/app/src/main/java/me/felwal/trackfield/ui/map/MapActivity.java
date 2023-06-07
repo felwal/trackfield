@@ -8,33 +8,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.MapsInitializer.Renderer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
+import com.mapbox.geojson.utils.PolylineUtils;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.felwal.android.util.ResourcesKt;
+import me.felwal.trackfield.BuildConfig;
 import me.felwal.trackfield.R;
+import me.felwal.trackfield.ui.map.model.Trail;
 import me.felwal.trackfield.ui.widget.sheet.PeekSheet;
+import me.felwal.trackfield.utils.LocationUtilsKt;
 import me.felwal.trackfield.utils.ScreenUtils;
 
 public abstract class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-    GoogleMap.OnPolylineClickListener, PeekSheet.SheetListener {
+    MapboxMap.OnPolylineClickListener, Style.OnStyleLoaded, PeekSheet.SheetListener {
 
     // extras names
     protected static final String EXTRA_ID = "id";
@@ -46,7 +49,9 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     protected final ArrayList<Polyline> tempPolylines = new ArrayList<>();
 
     protected int id;
-    protected GoogleMap map;
+    protected MapboxMap mapboxMap;
+    protected MapView mapView;
+
     protected boolean tempShown = false;
     protected boolean satellite = false;
 
@@ -55,6 +60,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ScreenUtils.updateTheme(this);
+        Mapbox.getInstance(this, BuildConfig.MAPBOX_DOWNLOADS_TOKEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setToolbar();
@@ -66,18 +72,28 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         id = intent.getIntExtra(EXTRA_ID, -1);
 
         // initialize maps with the latest renderer (currently neccessary for 18.0.0
-        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, null);
+        //MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, null);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fr_map);
-        mapFragment.getMapAsync(this);
+        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fr_map);
+        //mapFragment.getMapAsync(this);
+
+        mapView = findViewById(R.id.mv_map);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.map = googleMap;
-        googleMap.setMaxZoomPreference(MAP_MAX_ZOOM);
-        googleMap.getUiSettings().setCompassEnabled(false);
+    public void onMapReady(MapboxMap mapboxMap) {
+        this.mapboxMap = mapboxMap;
+        mapboxMap.setMaxZoomPreference(MAP_MAX_ZOOM);
+        mapboxMap.getUiSettings().setCompassEnabled(false);
+        mapboxMap.setStyle(getStyle());
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull Style style) {
+
     }
 
     @Override
@@ -97,8 +113,8 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         else if (itemId == R.id.action_toggle_map_type) {
             // toggle normal/satellite + update polylines color
 
-            map.setMapType(satellite ? GoogleMap.MAP_TYPE_NORMAL : GoogleMap.MAP_TYPE_HYBRID);
             satellite = !satellite;
+            mapboxMap.setStyle(getStyle());
 
             @ColorInt int selectedColor = getColorSelected();
             @ColorInt int deselectedColor = getColorDeselected();
@@ -147,22 +163,25 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
     private void togglePolylines() {
         // show
         if (!tempShown) {
+            mapboxMap.setOnPolylineClickListener(this);
+
             for (HashMap.Entry<Integer, String> entry : getRestOfPolylines(id).entrySet()) {
                 // options
                 PolylineOptions options = new PolylineOptions();
                 options.color(getColorDeselected());
-                options.width(ScreenUtils.px(3));
-                options.addAll(PolyUtil.decode(entry.getValue()));
+                options.width(ScreenUtils.px(1));
+                options.addAll(LocationUtilsKt.toLatLngs(PolylineUtils.decode(entry.getValue(), 5)));
 
                 // poly
-                Polyline polyline = map.addPolyline(options);
-                polyline.setTag(entry.getKey());
-                polyline.setClickable(true);
+                Polyline polyline = mapboxMap.addPolyline(options);
+                polyline.setId(entry.getKey());
                 tempPolylines.add(polyline);
             }
         }
         // hide
         else {
+            mapboxMap.setOnPolylineClickListener(null);
+
             for (Polyline p : tempPolylines) p.remove();
             tempPolylines.clear();
         }
@@ -170,38 +189,33 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         tempShown = !tempShown;
     }
 
-    protected static void moveCamera(GoogleMap googleMap, LatLngBounds bounds, int padding, boolean animate) {
+    protected static void moveCamera(MapboxMap mapboxMap, LatLngBounds bounds, int padding, boolean animate) {
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         try {
-            if (animate) googleMap.animateCamera(cu);
-            else googleMap.moveCamera(cu);
+            if (animate) mapboxMap.animateCamera(cu);
+            else mapboxMap.moveCamera(cu);
         }
         catch (Exception e) {
-            googleMap.setOnMapLoadedCallback(() -> {
-                if (animate) googleMap.animateCamera(cu);
-                else googleMap.moveCamera(cu);
-            });
         }
     }
 
-    protected static void setMapStyle(GoogleMap googleMap, Context c) {
-        MapStyleOptions style = new MapStyleOptions(ResourcesKt.getStringByAttr(c, R.attr.tf_mapStyle));
-        googleMap.setMapStyle(style);
+    private String getStyle() {
+        return satellite ? Style.SATELLITE : (ScreenUtils.isThemeLight(this) ? Style.LIGHT : Style.DARK);
     }
 
     // implements GoogleMap, PeekSheet
 
     @Override
     public void onPolylineClick(Polyline polyline) {
-        if (polyline.getTag() == null) return;
+        if (polyline.getId() == -1) return;
 
         // show sheet
-        int id = (int) polyline.getTag();
+        int id = (int) polyline.getId();
         PeekSheet.newInstance(id).show(getSupportFragmentManager());
 
         // focus camera
-        //LatLngBounds bounds = Trail.bounds(polyline.getPoints());
-        //moveCamera(googleMap, bounds, MAP_PADDING, true);
+        LatLngBounds bounds = LocationUtilsKt.getBounds(polyline.getPoints());
+        moveCamera(mapboxMap, bounds, MAP_PADDING, true);
 
         // appearance
         polyline.setColor(getColorSelected());
@@ -214,7 +228,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         // get polyline
         Polyline polyline = null;
         for (Polyline line : tempPolylines) {
-            if ((int) line.getTag() == exerciseId) {
+            if ((int) line.getId() == exerciseId) {
                 polyline = line;
                 break;
             }
@@ -239,7 +253,7 @@ public abstract class MapActivity extends AppCompatActivity implements OnMapRead
         return satellite ? c.getColor(R.color.polyline_satellite) : ResourcesKt.getColorByAttr(c, R.attr.colorSecondary);
     }
 
-    @ColorInt @SuppressLint("ResourceType")
+    @ColorInt
     protected int getColorDeselected() {
         return getColor(satellite ? R.color.selector_color_polyline_deselected_satellite
             : R.color.selector_color_polyline_deselected);

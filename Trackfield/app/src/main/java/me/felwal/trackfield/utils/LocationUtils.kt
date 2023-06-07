@@ -1,8 +1,10 @@
 package me.felwal.trackfield.utils
 
-import android.location.Location
 import androidx.annotation.FloatRange
-import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
+import com.mapbox.geojson.Point
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import kotlin.math.max
 
 typealias Segment = List<LatLng>
@@ -102,7 +104,7 @@ fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> 
             while (splitDist2 >= startDist2) {
 
                 val q = second.latlngAtDistance(splitDist2, maxDist2)
-                val splitDeltaDist = segPos1.distanceTo(q)
+                val splitDeltaDist = segPos1.distanceTo(q).toFloat()
 
                 // merge; create new subsegment
                 if (splitDeltaDist <= deltaDistMax) {
@@ -145,7 +147,7 @@ fun Pair<Segment, Segment>.splitIntoSubSegments(): List<Pair<Segment, Segment>> 
             while (splitDist1 >= startDist1) {
 
                 val p = first.latlngAtDistance(splitDist1, maxDist1)
-                val splitDeltaDist = segPos2.distanceTo(p)
+                val splitDeltaDist = segPos2.distanceTo(p).toFloat()
 
                 // merge; create new subsegment
                 if (splitDeltaDist <= deltaDistMax) {
@@ -202,7 +204,7 @@ fun Segment.subSegment(startDistance: Float, endDistance: Float, segDistance: Fl
     for (i in 0 until size - 1) {
         val p = get(i)
         val q = get(i + 1)
-        val distBetween = p.distanceTo(q)
+        val distBetween = p.distanceTo(q).toFloat()
 
         // look for start
         if (startIndex == -1 && dist + distBetween >= startDistance) {
@@ -252,7 +254,7 @@ fun Segment.latlngAtDistance(distance: Float, segDist: Float = distance()): LatL
     for (i in 0 until size - 1) {
         val p = get(i)
         val q = get(i + 1)
-        val distBetween = p.distanceTo(q)
+        val distBetween = p.distanceTo(q).toFloat()
 
         if (dist + distBetween >= distance || i == size - 2) {
             return p.between(q, (distance - dist) / distBetween)
@@ -361,16 +363,10 @@ fun Segment.distance(): Float {
     for (i in 0 until size - 1) {
         val p: LatLng = get(i)
         val q: LatLng = get(i + 1)
-        distance += p.distanceTo(q)
+        distance += p.distanceTo(q).toFloat()
     }
 
     return distance
-}
-
-fun LatLng.distanceTo(other: LatLng): Float {
-    val distBetweenArr = FloatArray(1)
-    Location.distanceBetween(latitude, longitude, other.latitude, other.longitude, distBetweenArr)
-    return distBetweenArr[0]
 }
 
 fun LatLng.between(other: LatLng, @FloatRange(from = 0.0, to = 1.0) ratio: Float): LatLng {
@@ -378,4 +374,48 @@ fun LatLng.between(other: LatLng, @FloatRange(from = 0.0, to = 1.0) ratio: Float
     val lng: Double = longitude + (other.longitude - longitude) * ratio
 
     return LatLng(lat, lng)
+}
+
+//
+
+fun com.google.android.gms.maps.model.LatLng.toMapboxLatLng() = LatLng(latitude, longitude)
+
+fun LatLng.toGoogleLatLng() = com.google.android.gms.maps.model.LatLng(latitude, longitude)
+
+fun LatLng.computeOffset(distance: Double, heading: Double) =
+    SphericalUtil.computeOffset(toGoogleLatLng(), distance, heading).toMapboxLatLng()
+
+//
+
+fun Point.toLatLng(): LatLng = LatLng(latitude(), longitude())
+
+fun LatLng.toPoint(): Point = Point.fromLngLat(longitude, latitude)
+
+fun List<Point>.toLatLngs(): List<LatLng> = map { it.toLatLng() }
+
+fun List<LatLng>.toPoints(): List<Point> = map { it.toPoint() }
+
+//
+
+fun List<LatLng>.getBounds(): LatLngBounds? {
+    if (size == 0) return null
+
+    val ll0: LatLng = get(0)
+
+    var north = ll0.latitude
+    var south = ll0.latitude
+    var east = ll0.longitude
+    var west = ll0.longitude
+
+    for (i in 1 until size) {
+        val lli: LatLng = get(i)
+
+        if (lli.latitude > north) north = lli.latitude
+        else if (lli.latitude < south) south = lli.latitude
+
+        if (lli.longitude > east) east = lli.longitude
+        else if (lli.longitude < west) west = lli.longitude
+    }
+
+    return LatLngBounds.from(north, east, south, west)
 }

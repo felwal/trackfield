@@ -6,12 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,40 +41,38 @@ public class PlaceMapActivity extends MapActivity {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        super.onMapReady(googleMap);
-        selectedPolylines = setReadyMap(googleMap);
-        googleMap.setOnPolylineClickListener(this);
+    public void onMapReady(MapboxMap mapboxMap) {
+        super.onMapReady(mapboxMap);
+        selectedPolylines = setReadyMap(mapboxMap);
+        mapboxMap.setOnPolylineClickListener(this);
     }
 
     @Override
     protected void recentre() {
-        moveCamera(map, place.getBounds(), MAP_PADDING, true);
+        //moveCamera(map, place.getBounds(), MAP_PADDING, true);
     }
 
     // set
 
-    private ArrayList<Polyline> setReadyMap(final GoogleMap googleMap) {
-        setMapStyle(googleMap, this);
-
+    private ArrayList<Polyline> setReadyMap(final MapboxMap mapboxMap) {
         // radius circle
         CircleOptions circle = new CircleOptions();
-        circle.center(place.getLocation());
-        circle.radius(place.getRadius());
-        circle.fillColor(getColorDeselected());
-        circle.strokeWidth(0f);
-        googleMap.addCircle(circle);
+        //circle.center(place.getLocation());
+        circle.withCircleRadius((float) place.getRadius());
+        //circle.withCircleColor(getColorDeselected());
+        circle.withCircleStrokeWidth(0f);
+        //mapboxMap.addCircle(circle);
 
         // marker
         MarkerOptions placeMarker = new MarkerOptions();
         Drawable drawable = ResourcesKt.getDrawableCompatWithTint(this, R.drawable.ic_place, R.attr.colorSecondary);
         Bitmap bitmap = ResourcesKt.toBitmap(drawable);
-        BitmapDescriptor bitmapDesc = BitmapDescriptorFactory.fromBitmap(bitmap);
-        placeMarker.icon(bitmapDesc);
-        placeMarker.position(place.getLocation());
-        googleMap.addMarker(placeMarker);
+        //BitmapDescriptor bitmapDesc = BitmapDescriptorFactory.fromBitmap(bitmap);
+        //placeMarker.icon(bitmapDesc);
+        //placeMarker.position(place.getLocation());
+        mapboxMap.addMarker(placeMarker);
 
-        moveCamera(googleMap, place.getBounds(), MAP_PADDING, false);
+        //moveCamera(mapboxMap, place.getBounds(), MAP_PADDING, false);
 
         return new ArrayList<>();
     }

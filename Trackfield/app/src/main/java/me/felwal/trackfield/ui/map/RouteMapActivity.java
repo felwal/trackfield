@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,45 +58,41 @@ public class RouteMapActivity extends MapActivity {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        super.onMapReady(googleMap);
-        selectedPolylines = setReadyMap(googleMap, trails, MAP_PADDING);
-        googleMap.setOnPolylineClickListener(this);
+    public void onMapReady(MapboxMap mapboxMap) {
+        super.onMapReady(mapboxMap);
+        selectedPolylines = setReadyMap(mapboxMap, trails, MAP_PADDING);
+        mapboxMap.setOnPolylineClickListener(this);
     }
 
     @Override
     protected void recentre() {
-        moveCamera(map, trails.getBounds(), MAP_PADDING, true);
+        moveCamera(mapboxMap, trails.getBounds(), MAP_PADDING, true);
     }
 
     // set
 
-    private ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trails trails, int padding) {
-
-        //style
-        setMapStyle(googleMap, this);
-
+    private ArrayList<Polyline> setReadyMap(final MapboxMap mapboxMap, final Trails trails, int padding) {
         if (trails.trailCount() == 0) return new ArrayList<>();
 
         // draw polylines
         ArrayList<Polyline> polylines = new ArrayList<>();
         for (List<LatLng> latLngs : trails.getLatLngs()) {
-            PolylineOptions options = new PolylineOptions().zIndex(0);
+            PolylineOptions options = new PolylineOptions();
             options.color(getColorSelected());
             options.addAll(latLngs);
-            polylines.add(googleMap.addPolyline(options));
+            polylines.add(mapboxMap.addPolyline(options));
         }
 
         // draw routevar average polyline
         if (routeVar != null) {
-            PolylineOptions options = new PolylineOptions().zIndex(1);
+            PolylineOptions options = new PolylineOptions();
             options.color(ResourcesKt.getColorByAttr(this, android.R.attr.textColorPrimary));
             options.addAll(LocationUtilsKt.averageSegment(trails.getLatLngs()));
-            polylines.add(googleMap.addPolyline(options));
+            polylines.add(mapboxMap.addPolyline(options));
         }
 
         // focus
-        moveCamera(googleMap, trails.getBounds(), padding, false);
+        moveCamera(mapboxMap, trails.getBounds(), padding, false);
 
         return polylines;
     }

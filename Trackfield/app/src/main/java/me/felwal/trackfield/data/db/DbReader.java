@@ -8,7 +8,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
@@ -593,8 +593,8 @@ public class DbReader extends DbHelper {
     public Place getPlace(LatLng latlng) {
         // TODO: check for radius instead, and return a list with all places which contains this.
 
-        double lat = latlng.latitude;
-        double lng = latlng.longitude;
+        double lat = latlng.getLatitude();
+        double lng = latlng.getLongitude();
 
         String from = PlaceEntry.TABLE_NAME;
         String where = null;

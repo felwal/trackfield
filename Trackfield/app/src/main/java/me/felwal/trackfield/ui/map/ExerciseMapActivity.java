@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.felwal.trackfield.data.db.DbReader;
 import me.felwal.trackfield.ui.map.model.Trail;
+import me.felwal.trackfield.utils.ScreenUtils;
 
 public class ExerciseMapActivity extends MapActivity {
 
@@ -35,10 +36,10 @@ public class ExerciseMapActivity extends MapActivity {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        super.onMapReady(googleMap);
-        selectedPolylines = setReadyMap(googleMap, trail, MAP_PADDING, this);
-        googleMap.setOnPolylineClickListener(this);
+    public void onMapReady(MapboxMap mapboxMap) {
+        super.onMapReady(mapboxMap);
+        selectedPolylines = setReadyMap(mapboxMap, trail, MAP_PADDING, this);
+        mapboxMap.setOnPolylineClickListener(this);
 
         // start marker
         /*Bitmap startBitmap = MiscUtilsKt.getBitmap(this, R.drawable.ic_play);
@@ -46,7 +47,7 @@ public class ExerciseMapActivity extends MapActivity {
             MarkerOptions startMarker = new MarkerOptions();
             startMarker.position(trail.getStart());
             startMarker.icon(BitmapDescriptorFactory.fromBitmap(startBitmap));
-            googleMap.addMarker(startMarker);
+            mapboxMap.addMarker(startMarker);
         }
 
         // end marker
@@ -55,34 +56,32 @@ public class ExerciseMapActivity extends MapActivity {
             MarkerOptions endMarker = new MarkerOptions();
             endMarker.position(trail.getEnd());
             endMarker.icon(BitmapDescriptorFactory.fromBitmap(endBitmap));
-            googleMap.addMarker(endMarker);
+            mapboxMap.addMarker(endMarker);
         }*/
 
-        //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //mapboxMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
     @Override
     protected void recentre() {
-        moveCamera(map, trail.getBounds(), MAP_PADDING, true);
+        moveCamera(mapboxMap, trail.getBounds(), MAP_PADDING, true);
     }
 
     // set
 
-    public static ArrayList<Polyline> setReadyMap(final GoogleMap googleMap, final Trail trail, int padding,
+    public static ArrayList<Polyline> setReadyMap(final MapboxMap mapboxMap, final Trail trail, int padding,
         Context c) {
-
-        // style
-        setMapStyle(googleMap, c);
 
         // draw polylines
         PolylineOptions options = new PolylineOptions();
         options.color(getColorSelected(false, c));
         options.addAll(trail.getLatLngs());
-        Polyline polyline = googleMap.addPolyline(options);
+        Polyline polyline = mapboxMap.addPolyline(options);
+        polyline.setWidth(ScreenUtils.px(3));
         ArrayList<Polyline> polylines = new ArrayList<>();
         polylines.add(polyline);
 
-        moveCamera(googleMap, trail.getBounds(), padding, false);
+        moveCamera(mapboxMap, trail.getBounds(), padding, false);
 
         return polylines;
     }

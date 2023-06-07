@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.ColorInt;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -80,11 +80,11 @@ public class Exerlite extends RecyclerItem {
     }
 
     public double getStartLat() {
-        return start.latitude;
+        return start.getLatitude();
     }
 
     public double getStartLng() {
-        return start.longitude;
+        return start.getLongitude();
     }
 
     // get driven

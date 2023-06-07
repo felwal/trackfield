@@ -60,6 +60,8 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:2.1.0'
     implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0'
 
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 

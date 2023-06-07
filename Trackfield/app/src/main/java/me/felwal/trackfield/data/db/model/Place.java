@@ -5,14 +5,14 @@ import android.location.Location;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.maps.android.SphericalUtil;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.felwal.trackfield.utils.LayoutUtils;
+import me.felwal.trackfield.utils.LocationUtilsKt;
 
 public class Place implements JSONObjectable {
 
@@ -95,11 +95,11 @@ public class Place implements JSONObjectable {
     }
 
     public double getLat() {
-        return location.latitude;
+        return location.getLatitude();
     }
 
     public double getLng() {
-        return location.longitude;
+        return location.getLongitude();
     }
 
     public int getRadius() {
@@ -114,20 +114,19 @@ public class Place implements JSONObjectable {
 
     public boolean contains(LatLng latLng) {
         float[] distBetweenArr = new float[1];
-        Location.distanceBetween(getLat(), getLng(), latLng.latitude, latLng.longitude, distBetweenArr);
+        Location.distanceBetween(getLat(), getLng(), latLng.getLatitude(), latLng.getLongitude(), distBetweenArr);
         float distBetween = distBetweenArr[0];
 
         return distBetween <= radius;
     }
 
     public LatLngBounds getBounds() {
-        LatLng south = SphericalUtil.computeOffset(location, radius,180);
-        LatLng southWest = SphericalUtil.computeOffset(south, radius,270);
+        double north = LocationUtilsKt.computeOffset(location, radius,0).getLatitude();
+        double east = LocationUtilsKt.computeOffset(location, radius,90).getLongitude();
+        double south = LocationUtilsKt.computeOffset(location, radius,180).getLatitude();
+        double west = LocationUtilsKt.computeOffset(location, radius,270).getLongitude();
 
-        LatLng north = SphericalUtil.computeOffset(location, radius,0);
-        LatLng northEast = SphericalUtil.computeOffset(north, radius,90);
-
-        return new LatLngBounds(southWest, northEast);
+        return LatLngBounds.from(north, east, south, west);
     }
 
     // extends
